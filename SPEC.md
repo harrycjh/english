@@ -1,8 +1,8 @@
 # 小可爱兔专属背单词 — 产品策划文档
 
 > 项目代号：VocaRabbit
-> 版本：v1.1
-> 最后更新：2025-05-05
+> 版本：v1.2
+> 最后更新：2026-05-08
 
 ---
 
@@ -12,6 +12,7 @@
 |------|------|---------|
 | v1.0 | 2025-05-05 | 初稿 |
 | v1.1 | 2025-05-05 | 调整为10新词+~50复习；增加3种题型+图片支持；用户自带图片库 |
+| v1.2 | 2026-05-08 | 首版聚焦离线学习端；图片改为基于本地 SSD 的牛津树页图流水线；家长端与同步后置 |
 
 ---
 
@@ -19,7 +20,7 @@
 
 **产品定位**
 
-一款专为儿童设计的英语单词记忆辅助工具，基于艾宾浩斯记忆曲线算法，帮助女儿高效背诵 KET 词汇。家长可通过独立的家长监控端实时掌握学习进度、调整任务和设置。
+一款专为儿童设计的英语单词记忆辅助工具，基于艾宾浩斯记忆曲线算法，帮助女儿高效背诵 KET 词汇。v1 首版聚焦单机离线学习端，优先把“词汇 + 中文 + 图片 + 复习机制”做稳定；家长监控端和跨设备同步放到后续阶段。
 
 **核心价值主张**
 
@@ -30,11 +31,13 @@
 | 用户 | 角色 | 设备 |
 |------|------|------|
 | 女儿（小可爱兔，KET 备考） | 学习者 | 手机（iOS/Android）或 iPad |
-| 家长（你） | 监控管理者 | 手机（iOS/Android）或 iPad |
+| 家长（你） | 后续阶段的监控管理者 | 手机（iOS/Android）或 iPad |
 
 ---
 
 ## 二、核心功能需求
+
+本文将功能划分为 `MVP 必做` 与 `后续增强` 两层，避免首版范围失控。
 
 ### 2.1 学习端（女儿使用）
 
@@ -43,7 +46,15 @@
 | 类型 | 数量 | 说明 |
 |------|------|------|
 | 新词 | 10个/天 | 按难度排序，低→高 |
-| 复习 | ~50个 | 艾宾浩斯队列，按需 |
+| 复习 | 默认上限 50 个/天 | 只取到期词；超出的顺延到下一天 |
+
+#### 任务队列规则
+
+- 到期复习词优先于新词
+- 当日复习队列默认上限 50 个，超出部分顺延，不强行塞满
+- 答错的词回到当日队尾，允许当日最多额外出现 2 次，避免无限循环
+- 当日“完成任务”指：今日新词全部做完，且今日被安排到的复习词全部完成
+- 没做完的到期复习词保留到下一天，继续按逾期优先处理
 
 #### 三种题型（根据单词掌握轮次自动切换）
 
@@ -54,10 +65,10 @@
 | **第5-6次出现** | 填空补全 | 中文释义 + 挖空英文单词 | 在空白处补全2-4个随机字母 |
 
 **轮次说明**：
-- "轮次"= 该词被**正确回忆**的累计次数
+- 题型轮次由 `masteryLevel` 决定，不直接等于累计答对次数
 - 第1次出现指首次学习该词
-- 答错不推进轮次，答对才计入
-- 第6次之后维持在第6轮（最长间隔复习）
+- 答对会提升题型难度，答错会降低题型难度
+- 第6轮之后维持在第6轮（最高题型难度）
 
 **填空补全规则**：
 - 单词长度≥6字母：挖空3-4个字母
@@ -77,21 +88,25 @@
 - 例句中单词位置有颜色高亮
 - 可单独播放例句发音
 
-#### 图片支持（用户自带）
+#### 图片支持（MVP 必做）
 
-- 用户提供配套图片库（自己整理）
-- **命名规范**：`{word_id}.jpg`（如 `apple.jpg`）
-- 支持格式：jpg、png、webp
-- 图片存放于 App 内置 Asset 目录
-- 无图片的词在第1-2轮时只显示英文+选项，不崩溃
+- 图片是首版必须能力，不是可选增强
+- 图片主来源不是 App 内手工上传，而是基于本地 SSD 中的 Oxford Tree 原始文档和词表里的页码定位做预处理生成
+- 词表中已保存牛津树定位格式 `Level x,y,z`，预处理脚本据此导出每个单词对应的候选页图
+- App 运行时只读取预处理后的图片资源，不直接读取本地 PDF 或原始文档
+- 每个上线单词必须至少绑定 1 张通过人工确认的图片；未确认图片的单词不能进入发布数据包
+- 图片资源统一输出到应用可打包目录，例如 `assets/images/words/{word_id}.webp`
 
 #### 离线可用
 
-- 单词数据：完整 KET 词汇表（含发音、例句）打包在 App 内
-- 进度数据：存储在本地 SQLite，联网时同步到家长端
-- 完全离线可学习
+- 单词数据：打包进 App 的本地数据包，至少包含英文、中文、分类、图片引用
+- 进度数据：完全存储在本地 SQLite
+- v1 不依赖云端，也不要求联网
+- 家长端查看与跨设备同步不属于 v1 发布范围
 
-### 2.2 家长监控端
+### 2.2 后续阶段：家长监控端
+
+> 以下能力不进入 v1 首版，仅作为后续规划保留。
 
 #### 进度仪表盘
 
@@ -121,9 +136,11 @@
 - 数据备份/恢复
 - 图片库管理（添加/删除图片）
 
-### 2.3 家长-孩子数据同步
+### 2.3 后续阶段：家长-孩子数据同步
 
-- 使用微信云开发或 Firebase
+> 以下能力不进入 v1 首版，仅作为后续规划保留。
+
+- v2 再评估 Firebase / Supabase / 微信云开发 等方案
 - 孩子端学习记录实时同步给家长
 - 家长修改设置实时同步给孩子
 
@@ -136,10 +153,11 @@
 | 项目 | 选型 | 说明 |
 |------|------|------|
 | 跨平台框架 | **Flutter** | iOS/Android 一套代码，性能好 |
-| 数据存储 | 本地 SQLite + 云端同步 | flutter_sqflite |
-| 发音方案 | 设备离线 TTS | 不依赖网络 |
-| 同步方案 | 微信云开发 | 免费额度够用，微信生态 |
-| 图片格式 | jpg/png/webp | 用户提供，App 内置 Asset |
+| 数据存储 | 本地 SQLite | 使用 sqflite，v1 不引入云同步 |
+| 发音方案 | 设备离线 TTS | 不依赖网络，v1 可先只做单词发音 |
+| 数据预处理 | Python 脚本 | 从本地词表和 Oxford Tree 页码生成 App 数据包 |
+| 同步方案 | 后续再定 | v1 不实现云同步 |
+| 图片格式 | webp/png | 由预处理流水线导出到 App 资源目录 |
 
 ### 3.2 数据模型
 
@@ -148,14 +166,21 @@
 ```dart
 class Word {
   String id;             // 唯一 ID，如 "ket_0001"
-  String english;       // 英文单词
-  String phonetic;       // 国际音标 [ket]
+  String english;        // 英文单词
   String chinese;        // 中文释义
-  String? audioPath;     // 发音文件路径（可选，离线TTS为主）
-  List<String> sentences; // 例句列表
-  String category;       // 分类（A-F，或按主题）
-  int difficulty;        // 难度 1-5（KET核心词=1，拓展词=2-5）
-  String? imagePath;     // 图片路径（用户提供，asset/images/）
+  String category;       // 分类（按主题）
+  int difficulty;        // 难度 1-5
+  String? phonetic;      // 音标（可选）
+  List<String> examples; // 例句（v1 可为空）
+  String imagePath;      // 预处理导出的主图路径，v1 必填
+  List<OxfordRef> oxfordRefs; // 原始图片定位（至少1个）
+  bool imageApproved;    // 是否已通过人工核验
+}
+
+class OxfordRef {
+  int level;
+  int book;
+  int page;
 }
 ```
 
@@ -164,16 +189,19 @@ class Word {
 ```dart
 class LearningRecord {
   String wordId;
-  DateTime learnedDate;      // 首次学习日期
-  int correctCount;          // 累计正确次数（决定题型轮次）
-  int errorCount;            // 累计错误次数
-  DateTime nextReviewDate;   // 下次复习日期（艾宾浩斯）
-  int ebbinghausStage;       // 当前艾宾浩斯阶段 0-6
-  int totalAttempts;         // 总答题次数
+  DateTime learnedDate;        // 首次学习日期
+  DateTime? lastReviewedAt;    // 上次复习时间
+  int reviewStage;             // 复习调度阶段 0-6
+  int masteryLevel;            // 题型难度阶段 0-6
+  int correctCount;            // 累计正确次数
+  int errorCount;              // 累计错误次数
+  int totalAttempts;           // 总答题次数
+  int sameDayWrongCount;       // 今日答错回流次数
+  DateTime nextReviewDate;     // 下次复习日期（艾宾浩斯）
 }
 ```
 
-> **题型轮次 = correctCount**（0=首次出现，1=第2次...，封顶6）
+> **题型轮次 = masteryLevel**，**复习调度 = reviewStage**。这两个字段不能混用。
 
 #### DailyTask（每日任务）
 
@@ -188,7 +216,7 @@ class DailyTask {
 }
 ```
 
-#### ParentSetting（家长设置）
+#### ParentSetting（后续阶段）
 
 ```dart
 class ParentSetting {
@@ -216,7 +244,6 @@ vocab_rabbit/
 │   │   ├── task_service.dart          # 每日任务生成
 │   │   ├── question_service.dart      # 题型路由（第1-6轮）
 │   │   ├── word_service.dart          # 单词管理
-│   │   ├── sync_service.dart          # 家长同步
 │   │   └── audio_service.dart         # 发音（TTS）
 │   ├── database/
 │   │   └── database_helper.dart
@@ -225,10 +252,6 @@ vocab_rabbit/
 │   │   │   ├── home_screen.dart       # 首页（今日任务）
 │   │   │   ├── learning_screen.dart    # 学习/复习界面
 │   │   │   └── completion_screen.dart  # 完成后庆祝页
-│   │   └── parent/                    # 家长端
-│   │       ├── dashboard_screen.dart   # 进度仪表盘
-│   │       ├── report_screen.dart      # 学习报告
-│   │       └── settings_screen.dart    # 设置
 │   └── widgets/
 │       ├── word_card.dart
 │       ├── question_image.dart         # 看图选中文组件
@@ -236,15 +259,22 @@ vocab_rabbit/
 │       ├── question_fillblank.dart      # 填空补全组件
 │       ├── progress_ring.dart
 │       └── heatmap_calendar.dart
+├── tools/
+│   ├── build_wordlist.py               # 从本地词表构建应用 JSON
+│   ├── export_oxford_images.py         # 按 Level,book,page 导出候选页图
+│   └── review_image_links.py           # 图片人工核验与通过清单
 ├── assets/
-│   ├── images/                        # 用户提供的图片库
-│   │   ├── apple.jpg
-│   │   ├── banana.png
-│   │   └── ...
+│   ├── images/
+│   │   └── words/
+│   │       ├── ket_0001.webp
+│   │       ├── ket_0002.webp
+│   │       └── ...
 │   └── words/
 │       └── ket_vocabulary.json        # KET 词汇数据
 └── pubspec.yaml
 ```
+
+> 家长端、同步服务、云端数据模型不进入 v1 代码结构；等学习端跑通后再追加。
 
 ---
 
@@ -350,18 +380,29 @@ vocab_rabbit/
 2. **高频错误词其次**：errorCount / totalAttempts > 30%
 3. **最久未复习词最后**：按 nextReviewDate 从远到近排
 
-### 5.3 答题后状态更新
+### 5.3 当日队列规则
+
+- 当日先拉取所有到期复习词，再补足今日新词
+- 复习数量超过 50 时，只取优先级最高的前 50 个，其余顺延
+- 答错词重新插入当日队尾
+- 同一个词当天最多因为答错而额外出现 2 次
+- 当天未完成的到期词会继续保持逾期状态，次日优先出现
+
+### 5.4 答题后状态更新
 
 ```
 if 正确:
-    ebbinghausStage = min(ebbinghausStage + 1, 6)
+    reviewStage = min(reviewStage + 1, 6)
+    masteryLevel = min(masteryLevel + 1, 6)
     correctCount += 1
-    nextReviewDate = 今日 + 间隔表[ebbinghausStage]
-    熟练度 = min(correctCount, 6)  # 用于决定题型
+    sameDayWrongCount = 0
+    nextReviewDate = 今日 + 间隔表[reviewStage]
 
 if 错误:
-    ebbinghausStage = 0  # 阶段重置
+    reviewStage = 0
+    masteryLevel = max(masteryLevel - 1, 0)
     errorCount += 1
+    sameDayWrongCount += 1
     nextReviewDate = 明日  # 明天再复习
 ```
 
@@ -400,76 +441,100 @@ if 错误:
 
 ### 7.1 数据来源
 
-Cambridge English 官方 KET Vocabulary List（约 1500 词，分 A-F 六级）
+- 主词表来源：本地生成的 `KET_A2_child_friendly_themed_wordlist_zh.md`
+- 该词表已包含英文、中文、主题分类，以及 Oxford Tree 图片定位（`Level x,y,z`）
+- 词表上游来源仍是 Cambridge English 官方 KET Vocabulary List，但 App 不直接读取 PDF
 
-### 7.2 MVP 范围
+### 7.2 图片来源
 
-**先行200核心词**（A级+部分B级），后续扩展。
+- 原始图片来源：本地 SSD 中保存的 Oxford Tree 原始文档
+- 图片不在 App 运行时动态读取，而是在发布前由脚本批量导出候选页图
+- 导出的候选页图需要人工核验，确保页面内容与目标单词语义匹配
 
-### 7.3 数据格式
+### 7.3 MVP 范围
+
+- 架构必须支持完整 KET 词表
+- 首轮开发以 200-300 个词跑通全链路：词表导入、图片导出、三种题型、复习队列、本地存档
+- 首次对外可用版本以“通过图片核验的词”为准，不强行一次上线全部词
+
+### 7.4 数据构建流水线
+
+1. 从 `KET_A2_child_friendly_themed_wordlist_zh.md` 解析词条与 `Level x,y,z` 图片定位
+2. 从本地 SSD 的 Oxford Tree 原始文档导出候选页图
+3. 人工核验图片是否适合作为该词的主图
+4. 生成 `ket_vocabulary.json` 与 `assets/images/words/` 图片资源
+5. App 仅消费最终生成的数据包，不依赖原始文档存在
+
+### 7.5 数据格式
 
 ```json
 {
   "id": "ket_0001",
   "english": "able",
-  "phonetic": "/ˈeɪbəl/",
   "chinese": "能够的，有能力的",
-  "sentences": [
-    "She was able to speak three languages.",
-    "Are you able to come to the meeting?"
+  "category": "感受和性格",
+  "difficulty": 1,
+  "imagePath": "assets/images/words/ket_0001.webp",
+  "oxfordRefs": [
+    {"level": 6, "book": 4, "page": 6}
   ],
-  "category": "A",
-  "difficulty": 1
+  "imageApproved": true,
+  "phonetic": null,
+  "examples": []
 }
 ```
 
-### 7.4 用户图片库
+### 7.6 图片发布规则
 
-```
-assets/images/
-  apple.jpg      # 必选（至少200核心词配图）
-  banana.png
-  book.webp
-  ...
-```
-
-> 用户将图片放入 `assets/images/` 目录，App 启动时扫描并建立图片索引。
+- 每个上线词必须有 `imageApproved = true`
+- 没有通过核验图片的词不能进入发布包
+- 原始 Oxford Tree 文档与抽取中间结果不进入公开仓库与 App 安装包
 
 ---
 
 ## 八、开发计划
 
+### 阶段 0：数据准备（1周）
+
+| 模块 | 工作内容 | 产出 |
+|------|---------|------|
+| 词表清洗 | 从现有 KET 文件生成结构化 JSON | draft_words.json |
+| 图片导出 | 按 Oxford Tree 定位导出候选页图 | image_candidates/ |
+| 图片核验 | 人工确认每词主图 | approved_images.csv |
+
 ### 阶段一：MVP（2-3周）
 
 | 模块 | 工作内容 | 产出 |
 |------|---------|------|
-| 数据层 | KET 200核心词 JSON + SQLite 建表 | words.db |
+| 数据层 | 导入已核验词包 + SQLite 建表 | words.db |
 | 题型系统 | 三种题型切换逻辑 | question_service.dart |
 | 艾宾浩斯 | 算法实现 + 复习队列生成 | ebbinghaus_service.dart |
 | 学习端 | 首页 + 三种题型界面 + 复习流程 | 3个页面 |
-| 发音 | 设备离线 TTS 集成 | audio_service.dart |
+| 发音 | 设备离线 TTS 集成（先做单词级） | audio_service.dart |
 | 本地存储 | SQLite CRUD + 进度保存 | database_helper.dart |
-| 图片支持 | Asset 扫描 + Image组件 | image_service.dart |
+| 图片支持 | 读取已导出的主图资源 | image_service.dart |
 
 **验收标准**：
-- 孩子能完成每日 10 新词 + ~50 复习
+- 孩子能完成每日 10 新词 + 到期复习
 - 三种题型正确切换
 - 复习队列按艾宾浩斯正确生成
 - 进度不丢
+- 图片题可稳定显示，不依赖外部原始文档
 
-### 阶段二：家长端（1-2周）
+### 阶段二：内容扩充与打磨（1-2周）
+
+| 模块 | 工作内容 |
+|------|---------|
+| 词量扩充 | 从 200-300 词扩到更完整的 KET 包 |
+| 图片补齐 | 补做没有通过核验的词图 |
+| 发音/例句 | 按真实可得数据逐步补全 |
+
+### 阶段三：家长端与同步（后续）
 
 | 模块 | 工作内容 |
 |------|---------|
 | 家长端 | 仪表盘 + 报告 + 设置 |
 | 同步 | 家长-孩子数据同步 |
-
-### 阶段三：离线优化（1周）
-
-| 模块 | 工作内容 |
-|------|---------|
-| 图片库 | 用户图片导入/管理界面 |
-| 数据导出 | CSV 导出 |
 
 ---
 
@@ -477,10 +542,11 @@ assets/images/
 
 | 风险 | 应对 |
 |------|------|
-| KET 词汇数据量大（1500词） | MVP 先做 200 核心词，后续扩展 |
-| 用户图片库需要整理 | 提供批量导入功能（从相册选） |
+| KET 词汇数据量大（1500+） | 首版只要求先跑通 200-300 词的数据闭环 |
+| Oxford Tree 页图与词义不一定完全匹配 | 建立人工核验环节，未通过的词不发布 |
+| 原始文档可能涉及版权和体积问题 | 公开仓库和 App 安装包都不放原始文档，只放处理后的必要资源 |
 | 填空题设计要适合低龄 | 键盘仅26字母，字体足够大 |
-| 离线时家长无法监控 | "离线学习记录"队列，联网时同步 |
+| v1 没有家长实时监控 | 明确定位为单机首版，家长端放到后续阶段 |
 
 ---
 
