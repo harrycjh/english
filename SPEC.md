@@ -1,7 +1,7 @@
 # 小可爱兔专属背单词 — 产品策划文档
 
 > 项目代号：VocaRabbit
-> 版本：v1.2
+> 版本：v1.3
 > 最后更新：2026-05-08
 
 ---
@@ -13,6 +13,7 @@
 | v1.0 | 2025-05-05 | 初稿 |
 | v1.1 | 2025-05-05 | 调整为10新词+~50复习；增加3种题型+图片支持；用户自带图片库 |
 | v1.2 | 2026-05-08 | 首版聚焦离线学习端；图片改为基于本地 SSD 的牛津树页图流水线；家长端与同步后置 |
+| v1.3 | 2026-05-08 | 技术路线改为 HTML5 网页端 / PWA；以 iPad 为主目标设备；数据存储改为 IndexedDB |
 
 ---
 
@@ -20,7 +21,7 @@
 
 **产品定位**
 
-一款专为儿童设计的英语单词记忆辅助工具，基于艾宾浩斯记忆曲线算法，帮助女儿高效背诵 KET 词汇。v1 首版聚焦单机离线学习端，优先把“词汇 + 中文 + 图片 + 复习机制”做稳定；家长监控端和跨设备同步放到后续阶段。
+一款专为儿童设计的英语单词记忆辅助工具，基于艾宾浩斯记忆曲线算法，帮助女儿高效背诵 KET 词汇。v1 首版聚焦单机离线学习端，优先把“词汇 + 中文 + 图片 + 复习机制”做稳定；交付形态为 HTML5 网页端，并以 iPad 使用体验为第一优先级设计。家长监控端和跨设备同步放到后续阶段。
 
 **核心价值主张**
 
@@ -30,8 +31,14 @@
 
 | 用户 | 角色 | 设备 |
 |------|------|------|
-| 女儿（小可爱兔，KET 备考） | 学习者 | 手机（iOS/Android）或 iPad |
-| 家长（你） | 后续阶段的监控管理者 | 手机（iOS/Android）或 iPad |
+| 女儿（小可爱兔，KET 备考） | 学习者 | iPad Safari / iPad 主屏 PWA（主目标），手机浏览器（次级兼容） |
+| 家长（你） | 后续阶段的监控管理者 | iPad / 桌面浏览器 |
+
+**平台策略**
+
+- v1 不是原生 App，而是 HTML5 网页端程序
+- 主要使用场景是 iPad，因此布局、字号、点击热区、横竖屏适配都按 iPad 优先设计
+- 推荐以 PWA 方式安装到 iPad 主屏，获得接近 App 的启动体验和离线缓存能力
 
 ---
 
@@ -78,7 +85,8 @@
 
 #### 发音功能
 
-- 点击单词/图片自动播放英式发音（设备离线 TTS）
+- 点击单词/图片播放英式发音
+- 优先使用预生成音频；没有预制音频时，再用浏览器可用的音频能力兜底
 - 例句有独立发音按钮
 - 填空题在提交前可点击喇叭听发音提示
 
@@ -91,17 +99,17 @@
 #### 图片支持（MVP 必做）
 
 - 图片是首版必须能力，不是可选增强
-- 图片主来源不是 App 内手工上传，而是基于本地 SSD 中的 Oxford Tree 原始文档和词表里的页码定位做预处理生成
+- 图片主来源不是网页端手工上传，而是基于本地 SSD 中的 Oxford Tree 原始文档和词表里的页码定位做预处理生成
 - 词表中已保存牛津树定位格式 `Level x,y,z`，预处理脚本据此导出每个单词对应的候选页图
-- App 运行时只读取预处理后的图片资源，不直接读取本地 PDF 或原始文档
+- 网页端运行时只读取预处理后的图片资源，不直接读取本地 PDF 或原始文档
 - 每个上线单词必须至少绑定 1 张通过人工确认的图片；未确认图片的单词不能进入发布数据包
-- 图片资源统一输出到应用可打包目录，例如 `assets/images/words/{word_id}.webp`
+- 图片资源统一输出到网页静态资源目录，例如 `public/content/images/words/{word_id}.webp`
 
 #### 离线可用
 
-- 单词数据：打包进 App 的本地数据包，至少包含英文、中文、分类、图片引用
-- 进度数据：完全存储在本地 SQLite
-- v1 不依赖云端，也不要求联网
+- 单词数据：打包进网页端静态资源，至少包含英文、中文、分类、图片引用
+- 进度数据：完全存储在浏览器本地 IndexedDB
+- 第一次打开需要联网缓存静态资源；缓存完成后可离线学习
 - 家长端查看与跨设备同步不属于 v1 发布范围
 
 ### 2.2 后续阶段：家长监控端
@@ -131,7 +139,7 @@
 
 #### 设置
 
-- 设备绑定（首次使用时扫码配对）
+- 网页端账户绑定 / 设备识别（方案后定）
 - 通知开关
 - 数据备份/恢复
 - 图片库管理（添加/删除图片）
@@ -152,52 +160,53 @@
 
 | 项目 | 选型 | 说明 |
 |------|------|------|
-| 跨平台框架 | **Flutter** | iOS/Android 一套代码，性能好 |
-| 数据存储 | 本地 SQLite | 使用 sqflite，v1 不引入云同步 |
-| 发音方案 | 设备离线 TTS | 不依赖网络，v1 可先只做单词发音 |
-| 数据预处理 | Python 脚本 | 从本地词表和 Oxford Tree 页码生成 App 数据包 |
+| 前端框架 | **React + TypeScript + Vite** | 适合快速搭建 iPad 优先的单页网页应用 |
+| 运行形态 | **PWA** | 可添加到 iPad 主屏，支持静态资源缓存与离线使用 |
+| 数据存储 | IndexedDB | 浏览器本地持久化，建议用 Dexie 封装 |
+| 发音方案 | 预制音频优先，浏览器音频兜底 | iPad Safari 的离线 TTS 一致性不足，音频不能阻塞主流程 |
+| 数据预处理 | Python 脚本 | 从本地词表和 Oxford Tree 页码生成网页端数据包 |
 | 同步方案 | 后续再定 | v1 不实现云同步 |
-| 图片格式 | webp/png | 由预处理流水线导出到 App 资源目录 |
+| 图片格式 | webp/png | 由预处理流水线导出到网页静态资源目录 |
 
 ### 3.2 数据模型
 
 #### Word（单词）
 
-```dart
-class Word {
-  String id;             // 唯一 ID，如 "ket_0001"
-  String english;        // 英文单词
-  String chinese;        // 中文释义
-  String category;       // 分类（按主题）
-  int difficulty;        // 难度 1-5
-  String? phonetic;      // 音标（可选）
-  List<String> examples; // 例句（v1 可为空）
-  String imagePath;      // 预处理导出的主图路径，v1 必填
-  List<OxfordRef> oxfordRefs; // 原始图片定位（至少1个）
-  bool imageApproved;    // 是否已通过人工核验
+```ts
+interface Word {
+  id: string;                // 唯一 ID，如 "ket_0001"
+  english: string;           // 英文单词
+  chinese: string;           // 中文释义
+  category: string;          // 分类（按主题）
+  difficulty: number;        // 难度 1-5
+  phonetic?: string | null;  // 音标（可选）
+  examples: string[];        // 例句（v1 可为空）
+  imagePath: string;         // 预处理导出的主图路径，v1 必填
+  oxfordRefs: OxfordRef[];   // 原始图片定位（至少1个）
+  imageApproved: boolean;    // 是否已通过人工核验
 }
 
-class OxfordRef {
-  int level;
-  int book;
-  int page;
+interface OxfordRef {
+  level: number;
+  book: number;
+  page: number;
 }
 ```
 
 #### LearningRecord（学习记录）
 
-```dart
-class LearningRecord {
-  String wordId;
-  DateTime learnedDate;        // 首次学习日期
-  DateTime? lastReviewedAt;    // 上次复习时间
-  int reviewStage;             // 复习调度阶段 0-6
-  int masteryLevel;            // 题型难度阶段 0-6
-  int correctCount;            // 累计正确次数
-  int errorCount;              // 累计错误次数
-  int totalAttempts;           // 总答题次数
-  int sameDayWrongCount;       // 今日答错回流次数
-  DateTime nextReviewDate;     // 下次复习日期（艾宾浩斯）
+```ts
+interface LearningRecord {
+  wordId: string;
+  learnedDate: string;         // ISO 日期字符串
+  lastReviewedAt?: string | null;
+  reviewStage: number;         // 复习调度阶段 0-6
+  masteryLevel: number;        // 题型难度阶段 0-6
+  correctCount: number;        // 累计正确次数
+  errorCount: number;          // 累计错误次数
+  totalAttempts: number;       // 总答题次数
+  sameDayWrongCount: number;   // 今日答错回流次数
+  nextReviewDate: string;      // ISO 日期字符串
 }
 ```
 
@@ -205,25 +214,25 @@ class LearningRecord {
 
 #### DailyTask（每日任务）
 
-```dart
-class DailyTask {
-  DateTime date;
-  List<String> newWordIds;      // 今日新词（10个）
-  List<String> reviewWordIds;  // 今日复习（~50个）
-  int completedNewWords;       // 已完成新词
-  int completedReviews;        // 已完成复习
-  bool isRestDay;              // 是否休息日
+```ts
+interface DailyTask {
+  date: string;
+  newWordIds: string[];
+  reviewWordIds: string[];
+  completedNewWords: number;
+  completedReviews: number;
+  isRestDay: boolean;
 }
 ```
 
 #### ParentSetting（后续阶段）
 
-```dart
-class ParentSetting {
-  int dailyNewWords;           // 每日新词数（默认10）
-  bool notificationsEnabled;   // 推送通知
-  List<String> disabledWords;  // 跳过的词
-  DateTime? pausedUntil;       // 临时暂停截止日
+```ts
+interface ParentSetting {
+  dailyNewWords: number;
+  notificationsEnabled: boolean;
+  disabledWords: string[];
+  pausedUntil?: string | null;
 }
 ```
 
@@ -231,50 +240,57 @@ class ParentSetting {
 
 ```
 vocab_rabbit/
-├── lib/
-│   ├── main.dart
-│   ├── app.dart
+├── index.html
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── public/
+│   └── content/
+│       ├── images/
+│       │   └── words/
+│       │       ├── ket_0001.webp
+│       │       ├── ket_0002.webp
+│       │       └── ...
+│       └── words/
+│           └── ket_vocabulary.json
+├── src/
+│   ├── main.tsx
+│   ├── app/
+│   │   ├── App.tsx
+│   │   └── routes.tsx
 │   ├── models/
-│   │   ├── word.dart
-│   │   ├── learning_record.dart
-│   │   ├── daily_task.dart
-│   │   └── parent_setting.dart
+│   │   ├── word.ts
+│   │   ├── learning-record.ts
+│   │   ├── daily-task.ts
+│   │   └── parent-setting.ts
 │   ├── services/
-│   │   ├── ebbinghaus_service.dart    # 艾宾浩斯算法
-│   │   ├── task_service.dart          # 每日任务生成
-│   │   ├── question_service.dart      # 题型路由（第1-6轮）
-│   │   ├── word_service.dart          # 单词管理
-│   │   └── audio_service.dart         # 发音（TTS）
-│   ├── database/
-│   │   └── database_helper.dart
+│   │   ├── spaced-repetition.ts       # 艾宾浩斯算法
+│   │   ├── task-service.ts            # 每日任务生成
+│   │   ├── question-service.ts        # 题型路由（第1-6轮）
+│   │   ├── word-service.ts            # 单词管理
+│   │   ├── audio-service.ts           # 发音/音频控制
+│   │   └── storage-service.ts         # IndexedDB 持久化
 │   ├── screens/
-│   │   ├── student/                   # 学习端
-│   │   │   ├── home_screen.dart       # 首页（今日任务）
-│   │   │   ├── learning_screen.dart    # 学习/复习界面
-│   │   │   └── completion_screen.dart  # 完成后庆祝页
-│   └── widgets/
-│       ├── word_card.dart
-│       ├── question_image.dart         # 看图选中文组件
-│       ├── question_text.dart           # 看英选中文组件
-│       ├── question_fillblank.dart      # 填空补全组件
-│       ├── progress_ring.dart
-│       └── heatmap_calendar.dart
+│   │   ├── HomePage.tsx               # 首页（今日任务）
+│   │   ├── LearningPage.tsx           # 学习/复习界面
+│   │   └── CompletionPage.tsx         # 完成后庆祝页
+│   ├── components/
+│   │   ├── WordCard.tsx
+│   │   ├── QuestionImage.tsx
+│   │   ├── QuestionText.tsx
+│   │   ├── QuestionFillBlank.tsx
+│   │   ├── ProgressRing.tsx
+│   │   └── HeatmapCalendar.tsx
+│   └── styles/
+│       └── ipad.css
 ├── tools/
 │   ├── build_wordlist.py               # 从本地词表构建应用 JSON
 │   ├── export_oxford_images.py         # 按 Level,book,page 导出候选页图
 │   └── review_image_links.py           # 图片人工核验与通过清单
-├── assets/
-│   ├── images/
-│   │   └── words/
-│   │       ├── ket_0001.webp
-│   │       ├── ket_0002.webp
-│   │       └── ...
-│   └── words/
-│       └── ket_vocabulary.json        # KET 词汇数据
-└── pubspec.yaml
 ```
 
 > 家长端、同步服务、云端数据模型不进入 v1 代码结构；等学习端跑通后再追加。
+> 视觉与交互以 iPad 横屏优先，竖屏兼容，手机仅保证基本可用。
 
 ---
 
@@ -416,8 +432,10 @@ if 错误:
 
 - **配色**：马卡龙色系，主色 #FF9A9E（珊瑚粉），背景 #FFF5F5
 - **字体**：大号圆体字，英文单词 32sp+，中文 24sp+
-- **按钮**：圆角大按钮（最小 48x48dp）
+- **按钮**：圆角大按钮（最小 56x56px，适配 iPad 触控）
 - **动画**：答对小鱼游泳动画，错误轻轻摇晃
+- **布局优先级**：iPad 横屏优先，其次 iPad 竖屏；不依赖 hover 交互
+- **输入方式**：填空题优先使用页面内大字母键盘，不依赖系统小键盘
 
 **主界面**：
 ```
@@ -443,7 +461,7 @@ if 错误:
 
 - 主词表来源：本地生成的 `KET_A2_child_friendly_themed_wordlist_zh.md`
 - 该词表已包含英文、中文、主题分类，以及 Oxford Tree 图片定位（`Level x,y,z`）
-- 词表上游来源仍是 Cambridge English 官方 KET Vocabulary List，但 App 不直接读取 PDF
+- 词表上游来源仍是 Cambridge English 官方 KET Vocabulary List，但网页端不直接读取 PDF
 
 ### 7.2 图片来源
 
@@ -462,8 +480,8 @@ if 错误:
 1. 从 `KET_A2_child_friendly_themed_wordlist_zh.md` 解析词条与 `Level x,y,z` 图片定位
 2. 从本地 SSD 的 Oxford Tree 原始文档导出候选页图
 3. 人工核验图片是否适合作为该词的主图
-4. 生成 `ket_vocabulary.json` 与 `assets/images/words/` 图片资源
-5. App 仅消费最终生成的数据包，不依赖原始文档存在
+4. 生成 `ket_vocabulary.json` 与 `public/content/images/words/` 图片资源
+5. 网页端仅消费最终生成的数据包，不依赖原始文档存在
 
 ### 7.5 数据格式
 
@@ -474,7 +492,7 @@ if 错误:
   "chinese": "能够的，有能力的",
   "category": "感受和性格",
   "difficulty": 1,
-  "imagePath": "assets/images/words/ket_0001.webp",
+  "imagePath": "/content/images/words/ket_0001.webp",
   "oxfordRefs": [
     {"level": 6, "book": 4, "page": 6}
   ],
@@ -488,7 +506,7 @@ if 错误:
 
 - 每个上线词必须有 `imageApproved = true`
 - 没有通过核验图片的词不能进入发布包
-- 原始 Oxford Tree 文档与抽取中间结果不进入公开仓库与 App 安装包
+- 原始 Oxford Tree 文档与抽取中间结果不进入公开仓库与网页发布包
 
 ---
 
@@ -506,13 +524,14 @@ if 错误:
 
 | 模块 | 工作内容 | 产出 |
 |------|---------|------|
-| 数据层 | 导入已核验词包 + SQLite 建表 | words.db |
-| 题型系统 | 三种题型切换逻辑 | question_service.dart |
-| 艾宾浩斯 | 算法实现 + 复习队列生成 | ebbinghaus_service.dart |
+| 数据层 | 导入已核验词包 + IndexedDB 建模 | content bundle + local db |
+| 题型系统 | 三种题型切换逻辑 | question-service.ts |
+| 艾宾浩斯 | 算法实现 + 复习队列生成 | spaced-repetition.ts |
 | 学习端 | 首页 + 三种题型界面 + 复习流程 | 3个页面 |
-| 发音 | 设备离线 TTS 集成（先做单词级） | audio_service.dart |
-| 本地存储 | SQLite CRUD + 进度保存 | database_helper.dart |
-| 图片支持 | 读取已导出的主图资源 | image_service.dart |
+| 发音 | 浏览器音频控制（先做单词级） | audio-service.ts |
+| 本地存储 | IndexedDB CRUD + 进度保存 | storage-service.ts |
+| 图片支持 | 读取已导出的主图资源 | image loader |
+| PWA | Service Worker + 离线缓存 | manifest + cache |
 
 **验收标准**：
 - 孩子能完成每日 10 新词 + 到期复习
@@ -520,6 +539,7 @@ if 错误:
 - 复习队列按艾宾浩斯正确生成
 - 进度不丢
 - 图片题可稳定显示，不依赖外部原始文档
+- iPad Safari 与主屏 PWA 模式下都可正常使用
 
 ### 阶段二：内容扩充与打磨（1-2周）
 
@@ -544,7 +564,9 @@ if 错误:
 |------|------|
 | KET 词汇数据量大（1500+） | 首版只要求先跑通 200-300 词的数据闭环 |
 | Oxford Tree 页图与词义不一定完全匹配 | 建立人工核验环节，未通过的词不发布 |
-| 原始文档可能涉及版权和体积问题 | 公开仓库和 App 安装包都不放原始文档，只放处理后的必要资源 |
+| 原始文档可能涉及版权和体积问题 | 公开仓库和网页发布包都不放原始文档，只放处理后的必要资源 |
+| iPad 浏览器离线能力依赖缓存成功 | 首次打开要求联网，并提供资源缓存完成提示 |
+| iPad 浏览器音频能力不完全一致 | 音频为增强项，不能阻塞答题主流程 |
 | 填空题设计要适合低龄 | 键盘仅26字母，字体足够大 |
 | v1 没有家长实时监控 | 明确定位为单机首版，家长端放到后续阶段 |
 
