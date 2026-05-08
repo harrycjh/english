@@ -1,5 +1,10 @@
 const CACHE_NAME = 'vocab-rabbit-shell-v2';
-const PRECACHE = ['/', '/index.html', '/manifest.webmanifest', '/content/words/ket_vocabulary.json'];
+const SCOPE_URL = new URL(self.registration.scope);
+const APP_ROOT_URL = new URL('./', SCOPE_URL).toString();
+const INDEX_URL = new URL('index.html', SCOPE_URL).toString();
+const MANIFEST_URL = new URL('manifest.webmanifest', SCOPE_URL).toString();
+const WORD_PAYLOAD_URL = new URL('content/words/ket_vocabulary.json', SCOPE_URL).toString();
+const PRECACHE = [APP_ROOT_URL, INDEX_URL, MANIFEST_URL, WORD_PAYLOAD_URL];
 
 async function putInCache(request, response) {
   if (!response || response.status !== 200) {
@@ -14,10 +19,10 @@ async function putInCache(request, response) {
 async function handleNavigation(request) {
   try {
     const response = await fetch(request);
-    await putInCache('/index.html', response.clone());
+    await putInCache(INDEX_URL, response.clone());
     return response;
   } catch {
-    return caches.match('/index.html');
+    return caches.match(INDEX_URL);
   }
 }
 
@@ -31,7 +36,7 @@ async function handleStaticAsset(request) {
     const response = await fetch(request);
     return putInCache(request, response);
   } catch {
-    return caches.match('/index.html');
+    return caches.match(INDEX_URL);
   }
 }
 
