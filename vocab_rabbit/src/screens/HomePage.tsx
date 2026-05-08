@@ -213,7 +213,8 @@ export function ReviewPage({
 
   return (
     <main className="page page--home page--review">
-      <section className="review-plan-shell" id="review-top">
+      <div className="review-mockup-frame">
+        <section className="review-plan-shell" id="review-top">
         <div className="review-plan-shell__chrome">
           <div className="review-plan-shell__brand">
             <span className="review-plan-shell__brand-mark" aria-hidden="true" />
@@ -347,6 +348,14 @@ export function ReviewPage({
         </div>
       </section>
 
+        <nav className="home-dock review-dock" aria-label="主页面导航">
+          <ReviewDockButton active glyph="review" label="复习" onClick={() => scrollToSection('review-top')} />
+          <ReviewDockButton glyph="selection" label="选词" onClick={onOpenSelection} />
+          <ReviewDockButton glyph="stats" label="统计" onClick={onOpenStats} />
+          <ReviewDockButton glyph="settings" label="设置" onClick={onOpenSettings} />
+        </nav>
+      </div>
+
       <WordDetailDrawer
         isOpen={Boolean(selectedWord)}
         word={selectedWord}
@@ -380,13 +389,6 @@ export function ReviewPage({
             : undefined
         }
       />
-
-      <nav className="home-dock review-dock" aria-label="主页面导航">
-        <ReviewDockButton active glyph="review" label="复习" onClick={() => scrollToSection('review-top')} />
-        <ReviewDockButton glyph="selection" label="选词" onClick={onOpenSelection} />
-        <ReviewDockButton glyph="stats" label="统计" onClick={onOpenStats} />
-        <ReviewDockButton glyph="settings" label="设置" onClick={onOpenSettings} />
-      </nav>
     </main>
   );
 }

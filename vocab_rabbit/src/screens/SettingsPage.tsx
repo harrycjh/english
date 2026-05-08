@@ -8,6 +8,8 @@ import {
   type ParentSetting,
 } from '../models/parent-setting';
 
+type SettingsDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
+
 interface SettingsPageProps {
   settings: ParentSetting;
   task: DailyTaskSummary;
@@ -34,6 +36,13 @@ interface SettingsToggleRowProps {
   description: string;
   enabled: boolean;
   onToggle: () => void;
+}
+
+interface SettingsDockButtonProps {
+  active?: boolean;
+  glyph: SettingsDockGlyph;
+  label: string;
+  onClick: () => void;
 }
 
 function SettingsNumberControl({
@@ -84,6 +93,19 @@ function SettingsToggleRow({ label, description, enabled, onToggle }: SettingsTo
         {enabled ? '已开启' : '已关闭'}
       </button>
     </article>
+  );
+}
+
+function SettingsDockButton({ active = false, glyph, label, onClick }: SettingsDockButtonProps) {
+  return (
+    <button
+      className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
+      type="button"
+      onClick={onClick}
+    >
+      <span className={`review-dock__glyph review-dock__glyph--${glyph}`} aria-hidden="true" />
+      <span>{label}</span>
+    </button>
   );
 }
 
@@ -158,26 +180,37 @@ export function SettingsPage({
 
   return (
     <main className="page page--home page--settings">
-      <section className="hero-card settings-hero">
-        <div className="settings-hero__content">
-          <span className="hero-card__eyebrow">设置页 · 家长控制台</span>
-          <h1>把学习节奏和本地数据收在这里</h1>
-          <p>{saveText}</p>
-          <div className="review-pill-row" aria-label="设置页摘要">
-            <span className="review-pill">{settings.dailyNewWordCount} 新词 / 天</span>
-            <span className="review-pill">{settings.dailyReviewLimit} 复习 / 天</span>
-            <span className="review-pill">发音 {settings.enableAudio ? '开' : '关'}</span>
+      <div className="settings-mockup-frame">
+        <div className="settings-shell__chrome">
+          <div className="settings-shell__brand">
+            <span className="settings-shell__brand-mark" aria-hidden="true" />
+            <span>VocaRabbit</span>
           </div>
+          <div className="settings-shell__profile">小树的家长版</div>
         </div>
-        <div className="settings-hero__aside">
-          <span className="settings-hero__label">当前任务影响</span>
-          <strong>{task.completedAt ? '今日已完成' : task.totalAnswered > 0 ? '今日进行中' : '今日未开始'}</strong>
-          <p>{taskEffectText}</p>
-        </div>
-      </section>
 
-      <section className="settings-panel-grid">
-        <section className="section-block settings-panel">
+        <section className="hero-card settings-hero">
+          <div className="settings-hero__art" aria-hidden="true" />
+          <div className="settings-hero__content">
+            <span className="hero-card__eyebrow">设置页 · 家长控制台</span>
+            <h1>把学习节奏和本地数据收在这里</h1>
+            <p>{saveText}</p>
+            <div className="review-pill-row" aria-label="设置页摘要">
+              <span className="review-pill">{settings.dailyNewWordCount} 新词 / 天</span>
+              <span className="review-pill">{settings.dailyReviewLimit} 复习 / 天</span>
+              <span className="review-pill">发音 {settings.enableAudio ? '开' : '关'}</span>
+            </div>
+          </div>
+          <div className="settings-hero__aside">
+            <span className="settings-hero__label">当前任务影响</span>
+            <strong>{task.completedAt ? '今日已完成' : task.totalAnswered > 0 ? '今日进行中' : '今日未开始'}</strong>
+            <p>{taskEffectText}</p>
+            <div className="settings-hero__focus-art" aria-hidden="true" />
+          </div>
+        </section>
+
+        <section className="settings-panel-grid">
+        <section className="section-block settings-panel settings-panel--volume">
           <div className="section-block__header">
             <h2>学习量设置</h2>
             <p>先把每天学多少控制稳，再谈更细的页面能力。</p>
@@ -204,7 +237,7 @@ export function SettingsPage({
           </div>
         </section>
 
-        <section className="section-block settings-panel">
+        <section className="section-block settings-panel settings-panel--experience">
           <div className="section-block__header">
             <h2>学习体验设置</h2>
             <p>这一页只放真正影响孩子学习体验的开关。</p>
@@ -237,7 +270,7 @@ export function SettingsPage({
           </div>
         </section>
 
-        <section className="section-block settings-panel">
+        <section className="section-block settings-panel settings-panel--device">
           <div className="section-block__header">
             <h2>设备与安装</h2>
             <p>先把 iPad 端的使用前提说明清楚，少踩一次缓存和安装坑。</p>
@@ -269,7 +302,7 @@ export function SettingsPage({
           </div>
         </section>
 
-        <section className="section-block settings-panel">
+        <section className="section-block settings-panel settings-panel--danger">
           <div className="section-block__header">
             <h2>数据管理</h2>
             <p>先把真正危险的动作做安全，再补导出导入。</p>
@@ -286,22 +319,15 @@ export function SettingsPage({
             导出 / 导入会放在下一步补齐。这一版先把重置路径和设置持久化打稳，避免改完参数却没有真实效果。
           </p>
         </section>
-      </section>
+        </section>
 
-      <nav className="home-dock" aria-label="主页面导航">
-        <button className="home-dock__button" type="button" onClick={onBackHome}>
-          复习
-        </button>
-        <button className="home-dock__button" type="button" onClick={onOpenSelection}>
-          选词
-        </button>
-        <button className="home-dock__button" type="button" onClick={onOpenStats}>
-          统计
-        </button>
-        <button className="home-dock__button is-active" type="button">
-          设置
-        </button>
-      </nav>
+        <nav className="home-dock review-dock settings-dock" aria-label="主页面导航">
+          <SettingsDockButton glyph="review" label="复习" onClick={onBackHome} />
+          <SettingsDockButton glyph="selection" label="选词" onClick={onOpenSelection} />
+          <SettingsDockButton glyph="stats" label="统计" onClick={onOpenStats} />
+          <SettingsDockButton active glyph="settings" label="设置" onClick={() => {}} />
+        </nav>
+      </div>
     </main>
   );
 }

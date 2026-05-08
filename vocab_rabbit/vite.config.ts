@@ -5,6 +5,7 @@ export default defineConfig(({ command }) => ({
   base: command === 'build' ? '/english/' : '/',
   plugins: [react()],
   server: {
+    allowedHosts: true,
     host: '0.0.0.0',
     port: 4173,
   },

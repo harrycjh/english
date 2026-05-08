@@ -7,6 +7,8 @@ import { createDefaultWordSelectionState, type WordSelectionState } from '../mod
 import type { WordPayload, WordRecord } from '../models/word';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
 
+type StatsDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
+
 interface StatsPageProps {
   payload: WordPayload;
   task: DailyTaskSummary;
@@ -17,6 +19,13 @@ interface StatsPageProps {
   onBackHome: () => void;
   onOpenSelection: () => void;
   onOpenSettings: () => void;
+}
+
+interface StatsDockButtonProps {
+  active?: boolean;
+  glyph: StatsDockGlyph;
+  label: string;
+  onClick: () => void;
 }
 
 function buildRecentDates(length: number): string[] {
@@ -39,6 +48,19 @@ function formatDateKey(dateKey: string): string {
     month: '2-digit',
     day: '2-digit',
   });
+}
+
+function StatsDockButton({ active = false, glyph, label, onClick }: StatsDockButtonProps) {
+  return (
+    <button
+      className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
+      type="button"
+      onClick={onClick}
+    >
+      <span className={`review-dock__glyph review-dock__glyph--${glyph}`} aria-hidden="true" />
+      <span>{label}</span>
+    </button>
+  );
 }
 
 export function StatsPage({
@@ -150,59 +172,70 @@ export function StatsPage({
 
   return (
     <main className="page page--home page--stats">
-      <section className="hero-card stats-hero">
-        <div className="stats-hero__content">
-          <span className="hero-card__eyebrow">统计页 · 学习节奏看板</span>
-          <h1>把学习节奏看成一张图，而不是一堆按钮</h1>
-          <p>
-            词库共 {payload.wordCount} 词，当前启用 {librarySummary.bucketCounts.active} 词，
-            已掌握 {librarySummary.bucketCounts.mastered} 词，已有 {librarySummary.bucketCounts.studied} 词留下学习记录。
-          </p>
-          <div className="review-pill-row" aria-label="统计页摘要">
-            <span className="review-pill">启用 {librarySummary.bucketCounts.active}</span>
-            <span className="review-pill">学习中 {librarySummary.bucketCounts.learning}</span>
-            <span className="review-pill">已掌握 {librarySummary.bucketCounts.mastered}</span>
-            <span className="review-pill">连续 {recentSummary.completionStreak} 天</span>
+      <div className="stats-mockup-frame">
+        <div className="stats-shell__chrome">
+          <div className="stats-shell__brand">
+            <span className="stats-shell__brand-mark" aria-hidden="true" />
+            <span>VocaRabbit</span>
           </div>
+          <div className="stats-shell__profile">小树的家长版</div>
         </div>
-        <div className="stats-hero__aside">
-          <span className="settings-hero__label">当前节奏</span>
-          <strong>{focusTitle}</strong>
-          <p>{focusText}</p>
-          <div className="review-pill-row">
-            <span className="review-pill">{todayStatus}</span>
-            <span className="review-pill">
-              {setting.dailyNewWordCount} 新词 / {setting.dailyReviewLimit} 复习
-            </span>
-          </div>
-        </div>
-      </section>
 
-      <section className="dashboard-grid review-dashboard">
-        <article className="stat-card">
+        <section className="hero-card stats-hero">
+          <div className="stats-hero__art" aria-hidden="true" />
+          <div className="stats-hero__content">
+            <span className="hero-card__eyebrow">统计页 · 学习节奏看板</span>
+            <h1>把学习节奏看成一张图，而不是一堆按钮</h1>
+            <p>
+              词库共 {payload.wordCount} 词，当前启用 {librarySummary.bucketCounts.active} 词，
+              已掌握 {librarySummary.bucketCounts.mastered} 词，已有 {librarySummary.bucketCounts.studied} 词留下学习记录。
+            </p>
+            <div className="review-pill-row" aria-label="统计页摘要">
+              <span className="review-pill">启用 {librarySummary.bucketCounts.active}</span>
+              <span className="review-pill">学习中 {librarySummary.bucketCounts.learning}</span>
+              <span className="review-pill">已掌握 {librarySummary.bucketCounts.mastered}</span>
+              <span className="review-pill">连续 {recentSummary.completionStreak} 天</span>
+            </div>
+          </div>
+          <div className="stats-hero__aside">
+            <span className="settings-hero__label">当前节奏</span>
+            <strong>{focusTitle}</strong>
+            <p>{focusText}</p>
+            <div className="review-pill-row">
+              <span className="review-pill">{todayStatus}</span>
+              <span className="review-pill">
+                {setting.dailyNewWordCount} 新词 / {setting.dailyReviewLimit} 复习
+              </span>
+            </div>
+            <div className="stats-hero__focus-art" aria-hidden="true" />
+          </div>
+        </section>
+
+        <section className="dashboard-grid review-dashboard">
+        <article className="stat-card stat-card--planned">
           <span>今日任务</span>
           <strong>{plannedCount}</strong>
           <small>{task.completedAt ? '今天任务已完成' : task.totalAnswered > 0 ? `已答 ${task.totalAnswered} 题` : '尚未开始今天任务'}</small>
         </article>
-        <article className="stat-card">
+        <article className="stat-card stat-card--active">
           <span>启用词库</span>
           <strong>{librarySummary.bucketCounts.active}</strong>
           <small>当前会真实参与学习计划的词</small>
         </article>
-        <article className="stat-card">
+        <article className="stat-card stat-card--mastered">
           <span>已掌握</span>
           <strong>{librarySummary.bucketCounts.mastered}</strong>
           <small>掌握等级达到 4 及以上</small>
         </article>
-        <article className="stat-card">
+        <article className="stat-card stat-card--accuracy">
           <span>14 天正确率</span>
           <strong>{recentSummary.totalAnswered > 0 ? `${recentSummary.accuracy}%` : '--'}</strong>
           <small>{recentSummary.totalAnswered > 0 ? `最近 14 天共作答 ${recentSummary.totalAnswered} 题` : '最近 14 天还没有作答记录'}</small>
         </article>
-      </section>
+        </section>
 
-      <section className="settings-panel-grid stats-panel-grid">
-        <section className="section-block settings-panel">
+        <section className="settings-panel-grid stats-panel-grid">
+        <section className="section-block settings-panel stats-panel stats-panel--progress">
           <div className="section-block__header">
             <h2>词库进度分布</h2>
             <p>先看词库处在哪个阶段，再决定是加量还是减压。</p>
@@ -235,7 +268,7 @@ export function StatsPage({
           </div>
         </section>
 
-        <section className="section-block settings-panel">
+        <section className="section-block settings-panel stats-panel stats-panel--pressure">
           <div className="section-block__header">
             <h2>未来几天压力</h2>
             <p>只统计当前启用且未暂停的词，避免被无效词量干扰。</p>
@@ -264,7 +297,7 @@ export function StatsPage({
           </p>
         </section>
 
-        <section className="section-block settings-panel">
+        <section className="section-block settings-panel stats-panel stats-panel--heatmap">
           <div className="section-block__header">
             <h2>最近 14 天</h2>
             <p>热力图只回答一个问题：最近有没有稳定完成，而不是看上去很忙。</p>
@@ -318,13 +351,13 @@ export function StatsPage({
           </ul>
         </section>
 
-        <section className="section-block settings-panel">
+        <section className="section-block settings-panel stats-panel stats-panel--coverage">
           <div className="section-block__header">
             <h2>启用词库分布</h2>
             <p>这一版先看启用范围落在哪些主题和 Level，判断范围有没有失衡。</p>
           </div>
           <div className="stats-list-grid">
-            <section className="stats-list-panel">
+            <section className="stats-list-panel stats-list-panel--categories">
               <h3>分类占比</h3>
               {librarySummary.topCategories.length > 0 ? (
                 <ul className="stats-list">
@@ -340,7 +373,7 @@ export function StatsPage({
               )}
             </section>
 
-            <section className="stats-list-panel">
+            <section className="stats-list-panel stats-list-panel--levels">
               <h3>Level 覆盖</h3>
               {librarySummary.topLevels.length > 0 ? (
                 <ul className="stats-list">
@@ -357,22 +390,15 @@ export function StatsPage({
             </section>
           </div>
         </section>
-      </section>
+        </section>
 
-      <nav className="home-dock" aria-label="主页面导航">
-        <button className="home-dock__button" type="button" onClick={onBackHome}>
-          复习
-        </button>
-        <button className="home-dock__button" type="button" onClick={onOpenSelection}>
-          选词
-        </button>
-        <button className="home-dock__button is-active" type="button">
-          统计
-        </button>
-        <button className="home-dock__button" type="button" onClick={onOpenSettings}>
-          设置
-        </button>
-      </nav>
+        <nav className="home-dock review-dock stats-dock" aria-label="主页面导航">
+          <StatsDockButton glyph="review" label="复习" onClick={onBackHome} />
+          <StatsDockButton glyph="selection" label="选词" onClick={onOpenSelection} />
+          <StatsDockButton active glyph="stats" label="统计" onClick={() => {}} />
+          <StatsDockButton glyph="settings" label="设置" onClick={onOpenSettings} />
+        </nav>
+      </div>
     </main>
   );
 }

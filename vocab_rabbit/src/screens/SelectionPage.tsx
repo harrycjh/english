@@ -15,6 +15,8 @@ import { WordDetailDrawer } from '../components/WordDetailDrawer';
 type StatusFilter = 'all' | 'new' | 'learning' | 'mastered' | 'paused' | 'disabled';
 type SortMode = 'level' | 'difficulty' | 'recent' | 'alphabetical';
 type ViewMode = 'grid' | 'list';
+type DisplayLimit = '100' | '200' | '500' | 'all';
+type SelectionDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
 
 interface SelectionPageProps {
   payload: WordPayload;
@@ -42,6 +44,13 @@ interface SelectionWordCardProps {
 }
 
 interface SelectionWordRowProps extends SelectionWordCardProps {}
+
+interface SelectionDockButtonProps {
+  active?: boolean;
+  glyph: SelectionDockGlyph;
+  label: string;
+  onClick: () => void;
+}
 
 function SelectionWordCard({
   word,
@@ -126,6 +135,19 @@ function SelectionWordRow({
   );
 }
 
+function SelectionDockButton({ active = false, glyph, label, onClick }: SelectionDockButtonProps) {
+  return (
+    <button
+      className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
+      type="button"
+      onClick={onClick}
+    >
+      <span className={`review-dock__glyph review-dock__glyph--${glyph}`} aria-hidden="true" />
+      <span>{label}</span>
+    </button>
+  );
+}
+
 function getPrimaryLevel(word: WordRecord): number | null {
   return word.oxfordRefs[0]?.level ?? null;
 }
@@ -159,6 +181,7 @@ export function SelectionPage({
   const [imageOnly, setImageOnly] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>('level');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [displayLimit, setDisplayLimit] = useState<DisplayLimit>('100');
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
 
   const levelOptions = useMemo(
@@ -235,6 +258,14 @@ export function SelectionPage({
     sortMode,
   ]);
 
+  const visibleWords = useMemo(() => {
+    if (displayLimit === 'all') {
+      return filteredWords;
+    }
+
+    return filteredWords.slice(0, Number(displayLimit));
+  }, [displayLimit, filteredWords]);
+
   const reviewLoad = useMemo(() => estimateReviewLoad(recordsById, selectionById, setting), [recordsById, selectionById, setting]);
 
   const categoryBreakdown = useMemo(() => {
@@ -291,29 +322,55 @@ export function SelectionPage({
 
   return (
     <main className="page page--home page--selection">
-      <section className="hero-card selection-hero">
-        <div className="selection-hero__content">
-          <span className="hero-card__eyebrow">选词页 · 词库范围控制器</span>
-          <h1>先决定学哪些词，再决定今天怎么学</h1>
-          <p>这里的选择会先保存在本机。未开始今天任务时，点击应用会立即重算今天的学习范围。</p>
-          <div className="review-pill-row" aria-label="选词页摘要">
-            <span className="review-pill">启用 {enabledCount}</span>
-            <span className="review-pill">暂停 {pausedCount}</span>
-            <span className="review-pill">已掌握 {masteredCount}</span>
-            <span className="review-pill">当前筛出 {filteredWords.length}</span>
+      <div className="selection-mockup-frame">
+        <div className="selection-shell__chrome">
+          <div className="selection-shell__brand">
+            <span className="selection-shell__brand-mark" aria-hidden="true" />
+            <span>VocaRabbit</span>
           </div>
+          <div className="selection-shell__profile">小树的家长版</div>
         </div>
-        <div className="selection-hero__aside">
-          <span className="settings-hero__label">应用提示</span>
-          <strong>{reviewLoad.riskLevel === '过高' ? '先收缩词量' : '可以继续微调'}</strong>
-          <p>{applyHint}</p>
-          <button className="primary-button" type="button" onClick={() => void onApplySelectionPlan()}>
-            应用当前词库并返回复习
-          </button>
-        </div>
-      </section>
 
-      <section className="selection-layout">
+        <section className="hero-card selection-hero">
+          <div className="selection-hero__art" aria-hidden="true" />
+          <div className="selection-hero__content">
+            <div className="selection-hero__eyebrow-row">
+              <span className="hero-card__eyebrow">选词页 · 词库范围控制器</span>
+              <span className="selection-hero__tag">已筛出 {filteredWords.length} 个</span>
+            </div>
+            <h1>词库管理</h1>
+            <p>在这里先决定哪些词参与今天任务，再把真正需要学的范围稳定下来。</p>
+            <div className="selection-summary-pills" aria-label="选词页摘要">
+              <span className="selection-summary-pill">
+                <strong>{enabledCount}</strong>
+                <small>已启用</small>
+              </span>
+              <span className="selection-summary-pill">
+                <strong>{pausedCount}</strong>
+                <small>已暂停</small>
+              </span>
+              <span className="selection-summary-pill">
+                <strong>{masteredCount}</strong>
+                <small>已掌握</small>
+              </span>
+              <span className="selection-summary-pill">
+                <strong>{filteredWords.length}</strong>
+                <small>当前筛出</small>
+              </span>
+            </div>
+          </div>
+          <div className="selection-hero__aside">
+            <span className="settings-hero__label">应用提示</span>
+            <strong>{reviewLoad.riskLevel === '过高' ? '先收缩词量' : '可以继续微调'}</strong>
+            <p>{applyHint}</p>
+            <button className="primary-button" type="button" onClick={() => void onApplySelectionPlan()}>
+              应用当前词库并返回复习
+            </button>
+            <div className="selection-hero__plan-art" aria-hidden="true" />
+          </div>
+        </section>
+
+        <section className="selection-layout">
         <aside className="section-block selection-sidebar">
           <div className="section-block__header">
             <h2>筛选</h2>
@@ -404,16 +461,31 @@ export function SelectionPage({
                 列表视图
               </button>
             </div>
-            <label className="selection-toolbar__sort">
-              <span>排序</span>
-              <select className="selection-select" value={sortMode} onChange={(event) => setSortMode(event.target.value as SortMode)}>
-                <option value="level">按 Level</option>
-                <option value="difficulty">按难度</option>
-                <option value="recent">按最近变更</option>
-                <option value="alphabetical">按字母</option>
-              </select>
-            </label>
+            <div className="selection-toolbar__meta">
+              <label className="selection-toolbar__sort">
+                <span>排序</span>
+                <select className="selection-select" value={sortMode} onChange={(event) => setSortMode(event.target.value as SortMode)}>
+                  <option value="level">按 Level</option>
+                  <option value="difficulty">按难度</option>
+                  <option value="recent">按最近变更</option>
+                  <option value="alphabetical">按字母</option>
+                </select>
+              </label>
+              <label className="selection-toolbar__sort">
+                <span>显示</span>
+                <select className="selection-select" value={displayLimit} onChange={(event) => setDisplayLimit(event.target.value as DisplayLimit)}>
+                  <option value="100">前 100 个</option>
+                  <option value="200">前 200 个</option>
+                  <option value="500">前 500 个</option>
+                  <option value="all">全部</option>
+                </select>
+              </label>
+            </div>
           </div>
+          <p className="selection-toolbar__hint">
+            当前显示 {visibleWords.length} / {filteredWords.length} 个词
+            {visibleWords.length < filteredWords.length ? '，批量操作仍按全部筛选结果。' : '。'}
+          </p>
           <div className="selection-bulk-actions">
             <button className="secondary-button" type="button" onClick={() => void savePatchedSelectionStates(filteredWords.map((word) => ({ wordId: word.id, isEnabled: true, isPaused: false })))}>
               启用当前筛选结果
@@ -433,7 +505,7 @@ export function SelectionPage({
             </article>
           ) : viewMode === 'grid' ? (
             <div className="selection-card-grid">
-              {filteredWords.map((word) => {
+              {visibleWords.map((word) => {
                 const selectionState = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
                 const learningBucket = getWordLearningBucket(word.id, recordsById[word.id], selectionState);
                 const statusLabel = learningBucket === 'paused'
@@ -485,7 +557,7 @@ export function SelectionPage({
             </div>
           ) : (
             <div className="selection-list">
-              {filteredWords.map((word) => {
+              {visibleWords.map((word) => {
                 const selectionState = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
                 const learningBucket = getWordLearningBucket(word.id, recordsById[word.id], selectionState);
                 const statusLabel = learningBucket === 'paused'
@@ -588,7 +660,15 @@ export function SelectionPage({
             )}
           </div>
         </aside>
-      </section>
+        </section>
+
+        <nav className="home-dock review-dock selection-dock" aria-label="主页面导航">
+          <SelectionDockButton glyph="review" label="复习" onClick={onBackHome} />
+          <SelectionDockButton active glyph="selection" label="选词" onClick={() => {}} />
+          <SelectionDockButton glyph="stats" label="统计" onClick={onOpenStats} />
+          <SelectionDockButton glyph="settings" label="设置" onClick={onOpenSettings} />
+        </nav>
+      </div>
 
       <WordDetailDrawer
         isOpen={Boolean(selectedWord)}
@@ -623,21 +703,6 @@ export function SelectionPage({
             : undefined
         }
       />
-
-      <nav className="home-dock" aria-label="主页面导航">
-        <button className="home-dock__button" type="button" onClick={onBackHome}>
-          复习
-        </button>
-        <button className="home-dock__button is-active" type="button">
-          选词
-        </button>
-        <button className="home-dock__button" type="button" onClick={onOpenStats}>
-          统计
-        </button>
-        <button className="home-dock__button" type="button" onClick={onOpenSettings}>
-          设置
-        </button>
-      </nav>
     </main>
   );
 }
