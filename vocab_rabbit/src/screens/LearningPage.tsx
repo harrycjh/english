@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { WordPayload } from '../models/word';
@@ -6,7 +6,7 @@ import { ProgressRing } from '../components/ProgressRing';
 import { QuestionFillBlank } from '../components/QuestionFillBlank';
 import { QuestionImage } from '../components/QuestionImage';
 import { QuestionText } from '../components/QuestionText';
-import { buildQuestion, getCorrectAnswer, isCorrectAnswer } from '../services/question-service';
+import { buildQuestion, getCorrectAnswer, isCorrectAnswer, type Question } from '../services/question-service';
 import { createEmptyRecord } from '../services/spaced-repetition';
 import { indexWordsById } from '../services/word-service';
 
@@ -43,7 +43,13 @@ export function LearningPage({
   const currentWordId = queue[currentIndex];
   const currentWord = currentWordId ? wordsById.get(currentWordId) : undefined;
   const currentRecord = currentWordId ? recordsById[currentWordId] ?? createEmptyRecord(currentWordId) : undefined;
-  const currentQuestion = currentWord ? buildQuestion(currentWord, payload.words, currentRecord) : null;
+  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(() =>
+    currentWord ? buildQuestion(currentWord, payload.words, currentRecord) : null
+  );
+
+  useEffect(() => {
+    setCurrentQuestion(currentWord ? buildQuestion(currentWord, payload.words, currentRecord) : null);
+  }, [currentIndex, currentWord, payload.words]);
 
   async function handleAnswer(answer: string) {
     if (!currentWordId || !currentQuestion || isLocked) {

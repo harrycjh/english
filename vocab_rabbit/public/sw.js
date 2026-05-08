@@ -1,5 +1,39 @@
-const CACHE_NAME = 'vocab-rabbit-shell-v1';
+const CACHE_NAME = 'vocab-rabbit-shell-v2';
 const PRECACHE = ['/', '/index.html', '/manifest.webmanifest', '/content/words/ket_vocabulary.json'];
+
+async function putInCache(request, response) {
+  if (!response || response.status !== 200) {
+    return response;
+  }
+
+  const cache = await caches.open(CACHE_NAME);
+  await cache.put(request, response.clone());
+  return response;
+}
+
+async function handleNavigation(request) {
+  try {
+    const response = await fetch(request);
+    await putInCache('/index.html', response.clone());
+    return response;
+  } catch {
+    return caches.match('/index.html');
+  }
+}
+
+async function handleStaticAsset(request) {
+  const cached = await caches.match(request);
+  if (cached) {
+    return cached;
+  }
+
+  try {
+    const response = await fetch(request);
+    return putInCache(request, response);
+  } catch {
+    return caches.match('/index.html');
+  }
+}
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -20,23 +54,10 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) {
-        return cached;
-      }
+  if (event.request.mode === 'navigate') {
+    event.respondWith(handleNavigation(event.request));
+    return;
+  }
 
-      return fetch(event.request)
-        .then((response) => {
-          if (!response || response.status !== 200) {
-            return response;
-          }
-
-          const cloned = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned));
-          return response;
-        })
-        .catch(() => caches.match('/index.html'));
-    })
-  );
+  event.respondWith(handleStaticAsset(event.request));
 });

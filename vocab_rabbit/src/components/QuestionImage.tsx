@@ -1,3 +1,4 @@
+import { AudioIconButton } from './AudioIconButton';
 import type { ChoiceQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
 import { getPrimaryOxfordRefLabel } from '../services/word-service';
@@ -15,6 +16,7 @@ export function QuestionImage({ question, disabled, selectedAnswer, onSubmit }: 
   return (
     <section className="question-panel">
       <div className="image-stage">
+        <AudioIconButton onClick={() => speakWord(question.word)} className="audio-icon-button--overlay" />
         {question.word.imageApproved ? (
           <img src={question.word.imagePath} alt={question.word.chinese} className="image-stage__image" />
         ) : (
@@ -29,9 +31,6 @@ export function QuestionImage({ question, disabled, selectedAnswer, onSubmit }: 
 
       <div className="question-panel__meta">
         <p>{question.prompt}</p>
-        <button className="audio-button" type="button" onClick={() => speakWord(question.word)}>
-          听发音
-        </button>
       </div>
 
       <div className="option-grid">

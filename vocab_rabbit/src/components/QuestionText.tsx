@@ -1,3 +1,4 @@
+import { AudioIconButton } from './AudioIconButton';
 import type { ChoiceQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
 
@@ -12,11 +13,9 @@ export function QuestionText({ question, disabled, selectedAnswer, onSubmit }: Q
   return (
     <section className="question-panel question-panel--text">
       <div className="question-word">
+        <AudioIconButton onClick={() => speakWord(question.word)} />
         <span className="question-word__label">英文单词</span>
         <strong>{question.studyText}</strong>
-        <button className="audio-button" type="button" onClick={() => speakWord(question.word)}>
-          听发音
-        </button>
       </div>
 
       <div className="question-panel__meta">

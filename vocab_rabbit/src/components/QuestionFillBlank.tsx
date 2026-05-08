@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { FillBlankQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
+import { AudioIconButton } from './AudioIconButton';
 
 interface QuestionFillBlankProps {
   question: FillBlankQuestion;
@@ -47,11 +48,9 @@ export function QuestionFillBlank({ question, disabled, onSubmit }: QuestionFill
   return (
     <section className="question-panel question-panel--fill">
       <div className="question-word question-word--fill">
+        <AudioIconButton onClick={() => speakWord(question.word)} />
         <span className="question-word__label">拼写挑战</span>
         <strong>{question.prompt}</strong>
-        <button className="audio-button" type="button" onClick={() => speakWord(question.word)}>
-          听发音
-        </button>
       </div>
 
       <div className="fill-blank-display" aria-label="填空单词">
