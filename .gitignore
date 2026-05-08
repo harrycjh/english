@@ -30,3 +30,11 @@ KET_A2_translation_cache.json
 KET_A2_official_vocabulary_list.pdf
 processing_log_early_level1.txt
 vision_extraction_log.txt
+
+# Web app build artifacts
+vocab_rabbit/node_modules/
+vocab_rabbit/dist/
+
+# Local/private word image exports
+vocab_rabbit/public/content/images/words/*
+!vocab_rabbit/public/content/images/words/.gitkeep
