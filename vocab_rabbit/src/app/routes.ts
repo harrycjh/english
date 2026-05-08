@@ -1,1 +1,1 @@
-export type AppRoute = 'home' | 'learning' | 'complete';
+export type AppRoute = 'home' | 'selection' | 'stats' | 'settings' | 'learning' | 'complete';

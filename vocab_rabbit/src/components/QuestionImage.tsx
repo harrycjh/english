@@ -6,17 +6,18 @@ import { getPrimaryOxfordRefLabel } from '../services/word-service';
 interface QuestionImageProps {
   question: ChoiceQuestion;
   disabled: boolean;
+  enableAudio: boolean;
   selectedAnswer: string | null;
   onSubmit: (answer: string) => void;
 }
 
-export function QuestionImage({ question, disabled, selectedAnswer, onSubmit }: QuestionImageProps) {
+export function QuestionImage({ question, disabled, enableAudio, selectedAnswer, onSubmit }: QuestionImageProps) {
   const oxfordLabel = getPrimaryOxfordRefLabel(question.word);
 
   return (
     <section className="question-panel">
       <div className="image-stage">
-        <AudioIconButton onClick={() => speakWord(question.word)} className="audio-icon-button--overlay" />
+        {enableAudio ? <AudioIconButton onClick={() => speakWord(question.word)} className="audio-icon-button--overlay" /> : null}
         {question.word.imageApproved ? (
           <img src={question.word.imagePath} alt={question.word.chinese} className="image-stage__image" />
         ) : (

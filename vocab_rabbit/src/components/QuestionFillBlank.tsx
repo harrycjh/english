@@ -6,6 +6,7 @@ import { AudioIconButton } from './AudioIconButton';
 interface QuestionFillBlankProps {
   question: FillBlankQuestion;
   disabled: boolean;
+  enableAudio: boolean;
   onSubmit: (answer: string) => void;
 }
 
@@ -21,7 +22,7 @@ function renderMaskedWord(maskedCharacters: string[], guessLetters: string[]) {
   });
 }
 
-export function QuestionFillBlank({ question, disabled, onSubmit }: QuestionFillBlankProps) {
+export function QuestionFillBlank({ question, disabled, enableAudio, onSubmit }: QuestionFillBlankProps) {
   const [guessLetters, setGuessLetters] = useState<string[]>([]);
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export function QuestionFillBlank({ question, disabled, onSubmit }: QuestionFill
   return (
     <section className="question-panel question-panel--fill">
       <div className="question-word question-word--fill">
-        <AudioIconButton onClick={() => speakWord(question.word)} />
+        {enableAudio ? <AudioIconButton onClick={() => speakWord(question.word)} /> : null}
         <span className="question-word__label">拼写挑战</span>
         <strong>{question.prompt}</strong>
       </div>

@@ -1,19 +1,30 @@
 import { startTransition, useEffect, useMemo, useState } from 'react';
 import type { DailyTaskSummary, SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
+import type { ParentSetting } from '../models/parent-setting';
+import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordPayload } from '../models/word';
 import type { AppRoute } from './routes';
 import { CompletionPage } from '../screens/CompletionPage';
-import { HomePage } from '../screens/HomePage';
+import { ReviewPage } from '../screens/HomePage';
 import { LearningPage } from '../screens/LearningPage';
+import { SelectionPage } from '../screens/SelectionPage';
+import { StatsPage } from '../screens/StatsPage';
+import { SettingsPage } from '../screens/SettingsPage';
 import { buildDailyTask, createDateKey } from '../services/task-service';
+import { ensureSelectionStateMap } from '../services/selection-service';
 import { createEmptyRecord, evaluateAnswer, isMastered } from '../services/spaced-repetition';
 import {
+  clearStudyData,
   getDailyTask,
+  getParentSetting,
   listLearningRecords,
   listRecentTasks,
+  listWordSelectionStates,
   saveDailyTask,
   saveLearningRecord,
+  saveParentSetting,
+  saveWordSelectionStates,
 } from '../services/storage-service';
 import { loadWordPayload } from '../services/word-service';
 
@@ -31,6 +42,8 @@ export default function App() {
   const [route, setRoute] = useState<AppRoute>('home');
   const [payload, setPayload] = useState<WordPayload | null>(null);
   const [recordsById, setRecordsById] = useState<Record<string, LearningRecord>>({});
+  const [selectionById, setSelectionById] = useState<Record<string, WordSelectionState>>({});
+  const [parentSetting, setParentSetting] = useState<ParentSetting | null>(null);
   const [task, setTask] = useState<DailyTaskSummary | null>(null);
   const [recentTasks, setRecentTasks] = useState<DailyTaskSummary[]>([]);
   const [sessionResult, setSessionResult] = useState<SessionResult | null>(null);
@@ -43,12 +56,22 @@ export default function App() {
     async function bootstrap() {
       try {
         setLoading(true);
-        const [payloadValue, savedRecords] = await Promise.all([loadWordPayload(), listLearningRecords()]);
+        const [payloadValue, savedRecords, savedSetting, savedSelection] = await Promise.all([
+          loadWordPayload(),
+          listLearningRecords(),
+          getParentSetting(),
+          listWordSelectionStates(),
+        ]);
         const todayKey = createDateKey();
+        const { nextSelectionById, missingStates } = ensureSelectionStateMap(payloadValue.words, savedSelection);
+
+        if (missingStates.length > 0) {
+          await saveWordSelectionStates(missingStates);
+        }
 
         let todayTask = await getDailyTask(todayKey);
         if (!todayTask) {
-          todayTask = buildDailyTask(payloadValue.words, savedRecords, new Date());
+          todayTask = buildDailyTask(payloadValue.words, savedRecords, savedSetting, new Date(), nextSelectionById);
           await saveDailyTask(todayTask);
         }
 
@@ -57,6 +80,8 @@ export default function App() {
         if (!cancelled) {
           setPayload(payloadValue);
           setRecordsById(savedRecords);
+          setSelectionById(nextSelectionById);
+          setParentSetting(savedSetting);
           setTask(todayTask);
           setRecentTasks(history);
           setError(null);
@@ -86,6 +111,21 @@ export default function App() {
 
   async function refreshRecentTasks() {
     setRecentTasks(await listRecentTasks(14));
+  }
+
+  async function rebuildTodayTask(
+    nextRecords: Record<string, LearningRecord> = recordsById,
+    nextSetting: ParentSetting | null = parentSetting,
+    nextSelection: Record<string, WordSelectionState> = selectionById
+  ) {
+    if (!payload || !nextSetting) {
+      return;
+    }
+
+    const nextTask = buildDailyTask(payload.words, nextRecords, nextSetting, new Date(), nextSelection);
+    await saveDailyTask(nextTask);
+    setTask(nextTask);
+    await refreshRecentTasks();
   }
 
   async function handleAnswer(wordId: string, isCorrect: boolean) {
@@ -121,7 +161,70 @@ export default function App() {
     startTransition(() => setRoute('learning'));
   }
 
+  function handleOpenSettings() {
+    startTransition(() => setRoute('settings'));
+  }
+
+  function handleOpenSelection() {
+    startTransition(() => setRoute('selection'));
+  }
+
+  function handleOpenStats() {
+    startTransition(() => setRoute('stats'));
+  }
+
   function handleBackHome() {
+    startTransition(() => setRoute('home'));
+  }
+
+  async function handleUpdateSetting(nextSetting: ParentSetting) {
+    await saveParentSetting(nextSetting);
+    setParentSetting(nextSetting);
+
+    if (task && !task.completedAt && task.totalAnswered === 0) {
+      await rebuildTodayTask(recordsById, nextSetting, selectionById);
+    }
+  }
+
+  async function handleSaveSelectionStates(states: WordSelectionState[]) {
+    await saveWordSelectionStates(states);
+    setSelectionById((previous) => {
+      const nextSelectionById = { ...previous };
+      for (const state of states) {
+        nextSelectionById[state.wordId] = state;
+      }
+      return nextSelectionById;
+    });
+  }
+
+  async function handleApplySelectionPlan() {
+    if (task && !task.completedAt && task.totalAnswered === 0) {
+      await rebuildTodayTask(recordsById, parentSetting, selectionById);
+    }
+
+    startTransition(() => setRoute('home'));
+  }
+
+  async function handleResetTodayTask() {
+    setSessionResult(null);
+    await rebuildTodayTask();
+    startTransition(() => setRoute('home'));
+  }
+
+  async function handleResetLearningProgress() {
+    if (!payload || !parentSetting) {
+      return;
+    }
+
+    await clearStudyData();
+    const nextRecords: Record<string, LearningRecord> = {};
+    const nextTask = buildDailyTask(payload.words, nextRecords, parentSetting, new Date(), selectionById);
+    await saveDailyTask(nextTask);
+
+    setRecordsById(nextRecords);
+    setTask(nextTask);
+    setSessionResult(null);
+    await refreshRecentTasks();
     startTransition(() => setRoute('home'));
   }
 
@@ -136,7 +239,7 @@ export default function App() {
     );
   }
 
-  if (error || !payload || !task) {
+  if (error || !payload || !task || !parentSetting) {
     return (
       <main className="page page--status">
         <section className="status-card status-card--error">
@@ -153,6 +256,7 @@ export default function App() {
         payload={payload}
         initialWordIds={[...task.newWordIds, ...task.reviewWordIds]}
         recordsById={recordsById}
+        setting={parentSetting}
         onAnswer={handleAnswer}
         onComplete={handleComplete}
         onExit={handleBackHome}
@@ -164,14 +268,69 @@ export default function App() {
     return <CompletionPage result={sessionResult} onBackHome={handleBackHome} />;
   }
 
+  if (route === 'settings') {
+    return (
+      <SettingsPage
+        settings={parentSetting}
+        task={task}
+        onBackHome={handleBackHome}
+        onOpenSelection={handleOpenSelection}
+        onOpenStats={handleOpenStats}
+        onUpdateSettings={handleUpdateSetting}
+        onResetTodayTask={handleResetTodayTask}
+        onResetLearningProgress={handleResetLearningProgress}
+      />
+    );
+  }
+
+  if (route === 'stats') {
+    return (
+      <StatsPage
+        payload={payload}
+        task={task}
+        recentTasks={recentTasks}
+        recordsById={recordsById}
+        selectionById={selectionById}
+        setting={parentSetting}
+        onBackHome={handleBackHome}
+        onOpenSelection={handleOpenSelection}
+        onOpenSettings={handleOpenSettings}
+      />
+    );
+  }
+
+  if (route === 'selection') {
+    return (
+      <SelectionPage
+        payload={payload}
+        recordsById={recordsById}
+        selectionById={selectionById}
+        setting={parentSetting}
+        task={task}
+        onBackHome={handleBackHome}
+        onOpenSettings={handleOpenSettings}
+        onOpenStats={handleOpenStats}
+        onSaveSelectionStates={handleSaveSelectionStates}
+        onApplySelectionPlan={handleApplySelectionPlan}
+      />
+    );
+  }
+
   return (
-    <HomePage
+    <ReviewPage
       payload={payload}
       task={task}
+      setting={parentSetting}
+      recordsById={recordsById}
+      selectionById={selectionById}
       masteredCount={masteredCount}
       recentTasks={recentTasks}
       previewWords={previewWords}
       onStart={handleStart}
+      onOpenSelection={handleOpenSelection}
+      onOpenStats={handleOpenStats}
+      onOpenSettings={handleOpenSettings}
+      onSaveSelectionStates={handleSaveSelectionStates}
     />
   );
 }

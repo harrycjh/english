@@ -3,13 +3,13 @@ import { getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service
 
 interface WordCardProps {
   word: WordRecord;
+  onOpenDetails?: () => void;
 }
 
-export function WordCard({ word }: WordCardProps) {
+export function WordCard({ word, onOpenDetails }: WordCardProps) {
   const oxfordLabel = getPrimaryOxfordRefLabel(word);
-
-  return (
-    <article className="word-card">
+  const content = (
+    <>
       <div className="word-card__header">
         <span className="word-card__category">{word.category}</span>
         <span className="word-card__difficulty">Lv.{word.difficulty}</span>
@@ -20,6 +20,20 @@ export function WordCard({ word }: WordCardProps) {
         <span>{word.partOfSpeech}</span>
         <span>{oxfordLabel ?? '暂未回填牛津树位置'}</span>
       </footer>
+    </>
+  );
+
+  if (onOpenDetails) {
+    return (
+      <button className="word-card word-card--interactive" type="button" onClick={onOpenDetails}>
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <article className="word-card">
+      {content}
     </article>
   );
 }

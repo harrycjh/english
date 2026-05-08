@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
+import type { ParentSetting } from '../models/parent-setting';
 import type { WordPayload } from '../models/word';
 import { ProgressRing } from '../components/ProgressRing';
 import { QuestionFillBlank } from '../components/QuestionFillBlank';
@@ -14,6 +15,7 @@ interface LearningPageProps {
   payload: WordPayload;
   initialWordIds: string[];
   recordsById: Record<string, LearningRecord>;
+  setting: ParentSetting;
   onAnswer: (wordId: string, isCorrect: boolean) => Promise<void>;
   onComplete: (result: SessionResult) => Promise<void>;
   onExit: () => void;
@@ -23,6 +25,7 @@ export function LearningPage({
   payload,
   initialWordIds,
   recordsById,
+  setting,
   onAnswer,
   onComplete,
   onExit,
@@ -44,12 +47,12 @@ export function LearningPage({
   const currentWord = currentWordId ? wordsById.get(currentWordId) : undefined;
   const currentRecord = currentWordId ? recordsById[currentWordId] ?? createEmptyRecord(currentWordId) : undefined;
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(() =>
-    currentWord ? buildQuestion(currentWord, payload.words, currentRecord) : null
+    currentWord ? buildQuestion(currentWord, payload.words, currentRecord, setting) : null
   );
 
   useEffect(() => {
-    setCurrentQuestion(currentWord ? buildQuestion(currentWord, payload.words, currentRecord) : null);
-  }, [currentIndex, currentWord, payload.words]);
+    setCurrentQuestion(currentWord ? buildQuestion(currentWord, payload.words, currentRecord, setting) : null);
+  }, [currentIndex, currentWord, payload.words, currentRecord, setting]);
 
   async function handleAnswer(answer: string) {
     if (!currentWordId || !currentQuestion || isLocked) {
@@ -132,6 +135,7 @@ export function LearningPage({
           <QuestionImage
             question={currentQuestion}
             disabled={isLocked}
+            enableAudio={setting.enableAudio}
             selectedAnswer={selectedAnswer}
             onSubmit={handleAnswer}
           />
@@ -141,13 +145,19 @@ export function LearningPage({
           <QuestionText
             question={currentQuestion}
             disabled={isLocked}
+            enableAudio={setting.enableAudio}
             selectedAnswer={selectedAnswer}
             onSubmit={handleAnswer}
           />
         ) : null}
 
         {currentQuestion.kind === 'fill-blank' ? (
-          <QuestionFillBlank question={currentQuestion} disabled={isLocked} onSubmit={handleAnswer} />
+          <QuestionFillBlank
+            question={currentQuestion}
+            disabled={isLocked}
+            enableAudio={setting.enableAudio}
+            onSubmit={handleAnswer}
+          />
         ) : null}
 
         <footer className={`feedback-strip${feedbackText ? ' is-visible' : ''}`}>

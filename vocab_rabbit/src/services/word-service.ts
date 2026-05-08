@@ -1,4 +1,4 @@
-import type { WordPayload, WordRecord } from '../models/word';
+import type { OxfordRef, WordPayload, WordRecord } from '../models/word';
 
 let payloadPromise: Promise<WordPayload> | null = null;
 
@@ -23,12 +23,20 @@ export function getStudyText(word: Pick<WordRecord, 'english'>): string {
     .trim();
 }
 
+export function getOxfordRefLabel(ref: OxfordRef): string {
+  return `Level ${ref.level},${ref.book},${ref.page}`;
+}
+
+export function getOxfordRefLabels(word: WordRecord, limit: number = 2): string[] {
+  return word.oxfordRefs.slice(0, limit).map(getOxfordRefLabel);
+}
+
 export function getPrimaryOxfordRefLabel(word: WordRecord): string | null {
   const firstRef = word.oxfordRefs[0];
   if (!firstRef) {
     return null;
   }
-  return `Level ${firstRef.level},${firstRef.book},${firstRef.page}`;
+  return getOxfordRefLabel(firstRef);
 }
 
 export function indexWordsById(words: WordRecord[]): Map<string, WordRecord> {

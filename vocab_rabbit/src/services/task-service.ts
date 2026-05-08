@@ -1,9 +1,9 @@
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
+import { defaultParentSetting, type ParentSetting } from '../models/parent-setting';
+import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordRecord } from '../models/word';
-
-const DEFAULT_NEW_WORD_LIMIT = 6;
-const DEFAULT_REVIEW_LIMIT = 8;
+import { getActiveStudyWords } from './selection-service';
 
 export function createDateKey(date: Date = new Date()): string {
   return date.toISOString().slice(0, 10);
@@ -46,9 +46,15 @@ function pickBalancedNewWords(words: WordRecord[], limit: number): string[] {
 export function buildDailyTask(
   words: WordRecord[],
   recordsById: Record<string, LearningRecord>,
-  date: Date = new Date()
+  setting: ParentSetting = defaultParentSetting,
+  date: Date = new Date(),
+  selectionById: Record<string, WordSelectionState> = {}
 ): DailyTaskSummary {
-  const dueReviewWordIds = words
+  const reviewLimit = Math.max(1, setting.dailyReviewLimit);
+  const newWordLimit = Math.max(1, setting.dailyNewWordCount);
+  const studyWords = getActiveStudyWords(words, selectionById);
+
+  const dueReviewWordIds = studyWords
     .filter((word) => {
       const record = recordsById[word.id];
       return record && isDue(record, date);
@@ -60,11 +66,11 @@ export function buildDailyTask(
       const rightDue = rightRecord?.nextDueAt ?? '';
       return leftDue.localeCompare(rightDue) || left.difficulty - right.difficulty;
     })
-    .slice(0, DEFAULT_REVIEW_LIMIT)
+    .slice(0, reviewLimit)
     .map((word) => word.id);
 
-  const unseenWords = words.filter((word) => !recordsById[word.id]);
-  const newWordIds = pickBalancedNewWords(unseenWords, DEFAULT_NEW_WORD_LIMIT);
+  const unseenWords = studyWords.filter((word) => !recordsById[word.id]);
+  const newWordIds = pickBalancedNewWords(unseenWords, newWordLimit);
 
   return {
     dateKey: createDateKey(date),

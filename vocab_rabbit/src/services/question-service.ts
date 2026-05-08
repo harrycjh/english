@@ -1,4 +1,5 @@
 import type { LearningRecord } from '../models/learning-record';
+import { defaultParentSetting, type ParentSetting } from '../models/parent-setting';
 import type { WordRecord } from '../models/word';
 import { getStudyText } from './word-service';
 
@@ -40,11 +41,11 @@ function canUseFillBlank(word: WordRecord): boolean {
   return /^[A-Za-z\- '\/]+$/.test(studyText) && studyText.replace(/[^A-Za-z]/g, '').length >= 4;
 }
 
-function getQuestionKind(word: WordRecord, record: LearningRecord | undefined): QuestionKind {
+function getQuestionKind(word: WordRecord, record: LearningRecord | undefined, setting: ParentSetting): QuestionKind {
   const masteryLevel = record?.masteryLevel ?? 0;
 
   if (masteryLevel <= 1) {
-    return 'image-choice';
+    return setting.showImages ? 'image-choice' : 'text-choice';
   }
 
   if (masteryLevel <= 3 || !canUseFillBlank(word)) {
@@ -127,8 +128,13 @@ function buildFillBlankQuestion(word: WordRecord): FillBlankQuestion {
   };
 }
 
-export function buildQuestion(word: WordRecord, allWords: WordRecord[], record: LearningRecord | undefined): Question {
-  const kind = getQuestionKind(word, record);
+export function buildQuestion(
+  word: WordRecord,
+  allWords: WordRecord[],
+  record: LearningRecord | undefined,
+  setting: ParentSetting = defaultParentSetting
+): Question {
+  const kind = getQuestionKind(word, record, setting);
   if (kind === 'fill-blank') {
     return buildFillBlankQuestion(word);
   }
