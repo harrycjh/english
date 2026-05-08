@@ -1,0 +1,32 @@
+.DS_Store
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Large local source/extracted datasets
+red-rocket/
+red-rocket-extracted/
+red-rocket-processed/
+oxford-tree/Level 1/
+oxford-tree/Level 2/
+oxford-tree/Level 3/
+oxford-tree/Level 4/
+oxford-tree/Level 5/
+oxford-tree/Level 6/
+oxford-tree/Level 7/
+oxford-tree/Level 8/
+oxford-tree/Level 9/
+oxford-tree/Level 10/
+oxford-tree/Level 11/
+oxford-tree/Level 12/
+oxford-tree/Level 13/
+oxford-tree/Level 14/
+oxford-tree/Level 15/
+oxford-tree/Level 16/
+oxford-tree/extracted/
+
+# Generated cache and local logs
+KET_A2_translation_cache.json
+KET_A2_official_vocabulary_list.pdf
+processing_log_early_level1.txt
+vision_extraction_log.txt
