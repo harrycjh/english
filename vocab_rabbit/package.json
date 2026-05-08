@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:gh-pages": "node scripts/deploy-gh-pages.mjs"
   },
   "dependencies": {
     "dexie": "^4.2.1",
