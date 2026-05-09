@@ -24,6 +24,12 @@ interface ReviewMetricCardProps {
   children?: ReactNode;
 }
 
+interface ReviewSummaryPillProps {
+  tone: 'library' | 'mastered' | 'completion';
+  label: string;
+  value: string;
+}
+
 interface ReviewPreviewCardProps {
   word: ReviewPreviewWord;
   index: number;
@@ -58,6 +64,18 @@ function ReviewMetricCard({ tone, label, value, note, children }: ReviewMetricCa
   );
 }
 
+function ReviewSummaryPill({ tone, label, value }: ReviewSummaryPillProps) {
+  return (
+    <span className={`review-summary-pill review-summary-pill--${tone}`}>
+      <span className="review-summary-pill__icon" aria-hidden="true" />
+      <span className="review-summary-pill__body">
+        <strong>{value}</strong>
+        <small>{label}</small>
+      </span>
+    </span>
+  );
+}
+
 function ReviewPreviewCard({ word, index, onOpenDetails }: ReviewPreviewCardProps) {
   const oxfordLabel = getPrimaryOxfordRefLabel(word);
   const artVariant = ['family', 'hello', 'body', 'spark'][index % 4];
@@ -69,6 +87,8 @@ function ReviewPreviewCard({ word, index, onOpenDetails }: ReviewPreviewCardProp
       onClick={onOpenDetails}
     >
       <div className="review-preview-card__art" aria-hidden="true">
+        <span className="review-preview-card__index">{index + 1}</span>
+        <span className="review-preview-card__favorite" />
         <span className="review-preview-card__art-badge">今日预览</span>
         <span className="review-preview-card__art-word">{getStudyText(word)}</span>
       </div>
@@ -249,18 +269,9 @@ export function ReviewPage({
             <h1>今日学习计划</h1>
             <p>{heroDescription}</p>
             <div className="review-summary-pills" aria-label="复习页摘要">
-              <span className="review-summary-pill">
-                <strong>{payload.wordCount.toLocaleString('en-US')}</strong>
-                <small>总词汇</small>
-              </span>
-              <span className="review-summary-pill">
-                <strong>{masteredCount}</strong>
-                <small>已掌握</small>
-              </span>
-              <span className="review-summary-pill">
-                <strong>{completionRate}%</strong>
-                <small>14 天完成率</small>
-              </span>
+              <ReviewSummaryPill tone="library" value={payload.wordCount.toLocaleString('en-US')} label="总词汇" />
+              <ReviewSummaryPill tone="mastered" value={String(masteredCount)} label="已掌握" />
+              <ReviewSummaryPill tone="completion" value={`${completionRate}%`} label="14 天完成率" />
             </div>
           </div>
 
