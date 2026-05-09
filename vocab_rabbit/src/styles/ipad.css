@@ -1,4 +1,10 @@
 :root {
+  --ipad-pro-11-landscape-width: 1194px;
+  --ipad-pro-11-landscape-height: 834px;
+  --ipad-shell-padding: 18px;
+  --ipad-shell-stage-width: min(100vw, var(--ipad-pro-11-landscape-width));
+  --ipad-shell-stage-height: min(100dvh, var(--ipad-pro-11-landscape-height));
+  --ipad-shell-frame-height: calc(var(--ipad-shell-stage-height) - (var(--ipad-shell-padding) * 2));
   color-scheme: light;
   font-family: 'Avenir Next', 'PingFang SC', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
@@ -22,11 +28,138 @@ html,
 body,
 #root {
   margin: 0;
+  width: 100%;
   min-height: 100%;
 }
 
 body {
   min-height: 100vh;
+}
+
+html[data-shell-mode='ipad-fixed'],
+body[data-shell-mode='ipad-fixed'],
+html[data-shell-mode='ipad-fixed'] #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body[data-shell-mode='ipad-fixed'] {
+  min-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+html[data-shell-mode='ipad-fixed'][data-orientation='portrait'] #root {
+  visibility: hidden;
+}
+
+html[data-shell-mode='ipad-fixed'][data-orientation='portrait'] body::before {
+  content: '请横屏使用\A VocaRabbit 已按 11 英寸 iPad Pro 固定为横屏主界面';
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 214, 107, 0.55), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(119, 188, 255, 0.32), transparent 25%),
+    linear-gradient(180deg, #fffdf6 0%, #fff6e7 100%);
+  color: #173553;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+  white-space: pre-line;
+  z-index: 9999;
+}
+
+html[data-shell-mode='ipad-fixed'] .page {
+  width: var(--ipad-shell-stage-width);
+  height: var(--ipad-shell-stage-height);
+  min-height: var(--ipad-shell-stage-height);
+  margin: 0 auto;
+  padding: var(--ipad-shell-padding);
+  overflow: hidden;
+}
+
+html[data-shell-mode='ipad-fixed'] .page--home,
+html[data-shell-mode='ipad-fixed'] .page--learn,
+html[data-shell-mode='ipad-fixed'] .page--complete,
+html[data-shell-mode='ipad-fixed'] .page--status,
+html[data-shell-mode='ipad-fixed'] .page--review,
+html[data-shell-mode='ipad-fixed'] .page--selection,
+html[data-shell-mode='ipad-fixed'] .page--stats,
+html[data-shell-mode='ipad-fixed'] .page--settings {
+  max-width: none;
+  padding: var(--ipad-shell-padding);
+}
+
+html[data-shell-mode='ipad-fixed'] .page--review,
+html[data-shell-mode='ipad-fixed'] .page--selection,
+html[data-shell-mode='ipad-fixed'] .page--stats,
+html[data-shell-mode='ipad-fixed'] .page--settings {
+  overflow: hidden;
+}
+
+html[data-shell-mode='ipad-fixed'] .review-mockup-frame,
+html[data-shell-mode='ipad-fixed'] .selection-mockup-frame,
+html[data-shell-mode='ipad-fixed'] .stats-mockup-frame,
+html[data-shell-mode='ipad-fixed'] .settings-mockup-frame {
+  display: flex;
+  flex-direction: column;
+  height: var(--ipad-shell-frame-height);
+  max-height: var(--ipad-shell-frame-height);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+html[data-shell-mode='ipad-fixed'] .review-mockup-frame > *,
+html[data-shell-mode='ipad-fixed'] .selection-mockup-frame > *,
+html[data-shell-mode='ipad-fixed'] .stats-mockup-frame > *,
+html[data-shell-mode='ipad-fixed'] .settings-mockup-frame > * {
+  flex: 0 0 auto;
+}
+
+html[data-shell-mode='ipad-fixed'] .review-dock.home-dock,
+html[data-shell-mode='ipad-fixed'] .selection-dock.home-dock,
+html[data-shell-mode='ipad-fixed'] .stats-dock.home-dock,
+html[data-shell-mode='ipad-fixed'] .settings-dock.home-dock {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  margin-top: auto;
+}
+
+html[data-shell-mode='ipad-fixed'] .page--learn,
+html[data-shell-mode='ipad-fixed'] .page--complete,
+html[data-shell-mode='ipad-fixed'] .page--status {
+  display: grid;
+  place-items: center;
+}
+
+html[data-shell-mode='ipad-fixed'] .learning-shell,
+html[data-shell-mode='ipad-fixed'] .celebration-card,
+html[data-shell-mode='ipad-fixed'] .status-card {
+  width: min(100%, 1024px);
+  max-height: var(--ipad-shell-frame-height);
+}
+
+html[data-shell-mode='ipad-fixed'] .learning-shell {
+  display: flex;
+  flex-direction: column;
+  height: var(--ipad-shell-frame-height);
+  overflow: hidden;
+}
+
+html[data-shell-mode='ipad-fixed'] .learning-shell > .question-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+html[data-shell-mode='ipad-fixed'] .feedback-strip {
+  flex: 0 0 auto;
 }
 
 button {
@@ -2663,15 +2796,15 @@ button {
 }
 
 .page--review {
-  max-width: 720px;
-  padding: 16px 10px 28px;
+  max-width: 1120px;
+  padding: 24px 14px 32px;
   overflow-x: auto;
 }
 
 .page--review .review-mockup-frame {
   position: relative;
-  width: 645px;
-  min-width: 645px;
+  width: 1024px;
+  min-width: 1024px;
   margin: 0 auto;
   padding: 14px 14px 16px;
   border-radius: 40px;
@@ -2764,8 +2897,8 @@ button {
 }
 
 .page--review .review-plan-shell__hero {
-  grid-template-columns: 88px minmax(0, 1fr) 214px;
-  gap: 12px;
+  grid-template-columns: 120px minmax(0, 1fr) 286px;
+  gap: 16px;
   align-items: stretch;
 }
 
@@ -2777,13 +2910,13 @@ button {
 }
 
 .page--review .review-mascot-scene {
-  min-height: 150px;
+  min-height: 208px;
   border-radius: 24px;
   background-color: #f9e7b4;
   background-image: url('/design-reference/slices/review-bunny-scene.png');
   background-repeat: no-repeat;
   background-position: center bottom;
-  background-size: auto 108%;
+  background-size: auto 116%;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.72);
 }
 
@@ -2810,13 +2943,13 @@ button {
 }
 
 .page--review .review-plan-shell__headline h1 {
-  font-size: 32px;
+  font-size: 44px;
 }
 
 .page--review .review-plan-shell__headline p {
-  max-width: 260px;
+  max-width: 440px;
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .page--review .review-summary-pills {
@@ -2830,16 +2963,16 @@ button {
 }
 
 .page--review .review-summary-pill strong {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .page--review .review-summary-pill small {
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .page--review .review-focus-card {
-  gap: 10px;
-  padding: 16px 16px 92px;
+  gap: 12px;
+  padding: 18px 18px 108px;
   border-radius: 24px;
   background: linear-gradient(180deg, #fff7df, #fff0c9);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.76);
@@ -2850,13 +2983,13 @@ button {
 }
 
 .page--review .review-focus-card strong {
-  font-size: 22px;
+  font-size: 28px;
 }
 
 .page--review .review-focus-card p {
-  max-width: 140px;
+  max-width: 208px;
   margin: 0;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .page--review .review-focus-card__button {
@@ -2864,7 +2997,7 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
+  min-height: 46px;
   margin-top: 2px;
   padding: 0 48px 0 20px;
   border-radius: 999px;
@@ -2898,10 +3031,10 @@ button {
 }
 
 .page--review .review-focus-card__art {
-  right: 12px;
-  bottom: 12px;
-  width: 90px;
-  height: 88px;
+  right: 14px;
+  bottom: 14px;
+  width: 118px;
+  height: 96px;
   border-radius: 18px;
   background: url('/design-reference/slices/review-focus-art.png') center bottom/contain no-repeat;
 }
@@ -2915,37 +3048,37 @@ button {
 
 .page--review .review-metric-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .page--review .review-metric-card {
-  min-height: 74px;
-  padding: 12px 14px;
-  grid-template-columns: 34px 1fr;
-  gap: 10px;
+  min-height: 92px;
+  padding: 14px 16px;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
   border-radius: 18px;
   box-shadow: inset 0 0 0 1px rgba(241, 214, 171, 0.72), 0 8px 18px rgba(155, 104, 24, 0.08);
 }
 
 .page--review .review-metric-card__icon {
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
 }
 
 .page--review .review-metric-card__content > span {
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .page--review .review-metric-card__content strong {
   margin-top: 6px;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .page--review .review-metric-card__content small {
   margin-top: 4px;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .page--review .review-metric-card--heatmap {
@@ -2962,8 +3095,8 @@ button {
 }
 
 .page--review .review-panel {
-  margin-top: 10px;
-  padding: 14px 14px 16px;
+  margin-top: 12px;
+  padding: 16px 16px 18px;
   border-radius: 20px;
   box-shadow: inset 0 0 0 1px rgba(241, 214, 171, 0.72), 0 8px 18px rgba(155, 104, 24, 0.08);
 }
@@ -2973,18 +3106,18 @@ button {
 }
 
 .page--review .review-panel__header h2 {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .page--review .review-panel__header p {
   margin: 0;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .page--review .review-preview-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .page--review .review-preview-card {
@@ -2993,12 +3126,12 @@ button {
 }
 
 .page--review .review-preview-card__art {
-  min-height: 60px;
+  min-height: 86px;
   padding: 0;
   background-color: #fff7e7;
   background-repeat: no-repeat;
-  background-size: auto 52px;
-  background-position: left 8px bottom 0;
+  background-size: auto 68px;
+  background-position: left 10px bottom 0;
 }
 
 .page--review .review-preview-card__art::before {
@@ -3014,25 +3147,25 @@ button {
 
 .page--review .review-preview-card--family .review-preview-card__art {
   background-image: url('/design-reference/slices/review-preview-family-art.png?v=2');
-  background-size: auto 54px;
+  background-size: auto 72px;
 }
 
 .page--review .review-preview-card--hello .review-preview-card__art {
   background-image: url('/design-reference/slices/review-preview-hello-art.png?v=2');
-  background-size: auto 46px;
-  background-position: left 10px bottom 5px;
+  background-size: auto 60px;
+  background-position: left 12px bottom 8px;
 }
 
 .page--review .review-preview-card--body .review-preview-card__art {
   background-image: url('/design-reference/slices/review-preview-body-art.png?v=2');
-  background-size: auto 44px;
-  background-position: left 12px bottom 4px;
+  background-size: auto 58px;
+  background-position: left 14px bottom 6px;
 }
 
 .page--review .review-preview-card--spark .review-preview-card__art {
   background-image: url('/design-reference/slices/review-preview-spark-art.png?v=2');
-  background-size: auto 42px;
-  background-position: left 12px bottom 5px;
+  background-size: auto 56px;
+  background-position: left 14px bottom 8px;
 }
 
 .page--review .review-preview-card__art-badge,
@@ -3041,62 +3174,62 @@ button {
 }
 
 .page--review .review-preview-card__body {
-  padding: 10px 12px 12px;
+  padding: 12px 14px 14px;
 }
 
 .page--review .review-preview-card__category,
 .page--review .review-preview-card__difficulty {
-  min-height: 20px;
-  padding: 0 7px;
-  font-size: 10px;
+  min-height: 22px;
+  padding: 0 8px;
+  font-size: 11px;
 }
 
 .page--review .review-preview-card__body strong {
-  margin-top: 8px;
-  font-size: 15px;
+  margin-top: 10px;
+  font-size: 18px;
   font-family: 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
 }
 
 .page--review .review-preview-card__body p {
   margin-top: 4px;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .page--review .review-preview-card__body footer {
   margin-top: 8px;
-  font-size: 9px;
+  font-size: 10px;
 }
 
 .page--review .review-advice-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .page--review .review-advice-card {
-  grid-template-columns: minmax(0, 1fr) 72px;
-  gap: 10px;
-  padding: 14px 16px;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  gap: 12px;
+  padding: 16px 18px;
   border-radius: 20px;
   box-shadow: inset 0 0 0 1px rgba(241, 214, 171, 0.72), 0 8px 18px rgba(155, 104, 24, 0.08);
 }
 
 .page--review .review-advice-card span {
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .page--review .review-advice-card strong {
   margin-top: 6px;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .page--review .review-advice-card p {
   margin-top: 6px;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .page--review .review-advice-card__art {
-  height: 64px;
+  height: 82px;
   border-radius: 16px;
   background: rgba(255, 249, 232, 0.92);
   background-repeat: no-repeat;
@@ -3122,9 +3255,9 @@ button {
 
 .page--review .review-dock.home-dock {
   bottom: 0;
-  margin-top: 10px;
-  padding: 6px 8px 8px;
-  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 10px 10px;
+  gap: 8px;
   border-radius: 0 0 28px 28px;
   background: #fffdf7;
   border: none;
@@ -3132,11 +3265,11 @@ button {
 }
 
 .page--review .review-dock .home-dock__button {
-  min-height: 42px;
+  min-height: 46px;
   gap: 8px;
   border-radius: 14px;
   background: transparent;
-  font-size: 13px;
+  font-size: 14px;
   box-shadow: none;
 }
 
@@ -3146,17 +3279,17 @@ button {
 }
 
 .page--review .review-dock__glyph {
-  width: 15px;
-  height: 15px;
+  width: 17px;
+  height: 17px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .page--review {
-    padding-inline: 12px;
+    padding-inline: 10px;
   }
 
   .page--review .review-mockup-frame {
-    min-width: 645px;
+    min-width: 1024px;
   }
 }
 

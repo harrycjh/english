@@ -38,6 +38,16 @@ function getPreviewWords(payload: WordPayload | null, task: DailyTaskSummary | n
   return wordIds.map((wordId) => wordsById.get(wordId)).filter(Boolean) as WordPayload['words'];
 }
 
+function isIpadFamilyDevice() {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  const platform = window.navigator.platform ?? '';
+  const hasTouch = window.navigator.maxTouchPoints > 1;
+  return /iPad/i.test(window.navigator.userAgent) || (platform === 'MacIntel' && hasTouch);
+}
+
 export default function App() {
   const [route, setRoute] = useState<AppRoute>('home');
   const [payload, setPayload] = useState<WordPayload | null>(null);
@@ -102,6 +112,39 @@ export default function App() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const root = document.documentElement;
+    const body = document.body;
+
+    function syncShellState() {
+      const shouldLockIpadShell = isIpadFamilyDevice() && (parentSetting?.preferLandscape ?? true);
+      const orientation = window.innerWidth >= window.innerHeight ? 'landscape' : 'portrait';
+      const shellMode = shouldLockIpadShell ? 'ipad-fixed' : 'fluid';
+
+      root.dataset.shellMode = shellMode;
+      root.dataset.orientation = orientation;
+      body.dataset.shellMode = shellMode;
+      body.dataset.orientation = orientation;
+    }
+
+    syncShellState();
+    window.addEventListener('resize', syncShellState);
+    window.addEventListener('orientationchange', syncShellState);
+
+    return () => {
+      window.removeEventListener('resize', syncShellState);
+      window.removeEventListener('orientationchange', syncShellState);
+      delete root.dataset.shellMode;
+      delete root.dataset.orientation;
+      delete body.dataset.shellMode;
+      delete body.dataset.orientation;
+    };
+  }, [parentSetting?.preferLandscape]);
 
   const previewWords = useMemo(() => getPreviewWords(payload, task), [payload, task]);
   const masteredCount = useMemo(
@@ -228,109 +271,113 @@ export default function App() {
     startTransition(() => setRoute('home'));
   }
 
-  if (loading) {
-    return (
-      <main className="page page--status">
-        <section className="status-card">
-          <h1>正在准备今天的词汇篮子…</h1>
-          <p>先读取词表 JSON，再恢复本地学习记录。</p>
-        </section>
-      </main>
-    );
-  }
+  function renderCurrentRoute() {
+    if (loading) {
+      return (
+        <main className="page page--status">
+          <section className="status-card">
+            <h1>正在准备今天的词汇篮子…</h1>
+            <p>先读取词表 JSON，再恢复本地学习记录。</p>
+          </section>
+        </main>
+      );
+    }
 
-  if (error || !payload || !task || !parentSetting) {
-    return (
-      <main className="page page--status">
-        <section className="status-card status-card--error">
-          <h1>页面初始化失败</h1>
-          <p>{error ?? '没有找到词表数据。'}</p>
-        </section>
-      </main>
-    );
-  }
+    if (error || !payload || !task || !parentSetting) {
+      return (
+        <main className="page page--status">
+          <section className="status-card status-card--error">
+            <h1>页面初始化失败</h1>
+            <p>{error ?? '没有找到词表数据。'}</p>
+          </section>
+        </main>
+      );
+    }
 
-  if (route === 'learning') {
+    if (route === 'learning') {
+      return (
+        <LearningPage
+          payload={payload}
+          initialWordIds={[...task.newWordIds, ...task.reviewWordIds]}
+          recordsById={recordsById}
+          setting={parentSetting}
+          onAnswer={handleAnswer}
+          onComplete={handleComplete}
+          onExit={handleBackHome}
+        />
+      );
+    }
+
+    if (route === 'complete' && sessionResult) {
+      return <CompletionPage result={sessionResult} onBackHome={handleBackHome} />;
+    }
+
+    if (route === 'settings') {
+      return (
+        <SettingsPage
+          settings={parentSetting}
+          task={task}
+          onBackHome={handleBackHome}
+          onOpenSelection={handleOpenSelection}
+          onOpenStats={handleOpenStats}
+          onUpdateSettings={handleUpdateSetting}
+          onResetTodayTask={handleResetTodayTask}
+          onResetLearningProgress={handleResetLearningProgress}
+        />
+      );
+    }
+
+    if (route === 'stats') {
+      return (
+        <StatsPage
+          payload={payload}
+          task={task}
+          recentTasks={recentTasks}
+          recordsById={recordsById}
+          selectionById={selectionById}
+          setting={parentSetting}
+          onBackHome={handleBackHome}
+          onOpenSelection={handleOpenSelection}
+          onOpenSettings={handleOpenSettings}
+        />
+      );
+    }
+
+    if (route === 'selection') {
+      return (
+        <SelectionPage
+          payload={payload}
+          recordsById={recordsById}
+          selectionById={selectionById}
+          setting={parentSetting}
+          task={task}
+          onBackHome={handleBackHome}
+          onOpenSettings={handleOpenSettings}
+          onOpenStats={handleOpenStats}
+          onSaveSelectionStates={handleSaveSelectionStates}
+          onApplySelectionPlan={handleApplySelectionPlan}
+        />
+      );
+    }
+
     return (
-      <LearningPage
+      <ReviewPage
         payload={payload}
-        initialWordIds={[...task.newWordIds, ...task.reviewWordIds]}
-        recordsById={recordsById}
+        task={task}
         setting={parentSetting}
-        onAnswer={handleAnswer}
-        onComplete={handleComplete}
-        onExit={handleBackHome}
-      />
-    );
-  }
-
-  if (route === 'complete' && sessionResult) {
-    return <CompletionPage result={sessionResult} onBackHome={handleBackHome} />;
-  }
-
-  if (route === 'settings') {
-    return (
-      <SettingsPage
-        settings={parentSetting}
-        task={task}
-        onBackHome={handleBackHome}
-        onOpenSelection={handleOpenSelection}
-        onOpenStats={handleOpenStats}
-        onUpdateSettings={handleUpdateSetting}
-        onResetTodayTask={handleResetTodayTask}
-        onResetLearningProgress={handleResetLearningProgress}
-      />
-    );
-  }
-
-  if (route === 'stats') {
-    return (
-      <StatsPage
-        payload={payload}
-        task={task}
+        recordsById={recordsById}
+        selectionById={selectionById}
+        masteredCount={masteredCount}
         recentTasks={recentTasks}
-        recordsById={recordsById}
-        selectionById={selectionById}
-        setting={parentSetting}
-        onBackHome={handleBackHome}
+        previewWords={previewWords}
+        onStart={handleStart}
         onOpenSelection={handleOpenSelection}
-        onOpenSettings={handleOpenSettings}
-      />
-    );
-  }
-
-  if (route === 'selection') {
-    return (
-      <SelectionPage
-        payload={payload}
-        recordsById={recordsById}
-        selectionById={selectionById}
-        setting={parentSetting}
-        task={task}
-        onBackHome={handleBackHome}
-        onOpenSettings={handleOpenSettings}
         onOpenStats={handleOpenStats}
+        onOpenSettings={handleOpenSettings}
         onSaveSelectionStates={handleSaveSelectionStates}
-        onApplySelectionPlan={handleApplySelectionPlan}
       />
     );
   }
 
-  return (
-    <ReviewPage
-      payload={payload}
-      task={task}
-      setting={parentSetting}
-      recordsById={recordsById}
-      selectionById={selectionById}
-      masteredCount={masteredCount}
-      recentTasks={recentTasks}
-      previewWords={previewWords}
-      onStart={handleStart}
-      onOpenSelection={handleOpenSelection}
-      onOpenStats={handleOpenStats}
-      onOpenSettings={handleOpenSettings}
-      onSaveSelectionStates={handleSaveSelectionStates}
-    />
-  );
+  return renderCurrentRoute();
 }
