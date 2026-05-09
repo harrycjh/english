@@ -45,14 +45,25 @@ export function LearningPage({
 
   const currentWordId = queue[currentIndex];
   const currentWord = currentWordId ? wordsById.get(currentWordId) : undefined;
-  const currentRecord = currentWordId ? recordsById[currentWordId] ?? createEmptyRecord(currentWordId) : undefined;
-  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(() =>
-    currentWord ? buildQuestion(currentWord, payload.words, currentRecord, setting) : null
-  );
+  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(() => {
+    if (!currentWordId || !currentWord) {
+      return null;
+    }
+
+    return buildQuestion(currentWord, payload.words, recordsById[currentWordId] ?? createEmptyRecord(currentWordId), setting);
+  });
 
   useEffect(() => {
-    setCurrentQuestion(currentWord ? buildQuestion(currentWord, payload.words, currentRecord, setting) : null);
-  }, [currentIndex, currentWord, payload.words, currentRecord, setting]);
+    if (!currentWordId || !currentWord) {
+      setCurrentQuestion(null);
+      return;
+    }
+
+    // Freeze one generated question per queue slot so rerenders do not reshuffle options.
+    setCurrentQuestion(
+      buildQuestion(currentWord, payload.words, recordsById[currentWordId] ?? createEmptyRecord(currentWordId), setting)
+    );
+  }, [currentIndex, currentWordId, currentWord, payload.words]);
 
   async function handleAnswer(answer: string) {
     if (!currentWordId || !currentQuestion || isLocked) {
