@@ -7,6 +7,7 @@ interface QuestionFillBlankProps {
   question: FillBlankQuestion;
   disabled: boolean;
   enableAudio: boolean;
+  showHints: boolean;
   onSubmit: (answer: string) => void;
 }
 
@@ -22,7 +23,7 @@ function renderMaskedWord(maskedCharacters: string[], guessLetters: string[]) {
   });
 }
 
-export function QuestionFillBlank({ question, disabled, enableAudio, onSubmit }: QuestionFillBlankProps) {
+export function QuestionFillBlank({ question, disabled, enableAudio, showHints, onSubmit }: QuestionFillBlankProps) {
   const [guessLetters, setGuessLetters] = useState<string[]>([]);
 
   useEffect(() => {
@@ -61,6 +62,16 @@ export function QuestionFillBlank({ question, disabled, enableAudio, onSubmit }:
           </span>
         ))}
       </div>
+
+      {showHints ? (
+        <div className="fill-blank-hint" aria-live="polite">
+          <span>拼写提示</span>
+          <strong>还缺 {question.missingLetters.length} 个字母</strong>
+          <p>
+            首个缺失字母是 {question.missingLetters[0]?.toUpperCase() ?? '-'}，已填写 {guessLetters.length}/{question.missingLetters.length}。
+          </p>
+        </div>
+      ) : null}
 
       <div className="keyboard-grid">
         {question.keyboardLetters.map((letter, index) => (

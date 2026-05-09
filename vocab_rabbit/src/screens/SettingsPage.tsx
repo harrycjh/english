@@ -7,6 +7,7 @@ import {
   MIN_REVIEW_LIMIT,
   type ParentSetting,
 } from '../models/parent-setting';
+import { APP_VERSION } from '../config/app-meta';
 
 type SettingsDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
 
@@ -185,6 +186,7 @@ export function SettingsPage({
           <div className="settings-shell__brand">
             <span className="settings-shell__brand-mark" aria-hidden="true" />
             <span>VocaRabbit</span>
+            <span className="app-version-badge">{APP_VERSION}</span>
           </div>
           <div className="settings-shell__profile">小树的家长版</div>
         </div>
@@ -262,8 +264,8 @@ export function SettingsPage({
               onToggle={() => void applySetting({ showExamples: !settings.showExamples })}
             />
             <SettingsToggleRow
-              label="拼写提示占位"
-              description="先保留设置入口；等拼写题细化后，这里会接入提示强度。"
+              label="拼写提示"
+              description="开启后，拼写题会显示缺失字母数量、首个字母和当前填写进度。"
               enabled={settings.showHints}
               onToggle={() => void applySetting({ showHints: !settings.showHints })}
             />

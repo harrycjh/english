@@ -5,6 +5,7 @@ import type { LearningRecord } from '../models/learning-record';
 import type { ParentSetting } from '../models/parent-setting';
 import { createDefaultWordSelectionState, type WordSelectionState } from '../models/word-selection-state';
 import type { WordPayload, WordRecord } from '../models/word';
+import { APP_VERSION } from '../config/app-meta';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
 
 type StatsDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
@@ -177,6 +178,7 @@ export function StatsPage({
           <div className="stats-shell__brand">
             <span className="stats-shell__brand-mark" aria-hidden="true" />
             <span>VocaRabbit</span>
+            <span className="app-version-badge">{APP_VERSION}</span>
           </div>
           <div className="stats-shell__profile">小树的家长版</div>
         </div>

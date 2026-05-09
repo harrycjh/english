@@ -10,6 +10,7 @@ import {
 import type { WordPayload } from '../models/word';
 import { HeatmapCalendar } from '../components/HeatmapCalendar';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
+import { APP_VERSION } from '../config/app-meta';
 import { getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
 
 type ReviewPreviewWord = WordPayload['words'][number];
@@ -219,6 +220,7 @@ export function ReviewPage({
           <div className="review-plan-shell__brand">
             <span className="review-plan-shell__brand-mark" aria-hidden="true" />
             <span>VocaRabbit</span>
+            <span className="app-version-badge">{APP_VERSION}</span>
           </div>
           <div className="review-plan-shell__profile">小树的家长版</div>
         </div>

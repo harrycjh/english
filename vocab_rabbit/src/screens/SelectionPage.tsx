@@ -11,6 +11,7 @@ import type { WordPayload, WordRecord } from '../models/word';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
 import { getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
+import { APP_VERSION } from '../config/app-meta';
 
 type StatusFilter = 'all' | 'new' | 'learning' | 'mastered' | 'paused' | 'disabled';
 type SortMode = 'level' | 'difficulty' | 'recent' | 'alphabetical';
@@ -327,6 +328,7 @@ export function SelectionPage({
           <div className="selection-shell__brand">
             <span className="selection-shell__brand-mark" aria-hidden="true" />
             <span>VocaRabbit</span>
+            <span className="app-version-badge">{APP_VERSION}</span>
           </div>
           <div className="selection-shell__profile">小树的家长版</div>
         </div>

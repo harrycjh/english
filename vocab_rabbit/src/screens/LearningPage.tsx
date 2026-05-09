@@ -167,6 +167,7 @@ export function LearningPage({
             question={currentQuestion}
             disabled={isLocked}
             enableAudio={setting.enableAudio}
+            showHints={setting.showHints}
             onSubmit={handleAnswer}
           />
         ) : null}
