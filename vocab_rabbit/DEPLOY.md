@@ -2,52 +2,63 @@
 
 ## 当前正式发布方式
 
-当前站点通过 `gh-pages` 分支发布，线上地址是：
+当前默认发布目标已经切回 GitHub Pages，线上地址是：
 
 https://harrycjh.github.io/english/
 
-这样做的好处是：
+这样做的原因是：
 
-- 不依赖 GitHub Actions workflow 权限
-- 只需要本地构建通过，就能直接更新线上静态站点
-- 适合当前这台机器上的 GitHub 认证现状
+- 代码与部署链路都回到 GitHub，一条线更简单
+- GitHub Actions 已恢复为推送 `main` 后自动发布
+- 当前构建基路径已经恢复为 GitHub Pages 所需的 `/english/`
 
-## 一键发布命令
+## 默认构建命令
 
 在 `vocab_rabbit` 目录执行：
 
 ```bash
-npm run deploy:gh-pages
+npm run build
 ```
 
-这个命令会自动完成：
-
-1. 执行生产构建
-2. 复制 `dist/` 产物到临时目录
-3. 写入 `.nojekyll`
-4. 生成 `404.html`
-5. 初始化临时 `gh-pages` 仓库
-6. 强制推送到远端 `gh-pages` 分支
-
-## 安全检查
-
-如果只想验证流程，不想真正推送，可以先跑：
+这个命令当前等价于：
 
 ```bash
-npm run deploy:gh-pages -- --dry-run
+npm run build:github
 ```
 
-这会完整跑完构建和临时产物准备，但不会推送远端。
+生成的 `dist/` 就是 GitHub Pages 使用的产物。
+
+## 发布到 GitHub Pages
+
+默认流程：
+
+1. 把代码推到 GitHub 仓库的 `main` 分支
+2. GitHub Actions 自动执行 Pages workflow
+3. Pages 发布完成后，站点会更新到最新版本
+
+当前 workflow 文件是 [.github/workflows/deploy-vocab-rabbit.yml](../.github/workflows/deploy-vocab-rabbit.yml)。
+
+## 手动备用方案
+
+如果 GitHub Actions 暂时不可用，仓库里仍保留手动备用能力：
+
+```bash
+npm run deploy:github:legacy
+```
+
+这个脚本会把当前构建结果直接推送到 `gh-pages` 分支。
 
 ## 发布后检查
 
-发布后通常等待几十秒到几分钟，然后检查：
+发布后检查：
 
 - https://harrycjh.github.io/english/
-- `gh api repos/harrycjh/english/pages`
+- 首页是否正常显示 `VocaRabbit` 和今日学习计划
+- 新增静态资源是否都能正常加载
 
-如果 `status` 是 `built`，但主页短时间还没刷新，优先怀疑 GitHub Pages CDN 缓存同步，稍等再试即可。
+## 当前约定
 
-## 备注
-
-仓库里仍保留了 GitHub Actions 的 workflow 文件，但当前默认维护方式以 `gh-pages` 分支发布为主。
+- 默认部署平台：GitHub Pages
+- 默认仓库：GitHub
+- 默认构建入口：`npm run build`
+- 备用手动发布入口：`npm run deploy:github:legacy`

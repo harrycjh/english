@@ -77,8 +77,8 @@ async function main() {
   const gitUserEmail = await readGitConfig(repoRoot, 'user.email');
   const distDir = path.join(projectRoot, 'dist');
 
-  console.log('Building VocaRabbit...');
-  await run('npm', ['run', 'build'], { cwd: projectRoot });
+  console.log('Building VocaRabbit for GitHub Pages...');
+  await run('npm', ['run', 'build:github'], { cwd: projectRoot });
 
   const tempRoot = await mkdtemp(path.join(tmpdir(), 'vocab-rabbit-gh-pages-'));
   const siteDir = path.join(tempRoot, 'site');

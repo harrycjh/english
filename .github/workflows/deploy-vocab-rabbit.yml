@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '.github/workflows/deploy-vocab-rabbit.yml'
-      - 'vocab_rabbit/**'
   workflow_dispatch:
 
 permissions:
