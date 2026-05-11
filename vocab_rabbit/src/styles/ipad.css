@@ -3687,88 +3687,88 @@ button {
 }
 
 .page--review .review-hotspot--profile {
-  left: 994px;
-  top: 15px;
-  width: 123px;
-  height: 32px;
-  border-radius: 16px;
+  left: 990px;
+  top: 14px;
+  width: 134px;
+  height: 34px;
+  border-radius: 17px;
 }
 
 .page--review .review-hotspot--focus-card {
-  left: 682px;
-  top: 52px;
-  width: 451px;
-  height: 208px;
-  border-radius: 32px;
+  left: 681px;
+  top: 51px;
+  width: 454px;
+  height: 213px;
+  border-radius: 34px;
 }
 
 .page--review .review-hotspot--start {
-  left: 702px;
-  top: 197px;
+  left: 707px;
+  top: 196px;
   z-index: 2;
-  width: 242px;
-  height: 49px;
+  width: 286px;
+  height: 56px;
   border-radius: 999px;
 }
 
 .page--review .review-hotspot--preview-1 {
   left: 29px;
-  top: 413px;
+  top: 455px;
   width: 274px;
-  height: 110px;
+  height: 151px;
 }
 
 .page--review .review-hotspot--preview-2 {
   left: 317px;
-  top: 413px;
+  top: 455px;
   width: 274px;
-  height: 110px;
+  height: 151px;
 }
 
 .page--review .review-hotspot--preview-3 {
   left: 605px;
-  top: 413px;
+  top: 455px;
   width: 274px;
-  height: 110px;
+  height: 151px;
 }
 
 .page--review .review-hotspot--preview-4 {
   left: 893px;
-  top: 413px;
+  top: 455px;
   width: 231px;
-  height: 110px;
+  height: 151px;
 }
 
 .page--review .review-hotspot--dock-review {
-  left: 127px;
-  top: 702px;
-  width: 158px;
-  height: 54px;
-  border-radius: 18px;
+  left: 126px;
+  top: 749px;
+  width: 160px;
+  height: 46px;
+  border-radius: 20px;
 }
 
 .page--review .review-hotspot--dock-selection {
-  left: 395px;
-  top: 702px;
-  width: 158px;
-  height: 54px;
-  border-radius: 18px;
+  left: 394px;
+  top: 749px;
+  width: 160px;
+  height: 46px;
+  border-radius: 20px;
 }
 
 .page--review .review-hotspot--dock-stats {
-  left: 662px;
-  top: 702px;
-  width: 158px;
-  height: 54px;
-  border-radius: 18px;
+  left: 661px;
+  top: 749px;
+  width: 160px;
+  height: 46px;
+  border-radius: 20px;
 }
 
 .page--review .review-hotspot--dock-settings {
-  left: 929px;
-  top: 702px;
-  width: 158px;
-  height: 54px;
-  border-radius: 18px;
+  left: 928px;
+  top: 749px;
+  width: 160px;
+  height: 46px;
+  border-radius: 20px;
 }
 
 @media (max-width: 1100px) {
