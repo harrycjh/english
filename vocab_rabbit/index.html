@@ -12,6 +12,65 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      (() => {
+        const reloadKey = 'vocab-rabbit-cache-recovery';
+        const assetPattern = /\/assets\/index-.*\.(js|css)$/;
+
+        async function clearCachedShell() {
+          if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map((registration) => registration.unregister()));
+          }
+
+          if (!('caches' in window)) {
+            return;
+          }
+
+          const cacheKeys = await caches.keys();
+          await Promise.all(
+            cacheKeys
+              .filter((cacheKey) => cacheKey.startsWith('vocab-rabbit-shell'))
+              .map((cacheKey) => caches.delete(cacheKey))
+          );
+        }
+
+        window.addEventListener(
+          'error',
+          (event) => {
+            const target = event.target;
+            if (!(target instanceof HTMLScriptElement) && !(target instanceof HTMLLinkElement)) {
+              return;
+            }
+
+            const assetUrl = target instanceof HTMLScriptElement ? target.src : target.href;
+            if (!assetUrl || !assetPattern.test(assetUrl)) {
+              return;
+            }
+
+            if (sessionStorage.getItem(reloadKey) === assetUrl) {
+              return;
+            }
+
+            sessionStorage.setItem(reloadKey, assetUrl);
+            void clearCachedShell().finally(() => {
+              const reloadUrl = new URL(window.location.href);
+              reloadUrl.searchParams.set('reload', Date.now().toString());
+              window.location.replace(reloadUrl.toString());
+            });
+          },
+          true
+        );
+
+        window.addEventListener(
+          'load',
+          () => {
+            sessionStorage.removeItem(reloadKey);
+          },
+          { once: true }
+        );
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

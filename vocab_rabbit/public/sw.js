@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vocab-rabbit-shell-v2';
+const CACHE_NAME = 'vocab-rabbit-shell-v3';
 const SCOPE_URL = new URL(self.registration.scope);
 const APP_ROOT_URL = new URL('./', SCOPE_URL).toString();
 const INDEX_URL = new URL('index.html', SCOPE_URL).toString();
@@ -18,11 +18,11 @@ async function putInCache(request, response) {
 
 async function handleNavigation(request) {
   try {
-    const response = await fetch(request);
+    const response = await fetch(request, { cache: 'no-store' });
     await putInCache(INDEX_URL, response.clone());
     return response;
   } catch {
-    return caches.match(INDEX_URL);
+    return (await caches.match(INDEX_URL)) || Response.error();
   }
 }
 
@@ -36,7 +36,7 @@ async function handleStaticAsset(request) {
     const response = await fetch(request);
     return putInCache(request, response);
   } catch {
-    return caches.match(INDEX_URL);
+    return Response.error();
   }
 }
 
