@@ -2845,7 +2845,7 @@ button {
   --review-shell-radius: 34px;
   --review-card-radius: 24px;
   max-width: 1230px;
-  padding: 18px 18px 0;
+  padding: 18px 12px 0;
   overflow-x: auto;
 }
 
