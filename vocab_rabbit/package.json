@@ -10,7 +10,7 @@
     "dev": "vite",
     "build": "npm run build:github",
     "build:github": "tsc --noEmit && vite build --mode github-pages",
-    "preview": "vite preview",
+    "preview": "npm run build && node scripts/preview-github-pages.mjs",
     "deploy:github:legacy": "node scripts/deploy-gh-pages.mjs"
   },
   "dependencies": {

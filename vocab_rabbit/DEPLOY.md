@@ -28,6 +28,22 @@ npm run build:github
 
 生成的 `dist/` 就是 GitHub Pages 使用的产物。
 
+## 本地预览
+
+本地不要再直接用 `vite preview` 预览 GitHub Pages 产物，因为当前构建基路径是 `/english/`，会导致资源路径和本地根路径不一致。
+
+在 `vocab_rabbit` 目录执行：
+
+```bash
+npm run preview -- --host 127.0.0.1 --port 4174
+```
+
+这个命令会先构建，再用本地静态服务把 `dist/` 挂到 `/english/` 下。打开下面这个地址即可：
+
+```text
+http://127.0.0.1:4174/english/
+```
+
 ## 发布到 GitHub Pages
 
 默认流程：

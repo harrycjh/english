@@ -4,6 +4,14 @@ import './styles/ipad.css';
 
 const SERVICE_WORKER_URL = `${import.meta.env.BASE_URL}sw.js`;
 
+function isLocalPreviewHost() {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  return ['127.0.0.1', '0.0.0.0', '::1', 'localhost'].includes(window.location.hostname);
+}
+
 async function disableServiceWorkerDuringDev() {
   if (!('serviceWorker' in navigator)) {
     return;
@@ -25,7 +33,7 @@ async function disableServiceWorkerDuringDev() {
 }
 
 function registerServiceWorker() {
-  if (import.meta.env.DEV) {
+  if (import.meta.env.DEV || isLocalPreviewHost()) {
     void disableServiceWorkerDuringDev();
     return;
   }
