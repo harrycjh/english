@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { ParentSetting } from '../models/parent-setting';
@@ -19,6 +19,10 @@ const reviewPreviewHotspotClasses = [
   'review-hotspot--preview-3',
   'review-hotspot--preview-4',
 ] as const;
+
+const REVIEW_FRAME_WIDTH = 1158;
+const REVIEW_FRAME_HEIGHT = 808;
+const REVIEW_VIEWPORT_GAP = 24;
 
 interface ReviewPageProps {
   payload: WordPayload;
@@ -48,9 +52,43 @@ export function ReviewPage({
   onSaveSelectionStates,
 }: ReviewPageProps) {
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
+  const [reviewScale, setReviewScale] = useState(1);
   const selectedWord = selectedWordId ? previewWords.find((word) => word.id === selectedWordId) ?? null : null;
   const selectedWordRecord = selectedWord ? recordsById[selectedWord.id] : undefined;
   const selectedWordSelectionState = selectedWord ? selectionById[selectedWord.id] : undefined;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    function syncReviewScale() {
+      const shellMode = document.documentElement.dataset.shellMode;
+
+      if (shellMode === 'ipad-fixed') {
+        setReviewScale(1);
+        return;
+      }
+
+      const availableWidth = Math.max(window.innerWidth - REVIEW_VIEWPORT_GAP, 320);
+      const availableHeight = Math.max(window.innerHeight - REVIEW_VIEWPORT_GAP, 320);
+      const nextScale = Math.min(1, availableWidth / REVIEW_FRAME_WIDTH, availableHeight / REVIEW_FRAME_HEIGHT);
+
+      setReviewScale(nextScale > 0 && Number.isFinite(nextScale) ? nextScale : 1);
+    }
+
+    syncReviewScale();
+    window.addEventListener('resize', syncReviewScale);
+    window.addEventListener('orientationchange', syncReviewScale);
+
+    return () => {
+      window.removeEventListener('resize', syncReviewScale);
+      window.removeEventListener('orientationchange', syncReviewScale);
+    };
+  }, [setting.preferLandscape]);
+
+  const scaledFrameWidth = Math.round(REVIEW_FRAME_WIDTH * reviewScale);
+  const scaledFrameHeight = Math.round(REVIEW_FRAME_HEIGHT * reviewScale);
 
   function handleReviewTabClick() {
     if (typeof window !== 'undefined') {
@@ -72,9 +110,27 @@ export function ReviewPage({
   }
 
   return (
-    <main className="page page--home page--review">
-      <div className="review-mockup-frame">
-        <div className="review-visual-surface" role="img" aria-label="VocaRabbit 复习页面视觉稿">
+    <main className="page page--review">
+      <div
+        className="review-mockup-frame"
+        style={{
+          width: `${scaledFrameWidth}px`,
+          minWidth: `${scaledFrameWidth}px`,
+          height: `${scaledFrameHeight}px`,
+          minHeight: `${scaledFrameHeight}px`,
+        }}
+      >
+        <div
+          className="review-visual-surface"
+          role="img"
+          aria-label="VocaRabbit 复习页面视觉稿"
+          style={{
+            width: `${REVIEW_FRAME_WIDTH}px`,
+            height: `${REVIEW_FRAME_HEIGHT}px`,
+            transform: `scale(${reviewScale})`,
+            transformOrigin: 'top left',
+          }}
+        >
           <button
             className="review-hotspot review-hotspot--profile"
             type="button"
