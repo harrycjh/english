@@ -295,11 +295,12 @@ export function ReviewPage({
             <div className="review-plan-shell__chrome">
               <div className="review-plan-shell__brand">
                 <span className="review-plan-shell__brand-mark" aria-hidden="true" />
-                <span>VocaRabbit</span>
+                <span className="review-plan-shell__brand-wordmark">VocaRabbit</span>
                 <span className="app-version-badge">{APP_VERSION}</span>
               </div>
               <button className="review-plan-shell__profile" type="button" onClick={onOpenSettings}>
-                小树的家长版
+                <span className="review-plan-shell__profile-avatar" aria-hidden="true" />
+                <span className="review-plan-shell__profile-label">小树的家长版</span>
               </button>
             </div>
 
