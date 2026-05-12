@@ -2923,12 +2923,22 @@ button {
 
 .page--review .review-plan-shell__profile {
   position: relative;
-  width: 123px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 142px;
+  min-height: 34px;
   padding-left: 40px;
-  padding-right: 18px;
+  padding-right: 24px;
+  border: none;
   font-size: 15px;
   font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
   color: #6d5a38;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .page--review .review-plan-shell__profile::before {
