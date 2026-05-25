@@ -4,7 +4,7 @@ import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordRecord } from '../models/word';
 import { speakWord } from '../services/audio-service';
 import { AudioIconButton } from './AudioIconButton';
-import { getOxfordRefLabels, getStudyText } from '../services/word-service';
+import { getOxfordRefLabels, getStudyText, getWordImageUrl } from '../services/word-service';
 
 export type WordDetailDrawerContext = 'review' | 'selection';
 
@@ -105,7 +105,7 @@ export function WordDetailDrawer({
         <section className="word-detail-drawer__panel">
           <h3>图片</h3>
           {word.imageApproved ? (
-            <img className="word-detail-drawer__image" src={word.imagePath} alt={word.chinese} />
+            <img className="word-detail-drawer__image" src={getWordImageUrl(word.imagePath)} alt={word.chinese} />
           ) : (
             <div className="word-detail-drawer__placeholder">
               <strong>{getStudyText(word)}</strong>

@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "page": "selection",
+    "source": "/Volumes/ExternalSSD/English/vocab_rabbit/design-output/chatgpt-ipad-renders/selection-page-original.png",
+    "canvas": {
+      "width": 1024,
+      "height": 715
+    },
+    "notes": [
+      "Scaled from selection-page-original.png to the current 1024px implementation frame.",
+      "This layout is intended as a construction baseline for the Selection page."
+    ]
+  },
+  "modules": {
+    "topChrome": { "x": 22, "y": 14, "width": 980, "height": 36, "type": "dom" },
+    "sidebar": { "x": 16, "y": 86, "width": 214, "height": 548, "type": "dom" },
+    "mainIntro": { "x": 248, "y": 86, "width": 430, "height": 90, "type": "dom" },
+    "viewSwitch": { "x": 248, "y": 188, "width": 164, "height": 44, "type": "dom" },
+    "sortControl": { "x": 624, "y": 188, "width": 154, "height": 44, "type": "dom" },
+    "actionRow": { "x": 248, "y": 242, "width": 530, "height": 44, "type": "dom" },
+    "cardGrid": { "x": 248, "y": 302, "width": 530, "height": 318, "type": "dom" },
+    "summaryHero": { "x": 802, "y": 86, "width": 206, "height": 302, "type": "dom" },
+    "summaryBreakdown": { "x": 802, "y": 402, "width": 206, "height": 232, "type": "dom" },
+    "bottomDock": { "x": 30, "y": 652, "width": 964, "height": 52, "type": "dom" }
+  },
+  "cards": {
+    "wordCards": [
+      { "id": "card1", "x": 248, "y": 302, "width": 167, "height": 152, "type": "dom" },
+      { "id": "card2", "x": 430, "y": 302, "width": 167, "height": 152, "type": "dom" },
+      { "id": "card3", "x": 612, "y": 302, "width": 167, "height": 152, "type": "dom" },
+      { "id": "card4", "x": 248, "y": 468, "width": 167, "height": 152, "type": "dom" },
+      { "id": "card5", "x": 430, "y": 468, "width": 167, "height": 152, "type": "dom" },
+      { "id": "card6", "x": 612, "y": 468, "width": 167, "height": 152, "type": "dom" }
+    ],
+    "summaryStats": [
+      { "id": "enabled", "x": 818, "y": 301, "width": 172, "height": 30, "type": "dom" },
+      { "id": "paused", "x": 818, "y": 334, "width": 172, "height": 30, "type": "dom" },
+      { "id": "dueTomorrow", "x": 818, "y": 367, "width": 172, "height": 30, "type": "dom" },
+      { "id": "due3d", "x": 818, "y": 400, "width": 172, "height": 30, "type": "dom" },
+      { "id": "risk", "x": 818, "y": 433, "width": 172, "height": 30, "type": "dom" }
+    ],
+    "dockButtons": [
+      { "id": "review", "x": 36, "y": 658, "width": 230, "height": 40, "type": "dom" },
+      { "id": "selection", "x": 274, "y": 658, "width": 230, "height": 40, "type": "dom" },
+      { "id": "stats", "x": 512, "y": 658, "width": 230, "height": 40, "type": "dom" },
+      { "id": "settings", "x": 750, "y": 658, "width": 230, "height": 40, "type": "dom" }
+    ]
+  }
+}

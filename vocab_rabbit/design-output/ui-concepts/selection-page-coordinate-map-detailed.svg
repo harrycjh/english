@@ -1,0 +1,493 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1293" viewBox="0 0 1024 1293">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<g>
+  <rect x="0" y="0" width="1024" height="30" rx="10" ry="10" fill="rgba(201,126,0,0.176)" stroke="#C97E00" stroke-width="2"/>
+  <rect x="2" y="0" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="4" y="10" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#C97E00">topChrome</text>
+</g>
+<g>
+  <rect x="0" y="0" width="161" height="30" rx="10" ry="10" fill="rgba(201,126,0,0.176)" stroke="#C97E00" stroke-width="2"/>
+  <rect x="2" y="0" width="90" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="4" y="10" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#C97E00">brandCluster</text>
+</g>
+<g>
+  <rect x="904" y="0" width="120" height="30" rx="10" ry="10" fill="rgba(201,126,0,0.176)" stroke="#C97E00" stroke-width="2"/>
+  <rect x="906" y="0" width="97" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="908" y="10" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#C97E00">profileButton</text>
+</g>
+<g>
+  <rect x="0" y="40" width="1024" height="318" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="2" y="27" width="52" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="4" y="37" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">hero</text>
+</g>
+<g>
+  <rect x="18" y="58" width="74" height="282" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="20" y="45" width="55" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="22" y="55" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroArt</text>
+</g>
+<g>
+  <rect x="106" y="58" width="646" height="282" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="108" y="45" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="110" y="55" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroContent</text>
+</g>
+<g>
+  <rect x="106" y="103" width="145" height="24" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="108" y="90" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="110" y="100" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroEyebrow</text>
+</g>
+<g>
+  <rect x="259" y="103" width="98" height="24" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="261" y="90" width="55" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="263" y="100" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroTag</text>
+</g>
+<g>
+  <rect x="106" y="137" width="646" height="37" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="108" y="124" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="110" y="134" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroTitle</text>
+</g>
+<g>
+  <rect x="106" y="185" width="380" height="39" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="108" y="172" width="111" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="110" y="182" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroDescription</text>
+</g>
+<g>
+  <rect x="106" y="234" width="646" height="61" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="108" y="221" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="110" y="231" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroPills</text>
+</g>
+<g>
+  <rect x="766" y="58" width="240" height="282" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="768" y="45" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="770" y="55" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroAside</text>
+</g>
+<g>
+  <rect x="785" y="77" width="202" height="21" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="787" y="64" width="104" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="789" y="74" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroAsideLabel</text>
+</g>
+<g>
+  <rect x="785" y="108" width="202" height="36" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="787" y="95" width="104" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="789" y="105" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroAsideTitle</text>
+</g>
+<g>
+  <rect x="785" y="154" width="188" height="39" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="787" y="141" width="146" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="789" y="151" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroAsideDescription</text>
+</g>
+<g>
+  <rect x="785" y="203" width="202" height="44" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="787" y="190" width="111" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="789" y="200" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroAsideButton</text>
+</g>
+<g>
+  <rect x="907" y="251" width="84" height="74" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="909" y="238" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="911" y="248" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroPlanArt</text>
+</g>
+<g>
+  <rect x="0" y="370" width="1024" height="851" rx="10" ry="10" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="2"/>
+  <rect x="2" y="357" width="52" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="4" y="367" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">layout</text>
+</g>
+<g>
+  <rect x="0" y="392" width="220" height="549" rx="10" ry="10" fill="rgba(62,138,89,0.149)" stroke="#3E8A59" stroke-width="2"/>
+  <rect x="2" y="379" width="55" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="4" y="389" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#3E8A59">sidebar</text>
+</g>
+<g>
+  <rect x="17" y="407" width="186" height="54" rx="10" ry="10" fill="rgba(62,138,89,0.149)" stroke="#3E8A59" stroke-width="2"/>
+  <rect x="19" y="394" width="97" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="21" y="404" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#3E8A59">sidebarHeader</text>
+</g>
+<g>
+  <rect x="17" y="473" width="186" height="63" rx="10" ry="10" fill="rgba(62,138,89,0.149)" stroke="#3E8A59" stroke-width="2"/>
+  <rect x="19" y="460" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="21" y="470" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#3E8A59">searchField</text>
+</g>
+<g>
+  <rect x="17" y="548" width="186" height="63" rx="10" ry="10" fill="rgba(62,138,89,0.149)" stroke="#3E8A59" stroke-width="2"/>
+  <rect x="19" y="535" width="97" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="21" y="545" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#3E8A59">categoryField</text>
+</g>
+<g>
+  <rect x="17" y="623" width="186" height="63" rx="10" ry="10" fill="rgba(62,138,89,0.149)" stroke="#3E8A59" stroke-width="2"/>
+  <rect x="19" y="610" width="76" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="21" y="620" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#3E8A59">levelField</text>
+</g>
+<g>
+  <rect x="17" y="698" width="186" height="63" rx="10" ry="10" fill="rgba(62,138,89,0.149)" stroke="#3E8A59" stroke-width="2"/>
+  <rect x="19" y="685" width="111" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="21" y="695" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#3E8A59">difficultyField</text>
+</g>
+<g>
+  <rect x="17" y="773" width="186" height="63" rx="10" ry="10" fill="rgba(62,138,89,0.149)" stroke="#3E8A59" stroke-width="2"/>
+  <rect x="19" y="760" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="21" y="770" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#3E8A59">statusField</text>
+</g>
+<g>
+  <rect x="17" y="850" width="186" height="20" rx="10" ry="10" fill="rgba(62,138,89,0.149)" stroke="#3E8A59" stroke-width="2"/>
+  <rect x="19" y="837" width="104" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="21" y="847" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#3E8A59">imageOnlyField</text>
+</g>
+<g>
+  <rect x="17" y="884" width="144" height="40" rx="10" ry="10" fill="rgba(62,138,89,0.149)" stroke="#3E8A59" stroke-width="2"/>
+  <rect x="19" y="871" width="132" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="21" y="881" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#3E8A59">resetFiltersButton</text>
+</g>
+<g>
+  <rect x="232" y="392" width="560" height="710" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="234" y="379" width="55" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="236" y="389" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">results</text>
+</g>
+<g>
+  <rect x="249" y="407" width="526" height="27" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="251" y="394" width="97" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="253" y="404" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">resultsHeader</text>
+</g>
+<g>
+  <rect x="249" y="446" width="526" height="42" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="251" y="433" width="104" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="253" y="443" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">resultsToolbar</text>
+</g>
+<g>
+  <rect x="249" y="498" width="526" height="18" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="251" y="485" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="253" y="495" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">resultsHint</text>
+</g>
+<g>
+  <rect x="249" y="528" width="526" height="38" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="251" y="515" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="253" y="525" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">bulkActions</text>
+</g>
+<g>
+  <rect x="249" y="578" width="526" height="507" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="251" y="565" width="62" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="253" y="575" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">cardGrid</text>
+</g>
+<g>
+  <rect x="804" y="392" width="220" height="829" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="806" y="379" width="55" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="808" y="389" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summary</text>
+</g>
+<g>
+  <rect x="821" y="407" width="186" height="81" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="394" width="97" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="404" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryHeader</text>
+</g>
+<g>
+  <rect x="821" y="500" width="186" height="178" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="487" width="90" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="497" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryCards</text>
+</g>
+<g>
+  <rect x="821" y="500" width="88" height="84" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="487" width="90" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="497" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryStat1</text>
+</g>
+<g>
+  <rect x="919" y="500" width="88" height="84" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="921" y="487" width="90" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="923" y="497" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryStat2</text>
+</g>
+<g>
+  <rect x="821" y="594" width="88" height="84" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="581" width="90" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="591" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryStat3</text>
+</g>
+<g>
+  <rect x="919" y="594" width="88" height="84" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="921" y="581" width="90" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="923" y="591" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryStat4</text>
+</g>
+<g>
+  <rect x="821" y="690" width="186" height="146" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="677" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="687" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryRisk</text>
+</g>
+<g>
+  <rect x="821" y="848" width="186" height="356" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="835" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="845" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryBreakdown</text>
+</g>
+<g>
+  <rect x="0" y="1233" width="1024" height="60" rx="10" ry="10" fill="rgba(91,100,115,0.157)" stroke="#5B6473" stroke-width="2"/>
+  <rect x="2" y="1220" width="76" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="4" y="1230" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#5B6473">bottomDock</text>
+</g>
+<g>
+  <rect x="9" y="1242" width="246" height="42" rx="10" ry="10" fill="rgba(91,100,115,0.157)" stroke="#5B6473" stroke-width="2"/>
+  <rect x="11" y="1229" width="76" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="13" y="1239" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#5B6473">dockReview</text>
+</g>
+<g>
+  <rect x="263" y="1242" width="246" height="42" rx="10" ry="10" fill="rgba(91,100,115,0.157)" stroke="#5B6473" stroke-width="2"/>
+  <rect x="265" y="1229" width="97" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="267" y="1239" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#5B6473">dockSelection</text>
+</g>
+<g>
+  <rect x="516" y="1242" width="246" height="42" rx="10" ry="10" fill="rgba(91,100,115,0.157)" stroke="#5B6473" stroke-width="2"/>
+  <rect x="518" y="1229" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="520" y="1239" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#5B6473">dockStats</text>
+</g>
+<g>
+  <rect x="770" y="1242" width="246" height="42" rx="10" ry="10" fill="rgba(91,100,115,0.157)" stroke="#5B6473" stroke-width="2"/>
+  <rect x="772" y="1229" width="90" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="774" y="1239" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#5B6473">dockSettings</text>
+</g>
+<g>
+  <rect x="106" y="234" width="156" height="61" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="108" y="221" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="110" y="231" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroPill1</text>
+</g>
+<g>
+  <rect x="270" y="234" width="156" height="61" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="272" y="221" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="274" y="231" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroPill2</text>
+</g>
+<g>
+  <rect x="433" y="234" width="156" height="61" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="435" y="221" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="437" y="231" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroPill3</text>
+</g>
+<g>
+  <rect x="597" y="234" width="156" height="61" rx="10" ry="10" fill="rgba(47,127,191,0.149)" stroke="#2F7FBF" stroke-width="2"/>
+  <rect x="599" y="221" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="601" y="231" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2F7FBF">heroPill4</text>
+</g>
+<g>
+  <rect x="249" y="446" width="72" height="42" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="251" y="433" width="90" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="253" y="443" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">toolbarChip1</text>
+</g>
+<g>
+  <rect x="331" y="446" width="72" height="42" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="333" y="433" width="90" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="335" y="443" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">toolbarChip2</text>
+</g>
+<g>
+  <rect x="249" y="528" width="124" height="38" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="251" y="515" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="253" y="525" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">bulkButton1</text>
+</g>
+<g>
+  <rect x="444" y="528" width="124" height="38" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="446" y="515" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="448" y="525" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">bulkButton2</text>
+</g>
+<g>
+  <rect x="639" y="528" width="136" height="38" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="641" y="515" width="83" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="643" y="525" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">bulkButton3</text>
+</g>
+<g>
+  <rect x="821" y="886" width="186" height="53" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="873" width="146" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="883" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryBreakdownRow1</text>
+</g>
+<g>
+  <rect x="821" y="939" width="186" height="53" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="926" width="146" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="936" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryBreakdownRow2</text>
+</g>
+<g>
+  <rect x="821" y="992" width="186" height="53" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="979" width="146" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="989" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryBreakdownRow3</text>
+</g>
+<g>
+  <rect x="821" y="1045" width="186" height="53" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="1032" width="146" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="1042" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryBreakdownRow4</text>
+</g>
+<g>
+  <rect x="821" y="1098" width="186" height="53" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="1085" width="146" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="1095" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryBreakdownRow5</text>
+</g>
+<g>
+  <rect x="821" y="1151" width="186" height="53" rx="10" ry="10" fill="rgba(208,75,106,0.133)" stroke="#D04B6A" stroke-width="2"/>
+  <rect x="823" y="1138" width="146" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="825" y="1148" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#D04B6A">summaryBreakdownRow6</text>
+</g>
+<g>
+  <rect x="249" y="578" width="258" height="249" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="251" y="565" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="253" y="575" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">wordCard1</text>
+</g>
+<g>
+  <rect x="264" y="593" width="228" height="32" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="580" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="590" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard1:header</text>
+</g>
+<g>
+  <rect x="264" y="593" width="98" height="32" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="580" width="132" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="590" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard1:category</text>
+</g>
+<g>
+  <rect x="456" y="596" width="36" height="25" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="458" y="583" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="460" y="593" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard1:status</text>
+</g>
+<g>
+  <rect x="264" y="635" width="228" height="30" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="622" width="111" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="632" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard1:title</text>
+</g>
+<g>
+  <rect x="264" y="677" width="228" height="18" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="664" width="125" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="674" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard1:chinese</text>
+</g>
+<g>
+  <rect x="264" y="707" width="228" height="34" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="694" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="704" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard1:footer</text>
+</g>
+<g>
+  <rect x="264" y="753" width="228" height="36" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="740" width="125" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="750" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard1:actions</text>
+</g>
+<g>
+  <rect x="264" y="797" width="228" height="15" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="784" width="104" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="794" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard1:meta</text>
+</g>
+<g>
+  <rect x="517" y="578" width="258" height="249" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="519" y="565" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="521" y="575" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">wordCard2</text>
+</g>
+<g>
+  <rect x="532" y="593" width="228" height="32" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="580" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="590" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard2:header</text>
+</g>
+<g>
+  <rect x="532" y="593" width="98" height="32" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="580" width="132" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="590" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard2:category</text>
+</g>
+<g>
+  <rect x="724" y="596" width="36" height="25" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="726" y="583" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="728" y="593" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard2:status</text>
+</g>
+<g>
+  <rect x="532" y="635" width="228" height="30" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="622" width="111" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="632" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard2:title</text>
+</g>
+<g>
+  <rect x="532" y="677" width="228" height="18" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="664" width="125" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="674" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard2:chinese</text>
+</g>
+<g>
+  <rect x="532" y="707" width="228" height="34" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="694" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="704" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard2:footer</text>
+</g>
+<g>
+  <rect x="532" y="753" width="228" height="36" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="740" width="125" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="750" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard2:actions</text>
+</g>
+<g>
+  <rect x="532" y="797" width="228" height="15" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="784" width="104" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="794" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard2:meta</text>
+</g>
+<g>
+  <rect x="249" y="837" width="258" height="249" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="251" y="824" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="253" y="834" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">wordCard3</text>
+</g>
+<g>
+  <rect x="264" y="852" width="228" height="32" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="839" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="849" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard3:header</text>
+</g>
+<g>
+  <rect x="264" y="852" width="111" height="32" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="839" width="132" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="849" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard3:category</text>
+</g>
+<g>
+  <rect x="456" y="855" width="36" height="25" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="458" y="842" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="460" y="852" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard3:status</text>
+</g>
+<g>
+  <rect x="264" y="893" width="228" height="30" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="880" width="111" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="890" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard3:title</text>
+</g>
+<g>
+  <rect x="264" y="935" width="228" height="18" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="922" width="125" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="932" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard3:chinese</text>
+</g>
+<g>
+  <rect x="264" y="965" width="228" height="34" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="952" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="962" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard3:footer</text>
+</g>
+<g>
+  <rect x="264" y="1011" width="228" height="36" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="998" width="125" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="1008" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard3:actions</text>
+</g>
+<g>
+  <rect x="264" y="1055" width="228" height="15" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="266" y="1042" width="104" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="268" y="1052" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard3:meta</text>
+</g>
+<g>
+  <rect x="517" y="837" width="258" height="249" rx="10" ry="10" fill="rgba(140,74,199,0.133)" stroke="#8C4AC7" stroke-width="2"/>
+  <rect x="519" y="824" width="69" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="521" y="834" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#8C4AC7">wordCard4</text>
+</g>
+<g>
+  <rect x="532" y="852" width="228" height="32" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="839" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="849" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard4:header</text>
+</g>
+<g>
+  <rect x="532" y="852" width="85" height="32" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="839" width="132" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="849" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard4:category</text>
+</g>
+<g>
+  <rect x="724" y="855" width="36" height="25" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="726" y="842" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="728" y="852" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard4:status</text>
+</g>
+<g>
+  <rect x="532" y="893" width="228" height="30" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="880" width="111" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="890" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard4:title</text>
+</g>
+<g>
+  <rect x="532" y="935" width="228" height="18" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="922" width="125" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="932" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard4:chinese</text>
+</g>
+<g>
+  <rect x="532" y="965" width="228" height="34" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="952" width="118" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="962" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard4:footer</text>
+</g>
+<g>
+  <rect x="532" y="1011" width="228" height="36" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="998" width="125" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="1008" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard4:actions</text>
+</g>
+<g>
+  <rect x="532" y="1055" width="228" height="15" rx="6" ry="6" fill="rgba(45,55,72,0.071)" stroke="#2D3748" stroke-width="1"/>
+  <rect x="534" y="1042" width="104" height="14" rx="4" ry="4" fill="rgba(255,255,255,0.86)"/>
+  <text x="536" y="1052" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#2D3748">wordCard4:meta</text>
+</g>
+</svg>

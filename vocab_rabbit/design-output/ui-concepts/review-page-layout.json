@@ -1,0 +1,1167 @@
+{
+  "meta": {
+    "project": "VocaRabbit",
+    "page": "review",
+    "status": "construction-pass-v2",
+    "derivedFrom": [
+      "public/design-reference/review-page-original.png",
+      "docs/plans/2026-05-12-review-page-ui-spec.md",
+      "design-output/ui-concepts/review-page-slice-spec.md",
+      "src/screens/HomePage.tsx",
+      "src/styles/ipad.css"
+    ],
+    "coordinateSpace": {
+      "width": 1158,
+      "height": 808,
+      "origin": "top-left",
+      "units": "px"
+    }
+  },
+  "layers": [
+    {
+      "id": "frameBackground",
+      "zIndex": 0,
+      "content": "page background gradient and warm glow"
+    },
+    {
+      "id": "cardSurfaces",
+      "zIndex": 1,
+      "content": "card fills, borders, masks, dock container"
+    },
+    {
+      "id": "slices",
+      "zIndex": 2,
+      "content": "bunny scene, focus art, preview art, guidance art"
+    },
+    {
+      "id": "decorativeIcons",
+      "zIndex": 3,
+      "content": "brand icon, summary icons, metric icons, dock glyphs, chevrons"
+    },
+    {
+      "id": "textContent",
+      "zIndex": 4,
+      "content": "headlines, labels, values, body text, footer text"
+    },
+    {
+      "id": "interactiveBadges",
+      "zIndex": 5,
+      "content": "preview index badges, favorite stars, CTA arrow circle"
+    },
+    {
+      "id": "globalOverlay",
+      "zIndex": 10,
+      "content": "WordDetailDrawer and future modal layers"
+    }
+  ],
+  "modules": {
+    "topChrome": {
+      "x": 23,
+      "y": 15,
+      "width": 1094,
+      "height": 42,
+      "borderRadius": 21,
+      "zIndex": 4,
+      "renderMode": "dom"
+    },
+    "brandCluster": {
+      "x": 23,
+      "y": 15,
+      "width": 196,
+      "height": 29,
+      "borderRadius": 15,
+      "zIndex": 4,
+      "renderMode": "dom",
+      "iconAnchor": {
+        "x": 23,
+        "y": 15,
+        "width": 29,
+        "height": 29,
+        "renderMode": "slice",
+        "file": "review-brand-rabbit-icon.png"
+      },
+      "textSafe": {
+        "x": 63,
+        "y": 15,
+        "width": 128,
+        "height": 29
+      },
+      "children": {
+        "wordmark": {
+          "x": 63,
+          "y": 15,
+          "width": 122,
+          "height": 29,
+          "renderMode": "dom"
+        },
+        "versionBadge": {
+          "x": 191,
+          "y": 18,
+          "width": 28,
+          "height": 22,
+          "renderMode": "dom"
+        }
+      }
+    },
+    "profileButton": {
+      "x": 976,
+      "y": 11,
+      "width": 154,
+      "height": 42,
+      "borderRadius": 21,
+      "zIndex": 4,
+      "renderMode": "dom",
+      "iconAnchor": {
+        "x": 986,
+        "y": 18,
+        "width": 28,
+        "height": 28,
+        "renderMode": "slice",
+        "file": "review-profile-avatar.png"
+      },
+      "textSafe": {
+        "x": 1024,
+        "y": 19,
+        "width": 82,
+        "height": 24
+      },
+      "children": {
+        "chevron": {
+          "x": 1112,
+          "y": 28,
+          "width": 8,
+          "height": 8,
+          "renderMode": "dom"
+        }
+      }
+    },
+    "heroMascot": {
+      "x": 0,
+      "y": 83,
+      "width": 227,
+      "height": 257,
+      "borderRadius": 0,
+      "zIndex": 0,
+      "renderMode": "dom",
+      "sliceBounds": {
+        "x": 0,
+        "y": 83,
+        "width": 227,
+        "height": 257,
+        "renderMode": "slice",
+        "file": "review-bunny-scene.png"
+      }
+    },
+    "heroHeadline": {
+      "x": 255,
+      "y": 40,
+      "width": 432,
+      "height": 243,
+      "borderRadius": 0,
+      "zIndex": 4,
+      "renderMode": "dom",
+      "textSafe": {
+        "x": 255,
+        "y": 62,
+        "width": 418,
+        "height": 116
+      },
+      "children": {
+        "eyebrow": {
+          "x": 255,
+          "y": 62,
+          "width": 200,
+          "height": 20,
+          "renderMode": "dom"
+        },
+        "headline": {
+          "x": 255,
+          "y": 102,
+          "width": 348,
+          "height": 70,
+          "renderMode": "dom"
+        },
+        "description": {
+          "x": 255,
+          "y": 174,
+          "width": 418,
+          "height": 48,
+          "renderMode": "dom"
+        }
+      }
+    },
+    "summaryPills": {
+      "x": 255,
+      "y": 204,
+      "width": 432,
+      "height": 68,
+      "borderRadius": 18,
+      "zIndex": 4,
+      "renderMode": "dom",
+      "children": [
+        {
+          "id": "library",
+          "x": 255,
+          "y": 204,
+          "width": 136,
+          "height": 68,
+          "borderRadius": 18,
+          "iconAnchor": {
+            "x": 267,
+            "y": 220,
+            "width": 36,
+            "height": 36,
+            "renderMode": "slice",
+            "file": "review-summary-library-icon.png"
+          },
+          "textSafe": {
+            "x": 313,
+            "y": 216,
+            "width": 66,
+            "height": 42
+          }
+        },
+        {
+          "id": "mastered",
+          "x": 403,
+          "y": 204,
+          "width": 136,
+          "height": 68,
+          "borderRadius": 18,
+          "iconAnchor": {
+            "x": 415,
+            "y": 220,
+            "width": 36,
+            "height": 36,
+            "renderMode": "slice",
+            "file": "review-summary-mastered-icon.png"
+          },
+          "textSafe": {
+            "x": 461,
+            "y": 216,
+            "width": 66,
+            "height": 42
+          }
+        },
+        {
+          "id": "completion",
+          "x": 551,
+          "y": 204,
+          "width": 136,
+          "height": 68,
+          "borderRadius": 18,
+          "iconAnchor": {
+            "x": 563,
+            "y": 220,
+            "width": 36,
+            "height": 36,
+            "renderMode": "slice",
+            "file": "review-summary-completion-icon.png"
+          },
+          "textSafe": {
+            "x": 609,
+            "y": 216,
+            "width": 66,
+            "height": 42
+          }
+        }
+      ]
+    },
+    "focusCard": {
+      "x": 707,
+      "y": 85,
+      "width": 434,
+      "height": 204,
+      "borderRadius": 34,
+      "zIndex": 4,
+      "renderMode": "dom",
+      "textSafe": {
+        "x": 733,
+        "y": 101,
+        "width": 226,
+        "height": 128
+      },
+      "children": {
+        "labelIcon": {
+          "x": 731,
+          "y": 101,
+          "width": 40,
+          "height": 40,
+          "renderMode": "dom"
+        },
+        "labelText": {
+          "x": 781,
+          "y": 101,
+          "width": 92,
+          "height": 40,
+          "renderMode": "dom"
+        },
+        "headline": {
+          "x": 731,
+          "y": 158,
+          "width": 220,
+          "height": 60,
+          "renderMode": "dom"
+        },
+        "description": {
+          "x": 731,
+          "y": 204,
+          "width": 232,
+          "height": 40,
+          "renderMode": "dom"
+        },
+        "ctaButton": {
+          "x": 733,
+          "y": 233,
+          "width": 187,
+          "height": 36,
+          "borderRadius": 30,
+          "renderMode": "dom"
+        },
+        "ctaArrowCircle": {
+          "x": 888,
+          "y": 239,
+          "width": 24,
+          "height": 24,
+          "renderMode": "dom"
+        }
+      }
+    },
+    "metricRow": {
+      "x": 29,
+      "y": 304,
+      "width": 1103,
+      "height": 105,
+      "borderRadius": 22,
+      "zIndex": 4,
+      "renderMode": "dom"
+    },
+    "previewSection": {
+      "x": 29,
+      "y": 418,
+      "width": 1103,
+      "height": 160,
+      "borderRadius": 0,
+      "zIndex": 4,
+      "renderMode": "dom",
+      "children": {
+        "headerTitle": {
+          "x": 29,
+          "y": 415,
+          "width": 120,
+          "height": 26,
+          "renderMode": "dom"
+        },
+        "headerDescription": {
+          "x": 152,
+          "y": 422,
+          "width": 320,
+          "height": 20,
+          "renderMode": "dom"
+        }
+      }
+    },
+    "guidanceSection": {
+      "x": 29,
+      "y": 582,
+      "width": 1103,
+      "height": 120,
+      "borderRadius": 0,
+      "zIndex": 4,
+      "renderMode": "dom",
+      "children": {
+        "headerTitle": {
+          "x": 29,
+          "y": 581,
+          "width": 120,
+          "height": 26,
+          "renderMode": "dom"
+        },
+        "headerDescription": {
+          "x": 152,
+          "y": 586,
+          "width": 320,
+          "height": 20,
+          "renderMode": "dom"
+        }
+      }
+    },
+    "bottomDock": {
+      "x": 29,
+      "y": 719,
+      "width": 1103,
+      "height": 87,
+      "borderRadius": 34,
+      "zIndex": 4,
+      "renderMode": "dom"
+    }
+  },
+  "cards": {
+    "metrics": [
+      {
+        "id": "task",
+        "x": 29,
+        "y": 304,
+        "width": 258,
+        "height": 105,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 43,
+          "y": 325,
+          "width": 63,
+          "height": 63,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 118,
+          "y": 326,
+          "width": 148,
+          "height": 58
+        },
+        "chevron": {
+          "x": 257,
+          "y": 350,
+          "width": 9,
+          "height": 9,
+          "renderMode": "dom"
+        }
+      },
+      {
+        "id": "time",
+        "x": 301,
+        "y": 304,
+        "width": 258,
+        "height": 105,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 315,
+          "y": 325,
+          "width": 63,
+          "height": 63,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 390,
+          "y": 326,
+          "width": 148,
+          "height": 58
+        },
+        "chevron": {
+          "x": 529,
+          "y": 350,
+          "width": 9,
+          "height": 9,
+          "renderMode": "dom"
+        }
+      },
+      {
+        "id": "theme",
+        "x": 573,
+        "y": 304,
+        "width": 258,
+        "height": 105,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 587,
+          "y": 325,
+          "width": 63,
+          "height": 63,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 662,
+          "y": 326,
+          "width": 148,
+          "height": 58
+        },
+        "chevron": {
+          "x": 801,
+          "y": 350,
+          "width": 9,
+          "height": 9,
+          "renderMode": "dom"
+        }
+      },
+      {
+        "id": "heatmap",
+        "x": 845,
+        "y": 304,
+        "width": 289,
+        "height": 105,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "textSafe": {
+          "x": 859,
+          "y": 314,
+          "width": 186,
+          "height": 18
+        },
+        "heatmapBounds": {
+          "x": 859,
+          "y": 338,
+          "width": 182,
+          "height": 50,
+          "renderMode": "dom"
+        },
+        "chevron": {
+          "x": 1105,
+          "y": 323,
+          "width": 9,
+          "height": 9,
+          "renderMode": "dom"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "id": "family",
+        "x": 29,
+        "y": 448,
+        "width": 265,
+        "height": 130,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "artSlot": {
+          "x": 29,
+          "y": 448,
+          "width": 110,
+          "height": 130,
+          "renderMode": "slice",
+          "file": "review-preview-family-art.png"
+        },
+        "indexBadge": {
+          "x": 39,
+          "y": 458,
+          "width": 28,
+          "height": 28,
+          "renderMode": "dom"
+        },
+        "favoriteIcon": {
+          "x": 262,
+          "y": 456,
+          "width": 22,
+          "height": 22,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 151,
+          "y": 457,
+          "width": 131,
+          "height": 90
+        },
+        "textBlocks": {
+          "headline": {
+            "x": 151,
+            "y": 465,
+            "width": 99,
+            "height": 24
+          },
+          "subtitle": {
+            "x": 151,
+            "y": 495,
+            "width": 99,
+            "height": 16
+          },
+          "meta": {
+            "x": 151,
+            "y": 523,
+            "width": 111,
+            "height": 22
+          }
+        }
+      },
+      {
+        "id": "hello",
+        "x": 308,
+        "y": 448,
+        "width": 265,
+        "height": 130,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "artSlot": {
+          "x": 308,
+          "y": 448,
+          "width": 110,
+          "height": 130,
+          "renderMode": "slice",
+          "file": "review-preview-hello-art.png"
+        },
+        "indexBadge": {
+          "x": 318,
+          "y": 458,
+          "width": 28,
+          "height": 28,
+          "renderMode": "dom"
+        },
+        "favoriteIcon": {
+          "x": 541,
+          "y": 456,
+          "width": 22,
+          "height": 22,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 430,
+          "y": 457,
+          "width": 131,
+          "height": 90
+        },
+        "textBlocks": {
+          "headline": {
+            "x": 430,
+            "y": 465,
+            "width": 99,
+            "height": 24
+          },
+          "subtitle": {
+            "x": 430,
+            "y": 495,
+            "width": 99,
+            "height": 16
+          },
+          "meta": {
+            "x": 430,
+            "y": 523,
+            "width": 111,
+            "height": 22
+          }
+        }
+      },
+      {
+        "id": "body",
+        "x": 587,
+        "y": 448,
+        "width": 265,
+        "height": 130,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "artSlot": {
+          "x": 587,
+          "y": 448,
+          "width": 110,
+          "height": 130,
+          "renderMode": "slice",
+          "file": "review-preview-body-art.png"
+        },
+        "indexBadge": {
+          "x": 597,
+          "y": 458,
+          "width": 28,
+          "height": 28,
+          "renderMode": "dom"
+        },
+        "favoriteIcon": {
+          "x": 820,
+          "y": 456,
+          "width": 22,
+          "height": 22,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 709,
+          "y": 457,
+          "width": 131,
+          "height": 90
+        },
+        "textBlocks": {
+          "headline": {
+            "x": 709,
+            "y": 465,
+            "width": 99,
+            "height": 24
+          },
+          "subtitle": {
+            "x": 709,
+            "y": 495,
+            "width": 99,
+            "height": 16
+          },
+          "meta": {
+            "x": 709,
+            "y": 523,
+            "width": 111,
+            "height": 22
+          }
+        }
+      },
+      {
+        "id": "spark",
+        "x": 866,
+        "y": 448,
+        "width": 265,
+        "height": 130,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "artSlot": {
+          "x": 866,
+          "y": 448,
+          "width": 110,
+          "height": 130,
+          "renderMode": "slice",
+          "file": "review-preview-spark-art.png"
+        },
+        "indexBadge": {
+          "x": 876,
+          "y": 458,
+          "width": 28,
+          "height": 28,
+          "renderMode": "dom"
+        },
+        "favoriteIcon": {
+          "x": 1099,
+          "y": 456,
+          "width": 22,
+          "height": 22,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 988,
+          "y": 457,
+          "width": 131,
+          "height": 90
+        },
+        "textBlocks": {
+          "headline": {
+            "x": 988,
+            "y": 465,
+            "width": 99,
+            "height": 24
+          },
+          "subtitle": {
+            "x": 988,
+            "y": 495,
+            "width": 99,
+            "height": 16
+          },
+          "meta": {
+            "x": 988,
+            "y": 523,
+            "width": 111,
+            "height": 22
+          }
+        }
+      }
+    ],
+    "guidance": [
+      {
+        "id": "tea",
+        "x": 29,
+        "y": 612,
+        "width": 361,
+        "height": 84,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 43,
+          "y": 627,
+          "width": 38,
+          "height": 38,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 83,
+          "y": 625,
+          "width": 195,
+          "height": 44
+        },
+        "textBlocks": {
+          "eyebrow": {
+            "x": 95,
+            "y": 625,
+            "width": 96,
+            "height": 14
+          },
+          "headline": {
+            "x": 95,
+            "y": 643,
+            "width": 188,
+            "height": 20
+          },
+          "description": {
+            "x": 95,
+            "y": 667,
+            "width": 188,
+            "height": 16
+          }
+        },
+        "artSlot": {
+          "x": 298,
+          "y": 622,
+          "width": 74,
+          "height": 63,
+          "renderMode": "slice",
+          "file": "review-book-art.png"
+        },
+        "chevron": {
+          "x": 356,
+          "y": 631,
+          "width": 9,
+          "height": 9,
+          "renderMode": "dom"
+        }
+      },
+      {
+        "id": "bars",
+        "x": 404,
+        "y": 612,
+        "width": 352,
+        "height": 84,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 418,
+          "y": 627,
+          "width": 38,
+          "height": 38,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 458,
+          "y": 625,
+          "width": 186,
+          "height": 44
+        },
+        "textBlocks": {
+          "eyebrow": {
+            "x": 470,
+            "y": 625,
+            "width": 96,
+            "height": 14
+          },
+          "headline": {
+            "x": 470,
+            "y": 643,
+            "width": 174,
+            "height": 20
+          },
+          "description": {
+            "x": 470,
+            "y": 667,
+            "width": 174,
+            "height": 16
+          }
+        },
+        "artSlot": {
+          "x": 664,
+          "y": 622,
+          "width": 74,
+          "height": 63,
+          "renderMode": "slice",
+          "file": "review-bars-art.png"
+        },
+        "chevron": {
+          "x": 722,
+          "y": 631,
+          "width": 9,
+          "height": 9,
+          "renderMode": "dom"
+        }
+      },
+      {
+        "id": "bag",
+        "x": 770,
+        "y": 612,
+        "width": 363,
+        "height": 84,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 784,
+          "y": 627,
+          "width": 38,
+          "height": 38,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 824,
+          "y": 625,
+          "width": 195,
+          "height": 44
+        },
+        "textBlocks": {
+          "eyebrow": {
+            "x": 836,
+            "y": 625,
+            "width": 110,
+            "height": 14
+          },
+          "headline": {
+            "x": 836,
+            "y": 643,
+            "width": 183,
+            "height": 20
+          },
+          "description": {
+            "x": 836,
+            "y": 667,
+            "width": 183,
+            "height": 16
+          }
+        },
+        "artSlot": {
+          "x": 1041,
+          "y": 622,
+          "width": 74,
+          "height": 63,
+          "renderMode": "slice",
+          "file": "review-bag-art.png"
+        },
+        "chevron": {
+          "x": 1099,
+          "y": 631,
+          "width": 9,
+          "height": 9,
+          "renderMode": "dom"
+        }
+      }
+    ],
+    "dockButtons": [
+      {
+        "id": "review",
+        "x": 127,
+        "y": 735,
+        "width": 158,
+        "height": 54,
+        "borderRadius": 18,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 173,
+          "y": 752,
+          "width": 20,
+          "height": 20,
+          "renderMode": "slice",
+          "file": "review-dock-review-icon.png"
+        },
+        "textSafe": {
+          "x": 203,
+          "y": 751,
+          "width": 46,
+          "height": 22
+        }
+      },
+      {
+        "id": "selection",
+        "x": 394,
+        "y": 735,
+        "width": 158,
+        "height": 54,
+        "borderRadius": 18,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 440,
+          "y": 752,
+          "width": 20,
+          "height": 20,
+          "renderMode": "slice",
+          "file": "review-dock-selection-icon.png"
+        },
+        "textSafe": {
+          "x": 470,
+          "y": 751,
+          "width": 46,
+          "height": 22
+        }
+      },
+      {
+        "id": "stats",
+        "x": 661,
+        "y": 735,
+        "width": 158,
+        "height": 54,
+        "borderRadius": 18,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 707,
+          "y": 752,
+          "width": 20,
+          "height": 20,
+          "renderMode": "slice",
+          "file": "review-dock-stats-icon.png"
+        },
+        "textSafe": {
+          "x": 737,
+          "y": 751,
+          "width": 46,
+          "height": 22
+        }
+      },
+      {
+        "id": "settings",
+        "x": 928,
+        "y": 735,
+        "width": 158,
+        "height": 54,
+        "borderRadius": 18,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 974,
+          "y": 752,
+          "width": 20,
+          "height": 20,
+          "renderMode": "slice",
+          "file": "review-dock-settings-icon.png"
+        },
+        "textSafe": {
+          "x": 1004,
+          "y": 751,
+          "width": 46,
+          "height": 22
+        }
+      }
+    ]
+  },
+  "slices": [
+    {
+      "id": "heroBunnyScene",
+      "file": "review-bunny-scene.png",
+      "host": "heroMascot",
+      "x": 0,
+      "y": 83,
+      "width": 227,
+      "height": 257,
+      "fit": "cover",
+      "anchor": "center-top",
+      "borderRadius": 0,
+      "zIndex": 0,
+      "renderMode": "slice"
+    },
+    {
+      "id": "focusArt",
+      "file": "review-focus-art.png",
+      "host": "focusCard",
+      "x": 707,
+      "y": 85,
+      "width": 434,
+      "height": 204,
+      "fit": "cover",
+      "anchor": "center-center",
+      "borderRadius": 0,
+      "zIndex": 2,
+      "renderMode": "slice"
+    },
+    {
+      "id": "previewFamilyArt",
+      "file": "review-preview-family-art.png",
+      "host": "preview-family",
+      "x": 29,
+      "y": 430,
+      "width": 110,
+      "height": 110,
+      "fit": "contain",
+      "anchor": "left-bottom",
+      "offsetX": 0,
+      "offsetY": 12,
+      "assetDisplayWidth": 106,
+      "zIndex": 2,
+      "renderMode": "slice"
+    },
+    {
+      "id": "previewHelloArt",
+      "file": "review-preview-hello-art.png",
+      "host": "preview-hello",
+      "x": 317,
+      "y": 430,
+      "width": 110,
+      "height": 110,
+      "fit": "contain",
+      "anchor": "left-bottom",
+      "offsetX": -2,
+      "offsetY": 16,
+      "assetDisplayWidth": 103,
+      "zIndex": 2,
+      "renderMode": "slice"
+    },
+    {
+      "id": "previewBodyArt",
+      "file": "review-preview-body-art.png",
+      "host": "preview-body",
+      "x": 605,
+      "y": 430,
+      "width": 110,
+      "height": 110,
+      "fit": "contain",
+      "anchor": "left-bottom",
+      "offsetX": 8,
+      "offsetY": 15,
+      "assetDisplayWidth": 83,
+      "zIndex": 2,
+      "renderMode": "slice"
+    },
+    {
+      "id": "previewSparkArt",
+      "file": "review-preview-spark-art.png",
+      "host": "preview-spark",
+      "x": 893,
+      "y": 430,
+      "width": 96,
+      "height": 110,
+      "fit": "contain",
+      "anchor": "left-bottom",
+      "offsetX": 0,
+      "offsetY": 13,
+      "assetDisplayWidth": 99,
+      "zIndex": 2,
+      "renderMode": "slice"
+    },
+    {
+      "id": "guidanceTeaArt",
+      "file": "review-book-art.png",
+      "host": "guidance-tea",
+      "x": 298,
+      "y": 604,
+      "width": 74,
+      "height": 63,
+      "fit": "contain",
+      "anchor": "center-bottom",
+      "assetDisplayWidth": 57,
+      "zIndex": 2,
+      "renderMode": "slice"
+    },
+    {
+      "id": "guidanceBarsArt",
+      "file": "review-bars-art.png",
+      "host": "guidance-bars",
+      "x": 664,
+      "y": 604,
+      "width": 74,
+      "height": 63,
+      "fit": "contain",
+      "anchor": "center-bottom",
+      "assetDisplayWidth": 66,
+      "zIndex": 2,
+      "renderMode": "slice"
+    },
+    {
+      "id": "guidanceBagArt",
+      "file": "review-bag-art.png",
+      "host": "guidance-bag",
+      "x": 1041,
+      "y": 604,
+      "width": 74,
+      "height": 63,
+      "fit": "contain",
+      "anchor": "center-bottom",
+      "assetDisplayWidth": 73,
+      "zIndex": 2,
+      "renderMode": "slice"
+    }
+  ]
+}

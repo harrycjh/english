@@ -1,0 +1,669 @@
+{
+  "frame": {
+    "width": 1024,
+    "height": 1293
+  },
+  "boxes": {
+    "selectionMockupFrame": {
+      "x": 0,
+      "y": 0,
+      "width": 1024,
+      "height": 1293
+    },
+    "topChrome": {
+      "x": 0,
+      "y": 0,
+      "width": 1024,
+      "height": 30
+    },
+    "brandCluster": {
+      "x": 0,
+      "y": 0,
+      "width": 161,
+      "height": 30
+    },
+    "profileButton": {
+      "x": 904,
+      "y": 0,
+      "width": 120,
+      "height": 30
+    },
+    "hero": {
+      "x": 0,
+      "y": 40,
+      "width": 1024,
+      "height": 318
+    },
+    "heroArt": {
+      "x": 18,
+      "y": 58,
+      "width": 74,
+      "height": 282
+    },
+    "heroContent": {
+      "x": 106,
+      "y": 58,
+      "width": 646,
+      "height": 282
+    },
+    "heroEyebrow": {
+      "x": 106,
+      "y": 103,
+      "width": 145,
+      "height": 24
+    },
+    "heroTag": {
+      "x": 259,
+      "y": 103,
+      "width": 98,
+      "height": 24
+    },
+    "heroTitle": {
+      "x": 106,
+      "y": 137,
+      "width": 646,
+      "height": 37
+    },
+    "heroDescription": {
+      "x": 106,
+      "y": 185,
+      "width": 380,
+      "height": 39
+    },
+    "heroPills": {
+      "x": 106,
+      "y": 234,
+      "width": 646,
+      "height": 61
+    },
+    "heroAside": {
+      "x": 766,
+      "y": 58,
+      "width": 240,
+      "height": 282
+    },
+    "heroAsideLabel": {
+      "x": 785,
+      "y": 77,
+      "width": 202,
+      "height": 21
+    },
+    "heroAsideTitle": {
+      "x": 785,
+      "y": 108,
+      "width": 202,
+      "height": 36
+    },
+    "heroAsideDescription": {
+      "x": 785,
+      "y": 154,
+      "width": 188,
+      "height": 39
+    },
+    "heroAsideButton": {
+      "x": 785,
+      "y": 203,
+      "width": 202,
+      "height": 44
+    },
+    "heroPlanArt": {
+      "x": 907,
+      "y": 251,
+      "width": 84,
+      "height": 74
+    },
+    "layout": {
+      "x": 0,
+      "y": 370,
+      "width": 1024,
+      "height": 851
+    },
+    "sidebar": {
+      "x": 0,
+      "y": 392,
+      "width": 220,
+      "height": 549
+    },
+    "sidebarHeader": {
+      "x": 17,
+      "y": 407,
+      "width": 186,
+      "height": 54
+    },
+    "searchField": {
+      "x": 17,
+      "y": 473,
+      "width": 186,
+      "height": 63
+    },
+    "categoryField": {
+      "x": 17,
+      "y": 548,
+      "width": 186,
+      "height": 63
+    },
+    "levelField": {
+      "x": 17,
+      "y": 623,
+      "width": 186,
+      "height": 63
+    },
+    "difficultyField": {
+      "x": 17,
+      "y": 698,
+      "width": 186,
+      "height": 63
+    },
+    "statusField": {
+      "x": 17,
+      "y": 773,
+      "width": 186,
+      "height": 63
+    },
+    "imageOnlyField": {
+      "x": 17,
+      "y": 850,
+      "width": 186,
+      "height": 20
+    },
+    "resetFiltersButton": {
+      "x": 17,
+      "y": 884,
+      "width": 144,
+      "height": 40
+    },
+    "results": {
+      "x": 232,
+      "y": 392,
+      "width": 560,
+      "height": 710
+    },
+    "resultsHeader": {
+      "x": 249,
+      "y": 407,
+      "width": 526,
+      "height": 27
+    },
+    "resultsToolbar": {
+      "x": 249,
+      "y": 446,
+      "width": 526,
+      "height": 42
+    },
+    "resultsHint": {
+      "x": 249,
+      "y": 498,
+      "width": 526,
+      "height": 18
+    },
+    "bulkActions": {
+      "x": 249,
+      "y": 528,
+      "width": 526,
+      "height": 38
+    },
+    "cardGrid": {
+      "x": 249,
+      "y": 578,
+      "width": 526,
+      "height": 507
+    },
+    "summary": {
+      "x": 804,
+      "y": 392,
+      "width": 220,
+      "height": 829
+    },
+    "summaryHeader": {
+      "x": 821,
+      "y": 407,
+      "width": 186,
+      "height": 81
+    },
+    "summaryCards": {
+      "x": 821,
+      "y": 500,
+      "width": 186,
+      "height": 178
+    },
+    "summaryStat1": {
+      "x": 821,
+      "y": 500,
+      "width": 88,
+      "height": 84
+    },
+    "summaryStat2": {
+      "x": 919,
+      "y": 500,
+      "width": 88,
+      "height": 84
+    },
+    "summaryStat3": {
+      "x": 821,
+      "y": 594,
+      "width": 88,
+      "height": 84
+    },
+    "summaryStat4": {
+      "x": 919,
+      "y": 594,
+      "width": 88,
+      "height": 84
+    },
+    "summaryRisk": {
+      "x": 821,
+      "y": 690,
+      "width": 186,
+      "height": 146
+    },
+    "summaryBreakdown": {
+      "x": 821,
+      "y": 848,
+      "width": 186,
+      "height": 356
+    },
+    "bottomDock": {
+      "x": 0,
+      "y": 1233,
+      "width": 1024,
+      "height": 60
+    },
+    "dockReview": {
+      "x": 9,
+      "y": 1242,
+      "width": 246,
+      "height": 42
+    },
+    "dockSelection": {
+      "x": 263,
+      "y": 1242,
+      "width": 246,
+      "height": 42
+    },
+    "dockStats": {
+      "x": 516,
+      "y": 1242,
+      "width": 246,
+      "height": 42
+    },
+    "dockSettings": {
+      "x": 770,
+      "y": 1242,
+      "width": 246,
+      "height": 42
+    }
+  },
+  "wordCards": [
+    {
+      "name": "wordCard1",
+      "box": {
+        "x": 249,
+        "y": 578,
+        "width": 258,
+        "height": 249
+      },
+      "header": {
+        "x": 264,
+        "y": 593,
+        "width": 228,
+        "height": 32
+      },
+      "category": {
+        "x": 264,
+        "y": 593,
+        "width": 98,
+        "height": 32
+      },
+      "status": {
+        "x": 456,
+        "y": 596,
+        "width": 36,
+        "height": 25
+      },
+      "title": {
+        "x": 264,
+        "y": 635,
+        "width": 228,
+        "height": 30
+      },
+      "chinese": {
+        "x": 264,
+        "y": 677,
+        "width": 228,
+        "height": 18
+      },
+      "footer": {
+        "x": 264,
+        "y": 707,
+        "width": 228,
+        "height": 34
+      },
+      "actions": {
+        "x": 264,
+        "y": 753,
+        "width": 228,
+        "height": 36
+      },
+      "meta": {
+        "x": 264,
+        "y": 797,
+        "width": 228,
+        "height": 15
+      }
+    },
+    {
+      "name": "wordCard2",
+      "box": {
+        "x": 517,
+        "y": 578,
+        "width": 258,
+        "height": 249
+      },
+      "header": {
+        "x": 532,
+        "y": 593,
+        "width": 228,
+        "height": 32
+      },
+      "category": {
+        "x": 532,
+        "y": 593,
+        "width": 98,
+        "height": 32
+      },
+      "status": {
+        "x": 724,
+        "y": 596,
+        "width": 36,
+        "height": 25
+      },
+      "title": {
+        "x": 532,
+        "y": 635,
+        "width": 228,
+        "height": 30
+      },
+      "chinese": {
+        "x": 532,
+        "y": 677,
+        "width": 228,
+        "height": 18
+      },
+      "footer": {
+        "x": 532,
+        "y": 707,
+        "width": 228,
+        "height": 34
+      },
+      "actions": {
+        "x": 532,
+        "y": 753,
+        "width": 228,
+        "height": 36
+      },
+      "meta": {
+        "x": 532,
+        "y": 797,
+        "width": 228,
+        "height": 15
+      }
+    },
+    {
+      "name": "wordCard3",
+      "box": {
+        "x": 249,
+        "y": 837,
+        "width": 258,
+        "height": 249
+      },
+      "header": {
+        "x": 264,
+        "y": 852,
+        "width": 228,
+        "height": 32
+      },
+      "category": {
+        "x": 264,
+        "y": 852,
+        "width": 111,
+        "height": 32
+      },
+      "status": {
+        "x": 456,
+        "y": 855,
+        "width": 36,
+        "height": 25
+      },
+      "title": {
+        "x": 264,
+        "y": 893,
+        "width": 228,
+        "height": 30
+      },
+      "chinese": {
+        "x": 264,
+        "y": 935,
+        "width": 228,
+        "height": 18
+      },
+      "footer": {
+        "x": 264,
+        "y": 965,
+        "width": 228,
+        "height": 34
+      },
+      "actions": {
+        "x": 264,
+        "y": 1011,
+        "width": 228,
+        "height": 36
+      },
+      "meta": {
+        "x": 264,
+        "y": 1055,
+        "width": 228,
+        "height": 15
+      }
+    },
+    {
+      "name": "wordCard4",
+      "box": {
+        "x": 517,
+        "y": 837,
+        "width": 258,
+        "height": 249
+      },
+      "header": {
+        "x": 532,
+        "y": 852,
+        "width": 228,
+        "height": 32
+      },
+      "category": {
+        "x": 532,
+        "y": 852,
+        "width": 85,
+        "height": 32
+      },
+      "status": {
+        "x": 724,
+        "y": 855,
+        "width": 36,
+        "height": 25
+      },
+      "title": {
+        "x": 532,
+        "y": 893,
+        "width": 228,
+        "height": 30
+      },
+      "chinese": {
+        "x": 532,
+        "y": 935,
+        "width": 228,
+        "height": 18
+      },
+      "footer": {
+        "x": 532,
+        "y": 965,
+        "width": 228,
+        "height": 34
+      },
+      "actions": {
+        "x": 532,
+        "y": 1011,
+        "width": 228,
+        "height": 36
+      },
+      "meta": {
+        "x": 532,
+        "y": 1055,
+        "width": 228,
+        "height": 15
+      }
+    }
+  ],
+  "heroPills": [
+    {
+      "name": "heroPill1",
+      "box": {
+        "x": 106,
+        "y": 234,
+        "width": 156,
+        "height": 61
+      }
+    },
+    {
+      "name": "heroPill2",
+      "box": {
+        "x": 270,
+        "y": 234,
+        "width": 156,
+        "height": 61
+      }
+    },
+    {
+      "name": "heroPill3",
+      "box": {
+        "x": 433,
+        "y": 234,
+        "width": 156,
+        "height": 61
+      }
+    },
+    {
+      "name": "heroPill4",
+      "box": {
+        "x": 597,
+        "y": 234,
+        "width": 156,
+        "height": 61
+      }
+    }
+  ],
+  "toolbarChips": [
+    {
+      "name": "toolbarChip1",
+      "box": {
+        "x": 249,
+        "y": 446,
+        "width": 72,
+        "height": 42
+      }
+    },
+    {
+      "name": "toolbarChip2",
+      "box": {
+        "x": 331,
+        "y": 446,
+        "width": 72,
+        "height": 42
+      }
+    }
+  ],
+  "bulkButtons": [
+    {
+      "name": "bulkButton1",
+      "box": {
+        "x": 249,
+        "y": 528,
+        "width": 124,
+        "height": 38
+      }
+    },
+    {
+      "name": "bulkButton2",
+      "box": {
+        "x": 444,
+        "y": 528,
+        "width": 124,
+        "height": 38
+      }
+    },
+    {
+      "name": "bulkButton3",
+      "box": {
+        "x": 639,
+        "y": 528,
+        "width": 136,
+        "height": 38
+      }
+    }
+  ],
+  "breakdownRows": [
+    {
+      "name": "summaryBreakdownRow1",
+      "box": {
+        "x": 821,
+        "y": 886,
+        "width": 186,
+        "height": 53
+      }
+    },
+    {
+      "name": "summaryBreakdownRow2",
+      "box": {
+        "x": 821,
+        "y": 939,
+        "width": 186,
+        "height": 53
+      }
+    },
+    {
+      "name": "summaryBreakdownRow3",
+      "box": {
+        "x": 821,
+        "y": 992,
+        "width": 186,
+        "height": 53
+      }
+    },
+    {
+      "name": "summaryBreakdownRow4",
+      "box": {
+        "x": 821,
+        "y": 1045,
+        "width": 186,
+        "height": 53
+      }
+    },
+    {
+      "name": "summaryBreakdownRow5",
+      "box": {
+        "x": 821,
+        "y": 1098,
+        "width": 186,
+        "height": 53
+      }
+    },
+    {
+      "name": "summaryBreakdownRow6",
+      "box": {
+        "x": 821,
+        "y": 1151,
+        "width": 186,
+        "height": 53
+      }
+    }
+  ]
+}

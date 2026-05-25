@@ -1,0 +1,333 @@
+{
+  "meta": {
+    "project": "VocaRabbit",
+    "page": "review",
+    "status": "template-baseline",
+    "note": "This file is a template and current implementation baseline, not the final reference-derived truth.",
+    "coordinateSpace": {
+      "width": 1158,
+      "height": 808,
+      "origin": "top-left",
+      "units": "px"
+    }
+  },
+  "modules": {
+    "topChrome": {
+      "x": 23,
+      "y": 15,
+      "width": 1094,
+      "height": 34,
+      "renderMode": "dom"
+    },
+    "brandCluster": {
+      "x": 23,
+      "y": 15,
+      "width": 220,
+      "height": 29,
+      "renderMode": "dom"
+    },
+    "profileButton": {
+      "x": 963,
+      "y": 11,
+      "width": 154,
+      "height": 42,
+      "renderMode": "dom"
+    },
+    "heroMascot": {
+      "x": 0,
+      "y": 40,
+      "width": 231,
+      "height": 243,
+      "renderMode": "slice"
+    },
+    "heroHeadline": {
+      "x": 231,
+      "y": 40,
+      "width": 432,
+      "height": 243,
+      "renderMode": "dom"
+    },
+    "summaryPills": {
+      "x": 231,
+      "y": 196,
+      "width": 432,
+      "height": 68,
+      "renderMode": "dom"
+    },
+    "focusCard": {
+      "x": 682,
+      "y": 48,
+      "width": 451,
+      "height": 224,
+      "renderMode": "dom"
+    },
+    "metricRow": {
+      "x": 29,
+      "y": 288,
+      "width": 1103,
+      "height": 100,
+      "renderMode": "dom"
+    },
+    "previewSection": {
+      "x": 29,
+      "y": 402,
+      "width": 1103,
+      "height": 151,
+      "renderMode": "dom"
+    },
+    "guidanceSection": {
+      "x": 29,
+      "y": 567,
+      "width": 1103,
+      "height": 119,
+      "renderMode": "dom"
+    },
+    "bottomDock": {
+      "x": 29,
+      "y": 703,
+      "width": 1103,
+      "height": 87,
+      "renderMode": "dom"
+    }
+  },
+  "cards": {
+    "metrics": [
+      {
+        "id": "task",
+        "x": 29,
+        "y": 288,
+        "width": 258,
+        "height": 100,
+        "renderMode": "dom"
+      },
+      {
+        "id": "time",
+        "x": 301,
+        "y": 288,
+        "width": 258,
+        "height": 100,
+        "renderMode": "dom"
+      },
+      {
+        "id": "theme",
+        "x": 573,
+        "y": 288,
+        "width": 258,
+        "height": 100,
+        "renderMode": "dom"
+      },
+      {
+        "id": "heatmap",
+        "x": 845,
+        "y": 288,
+        "width": 289,
+        "height": 100,
+        "renderMode": "dom"
+      }
+    ],
+    "previews": [
+      {
+        "id": "family",
+        "x": 29,
+        "y": 430,
+        "width": 274,
+        "height": 110,
+        "art": {
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "height": 110,
+          "renderMode": "slice",
+          "file": "review-preview-family-art.png"
+        }
+      },
+      {
+        "id": "hello",
+        "x": 317,
+        "y": 430,
+        "width": 274,
+        "height": 110,
+        "art": {
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "height": 110,
+          "renderMode": "slice",
+          "file": "review-preview-hello-art.png"
+        }
+      },
+      {
+        "id": "body",
+        "x": 605,
+        "y": 430,
+        "width": 274,
+        "height": 110,
+        "art": {
+          "x": 0,
+          "y": 0,
+          "width": 110,
+          "height": 110,
+          "renderMode": "slice",
+          "file": "review-preview-body-art.png"
+        }
+      },
+      {
+        "id": "spark",
+        "x": 893,
+        "y": 430,
+        "width": 231,
+        "height": 110,
+        "art": {
+          "x": 0,
+          "y": 0,
+          "width": 96,
+          "height": 110,
+          "renderMode": "slice",
+          "file": "review-preview-spark-art.png"
+        }
+      }
+    ],
+    "guidance": [
+      {
+        "id": "tea",
+        "x": 29,
+        "y": 595,
+        "width": 361,
+        "height": 84,
+        "art": {
+          "width": 74,
+          "height": 63,
+          "renderMode": "slice",
+          "file": "review-book-art.png"
+        }
+      },
+      {
+        "id": "bars",
+        "x": 404,
+        "y": 595,
+        "width": 352,
+        "height": 84,
+        "art": {
+          "width": 74,
+          "height": 63,
+          "renderMode": "slice",
+          "file": "review-bars-art.png"
+        }
+      },
+      {
+        "id": "bag",
+        "x": 770,
+        "y": 595,
+        "width": 363,
+        "height": 84,
+        "art": {
+          "width": 74,
+          "height": 63,
+          "renderMode": "slice",
+          "file": "review-bag-art.png"
+        }
+      }
+    ],
+    "dockButtons": [
+      {
+        "id": "review",
+        "x": 127,
+        "y": 719,
+        "width": 158,
+        "height": 54,
+        "renderMode": "dom"
+      },
+      {
+        "id": "selection",
+        "x": 394,
+        "y": 719,
+        "width": 158,
+        "height": 54,
+        "renderMode": "dom"
+      },
+      {
+        "id": "stats",
+        "x": 661,
+        "y": 719,
+        "width": 158,
+        "height": 54,
+        "renderMode": "dom"
+      },
+      {
+        "id": "settings",
+        "x": 928,
+        "y": 719,
+        "width": 158,
+        "height": 54,
+        "renderMode": "dom"
+      }
+    ]
+  },
+  "slices": [
+    {
+      "file": "review-bunny-scene.png",
+      "type": "scene",
+      "display": { "width": 231, "height": 243 },
+      "export": { "width": 462, "height": 486 },
+      "placement": { "x": 0, "y": 40, "width": 231, "height": 243 },
+      "transparent": false
+    },
+    {
+      "file": "review-focus-art.png",
+      "type": "scene",
+      "display": { "width": 214, "height": 171 },
+      "export": { "width": 428, "height": 342 },
+      "placement": { "x": 901, "y": 101, "width": 214, "height": 171 },
+      "transparent": true
+    },
+    {
+      "file": "review-preview-family-art.png",
+      "type": "cutout",
+      "display": { "width": 110, "height": 110 },
+      "export": { "width": 220, "height": 220 },
+      "transparent": true
+    },
+    {
+      "file": "review-preview-hello-art.png",
+      "type": "cutout",
+      "display": { "width": 110, "height": 110 },
+      "export": { "width": 220, "height": 220 },
+      "transparent": true
+    },
+    {
+      "file": "review-preview-body-art.png",
+      "type": "cutout",
+      "display": { "width": 110, "height": 110 },
+      "export": { "width": 220, "height": 220 },
+      "transparent": true
+    },
+    {
+      "file": "review-preview-spark-art.png",
+      "type": "cutout",
+      "display": { "width": 96, "height": 110 },
+      "export": { "width": 192, "height": 220 },
+      "transparent": true
+    },
+    {
+      "file": "review-book-art.png",
+      "type": "cutout",
+      "display": { "width": 74, "height": 63 },
+      "export": { "width": 148, "height": 126 },
+      "transparent": true
+    },
+    {
+      "file": "review-bars-art.png",
+      "type": "cutout",
+      "display": { "width": 74, "height": 63 },
+      "export": { "width": 148, "height": 126 },
+      "transparent": true
+    },
+    {
+      "file": "review-bag-art.png",
+      "type": "cutout",
+      "display": { "width": 74, "height": 63 },
+      "export": { "width": 148, "height": 126 },
+      "transparent": true
+    }
+  ]
+}

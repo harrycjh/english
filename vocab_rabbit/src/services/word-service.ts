@@ -24,6 +24,14 @@ export function getStudyText(word: Pick<WordRecord, 'english'>): string {
     .trim();
 }
 
+export function getAssetUrl(assetPath: string): string {
+  return `${import.meta.env.BASE_URL}${assetPath.replace(/^\//, '')}`;
+}
+
+export function getWordImageUrl(imagePath: string): string {
+  return getAssetUrl(imagePath);
+}
+
 export function getOxfordRefLabel(ref: OxfordRef): string {
   return `Level ${ref.level},${ref.book},${ref.page}`;
 }

@@ -1,42 +1,79 @@
-# VocaRabbit Imagine 2 UI Prompt Pack
+# VocaRabbit ChatGPT Image iPad Prompt Pack
 
 ## Use This Pack For
 
 - Product: VocaRabbit
 - Platform: iPad-first HTML5 web app / PWA
 - Audience: parent-guided children's English vocabulary learning
-- Default pages in this pack: review, selection, stats, settings, word detail drawer
-- Goal: generate polished concept UI images with one unified visual language
+- Default pages in this pack: review, selection, stats, settings
+- Goal: ask ChatGPT Image to redraw the four parent pages at iPad Pro 11 landscape quality, using the current project structure rather than only the old low-res mockups
+
+## Target Device And Canvas
+
+- Target device: 11-inch iPad Pro, 3rd generation
+- Physical render target: 2388 x 1668 px, landscape
+- Layout logic: 1194 x 834 CSS viewport inside the image composition
+- Output requirement: one page per image, full-screen app canvas, no outer black tablet bezel, no device hand mockup, no perspective tilt
+
+## Recommended ChatGPT Image Workflow
+
+Generate one page at a time, not all four together.
+
+For each page:
+
+1. Upload the matching current reference image from the project.
+2. Paste the shared base prompt.
+3. Paste the page-specific prompt.
+4. Ask for a single image at 2388 x 1668, landscape.
+
+Recommended reference files:
+
+- Review: [public/design-reference/review-reference.png](public/design-reference/review-reference.png)
+- Selection: [public/design-reference/selection-reference.png](public/design-reference/selection-reference.png)
+- Stats: [public/design-reference/stats-reference.png](public/design-reference/stats-reference.png)
+- Settings: [public/design-reference/settings-reference.png](public/design-reference/settings-reference.png)
+
+If ChatGPT Image supports multiple reference images, also upload the higher-resolution original homepage image from Downloads as a style reference for warmth, lighting, and illustration finish.
+
+## Shared Base Prompt
+
+Use this together with one page-specific prompt.
+
+```text
+Redraw this interface as a premium iPad-first Chinese educational product UI for VocaRabbit. Keep the layout logic, information hierarchy, and page purpose, but upgrade the fidelity, spacing, illustration finish, lighting, and component consistency. Output a single landscape image at 2388 x 1668 pixels for 11-inch iPad Pro. Use a clean full-screen app canvas, not a physical tablet mockup. Preserve the warm cream, honey, apricot, soft sage, and lake-blue visual language. Make it feel like a high-end family learning product, not an enterprise dashboard and not a generic mobile app. Use large readable simplified Chinese headings and short labels only. Avoid tiny dense text. Keep the bottom navigation consistent across all four pages. Top-left brand is VocaRabbit, with a subtle small version badge if it fits naturally. The page should look production-ready, calm, premium, storybook-inspired, and tailored for parent use on iPad landscape.
+```
 
 ## Core Art Direction
 
 Use the same visual DNA across all pages:
 
 - warm daylight educational product UI, not generic SaaS
-- iPad landscape composition, 4:3 ratio, spacious layout, high legibility
+- iPad landscape composition with strong horizontal rhythm and generous breathing room
 - editorial + storybook feel, but still clearly a real product interface
-- creamy ivory background with sunlit apricot, honey, lake blue, and moss accents
-- soft layered glass cards, rounded 28px corners, subtle depth, tactile shadows
-- humanist rounded sans-serif for UI, elegant warm display serif only for major headlines
-- no purple bias, no dark mode, no neon, no cyberpunk, no generic dashboard clutter
-- simplified Chinese interface labels, with some English vocabulary words visible inside cards
+- creamy ivory background with sunlit apricot, honey gold, muted lake blue, and soft sage accents
+- rabbit and cottage illustrations can appear as supporting scene art, not as noisy stickers
+- soft layered cards, rounded 28px corners, subtle depth, tactile shadows, premium spacing
+- humanist rounded sans-serif for UI, elegant warm serif only for large hero headlines
+- simplified Chinese interface labels, with selected English vocabulary words visible inside cards
 - premium but child-friendly, calm, trustworthy, intelligent
+- visual consistency across review, selection, stats, settings: same dock, same card system, same palette temperature, same illustration finish
 
 ## Shared Negative Prompt
 
 Use this on every page:
 
 ```text
-ugly layout, generic dribbble shot, purple gradient, dark mode, neon glow, futuristic HUD, cramped mobile UI, too many tiny charts, illegible Chinese text, random gibberish text, stock photo realism, cartoon character mascot overload, childish toy aesthetic, low contrast, cheap e-learning app, cluttered spacing, inconsistent card styles, misaligned bottom navigation, messy shadows
+ugly layout, generic dribbble shot, purple gradient, dark mode, neon glow, futuristic HUD, cramped mobile UI, black tablet bezel, device frame, too many tiny charts, illegible Chinese text, random gibberish text, stock photo realism, mascot overload, childish toy aesthetic, low contrast, cheap e-learning app, cluttered spacing, inconsistent card styles, misaligned bottom navigation, messy shadows, too much empty white space with no structure, dense spreadsheet look
 ```
 
 ## Shared Output Settings
 
-- aspect ratio: 4:3
-- device framing: iPad landscape app screen mockup or clean full-screen product shot
-- resolution target: 2K or above
+- aspect ratio: match 2388 x 1668 landscape
+- device framing: clean full-screen product shot, no outer device shell
+- resolution target: exact iPad Pro 11 landscape output if supported, otherwise nearest high-res landscape equivalent
 - camera: straight-on product design shot, no extreme perspective
-- consistency tip: keep the same palette, card radius, bottom navigation style, and typography across all pages
+- text rule: only large headings, short labels, big numerals, sparse supporting copy
+- consistency tip: keep the same palette, card radius, bottom navigation style, illustration rendering, and typography across all pages
 
 ## Prompt 1: Review Page
 
@@ -44,16 +81,24 @@ ugly layout, generic dribbble shot, purple gradient, dark mode, neon glow, futur
 
 - vocarabbit-review-page.png
 
+### Upload This Reference
+
+- [public/design-reference/review-reference.png](public/design-reference/review-reference.png)
+
 ### Prompt
 
 ```text
-Design a premium iPad-first vocabulary learning web app screen for a product called VocaRabbit. Create the review home page for parents. Use a warm editorial storybook interface with creamy ivory background, apricot and honey highlights, soft lake-blue support color, subtle moss accents, rounded glass cards, clean tactile shadows, elegant but friendly typography. The page should feel intentional and modern, not generic SaaS.
+Create the VocaRabbit parent review home page, redesigned for 11-inch iPad Pro landscape at 2388 x 1668. Keep the page purpose of today's study overview. Use a premium warm cream educational UI with soft golden daylight, elegant serif headline, rounded tactile cards, and a gentle rabbit-and-cottage illustration language.
 
-Layout: a large hero section at the top with a left headline area and a right focus card. Headline in simplified Chinese: “今天先把这组词稳稳学完”. Small eyebrow label: “今日任务 · 复习页”. Supporting sentence describes today’s plan with new words and review words. Include pill tags for total vocabulary, mastered count, and 14-day completion.
+Top area: left side has a rabbit hero illustration and a large Chinese headline “今日学习计划”. Above it, a tiny encouraging line like “坚持每天进步一点点”. Below it, one sentence summarizing today's new words and review words. Add three compact summary pills for total vocabulary, mastered words, and 14-day completion.
 
-Below the hero, add four summary cards: today task count, estimated minutes, preview theme count, and a 14-day heatmap card. Then a “今日预览” section with four beautiful vocabulary cards showing English words and Chinese meanings, for example family, name, arm, better. Then a “轻量建议” section with three guidance cards: today suggestion, future pressure, current study settings.
+Top right: a beautiful focus card with the section label “今日焦点”, a bold theme like “家庭与人物”, a short description, a large warm start button, and a small sunlit cottage illustration.
 
-Bottom navigation should be persistent and elegant with four tabs: 复习, 选词, 统计, 设置. Review tab active. Make the interface breathable, rich, premium, calm, and suitable for iPad. Simplified Chinese labels should look mostly legible and clean.
+Middle row: four clean metric cards for today task count, estimated minutes, preview theme count, and 14-day heatmap summary.
+
+Lower area: a “今日预习或今日预览” section with four premium vocabulary preview cards showing words like family, name, arm, better. Each card should show a small illustration, English word, Chinese meaning, level/location hint, and a warm category marker. Under that, a compact “轻量建议” or guidance area with three advisory cards for today's suggestion, future pressure, and current study settings.
+
+Bottom dock navigation with four tabs: 复习, 选词, 统计, 设置. Review tab active. Keep the layout close to the reference structure but make it clearly higher fidelity, more spacious, sharper, and more consistent for iPad.
 ```
 
 ## Prompt 2: Selection Page
@@ -62,14 +107,22 @@ Bottom navigation should be persistent and elegant with four tabs: 复习, 选�
 
 - vocarabbit-selection-page.png
 
+### Upload This Reference
+
+- [public/design-reference/selection-reference.png](public/design-reference/selection-reference.png)
+
 ### Prompt
 
 ```text
-Design an iPad-first vocabulary selection page for VocaRabbit, a premium web app for parent-guided children’s English learning. The style must match a warm editorial storybook product UI: creamy paper-like background, apricot and sunlight gradients, lake-blue support elements, moss accents, rounded 28px glass cards, tactile depth, excellent spacing, soft but crisp shadows.
+Create the VocaRabbit vocabulary management page for parents, redesigned for 11-inch iPad Pro landscape at 2388 x 1668. This is the word-library control center. Keep the warm premium family-learning style from the review page, but make the page more operational and structured.
 
-This page is a powerful but friendly library control screen. Use a 3-column layout. Left column: filter panel card with search bar, category selector, level selector, difficulty selector, learning status selector, image-only toggle, and a reset button. Center column: main word library area with a title like “词卡区”, segmented controls for card/list view, sort dropdown, bulk action buttons, and a visually rich grid of vocabulary cards. Example words can include family, friend, arm, better, after, again. Each card should show category, status chip, English word, Chinese translation, part of speech, and an Oxford Tree location line. Right column: sticky plan summary panel with enabled word count, paused count, due tomorrow, due in 3 days, pressure label, and category distribution list.
+Use a clear 3-column composition. Left column: a filter panel with search field, category selector, Oxford Tree level, difficulty, learning status, image-only toggle, and reset control. Center: the main word library with a heading “词库管理”, a short explanatory subtitle, a segmented card/list view toggle, sorting controls, bulk action chips, and a refined grid of vocabulary cards. Use example words like family, friend, arm, better, after, again.
 
-Top hero area should explain that the page controls which words are active before today’s task is rebuilt. Add a strong primary CTA: “应用当前词库并返回复习”. Bottom navigation with 复习, 选词, 统计, 设置. Selection tab active. The page should feel advanced but not overwhelming, elegant but practical, and much better than a typical filter dashboard.
+Each vocabulary card should contain a category badge, status chip, English word, Chinese meaning, part of speech, and Oxford Tree location. The cards should feel collectible and elegant, not spreadsheet-like.
+
+Right column: a plan summary panel with enabled count, paused count, due tomorrow, due in three days, pressure level, and a small category distribution module. Add a warm small house or rabbit support illustration in that summary area.
+
+Bottom dock with 复习, 选词, 统计, 设置. Selection tab active. Keep the design readable and powerful for iPad parents, but never like a cold admin table.
 ```
 
 ## Prompt 3: Stats Page
@@ -78,16 +131,22 @@ Top hero area should explain that the page controls which words are active befor
 
 - vocarabbit-stats-page.png
 
+### Upload This Reference
+
+- [public/design-reference/stats-reference.png](public/design-reference/stats-reference.png)
+
 ### Prompt
 
 ```text
-Design a premium statistics dashboard page for VocaRabbit on iPad landscape. This is not a business analytics tool. It is a learning rhythm dashboard for parents managing a child’s English vocabulary progress. Use the same visual language: creamy ivory background, sunlit apricot warmth, lake-blue support, moss-green accents, rounded glass panels, elegant editorial typography, calm premium educational product feeling.
+Create the VocaRabbit statistics page for parents, redesigned for 11-inch iPad Pro landscape at 2388 x 1668. This page should feel like a calm learning-rhythm cockpit, not a business dashboard. Preserve the warm premium storybook-product style.
 
-Top hero section: simplified Chinese title “把学习节奏看成一张图，而不是一堆按钮”, eyebrow label “统计页 · 学习节奏看板”, supporting text about enabled words, mastered words, and studied words. Add summary pills: enabled, learning, mastered, streak. On the right, a focus card labeled “当前节奏” with a big state like “节奏正常”, a short pressure summary, and small pills for today status and daily plan.
+Hero area: left side has a reading rabbit illustration and the headline “把学习节奏看成一张图，而不是一堆按钮”. Add a small eyebrow label “统计页 · 学习节奏看板”, plus one short sentence summarizing enabled words, mastered words, and studied words. Add a row of summary pills: 启用, 学习中, 已掌握, 连续天数.
 
-Below, add four key stat cards: today task, active library, mastered count, 14-day accuracy. Then four large dashboard blocks: vocabulary progress distribution, pressure in upcoming days, a 14-day heatmap with a compact recent task list, and active library distribution by category and level. Make the heatmap elegant, minimal, and readable. Charts should be list-based, bars or subtle blocks, not noisy enterprise charts.
+Right side: a compact focus card labeled “当前节奏”, with a big state like “节奏正常” or “先给未来减压”, a short pressure note, and small plan pills.
 
-Bottom navigation with 复习, 选词, 统计, 设置. Stats tab active. The whole page should feel like a calm, premium family learning cockpit rather than an admin backend.
+Below: four top stat cards for today task, active library, mastered count, and 14-day accuracy. Then large analytics blocks for vocabulary progress distribution, upcoming review pressure, a refined 14-day heatmap with recent task list, and active library distribution by category and level. Use bars, chips, calm blocks, and soft data visuals only. No noisy charts.
+
+Bottom dock with 复习, 选词, 统计, 设置. Stats tab active. The whole image should look premium, organized, readable, and emotionally calm for an iPad parent dashboard.
 ```
 
 ## Prompt 4: Settings Page
@@ -96,46 +155,34 @@ Bottom navigation with 复习, 选词, 统计, 设置. Stats tab active. The who
 
 - vocarabbit-settings-page.png
 
-### Prompt
+### Upload This Reference
 
-```text
-Design a polished iPad-first settings page for VocaRabbit, a premium Chinese vocabulary-learning web app for families. Match the same visual system as the rest of the product: creamy ivory background, warm apricot sunlight, lake-blue support tones, soft moss accents, elegant rounded glass cards, tactile shadows, generous spacing, refined editorial typography.
-
-The page is a parent control console, but it should feel approachable and calm, not technical. Top hero section with eyebrow “设置页 · 家长控制台”, main title “把学习节奏和本地数据收在这里”, and small pill summary showing new words per day, reviews per day, and audio on/off. Right-side hero card labeled “当前任务影响” with state like 今日未开始 or 今日进行中, plus a short explanation.
-
-Below, create a clean two-column card layout. Section 1: learning load settings with large tactile stepper controls for daily new words and review cap. Section 2: learning experience toggles for English audio, image questions, examples, and hints. Section 3: device and installation guidance for iPad standalone mode, Safari environment, and landscape preference. Section 4: data management with a normal reset button and a clearly dangerous destructive action button.
-
-Bottom navigation with 复习, 选词, 统计, 设置. Settings tab active. The page should look like a high-end educational product, warm and composed, not like a generic settings form.
-```
-
-## Prompt 5: Word Detail Drawer Overlay
-
-### Filename
-
-- vocarabbit-word-detail-drawer.png
+- [public/design-reference/settings-reference.png](public/design-reference/settings-reference.png)
 
 ### Prompt
 
 ```text
-Create a refined UI concept for a word detail drawer overlay in VocaRabbit, shown on top of an existing warm educational product interface. The drawer slides from the right side on iPad landscape and feels elegant, tactile, and premium. Keep the same design system: creamy ivory surface, subtle warm gradients, rounded sections, soft glass layering, crisp spacing, refined typography, clean Chinese labels.
+Create the VocaRabbit settings page for parents, redesigned for 11-inch iPad Pro landscape at 2388 x 1668. Keep the same warm cream premium visual system, but make it the clearest and most controllable page of the set.
 
-The drawer header shows a small context label like “复习页详情”, the English word “family”, and the Chinese meaning “家庭 · n”. Include a round audio play button and a close button. Add status chips for category, level, learning status, and whether the word is enabled. Then create 4 content sections: image placeholder, Oxford Tree locations list, learning status cards, and action buttons. Learning status cards should show mastery level, review stage, wrong count, and next review time. Action area includes buttons such as “移出当前计划” and “暂停该词”.
+Hero area: a warm rabbit desk illustration on the left, eyebrow label “设置页 · 家长控制台”, main title “把学习节奏和本地数据收在这里”, and a short save-status line. Add three summary pills like new words per day, reviews per day, and audio on/off. On the right, a focus card labeled “当前任务影响” with a state such as 今日未开始 or 今日进行中, and a short explanation.
 
-Behind the drawer, show a softly blurred view of the main app page. The drawer must feel like a real production component, not a rough modal. Keep it visually calm, rich, and easy for parents to scan quickly.
+Below, build a calm 2-column settings layout with large tactile cards. Section 1: learning load controls with plus/minus steppers for daily new words and daily review cap. Section 2: learning experience toggles for English audio, image questions, example sentences, and spelling hints. Section 3: device/runtime guidance for iPad standalone mode, Safari environment, and landscape preference. Section 4: data management with safe reset, export, and one clearly dangerous destructive action.
+
+Bottom dock with 复习, 选词, 统计, 设置. Settings tab active. The page should feel premium, reassuring, and readable on iPad, not like a default settings form.
 ```
 
 ## Recommended Generation Order
 
 1. Generate the review page first and lock the visual language.
-2. Use that accepted image as a style reference for selection, stats, and settings.
-3. Generate the word detail drawer last so the overlay inherits the page system.
+2. Use the accepted review page as an additional style reference for selection, stats, and settings.
+3. Keep the dock, palette temperature, card geometry, and illustration finish identical across all four pages.
 
 ## If You Want Even More Stable Results
 
 Append this mini consistency suffix to every page prompt:
 
 ```text
-Keep the same product design language across all screens: same palette, same rounded card system, same bottom dock, same spacing logic, same shadow softness, same typography pairing, same iPad-first composition.
+Keep the same product design language across all screens: same palette, same rounded card system, same bottom dock, same spacing logic, same shadow softness, same typography pairing, same rabbit/cottage illustration finish, same iPad-first composition.
 ```
 
 ## If You Want A Bolder Alternative Direction

@@ -82,10 +82,10 @@ ReviewPage
 | --- | --- | --- |
 | review-mockup-frame | `(0, 0, 1158, 808)` | 主画布，圆角 34 |
 | review-plan-shell | `(0, 0, 1158, 285)` | 顶部 hero 区 |
-| review-metric-grid | `(29, 272, 1103, 100)` | 4 张 metric 卡 |
-| review-preview-section | `(29, 386, 1103, ~151)` | 标题 + 4 张 preview card |
-| review-guidance-section | `(29, 551, 1103, ~119)` | 标题 + 3 张 advice card |
-| review-dock | `(29, 687, 1103, 87)` | 底部导航 |
+| review-metric-grid | `(29, 288, 1103, 100)` | 4 张 metric 卡 |
+| review-preview-section | `(29, 402, 1103, ~151)` | 标题 + 4 张 preview card |
+| review-guidance-section | `(29, 567, 1103, ~119)` | 标题 + 3 张 advice card |
+| review-dock | `(29, 703, 1103, 87)` | 底部导航 |
 
 ### 4.2 顶部区
 
@@ -133,7 +133,7 @@ ReviewPage
 
 | Module | Box / Size | Notes |
 | --- | --- | --- |
-| dock container | `(29, 687, 1103, 87)` | 圆角仅下边缘 |
+| dock container | `(29, 703, 1103, 87)` | 圆角仅下边缘 |
 | dock button | `158 x 54` | 4 个按钮等宽 |
 | dock content gap | `109` | 按钮间隔 |
 | dock padding | `16 45 17 98` | 容器内边距 |

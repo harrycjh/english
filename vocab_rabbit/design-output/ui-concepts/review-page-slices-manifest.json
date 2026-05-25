@@ -1,0 +1,275 @@
+{
+  "basePath": "public/design-reference/slices/",
+  "exports": [
+    {
+      "file": "review-bunny-scene.png",
+      "type": "scene",
+      "display": {
+        "width": 231,
+        "height": 243
+      },
+      "export": {
+        "width": 462,
+        "height": 486
+      },
+      "background": "rectangular",
+      "transparent": false,
+      "notes": "Left hero scene only. Keep meadow and rabbit. No text, no card border, no glow outside asset box."
+    },
+    {
+      "file": "review-focus-art.png",
+      "type": "scene",
+      "display": {
+        "width": 214,
+        "height": 171
+      },
+      "export": {
+        "width": 428,
+        "height": 342
+      },
+      "background": "rectangular",
+      "transparent": false,
+      "notes": "House, tree, path and foreground flowers only. No label, no CTA, no card chrome."
+    },
+    {
+      "file": "review-preview-family-art.png",
+      "type": "cutout",
+      "display": {
+        "width": 110,
+        "height": 110
+      },
+      "export": {
+        "width": 220,
+        "height": 220
+      },
+      "background": "art-slot",
+      "transparent": true,
+      "notes": "Family illustration for preview card 1. Keep transparent padding for left-aligned placement."
+    },
+    {
+      "file": "review-preview-hello-art.png",
+      "type": "cutout",
+      "display": {
+        "width": 110,
+        "height": 110
+      },
+      "export": {
+        "width": 220,
+        "height": 220
+      },
+      "background": "art-slot",
+      "transparent": true,
+      "notes": "Blue hello name-card for preview card 2. No badge, no number, no favorite icon."
+    },
+    {
+      "file": "review-preview-body-art.png",
+      "type": "cutout",
+      "display": {
+        "width": 110,
+        "height": 110
+      },
+      "export": {
+        "width": 220,
+        "height": 220
+      },
+      "background": "art-slot",
+      "transparent": true,
+      "notes": "Arm illustration for preview card 3. Keep transparent padding so the arm can sit lower-left in slot."
+    },
+    {
+      "file": "review-preview-spark-art.png",
+      "type": "cutout",
+      "display": {
+        "width": 96,
+        "height": 110
+      },
+      "export": {
+        "width": 192,
+        "height": 220
+      },
+      "background": "art-slot",
+      "transparent": true,
+      "notes": "Child with sparkles for preview card 4. Keep transparent padding for narrow last-card slot."
+    },
+    {
+      "file": "review-book-art.png",
+      "type": "cutout",
+      "display": {
+        "width": 74,
+        "height": 63
+      },
+      "export": {
+        "width": 148,
+        "height": 126
+      },
+      "background": "art-slot",
+      "transparent": true,
+      "notes": "Books and cup illustration for guidance card 1. No panel background."
+    },
+    {
+      "file": "review-bars-art.png",
+      "type": "cutout",
+      "display": {
+        "width": 74,
+        "height": 63
+      },
+      "export": {
+        "width": 148,
+        "height": 126
+      },
+      "background": "art-slot",
+      "transparent": true,
+      "notes": "Blue rounded bar cluster for guidance card 2. No panel background."
+    },
+    {
+      "file": "review-bag-art.png",
+      "type": "cutout",
+      "display": {
+        "width": 74,
+        "height": 63
+      },
+      "export": {
+        "width": 148,
+        "height": 126
+      },
+      "background": "art-slot",
+      "transparent": true,
+      "notes": "School bag illustration for guidance card 3. No panel background."
+    },
+    {
+      "file": "review-brand-rabbit-icon.png",
+      "type": "icon",
+      "display": {
+        "width": 29,
+        "height": 29
+      },
+      "export": {
+        "width": 58,
+        "height": 58
+      },
+      "background": "icon",
+      "transparent": true,
+      "notes": "Rabbit app mark only. Exclude the VocaRabbit wordmark."
+    },
+    {
+      "file": "review-profile-avatar.png",
+      "type": "icon",
+      "display": {
+        "width": 28,
+        "height": 28
+      },
+      "export": {
+        "width": 56,
+        "height": 56
+      },
+      "background": "icon",
+      "transparent": true,
+      "notes": "Parent avatar only. Exclude label text and chevron."
+    },
+    {
+      "file": "review-summary-library-icon.png",
+      "type": "icon",
+      "display": {
+        "width": 36,
+        "height": 36
+      },
+      "export": {
+        "width": 72,
+        "height": 72
+      },
+      "background": "icon",
+      "transparent": true,
+      "notes": "Summary pill 1 icon only. No count or label."
+    },
+    {
+      "file": "review-summary-mastered-icon.png",
+      "type": "icon",
+      "display": {
+        "width": 36,
+        "height": 36
+      },
+      "export": {
+        "width": 72,
+        "height": 72
+      },
+      "background": "icon",
+      "transparent": true,
+      "notes": "Summary pill 2 icon only. No count or label."
+    },
+    {
+      "file": "review-summary-completion-icon.png",
+      "type": "icon",
+      "display": {
+        "width": 36,
+        "height": 36
+      },
+      "export": {
+        "width": 72,
+        "height": 72
+      },
+      "background": "icon",
+      "transparent": true,
+      "notes": "Summary pill 3 icon only. No percent text."
+    },
+    {
+      "file": "review-dock-review-icon.png",
+      "type": "icon",
+      "display": {
+        "width": 20,
+        "height": 20
+      },
+      "export": {
+        "width": 40,
+        "height": 40
+      },
+      "background": "icon",
+      "transparent": true,
+      "notes": "Bottom dock review glyph only. Exclude active pill and label."
+    },
+    {
+      "file": "review-dock-selection-icon.png",
+      "type": "icon",
+      "display": {
+        "width": 20,
+        "height": 20
+      },
+      "export": {
+        "width": 40,
+        "height": 40
+      },
+      "background": "icon",
+      "transparent": true,
+      "notes": "Bottom dock selection glyph only. Exclude label."
+    },
+    {
+      "file": "review-dock-stats-icon.png",
+      "type": "icon",
+      "display": {
+        "width": 20,
+        "height": 20
+      },
+      "export": {
+        "width": 40,
+        "height": 40
+      },
+      "background": "icon",
+      "transparent": true,
+      "notes": "Bottom dock stats glyph only. Exclude label."
+    },
+    {
+      "file": "review-dock-settings-icon.png",
+      "type": "icon",
+      "display": {
+        "width": 20,
+        "height": 20
+      },
+      "export": {
+        "width": 40,
+        "height": 40
+      },
+      "background": "icon",
+      "transparent": true,
+      "notes": "Bottom dock settings glyph only. Exclude label."
+    }
+  ]
+}
