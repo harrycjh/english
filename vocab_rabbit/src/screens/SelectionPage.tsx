@@ -163,11 +163,12 @@ function SelectionWordCard({
   const sourceLabel = visualOverride?.sourceLabel ?? getPrimaryOxfordRefLabel(word);
   const effectiveStatusLabel = visualOverride?.statusLabel ?? statusLabel;
   const effectiveStatusTone = visualOverride?.statusTone ?? statusTone;
+  const colorSlot = getCategoryColorSlot(categoryLabel);
 
   return (
     <article className="selection-word-card">
       <div className="selection-word-card__header word-card__header">
-        <span className="word-card__category">{categoryLabel}</span>
+        <span className={`word-card__category word-card__category--c${colorSlot}`}>{categoryLabel}</span>
         <span className={`selection-status-chip selection-status-chip--${effectiveStatusTone}`}>{effectiveStatusLabel}</span>
       </div>
       <button className="selection-word-card__body" type="button" onClick={onOpenDetails}>
@@ -268,6 +269,16 @@ function formatPartOfSpeech(partOfSpeech: string): string {
   return partOfSpeech;
 }
 
+/** 根据分类名称计算一个稳定的 0-7 颜色槽位，用于徽章多彩配色 */
+function getCategoryColorSlot(category: string): number {
+  let h = 0;
+  for (let i = 0; i < category.length; i++) {
+    h = (h * 31 + category.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h) % 8;
+}
+
+
 function buildPagination(totalPages: number, currentPage: number): PaginationToken[] {
   if (totalPages <= 7) {
     return Array.from({ length: totalPages }, (_, index) => index + 1);
@@ -311,7 +322,7 @@ export function SelectionPage({
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState<StatusFilter>('all');
   const [imageOnly, setImageOnly] = useState(false);
-  const [sortMode, setSortMode] = useState<SortMode>('alphabetical');
+  const [sortMode, setSortMode] = useState<SortMode>('level');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);

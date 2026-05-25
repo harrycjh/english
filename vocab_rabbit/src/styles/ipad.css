@@ -4806,6 +4806,16 @@ button {
   font-weight: 700;
 }
 
+/* 8 per-category colour slots — assigned by a stable name-hash in getCategoryColorSlot() */
+.page--selection .word-card__category--c0 { background: #fff3d1; color: #a05c00; } /* amber */
+.page--selection .word-card__category--c1 { background: #ddf3f3; color: #0a6d70; } /* teal */
+.page--selection .word-card__category--c2 { background: #eeeaff; color: #5836b4; } /* lavender */
+.page--selection .word-card__category--c3 { background: #ffe8d6; color: #b54e1e; } /* coral */
+.page--selection .word-card__category--c4 { background: #e5f5e5; color: #2e7c3a; } /* sage */
+.page--selection .word-card__category--c5 { background: #deeeff; color: #1c52a5; } /* sky */
+.page--selection .word-card__category--c6 { background: #ffeaf0; color: #bc2e59; } /* rose */
+.page--selection .word-card__category--c7 { background: #fff8e3; color: #8a6200; } /* gold */
+
 .page--selection .selection-summary__hero,
 .page--selection .selection-summary__breakdown {
   padding: 18px 18px 18px;
@@ -5165,11 +5175,7 @@ button {
   left: 0;
   width: 1024px;
   height: 318px;
-  background:
-    radial-gradient(circle at 80% 30%, rgba(255,241,200,0.56), transparent 38%),
-    linear-gradient(180deg, rgba(255,254,250,0.98), rgba(255,248,235,0.98));
-  border-radius: 24px;
-  overflow: hidden;
+  /* NO card background — content floats on warm frame background */
 }
 
 /* heroArt: design x=18,y=58→surface y=28, w=74,h=282 */
