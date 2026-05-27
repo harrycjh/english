@@ -1,0 +1,9 @@
+{
+  "name": "english",
+  "installCommand": "cd vocab_rabbit && npm ci",
+  "buildCommand": "cd vocab_rabbit && npm run build",
+  "assets": {
+    "directory": "vocab_rabbit/dist",
+    "notFoundStrategy": "singlePageApplication"
+  }
+}
