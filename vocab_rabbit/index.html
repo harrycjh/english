@@ -12,6 +12,26 @@
   </head>
   <body>
     <div id="root"></div>
+    <a href="https://www.cw2017.com" id="homeBtn" title="回家">&#8962;</a>
+    <style>
+      #homeBtn {
+        position: fixed;
+        top: 12px; left: 12px;
+        z-index: 9999;
+        width: 40px; height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        color: #8f7a66;
+        text-decoration: none;
+        font-size: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      #homeBtn:hover { transform: scale(1.08); box-shadow: 0 3px 12px rgba(0,0,0,0.18); }
+    </style>
     <script>
       (() => {
         const reloadKey = 'vocab-rabbit-cache-recovery';
