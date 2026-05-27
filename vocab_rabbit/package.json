@@ -10,6 +10,7 @@
     "dev": "vite",
     "build": "npm run build:github",
     "build:github": "tsc --noEmit && vite build --mode github-pages",
+    "build:esa": "tsc --noEmit && vite build",
     "preview": "npm run build && node scripts/preview-github-pages.mjs",
     "deploy:github:legacy": "node scripts/deploy-gh-pages.mjs"
   },
