@@ -1,6 +1,6 @@
 {
   "name": "english",
-  "installCommand": "cd vocab_rabbit && npm ci",
+  "installCommand": "",
   "buildCommand": "cd vocab_rabbit && npm run build",
   "assets": {
     "directory": "vocab_rabbit/dist",

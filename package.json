@@ -1,0 +1,7 @@
+{
+  "name": "english",
+  "private": true,
+  "scripts": {
+    "postinstall": "cd vocab_rabbit && npm ci"
+  }
+}
