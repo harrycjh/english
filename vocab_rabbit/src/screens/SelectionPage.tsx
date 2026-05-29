@@ -165,7 +165,7 @@ function SelectionWordCard({
     <article className="selection-word-card">
       <button className="selection-word-card__body" type="button" onClick={onOpenDetails}>
         <div className="word-card__header">
-          <span className={`word-card__category word-card__category--c${colorSlot}`}>{categoryLabel}</span>
+          <span className={`word-card__category word-card__category--c${colorSlot}`}>{categoryLabel.length > 5 ? categoryLabel.slice(0, 5) : categoryLabel}</span>
           <span className={`selection-status-chip selection-status-chip--${effectiveStatusTone}`}>{effectiveStatusLabel}</span>
         </div>
         <span className="selection-word-card__favorite" aria-hidden="true">☆</span>
