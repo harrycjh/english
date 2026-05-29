@@ -5036,19 +5036,23 @@ button {
   position: static;
   bottom: auto;
   flex-shrink: 0;
-  margin: 10px 0 14px;
-  padding: 8px;
-  gap: 8px;
+  margin: 8px 40px 14px;
+  padding: 6px 16px;
+  gap: 0;
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(255, 252, 245, 0.95) 0%, rgba(255, 248, 235, 0.98) 100%);
   box-shadow: 0 2px 12px rgba(202, 160, 85, 0.08), inset 0 0 0 1px rgba(230, 210, 170, 0.5);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .page--selection .selection-dock .home-dock__button {
-  min-height: 48px;
-  gap: 8px;
+  min-height: 44px;
+  flex: 1;
+  gap: 2px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: rgba(60, 50, 40, 0.7);
   background: transparent;

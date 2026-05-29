@@ -244,7 +244,7 @@ function getSelectionDockButtonUrl(glyph: SelectionDockGlyph, active: boolean) {
 
 function SelectionDockButton({ active = false, glyph, label, onClick }: SelectionDockButtonProps) {
   const bgUrl = getSelectionDockButtonUrl(glyph, active);
-  const backgroundSize = glyph === 'selection' && active ? '70% auto' : '70% auto';
+  const backgroundSize = '24px 24px';
   return (
     <button
       className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
@@ -254,7 +254,7 @@ function SelectionDockButton({ active = false, glyph, label, onClick }: Selectio
       style={{
         backgroundImage: `url(${bgUrl})`,
         backgroundSize,
-        backgroundPosition: 'center center',
+        backgroundPosition: 'center 6px',
         backgroundRepeat: 'no-repeat',
       }}
     >
