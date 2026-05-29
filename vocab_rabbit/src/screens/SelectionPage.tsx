@@ -9,7 +9,7 @@ import {
 } from '../models/word-selection-state';
 import type { WordPayload, WordRecord } from '../models/word';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
-import { getAssetUrl, getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
+import { getAssetUrl, getPrimaryOxfordRefLabel, getStudyText, getWordImageUrl } from '../services/word-service';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { APP_VERSION } from '../config/app-meta';
 
@@ -36,12 +36,7 @@ interface SelectionWordCardProps {
   word: WordRecord;
   statusLabel: string;
   statusTone: 'active' | 'paused' | 'disabled';
-  isEnabled: boolean;
-  isPaused: boolean;
-  updatedAtLabel: string;
   onOpenDetails: () => void;
-  onToggleEnabled: () => void;
-  onTogglePaused: () => void;
   visualOverride?: SelectionCardVisualOverride;
 }
 
@@ -148,15 +143,16 @@ function SelectionWordCard({
   word,
   statusLabel,
   statusTone,
-  isEnabled,
-  isPaused,
-  updatedAtLabel,
   onOpenDetails,
-  onToggleEnabled,
-  onTogglePaused,
   visualOverride,
 }: SelectionWordCardProps) {
   const displayWord = getStudyText(word);
+  const [hasArt, setHasArt] = useState(true);
+  const artSrc = visualOverride?.demoArtPath
+    ? getAssetUrl(visualOverride.demoArtPath)
+    : hasArt
+      ? getWordImageUrl(word.imagePath)
+      : null;
   const categoryLabel = visualOverride?.categoryLabel ?? word.category;
   const chineseLabel = visualOverride?.chineseLabel ?? word.chinese;
   const partOfSpeechLabel = visualOverride?.partOfSpeechLabel ?? formatPartOfSpeech(word.partOfSpeech);
@@ -167,30 +163,35 @@ function SelectionWordCard({
 
   return (
     <article className="selection-word-card">
-      <div className="selection-word-card__header word-card__header">
-        <span className={`word-card__category word-card__category--c${colorSlot}`}>{categoryLabel}</span>
-        <span className={`selection-status-chip selection-status-chip--${effectiveStatusTone}`}>{effectiveStatusLabel}</span>
-      </div>
       <button className="selection-word-card__body" type="button" onClick={onOpenDetails}>
-        <h3>{displayWord}</h3>
-        <p>{chineseLabel}</p>
-        <div className="selection-word-card__foot">
-          <small>{partOfSpeechLabel}</small>
-          {sourceLabel ? <small>{sourceLabel}</small> : null}
+        <div className="word-card__header">
+          <span className={`word-card__category word-card__category--c${colorSlot}`}>{categoryLabel}</span>
+          <span className={`selection-status-chip selection-status-chip--${effectiveStatusTone}`}>{effectiveStatusLabel}</span>
         </div>
+        <span className="selection-word-card__favorite" aria-hidden="true">☆</span>
+        <div className="selection-word-card__content">
+          <div className="selection-word-card__art">
+            {artSrc ? (
+              <img
+                src={artSrc}
+                alt={chineseLabel}
+                onError={visualOverride?.demoArtPath ? undefined : () => setHasArt(false)}
+              />
+            ) : (
+              <span className="selection-word-card__art-fallback">{displayWord.slice(0, 2).toUpperCase()}</span>
+            )}
+          </div>
+          <div className="selection-word-card__copy">
+            <h3>{displayWord}</h3>
+            <p>{chineseLabel}</p>
+            <small>{partOfSpeechLabel}</small>
+          </div>
+        </div>
+        <footer>
+          <span className="selection-word-card__source-mark" aria-hidden="true" />
+          <span>{sourceLabel ? sourceLabel : 'Oxford Tree · 暂未回填位置'}</span>
+        </footer>
       </button>
-      <div className="selection-word-card__actions">
-        <button className="secondary-button" type="button" onClick={onOpenDetails}>详情</button>
-        <button className="secondary-button" type="button" onClick={onToggleEnabled}>
-          {isEnabled ? '移出' : '启用'}
-        </button>
-        {isEnabled ? (
-          <button className="secondary-button" type="button" onClick={onTogglePaused}>
-            {isPaused ? '恢复' : '暂停'}
-          </button>
-        ) : null}
-      </div>
-      <small className="selection-word-card__meta">最近变更：{updatedAtLabel}</small>
     </article>
   );
 }
@@ -269,7 +270,6 @@ function formatPartOfSpeech(partOfSpeech: string): string {
   return partOfSpeech;
 }
 
-/** 根据分类名称计算一个稳定的 0-7 颜色槽位，用于徽章多彩配色 */
 function getCategoryColorSlot(category: string): number {
   let h = 0;
   for (let i = 0; i < category.length; i++) {
@@ -277,7 +277,6 @@ function getCategoryColorSlot(category: string): number {
   }
   return Math.abs(h) % 8;
 }
-
 
 function buildPagination(totalPages: number, currentPage: number): PaginationToken[] {
   if (totalPages <= 7) {
@@ -322,7 +321,7 @@ export function SelectionPage({
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState<StatusFilter>('all');
   const [imageOnly, setImageOnly] = useState(false);
-  const [sortMode, setSortMode] = useState<SortMode>('level');
+  const [sortMode, setSortMode] = useState<SortMode>('alphabetical');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
@@ -341,11 +340,11 @@ export function SelectionPage({
   );
 
   const enabledCount = useMemo(
-    () => Object.values(selectionById).filter((selectionState) => selectionState.isEnabled && !selectionState.isPaused).length,
+    () => Object.values(selectionById).filter((s) => s.isEnabled && !s.isPaused).length,
     [selectionById]
   );
   const pausedCount = useMemo(
-    () => Object.values(selectionById).filter((selectionState) => selectionState.isPaused).length,
+    () => Object.values(selectionById).filter((s) => s.isPaused).length,
     [selectionById]
   );
 
@@ -378,57 +377,35 @@ export function SelectionPage({
 
     return nextWords.sort((left, right) => {
       if (shouldUseReferenceOrder) {
-        const leftFeaturedIndex = REFERENCE_SELECTION_CARD_INDEX.get(left.id);
-        const rightFeaturedIndex = REFERENCE_SELECTION_CARD_INDEX.get(right.id);
-        if (leftFeaturedIndex !== undefined || rightFeaturedIndex !== undefined) {
-          if (leftFeaturedIndex === undefined) {
-            return 1;
-          }
-          if (rightFeaturedIndex === undefined) {
-            return -1;
-          }
-          return leftFeaturedIndex - rightFeaturedIndex;
+        const leftIdx = REFERENCE_SELECTION_CARD_INDEX.get(left.id);
+        const rightIdx = REFERENCE_SELECTION_CARD_INDEX.get(right.id);
+        if (leftIdx !== undefined || rightIdx !== undefined) {
+          if (leftIdx === undefined) return 1;
+          if (rightIdx === undefined) return -1;
+          return leftIdx - rightIdx;
         }
         return left.english.localeCompare(right.english);
       }
 
-      if (sortMode === 'alphabetical') {
-        return left.english.localeCompare(right.english);
-      }
-
-      if (sortMode === 'difficulty') {
-        return left.difficulty - right.difficulty || left.english.localeCompare(right.english);
-      }
-
+      if (sortMode === 'alphabetical') return left.english.localeCompare(right.english);
+      if (sortMode === 'difficulty') return left.difficulty - right.difficulty || left.english.localeCompare(right.english);
       if (sortMode === 'recent') {
-        const leftUpdatedAt = selectionById[left.id]?.updatedAt ?? '';
-        const rightUpdatedAt = selectionById[right.id]?.updatedAt ?? '';
-        return rightUpdatedAt.localeCompare(leftUpdatedAt) || left.english.localeCompare(right.english);
+        const l = selectionById[left.id]?.updatedAt ?? '';
+        const r = selectionById[right.id]?.updatedAt ?? '';
+        return r.localeCompare(l) || left.english.localeCompare(right.english);
       }
-
-      return (getPrimaryLevel(left) ?? Number.MAX_SAFE_INTEGER) - (getPrimaryLevel(right) ?? Number.MAX_SAFE_INTEGER) ||
+      return (getPrimaryLevel(left) ?? 999) - (getPrimaryLevel(right) ?? 999) ||
         left.difficulty - right.difficulty ||
         left.english.localeCompare(right.english);
     });
-  }, [
-    imageOnly,
-    payload.words,
-    recordsById,
-    searchText,
-    selectedCategory,
-    selectedDifficulty,
-    selectedLevel,
-    selectedStatus,
-    selectionById,
-    sortMode,
-  ]);
+  }, [imageOnly, payload.words, recordsById, searchText, selectedCategory, selectedDifficulty, selectedLevel, selectedStatus, selectionById, sortMode]);
 
-  const pageSize = 4;
+  const pageSize = 6;
   const totalPages = Math.max(1, Math.ceil(filteredWords.length / pageSize));
   const activePage = Math.min(currentPage, totalPages);
   const visibleWords = useMemo(() => {
-    const startIndex = (activePage - 1) * pageSize;
-    return filteredWords.slice(startIndex, startIndex + pageSize);
+    const start = (activePage - 1) * pageSize;
+    return filteredWords.slice(start, start + pageSize);
   }, [activePage, filteredWords]);
 
   const reviewLoad = useMemo(() => estimateReviewLoad(recordsById, selectionById, setting), [recordsById, selectionById, setting]);
@@ -436,16 +413,15 @@ export function SelectionPage({
   const categoryBreakdown = useMemo(() => {
     const counts = new Map<string, number>();
     for (const word of payload.words) {
-      const selectionState = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
-      if (selectionState.isEnabled && !selectionState.isPaused) {
+      const s = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
+      if (s.isEnabled && !s.isPaused) {
         counts.set(word.category, (counts.get(word.category) ?? 0) + 1);
       }
     }
-
-    return [...counts.entries()].sort((left, right) => right[1] - left[1]).slice(0, 6);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6);
   }, [payload.words, selectionById]);
 
-  const selectedWord = selectedWordId ? payload.words.find((word) => word.id === selectedWordId) ?? null : null;
+  const selectedWord = selectedWordId ? payload.words.find((w) => w.id === selectedWordId) ?? null : null;
   const selectedWordRecord = selectedWord ? recordsById[selectedWord.id] : undefined;
   const selectedWordSelectionState = selectedWord ? selectionById[selectedWord.id] : undefined;
   const isReferenceGridState = viewMode === 'grid' &&
@@ -456,32 +432,20 @@ export function SelectionPage({
     selectedStatus === 'all' &&
     !imageOnly &&
     sortMode === 'alphabetical';
-  const applyHint = !task.completedAt && task.totalAnswered === 0
-    ? '应用后会立即重算今天任务并返回复习页。'
-    : '当前任务已经开始或完成，应用后会保存词范围，但不会覆盖今天已生成的任务。';
   const pagination = useMemo(() => buildPagination(totalPages, activePage), [activePage, totalPages]);
   const breakdownMax = categoryBreakdown[0]?.[1] ?? 1;
 
   async function savePatchedSelectionStates(states: Array<Partial<WordSelectionState> & Pick<WordSelectionState, 'wordId'>>) {
     const nextStates = states.map((state) => {
-      const currentState = selectionById[state.wordId] ?? createDefaultWordSelectionState(state.wordId);
-      return normalizeWordSelectionState({
-        ...currentState,
-        ...state,
-        updatedAt: new Date().toISOString(),
-      });
+      const cur = selectionById[state.wordId] ?? createDefaultWordSelectionState(state.wordId);
+      return normalizeWordSelectionState({ ...cur, ...state, updatedAt: new Date().toISOString() });
     });
-
     await onSaveSelectionStates(nextStates);
   }
 
   async function handleKeepOnlyFiltered() {
-    const filteredIds = new Set(filteredWords.map((word) => word.id));
-    const nextStates = payload.words.map((word) => ({
-      wordId: word.id,
-      isEnabled: filteredIds.has(word.id),
-      isPaused: false,
-    }));
+    const filteredIds = new Set(filteredWords.map((w) => w.id));
+    const nextStates = payload.words.map((w) => ({ wordId: w.id, isEnabled: filteredIds.has(w.id), isPaused: false }));
     await savePatchedSelectionStates(nextStates);
   }
 
@@ -500,378 +464,236 @@ export function SelectionPage({
     <main className="page page--home page--selection">
       <div className="selection-mockup-frame">
 
-        {/* ── Chrome bar (y=0..30) ── */}
-        <div className="selection-chrome">
-          <div className="selection-brand-cluster">
-            <span className="selection-brand-mark" aria-hidden="true" />
-            <span className="selection-brand-wordmark">VocaRabbit</span>
-            <span className="app-version-badge">{APP_VERSION}</span>
+        {/* Chrome bar */}
+        <div className="selection-shell__chrome">
+          <div className="selection-shell__brand">
+            <span className="selection-shell__brand-mark" aria-hidden="true" />
+            <span>VocaRabbit</span>
           </div>
-          <button className="selection-profile-btn" type="button">
-            <span className="selection-profile-avatar" aria-hidden="true" />
+          <button className="selection-shell__profile" type="button">
+            <span className="selection-shell__profile-avatar" aria-hidden="true" />
             <span>小雨的家长</span>
           </button>
         </div>
 
-        {/* ── Scrollable body (y=30..708) ── */}
-        <div className="selection-scroll-body">
-          <div className="selection-dom-surface">
+        {/* Three-column layout */}
+        <section className="selection-layout">
 
-            {/* ── Hero section (y=10..328 in surface) ── */}
-            <section className="selection-hero-section" aria-label="词库管理">
-              <div className="selection-hero-art" aria-hidden="true">
-                <img src={getAssetUrl('/design-reference/slices/selection-rabbit-art.png')} alt="" />
+          {/* Left sidebar: filters */}
+          <aside className="section-block selection-sidebar">
+            <div className="section-block__header">
+              <h2>筛选条件</h2>
+            </div>
+            <label className="selection-field">
+              <span>搜索</span>
+              <input
+                className="selection-input"
+                type="search"
+                value={searchText}
+                placeholder="搜索单词或中文意思"
+                onChange={(e) => { setSearchText(e.target.value); setCurrentPage(1); }}
+              />
+            </label>
+            <label className="selection-field">
+              <span>词类分类</span>
+              <select className="selection-select" value={selectedCategory} onChange={(e) => { setSelectedCategory(e.target.value); setCurrentPage(1); }}>
+                <option value="all">全部词类</option>
+                {payload.categories.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
+              </select>
+            </label>
+            <label className="selection-field">
+              <span>Oxford Tree</span>
+              <select className="selection-select" value={selectedLevel} onChange={(e) => { setSelectedLevel(e.target.value); setCurrentPage(1); }}>
+                <option value="all">全部等级</option>
+                {levelOptions.map((lv) => <option key={lv} value={lv}>Level {lv}</option>)}
+              </select>
+            </label>
+            <label className="selection-field">
+              <span>难度</span>
+              <select className="selection-select" value={selectedDifficulty} onChange={(e) => { setSelectedDifficulty(e.target.value); setCurrentPage(1); }}>
+                <option value="all">全部难度</option>
+                {[1, 2, 3, 4, 5].map((d) => <option key={d} value={d}>Lv.{d}</option>)}
+              </select>
+            </label>
+            <label className="selection-field">
+              <span>学习状态</span>
+              <select className="selection-select" value={selectedStatus} onChange={(e) => { setSelectedStatus(e.target.value as StatusFilter); setCurrentPage(1); }}>
+                <option value="all">全部状态</option>
+                <option value="new">未学</option>
+                <option value="learning">学习中</option>
+                <option value="mastered">已掌握</option>
+                <option value="paused">已暂停</option>
+                <option value="disabled">未启用</option>
+              </select>
+            </label>
+            <label className="selection-toggle">
+              <span>仅图片题</span>
+              <span className={`selection-toggle__track${imageOnly ? ' is-active' : ''}`} aria-hidden="true">
+                <span className="selection-toggle__thumb" />
+              </span>
+              <input type="checkbox" checked={imageOnly} onChange={(e) => { setImageOnly(e.target.checked); setCurrentPage(1); }} />
+            </label>
+            <button className="secondary-button" type="button" onClick={resetFilters}>重置筛选</button>
+          </aside>
+
+          {/* Center: results */}
+          <section className="section-block selection-results">
+            <div className="selection-results__intro">
+              <h1>词库管理</h1>
+              <p>在这里整理孩子的学习词库，灵活安排复习与预习。</p>
+            </div>
+            <div className="selection-toolbar">
+              <div className="selection-toolbar__group">
+                <button className={`selection-toolbar__chip${viewMode === 'grid' ? ' is-active' : ''}`} type="button"
+                  onClick={() => { setViewMode('grid'); setCurrentPage(1); }}>卡片视图</button>
+                <button className={`selection-toolbar__chip${viewMode === 'list' ? ' is-active' : ''}`} type="button"
+                  onClick={() => { setViewMode('list'); setCurrentPage(1); }}>列表视图</button>
               </div>
-              <div className="selection-hero-content">
-                <div className="selection-hero-eyebrow-row">
-                  <span className="selection-hero-eyebrow">选词页·词库范围控制器</span>
-                  <span className="selection-hero-tag">已筛出 {filteredWords.length} 个</span>
-                </div>
-                <h1 className="selection-hero-title">词库管理</h1>
-                <p className="selection-hero-desc">在这里先决定哪些词参与今天任务，再把真正需要学的范围稳定下来。</p>
-                <div className="selection-hero-pills">
-                  <div className="selection-hero-pill">
-                    <strong>{enabledCount}</strong>
-                    <span>已启用</span>
-                  </div>
-                  <div className="selection-hero-pill">
-                    <strong>{pausedCount}</strong>
-                    <span>已暂停</span>
-                  </div>
-                  <div className="selection-hero-pill">
-                    <strong>{masteredCount}</strong>
-                    <span>已掌握</span>
-                  </div>
-                  <div className="selection-hero-pill">
-                    <strong>{filteredWords.length}</strong>
-                    <span>当前筛出</span>
-                  </div>
-                </div>
+              <div className="selection-toolbar__meta">
+                <label className="selection-toolbar__sort">
+                  <span>按字母排序</span>
+                  <select className="selection-select" value={sortMode}
+                    onChange={(e) => { setSortMode(e.target.value as SortMode); setCurrentPage(1); }}>
+                    <option value="level">按 Level</option>
+                    <option value="difficulty">按难度</option>
+                    <option value="recent">按最近变更</option>
+                    <option value="alphabetical">按字母</option>
+                  </select>
+                </label>
               </div>
-              <aside className="selection-hero-aside">
-                <span className="selection-hero-aside-label">应用提示</span>
-                <strong className="selection-hero-aside-title">可以继续微调</strong>
-                <p className="selection-hero-aside-desc">{applyHint}</p>
-                <button
-                  className="primary-button selection-hero-aside-btn"
-                  type="button"
-                  onClick={() => void onApplySelectionPlan()}
-                >
-                  应用当前词库并返回复习页
-                </button>
-                <div className="selection-hero-plan-art" aria-hidden="true">
-                  <img src={getAssetUrl('/design-reference/slices/selection-plan-art.png')} alt="" />
-                </div>
-              </aside>
-            </section>
+            </div>
+            <div className="selection-bulk-actions">
+              <button className="secondary-button selection-action selection-action--plan" type="button" onClick={() => void onApplySelectionPlan()}>加入计划</button>
+              <button className="secondary-button selection-action selection-action--pause" type="button"
+                onClick={() => void savePatchedSelectionStates(filteredWords.map((w) => ({ wordId: w.id, isEnabled: true, isPaused: true })))}>暂停复习</button>
+              <button className="secondary-button selection-action selection-action--manage" type="button" onClick={() => void handleKeepOnlyFiltered()}>批量管理</button>
+            </div>
 
-            {/* ── Three-column layout (y=340 in surface) ── */}
-            <div className="selection-layout-section">
+            {filteredWords.length === 0 ? (
+              <article className="selection-empty-state">
+                <strong>当前筛选没有结果</strong>
+                <p>可以清空筛选，或者放宽分类、状态与图片条件。</p>
+              </article>
+            ) : viewMode === 'grid' ? (
+              <div className="selection-card-grid">
+                {visibleWords.map((word) => {
+                  const ss = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
+                  const bucket = getWordLearningBucket(word.id, recordsById[word.id], ss);
+                  const sl = bucket === 'paused' ? '已暂停' : bucket === 'disabled' ? '未启用' : bucket === 'mastered' ? '已掌握' : bucket === 'learning' ? '学习中' : '未学';
+                  const st = bucket === 'paused' ? 'paused' : bucket === 'disabled' ? 'disabled' : 'active';
+                  const vo = isReferenceGridState ? REFERENCE_SELECTION_CARD_OVERRIDES[word.id] : undefined;
+                  return (
+                    <SelectionWordCard
+                      key={word.id}
+                      word={word}
+                      statusLabel={vo?.statusLabel ?? sl}
+                      statusTone={vo?.statusTone ?? st}
+                      visualOverride={vo}
+                      onOpenDetails={() => setSelectedWordId(word.id)}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="selection-list">
+                {visibleWords.map((word) => {
+                  const ss = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
+                  const bucket = getWordLearningBucket(word.id, recordsById[word.id], ss);
+                  const sl = bucket === 'paused' ? '已暂停' : bucket === 'disabled' ? '未启用' : bucket === 'mastered' ? '已掌握' : bucket === 'learning' ? '学习中' : '未学';
+                  const st = bucket === 'paused' ? 'paused' : bucket === 'disabled' ? 'disabled' : 'active';
+                  return (
+                    <SelectionWordRow
+                      key={word.id} word={word} statusLabel={sl} statusTone={st}
+                      updatedAtLabel={formatUpdatedAt(ss.updatedAt)}
+                      isEnabled={ss.isEnabled} isPaused={ss.isPaused}
+                      onOpenDetails={() => setSelectedWordId(word.id)}
+                      onToggleEnabled={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: !ss.isEnabled, isPaused: false }])}
+                      onTogglePaused={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: true, isPaused: !ss.isPaused }])}
+                    />
+                  );
+                })}
+              </div>
+            )}
 
-              {/* Sidebar (left=0, w=220) */}
-              <aside className="selection-sidebar-panel">
-                <div className="selection-sidebar-hd">
-                  <strong>筛选</strong>
-                  <p>先缩小范围，再决定是否启用或暂停。</p>
-                </div>
-                <label className="selection-field">
-                  <span>搜索</span>
-                  <input
-                    className="selection-input"
-                    type="search"
-                    value={searchText}
-                    placeholder="搜索英文、中文或分类"
-                    onChange={(event) => { setSearchText(event.target.value); setCurrentPage(1); }}
-                  />
-                </label>
-                <label className="selection-field">
-                  <span>分类</span>
-                  <select className="selection-select" value={selectedCategory} onChange={(event) => { setSelectedCategory(event.target.value); setCurrentPage(1); }}>
-                    <option value="all">全部分类</option>
-                    {payload.categories.map((category) => (
-                      <option key={category} value={category}>{category}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="selection-field">
-                  <span>Oxford Tree Level</span>
-                  <select className="selection-select" value={selectedLevel} onChange={(event) => { setSelectedLevel(event.target.value); setCurrentPage(1); }}>
-                    <option value="all">全部 Level</option>
-                    {levelOptions.map((level) => (
-                      <option key={level} value={level}>Level {level}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="selection-field">
-                  <span>难度</span>
-                  <select className="selection-select" value={selectedDifficulty} onChange={(event) => { setSelectedDifficulty(event.target.value); setCurrentPage(1); }}>
-                    <option value="all">全部难度</option>
-                    {[1, 2, 3, 4, 5].map((d) => (
-                      <option key={d} value={d}>Lv.{d}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="selection-field">
-                  <span>学习状态</span>
-                  <select className="selection-select" value={selectedStatus} onChange={(event) => { setSelectedStatus(event.target.value as StatusFilter); setCurrentPage(1); }}>
-                    <option value="all">全部状态</option>
-                    <option value="new">未学</option>
-                    <option value="learning">学习中</option>
-                    <option value="mastered">已掌握</option>
-                    <option value="paused">已暂停</option>
-                    <option value="disabled">未启用</option>
-                  </select>
-                </label>
-                <label className="selection-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={imageOnly}
-                    onChange={(event) => { setImageOnly(event.target.checked); setCurrentPage(1); }}
-                  />
-                  <span>只看有已审核图片的词</span>
-                </label>
-                <button className="secondary-button selection-sidebar-reset" type="button" onClick={resetFilters}>
-                  清空当前筛选
-                </button>
-              </aside>
-
-              {/* Results (left=232, w=560) */}
-              <section className="selection-results-panel">
-                <div className="selection-results-hd">
-                  <h2>词卡区</h2>
-                  <p>先点详情理解词，再决定启用、暂停还是移出。</p>
-                </div>
-                <div className="selection-toolbar">
-                  <div className="selection-toolbar__group">
-                    <button
-                      className={`selection-toolbar__chip${viewMode === 'grid' ? ' is-active' : ''}`}
-                      type="button"
-                      onClick={() => { setViewMode('grid'); setCurrentPage(1); }}
-                    >
-                      卡片视图
-                    </button>
-                    <button
-                      className={`selection-toolbar__chip${viewMode === 'list' ? ' is-active' : ''}`}
-                      type="button"
-                      onClick={() => { setViewMode('list'); setCurrentPage(1); }}
-                    >
-                      列表视图
-                    </button>
-                  </div>
-                  <div className="selection-toolbar__meta">
-                    <label className="selection-toolbar__sort">
-                      <span>排序</span>
-                      <select
-                        className="selection-select"
-                        value={sortMode}
-                        onChange={(event) => { setSortMode(event.target.value as SortMode); setCurrentPage(1); }}
-                      >
-                        <option value="level">按 Level</option>
-                        <option value="difficulty">按难度</option>
-                        <option value="recent">按最近变更</option>
-                        <option value="alphabetical">按字母</option>
-                      </select>
-                    </label>
-                  </div>
-                </div>
-                <p className="selection-results-hint">
-                  当前显示 {Math.min((activePage) * pageSize, filteredWords.length)} / {filteredWords.length} 个词，批量操作仍按全部筛选结果。
-                </p>
-                <div className="selection-bulk-actions">
-                  <button className="secondary-button selection-action selection-action--plan" type="button" onClick={() => void onApplySelectionPlan()}>
-                    启用当前筛选结果
-                  </button>
-                  <button
-                    className="secondary-button selection-action selection-action--pause"
-                    type="button"
-                    onClick={() => void savePatchedSelectionStates(filteredWords.map((word) => ({ wordId: word.id, isEnabled: true, isPaused: true })))}
-                  >
-                    暂停当前筛选结果
-                  </button>
-                  <button className="secondary-button selection-action selection-action--manage" type="button" onClick={() => void handleKeepOnlyFiltered()}>
-                    只保留当前筛选结果
-                  </button>
-                </div>
-
-                {filteredWords.length === 0 ? (
-                  <article className="selection-empty-state">
-                    <strong>当前筛选没有结果</strong>
-                    <p>可以清空筛选，或者放宽分类、状态与图片条件。</p>
-                  </article>
-                ) : viewMode === 'grid' ? (
-                  <div className="selection-card-grid">
-                    {visibleWords.map((word) => {
-                      const selectionState = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
-                      const learningBucket = getWordLearningBucket(word.id, recordsById[word.id], selectionState);
-                      const statusLabel =
-                        learningBucket === 'paused' ? '已暂停' :
-                        learningBucket === 'disabled' ? '未启用' :
-                        learningBucket === 'mastered' ? '已掌握' :
-                        learningBucket === 'learning' ? '学习中' : '未学';
-                      const statusTone =
-                        learningBucket === 'paused' ? 'paused' :
-                        learningBucket === 'disabled' ? 'disabled' : 'active';
-                      const visualOverride = isReferenceGridState ? REFERENCE_SELECTION_CARD_OVERRIDES[word.id] : undefined;
-
-                      return (
-                        <SelectionWordCard
-                          key={word.id}
-                          word={word}
-                          statusLabel={visualOverride?.statusLabel ?? statusLabel}
-                          statusTone={visualOverride?.statusTone ?? statusTone}
-                          visualOverride={visualOverride}
-                          isEnabled={selectionState.isEnabled}
-                          isPaused={selectionState.isPaused}
-                          updatedAtLabel={formatUpdatedAt(selectionState.updatedAt)}
-                          onOpenDetails={() => setSelectedWordId(word.id)}
-                          onToggleEnabled={() =>
-                            void savePatchedSelectionStates([{
-                              wordId: word.id,
-                              isEnabled: !selectionState.isEnabled,
-                              isPaused: false,
-                            }])
-                          }
-                          onTogglePaused={() =>
-                            void savePatchedSelectionStates([{
-                              wordId: word.id,
-                              isEnabled: true,
-                              isPaused: !selectionState.isPaused,
-                            }])
-                          }
-                        />
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="selection-list">
-                    {visibleWords.map((word) => {
-                      const selectionState = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
-                      const learningBucket = getWordLearningBucket(word.id, recordsById[word.id], selectionState);
-                      const statusLabel =
-                        learningBucket === 'paused' ? '已暂停' :
-                        learningBucket === 'disabled' ? '未启用' :
-                        learningBucket === 'mastered' ? '已掌握' :
-                        learningBucket === 'learning' ? '学习中' : '未学';
-                      const statusTone =
-                        learningBucket === 'paused' ? 'paused' :
-                        learningBucket === 'disabled' ? 'disabled' : 'active';
-
-                      return (
-                        <SelectionWordRow
-                          key={word.id}
-                          word={word}
-                          statusLabel={statusLabel}
-                          statusTone={statusTone}
-                          updatedAtLabel={formatUpdatedAt(selectionState.updatedAt)}
-                          isEnabled={selectionState.isEnabled}
-                          isPaused={selectionState.isPaused}
-                          onOpenDetails={() => setSelectedWordId(word.id)}
-                          onToggleEnabled={() =>
-                            void savePatchedSelectionStates([{
-                              wordId: word.id,
-                              isEnabled: !selectionState.isEnabled,
-                              isPaused: selectionState.isEnabled ? false : false,
-                            }])
-                          }
-                          onTogglePaused={() =>
-                            void savePatchedSelectionStates([{
-                              wordId: word.id,
-                              isEnabled: true,
-                              isPaused: !selectionState.isPaused,
-                            }])
-                          }
-                        />
-                      );
-                    })}
-                  </div>
-                )}
-
-                <div className="selection-pagination">
-                  <span>共 {filteredWords.length} 个单词</span>
-                  <div className="selection-pagination__rail" aria-label="分页">
-                    {pagination.map((item, index) =>
-                      item === 'ellipsis' ? (
-                        <span key={`ellipsis-${index}`} className="selection-pagination__ellipsis">…</span>
-                      ) : (
-                        <button
-                          key={item}
-                          className={`selection-pagination__button${item === activePage ? ' is-active' : ''}`}
-                          type="button"
-                          onClick={() => setCurrentPage(item)}
-                        >
-                          {item}
-                        </button>
-                      )
-                    )}
-                  </div>
-                </div>
-              </section>
-
-              {/* Summary (left=804, w=220) */}
-              <aside className="selection-summary-panel">
-                <div className="selection-summary-hd">
-                  <h2>当前学习计划摘要</h2>
-                  <p>右侧只显示当前选择带来的真实后果。</p>
-                </div>
-                <div className="selection-summary-stats">
-                  <article className="selection-summary-stat">
-                    <span>已启用</span>
-                    <strong>{enabledCount}</strong>
-                  </article>
-                  <article className="selection-summary-stat">
-                    <span>已暂停</span>
-                    <strong>{pausedCount}</strong>
-                  </article>
-                  <article className="selection-summary-stat">
-                    <span>明天到期</span>
-                    <strong>{reviewLoad.dueTomorrowCount}</strong>
-                  </article>
-                  <article className="selection-summary-stat">
-                    <span>未来 3 天</span>
-                    <strong>{reviewLoad.dueInThreeDaysCount}</strong>
-                  </article>
-                </div>
-                <div className="selection-summary-risk">
-                  <span>压力标签</span>
-                  <strong>{reviewLoad.riskLevel === '正常' ? '正常' : reviewLoad.riskLevel}</strong>
-                  <p>当前启用范围还在舒适区，可以继续微调。</p>
-                </div>
-                <div className="selection-summary-breakdown">
-                  <h3>分类占比</h3>
-                  {categoryBreakdown.length > 0 ? (
-                    <ul>
-                      {categoryBreakdown.map(([category, count], index) => (
-                        <li key={category}>
-                          <span>{category}</span>
-                          <div className="selection-summary__bar-track">
-                            <div
-                              className={`selection-summary__bar selection-summary__bar--${index % 6}`}
-                              style={{ width: `${Math.max(12, Math.round((count / breakdownMax) * 100))}%` }}
-                            />
-                          </div>
-                          <strong>{count}</strong>
-                        </li>
-                      ))}
-                    </ul>
+            <div className="selection-pagination">
+              <span>共 {filteredWords.length} 个单词</span>
+              <div className="selection-pagination__rail">
+                {pagination.map((item, idx) =>
+                  item === 'ellipsis' ? (
+                    <span key={`e-${idx}`} className="selection-pagination__ellipsis">…</span>
                   ) : (
-                    <p>当前没有启用词。</p>
-                  )}
-                </div>
-              </aside>
+                    <button key={item} className={`selection-pagination__button${item === activePage ? ' is-active' : ''}`}
+                      type="button" onClick={() => setCurrentPage(item)}>{item}</button>
+                  )
+                )}
+              </div>
+            </div>
+          </section>
 
-            </div>{/* /selection-layout-section */}
-          </div>{/* /selection-dom-surface */}
-        </div>{/* /selection-scroll-body */}
+          {/* Right sidebar: summary */}
+          <aside className="section-block selection-summary">
+            <article className="selection-summary__hero">
+              <div className="selection-summary__hero-head">
+                <h2>计划摘要</h2>
+                <span className="selection-summary__info">i</span>
+              </div>
+              <div className="selection-summary__hero-art" aria-hidden="true" />
+              <div className="selection-summary__stats">
+                <article>
+                  <span className="selection-summary__stat-icon selection-summary__stat-icon--enabled" aria-hidden="true" />
+                  <span>已启用单词</span>
+                  <strong>{enabledCount}</strong>
+                </article>
+                <article>
+                  <span className="selection-summary__stat-icon selection-summary__stat-icon--paused" aria-hidden="true" />
+                  <span>已暂停单词</span>
+                  <strong>{pausedCount}</strong>
+                </article>
+                <article>
+                  <span className="selection-summary__stat-icon selection-summary__stat-icon--due" aria-hidden="true" />
+                  <span>明日待复习</span>
+                  <strong>{reviewLoad.dueTomorrowCount}</strong>
+                </article>
+                <article>
+                  <span className="selection-summary__stat-icon selection-summary__stat-icon--future" aria-hidden="true" />
+                  <span>3 天内待复习</span>
+                  <strong>{reviewLoad.dueInThreeDaysCount}</strong>
+                </article>
+                <article className="selection-summary__stat-row selection-summary__stat-row--risk">
+                  <span className="selection-summary__stat-icon selection-summary__stat-icon--risk" aria-hidden="true" />
+                  <span>当前压力</span>
+                  <strong>{reviewLoad.riskLevel === '正常' ? '轻松' : reviewLoad.riskLevel}</strong>
+                </article>
+              </div>
+            </article>
+            <div className="selection-summary__breakdown">
+              <h3>词类分布</h3>
+              {categoryBreakdown.length > 0 ? (
+                <ul>
+                  {categoryBreakdown.map(([cat, count], idx) => (
+                    <li key={cat}>
+                      <span>{cat}</span>
+                      <div className="selection-summary__bar-track">
+                        <div className={`selection-summary__bar selection-summary__bar--${idx % 6}`}
+                          style={{ width: `${Math.max(12, Math.round((count / breakdownMax) * 100))}%` }} />
+                      </div>
+                      <strong>{count}</strong>
+                    </li>
+                  ))}
+                </ul>
+              ) : <p>当前没有启用词。</p>}
+            </div>
+          </aside>
+        </section>
 
-        {/* ── Dock bar (bottom 60px) ── */}
-        <nav className="selection-dock-bar home-dock review-dock" aria-label="主页面导航">
+        {/* Dock bar */}
+        <nav className="home-dock review-dock selection-dock" aria-label="主页面导航">
           <SelectionDockButton glyph="review" label="复习" onClick={onBackHome} />
           <SelectionDockButton active glyph="selection" label="选词" onClick={() => {}} />
           <SelectionDockButton glyph="stats" label="统计" onClick={onOpenStats} />
           <SelectionDockButton glyph="settings" label="设置" onClick={onOpenSettings} />
         </nav>
-
-      </div>{/* /selection-mockup-frame */}
+      </div>
 
       <WordDetailDrawer
         isOpen={Boolean(selectedWord)}
@@ -883,27 +705,15 @@ export function SelectionPage({
         onClose={() => setSelectedWordId(null)}
         onToggleEnabled={
           selectedWord
-            ? () =>
-                void savePatchedSelectionStates([{
-                  wordId: selectedWord.id,
-                  isEnabled: !(selectedWordSelectionState?.isEnabled ?? true),
-                  isPaused: false,
-                }])
+            ? () => void savePatchedSelectionStates([{ wordId: selectedWord.id, isEnabled: !(selectedWordSelectionState?.isEnabled ?? true), isPaused: false }])
             : undefined
         }
         onTogglePaused={
           selectedWord
-            ? () =>
-                void savePatchedSelectionStates([{
-                  wordId: selectedWord.id,
-                  isEnabled: true,
-                  isPaused: !(selectedWordSelectionState?.isPaused ?? false),
-                }])
+            ? () => void savePatchedSelectionStates([{ wordId: selectedWord.id, isEnabled: true, isPaused: !(selectedWordSelectionState?.isPaused ?? false) }])
             : undefined
         }
       />
     </main>
   );
 }
-
-
