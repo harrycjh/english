@@ -5410,10 +5410,8 @@ button {
   padding: 0;
   border-radius: 0;
   background: transparent;
-  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr) minmax(0, 1.08fr);
-  grid-template-areas:
-    'progress pressure coverage'
-    'heatmap heatmap coverage';
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-areas: 'progress pressure heatmap coverage';
 }
 
 .page--stats .section-block__header {
@@ -5650,26 +5648,276 @@ button {
   position: static;
   bottom: auto;
   margin-top: 14px;
-  padding: 8px;
-  gap: 8px;
-  border-radius: 0 0 28px 28px;
-  background: #fffdf7;
-  box-shadow: none;
+  padding: 6px 24px;
+  gap: 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 252, 245, 0.95) 0%, rgba(255, 248, 235, 0.98) 100%);
+  box-shadow: 0 2px 12px rgba(202, 160, 85, 0.08), inset 0 0 0 1px rgba(230, 210, 170, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .page--stats .stats-dock .home-dock__button {
-  min-height: 42px;
+  position: relative;
+  width: 126px;
+  min-width: 126px;
+  min-height: 43px;
+  height: 43px;
   gap: 8px;
   border-radius: 14px;
-  font-size: 13px;
-  background: rgba(255, 248, 233, 0.96);
-  box-shadow: inset 0 0 0 1px rgba(241, 214, 171, 0.72);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  color: transparent;
+  font-weight: 700;
+  box-shadow: none;
+  flex: none;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.page--stats .stats-dock .home-dock__button:hover {
+  transform: translateY(-1px);
+  opacity: 0.98;
 }
 
 .page--stats .stats-dock .home-dock__button.is-active {
-  color: #7c4d02;
-  background: linear-gradient(135deg, #ffd777, #ffbe57);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+  color: transparent;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.page--stats .stats-dock .review-dock__label {
+  display: none;
+}
+
+/* ─── Donut Chart ─── */
+
+.page--stats .stats-donut {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 14px auto 12px;
+}
+
+.page--stats .stats-donut__center {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.page--stats .stats-donut__center-label {
+  font-size: 10px;
+  color: #8b7a5e;
+}
+
+.page--stats .stats-donut__center-value {
+  font-size: 18px;
+  font-weight: 800;
+  color: #173553;
+}
+
+.page--stats .stats-donut-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.page--stats .stats-donut-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #5a4e3a;
+}
+
+.page--stats .stats-donut-legend__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.page--stats .stats-donut-legend__label {
+  flex: 1;
+}
+
+.page--stats .stats-donut-legend__value {
+  font-weight: 600;
+  min-width: 36px;
+}
+
+.page--stats .stats-donut-legend__pct {
+  min-width: 28px;
+  text-align: right;
+  color: #8b7a5e;
+}
+
+/* ─── Horizontal Bars ─── */
+
+.page--stats .stats-hbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.page--stats .stats-hbar__label {
+  min-width: 44px;
+  font-size: 11px;
+  color: #5a4e3a;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.page--stats .stats-hbar__track {
+  flex: 1;
+  height: 12px;
+  border-radius: 6px;
+  background: rgba(240, 232, 216, 0.8);
+  overflow: hidden;
+}
+
+.page--stats .stats-hbar__fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 400ms ease;
+}
+
+.page--stats .stats-hbar__value {
+  min-width: 28px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #173553;
+  text-align: right;
+}
+
+/* ─── Pressure Summary ─── */
+
+.page--stats .stats-pressure-bars {
+  margin-top: 10px;
+}
+
+.page--stats .stats-pressure-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(232, 247, 239, 0.7);
+  border: 1px solid rgba(123, 205, 165, 0.3);
+}
+
+.page--stats .stats-pressure-summary__icon {
+  font-size: 22px;
+}
+
+.page--stats .stats-pressure-summary strong {
+  display: block;
+  font-size: 13px;
+  color: #2e7d32;
+}
+
+.page--stats .stats-pressure-summary p {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #5a4e3a;
+}
+
+/* ─── Recent Activity ─── */
+
+.page--stats .stats-recent-activity {
+  margin-top: 14px;
+}
+
+.page--stats .stats-recent-activity h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #3d3425;
+  margin: 0 0 8px;
+}
+
+.page--stats .stats-activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.page--stats .stats-activity-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(241, 214, 171, 0.5);
+  font-size: 11px;
+  color: #5a4e3a;
+}
+
+.page--stats .stats-activity__status {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.page--stats .stats-activity__date {
+  font-weight: 700;
+  color: #3d3425;
+  min-width: 38px;
+}
+
+.page--stats .stats-activity__detail {
+  flex: 1;
+}
+
+.page--stats .stats-activity__acc {
+  font-weight: 600;
+  color: #8b7a5e;
+}
+
+/* ─── Coverage Section ─── */
+
+.page--stats .stats-coverage-section {
+  margin-top: 14px;
+}
+
+.page--stats .stats-coverage-section:first-child {
+  margin-top: 8px;
+}
+
+.page--stats .stats-coverage-section h3 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #5a4e3a;
+  margin: 0 0 6px;
+}
+
+.page--stats .stats-coverage-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ─── Encourage note ─── */
+
+.page--stats .stats-inline-note--encourage {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(232, 247, 239, 0.5);
+  font-size: 11px;
+  color: #2e7d32;
 }
 
 @media (max-width: 1100px) {

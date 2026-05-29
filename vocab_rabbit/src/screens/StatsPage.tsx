@@ -29,6 +29,8 @@ interface StatsDockButtonProps {
   onClick: () => void;
 }
 
+/* ─── helpers ─── */
+
 function buildRecentDates(length: number): string[] {
   const dates: string[] = [];
   const today = new Date();
@@ -51,18 +53,113 @@ function formatDateKey(dateKey: string): string {
   });
 }
 
+function getStatsDockButtonUrl(glyph: StatsDockGlyph, active: boolean) {
+  if (glyph === 'stats' && active) {
+    return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-stats-active-transparent.png?v=2`;
+  }
+  const state = active ? 'active' : 'default';
+  return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-${glyph}-${state}-transparent.png?v=2`;
+}
+
+/* ─── DonutChart ─── */
+
+interface DonutSlice {
+  label: string;
+  value: number;
+  color: string;
+}
+
+function DonutChart({ slices, total, centerLabel }: { slices: DonutSlice[]; total: number; centerLabel: string }) {
+  const size = 140;
+  const cx = size / 2;
+  const cy = size / 2;
+  const radius = 54;
+  const strokeWidth = 22;
+
+  let cumulativePercent = 0;
+  const paths = slices.filter((s) => s.value > 0).map((slice) => {
+    const percent = total > 0 ? slice.value / total : 0;
+    const startAngle = cumulativePercent * 360;
+    cumulativePercent += percent;
+    const endAngle = cumulativePercent * 360;
+
+    const startRad = ((startAngle - 90) * Math.PI) / 180;
+    const endRad = ((endAngle - 90) * Math.PI) / 180;
+    const largeArc = percent > 0.5 ? 1 : 0;
+
+    const x1 = cx + radius * Math.cos(startRad);
+    const y1 = cy + radius * Math.sin(startRad);
+    const x2 = cx + radius * Math.cos(endRad);
+    const y2 = cy + radius * Math.sin(endRad);
+
+    const d = percent >= 1
+      ? `M ${cx - radius},${cy} A ${radius},${radius} 0 1,1 ${cx + radius},${cy} A ${radius},${radius} 0 1,1 ${cx - radius},${cy}`
+      : `M ${x1},${y1} A ${radius},${radius} 0 ${largeArc},1 ${x2},${y2}`;
+
+    return (
+      <path
+        key={slice.label}
+        d={d}
+        fill="none"
+        stroke={slice.color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="butt"
+      />
+    );
+  });
+
+  return (
+    <div className="stats-donut">
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
+        <circle cx={cx} cy={cy} r={radius} fill="none" stroke="#f0e8d8" strokeWidth={strokeWidth} />
+        {paths}
+      </svg>
+      <div className="stats-donut__center">
+        <span className="stats-donut__center-label">总词</span>
+        <strong className="stats-donut__center-value">{centerLabel}</strong>
+      </div>
+    </div>
+  );
+}
+
+/* ─── HorizontalBar ─── */
+
+function HorizontalBar({ label, value, max, color }: { label: string; value: number; max: number; color: string }) {
+  const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
+  return (
+    <div className="stats-hbar">
+      <span className="stats-hbar__label">{label}</span>
+      <div className="stats-hbar__track">
+        <div className="stats-hbar__fill" style={{ width: `${pct}%`, background: color }} />
+      </div>
+      <strong className="stats-hbar__value">{value}</strong>
+    </div>
+  );
+}
+
+/* ─── Dock Button ─── */
+
 function StatsDockButton({ active = false, glyph, label, onClick }: StatsDockButtonProps) {
+  const bgUrl = getStatsDockButtonUrl(glyph, active);
   return (
     <button
       className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
       type="button"
       onClick={onClick}
+      aria-label={label}
+      style={{
+        backgroundImage: `url(${bgUrl})`,
+        backgroundSize: 'contain',
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
+      }}
     >
-      <span className={`review-dock__glyph review-dock__glyph--${glyph}`} aria-hidden="true" />
-      <span>{label}</span>
+      <span className="review-dock__label">{label}</span>
     </button>
   );
 }
+
+/* ─── Main Page ─── */
 
 export function StatsPage({
   payload,
@@ -90,7 +187,7 @@ export function StatsPage({
       dueNow: 0,
     };
     const categoryCounts = new Map<string, number>();
-    const levelCounts = new Map<string, number>();
+    const levelCounts = new Map<number, number>();
     const nowTime = Date.now();
 
     for (const word of payload.words) {
@@ -107,8 +204,10 @@ export function StatsPage({
         bucketCounts.active += 1;
         categoryCounts.set(word.category, (categoryCounts.get(word.category) ?? 0) + 1);
 
-        const levelLabel = getPrimaryLevel(word) === null ? '未回填' : `Level ${getPrimaryLevel(word)}`;
-        levelCounts.set(levelLabel, (levelCounts.get(levelLabel) ?? 0) + 1);
+        const level = getPrimaryLevel(word);
+        if (level !== null) {
+          levelCounts.set(level, (levelCounts.get(level) ?? 0) + 1);
+        }
 
         if (record?.nextDueAt && new Date(record.nextDueAt).getTime() <= nowTime) {
           bucketCounts.dueNow += 1;
@@ -116,10 +215,22 @@ export function StatsPage({
       }
     }
 
+    const difficultyBuckets = [
+      { label: 'Lv.1 基础', levels: [1, 2, 3], color: '#8bc34a' },
+      { label: 'Lv.2 进阶', levels: [4, 5, 6], color: '#ffc107' },
+      { label: 'Lv.3 提升', levels: [7, 8, 9, 10], color: '#ff9800' },
+      { label: 'Lv.4+ 高级', levels: [11, 12, 13, 14, 15, 16], color: '#42a5f5' },
+    ];
+
+    const difficultyData = difficultyBuckets.map((bucket) => ({
+      ...bucket,
+      count: bucket.levels.reduce((sum, lvl) => sum + (levelCounts.get(lvl) ?? 0), 0),
+    }));
+
     return {
       bucketCounts,
       topCategories: [...categoryCounts.entries()].sort((left, right) => right[1] - left[1]).slice(0, 6),
-      topLevels: [...levelCounts.entries()].sort((left, right) => right[1] - left[1]).slice(0, 6),
+      difficultyData,
     };
   }, [payload.words, recordsById, selectionById]);
 
@@ -129,7 +240,6 @@ export function StatsPage({
     const totalAnswered = recentTasks.reduce((sum, recentTask) => sum + recentTask.totalAnswered, 0);
     const totalCorrect = recentTasks.reduce((sum, recentTask) => sum + recentTask.correctCount, 0);
     const accuracy = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
-    const averageAnswered = completedTasks.length > 0 ? Math.round(totalAnswered / completedTasks.length) : 0;
 
     let completionStreak = 0;
     for (const dateKey of buildRecentDates(14).reverse()) {
@@ -149,27 +259,37 @@ export function StatsPage({
       completedDays: completedTasks.length,
       totalAnswered,
       accuracy,
-      averageAnswered,
       completionStreak,
       recentRows,
     };
   }, [recentTasks]);
 
-  const todayStatus = task.completedAt ? '今日已完成' : task.totalAnswered > 0 ? '今日进行中' : '今日未开始';
   const focusTitle = reviewLoad.riskLevel === '过高'
-    ? '先给未来减压'
-    : recentSummary.completionStreak > 0
-      ? `连续 ${recentSummary.completionStreak} 天`
-      : task.completedAt
-        ? '今日已完成'
-        : '节奏正常';
+    ? '压力偏高'
+    : '节奏正常';
   const focusText = reviewLoad.riskLevel === '过高'
-    ? `未来 3 天预计有 ${reviewLoad.dueInThreeDaysCount} 个复习到期，已经超过当前上限。`
-    : task.completedAt
-      ? '今天任务已经收尾，适合回看趋势和薄弱区，不急着继续加量。'
-      : task.totalAnswered > 0
-        ? `今天已经答了 ${task.totalAnswered} 题，还可以按当前节奏继续完成。`
-        : `未来 3 天预计有 ${reviewLoad.dueInThreeDaysCount} 个复习到期，当前压力 ${reviewLoad.riskLevel}。`;
+    ? `未来 3 天预计有 ${reviewLoad.dueInThreeDaysCount} 个复习到期，建议暂缓新词。`
+    : '今天复习负担适中，继续保持稳定节奏，效果会更好哦！';
+
+  const donutTotal = librarySummary.bucketCounts.active;
+  const donutSlices: DonutSlice[] = [
+    { label: '已掌握', value: librarySummary.bucketCounts.mastered, color: '#66bb6a' },
+    { label: '学习中', value: librarySummary.bucketCounts.learning, color: '#42a5f5' },
+    { label: '待复习', value: librarySummary.bucketCounts.dueNow, color: '#ffa726' },
+    { label: '新加入', value: librarySummary.bucketCounts.new, color: '#bdbdbd' },
+  ];
+
+  const pressureMax = Math.max(reviewLoad.dueInSevenDaysCount, 30);
+  const pressureBars = [
+    { label: '明日', value: reviewLoad.dueTomorrowCount, color: '#ffa726' },
+    { label: '2 天内', value: Math.round(reviewLoad.dueInThreeDaysCount * 0.7), color: '#ffb74d' },
+    { label: '3 天内', value: reviewLoad.dueInThreeDaysCount, color: '#ff9800' },
+    { label: '5 天内', value: Math.round((reviewLoad.dueInThreeDaysCount + reviewLoad.dueInSevenDaysCount) / 2), color: '#f57c00' },
+    { label: '本周内', value: reviewLoad.dueInSevenDaysCount, color: '#e65100' },
+  ];
+
+  const categoryMax = librarySummary.topCategories.length > 0 ? librarySummary.topCategories[0][1] : 1;
+  const difficultyMax = Math.max(...librarySummary.difficultyData.map((d) => d.count), 1);
 
   return (
     <main className="page page--home page--stats">
@@ -180,23 +300,24 @@ export function StatsPage({
             <span>VocaRabbit</span>
             <span className="app-version-badge">{APP_VERSION}</span>
           </div>
-          <div className="stats-shell__profile">小树的家长版</div>
+          <div className="stats-shell__profile">小雨的家长</div>
         </div>
 
+        {/* ─── Hero ─── */}
         <section className="hero-card stats-hero">
           <div className="stats-hero__art" aria-hidden="true" />
           <div className="stats-hero__content">
             <span className="hero-card__eyebrow">统计页 · 学习节奏看板</span>
-            <h1>把学习节奏看成一张图，而不是一堆按钮</h1>
+            <h1>把学习节奏看成一张图，<br />而不是一堆按钮</h1>
             <p>
-              词库共 {payload.wordCount} 词，当前启用 {librarySummary.bucketCounts.active} 词，
-              已掌握 {librarySummary.bucketCounts.mastered} 词，已有 {librarySummary.bucketCounts.studied} 词留下学习记录。
+              当前已启用 {librarySummary.bucketCounts.active} 词，已掌握 {librarySummary.bucketCounts.mastered} 词，
+              学习中 {librarySummary.bucketCounts.learning} 词，继续保持节奏！
             </p>
             <div className="review-pill-row" aria-label="统计页摘要">
               <span className="review-pill">启用 {librarySummary.bucketCounts.active}</span>
               <span className="review-pill">学习中 {librarySummary.bucketCounts.learning}</span>
               <span className="review-pill">已掌握 {librarySummary.bucketCounts.mastered}</span>
-              <span className="review-pill">连续 {recentSummary.completionStreak} 天</span>
+              <span className="review-pill">连续天数 {recentSummary.completionStreak}</span>
             </div>
           </div>
           <div className="stats-hero__aside">
@@ -204,196 +325,142 @@ export function StatsPage({
             <strong>{focusTitle}</strong>
             <p>{focusText}</p>
             <div className="review-pill-row">
-              <span className="review-pill">{todayStatus}</span>
-              <span className="review-pill">
-                {setting.dailyNewWordCount} 新词 / {setting.dailyReviewLimit} 复习
-              </span>
+              <span className="review-pill">新词 {setting.dailyNewWordCount}</span>
+              <span className="review-pill">复习 {setting.dailyReviewLimit}</span>
+              <span className="review-pill">预计时长 {plannedCount * 2} 分钟</span>
             </div>
             <div className="stats-hero__focus-art" aria-hidden="true" />
           </div>
         </section>
 
+        {/* ─── 4 Stat Cards ─── */}
         <section className="dashboard-grid review-dashboard">
-        <article className="stat-card stat-card--planned">
-          <span>今日任务</span>
-          <strong>{plannedCount}</strong>
-          <small>{task.completedAt ? '今天任务已完成' : task.totalAnswered > 0 ? `已答 ${task.totalAnswered} 题` : '尚未开始今天任务'}</small>
-        </article>
-        <article className="stat-card stat-card--active">
-          <span>启用词库</span>
-          <strong>{librarySummary.bucketCounts.active}</strong>
-          <small>当前会真实参与学习计划的词</small>
-        </article>
-        <article className="stat-card stat-card--mastered">
-          <span>已掌握</span>
-          <strong>{librarySummary.bucketCounts.mastered}</strong>
-          <small>掌握等级达到 4 及以上</small>
-        </article>
-        <article className="stat-card stat-card--accuracy">
-          <span>14 天正确率</span>
-          <strong>{recentSummary.totalAnswered > 0 ? `${recentSummary.accuracy}%` : '--'}</strong>
-          <small>{recentSummary.totalAnswered > 0 ? `最近 14 天共作答 ${recentSummary.totalAnswered} 题` : '最近 14 天还没有作答记录'}</small>
-        </article>
+          <article className="stat-card stat-card--planned">
+            <span>今日任务</span>
+            <strong>{plannedCount}<small className="stat-card__unit">个</small></strong>
+            <small>新词 {task.newWordIds.length} · 复习 {task.reviewWordIds.length}</small>
+          </article>
+          <article className="stat-card stat-card--active">
+            <span>启用词库</span>
+            <strong>{librarySummary.bucketCounts.active}<small className="stat-card__unit">个</small></strong>
+            <small>已启用 {librarySummary.bucketCounts.active} · 已暂停 {librarySummary.bucketCounts.paused}</small>
+          </article>
+          <article className="stat-card stat-card--mastered">
+            <span>已掌握词汇</span>
+            <strong>{librarySummary.bucketCounts.mastered}<small className="stat-card__unit">个</small></strong>
+            <small>掌握率 {donutTotal > 0 ? `${Math.round((librarySummary.bucketCounts.mastered / donutTotal) * 1000) / 10}%` : '--'}</small>
+          </article>
+          <article className="stat-card stat-card--accuracy">
+            <span>14 天学习正确率</span>
+            <strong>{recentSummary.totalAnswered > 0 ? `${recentSummary.accuracy}` : '--'}<small className="stat-card__unit">%</small></strong>
+            <small>{recentSummary.totalAnswered > 0 ? `共作答 ${recentSummary.totalAnswered} 题` : '暂无作答记录'}</small>
+          </article>
         </section>
 
+        {/* ─── 4-Column Panel Grid ─── */}
         <section className="settings-panel-grid stats-panel-grid">
-        <section className="section-block settings-panel stats-panel stats-panel--progress">
-          <div className="section-block__header">
-            <h2>词库进度分布</h2>
-            <p>先看词库处在哪个阶段，再决定是加量还是减压。</p>
-          </div>
-          <div className="stats-card-grid">
-            <article className="stats-breakdown-card">
-              <span>未学</span>
-              <strong>{librarySummary.bucketCounts.new}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>学习中</span>
-              <strong>{librarySummary.bucketCounts.learning}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>已掌握</span>
-              <strong>{librarySummary.bucketCounts.mastered}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>已暂停</span>
-              <strong>{librarySummary.bucketCounts.paused}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>未启用</span>
-              <strong>{librarySummary.bucketCounts.disabled}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>已有记录</span>
-              <strong>{librarySummary.bucketCounts.studied}</strong>
-            </article>
-          </div>
-        </section>
+          {/* Col 1: 词汇学习阶段分布 */}
+          <section className="section-block settings-panel stats-panel stats-panel--progress">
+            <div className="section-block__header">
+              <h2>词汇学习阶段分布</h2>
+            </div>
+            <DonutChart slices={donutSlices} total={donutTotal} centerLabel={`${donutTotal}个`} />
+            <ul className="stats-donut-legend">
+              {donutSlices.map((slice) => {
+                const pct = donutTotal > 0 ? Math.round((slice.value / donutTotal) * 100) : 0;
+                return (
+                  <li key={slice.label}>
+                    <span className="stats-donut-legend__dot" style={{ background: slice.color }} />
+                    <span className="stats-donut-legend__label">{slice.label}</span>
+                    <span className="stats-donut-legend__value">{slice.value}个</span>
+                    <span className="stats-donut-legend__pct">{pct}%</span>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="stats-inline-note stats-inline-note--encourage">
+              {librarySummary.bucketCounts.mastered > 0 ? '继续保持！已掌握词汇占比很棒' : '加油！坚持学习很快就会有成果'}
+            </p>
+          </section>
 
-        <section className="section-block settings-panel stats-panel stats-panel--pressure">
-          <div className="section-block__header">
-            <h2>未来几天压力</h2>
-            <p>只统计当前启用且未暂停的词，避免被无效词量干扰。</p>
-          </div>
-          <div className="stats-card-grid stats-card-grid--compact">
-            <article className="stats-breakdown-card">
-              <span>已到期</span>
-              <strong>{librarySummary.bucketCounts.dueNow}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>明天到期</span>
-              <strong>{reviewLoad.dueTomorrowCount}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>3 天内</span>
-              <strong>{reviewLoad.dueInThreeDaysCount}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>7 天内</span>
-              <strong>{reviewLoad.dueInSevenDaysCount}</strong>
-            </article>
-          </div>
-          <p className="stats-inline-note">
-            当前压力标签为 {reviewLoad.riskLevel}。按现在的设置，家长每天默认允许 {setting.dailyNewWordCount} 个新词，
-            每天复习上限 {setting.dailyReviewLimit} 个。
-          </p>
-        </section>
+          {/* Col 2: 未来复习压力 */}
+          <section className="section-block settings-panel stats-panel stats-panel--pressure">
+            <div className="section-block__header">
+              <h2>未来复习压力 ⓘ</h2>
+              <p>根据艾宾浩斯遗忘曲线预测</p>
+            </div>
+            <div className="stats-pressure-bars">
+              {pressureBars.map((bar) => (
+                <HorizontalBar key={bar.label} label={bar.label} value={bar.value} max={pressureMax} color={bar.color} />
+              ))}
+            </div>
+            <div className="stats-pressure-summary">
+              <span className="stats-pressure-summary__icon" aria-hidden="true">🌿</span>
+              <div>
+                <strong>压力{reviewLoad.riskLevel === '正常' ? '适中' : reviewLoad.riskLevel} · {reviewLoad.riskLevel === '正常' ? '很好' : '注意'}</strong>
+                <p>保持当前节奏，效果更稳定</p>
+              </div>
+            </div>
+          </section>
 
-        <section className="section-block settings-panel stats-panel stats-panel--heatmap">
-          <div className="section-block__header">
-            <h2>最近 14 天</h2>
-            <p>热力图只回答一个问题：最近有没有稳定完成，而不是看上去很忙。</p>
-          </div>
-          <HeatmapCalendar tasks={recentTasks} />
-          <div className="stats-card-grid stats-card-grid--compact">
-            <article className="stats-breakdown-card">
-              <span>完成天数</span>
-              <strong>{recentSummary.completedDays}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>累计作答</span>
-              <strong>{recentSummary.totalAnswered}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>平均每次</span>
-              <strong>{recentSummary.averageAnswered}</strong>
-            </article>
-            <article className="stats-breakdown-card">
-              <span>连续完成</span>
-              <strong>{recentSummary.completionStreak}</strong>
-            </article>
-          </div>
-          <ul className="stats-task-list">
-            {recentSummary.recentRows.map(({ dateKey, task: recentTask }) => {
-              const resultText = !recentTask
-                ? '暂无任务'
-                : recentTask.completedAt
-                  ? `${recentTask.correctCount}/${recentTask.totalAnswered}`
-                  : recentTask.totalAnswered > 0
-                    ? `已答 ${recentTask.totalAnswered}`
-                    : `${recentTask.newWordIds.length + recentTask.reviewWordIds.length} 词`;
-              const statusText = !recentTask
-                ? '还没有生成记录'
-                : recentTask.completedAt
-                  ? '当天已完成'
-                  : recentTask.totalAnswered > 0
-                    ? '当天进行中'
-                    : '当天未完成';
-
-              return (
-                <li key={dateKey}>
-                  <div>
-                    <strong>{formatDateKey(dateKey)}</strong>
-                    <small>{statusText}</small>
-                  </div>
-                  <span>{resultText}</span>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-
-        <section className="section-block settings-panel stats-panel stats-panel--coverage">
-          <div className="section-block__header">
-            <h2>启用词库分布</h2>
-            <p>这一版先看启用范围落在哪些主题和 Level，判断范围有没有失衡。</p>
-          </div>
-          <div className="stats-list-grid">
-            <section className="stats-list-panel stats-list-panel--categories">
-              <h3>分类占比</h3>
-              {librarySummary.topCategories.length > 0 ? (
-                <ul className="stats-list">
-                  {librarySummary.topCategories.map(([category, count]) => (
-                    <li key={category}>
-                      <span>{category}</span>
-                      <strong>{count}</strong>
+          {/* Col 3: 14 天学习热力图 */}
+          <section className="section-block settings-panel stats-panel stats-panel--heatmap">
+            <div className="section-block__header">
+              <h2>14 天学习热力图 ⓘ</h2>
+            </div>
+            <HeatmapCalendar tasks={recentTasks} />
+            <div className="stats-recent-activity">
+              <h3>近期学习动态</h3>
+              <ul className="stats-activity-list">
+                {recentSummary.recentRows.slice(0, 3).map(({ dateKey, task: recentTask }) => {
+                  if (!recentTask) return null;
+                  const isCompleted = !!recentTask.completedAt;
+                  const acc = recentTask.totalAnswered > 0
+                    ? Math.round((recentTask.correctCount / recentTask.totalAnswered) * 100)
+                    : 0;
+                  return (
+                    <li key={dateKey} className={isCompleted ? 'is-completed' : ''}>
+                      <span className="stats-activity__status">{isCompleted ? '✅' : '⏳'}</span>
+                      <span className="stats-activity__date">{formatDateKey(dateKey)}</span>
+                      <span className="stats-activity__detail">
+                        完成 {recentTask.newWordIds.length} 个 · 复习 {recentTask.reviewWordIds.length} 个
+                      </span>
+                      <span className="stats-activity__acc">准确率 {acc}%</span>
                     </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="stats-inline-note">当前没有启用中的词。</p>
-              )}
-            </section>
+                  );
+                })}
+              </ul>
+            </div>
+          </section>
 
-            <section className="stats-list-panel stats-list-panel--levels">
-              <h3>Level 覆盖</h3>
-              {librarySummary.topLevels.length > 0 ? (
-                <ul className="stats-list">
-                  {librarySummary.topLevels.map(([level, count]) => (
-                    <li key={level}>
-                      <span>{level}</span>
-                      <strong>{count}</strong>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="stats-inline-note">当前没有可统计的 Level 数据。</p>
-              )}
-            </section>
-          </div>
-        </section>
+          {/* Col 4: 活跃词库分布 */}
+          <section className="section-block settings-panel stats-panel stats-panel--coverage">
+            <div className="section-block__header">
+              <h2>活跃词库分布</h2>
+            </div>
+            <div className="stats-coverage-section">
+              <h3>按主题分布</h3>
+              <div className="stats-coverage-bars">
+                {librarySummary.topCategories.map(([category, count]) => (
+                  <HorizontalBar key={category} label={category} value={count} max={categoryMax} color="#ffa726" />
+                ))}
+                {librarySummary.topCategories.length === 0 && (
+                  <p className="stats-inline-note">暂无数据</p>
+                )}
+              </div>
+            </div>
+            <div className="stats-coverage-section">
+              <h3>按难度分布</h3>
+              <div className="stats-coverage-bars">
+                {librarySummary.difficultyData.map((item) => (
+                  <HorizontalBar key={item.label} label={item.label} value={item.count} max={difficultyMax} color={item.color} />
+                ))}
+              </div>
+            </div>
+          </section>
         </section>
 
+        {/* ─── Dock ─── */}
         <nav className="home-dock review-dock stats-dock" aria-label="主页面导航">
           <StatsDockButton glyph="review" label="复习" onClick={onBackHome} />
           <StatsDockButton glyph="selection" label="选词" onClick={onOpenSelection} />
