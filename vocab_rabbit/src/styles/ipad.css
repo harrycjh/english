@@ -5037,8 +5037,8 @@ button {
   bottom: auto;
   flex-shrink: 0;
   margin: 8px 40px 14px;
-  padding: 6px 28px;
-  gap: 12px;
+  padding: 6px 24px;
+  gap: 10px;
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(255, 252, 245, 0.95) 0%, rgba(255, 248, 235, 0.98) 100%);
   box-shadow: 0 2px 12px rgba(202, 160, 85, 0.08), inset 0 0 0 1px rgba(230, 210, 170, 0.5);
@@ -5049,12 +5049,12 @@ button {
 
 .page--selection .selection-dock .home-dock__button {
   position: relative;
-  width: 158px;
-  min-width: 158px;
-  min-height: 54px;
-  height: 54px;
-  gap: 10px;
-  border-radius: 18px;
+  width: 126px;
+  min-width: 126px;
+  min-height: 43px;
+  height: 43px;
+  gap: 8px;
+  border-radius: 14px;
   background-color: transparent;
   background-repeat: no-repeat;
   background-position: center center;
