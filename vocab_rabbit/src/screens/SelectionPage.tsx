@@ -234,15 +234,31 @@ function SelectionWordRow({
   );
 }
 
+function getSelectionDockButtonUrl(glyph: SelectionDockGlyph, active: boolean) {
+  if (glyph === 'selection' && active) {
+    return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-selection-active-transparent.png?v=2`;
+  }
+  const state = active ? 'active' : 'default';
+  return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-${glyph}-${state}-transparent.png?v=2`;
+}
+
 function SelectionDockButton({ active = false, glyph, label, onClick }: SelectionDockButtonProps) {
+  const bgUrl = getSelectionDockButtonUrl(glyph, active);
+  const backgroundSize = glyph === 'selection' && active ? '70% auto' : '70% auto';
   return (
     <button
       className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
       type="button"
       onClick={onClick}
+      aria-label={label}
+      style={{
+        backgroundImage: `url(${bgUrl})`,
+        backgroundSize,
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
+      }}
     >
-      <span className={`review-dock__glyph review-dock__glyph--${glyph}`} aria-hidden="true" />
-      <span>{label}</span>
+      <span className="review-dock__label">{label}</span>
     </button>
   );
 }
