@@ -4701,17 +4701,17 @@ button {
 
 .page--selection .selection-word-card__content {
   display: grid;
-  grid-template-columns: 78px minmax(0, 1fr);
+  grid-template-columns: 52px minmax(0, 1fr);
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-top: 8px;
 }
 
 .page--selection .selection-word-card__art {
   display: grid;
   place-items: center;
-  height: 84px;
-  border-radius: 16px;
+  height: 60px;
+  border-radius: 12px;
   overflow: hidden;
   background:
     radial-gradient(circle at top center, rgba(255, 244, 215, 0.8), transparent 70%),
@@ -4726,7 +4726,7 @@ button {
 
 .page--selection .selection-word-card__art-fallback {
   color: #d28a25;
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: 0.06em;
 }
@@ -4735,14 +4735,19 @@ button {
   display: flex;
   flex-direction: column;
   gap: 3px;
+  min-width: 0;
 }
 
 .page--selection .selection-word-card h3,
 .page--selection .selection-word-row__main strong {
   margin: 0;
   color: #3e2612;
-  font-size: 18px;
+  font-size: 15px;
   font-family: 'Source Han Serif SC', 'Noto Serif SC', 'Iowan Old Style', 'Palatino Linotype', serif;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
 .page--selection .selection-word-card p,

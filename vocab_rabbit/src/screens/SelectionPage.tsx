@@ -182,7 +182,7 @@ function SelectionWordCard({
             )}
           </div>
           <div className="selection-word-card__copy">
-            <h3>{displayWord}</h3>
+            <h3 lang="en">{displayWord}</h3>
             <p>{chineseLabel}</p>
             <small>{partOfSpeechLabel}</small>
           </div>
@@ -212,7 +212,7 @@ function SelectionWordRow({
   return (
     <article className="selection-word-row">
       <button className="selection-word-row__main" type="button" onClick={onOpenDetails}>
-        <strong>{getStudyText(word)}</strong>
+        <strong lang="en">{getStudyText(word)}</strong>
         <span>{word.chinese}</span>
         <span>{word.category}</span>
         <span>{word.partOfSpeech}</span>
