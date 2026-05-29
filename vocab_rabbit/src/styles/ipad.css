@@ -5040,8 +5040,8 @@ button {
   padding: 8px;
   gap: 8px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #2b2118 0%, #1a140e 100%);
-  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, rgba(255, 252, 245, 0.95) 0%, rgba(255, 248, 235, 0.98) 100%);
+  box-shadow: 0 2px 12px rgba(202, 160, 85, 0.08), inset 0 0 0 1px rgba(230, 210, 170, 0.5);
 }
 
 .page--selection .selection-dock .home-dock__button {
@@ -5050,15 +5050,15 @@ button {
   border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(60, 50, 40, 0.7);
   background: transparent;
   box-shadow: none;
 }
 
 .page--selection .selection-dock .home-dock__button.is-active {
-  color: #fff;
-  background: linear-gradient(135deg, rgba(255, 180, 60, 0.22), rgba(255, 140, 20, 0.18));
-  box-shadow: inset 0 0 0 1px rgba(255, 180, 60, 0.3), 0 4px 12px rgba(255, 140, 20, 0.12);
+  color: #e8760a;
+  background: rgba(255, 160, 40, 0.10);
+  box-shadow: none;
 }
 
 .page--selection .selection-dock .review-dock__label {
