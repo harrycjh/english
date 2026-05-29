@@ -244,7 +244,6 @@ function getSelectionDockButtonUrl(glyph: SelectionDockGlyph, active: boolean) {
 
 function SelectionDockButton({ active = false, glyph, label, onClick }: SelectionDockButtonProps) {
   const bgUrl = getSelectionDockButtonUrl(glyph, active);
-  const backgroundSize = '24px 24px';
   return (
     <button
       className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
@@ -253,8 +252,8 @@ function SelectionDockButton({ active = false, glyph, label, onClick }: Selectio
       aria-label={label}
       style={{
         backgroundImage: `url(${bgUrl})`,
-        backgroundSize,
-        backgroundPosition: 'center 6px',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
       }}
     >
