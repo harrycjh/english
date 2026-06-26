@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vocab-rabbit-shell-v4';
+const CACHE_NAME = 'vocab-rabbit-shell-v5';
 const SCOPE_URL = new URL(self.registration.scope);
 const APP_ROOT_URL = new URL('./', SCOPE_URL).toString();
 const INDEX_URL = new URL('index.html', SCOPE_URL).toString();
@@ -40,6 +40,15 @@ async function handleStaticAsset(request) {
   }
 }
 
+async function handleWordPayload(request) {
+  try {
+    const response = await fetch(request, { cache: 'no-store' });
+    return putInCache(request, response);
+  } catch {
+    return (await caches.match(request)) || (await caches.match(WORD_PAYLOAD_URL)) || Response.error();
+  }
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE)).then(() => self.skipWaiting())
@@ -61,6 +70,11 @@ self.addEventListener('fetch', (event) => {
 
   if (event.request.mode === 'navigate') {
     event.respondWith(handleNavigation(event.request));
+    return;
+  }
+
+  if (new URL(event.request.url).pathname.endsWith('/content/words/ket_vocabulary.json')) {
+    event.respondWith(handleWordPayload(event.request));
     return;
   }
 

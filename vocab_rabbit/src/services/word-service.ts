@@ -1,11 +1,15 @@
 import type { OxfordRef, WordPayload, WordRecord } from '../models/word';
+import { APP_VERSION } from '../config/app-meta';
 
 let payloadPromise: Promise<WordPayload> | null = null;
-const WORD_PAYLOAD_URL = `${import.meta.env.BASE_URL}content/words/ket_vocabulary.json`;
+
+export function getWordPayloadUrl(): string {
+  return `${import.meta.env.BASE_URL}content/words/ket_vocabulary.json?v=${APP_VERSION}`;
+}
 
 export async function loadWordPayload(): Promise<WordPayload> {
   if (!payloadPromise) {
-    payloadPromise = fetch(WORD_PAYLOAD_URL).then(async (response) => {
+    payloadPromise = fetch(getWordPayloadUrl()).then(async (response) => {
       if (!response.ok) {
         throw new Error('无法加载词表 JSON。请先运行构建脚本。');
       }
