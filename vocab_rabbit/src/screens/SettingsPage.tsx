@@ -18,6 +18,7 @@ interface SettingsPageProps {
   onOpenSelection: () => void;
   onOpenStats: () => void;
   onUpdateSettings: (nextSetting: ParentSetting) => Promise<void>;
+  onExportStudyData: () => Promise<void>;
   onResetTodayTask: () => Promise<void>;
   onResetLearningProgress: () => Promise<void>;
 }
@@ -142,6 +143,7 @@ export function SettingsPage({
   onOpenSelection,
   onOpenStats,
   onUpdateSettings,
+  onExportStudyData,
   onResetTodayTask,
   onResetLearningProgress,
 }: SettingsPageProps) {
@@ -187,6 +189,11 @@ export function SettingsPage({
   async function handleClearAllData() {
     const confirmed = window.confirm('⚠️ 这会永久删除所有本地学习数据，且无法恢复。确定要清空吗？');
     if (confirmed) await onResetLearningProgress();
+  }
+
+  async function handleExportDataClick() {
+    await onExportStudyData();
+    setLastSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
   }
 
   return (
@@ -359,7 +366,7 @@ export function SettingsPage({
                   <strong>导出数据</strong>
                   <p>导出学习数据备份，便于保存或迁移。</p>
                 </div>
-                <button className="secondary-button" type="button" onClick={() => { /* TODO */ }}>
+                <button className="secondary-button" type="button" onClick={() => void handleExportDataClick()}>
                   导出数据
                 </button>
               </article>

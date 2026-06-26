@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { ParentSetting } from '../models/parent-setting';
@@ -23,6 +24,7 @@ interface SelectionPageProps {
   payload: WordPayload;
   recordsById: Record<string, LearningRecord>;
   selectionById: Record<string, WordSelectionState>;
+  answerEvents: AnswerEvent[];
   setting: ParentSetting;
   task: DailyTaskSummary;
   onBackHome: () => void;
@@ -37,6 +39,10 @@ interface SelectionWordCardProps {
   statusLabel: string;
   statusTone: 'active' | 'paused' | 'disabled';
   onOpenDetails: () => void;
+  onToggleEnabled: () => void;
+  onTogglePaused: () => void;
+  isEnabled: boolean;
+  isPaused: boolean;
   visualOverride?: SelectionCardVisualOverride;
 }
 
@@ -144,6 +150,10 @@ function SelectionWordCard({
   statusLabel,
   statusTone,
   onOpenDetails,
+  onToggleEnabled,
+  onTogglePaused,
+  isEnabled,
+  isPaused,
   visualOverride,
 }: SelectionWordCardProps) {
   const displayWord = getStudyText(word);
@@ -157,8 +167,6 @@ function SelectionWordCard({
   const chineseLabel = visualOverride?.chineseLabel ?? word.chinese;
   const partOfSpeechLabel = visualOverride?.partOfSpeechLabel ?? formatPartOfSpeech(word.partOfSpeech);
   const sourceLabel = visualOverride?.sourceLabel ?? getPrimaryOxfordRefLabel(word);
-  const effectiveStatusLabel = visualOverride?.statusLabel ?? statusLabel;
-  const effectiveStatusTone = visualOverride?.statusTone ?? statusTone;
   const colorSlot = getCategoryColorSlot(categoryLabel);
 
   return (
@@ -166,9 +174,8 @@ function SelectionWordCard({
       <button className="selection-word-card__body" type="button" onClick={onOpenDetails}>
         <div className="word-card__header">
           <span className={`word-card__category word-card__category--c${colorSlot}`}>{categoryLabel.length > 5 ? categoryLabel.slice(0, 5) : categoryLabel}</span>
-          <span className={`selection-status-chip selection-status-chip--${effectiveStatusTone}`}>{effectiveStatusLabel}</span>
+          <span className={`selection-status-chip selection-status-chip--${statusTone}`}>{statusLabel}</span>
         </div>
-        <span className="selection-word-card__favorite" aria-hidden="true">☆</span>
         <div className="selection-word-card__content">
           <div className="selection-word-card__art">
             {artSrc ? (
@@ -192,6 +199,16 @@ function SelectionWordCard({
           <span>{sourceLabel ? sourceLabel : 'Oxford Tree · 暂未回填位置'}</span>
         </footer>
       </button>
+      <div className="selection-word-card__actions">
+        <button className={isEnabled ? 'secondary-button' : 'primary-button'} type="button" onClick={onToggleEnabled}>
+          {isEnabled ? '移出' : '启用'}
+        </button>
+        {isEnabled ? (
+          <button className="secondary-button" type="button" onClick={onTogglePaused}>
+            {isPaused ? '恢复' : '暂停'}
+          </button>
+        ) : null}
+      </div>
     </article>
   );
 }
@@ -322,6 +339,7 @@ export function SelectionPage({
   payload,
   recordsById,
   selectionById,
+  answerEvents,
   setting,
   task,
   onBackHome,
@@ -464,6 +482,10 @@ export function SelectionPage({
     await savePatchedSelectionStates(nextStates);
   }
 
+  async function handleSetFilteredEnabled(isEnabled: boolean) {
+    await savePatchedSelectionStates(filteredWords.map((w) => ({ wordId: w.id, isEnabled, isPaused: false })));
+  }
+
   function resetFilters() {
     setSearchText('');
     setSelectedCategory('all');
@@ -485,7 +507,7 @@ export function SelectionPage({
             <span className="selection-shell__brand-mark" aria-hidden="true" />
             <span>VocaRabbit</span>
           </div>
-          <button className="selection-shell__profile" type="button">
+          <button className="selection-shell__profile" type="button" onClick={onOpenSettings}>
             <span className="selection-shell__profile-avatar" aria-hidden="true" />
             <span>小雨的家长</span>
           </button>
@@ -578,10 +600,14 @@ export function SelectionPage({
               </div>
             </div>
             <div className="selection-bulk-actions">
-              <button className="secondary-button selection-action selection-action--plan" type="button" onClick={() => void onApplySelectionPlan()}>加入计划</button>
+              <button className="primary-button selection-action selection-action--plan" type="button" onClick={() => void onApplySelectionPlan()}>保存返回</button>
+              <button className="secondary-button selection-action selection-action--plan" type="button"
+                onClick={() => void handleSetFilteredEnabled(true)}>启用筛选结果</button>
               <button className="secondary-button selection-action selection-action--pause" type="button"
-                onClick={() => void savePatchedSelectionStates(filteredWords.map((w) => ({ wordId: w.id, isEnabled: true, isPaused: true })))}>暂停复习</button>
-              <button className="secondary-button selection-action selection-action--manage" type="button" onClick={() => void handleKeepOnlyFiltered()}>批量管理</button>
+                onClick={() => void savePatchedSelectionStates(filteredWords.map((w) => ({ wordId: w.id, isEnabled: true, isPaused: true })))}>暂停筛选结果</button>
+              <button className="secondary-button selection-action selection-action--manage" type="button"
+                onClick={() => void handleSetFilteredEnabled(false)}>移出筛选结果</button>
+              <button className="secondary-button selection-action selection-action--manage" type="button" onClick={() => void handleKeepOnlyFiltered()}>仅保留筛选结果</button>
             </div>
 
             {filteredWords.length === 0 ? (
@@ -601,10 +627,14 @@ export function SelectionPage({
                     <SelectionWordCard
                       key={word.id}
                       word={word}
-                      statusLabel={vo?.statusLabel ?? sl}
-                      statusTone={vo?.statusTone ?? st}
+                      statusLabel={sl}
+                      statusTone={st}
                       visualOverride={vo}
                       onOpenDetails={() => setSelectedWordId(word.id)}
+                      isEnabled={ss.isEnabled}
+                      isPaused={ss.isPaused}
+                      onToggleEnabled={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: !ss.isEnabled, isPaused: false }])}
+                      onTogglePaused={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: true, isPaused: !ss.isPaused }])}
                     />
                   );
                 })}
@@ -715,6 +745,7 @@ export function SelectionPage({
         word={selectedWord}
         record={selectedWordRecord}
         selectionState={selectedWordSelectionState}
+        answerEvents={answerEvents}
         setting={setting}
         context="selection"
         onClose={() => setSelectedWordId(null)}

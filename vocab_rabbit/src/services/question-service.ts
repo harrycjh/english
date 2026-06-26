@@ -45,7 +45,7 @@ function getQuestionKind(word: WordRecord, record: LearningRecord | undefined, s
   const masteryLevel = record?.masteryLevel ?? 0;
 
   if (masteryLevel <= 1) {
-    return setting.showImages ? 'image-choice' : 'text-choice';
+    return setting.showImages && word.imageApproved ? 'image-choice' : 'text-choice';
   }
 
   if (masteryLevel <= 3 || !canUseFillBlank(word)) {
@@ -90,7 +90,7 @@ function buildChoiceQuestion(kind: 'image-choice' | 'text-choice', word: WordRec
   };
 }
 
-function buildFillBlankQuestion(word: WordRecord): FillBlankQuestion {
+function buildFillBlankQuestion(word: WordRecord, mode: 'partial' | 'full' = 'partial'): FillBlankQuestion {
   const studyText = getStudyText(word);
   const letters = [...studyText];
   const alphaIndices = letters
@@ -98,10 +98,14 @@ function buildFillBlankQuestion(word: WordRecord): FillBlankQuestion {
     .filter(({ character }) => /[A-Za-z]/.test(character))
     .map(({ index }) => index);
 
-  const targetMissingCount = Math.min(3, Math.max(2, Math.floor(alphaIndices.length / 3)));
-  const chosenIndices = alphaIndices
-    .slice(Math.max(1, Math.floor(alphaIndices.length / 3)), Math.max(1, Math.floor(alphaIndices.length / 3)) + targetMissingCount)
-    .sort((left, right) => left - right);
+  const chosenIndices = mode === 'full'
+    ? alphaIndices
+    : alphaIndices
+      .slice(
+        Math.max(1, Math.floor(alphaIndices.length / 3)),
+        Math.max(1, Math.floor(alphaIndices.length / 3)) + Math.min(3, Math.max(2, Math.floor(alphaIndices.length / 3)))
+      )
+      .sort((left, right) => left - right);
 
   const maskedCharacters = letters.map((character, index) =>
     chosenIndices.includes(index) ? '_' : character
@@ -136,7 +140,7 @@ export function buildQuestion(
 ): Question {
   const kind = getQuestionKind(word, record, setting);
   if (kind === 'fill-blank') {
-    return buildFillBlankQuestion(word);
+    return buildFillBlankQuestion(word, (record?.masteryLevel ?? 0) >= 6 ? 'full' : 'partial');
   }
   return buildChoiceQuestion(kind, word, allWords);
 }

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { AnswerEvent } from '../models/answer-event';
 import type { SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { ParentSetting } from '../models/parent-setting';
@@ -8,7 +9,10 @@ import { QuestionFillBlank } from '../components/QuestionFillBlank';
 import { QuestionImage } from '../components/QuestionImage';
 import { QuestionText } from '../components/QuestionText';
 import { buildQuestion, getCorrectAnswer, isCorrectAnswer, type Question } from '../services/question-service';
+import { createAnswerEventId } from '../services/answer-event-service';
+import { getExampleSentences } from '../services/example-service';
 import { createEmptyRecord } from '../services/spaced-repetition';
+import { createDateKey } from '../services/task-service';
 import { indexWordsById } from '../services/word-service';
 
 interface LearningPageProps {
@@ -16,7 +20,7 @@ interface LearningPageProps {
   initialWordIds: string[];
   recordsById: Record<string, LearningRecord>;
   setting: ParentSetting;
-  onAnswer: (wordId: string, isCorrect: boolean) => Promise<void>;
+  onAnswer: (event: AnswerEvent) => Promise<void>;
   onComplete: (result: SessionResult) => Promise<void>;
   onExit: () => void;
 }
@@ -42,6 +46,7 @@ export function LearningPage({
   });
   const [isLocked, setIsLocked] = useState(false);
   const [feedbackText, setFeedbackText] = useState<string | null>(null);
+  const [questionStartedAt, setQuestionStartedAt] = useState(() => Date.now());
 
   const currentWordId = queue[currentIndex];
   const currentWord = currentWordId ? wordsById.get(currentWordId) : undefined;
@@ -63,6 +68,7 @@ export function LearningPage({
     setCurrentQuestion(
       buildQuestion(currentWord, payload.words, recordsById[currentWordId] ?? createEmptyRecord(currentWordId), setting)
     );
+    setQuestionStartedAt(Date.now());
   }, [currentIndex, currentWordId, currentWord, payload.words]);
 
   async function handleAnswer(answer: string) {
@@ -72,6 +78,19 @@ export function LearningPage({
 
     const correct = isCorrectAnswer(currentQuestion, answer);
     const correctAnswer = getCorrectAnswer(currentQuestion);
+    const answeredAt = new Date();
+    const answeredAtText = answeredAt.toISOString();
+    const answerEvent: AnswerEvent = {
+      id: createAnswerEventId(currentWordId, answeredAtText),
+      wordId: currentWordId,
+      dateKey: createDateKey(answeredAt),
+      answeredAt: answeredAtText,
+      questionKind: currentQuestion.kind,
+      selectedAnswer: answer,
+      correctAnswer,
+      isCorrect: correct,
+      responseTimeMs: Math.max(0, Date.now() - questionStartedAt),
+    };
     const currentRepeatCount = repeatCounts[currentWordId] ?? 0;
     const shouldRepeat = !correct && currentRepeatCount < 2;
     const nextQueueLength = queue.length + (shouldRepeat ? 1 : 0);
@@ -94,7 +113,7 @@ export function LearningPage({
       setQueue((previous) => [...previous, currentWordId]);
     }
 
-    await onAnswer(currentWordId, correct);
+    await onAnswer(answerEvent);
 
     window.setTimeout(async () => {
       setSelectedAnswer(null);
@@ -127,6 +146,8 @@ export function LearningPage({
       </main>
     );
   }
+
+  const exampleSentences = setting.showExamples ? getExampleSentences(currentWord).slice(0, 1) : [];
 
   return (
     <main className="page page--learn">
@@ -170,6 +191,13 @@ export function LearningPage({
             showHints={setting.showHints}
             onSubmit={handleAnswer}
           />
+        ) : null}
+
+        {exampleSentences.length > 0 ? (
+          <section className="learning-example-panel" aria-label="例句">
+            <span>例句</span>
+            <p>{exampleSentences[0]}</p>
+          </section>
         ) : null}
 
         <footer className={`feedback-strip${feedbackText ? ' is-visible' : ''}`}>

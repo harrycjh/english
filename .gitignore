@@ -34,7 +34,4 @@ vision_extraction_log.txt
 # Web app build artifacts
 vocab_rabbit/node_modules/
 vocab_rabbit/dist/
-
-# Local/private word image exports
-vocab_rabbit/public/content/images/words/*
-!vocab_rabbit/public/content/images/words/.gitkeep
+vocab_rabbit/design-output/

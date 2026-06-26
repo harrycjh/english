@@ -167,7 +167,7 @@
       "category": "家人和朋友",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_grandchild_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -178,7 +178,7 @@
       "category": "家人和朋友",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_guest_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -365,7 +365,7 @@
       "category": "家人和朋友",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_penfriend_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -486,7 +486,7 @@
       "category": "家人和朋友",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_grandma_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -629,7 +629,7 @@
       "category": "家人和朋友",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_surname_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -662,7 +662,7 @@
       "category": "家人和朋友",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_grandpa_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -695,7 +695,7 @@
       "category": "家人和朋友",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_teenager_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -728,7 +728,7 @@
       "category": "家人和朋友",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_grandparent_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -888,7 +888,7 @@
       "category": "家人和朋友",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_granny_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -943,7 +943,7 @@
       "category": "人物身份和称呼",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_boyfriend_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -954,7 +954,7 @@
       "category": "人物身份和称呼",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_business_person_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -965,7 +965,7 @@
       "category": "人物身份和称呼",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_celebrity_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -976,7 +976,7 @@
       "category": "人物身份和称呼",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_colleague_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -987,7 +987,7 @@
       "category": "人物身份和称呼",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_first_name_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -1015,7 +1015,7 @@
       "category": "人物身份和称呼",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_headteacher_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -1026,7 +1026,7 @@
       "category": "人物身份和称呼",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_housewife_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -1081,7 +1081,7 @@
       "category": "人物身份和称呼",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_nationality_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -1686,7 +1686,7 @@
       "category": "身体、健康和锻炼",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_stomach_ache_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -3129,7 +3129,7 @@
       "category": "感受和性格",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_pleasant_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -4130,7 +4130,7 @@
       "category": "房子和家具",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_apartment_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -4229,7 +4229,7 @@
       "category": "房子和家具",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_cooker_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -4262,7 +4262,7 @@
       "category": "房子和家具",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_refrigerator_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -4295,7 +4295,7 @@
       "category": "房子和家具",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_bathtub_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -4873,7 +4873,7 @@
       "category": "房子和家具",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_bookshelf_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -4884,7 +4884,7 @@
       "category": "房子和家具",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_dvd_player_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -5291,7 +5291,7 @@
       "category": "房子和家具",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_accommodation_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -5346,7 +5346,7 @@
       "category": "房子和家具",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_cabinet_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -5379,7 +5379,7 @@
       "category": "房子和家具",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_closet_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -5649,7 +5649,7 @@
       "category": "家用电器和电子设备",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_laptop_computer_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -5743,7 +5743,7 @@
       "category": "家用电器和电子设备",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_cell_phone_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -5920,7 +5920,7 @@
       "category": "家用电器和电子设备",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_battery_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -5953,7 +5953,7 @@
       "category": "家用电器和电子设备",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_dvd_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -6047,7 +6047,7 @@
       "category": "衣服和配饰",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_swimsuit_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -6097,7 +6097,7 @@
       "category": "衣服和配饰",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_raincoat_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -6130,7 +6130,7 @@
       "category": "衣服和配饰",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_bathing_suit_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -6224,7 +6224,7 @@
       "category": "衣服和配饰",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_glove_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -6235,7 +6235,7 @@
       "category": "衣服和配饰",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_blouse_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -6417,7 +6417,7 @@
       "category": "衣服和配饰",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_hoodie_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -6638,7 +6638,7 @@
       "category": "衣服和配饰",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_wallet_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -6776,7 +6776,7 @@
       "category": "衣服和配饰",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_sunglasses_n_pl.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -6848,7 +6848,7 @@
       "category": "衣服和配饰",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_sweater_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -6859,7 +6859,7 @@
       "category": "衣服和配饰",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_earring_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -7371,7 +7371,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_cola_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -7487,7 +7487,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_rice_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -7520,7 +7520,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_roast_v_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -7575,7 +7575,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_salad_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -7835,7 +7835,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_sausage_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -7868,7 +7868,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_dessert_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -7879,7 +7879,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_main_course_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -7890,7 +7890,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_slice_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8055,7 +8055,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_burger_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8088,7 +8088,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_melon_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8287,7 +8287,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_cafeteria_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8320,7 +8320,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_mineral_water_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8375,7 +8375,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_mushroom_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8518,7 +8518,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_omelette_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8551,7 +8551,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_carrot_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8562,7 +8562,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_fried_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8573,7 +8573,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_onion_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8650,7 +8650,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_vegetable_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8683,7 +8683,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_garlic_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8694,7 +8694,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_pasta_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8778,7 +8778,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_waitress_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8811,7 +8811,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_grape_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8866,7 +8866,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_chilli_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8916,7 +8916,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_yog_h_urt_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8949,7 +8949,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_bean_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8960,7 +8960,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_fast_food_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -8971,7 +8971,7 @@
       "category": "食物和饮料",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_ingredient_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9136,7 +9136,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_ruler_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9208,7 +9208,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_biology_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9219,7 +9219,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_dictionary_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9274,7 +9274,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_blackboard_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9285,7 +9285,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_diploma_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9462,7 +9462,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_geography_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9473,7 +9473,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_physics_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9506,7 +9506,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_chemistry_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9649,7 +9649,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_classmate_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9875,7 +9875,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_coach_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9930,7 +9930,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_college_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -9985,7 +9985,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_grade_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10123,7 +10123,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_pencil_case_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10178,7 +10178,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_schoolchild_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10233,7 +10233,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_timetable_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10244,7 +10244,7 @@
       "category": "学校和学习",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_vocabulary_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10299,7 +10299,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_advertisement_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10349,7 +10349,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_passport_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10360,7 +10360,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_article_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10564,7 +10564,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_textbook_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10641,7 +10641,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_ticket_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10674,7 +10674,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_album_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10746,7 +10746,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_guidebook_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10779,7 +10779,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_id_card_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10790,7 +10790,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_invitation_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10906,7 +10906,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_paragraph_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -10939,7 +10939,7 @@
       "category": "书本、证件和文字",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_review_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -11497,7 +11497,7 @@
       "category": "娱乐和表演",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_painter_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -11530,7 +11530,7 @@
       "category": "娱乐和表演",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_cartoon_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -11690,7 +11690,7 @@
       "category": "娱乐和表演",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_photography_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -11723,7 +11723,7 @@
       "category": "娱乐和表演",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_hip_hop_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -11756,7 +11756,7 @@
       "category": "娱乐和表演",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_classical_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -11877,7 +11877,7 @@
       "category": "娱乐和表演",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_video_game_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -11998,7 +11998,7 @@
       "category": "娱乐和表演",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_dancer_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -12119,7 +12119,7 @@
       "category": "娱乐和表演",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_comedy_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -12252,7 +12252,7 @@
       "category": "娱乐和表演",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_violin_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -12351,7 +12351,7 @@
       "category": "爱好和休闲",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_hobby_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -12406,7 +12406,7 @@
       "category": "爱好和休闲",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_cycling_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -12654,7 +12654,7 @@
       "category": "爱好和休闲",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_ice_skating_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -12797,7 +12797,7 @@
       "category": "爱好和休闲",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_surfing_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -12869,7 +12869,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_software_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -12880,7 +12880,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_by_post_prep_phr.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -12935,7 +12935,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_tablet_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -12968,7 +12968,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_download_n_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13023,7 +13023,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_online_adj_adv.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13034,7 +13034,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_password_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13150,7 +13150,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_web_page_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13249,7 +13249,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_app_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13260,7 +13260,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_blog_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13271,7 +13271,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_channel_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13282,7 +13282,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_chatroom_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13388,7 +13388,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_selfie_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13399,7 +13399,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_social_media_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13427,7 +13427,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_technology_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13455,7 +13455,7 @@
       "category": "通讯、网络和数码",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_wifi_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13554,7 +13554,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_badminton_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13802,7 +13802,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_table_tennis_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13945,7 +13945,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_ski_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13956,7 +13956,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_tennis_player_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -13967,7 +13967,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_skiing_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14022,7 +14022,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_snowboard_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14077,7 +14077,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_snowboarding_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14325,7 +14325,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_surf_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14353,7 +14353,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_surfboard_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14408,7 +14408,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_surfboarding_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14419,7 +14419,7 @@
       "category": "运动和比赛",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_windsurfing_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14496,7 +14496,7 @@
       "category": "建筑和公共地点",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_apartment_building_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14507,7 +14507,7 @@
       "category": "建筑和公共地点",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_department_store_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14733,7 +14733,7 @@
       "category": "建筑和公共地点",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_pharmacy_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14783,7 +14783,7 @@
       "category": "建筑和公共地点",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_grocery_store_n_am_eng.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14794,7 +14794,7 @@
       "category": "建筑和公共地点",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_post_office_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14805,7 +14805,7 @@
       "category": "建筑和公共地点",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_guest_house_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14816,7 +14816,7 @@
       "category": "建筑和公共地点",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_railway_station_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14827,7 +14827,7 @@
       "category": "建筑和公共地点",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_petrol_station_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14838,7 +14838,7 @@
       "category": "建筑和公共地点",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_restaurant_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -14937,7 +14937,7 @@
       "category": "城镇街道和城市",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_city_centre_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -15185,7 +15185,7 @@
       "category": "城镇街道和城市",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_roundabout_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -15323,7 +15323,7 @@
       "category": "城镇街道和城市",
       "difficulty": 1,
       "imagePath": "/content/images/words/ket_crossing_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": [
         {
           "level": 3,
@@ -15868,7 +15868,7 @@
       "category": "购物买东西",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_shop_assistant_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -15923,7 +15923,7 @@
       "category": "购物买东西",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_shopper_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -15956,7 +15956,7 @@
       "category": "购物买东西",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_credit_card_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -16028,7 +16028,7 @@
       "category": "购物买东西",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_customer_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -16166,7 +16166,7 @@
       "category": "购物买东西",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_dollar_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -16238,7 +16238,7 @@
       "category": "购物买东西",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_receipt_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -16249,7 +16249,7 @@
       "category": "购物买东西",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_discount_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -16458,7 +16458,7 @@
       "category": "动物和昆虫",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_butterfly_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -16921,7 +16921,7 @@
       "category": "动物和昆虫",
       "difficulty": 1,
       "imagePath": "/content/images/words/ket_lion_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": [
         {
           "level": 3,
@@ -17031,7 +17031,7 @@
       "category": "动物和昆虫",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_panda_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -17108,7 +17108,7 @@
       "category": "动物和昆虫",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_polar_bear_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -17417,7 +17417,7 @@
       "category": "动物和昆虫",
       "difficulty": 1,
       "imagePath": "/content/images/words/ket_zebra_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": [
         {
           "level": 3,
@@ -18028,7 +18028,7 @@
       "category": "自然世界",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_environment_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -18447,7 +18447,7 @@
       "category": "月份和星期",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_february_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -18673,7 +18673,7 @@
       "category": "月份和星期",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_september_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -18992,7 +18992,7 @@
       "category": "时间和日期",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_weekday_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -19113,7 +19113,7 @@
       "category": "时间和日期",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_weekly_adj_adv.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -19124,7 +19124,7 @@
       "category": "时间和日期",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_calendar_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -19240,7 +19240,7 @@
       "category": "时间和日期",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_working_hours_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -19466,7 +19466,7 @@
       "category": "时间和日期",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_monthly_adj_adv.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -19499,7 +19499,7 @@
       "category": "时间和日期",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_centimetre_centimeter_cm_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -19510,7 +19510,7 @@
       "category": "时间和日期",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_degree_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -19858,7 +19858,7 @@
       "category": "出行和交通",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_petrol_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -19935,7 +19935,7 @@
       "category": "出行和交通",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_tour_guide_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -20012,7 +20012,7 @@
       "category": "出行和交通",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_tourist_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -20045,7 +20045,7 @@
       "category": "出行和交通",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_tourist_information_centre_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -20166,7 +20166,7 @@
       "category": "出行和交通",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_traffic_light_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -20338,7 +20338,7 @@
       "category": "出行和交通",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_mechanic_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -20840,7 +20840,7 @@
       "category": "出行和交通",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_scooter_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -20851,7 +20851,7 @@
       "category": "出行和交通",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_sightseeing_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -20901,7 +20901,7 @@
       "category": "工作和职业",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_journalist_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -20912,7 +20912,7 @@
       "category": "工作和职业",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_secretary_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -21077,7 +21077,7 @@
       "category": "工作和职业",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_businessman_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -21088,7 +21088,7 @@
       "category": "工作和职业",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_businesswoman_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -21121,7 +21121,7 @@
       "category": "工作和职业",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_occupation_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -21264,7 +21264,7 @@
       "category": "工作和职业",
       "difficulty": 1,
       "imagePath": "/content/images/words/ket_guide_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": [
         {
           "level": 3,
@@ -21352,7 +21352,7 @@
       "category": "工作和职业",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_receptionist_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -21363,7 +21363,7 @@
       "category": "工作和职业",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_career_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -21374,7 +21374,7 @@
       "category": "工作和职业",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_department_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -21864,7 +21864,7 @@
       "category": "抽象概念和想法",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_identification_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -21941,7 +21941,7 @@
       "category": "抽象概念和想法",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_opinion_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -22150,7 +22150,7 @@
       "category": "抽象概念和想法",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_topic_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -22293,7 +22293,7 @@
       "category": "玩具、礼物和小物件",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_make_up_n.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -24973,7 +24973,7 @@
       "category": "介词和方向词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_minus_prep.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -25512,7 +25512,7 @@
       "category": "连词和句子连接词",
       "difficulty": 1,
       "imagePath": "/content/images/words/ket_or_conj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": [
         {
           "level": 3,
@@ -25600,7 +25600,7 @@
       "category": "感叹词和回应语",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_alright_adj_adv_exclam.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -25650,7 +25650,7 @@
       "category": "感叹词和回应语",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_good_afternoon_exclam.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -26988,7 +26988,7 @@
       "category": "方式和程度副词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_first_of_all_adv.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -27329,7 +27329,7 @@
       "category": "方式和程度副词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_outdoors_adv.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -27758,7 +27758,7 @@
       "category": "常用短语动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_break_down_phr_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -27791,7 +27791,7 @@
       "category": "常用短语动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_fill_in_phr_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -28066,7 +28066,7 @@
       "category": "常用短语动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_turn_off_phr_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -28077,7 +28077,7 @@
       "category": "常用短语动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_turn_on_phr_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -29107,7 +29107,7 @@
       "category": "常用动作动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_discover_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -29614,7 +29614,7 @@
       "category": "常用动作动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_give_back_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -29625,7 +29625,7 @@
       "category": "常用动作动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_give_somebody_a_call_ring_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -29680,7 +29680,7 @@
       "category": "常用动作动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_guess_what_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -30649,7 +30649,7 @@
       "category": "常用动作动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_repeat_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -31315,7 +31315,7 @@
       "category": "常用动作动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_upload_v.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -31541,7 +31541,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_attractive_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -31552,7 +31552,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_available_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -31607,7 +31607,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_blond_e_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -31904,7 +31904,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_extinct_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -32025,7 +32025,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_foreign_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -32168,7 +32168,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_good_looking_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -32179,7 +32179,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_half_price_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -32207,7 +32207,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_helpful_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -32428,7 +32428,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_left_hand_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -32615,7 +32615,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_musical_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -32648,7 +32648,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_natural_not_artificial_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -32957,7 +32957,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_relaxing_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -33293,7 +33293,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_striped_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {
@@ -33558,7 +33558,7 @@
       "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_well_known_adj.webp",
-      "imageApproved": false,
+      "imageApproved": true,
       "oxfordRefs": []
     },
     {

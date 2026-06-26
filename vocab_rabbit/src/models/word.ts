@@ -14,6 +14,8 @@ export interface WordRecord {
   imagePath: string;
   imageApproved: boolean;
   oxfordRefs: OxfordRef[];
+  example?: string;
+  examples?: string[];
 }
 
 export interface WordPayload {
