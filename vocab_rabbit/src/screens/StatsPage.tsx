@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
 import { HeatmapCalendar } from '../components/HeatmapCalendar';
+import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { ParentSetting } from '../models/parent-setting';
 import { createDefaultWordSelectionState, type WordSelectionState } from '../models/word-selection-state';
 import type { WordPayload, WordRecord } from '../models/word';
 import { APP_VERSION } from '../config/app-meta';
+import { summarizeAnswerEvents } from '../services/answer-event-service';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
 
 type StatsDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
@@ -15,11 +17,13 @@ interface StatsPageProps {
   task: DailyTaskSummary;
   recentTasks: DailyTaskSummary[];
   recordsById: Record<string, LearningRecord>;
+  answerEvents: AnswerEvent[];
   selectionById: Record<string, WordSelectionState>;
   setting: ParentSetting;
   onBackHome: () => void;
   onOpenSelection: () => void;
   onOpenSettings: () => void;
+  onPracticeWrongWords: () => void;
 }
 
 interface StatsDockButtonProps {
@@ -166,14 +170,18 @@ export function StatsPage({
   task,
   recentTasks,
   recordsById,
+  answerEvents,
   selectionById,
   setting,
   onBackHome,
   onOpenSelection,
   onOpenSettings,
+  onPracticeWrongWords,
 }: StatsPageProps) {
   const plannedCount = task.newWordIds.length + task.reviewWordIds.length;
   const reviewLoad = useMemo(() => estimateReviewLoad(recordsById, selectionById, setting), [recordsById, selectionById, setting]);
+  const wordsById = useMemo(() => new Map(payload.words.map((word) => [word.id, word])), [payload.words]);
+  const answerSummary = useMemo(() => summarizeAnswerEvents(answerEvents), [answerEvents]);
 
   const librarySummary = useMemo(() => {
     const bucketCounts = {
@@ -237,8 +245,10 @@ export function StatsPage({
   const recentSummary = useMemo(() => {
     const taskMap = new Map(recentTasks.map((recentTask) => [recentTask.dateKey, recentTask]));
     const completedTasks = recentTasks.filter((recentTask) => recentTask.completedAt);
-    const totalAnswered = recentTasks.reduce((sum, recentTask) => sum + recentTask.totalAnswered, 0);
-    const totalCorrect = recentTasks.reduce((sum, recentTask) => sum + recentTask.correctCount, 0);
+    const eventTotalAnswered = answerEvents.length;
+    const eventTotalCorrect = answerEvents.filter((event) => event.isCorrect).length;
+    const totalAnswered = eventTotalAnswered || recentTasks.reduce((sum, recentTask) => sum + recentTask.totalAnswered, 0);
+    const totalCorrect = eventTotalAnswered ? eventTotalCorrect : recentTasks.reduce((sum, recentTask) => sum + recentTask.correctCount, 0);
     const accuracy = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
 
     let completionStreak = 0;
@@ -262,7 +272,7 @@ export function StatsPage({
       completionStreak,
       recentRows,
     };
-  }, [recentTasks]);
+  }, [answerEvents, recentTasks]);
 
   const focusTitle = reviewLoad.riskLevel === '过高'
     ? '压力偏高'
@@ -290,6 +300,12 @@ export function StatsPage({
 
   const categoryMax = librarySummary.topCategories.length > 0 ? librarySummary.topCategories[0][1] : 1;
   const difficultyMax = Math.max(...librarySummary.difficultyData.map((d) => d.count), 1);
+  const topWrongWords = answerSummary.wrongWordRanking.slice(0, 6);
+  const questionKindLabels: Record<string, string> = {
+    'image-choice': '图片选择',
+    'text-choice': '文字选择',
+    'fill-blank': '拼写填空',
+  };
 
   return (
     <main className="page page--home page--stats">
@@ -456,6 +472,60 @@ export function StatsPage({
                   <HorizontalBar key={item.label} label={item.label} value={item.count} max={difficultyMax} color={item.color} />
                 ))}
               </div>
+            </div>
+          </section>
+        </section>
+
+        <section className="settings-panel-grid stats-panel-grid stats-panel-grid--events">
+          <section className="section-block settings-panel stats-panel">
+            <div className="section-block__header">
+              <h2>高频错词</h2>
+              <p>根据逐题答题记录统计。</p>
+            </div>
+            {topWrongWords.length > 0 ? (
+              <>
+                <ul className="stats-activity-list">
+                  {topWrongWords.map((item) => {
+                    const word = wordsById.get(item.wordId);
+                    return (
+                      <li key={item.wordId}>
+                        <span className="stats-activity__status">!</span>
+                        <span className="stats-activity__date">{word?.english ?? item.wordId}</span>
+                        <span className="stats-activity__detail">{word?.chinese ?? '未知单词'}</span>
+                        <span className="stats-activity__acc">错 {item.wrongCount}/{item.totalCount}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <button className="primary-button" type="button" onClick={onPracticeWrongWords}>
+                  练习高频错词
+                </button>
+                <button className="secondary-button" type="button" onClick={onOpenSelection}>
+                  去选词页调整
+                </button>
+              </>
+            ) : (
+              <p className="stats-inline-note">暂无错题记录。</p>
+            )}
+          </section>
+
+          <section className="section-block settings-panel stats-panel">
+            <div className="section-block__header">
+              <h2>题型正确率</h2>
+              <p>用于判断图片题、选择题和拼写题的难度。</p>
+            </div>
+            <div className="stats-coverage-bars">
+              {answerSummary.byQuestionKind.length > 0 ? answerSummary.byQuestionKind.map((item) => (
+                <HorizontalBar
+                  key={item.questionKind}
+                  label={`${questionKindLabels[item.questionKind] ?? item.questionKind} ${item.accuracy}%`}
+                  value={item.correctCount}
+                  max={item.totalCount}
+                  color={item.accuracy >= 80 ? '#66bb6a' : item.accuracy >= 50 ? '#ffa726' : '#ef5350'}
+                />
+              )) : (
+                <p className="stats-inline-note">完成几题后会显示题型趋势。</p>
+              )}
             </div>
           </section>
         </section>

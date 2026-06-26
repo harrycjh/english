@@ -1,9 +1,12 @@
+import type { AnswerEvent } from '../models/answer-event';
 import type { LearningRecord } from '../models/learning-record';
 import type { ParentSetting } from '../models/parent-setting';
 import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordRecord } from '../models/word';
 import { speakWord } from '../services/audio-service';
 import { AudioIconButton } from './AudioIconButton';
+import { getExampleSentences } from '../services/example-service';
+import { getWordAnswerStats } from '../services/answer-event-service';
 import { getOxfordRefLabels, getStudyText, getWordImageUrl } from '../services/word-service';
 
 export type WordDetailDrawerContext = 'review' | 'selection';
@@ -13,6 +16,7 @@ interface WordDetailDrawerProps {
   word: WordRecord | null;
   record: LearningRecord | undefined;
   selectionState: WordSelectionState | undefined;
+  answerEvents?: AnswerEvent[];
   setting: ParentSetting;
   context: WordDetailDrawerContext;
   onClose: () => void;
@@ -57,11 +61,19 @@ function getLearningLabel(record: LearningRecord | undefined): string {
   return '学习中';
 }
 
+function getQuestionKindLabel(questionKind: AnswerEvent['questionKind']): string {
+  if (questionKind === 'image-choice') return '图片选择';
+  if (questionKind === 'text-choice') return '文字选择';
+  if (questionKind === 'fill-blank') return '拼写填空';
+  return questionKind;
+}
+
 export function WordDetailDrawer({
   isOpen,
   word,
   record,
   selectionState,
+  answerEvents = [],
   setting,
   context,
   onClose,
@@ -73,6 +85,8 @@ export function WordDetailDrawer({
   }
 
   const oxfordLabels = getOxfordRefLabels(word, 2);
+  const exampleSentences = getExampleSentences(word);
+  const answerStats = getWordAnswerStats(answerEvents, word.id);
   const isEnabled = selectionState ? selectionState.isEnabled : true;
   const isPaused = selectionState?.isPaused ?? false;
 
@@ -128,6 +142,15 @@ export function WordDetailDrawer({
         </section>
 
         <section className="word-detail-drawer__panel">
+          <h3>例句</h3>
+          <ul className="word-detail-drawer__list">
+            {exampleSentences.map((example) => (
+              <li key={example}>{example}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="word-detail-drawer__panel">
           <h3>学习状态</h3>
           <div className="word-detail-drawer__stats">
             <article>
@@ -147,6 +170,43 @@ export function WordDetailDrawer({
               <strong>{formatDateTime(record?.nextDueAt ?? null)}</strong>
             </article>
           </div>
+        </section>
+
+        <section className="word-detail-drawer__panel">
+          <h3>答题记录</h3>
+          <div className="word-detail-drawer__stats">
+            <article>
+              <span>累计作答</span>
+              <strong>{answerStats.totalCount}</strong>
+            </article>
+            <article>
+              <span>正确率</span>
+              <strong>{answerStats.totalCount > 0 ? `${answerStats.accuracy}%` : '--'}</strong>
+            </article>
+            <article>
+              <span>答错次数</span>
+              <strong>{answerStats.wrongCount}</strong>
+            </article>
+            <article>
+              <span>答对次数</span>
+              <strong>{answerStats.correctCount}</strong>
+            </article>
+          </div>
+          {answerStats.recentEvents.length > 0 ? (
+            <ul className="word-detail-drawer__answer-list">
+              {answerStats.recentEvents.map((event) => (
+                <li key={event.id} className={event.isCorrect ? 'is-correct' : 'is-wrong'}>
+                  <span>{event.isCorrect ? '正确' : '错误'}</span>
+                  <strong>{getQuestionKindLabel(event.questionKind)}</strong>
+                  <small>
+                    {formatDateTime(event.answeredAt)} · 选 {event.selectedAnswer || '空'} · 答 {event.correctAnswer}
+                  </small>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>暂无逐题记录。</p>
+          )}
         </section>
 
         {onToggleEnabled ? (

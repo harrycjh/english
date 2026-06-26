@@ -1,4 +1,5 @@
 import { type CSSProperties, type ReactNode, useState } from 'react';
+import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { ParentSetting } from '../models/parent-setting';
@@ -448,6 +449,7 @@ interface ReviewPageProps {
   setting: ParentSetting;
   recordsById: Record<string, LearningRecord>;
   selectionById: Record<string, WordSelectionState>;
+  answerEvents: AnswerEvent[];
   masteredCount: number;
   recentTasks: DailyTaskSummary[];
   previewWords: WordPayload['words'];
@@ -464,6 +466,7 @@ export function ReviewPage({
   setting,
   recordsById,
   selectionById,
+  answerEvents,
   masteredCount,
   recentTasks,
   previewWords,
@@ -766,6 +769,7 @@ export function ReviewPage({
         word={selectedWord}
         record={selectedWordRecord}
         selectionState={selectedWordSelectionState}
+        answerEvents={answerEvents}
         setting={setting}
         context="review"
         onClose={() => setSelectedWordId(null)}

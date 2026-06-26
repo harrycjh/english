@@ -78,6 +78,22 @@ export function buildDailyTask(
     reviewWordIds: dueReviewWordIds,
     completedAt: null,
     correctCount: 0,
+    wrongCount: 0,
     totalAnswered: 0,
+    answeredWordIds: [],
+  };
+}
+
+export function recordTaskAnswer(task: DailyTaskSummary, isCorrect: boolean, wordId?: string): DailyTaskSummary {
+  const answeredWordIds = wordId && !task.answeredWordIds.includes(wordId)
+    ? [...task.answeredWordIds, wordId]
+    : task.answeredWordIds;
+
+  return {
+    ...task,
+    correctCount: task.correctCount + (isCorrect ? 1 : 0),
+    wrongCount: task.wrongCount + (isCorrect ? 0 : 1),
+    totalAnswered: task.totalAnswered + 1,
+    answeredWordIds,
   };
 }

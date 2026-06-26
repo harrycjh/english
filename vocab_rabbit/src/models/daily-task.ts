@@ -4,7 +4,9 @@ export interface DailyTaskSummary {
   reviewWordIds: string[];
   completedAt: string | null;
   correctCount: number;
+  wrongCount: number;
   totalAnswered: number;
+  answeredWordIds: string[];
 }
 
 export interface SessionResult {

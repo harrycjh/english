@@ -1,4 +1,5 @@
 import { startTransition, useEffect, useMemo, useState } from 'react';
+import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary, SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { ParentSetting } from '../models/parent-setting';
@@ -11,22 +12,28 @@ import { LearningPage } from '../screens/LearningPage';
 import { SelectionPage } from '../screens/SelectionPage';
 import { StatsPage } from '../screens/StatsPage';
 import { SettingsPage } from '../screens/SettingsPage';
-import { buildDailyTask, createDateKey } from '../services/task-service';
+import { buildDailyTask, createDateKey, recordTaskAnswer } from '../services/task-service';
+import { getWrongPracticeWordIds } from '../services/answer-event-service';
 import { ensureSelectionStateMap } from '../services/selection-service';
 import { createEmptyRecord, evaluateAnswer, isMastered } from '../services/spaced-repetition';
 import {
   clearStudyData,
   getDailyTask,
   getParentSetting,
+  listAnswerEvents,
+  listDailyTasks,
   listLearningRecords,
   listRecentTasks,
   listWordSelectionStates,
+  saveAnswerEvent,
   saveDailyTask,
   saveLearningRecord,
   saveParentSetting,
   saveWordSelectionStates,
 } from '../services/storage-service';
+import { buildStudyDataExport, downloadJsonFile } from '../services/study-data-export';
 import { loadWordPayload } from '../services/word-service';
+import { APP_VERSION } from '../config/app-meta';
 
 function getPreviewWords(payload: WordPayload | null, task: DailyTaskSummary | null) {
   if (!payload || !task) {
@@ -52,9 +59,11 @@ export default function App() {
   const [route, setRoute] = useState<AppRoute>('home');
   const [payload, setPayload] = useState<WordPayload | null>(null);
   const [recordsById, setRecordsById] = useState<Record<string, LearningRecord>>({});
+  const [answerEvents, setAnswerEvents] = useState<AnswerEvent[]>([]);
   const [selectionById, setSelectionById] = useState<Record<string, WordSelectionState>>({});
   const [parentSetting, setParentSetting] = useState<ParentSetting | null>(null);
   const [task, setTask] = useState<DailyTaskSummary | null>(null);
+  const [practiceWordIds, setPracticeWordIds] = useState<string[] | null>(null);
   const [recentTasks, setRecentTasks] = useState<DailyTaskSummary[]>([]);
   const [sessionResult, setSessionResult] = useState<SessionResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -66,11 +75,12 @@ export default function App() {
     async function bootstrap() {
       try {
         setLoading(true);
-        const [payloadValue, savedRecords, savedSetting, savedSelection] = await Promise.all([
+        const [payloadValue, savedRecords, savedSetting, savedSelection, savedAnswerEvents] = await Promise.all([
           loadWordPayload(),
           listLearningRecords(),
           getParentSetting(),
           listWordSelectionStates(),
+          listAnswerEvents(500),
         ]);
         const todayKey = createDateKey();
         const { nextSelectionById, missingStates } = ensureSelectionStateMap(payloadValue.words, savedSelection);
@@ -90,6 +100,7 @@ export default function App() {
         if (!cancelled) {
           setPayload(payloadValue);
           setRecordsById(savedRecords);
+          setAnswerEvents(savedAnswerEvents);
           setSelectionById(nextSelectionById);
           setParentSetting(savedSetting);
           setTask(todayTask);
@@ -171,13 +182,25 @@ export default function App() {
     await refreshRecentTasks();
   }
 
-  async function handleAnswer(wordId: string, isCorrect: boolean) {
-    const currentRecord = recordsById[wordId] ?? createEmptyRecord(wordId);
-    const nextRecord = evaluateAnswer(currentRecord, isCorrect, new Date());
-    await saveLearningRecord(nextRecord);
+  async function handleAnswer(event: AnswerEvent) {
+    const currentRecord = recordsById[event.wordId] ?? createEmptyRecord(event.wordId);
+    const nextRecord = evaluateAnswer(currentRecord, event.isCorrect, new Date(event.answeredAt));
+    await Promise.all([
+      saveLearningRecord(nextRecord),
+      saveAnswerEvent(event),
+    ]);
+    setAnswerEvents((previous) => [...previous.slice(-499), event]);
+
+    if (!practiceWordIds && task && !task.completedAt) {
+      const nextTask = recordTaskAnswer(task, event.isCorrect, event.wordId);
+      await saveDailyTask(nextTask);
+      setTask(nextTask);
+      await refreshRecentTasks();
+    }
+
     setRecordsById((previous) => ({
       ...previous,
-      [wordId]: nextRecord,
+      [event.wordId]: nextRecord,
     }));
   }
 
@@ -186,11 +209,20 @@ export default function App() {
       return;
     }
 
+    if (practiceWordIds) {
+      setPracticeWordIds(null);
+      setSessionResult(result);
+      startTransition(() => setRoute('complete'));
+      return;
+    }
+
     const completedTask: DailyTaskSummary = {
       ...task,
       completedAt: new Date().toISOString(),
       correctCount: result.correctCount,
+      wrongCount: result.wrongCount,
       totalAnswered: result.totalAnswered,
+      answeredWordIds: [...new Set([...task.answeredWordIds, ...task.newWordIds, ...task.reviewWordIds])],
     };
 
     await saveDailyTask(completedTask);
@@ -201,6 +233,22 @@ export default function App() {
   }
 
   function handleStart() {
+    setPracticeWordIds(null);
+    startTransition(() => setRoute('learning'));
+  }
+
+  function handlePracticeWrongWords() {
+    if (!payload) {
+      return;
+    }
+
+    const validWordIds = new Set(payload.words.map((word) => word.id));
+    const nextPracticeWordIds = getWrongPracticeWordIds(answerEvents, 10).filter((wordId) => validWordIds.has(wordId));
+    if (nextPracticeWordIds.length === 0) {
+      return;
+    }
+
+    setPracticeWordIds(nextPracticeWordIds);
     startTransition(() => setRoute('learning'));
   }
 
@@ -217,6 +265,7 @@ export default function App() {
   }
 
   function handleBackHome() {
+    setPracticeWordIds(null);
     startTransition(() => setRoute('home'));
   }
 
@@ -265,10 +314,35 @@ export default function App() {
     await saveDailyTask(nextTask);
 
     setRecordsById(nextRecords);
+    setAnswerEvents([]);
     setTask(nextTask);
     setSessionResult(null);
     await refreshRecentTasks();
     startTransition(() => setRoute('home'));
+  }
+
+  async function handleExportStudyData() {
+    if (!parentSetting) {
+      return;
+    }
+
+    const [learningRecordMap, dailyTasks, wordSelectionMap, answerEvents] = await Promise.all([
+      listLearningRecords(),
+      listDailyTasks(),
+      listWordSelectionStates(),
+      listAnswerEvents(),
+    ]);
+    const exportedAt = new Date().toISOString();
+    const exportPayload = buildStudyDataExport({
+      exportedAt,
+      appVersion: APP_VERSION,
+      learningRecords: Object.values(learningRecordMap),
+      dailyTasks,
+      parentSetting,
+      wordSelectionStates: Object.values(wordSelectionMap),
+      answerEvents,
+    });
+    downloadJsonFile(`vocab-rabbit-study-data-${exportedAt.slice(0, 10)}.json`, exportPayload);
   }
 
   function renderCurrentRoute() {
@@ -295,10 +369,14 @@ export default function App() {
     }
 
     if (route === 'learning') {
+      const dailyWordIds = [...task.newWordIds, ...task.reviewWordIds];
+      const remainingDailyWordIds = task.completedAt
+        ? dailyWordIds
+        : dailyWordIds.filter((wordId) => !task.answeredWordIds.includes(wordId));
       return (
         <LearningPage
           payload={payload}
-          initialWordIds={[...task.newWordIds, ...task.reviewWordIds]}
+          initialWordIds={practiceWordIds ?? remainingDailyWordIds}
           recordsById={recordsById}
           setting={parentSetting}
           onAnswer={handleAnswer}
@@ -321,6 +399,7 @@ export default function App() {
           onOpenSelection={handleOpenSelection}
           onOpenStats={handleOpenStats}
           onUpdateSettings={handleUpdateSetting}
+          onExportStudyData={handleExportStudyData}
           onResetTodayTask={handleResetTodayTask}
           onResetLearningProgress={handleResetLearningProgress}
         />
@@ -334,11 +413,13 @@ export default function App() {
           task={task}
           recentTasks={recentTasks}
           recordsById={recordsById}
+          answerEvents={answerEvents}
           selectionById={selectionById}
           setting={parentSetting}
           onBackHome={handleBackHome}
           onOpenSelection={handleOpenSelection}
           onOpenSettings={handleOpenSettings}
+          onPracticeWrongWords={handlePracticeWrongWords}
         />
       );
     }
@@ -349,6 +430,7 @@ export default function App() {
           payload={payload}
           recordsById={recordsById}
           selectionById={selectionById}
+          answerEvents={answerEvents}
           setting={parentSetting}
           task={task}
           onBackHome={handleBackHome}
@@ -367,6 +449,7 @@ export default function App() {
         setting={parentSetting}
         recordsById={recordsById}
         selectionById={selectionById}
+        answerEvents={answerEvents}
         masteredCount={masteredCount}
         recentTasks={recentTasks}
         previewWords={previewWords}
