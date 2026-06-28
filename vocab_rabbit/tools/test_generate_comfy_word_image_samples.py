@@ -101,6 +101,62 @@ class FamilyPromptTests(unittest.TestCase):
             MODULE.build_prompt(next(word for word in words if word["id"] == "ket_dvd_n")),
         )
 
+    def test_every_identity_word_has_a_dedicated_visual_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        identity_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "人物身份和称呼"
+        }
+
+        self.assertEqual(identity_ids, set(MODULE.IDENTITY_SCENES))
+        self.assertIn(
+            "pointing to themselves",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_name_n")),
+        )
+
+    def test_every_month_and_weekday_has_a_text_free_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        calendar_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "月份和星期"
+        }
+
+        self.assertEqual(calendar_ids, set(MODULE.CALENDAR_SCENES))
+        for word in words:
+            if word["id"] in calendar_ids:
+                prompt = MODULE.build_prompt(word).lower()
+                self.assertNotIn("calendar", prompt)
+                self.assertIn("no writing", prompt)
+
+    def test_number_scenes_use_quantities_instead_of_written_digits(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        number_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "数字和顺序词"
+        }
+
+        self.assertEqual(number_ids, set(MODULE.NUMBER_SCENES))
+        for word in words:
+            if word["id"] in number_ids:
+                self.assertIn("no written numbers", MODULE.build_prompt(word))
+
+    def test_every_countryside_place_has_a_dedicated_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        place_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "乡村和自然地点"
+        }
+
+        self.assertEqual(place_ids, set(MODULE.NATURAL_PLACE_SCENES))
+        self.assertIn(
+            "small woodland",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_wood_n")),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

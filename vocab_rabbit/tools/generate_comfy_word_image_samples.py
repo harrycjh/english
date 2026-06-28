@@ -129,6 +129,67 @@ ELECTRONICS_SCENES = {
     "ket_equipment_n": "a neatly arranged set of useful equipment: camera, tripod, headphones, lamp, and small toolkit",
 }
 
+IDENTITY_SCENES = {
+    "ket_boyfriend_n": "a wholesome teenage boy and girl walking together affectionately in a sunny park",
+    "ket_business_person_n": "one professional adult in business clothes carrying a briefcase in a modern office lobby",
+    "ket_celebrity_n": "a famous friendly performer waving to an excited crowd, with cameras but no banners or writing",
+    "ket_colleague_n": "two adult coworkers happily working together at neighboring desks with blank screens and papers",
+    "ket_first_name_n": "two children meeting for the first time and politely pointing to themselves while smiling",
+    "ket_girlfriend_n": "a wholesome teenage girl and boy walking together affectionately in a sunny park",
+    "ket_headteacher_n": "a school principal welcoming children at the entrance of a school with blank walls",
+    "ket_housewife_n": "an adult woman managing a home, folding clean laundry beside a basket in a cozy room",
+    "ket_man_n": "one friendly adult man standing outdoors in simple everyday clothes",
+    "ket_name_n": "two children greeting each other and pointing to themselves as they introduce who they are",
+    "ket_nationality_n": "a diverse group of people from different countries standing together with plain colorful flags and no symbols",
+}
+
+CALENDAR_SCENES = {
+    "ket_april_n": "a child walking under an umbrella through gentle spring rain and fresh green buds, no writing",
+    "ket_august_n": "a very hot late-summer beach day with bright sun, swimming, and watermelon, no writing",
+    "ket_december_n": "a snowy winter evening with a decorated evergreen tree and warm lights, no writing",
+    "ket_february_n": "a cozy winter scene with snow, warm clothes, and simple heart decorations, no writing",
+    "ket_friday_n": "schoolchildren happily leaving school at the end of the school week, no writing",
+    "ket_january_n": "a fresh snowy winter morning with a child building a snowman, no writing",
+    "ket_july_n": "a bright midsummer day with children swimming and playing on a beach, no writing",
+    "ket_june_n": "an early-summer picnic in a sunny green park full of flowers, no writing",
+    "ket_march_n": "the first spring buds opening as the last small patches of snow melt, no writing",
+    "ket_may_n": "a warm spring garden overflowing with colorful flowers and butterflies, no writing",
+    "ket_monday_n": "a child starting the school week by arriving at school with a backpack, no writing",
+    "ket_november_n": "a cool late-autumn day with bare trees, a warm coat, and fallen leaves, no writing",
+    "ket_october_n": "an autumn scene with orange leaves, pumpkins, and children in light jackets, no writing",
+    "ket_saturday_n": "a family enjoying a relaxed daytime outing together in a park, no writing",
+    "ket_september_n": "children returning to school in early autumn with backpacks and falling leaves, no writing",
+    "ket_sunday_n": "a family enjoying a slow relaxing breakfast together at home, no writing",
+    "ket_thursday_n": "schoolchildren doing a music activity near the end of the school week, no writing",
+    "ket_tuesday_n": "schoolchildren doing an art activity on the second school day, no writing or numbers",
+    "ket_wednesday_n": "schoolchildren enjoying a midweek sports activity in the school playground, no writing",
+}
+
+NUMBER_SCENES = {
+    "ket_first_adv_adj": "one runner crossing the finish line clearly ahead of two runners behind, no written numbers",
+    "ket_one_det_pron": "one single red apple alone in the center of a plain table, no written numbers",
+    "ket_zero_n": "an open empty basket with nothing inside, clearly showing none remaining, no written numbers",
+}
+
+NATURAL_PLACE_SCENES = {
+    "ket_area_n": "a broad outdoor area containing a meadow, a few trees, and a small pond viewed from above",
+    "ket_forest_n": "a dense green forest filled with many tall trees and a narrow natural trail",
+    "ket_ocean_n": "a vast blue ocean stretching to the horizon with gentle waves",
+    "ket_hill_n": "one rounded green hill rising clearly above a flat meadow",
+    "ket_path_n": "a narrow winding footpath leading through grass and trees",
+    "ket_sky_n": "a wide bright blue sky with a few soft white clouds above a low horizon",
+    "ket_island_n": "one small tropical island surrounded completely by blue sea",
+    "ket_village_n": "a small country village with a few houses, trees, and a quiet lane",
+    "ket_farm_n": "a countryside farm with a barn, crop field, tractor, and a few animals",
+    "ket_lake_n": "a calm blue lake surrounded by green hills and trees",
+    "ket_rainforest_n": "a lush tropical rainforest with dense broad leaves, vines, and tall trees",
+    "ket_wood_n": "a small woodland made of many trees with a walking trail between them",
+    "ket_field_n": "a wide open green field bordered by a simple fence and distant trees",
+    "ket_mountain_n": "one tall rocky mountain with a snow-covered peak above a valley",
+    "ket_river_n": "a flowing blue river winding through green countryside",
+    "ket_coast_n": "a clear coastline where rocky green land meets the blue sea",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -382,7 +443,22 @@ def build_prompt(word: dict[str, Any]) -> str:
             word["id"],
             WEATHER_SCENES.get(
                 word["id"],
-                ELECTRONICS_SCENES.get(word["id"], scene_hints.get(english, fallback_scene)),
+                ELECTRONICS_SCENES.get(
+                    word["id"],
+                    IDENTITY_SCENES.get(
+                        word["id"],
+                        CALENDAR_SCENES.get(
+                            word["id"],
+                            NUMBER_SCENES.get(
+                                word["id"],
+                                NATURAL_PLACE_SCENES.get(
+                                    word["id"],
+                                    scene_hints.get(english, fallback_scene),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
             ),
         ),
     )
