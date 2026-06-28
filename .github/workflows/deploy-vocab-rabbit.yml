@@ -39,6 +39,8 @@ jobs:
 
       - name: Build app
         working-directory: vocab_rabbit
+        env:
+          VITE_CONTENT_VERSION: ${{ github.sha }}
         run: npm run build
 
       - name: Upload Pages artifact

@@ -24,6 +24,157 @@ WORKFLOW_TEMPLATE_PATH = Path(
 COMFY_OUTPUT_ROOT = Path("/Users/chujianhe/ComfyUI-Shared/output")
 DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "design-output/word-image-generation"
 
+FAMILY_SCENES = {
+    "ket_aunt_n": "an adult woman smiling beside her niece and nephew at a family picnic",
+    "ket_girl_n": "one cheerful school-age girl standing outdoors",
+    "ket_group_n": "a small group of five diverse children standing together",
+    "ket_mum_n_br_eng": "a mother hugging her child in a cozy home",
+    "ket_boy_n": "one cheerful school-age boy standing outdoors",
+    "ket_grandchild_n": "a young child happily sitting between two grandparents",
+    "ket_guest_n": "a friendly visitor being welcomed through the front door of a home",
+    "ket_neighbour_n": "two families greeting each other across the low fence between their homes",
+    "ket_brother_n": "two boys of different ages standing together as brothers",
+    "ket_grand_d_ad_n": "a kind elderly grandfather walking hand in hand with his grandchild",
+    "ket_guy_n": "one friendly young adult man in casual clothes",
+    "ket_parent_n": "one caring parent holding a young child's hand",
+    "ket_child_n": "one happy young child playing with wooden blocks",
+    "ket_granddaughter_n": "a young girl hugging her grandmother",
+    "ket_husband_n": "a married adult man standing affectionately beside his wife",
+    "ket_penfriend_n": "two children in different homes exchanging plain sealed envelopes through mailboxes",
+    "ket_cousin_n": "two children from an extended family playing together at a family picnic",
+    "ket_grandfather_n": "a kind elderly grandfather reading a picture book with his grandchild, all pages blank",
+    "ket_love_n_v": "a parent and child sharing a warm affectionate hug, with a small simple heart shape nearby",
+    "ket_sister_n": "two girls of different ages standing together as sisters",
+    "ket_dad_n": "a father hugging his child in a cozy home",
+    "ket_grandma_n": "a kind elderly grandmother baking with her grandchild in a cozy kitchen",
+    "ket_married_adj": "a happy married couple wearing plain wedding rings and holding hands",
+    "ket_son_n": "a father and mother proudly standing beside their young son",
+    "ket_daughter_n": "a father and mother proudly standing beside their young daughter",
+    "ket_grandmother_n": "a kind elderly grandmother reading a picture book with her grandchild, all pages blank",
+    "ket_miss_n": "a friendly unmarried woman teacher being politely greeted by two schoolchildren outdoors",
+    "ket_miss_v": "a child arriving too late with a school bus pulling away in the distance",
+    "ket_surname_n": "three generations of one family posing together for a family portrait",
+    "ket_family_n": "a happy family of two parents and two children together at home",
+    "ket_grandpa_n": "a kind elderly grandfather gardening with his grandchild",
+    "ket_mother_n": "a mother caring for her young child at home",
+    "ket_teenager_n": "one cheerful teenage student wearing a backpack outdoors",
+    "ket_father_n": "a father caring for his young child at home",
+    "ket_grandparent_n": "a grandmother and grandfather together with one grandchild",
+    "ket_mr_n": "a polite adult man in everyday clothes being greeted by two schoolchildren outdoors",
+    "ket_uncle_n": "an adult man smiling beside his niece and nephew at a family picnic",
+    "ket_friend_n": "two children smiling and playing together as close friends",
+    "ket_grandson_n": "a young boy hugging his grandfather",
+    "ket_mrs_n": "a married adult woman wearing a plain wedding ring and greeting two neighbours",
+    "ket_wife_n": "a married adult woman standing affectionately beside her husband",
+    "ket_friendly_adj": "a smiling child warmly welcoming a new child into a playground game",
+    "ket_granny_n": "a kind elderly grandmother knitting beside her grandchild",
+    "ket_ms_n": "a confident adult woman being politely greeted by two coworkers",
+    "ket_kid_s_n": "three happy young children playing together with a ball outdoors",
+}
+
+COLOR_SCENES = {
+    "ket_black_adj_n": "three clearly black objects on a light background: a hat, an umbrella, and a pair of boots",
+    "ket_golden_adj": "three shiny golden objects on a light background: a star, a ribbon, and a small bell",
+    "ket_orange_adj_n": "three clearly orange-colored objects on a light background: a balloon, a scarf, and a cup, with no fruit",
+    "ket_red_adj": "three clearly red objects on a light background: a balloon, an apple, and a toy car",
+    "ket_blue_adj_n": "three clearly blue objects on a light background: a balloon, a cup, and a toy boat",
+    "ket_green_adj": "three clearly green objects on a light background: a leaf, a ball, and a rain boot",
+    "ket_pale_adj": "a washed-out pale pink scarf beside an otherwise identical vivid deep pink scarf, with the pale scarf larger and emphasized",
+    "ket_silver_n_adj": "three shiny silver-colored objects on a light background: a spoon, a bracelet, and a small bell",
+    "ket_brown_adj_n": "three clearly brown objects on a light background: a teddy bear, a boot, and a wooden bowl",
+    "ket_pink_adj": "three clearly pink objects on a light background: a balloon, a flower, and a rain boot",
+    "ket_white_adj": "three clearly white objects on a blue background: a feather, a snowball, and a cloud-shaped cushion",
+    "ket_dark_adj": "two blue umbrellas side by side, one light blue and one very dark blue, with the dark umbrella larger and emphasized",
+    "ket_purple_adj": "three clearly purple objects on a light background: a balloon, a flower, and a cup",
+    "ket_yellow_adj": "three clearly yellow objects on a light background: a balloon, a rain boot, and a toy car",
+}
+
+WEATHER_SCENES = {
+    "ket_cloud_n": "one large soft white cloud floating in a clear blue sky",
+    "ket_sun_n": "a large bright sun shining alone in a clear sky above a green field",
+    "ket_wet_adj": "a red raincoat and pair of rain boots dripping with water beside a shiny puddle",
+    "ket_cloudy_adj": "a town under a sky completely covered with many grey clouds",
+    "ket_sunny_adj": "children playing in a bright park under strong warm sunshine and a clear blue sky",
+    "ket_wind_n": "a strong gust of wind visibly blowing leaves, a scarf, and tree branches sideways",
+    "ket_rain_n_v": "heavy raindrops falling from a dark cloud onto an open umbrella and puddles",
+    "ket_thunderstorm_n": "dark storm clouds with bright lightning and heavy rain over a distant town",
+    "ket_windy_adj": "a child holding a hat while strong wind bends a tree and blows leaves sideways",
+    "ket_fog_n": "thick white fog covering a quiet road and partly hiding distant trees",
+    "ket_snow_n_v": "large snowflakes falling over a small house and snow-covered trees",
+    "ket_warm_adj": "a comfortable child enjoying gentle sunshine in a light sweater on a mild spring day",
+    "ket_foggy_adj": "a person walking carefully through a town street filled with thick pale fog",
+    "ket_storm_n": "powerful dark clouds, strong wind, and heavy rain bending trees in an open landscape",
+    "ket_weather_n": "one broad landscape under a changing sky containing sunshine, clouds, rain, wind, and snow",
+}
+
+ELECTRONICS_SCENES = {
+    "ket_camera_n": "one simple modern camera with a large lens on a plain surface, no brand or writing",
+    "ket_laptop_computer_n": "one open laptop computer with a completely blank blue screen on a desk",
+    "ket_radio_n": "one small portable radio with a speaker, antenna, and plain knobs, no labels or numbers",
+    "ket_cd_player_n": "a compact disc player playing a shiny blank disc, with small music notes nearby",
+    "ket_electric_adj": "a desk lamp connected by a visible cable to a wall outlet and glowing brightly",
+    "ket_telephone_n_v": "one classic landline telephone with a handset and plain buttons, no numbers",
+    "ket_cell_phone_n": "one modern cell phone with a completely blank screen on a plain surface",
+    "ket_electricity_n": "a small battery safely connected to a glowing light bulb by two visible wires",
+    "ket_mobile_phone_n": "one modern mobile phone held in a hand, with a completely blank screen",
+    "ket_television_tv_n": "one television showing a simple nature picture with no words, logos, or interface",
+    "ket_video_n": "a small video camera filming a bouncing ball, beside three simple sequential picture frames with no text",
+    "ket_pc_personal_computer_n": "a desktop personal computer with monitor, keyboard, and mouse, all surfaces blank",
+    "ket_washing_machine_n": "one front-loading washing machine with colorful clothes visible inside, no labels",
+    "ket_phone_v_n": "a child happily talking to a friend on a plain telephone, with no screen text",
+    "ket_digital_camera_n": "one compact digital camera with a large lens and completely blank rear screen",
+    "ket_battery_n": "two plain household batteries beside a small glowing flashlight, with no labels or symbols",
+    "ket_cd_n": "one shiny blank compact disc beside headphones and floating music notes",
+    "ket_dvd_n": "one shiny blank video disc beside a plain film reel, a small media player, and a bowl of popcorn",
+    "ket_equipment_n": "a neatly arranged set of useful equipment: camera, tripod, headphones, lamp, and small toolkit",
+}
+
+CATEGORY_CONTEXTS = {
+    "动物和昆虫": "animals and insects",
+    "颜色": "colors and shades",
+    "食物和饮料": "food and drinks",
+    "房子和家具": "homes and furniture",
+    "衣服和配饰": "clothing and accessories",
+    "身体、健康和锻炼": "the human body, health, and exercise",
+    "运动和比赛": "sports and games",
+    "出行和交通": "travel and transport",
+    "自然世界": "the natural world",
+    "天气": "weather",
+    "玩具、礼物和小物件": "toys, gifts, and small objects",
+    "家用电器和电子设备": "home appliances and electronic devices",
+    "建筑和公共地点": "buildings and public places",
+    "城镇街道和城市": "towns, streets, and cities",
+    "乡村和自然地点": "the countryside and natural places",
+    "工作和职业": "jobs and occupations",
+    "人物身份和称呼": "people, identities, and forms of address",
+    "家人和朋友": "family and friends",
+    "学校和学习": "school and learning",
+    "娱乐和表演": "entertainment and performance",
+    "爱好和休闲": "hobbies and leisure",
+    "购物买东西": "shopping and buying things",
+    "通讯、网络和数码": "communication, the internet, and digital technology",
+    "书本、证件和文字": "books, documents, and writing",
+    "月份和星期": "months and days of the week",
+    "时间和日期": "time and dates",
+    "常用动作动词": "common physical actions",
+    "说话和思考动词": "speaking and thinking actions",
+    "常用短语动词": "common phrasal actions",
+    "常见形容词": "common descriptive qualities",
+    "感受和性格": "feelings and personality",
+    "方式和程度副词": "ways and degrees of doing things",
+    "时间和频率副词": "time and frequency",
+    "介词和方向词": "positions and directions",
+    "人称和指代词": "people and reference words",
+    "冠词和限定词": "quantity and reference",
+    "连词和句子连接词": "choices, causes, and connected events",
+    "情态动词和语气": "ability, permission, obligation, and possibility",
+    "感叹词和回应语": "greetings, reactions, and responses",
+    "数量和多少": "quantities and amounts",
+    "数字和顺序词": "numbers and order",
+    "抽象概念和想法": "ideas and abstract concepts",
+    "其他常用词": "everyday situations",
+}
+
 
 def post_json(url: str, payload: dict[str, Any]) -> dict[str, Any]:
     data = json.dumps(payload).encode("utf-8")
@@ -210,9 +361,31 @@ def build_prompt(word: dict[str, Any]) -> str:
         "first of all": "a child placing the first wooden block on a table, no numbers, no labels",
         "give back": "a child returning a toy to a friend, plain background, no speech bubble",
         "attractive": "a neat colorful garden scene with flowers and sunlight, no people holding signs",
+        "animal": "a dog, rabbit, and small bird standing together on grass",
+        "creature": "three very different living creatures together: a small mammal, a bird, and an insect",
+        "insect": "three clearly different insects on leaves: a beetle, a butterfly, and a ladybird",
+        "nest": "a bird nest made of twigs resting securely in a tree branch, with three plain eggs",
+        "pet": "a happy child gently caring for a friendly dog and cat at home",
+        "tail": "a side view of a friendly cat whose long curved tail is clearly visible and is the visual focus",
+        "wildlife": "several wild animals living freely in a natural meadow and woodland habitat",
+        "wing": "a close side view of a bird with one fully spread feathered wing as the visual focus",
     }
     scene_hints.update(strict_scenes)
-    scene = scene_hints.get(english, f"a simple real-life scene that clearly represents {english}")
+    category_context = CATEGORY_CONTEXTS.get(word.get("category", ""), "an everyday situation")
+    fallback_scene = (
+        f"a simple real-life scene that clearly represents {english}, "
+        f"specifically in the context of {category_context}"
+    )
+    scene = FAMILY_SCENES.get(
+        word["id"],
+        COLOR_SCENES.get(
+            word["id"],
+            WEATHER_SCENES.get(
+                word["id"],
+                ELECTRONICS_SCENES.get(word["id"], scene_hints.get(english, fallback_scene)),
+            ),
+        ),
+    )
     return (
         f"Create a standalone storybook illustration: {scene}. "
         "Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. "

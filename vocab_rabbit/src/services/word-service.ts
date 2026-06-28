@@ -1,10 +1,10 @@
 import type { OxfordRef, WordPayload, WordRecord } from '../models/word';
-import { APP_VERSION } from '../config/app-meta';
+import { CONTENT_VERSION } from '../config/app-meta';
 
 let payloadPromise: Promise<WordPayload> | null = null;
 
 export function getWordPayloadUrl(): string {
-  return `${import.meta.env.BASE_URL}content/words/ket_vocabulary.json?v=${APP_VERSION}`;
+  return `${import.meta.env.BASE_URL}content/words/ket_vocabulary.json?v=${CONTENT_VERSION}`;
 }
 
 export async function loadWordPayload(): Promise<WordPayload> {
@@ -33,7 +33,7 @@ export function getAssetUrl(assetPath: string): string {
 }
 
 export function getWordImageUrl(imagePath: string): string {
-  return getAssetUrl(imagePath);
+  return `${getAssetUrl(imagePath)}?v=${CONTENT_VERSION}`;
 }
 
 export function getOxfordRefLabel(ref: OxfordRef): string {
