@@ -157,6 +157,80 @@ class FamilyPromptTests(unittest.TestCase):
             MODULE.build_prompt(next(word for word in words if word["id"] == "ket_wood_n")),
         )
 
+    def test_building_words_follow_their_place_meanings(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        building_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "建筑和公共地点"
+        }
+
+        self.assertEqual(building_ids, set(MODULE.BUILDING_SCENES))
+        self.assertIn(
+            "city block",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_block_n")),
+        )
+        self.assertIn(
+            "elevator",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_lift_n")),
+        )
+        self.assertIn(
+            "plain residential",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_block_n")),
+        )
+        self.assertIn(
+            "no sign above",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_exit_n")),
+        )
+        self.assertIn(
+            "completely blank facade",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_police_station_n")),
+        )
+
+    def test_city_words_have_distinct_text_free_scenes(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        city_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "城镇街道和城市"
+        }
+
+        self.assertEqual(city_ids, set(MODULE.CITY_SCENES))
+        self.assertIn(
+            "central plaza",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_city_centre_n")),
+        )
+        self.assertIn(
+            "center of a circle",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_centre_center_n")),
+        )
+        self.assertIn(
+            "no hanging tags",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_market_n")),
+        )
+        self.assertIn(
+            "plain homes only",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_town_n")),
+        )
+
+    def test_natural_world_words_have_dedicated_scenes(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        nature_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "自然世界"
+        }
+
+        self.assertEqual(nature_ids, set(MODULE.NATURE_SCENES))
+        for word_id in ("ket_north_n_adj_adv", "ket_south_n_adj_adv", "ket_east_n_adj_adv", "ket_west_n_adj_adv"):
+            word = next(word for word in words if word["id"] == word_id)
+            self.assertIn("no letters", MODULE.build_prompt(word))
+            self.assertIn("without a compass", MODULE.build_prompt(word))
+        self.assertIn(
+            "no map outline",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_country_n")),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
