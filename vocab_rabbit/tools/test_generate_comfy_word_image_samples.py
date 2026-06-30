@@ -13,6 +13,10 @@ SPEC.loader.exec_module(MODULE)
 
 
 class FamilyPromptTests(unittest.TestCase):
+    def test_workflow_template_is_bundled_with_the_project(self) -> None:
+        self.assertTrue(MODULE.WORKFLOW_TEMPLATE_PATH.is_relative_to(MODULE.PROJECT_ROOT))
+        self.assertTrue(MODULE.WORKFLOW_TEMPLATE_PATH.exists())
+
     def test_every_family_word_has_a_dedicated_scene(self) -> None:
         words = MODULE.load_words(include_approved=True)
         family_ids = {word["id"] for word in words if word.get("category") == "家人和朋友"}
@@ -230,6 +234,17 @@ class FamilyPromptTests(unittest.TestCase):
             "no map outline",
             MODULE.build_prompt(next(word for word in words if word["id"] == "ket_country_n")),
         )
+
+    def test_current_preview_words_have_clear_text_free_scenes(self) -> None:
+        words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
+
+        ambulance_prompt = MODULE.build_prompt(words["ket_ambulance_n"])
+        bad_prompt = MODULE.build_prompt(words["ket_bad_adj"])
+
+        self.assertIn("white emergency ambulance", ambulance_prompt)
+        self.assertIn("completely blank vehicle", ambulance_prompt)
+        self.assertIn("paramedics pushing an empty stretcher", ambulance_prompt)
+        self.assertIn("fresh apple beside a visibly rotten apple", bad_prompt)
 
 
 if __name__ == "__main__":

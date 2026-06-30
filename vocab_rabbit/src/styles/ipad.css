@@ -3749,10 +3749,7 @@ button {
   min-height: 110px;
   height: 110px;
   padding: 0;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-size: 96px auto;
-  background-position: left 8px bottom 12px;
+  background: #f4ead9;
 }
 
 .page--review .review-preview-card__art::before {
@@ -3763,28 +3760,11 @@ button {
   display: none;
 }
 
-.page--review .review-preview-card--family .review-preview-card__art {
-  background-image: url('/design-reference/slices/review-preview-family-art.png?v=4');
-  background-size: 106px auto;
-  background-position: left 0 bottom 12px;
-}
-
-.page--review .review-preview-card--hello .review-preview-card__art {
-  background-image: url('/design-reference/slices/review-preview-hello-art.png?v=4');
-  background-size: 103px auto;
-  background-position: left -2px bottom 16px;
-}
-
-.page--review .review-preview-card--body .review-preview-card__art {
-  background-image: url('/design-reference/slices/review-preview-body-art.png?v=4');
-  background-size: 83px auto;
-  background-position: left 8px bottom 15px;
-}
-
-.page--review .review-preview-card--spark .review-preview-card__art {
-  background-image: url('/design-reference/slices/review-preview-spark-art.png?v=4');
-  background-size: 99px auto;
-  background-position: left 0 bottom 13px;
+.page--review .review-preview-card__word-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .page--review .review-preview-card__index {

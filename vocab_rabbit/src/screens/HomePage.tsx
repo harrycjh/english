@@ -11,7 +11,7 @@ import {
 import type { WordPayload } from '../models/word';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { APP_VERSION } from '../config/app-meta';
-import { getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
+import { getPrimaryOxfordRefLabel, getStudyText, getWordImageUrl } from '../services/word-service';
 import reviewLayoutData from '../../design-output/ui-concepts/review-page-layout.json';
 import reviewSlicesManifestData from '../../design-output/ui-concepts/review-page-slices-manifest.json';
 
@@ -302,21 +302,6 @@ function ReviewSummaryPill({ tone, label, value, layout }: ReviewSummaryPillProp
 function ReviewPreviewCard({ word, index, layout, onOpenDetails }: ReviewPreviewCardProps) {
   const oxfordLabel = getPrimaryOxfordRefLabel(word);
   const artVariant = ['family', 'hello', 'body', 'spark'][index % 4];
-  const artPlacement = reviewSlicePlacementsByFile[layout.artSlot.file];
-  const previewArtHeightByVariant: Record<typeof artVariant, number> = {
-    family: 94,
-    hello: 77,
-    body: 72,
-    spark: 86,
-  };
-  const previewArtBottomInsetByVariant: Record<typeof artVariant, number> = {
-    family: 33,
-    hello: 35,
-    body: 35,
-    spark: 33,
-  };
-  const previewArtHeight = Math.min(previewArtHeightByVariant[artVariant], layout.artSlot.height - 12);
-  const previewArtBottomInset = previewArtBottomInsetByVariant[artVariant];
 
   return (
     <button
@@ -331,12 +316,13 @@ function ReviewPreviewCard({ word, index, layout, onOpenDetails }: ReviewPreview
         style={{
           ...getRelativeBoundsStyle(layout.artSlot, layout),
           zIndex: reviewLayerZIndex.slices,
-          backgroundImage: `url(${getReviewSliceUrl(layout.artSlot.file)})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: `auto ${previewArtHeight}px`,
-          backgroundPosition: `calc(50% + 15px) calc(100% - ${previewArtBottomInset}px)`,
         }}
       >
+        <img
+          className="review-preview-card__word-image"
+          src={getWordImageUrl(word.imagePath)}
+          alt=""
+        />
         <span
           className="review-preview-card__index"
           style={{ ...getRelativeBoundsStyle(layout.indexBadge, layout), zIndex: reviewLayerZIndex.interactiveBadges }}

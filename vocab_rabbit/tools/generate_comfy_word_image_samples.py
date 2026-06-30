@@ -18,9 +18,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 WORD_LIST_PATH = PROJECT_ROOT / "public/content/words/ket_vocabulary.json"
-WORKFLOW_TEMPLATE_PATH = Path(
-    "/Users/chujianhe/Documents/Codex/2026-06-22/w/outputs/comfyui-recovered-workflows/z-image-turbo_00001_.api-prompt.json"
-)
+WORKFLOW_TEMPLATE_PATH = PROJECT_ROOT / "tools/workflows/z-image-turbo.api-prompt.json"
 COMFY_OUTPUT_ROOT = Path("/Users/chujianhe/ComfyUI-Shared/output")
 DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "design-output/word-image-generation"
 
@@ -514,6 +512,8 @@ def build_prompt(word: dict[str, Any]) -> str:
         "tail": "a side view of a friendly cat whose long curved tail is clearly visible and is the visual focus",
         "wildlife": "several wild animals living freely in a natural meadow and woodland habitat",
         "wing": "a close side view of a bird with one fully spread feathered wing as the visual focus",
+        "ambulance": "a white emergency ambulance with large red and blue rooftop warning lights parked outside a clinic, two uniformed paramedics pushing an empty stretcher beside it, viewed clearly from the side, completely blank vehicle with no symbols or writing",
+        "bad": "a fresh apple beside a visibly rotten apple with a dark bruise and wilted leaf, clearly showing a good and bad condition without symbols or writing",
     }
     scene_hints.update(strict_scenes)
     category_context = CATEGORY_CONTEXTS.get(word.get("category", ""), "an everyday situation")
