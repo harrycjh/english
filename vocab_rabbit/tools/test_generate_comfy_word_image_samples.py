@@ -115,6 +115,40 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_first_common_adjective_batch_uses_specific_scenes(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        first_batch = [
+            word
+            for word in words
+            if word.get("category") == "常见形容词"
+            and word["id"] <= "ket_fresh_adj"
+        ]
+
+        self.assertEqual(len(first_batch), 30)
+        for word in first_batch:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
+    def test_second_common_adjective_batch_uses_specific_scenes(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        second_batch = [
+            word
+            for word in words
+            if word.get("category") == "常见形容词"
+            and "ket_frightened_adj" <= word["id"] <= "ket_national_adj"
+        ]
+
+        self.assertEqual(len(second_batch), 30)
+        for word in second_batch:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
     def test_animal_body_parts_are_the_clear_subject(self) -> None:
         words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
 
