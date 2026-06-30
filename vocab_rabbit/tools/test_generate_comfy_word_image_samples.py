@@ -183,6 +183,28 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_first_feeling_batch_uses_specific_scenes(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        first_batch_ids = {
+            "ket_able_adj", "ket_afraid_adj", "ket_alone_adj_adv", "ket_amazing_adj",
+            "ket_angry_adj", "ket_beautiful_adj", "ket_better_adj_adv", "ket_big_adj",
+            "ket_bored_adj", "ket_boring_adj", "ket_brave_adj", "ket_brilliant_adj",
+            "ket_busy_adj", "ket_careful_adj", "ket_clear_adj", "ket_clever_adj",
+            "ket_cool_adj_exclam", "ket_different_adj", "ket_difficult_adj",
+            "ket_excellent_adj", "ket_excited_adj", "ket_famous_adj", "ket_fast_adj_adv",
+            "ket_favourite_adj", "ket_fine_adj", "ket_free_adj_adv", "ket_funny_adj",
+            "ket_good_adj", "ket_great_adj", "ket_happy_adj",
+        }
+        first_batch = [word for word in words if word["id"] in first_batch_ids]
+
+        self.assertEqual(len(first_batch), 30)
+        for word in first_batch:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
     def test_animal_body_parts_are_the_clear_subject(self) -> None:
         words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
 

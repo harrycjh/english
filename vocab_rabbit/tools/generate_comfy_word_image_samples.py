@@ -676,6 +676,39 @@ ADJECTIVE_SCENES = {
     "ket_worst_adj": "three apples progressing from fresh to bruised to completely rotten, with the last clearly worst",
 }
 
+FEELING_SCENES = {
+    "ket_able_adj": "a confident child successfully reaching and placing a book on a high shelf using a safe step stool",
+    "ket_afraid_adj": "an afraid child stepping back from a harmless small spider with wide eyes",
+    "ket_alone_adj_adv": "one child sitting alone on a park bench with no other people nearby",
+    "ket_amazing_adj": "a child gazing in amazement at a huge waterfall beneath a bright rainbow",
+    "ket_angry_adj": "an angry child with crossed arms, furrowed eyebrows, and flushed cheeks",
+    "ket_beautiful_adj": "a beautiful colorful flower garden in soft morning sunlight",
+    "ket_better_adj_adv": "a repaired toy car working well beside the same kind of toy still visibly broken",
+    "ket_big_adj": "a big elephant standing beside a tiny mouse for strong size contrast",
+    "ket_bored_adj": "a bored child slumped at an empty table with head resting on one hand",
+    "ket_boring_adj": "a child yawning during a dull repetitive activity of sorting identical plain blocks",
+    "ket_brave_adj": "a brave child calmly helping a frightened kitten down from a very low safe branch",
+    "ket_brilliant_adj": "a proud child presenting a complex completed model bridge that works perfectly",
+    "ket_busy_adj": "a busy child organizing books, packing a bag, and preparing lunch at the same time",
+    "ket_careful_adj": "a careful child slowly carrying a glass filled to the brim with both hands",
+    "ket_clear_adj": "one crystal-clear transparent glass beside a cloudy opaque glass for contrast",
+    "ket_clever_adj": "a clever child fitting the final difficult piece into a complex shape puzzle",
+    "ket_cool_adj_exclam": "friends reacting with admiration as a child performs a safe skateboard trick",
+    "ket_different_adj": "one bright red apple placed among a row of identical green apples",
+    "ket_difficult_adj": "a child concentrating hard on a complex many-piece three-dimensional puzzle",
+    "ket_excellent_adj": "a child proudly holding an exceptionally well-built model beside applauding family",
+    "ket_excited_adj": "an excited child jumping happily at the entrance to a colorful amusement park, no signs",
+    "ket_famous_adj": "a well-known performer on a stage surrounded by a large cheering audience and cameras",
+    "ket_fast_adj_adv": "one runner moving far ahead of several others with clear motion and speed",
+    "ket_favourite_adj": "a child choosing and hugging one beloved teddy from among several different toys",
+    "ket_fine_adj": "a healthy smiling child giving a thumbs-up after a simple medical check, no writing",
+    "ket_free_adj_adv": "a bird flying freely into the open sky from an open cage",
+    "ket_funny_adj": "a playful clown making children laugh with a harmless silly hat trick",
+    "ket_good_adj": "a fresh healthy apple chosen beside a visibly rotten apple",
+    "ket_great_adj": "a child and friends giving enthusiastic thumbs-up to an impressive finished project",
+    "ket_happy_adj": "a happy child smiling broadly and raising both arms in a sunny park",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -993,7 +1026,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                     word["id"],
                                                                     ADJECTIVE_SCENES.get(
                                                                         word["id"],
-                                                                        scene_hints.get(english, fallback_scene),
+                                                                        FEELING_SCENES.get(
+                                                                            word["id"],
+                                                                            scene_hints.get(english, fallback_scene),
+                                                                        ),
                                                                     ),
                                                                 ),
                                                             ),
