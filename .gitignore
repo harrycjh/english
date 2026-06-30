@@ -35,3 +35,4 @@ vision_extraction_log.txt
 vocab_rabbit/node_modules/
 vocab_rabbit/dist/
 vocab_rabbit/design-output/
+vocab_rabbit/.superpowers/
