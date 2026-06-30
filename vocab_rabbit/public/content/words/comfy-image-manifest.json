@@ -90,6 +90,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_apple_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835363928,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents apple, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_april_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -198,6 +210,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_bake_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835371480,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents bake, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_ball_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -210,10 +234,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_banana_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835379017,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents banana, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bank_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_barbecue_barbeque_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835386556,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents barbecue/barbeque, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
       "width": 512,
       "height": 512
     },
@@ -306,6 +354,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bean_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835394106,
+      "prompt": "Create a standalone storybook illustration: green beans in a small bowl, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
       "width": 512,
       "height": 512
     },
@@ -498,6 +558,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_bottle_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835416766,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents bottle, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bottom_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -562,6 +634,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_bread_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835424312,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents bread, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_breakfast_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835431858,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents breakfast, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bridge_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -590,6 +686,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_burger_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835439422,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents burger, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
       "width": 512,
       "height": 512
     },
@@ -654,6 +762,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_butter_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835446969,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents butter, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_butterfly_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -674,6 +794,42 @@
       "height": 512
     },
     {
+      "wordId": "ket_cafe_caf_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835454512,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cafe/café, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cafeteria_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835462068,
+      "prompt": "Create a standalone storybook illustration: children eating lunch at tables in a bright dining room, plain walls, no menu board. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cake_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835469614,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cake, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_camel_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -686,6 +842,30 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_can_n_mv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835477170,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents can, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_candy_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835484723,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents candy, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
       "width": 512,
       "height": 512
     },
@@ -730,6 +910,18 @@
       "prompt": "Create a standalone storybook illustration: one large soft wall-to-wall carpet covering most of a room floor, with its texture clearly visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "full rectangular carpet visible",
       "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_carrot_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835492261,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents carrot, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
       "width": 512,
       "height": 512
     },
@@ -814,6 +1006,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_cereal_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835499807,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cereal, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_chain_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -838,10 +1042,70 @@
       "height": 512
     },
     {
+      "wordId": "ket_cheese_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835507355,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cheese, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_chef_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835514892,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents chef, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_chicken_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835522448,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents chicken, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_child_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_chilli_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835529998,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents chilli, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_chocolate_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835537561,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents chocolate, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
       "width": 512,
       "height": 512
     },
@@ -958,6 +1222,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_coffee_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835545109,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents coffee, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cola_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835552640,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cola, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_colleague_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -986,6 +1274,18 @@
       "prompt": "Create a standalone storybook illustration: one desktop computer with monitor, keyboard, and mouse on a desk, screen completely blank. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear computer with blank screen",
       "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cook_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835560179,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cook, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
       "width": 512,
       "height": 512
     },
@@ -1098,6 +1398,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_cup_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835575279,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cup, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_cupboard_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -1106,6 +1418,18 @@
       "prompt": "Create a standalone storybook illustration: one kitchen cupboard with two doors open to show neatly stacked plates and cups. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear cupboard",
       "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_curry_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835582827,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents curry, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
       "width": 512,
       "height": 512
     },
@@ -1194,6 +1518,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_dessert_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835690024,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents dessert, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_digital_camera_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1214,6 +1550,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_dinner_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835697568,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents dinner, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_dinosaur_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1226,6 +1574,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_dish_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835705113,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents dish, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
       "width": 512,
       "height": 512
     },
@@ -1310,6 +1670,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_drink_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835712653,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents drink, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_duck_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1374,6 +1746,30 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_eat_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835720206,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents eat, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_egg_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835727762,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents egg, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
       "width": 512,
       "height": 512
     },
@@ -1566,6 +1962,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_fish_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835742858,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents fish, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_fishing_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -1670,6 +2078,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_fork_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835757950,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents fork, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_friday_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1686,6 +2106,18 @@
       "prompt": "Create a standalone storybook illustration: one compact fridge with its door open to show milk, fruit, and vegetables with blank packaging. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear fridge with text-free food",
       "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_fried_adj",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835765506,
+      "prompt": "Create a standalone storybook illustration: golden food cooking in a pan with a little oil and steam. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
       "width": 512,
       "height": 512
     },
@@ -1722,6 +2154,18 @@
       "prompt": "Create a standalone storybook illustration: a straight-on view of the front of one house showing its door, windows, and porch symmetrically. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear front view of house",
       "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_fruit_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835773051,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents fruit, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
       "width": 512,
       "height": 512
     },
@@ -1782,6 +2226,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_garlic_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835780604,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents garlic, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_gate_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -1834,6 +2290,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_glass_n_adj",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835788151,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents glass, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
       "width": 512,
       "height": 512
     },
@@ -1982,6 +2450,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_grape_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835795705,
+      "prompt": "Create a standalone storybook illustration: a bunch of grapes on a plain plate, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_grass_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1994,6 +2474,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grilled_adj",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835803262,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents grilled, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
       "width": 512,
       "height": 512
     },
@@ -2174,6 +2666,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_honey_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835810801,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents honey, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_hoodie_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -2238,6 +2742,42 @@
       "height": 512
     },
     {
+      "wordId": "ket_ice_cream_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835818338,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents ice cream, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_ice_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835825889,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents ice, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_ingredient_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835833431,
+      "prompt": "Create a standalone storybook illustration: several simple cooking items on a kitchen table, such as eggs, flour, vegetables, and oil, with no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_insect_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2250,6 +2790,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_jam_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835840989,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents jam, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
       "width": 512,
       "height": 512
     },
@@ -2302,6 +2854,18 @@
       "prompt": "Create a standalone storybook illustration: a journalist holding a plain microphone while interviewing a firefighter as a camera operator records them, no logos or writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear interview scene",
       "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_juice_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835848542,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents juice, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
       "width": 512,
       "height": 512
     },
@@ -2406,6 +2970,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_knife_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835856099,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents knife, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_lake_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2430,6 +3006,30 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_lemon_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835863639,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents lemon, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_lemonade_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835871181,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents lemonade, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
       "width": 512,
       "height": 512
     },
@@ -2502,6 +3102,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_lunch_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835878726,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents lunch, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_main_course_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835886265,
+      "prompt": "Create a standalone storybook illustration: a full dinner plate with vegetables and a central warm dish, no menu or writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_make_up_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2526,6 +3150,18 @@
       "prompt": "Create a standalone storybook illustration: a store manager in smart clothes checking shelves while guiding two employees in a tidy shop, no signs or labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear store management",
       "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_mango_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835893798,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents mango, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
       "width": 512,
       "height": 512
     },
@@ -2558,6 +3194,66 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_meal_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835901349,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents meal, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_meat_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782835972624,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents meat, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_melon_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782835980188,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents melon, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_milk_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782835995294,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents milk, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_mineral_water_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836002836,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents mineral water, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
       "width": 512,
       "height": 512
     },
@@ -2678,6 +3374,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_mushroom_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836010380,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents mushroom, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_name_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2790,10 +3498,46 @@
       "height": 512
     },
     {
+      "wordId": "ket_oil_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836017926,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents oil, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_omelette_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836025482,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents omelette, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_one_det_pron",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_onion_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836033025,
+      "prompt": "Create a standalone storybook illustration: one onion on a plain kitchen table, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
       "width": 512,
       "height": 512
     },
@@ -2850,6 +3594,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_pasta_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836040577,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents pasta, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_path_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2866,6 +3622,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_pear_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836048125,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents pear, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_penfriend_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2878,6 +3646,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_pepper_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836055670,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents pepper, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
       "width": 512,
       "height": 512
     },
@@ -2922,6 +3702,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_picnic_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836063211,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents picnic, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_pillow_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -2942,10 +3734,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_pizza_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836070749,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents pizza, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_plant_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_plate_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836078295,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents plate, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
       "width": 512,
       "height": 512
     },
@@ -3026,6 +3842,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_potato_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836085841,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents potato, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
       "width": 512,
       "height": 512
     },
@@ -3214,6 +4042,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_rice_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836100947,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents rice, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_ride_n_v",
       "status": "accepted",
       "source": "comfy-run",
@@ -3262,6 +4102,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_roast_v_adj",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836108483,
+      "prompt": "Create a standalone storybook illustration: a roasted meal on a plate with steam rising, no text. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
       "width": 512,
       "height": 512
     },
@@ -3346,10 +4198,58 @@
       "height": 512
     },
     {
+      "wordId": "ket_salad_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836116031,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents salad, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sandwich_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836131127,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents sandwich, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_saturday_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sauce_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836138674,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents sauce, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sausage_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836146197,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents sausage, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
       "width": 512,
       "height": 512
     },
@@ -3598,6 +4498,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_slice_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836153734,
+      "prompt": "Create a standalone storybook illustration: one clean slice cut from a round fruit on a plate. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_snack_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836161290,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents snack, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_snail_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -3690,6 +4614,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_soup_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836168850,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents soup, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_south_n_adj_adv",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -3710,6 +4646,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_spoon_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836176397,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents spoon, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
       "width": 512,
       "height": 512
     },
@@ -3818,10 +4766,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_steak_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836183940,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents steak, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_storm_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_strawberry_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836191498,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents strawberry, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:17:28.266984+00:00",
       "width": 512,
       "height": 512
     },
@@ -3894,6 +4866,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_supper_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836263283,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents supper, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:19:36.910019+00:00",
       "width": 512,
       "height": 512
     },
@@ -4042,6 +5026,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_tea_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836270824,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents tea, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:19:36.910019+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_team_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -4170,6 +5166,18 @@
       "prompt": "Create a standalone storybook illustration: one clean modern toilet with lid, seat, tank, and flush handle, shown alone in a bathroom. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear toilet",
       "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tomato_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836293465,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents tomato, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:19:36.910019+00:00",
       "width": 512,
       "height": 512
     },
@@ -4314,6 +5322,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_vegetable_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836301017,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents vegetable, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:19:36.910019+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_video_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -4338,6 +5358,30 @@
       "prompt": "Create a standalone storybook illustration: two teams hitting a volleyball over a high net on a beach court, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear volleyball",
       "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_waiter_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836308556,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents waiter, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "acceptedAt": "2026-06-30T16:19:36.910019+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_waitress_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836316101,
+      "prompt": "Create a standalone storybook illustration: a smiling waitress carrying a tray, plain cafe background, no signs or menu. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:19:36.910019+00:00",
       "width": 512,
       "height": 512
     },
@@ -4626,6 +5670,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_yog_h_urt_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836331200,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents yog(h)urt, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-06-30T16:19:36.910019+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_zebra_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -4652,6 +5708,15 @@
   ],
   "reviews": [
     {
+      "wordId": "ket_apple_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835363928,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents apple, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
       "wordId": "ket_badminton_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-182435",
@@ -4661,6 +5726,15 @@
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
     },
     {
+      "wordId": "ket_bake_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835371480,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents bake, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
       "wordId": "ket_ball_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-182435",
@@ -4668,6 +5742,24 @@
       "prompt": "Create a standalone storybook illustration: one simple colorful round ball resting on grass, shown clearly as the main object with no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear ball",
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_banana_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835379017,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents banana, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_barbecue_barbeque_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835386556,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents barbecue/barbeque, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
     },
     {
       "wordId": "ket_baseball_n",
@@ -4697,6 +5789,15 @@
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
     },
     {
+      "wordId": "ket_bean_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835394106,
+      "prompt": "Create a standalone storybook illustration: green beans in a small bowl, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
       "wordId": "ket_boat_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-182435",
@@ -4704,6 +5805,123 @@
       "prompt": "Create a standalone storybook illustration: one small simple rowboat floating on calm water with two oars inside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear rowboat",
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_boil_v",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835401667,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents boil, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Looks like a glass with a spoon; boiling is not shown.",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_boiled_adj",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835409216,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents boiled, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Looks like a cup of liquid; a boiled food or boiling process is not clear.",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_bottle_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835416766,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents bottle, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_bread_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835424312,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents bread, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_breakfast_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835431858,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents breakfast, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_burger_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835439422,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents burger, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_butter_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835446969,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents butter, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_cafe_caf_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835454512,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cafe/café, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_cafeteria_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835462068,
+      "prompt": "Create a standalone storybook illustration: children eating lunch at tables in a bright dining room, plain walls, no menu board. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_cake_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835469614,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cake, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_can_n_mv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835477170,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents can, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_candy_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835484723,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents candy, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_carrot_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835492261,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents carrot, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
     },
     {
       "wordId": "ket_catch_v",
@@ -4715,6 +5933,60 @@
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
     },
     {
+      "wordId": "ket_cereal_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835499807,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cereal, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_cheese_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835507355,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cheese, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_chef_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835514892,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents chef, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_chicken_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835522448,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents chicken, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_chilli_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835529998,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents chilli, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_chocolate_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835537561,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents chocolate, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
       "wordId": "ket_climb_v",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-182435",
@@ -4722,6 +5994,42 @@
       "prompt": "Create a standalone storybook illustration: a child wearing a safety harness actively climbing an indoor rock wall with colored holds. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear climbing action",
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_coffee_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835545109,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents coffee, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_cola_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835552640,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cola, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_cook_n_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835560179,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cook, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_cream_adj_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835567732,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cream, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Looks like milk in a glass; cream is not visually distinct.",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
     },
     {
       "wordId": "ket_cricket_n",
@@ -4733,6 +6041,87 @@
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
     },
     {
+      "wordId": "ket_cup_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835575279,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cup, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_curry_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000243",
+      "seed": 782835582827,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents curry, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
+    },
+    {
+      "wordId": "ket_delicious_adj",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835682464,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents delicious, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Shows a drink but does not visually communicate that it tastes delicious.",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_dessert_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835690024,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents dessert, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_dinner_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835697568,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents dinner, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_dish_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835705113,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents dish, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_drink_n_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835712653,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents drink, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_eat_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835720206,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents eat, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_egg_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835727762,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents egg, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
       "wordId": "ket_enter_v",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-182435",
@@ -4742,6 +6131,24 @@
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
     },
     {
+      "wordId": "ket_fast_food_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835735307,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents fast food, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Contains a prominent brand-style letter M on the package.",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_fish_n_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835742858,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents fish, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
       "wordId": "ket_fishing_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-182435",
@@ -4749,6 +6156,15 @@
       "prompt": "Create a standalone storybook illustration: a person fishing peacefully with a rod beside a lake while a fish approaches the hook. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear fishing",
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_food_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835750401,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents food, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Shows only a glass of juice, so the broader food concept is not represented.",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
     },
     {
       "wordId": "ket_football_n",
@@ -4769,6 +6185,33 @@
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
     },
     {
+      "wordId": "ket_fork_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835757950,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents fork, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_fried_adj",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835765506,
+      "prompt": "Create a standalone storybook illustration: golden food cooking in a pan with a little oil and steam. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_fruit_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835773051,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents fruit, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
       "wordId": "ket_game_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-182435",
@@ -4776,6 +6219,24 @@
       "prompt": "Create a standalone storybook illustration: four children actively playing a simple team ball game together on a playground. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear group game",
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_garlic_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835780604,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents garlic, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_glass_n_adj",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835788151,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents glass, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
     },
     {
       "wordId": "ket_goal_n",
@@ -4796,6 +6257,24 @@
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
     },
     {
+      "wordId": "ket_grape_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835795705,
+      "prompt": "Create a standalone storybook illustration: a bunch of grapes on a plain plate, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_grilled_adj",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835803262,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents grilled, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
       "wordId": "ket_hockey_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-182435",
@@ -4805,6 +6284,87 @@
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
     },
     {
+      "wordId": "ket_honey_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835810801,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents honey, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_ice_cream_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835818338,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents ice cream, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_ice_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835825889,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents ice, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_ingredient_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835833431,
+      "prompt": "Create a standalone storybook illustration: several simple cooking items on a kitchen table, such as eggs, flour, vegetables, and oil, with no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_jam_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835840989,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents jam, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_juice_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835848542,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents juice, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_knife_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835856099,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents knife, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_lemon_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835863639,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents lemon, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_lemonade_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835871181,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents lemonade, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
       "wordId": "ket_luck_n",
       "status": "REJECT",
       "runId": "comfy-sample-20260630-182435",
@@ -4812,6 +6372,177 @@
       "prompt": "Create a standalone storybook illustration: a football unexpectedly bouncing into the goal off the post while both teams react with surprise. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "ordinary ball game does not communicate luck",
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_lunch_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835878726,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents lunch, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_main_course_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835886265,
+      "prompt": "Create a standalone storybook illustration: a full dinner plate with vegetables and a central warm dish, no menu or writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_mango_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835893798,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents mango, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_meal_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-000802",
+      "seed": 782835901349,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents meal, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_meat_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782835972624,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents meat, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_melon_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782835980188,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents melon, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_menu_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782835987738,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents menu, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Shows a glass of green drink instead of a menu.",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_milk_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782835995294,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents milk, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_mineral_water_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836002836,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents mineral water, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_mushroom_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836010380,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents mushroom, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_oil_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836017926,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents oil, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_omelette_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836025482,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents omelette, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_onion_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836033025,
+      "prompt": "Create a standalone storybook illustration: one onion on a plain kitchen table, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_pasta_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836040577,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents pasta, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_pear_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836048125,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents pear, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_pepper_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836055670,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents pepper, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_picnic_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836063211,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents picnic, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_pizza_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836070749,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents pizza, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_plate_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836078295,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents plate, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
     },
     {
       "wordId": "ket_player_n",
@@ -4830,6 +6561,15 @@
       "prompt": "Create a standalone storybook illustration: one small round backyard pool filled with clear water beside a garden chair. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear small pool",
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_potato_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836085841,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents potato, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
     },
     {
       "wordId": "ket_prize_n",
@@ -4859,6 +6599,24 @@
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
     },
     {
+      "wordId": "ket_recipe_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836093400,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents recipe, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Shows a glass of drink instead of recipe instructions or a recipe book.",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_rice_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836100947,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents rice, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
       "wordId": "ket_ride_n_v",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-182435",
@@ -4877,6 +6635,15 @@
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
     },
     {
+      "wordId": "ket_roast_v_adj",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836108483,
+      "prompt": "Create a standalone storybook illustration: a roasted meal on a plate with steam rising, no text. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
       "wordId": "ket_rugby_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-182435",
@@ -4893,6 +6660,51 @@
       "prompt": "Create a standalone storybook illustration: a sailor controlling a small sailboat with one white sail across open blue water. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear sailing",
       "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_salad_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836116031,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents salad, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_salt_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836123577,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents salt, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Shows a glass of water instead of salt.",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_sandwich_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836131127,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents sandwich, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_sauce_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836138674,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents sauce, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_sausage_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836146197,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents sausage, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
     },
     {
       "wordId": "ket_sea_n",
@@ -4940,6 +6752,24 @@
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
     },
     {
+      "wordId": "ket_slice_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836153734,
+      "prompt": "Create a standalone storybook illustration: one clean slice cut from a round fruit on a plate. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_snack_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836161290,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents snack, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
       "wordId": "ket_snowboard_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-235635",
@@ -4967,6 +6797,24 @@
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
     },
     {
+      "wordId": "ket_soup_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836168850,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents soup, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_spoon_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836176397,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents spoon, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
       "wordId": "ket_sport_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-235635",
@@ -4992,6 +6840,42 @@
       "prompt": "Create a standalone storybook illustration: a large open sports stadium with field, running track, stands, and cheering crowd, no scoreboard text. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear stadium",
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_steak_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836183940,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents steak, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_strawberry_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001252",
+      "seed": 782836191498,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents strawberry, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_sugar_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836255717,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents sugar, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Looks like a glass of milk rather than visible sugar.",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
+    },
+    {
+      "wordId": "ket_supper_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836263283,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents supper, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
     },
     {
       "wordId": "ket_surf_v",
@@ -5048,6 +6932,15 @@
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
     },
     {
+      "wordId": "ket_tea_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836270824,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents tea, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
+    },
+    {
       "wordId": "ket_team_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-235635",
@@ -5075,6 +6968,15 @@
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
     },
     {
+      "wordId": "ket_thirsty_adj",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836278370,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents thirsty, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Shows only a drink and does not communicate a thirsty person or state.",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
+    },
+    {
       "wordId": "ket_throw_v",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-235635",
@@ -5082,6 +6984,24 @@
       "prompt": "Create a standalone storybook illustration: one child clearly throwing a red ball through the air toward a friend. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear throwing action and OCR is false positive",
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_toast_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836285919,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents toast, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Looks like plain pale bread without a toasted surface.",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
+    },
+    {
+      "wordId": "ket_tomato_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836293465,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents tomato, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
     },
     {
       "wordId": "ket_v_versus_prep",
@@ -5093,6 +7013,15 @@
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
     },
     {
+      "wordId": "ket_vegetable_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836301017,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents vegetable, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
+    },
+    {
       "wordId": "ket_volleyball_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260630-235635",
@@ -5100,6 +7029,33 @@
       "prompt": "Create a standalone storybook illustration: two teams hitting a volleyball over a high net on a beach court, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear volleyball",
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_waiter_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836308556,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents waiter, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
+    },
+    {
+      "wordId": "ket_waitress_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836316101,
+      "prompt": "Create a standalone storybook illustration: a smiling waitress carrying a tray, plain cafe background, no signs or menu. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
+    },
+    {
+      "wordId": "ket_wash_up_phr_v",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836323645,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents wash up, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Shows a blue container but no person washing dishes.",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
     },
     {
       "wordId": "ket_win_v",
@@ -5127,6 +7083,15 @@
       "prompt": "Create a standalone storybook illustration: a happy athlete standing on the highest center podium holding a trophy while others applaud, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "podium contains visible ranking numbers",
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_yog_h_urt_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-001735",
+      "seed": 782836331200,
+      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents yog(h)urt, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
     }
   ]
 }
