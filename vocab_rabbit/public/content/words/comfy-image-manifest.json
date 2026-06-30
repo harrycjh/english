@@ -94,6 +94,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_backpack_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175750",
+      "seed": 782813470430,
+      "prompt": "Create a standalone storybook illustration: one sturdy solid-color school backpack with two shoulder straps and several zipped pockets, standing upright, front surface completely blank and undecorated with no logo, emblem, pattern, or patch. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "plain undecorated backpack",
+      "acceptedAt": "2026-06-30T10:05:24.534304+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bad_adj",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -102,10 +114,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_bag_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813192465,
+      "prompt": "Create a standalone storybook illustration: one simple reusable cloth carry bag with two handles, holding fruit and a towel, no writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear cloth carry bag and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bank_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bathing_suit_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813199997,
+      "prompt": "Create a standalone storybook illustration: one modest colorful bathing suit displayed clearly on a plain clothes hanger beside a beach towel. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bathing suit and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
       "width": 512,
       "height": 512
     },
@@ -142,6 +178,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_belt_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813207528,
+      "prompt": "Create a standalone storybook illustration: one brown leather belt laid in a gentle curve with its buckle clearly visible, no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear belt and buckle",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bird_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -166,10 +214,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_blouse_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813215054,
+      "prompt": "Create a standalone storybook illustration: one elegant women's blouse with collar, buttons, and soft sleeves displayed on a hanger. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear blouse and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_blue_adj_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_boot_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175917",
+      "seed": 782813557389,
+      "prompt": "Create a standalone storybook illustration: one single plain yellow rubber rain boot standing beside a small puddle, with a smooth uninterrupted shaft and no straps, patches, tags, buckles, or marks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "single plain rain boot with no marks",
+      "acceptedAt": "2026-06-30T10:05:24.605825+00:00",
       "width": 512,
       "height": 512
     },
@@ -198,6 +270,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bracelet_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813230123,
+      "prompt": "Create a standalone storybook illustration: one colorful bead bracelet circling a wrist, shown in close view with no letters. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bracelet",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
       "width": 512,
       "height": 512
     },
@@ -318,6 +402,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_cap_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813237655,
+      "prompt": "Create a standalone storybook illustration: one plain baseball cap with a curved peak, shown from the side with no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear plain cap",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_capital_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -394,6 +490,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_chain_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813245178,
+      "prompt": "Create a standalone storybook illustration: a close view of one plain silver chain made of clearly interlocking metal links, no pendant. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear metal links",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_child_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -430,6 +538,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_clothes_n_pl",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813252710,
+      "prompt": "Create a standalone storybook illustration: a neat group of different clothes together: shirt, trousers, dress, coat, and socks on a rack. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear group of clothes",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_cloud_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -450,6 +570,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_coat_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813260247,
+      "prompt": "Create a standalone storybook illustration: one long warm winter coat with buttons and pockets displayed on a hanger. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear coat",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
       "width": 512,
       "height": 512
     },
@@ -478,6 +610,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_costume_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813267784,
+      "prompt": "Create a standalone storybook illustration: a child wearing a colorful stage pirate costume with hat and cape, no skull symbol or writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear stage costume",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
       "width": 512,
       "height": 512
     },
@@ -662,6 +806,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_dress_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813275311,
+      "prompt": "Create a standalone storybook illustration: a child actively putting on a colorful knee-length dress with help from a parent, safe and modest. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear dressing action",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_duck_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -694,6 +850,18 @@
       "prompt": "Create a standalone storybook illustration: a close clear view of a bicycle repair worker receiving coins after completing a repair, with a happy customer placing a pile of coins into the repair worker's open hand and the repaired bicycle beside them, no price labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear coin payment after bicycle work",
       "acceptedAt": "2026-06-30T09:50:51.402251+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_earring_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813282843,
+      "prompt": "Create a standalone storybook illustration: a matching pair of small hoop earrings displayed together on a plain jewelry stand. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear pair of earrings",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
       "width": 512,
       "height": 512
     },
@@ -794,6 +962,18 @@
       "prompt": "Create a standalone storybook illustration: a farmer in boots tending vegetables beside a tractor and barn on a sunny farm. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear farm work",
       "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_fashion_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813290371,
+      "prompt": "Create a standalone storybook illustration: three stylish adults modeling distinctly fashionable colorful outfits on a simple runway, no banners or logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear fashionable outfits",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
       "width": 512,
       "height": 512
     },
@@ -930,6 +1110,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_get_dressed_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813297904,
+      "prompt": "Create a standalone storybook illustration: a child actively getting dressed by pulling on a sweater beside neatly laid-out trousers and socks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear getting dressed action",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_gift_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -958,6 +1150,30 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_glasses_n_pl",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813305434,
+      "prompt": "Create a standalone storybook illustration: one pair of clear-lens reading glasses with visible frames and folded arms on a plain table. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear glasses",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_glove_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813312970,
+      "prompt": "Create a standalone storybook illustration: a matching pair of warm winter gloves placed side by side on snow. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear gloves",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
       "width": 512,
       "height": 512
     },
@@ -1142,6 +1358,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_handbag_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813320500,
+      "prompt": "Create a standalone storybook illustration: one structured women's handbag with short handles and a clasp sitting upright, no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear structured handbag",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_hat_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813328030,
+      "prompt": "Create a standalone storybook illustration: one wide-brimmed sun hat with a simple ribbon displayed against a plain background. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear sun hat",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_headteacher_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1162,6 +1402,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_hoodie_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813335570,
+      "prompt": "Create a standalone storybook illustration: one plain hooded sweatshirt with front pocket and hood clearly visible on a hanger. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear hoodie",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
       "width": 512,
       "height": 512
     },
@@ -1230,6 +1482,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_jeans_n_pl",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813343097,
+      "prompt": "Create a standalone storybook illustration: one full pair of blue denim jeans with pockets and seams displayed on a hanger. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear jeans",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_jellyfish_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1270,6 +1534,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_jumper_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813350637,
+      "prompt": "Create a standalone storybook illustration: one thick knitted pullover jumper with long sleeves folded neatly, no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear knitted jumper",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_june_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1302,6 +1578,18 @@
       "prompt": "Create a standalone storybook illustration: a friendly king wearing a gold crown and royal robe while seated on a simple throne. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear royal identity",
       "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_kit_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175304",
+      "seed": 782813358168,
+      "prompt": "Create a standalone storybook illustration: a complete plain football kit laid out together: jersey, shorts, socks, boots, and ball, no numbers or logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear football kit and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
       "width": 512,
       "height": 512
     },
@@ -1550,6 +1838,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_necklace_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813593699,
+      "prompt": "Create a standalone storybook illustration: one necklace with a simple round pendant worn around a neck, shown clearly with no letters. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear pendant necklace",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_neighbour_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1770,6 +2070,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_pocket_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813601240,
+      "prompt": "Create a standalone storybook illustration: a close view of a clear fabric pocket on the front of trousers with a hand placing a coin inside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear pocket action",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_polar_bear_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1830,6 +2142,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_purse_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813608770,
+      "prompt": "Create a standalone storybook illustration: one small coin purse opened to show a few plain coins, with a clasp and no printed marks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear coin purse",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_puzzle_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1882,6 +2206,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_raincoat_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813616295,
+      "prompt": "Create a standalone storybook illustration: one bright yellow waterproof raincoat with hood and buttons, hanging beside raindrops, no brand. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear raincoat",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_rainforest_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1918,6 +2254,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_ring_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813623826,
+      "prompt": "Create a standalone storybook illustration: one gold finger ring with a small jewel shown clearly on a plain hand, no box or writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear jewelry sense",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_river_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1946,6 +2294,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_scarf_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813631359,
+      "prompt": "Create a standalone storybook illustration: one long warm knitted scarf wrapped loosely around a child's neck in winter. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear scarf",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
       "width": 512,
       "height": 512
     },
@@ -2006,10 +2366,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_shirt_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813638888,
+      "prompt": "Create a standalone storybook illustration: one collared button-up shirt neatly displayed on a hanger, completely plain with no label. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear collared shirt",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_shop_n_v",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_shorts_n_pl",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813646421,
+      "prompt": "Create a standalone storybook illustration: one pair of knee-length shorts displayed clearly from waistband to hems. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear shorts",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
       "width": 512,
       "height": 512
     },
@@ -2026,6 +2410,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_skirt_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813653954,
+      "prompt": "Create a standalone storybook illustration: one knee-length pleated skirt displayed clearly on a hanger. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear skirt",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
       "width": 512,
       "height": 512
     },
@@ -2058,6 +2454,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sock_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813661487,
+      "prompt": "Create a standalone storybook illustration: a matching pair of colorful ankle socks placed side by side, no pattern letters. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear socks",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
       "width": 512,
       "height": 512
     },
@@ -2154,6 +2562,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_suit_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813669018,
+      "prompt": "Create a standalone storybook illustration: an adult wearing a complete smart suit with matching jacket and trousers, plain shirt, and tie. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear formal suit",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_summer_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2174,6 +2594,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sunglasses_n_pl",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813676554,
+      "prompt": "Create a standalone storybook illustration: one pair of dark-lens sunglasses with visible frames on a sunny beach towel, no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear sunglasses",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
       "width": 512,
       "height": 512
     },
@@ -2206,6 +2638,42 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sweater_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813684086,
+      "prompt": "Create a standalone storybook illustration: a child wearing one warm knitted sweater with long sleeves on a cold day, no pattern letters. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear worn sweater",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_swimsuit_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813691620,
+      "prompt": "Create a standalone storybook illustration: a cheerful child wearing a modest one-piece swimsuit beside a swimming pool, no logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "child-safe pool scene and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_t_shirt_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813699148,
+      "prompt": "Create a standalone storybook illustration: one plain short-sleeved T-shirt displayed flat with no picture, letters, or logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear plain T-shirt",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
       "width": 512,
       "height": 512
     },
@@ -2258,10 +2726,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_tie_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813706676,
+      "prompt": "Create a standalone storybook illustration: one striped necktie neatly knotted around the collar of a plain white shirt, no label. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear necktie",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_tiger_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tights_n_pl",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813714207,
+      "prompt": "Create a standalone storybook illustration: a pair of opaque purple tights clearly displayed on a child-size clothing mannequin, safe and modest. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear opaque tights",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
       "width": 512,
       "height": 512
     },
@@ -2310,10 +2802,46 @@
       "height": 512
     },
     {
+      "wordId": "ket_trousers_n_pl",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813721736,
+      "prompt": "Create a standalone storybook illustration: one full pair of plain trousers displayed from waist to ankles on a hanger. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear trousers",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_try_on_phr_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813729267,
+      "prompt": "Create a standalone storybook illustration: a child trying on a jacket in front of a shop mirror while a parent checks the fit, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear mirror fitting scene",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_tuesday_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_umbrella_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180359",
+      "seed": 782813839114,
+      "prompt": "Create a standalone storybook illustration: one child clearly holding an open colorful umbrella in falling rain, with a straight handle visibly connected to the canopy and gripped in the child's hand, no isolated handle shape, letters, or writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "connected handle and clear umbrella form",
+      "acceptedAt": "2026-06-30T10:05:25.071183+00:00",
       "width": 512,
       "height": 512
     },
@@ -2334,6 +2862,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_uniform_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813744335,
+      "prompt": "Create a standalone storybook illustration: a school child wearing a complete plain school uniform with matching jacket, shirt, and trousers, no badge. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear school uniform",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_video_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2346,6 +2886,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wallet_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813751869,
+      "prompt": "Create a standalone storybook illustration: one open bifold wallet showing plain cards and a few notes with no readable details. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bifold wallet",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
       "width": 512,
       "height": 512
     },
@@ -2366,10 +2918,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_watch_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813759397,
+      "prompt": "Create a standalone storybook illustration: one analog wristwatch strapped around a wrist, with plain hands and no written numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear wristwatch sense",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_water_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wear_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-175953",
+      "seed": 782813766930,
+      "prompt": "Create a standalone storybook illustration: a child already wearing a bright red coat, scarf, and boots and happily pointing to the outfit. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear already-wearing action",
+      "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
       "width": 512,
       "height": 512
     },

@@ -310,6 +310,49 @@ class FamilyPromptTests(unittest.TestCase):
             MODULE.build_prompt(next(word for word in words if word["id"] == "ket_writer_n")),
         )
 
+    def test_every_clothing_word_has_a_dedicated_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        clothing_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "衣服和配饰"
+        }
+        clothing_scenes = getattr(MODULE, "CLOTHING_SCENES", {})
+
+        self.assertEqual(clothing_ids, set(clothing_scenes))
+        self.assertIn(
+            "small coin purse",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_purse_n")),
+        )
+        self.assertIn(
+            "open bifold wallet",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_wallet_n")),
+        )
+        self.assertIn(
+            "already wearing",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_wear_v")),
+        )
+        self.assertIn(
+            "complete plain football kit",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_kit_n")),
+        )
+        self.assertIn(
+            "front surface completely blank and undecorated",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_backpack_n")),
+        )
+        self.assertIn(
+            "no straps, patches, tags, buckles, or marks",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_boot_n")),
+        )
+        self.assertIn(
+            "one single plain yellow rubber rain boot",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_boot_n")),
+        )
+        self.assertIn(
+            "straight handle visibly connected to the canopy",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_umbrella_n")),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
