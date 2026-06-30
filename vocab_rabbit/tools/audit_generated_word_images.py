@@ -58,6 +58,17 @@ def detect_text(record: dict[str, Any]) -> str:
     return " ".join(text.split())
 
 
+def write_review_tsv(records: list[dict[str, Any]], output_path: Path) -> None:
+    with output_path.open("w", encoding="utf-8") as file:
+        file.write("ordinal\twordId\tenglish\tstatus\tnotes\n")
+        for record in records:
+            notes = f"OCR: {record['ocrText']}" if record["ocrText"] else ""
+            file.write(
+                f"{record['ordinal']}\t{record['wordId']}\t{record['english']}"
+                f"\tPENDING\t{notes}\n"
+            )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Create review artifacts for generated word images.")
     parser.add_argument("--run-dir", type=Path, default=DEFAULT_RUN_DIR)
@@ -93,11 +104,7 @@ def main() -> None:
     ]
 
     tsv_path = review_dir / "manual-review.tsv"
-    with tsv_path.open("w", encoding="utf-8") as file:
-        file.write("ordinal\twordId\tenglish\tstatus\tnotes\n")
-        for record in enriched:
-            default_status = "REVIEW" if record["ocrText"] else "OK"
-            file.write(f"{record['ordinal']}\t{record['wordId']}\t{record['english']}\t{default_status}\t{record['ocrText']}\n")
+    write_review_tsv(enriched, tsv_path)
 
     report = {
         "runDir": str(run_dir),
