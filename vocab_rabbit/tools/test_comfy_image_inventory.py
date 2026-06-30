@@ -76,6 +76,23 @@ class ComfyImageInventoryTests(unittest.TestCase):
             self.assertEqual(report["invalidWordIds"], ["ket_c"])
             self.assertFalse(report["complete"])
 
+    def test_validate_inventory_counts_rejected_reviews_as_first_pass_processed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            image_root = Path(temporary_directory)
+            Image.new("RGB", (512, 512), "white").save(image_root / "ket_a.webp", "WEBP")
+            words = [{"id": "ket_a"}, {"id": "ket_b"}, {"id": "ket_c"}]
+            manifest = {
+                "version": 1,
+                "images": [{"wordId": "ket_a", "status": "accepted"}],
+                "reviews": [{"wordId": "ket_b", "status": "REJECT"}],
+            }
+
+            report = MODULE.validate_inventory(words, manifest, image_root)
+
+            self.assertEqual(report.get("reviewed"), 2)
+            self.assertEqual(report.get("unreviewed"), 1)
+            self.assertEqual(report.get("unreviewedWordIds"), ["ket_c"])
+            self.assertFalse(report.get("firstPassComplete"))
 
 if __name__ == "__main__":
     unittest.main()

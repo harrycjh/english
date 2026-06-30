@@ -60,7 +60,13 @@ def validate_inventory(
     ]
     accepted_by_id = {record["wordId"]: record for record in accepted_records}
     accepted_ids = set(accepted_by_id)
+    reviewed_ids = accepted_ids | {
+        record["wordId"]
+        for record in manifest.get("reviews", [])
+        if record.get("status") in {"ACCEPT", "REJECT"}
+    }
     missing_word_ids = sorted(word_ids - accepted_ids)
+    unreviewed_word_ids = sorted(word_ids - reviewed_ids)
     invalid_word_ids = sorted(
         word_id
         for word_id in accepted_ids
@@ -73,6 +79,10 @@ def validate_inventory(
         "accepted": len(accepted_ids),
         "remaining": len(missing_word_ids),
         "missingWordIds": missing_word_ids,
+        "reviewed": len(word_ids & reviewed_ids),
+        "unreviewed": len(unreviewed_word_ids),
+        "unreviewedWordIds": unreviewed_word_ids,
+        "firstPassComplete": not unreviewed_word_ids,
         "invalidWordIds": invalid_word_ids,
         "complete": not missing_word_ids and not invalid_word_ids,
     }
@@ -112,6 +122,8 @@ def main() -> None:
         "totalWords": report["totalWords"],
         "accepted": report["accepted"],
         "remaining": report["remaining"],
+        "reviewed": report["reviewed"],
+        "unreviewed": report["unreviewed"],
         "invalid": len(report["invalidWordIds"]),
         "complete": report["complete"],
     }

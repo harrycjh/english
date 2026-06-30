@@ -114,8 +114,23 @@ def apply_batch(
         record["wordId"]: record
         for record in provenance.get("images", [])
     }
+    reviews_by_id = {
+        record["wordId"]: record
+        for record in provenance.get("reviews", [])
+    }
     run_id = run_manifest.get("meta", {}).get("runId") or run_dir.name
     accepted_at = datetime.now(timezone.utc).isoformat()
+    for word_id, decision in decisions.items():
+        record = records_by_id[word_id]
+        reviews_by_id[word_id] = {
+            "wordId": word_id,
+            "status": decision["status"],
+            "runId": run_id,
+            "seed": record.get("seed"),
+            "prompt": record.get("prompt", ""),
+            "reviewNotes": decision["notes"],
+            "reviewedAt": accepted_at,
+        }
     for word_id in accepted_word_ids:
         record = records_by_id[word_id]
         provenance_by_id[word_id] = {
@@ -134,6 +149,10 @@ def apply_batch(
     provenance["images"] = [
         provenance_by_id[word_id]
         for word_id in sorted(provenance_by_id)
+    ]
+    provenance["reviews"] = [
+        reviews_by_id[word_id]
+        for word_id in sorted(reviews_by_id)
     ]
     write_json_atomic(manifest_path, provenance)
 

@@ -174,6 +174,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_badminton_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815075810,
+      "prompt": "Create a standalone storybook illustration: two players hitting a shuttlecock across a badminton net with plain rackets. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear badminton scene",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bag_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -186,10 +198,58 @@
       "height": 512
     },
     {
+      "wordId": "ket_ball_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815083355,
+      "prompt": "Create a standalone storybook illustration: one simple colorful round ball resting on grass, shown clearly as the main object with no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear ball",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bank_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_baseball_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815090882,
+      "prompt": "Create a standalone storybook illustration: a baseball player swinging a wooden bat toward a pitched white ball on a baseball field. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear baseball action",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_basketball_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815098414,
+      "prompt": "Create a standalone storybook illustration: a basketball player shooting an orange ball toward a hoop on an outdoor court. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear basketball action",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bat_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815105946,
+      "prompt": "Create a standalone storybook illustration: one plain wooden baseball bat lying beside a white baseball, no writing or logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear sports bat sense",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -374,6 +434,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_boat_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815113483,
+      "prompt": "Create a standalone storybook illustration: one small simple rowboat floating on calm water with two oars inside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear rowboat",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -678,6 +750,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_catch_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815121118,
+      "prompt": "Create a standalone storybook illustration: one child catching a red ball securely with both hands while it arrives through the air. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear catching action",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_cd_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -786,6 +870,18 @@
       "prompt": "Create a standalone storybook illustration: a cleaner wearing gloves and using a mop and bucket to clean a shiny floor. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear cleaning action",
       "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_climb_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815128654,
+      "prompt": "Create a standalone storybook illustration: a child wearing a safety harness actively climbing an indoor rock wall with colored holds. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear climbing action",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -970,6 +1066,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cricket_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815136188,
+      "prompt": "Create a standalone storybook illustration: a cricket batter using a flat wooden bat beside three plain stumps as a ball approaches. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear cricket sport sense",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -1294,6 +1402,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_enter_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815143722,
+      "prompt": "Create a standalone storybook illustration: an athlete stepping through an open stadium gate to enter a sports competition, no sign. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear entering stadium action",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_entrance_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -1446,6 +1566,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_fishing_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815151261,
+      "prompt": "Create a standalone storybook illustration: a person fishing peacefully with a rod beside a lake while a fish approaches the hook. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear fishing",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_flat_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -1490,6 +1622,30 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_football_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815158796,
+      "prompt": "Create a standalone storybook illustration: one classic black-and-white football resting beside a plain goal net, no logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear football",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_football_player_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815166328,
+      "prompt": "Create a standalone storybook illustration: one football player in a plain kit dribbling a ball on a grass pitch, no number or logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear football player",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -1586,6 +1742,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_game_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815173857,
+      "prompt": "Create a standalone storybook illustration: four children actively playing a simple team ball game together on a playground. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear group game",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -1694,6 +1862,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_goal_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815181388,
+      "prompt": "Create a standalone storybook illustration: a football flying into a clear goal net while a goalkeeper reaches for it, no scoreboard. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear football goal",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_goat_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1706,6 +1886,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_golf_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815188920,
+      "prompt": "Create a standalone storybook illustration: a golfer swinging a club toward a ball on a green golf course with a plain flag. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear golf",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -1954,6 +2146,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_hockey_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815196456,
+      "prompt": "Create a standalone storybook illustration: two field hockey players using curved sticks to compete for a ball on grass, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear hockey",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -2746,6 +2950,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_player_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815211525,
+      "prompt": "Create a standalone storybook illustration: one clearly recognizable sports player in a plain uniform holding a ball ready to join a game. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear player and OCR is false positive",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_playground_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2794,6 +3010,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_pool_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815219062,
+      "prompt": "Create a standalone storybook illustration: one small round backyard pool filled with clear water beside a garden chair. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear small pool",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_post_office_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2806,6 +3034,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_prize_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815226595,
+      "prompt": "Create a standalone storybook illustration: one gold trophy cup with a plain medal and ribbon arranged beside it, no writing or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear trophy prize",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -2862,6 +3102,30 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_race_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815235633,
+      "prompt": "Create a standalone storybook illustration: several runners competing side by side in a race toward a plain finish ribbon, no lane numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear running race and OCR is false positive",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_racket_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815243164,
+      "prompt": "Create a standalone storybook illustration: one plain tennis racket with visible strings lying beside a tennis ball, no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear racket and OCR is false positive",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -2950,6 +3214,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_ride_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815250802,
+      "prompt": "Create a standalone storybook illustration: a helmeted child actively riding a bicycle along a safe park path. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bicycle riding",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_riding_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815258330,
+      "prompt": "Create a standalone storybook illustration: a helmeted rider practicing horse riding in a safe fenced arena. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear horse riding",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_ring_n_v",
       "status": "accepted",
       "source": "comfy-run",
@@ -3022,6 +3310,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_rugby_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815265873,
+      "prompt": "Create a standalone storybook illustration: two rugby players safely passing an oval ball on a grass field, plain kits with no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear rugby and OCR is false positive",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_safe_adj",
       "status": "accepted",
       "source": "comfy-run",
@@ -3030,6 +3330,18 @@
       "prompt": "Create a standalone storybook illustration: a family protected safely inside a strong cozy home while heavy rain and wind remain outside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear protected family scene",
       "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sailing_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815273411,
+      "prompt": "Create a standalone storybook illustration: a sailor controlling a small sailboat with one white sail across open blue water. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear sailing",
+      "acceptedAt": "2026-06-30T15:56:08.017921+00:00",
       "width": 512,
       "height": 512
     },
@@ -3070,6 +3382,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sea_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782834995224,
+      "prompt": "Create a standalone storybook illustration: a wide open blue sea with waves stretching to the horizon and one tiny distant sailboat. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear open sea",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
       "width": 512,
       "height": 512
     },
@@ -3218,6 +3542,42 @@
       "height": 512
     },
     {
+      "wordId": "ket_skate_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835002774,
+      "prompt": "Create a standalone storybook illustration: a child wearing ice skates and actively skating across a safe frozen rink. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear ice skating",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_skateboard_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835010327,
+      "prompt": "Create a standalone storybook illustration: one plain skateboard shown from the side with deck, trucks, and four wheels, no graphic. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear plain skateboard",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_skiing_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835025429,
+      "prompt": "Create a standalone storybook illustration: several people enjoying downhill skiing together on a broad snowy mountain slope. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear group skiing",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_skirt_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -3258,6 +3618,42 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_snowboard_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835032976,
+      "prompt": "Create a standalone storybook illustration: one plain snowboard with bindings standing upright in clean snow, no graphics. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear snowboard",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_snowboarding_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835040524,
+      "prompt": "Create a standalone storybook illustration: a snowboarder in helmet and plain winter clothes carving safely down a snowy slope. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear snowboarding and OCR is false positive",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_soccer_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835048082,
+      "prompt": "Create a standalone storybook illustration: children actively playing soccer together on a grass field with a ball and two plain goals. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear soccer game",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
       "width": 512,
       "height": 512
     },
@@ -3318,6 +3714,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_sport_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835055629,
+      "prompt": "Create a standalone storybook illustration: four athletes together demonstrating different sports: running, tennis, basketball, and swimming. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "multiple sports and OCR is false positive",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sports_centre_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835063171,
+      "prompt": "Create a standalone storybook illustration: a large indoor sports centre cutaway showing a basketball court, swimming pool, and gym, no sign. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear multi-sport centre",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_spring_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -3330,6 +3750,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_stadium_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835070702,
+      "prompt": "Create a standalone storybook illustration: a large open sports stadium with field, running track, stands, and cheering crowd, no scoreboard text. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear stadium",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
       "width": 512,
       "height": 512
     },
@@ -3466,6 +3898,42 @@
       "height": 512
     },
     {
+      "wordId": "ket_surf_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835078261,
+      "prompt": "Create a standalone storybook illustration: one surfer actively riding along the face of a curling ocean wave on a plain board. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear surfing action",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_surfboard_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835085805,
+      "prompt": "Create a standalone storybook illustration: one plain colorful surfboard with fins resting upright in sand, no writing or logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear surfboard",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_surfboarding_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835093355,
+      "prompt": "Create a standalone storybook illustration: a person balancing on a surfboard while riding a medium ocean wave, safe and clearly visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear surfboard riding",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_surname_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -3490,6 +3958,30 @@
       "prompt": "Create a standalone storybook illustration: a child wearing one warm knitted sweater with long sleeves on a cold day, no pattern letters. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear worn sweater",
       "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_swimming_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835100908,
+      "prompt": "Create a standalone storybook illustration: one swimmer actively swimming freestyle through a clear pool lane, no lane numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear swimming",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_swimming_pool_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835108451,
+      "prompt": "Create a standalone storybook illustration: a full swimming pool with clear blue water, lane ropes, starting blocks, and swimmers, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear lane pool",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
       "width": 512,
       "height": 512
     },
@@ -3530,10 +4022,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_table_tennis_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835115994,
+      "prompt": "Create a standalone storybook illustration: two players hitting a small ball across a table tennis table and net. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear table tennis and OCR is false positive",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_tail_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_team_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835123542,
+      "prompt": "Create a standalone storybook illustration: a diverse sports team in matching plain uniforms forming a supportive huddle, no logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear team huddle",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
       "width": 512,
       "height": 512
     },
@@ -3558,6 +4074,42 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tennis_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835131085,
+      "prompt": "Create a standalone storybook illustration: two tennis players rallying a ball across a court net with plain rackets. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear tennis match",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tennis_player_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835138647,
+      "prompt": "Create a standalone storybook illustration: one tennis player in plain sportswear serving a ball with a racket, no logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear tennis player",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_throw_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835146205,
+      "prompt": "Create a standalone storybook illustration: one child clearly throwing a red ball through the air toward a friend. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear throwing action and OCR is false positive",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
       "width": 512,
       "height": 512
     },
@@ -3778,6 +4330,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_volleyball_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835161292,
+      "prompt": "Create a standalone storybook illustration: two teams hitting a volleyball over a high net on a beach court, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear volleyball",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_wall_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -3938,10 +4502,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_win_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835168832,
+      "prompt": "Create a standalone storybook illustration: one runner clearly winning by crossing a plain finish ribbon ahead of the other runners, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear winning finish",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_wind_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_windsurfing_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835176387,
+      "prompt": "Create a standalone storybook illustration: a windsurfer controlling a tall colorful sail on a board across breezy blue water. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear windsurfing",
+      "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
       "width": 512,
       "height": 512
     },
@@ -4060,6 +4648,485 @@
       "commit": "8b246d2",
       "width": 512,
       "height": 512
+    }
+  ],
+  "reviews": [
+    {
+      "wordId": "ket_badminton_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815075810,
+      "prompt": "Create a standalone storybook illustration: two players hitting a shuttlecock across a badminton net with plain rackets. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear badminton scene",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_ball_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815083355,
+      "prompt": "Create a standalone storybook illustration: one simple colorful round ball resting on grass, shown clearly as the main object with no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear ball",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_baseball_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815090882,
+      "prompt": "Create a standalone storybook illustration: a baseball player swinging a wooden bat toward a pitched white ball on a baseball field. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear baseball action",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_basketball_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815098414,
+      "prompt": "Create a standalone storybook illustration: a basketball player shooting an orange ball toward a hoop on an outdoor court. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear basketball action",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_bat_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815105946,
+      "prompt": "Create a standalone storybook illustration: one plain wooden baseball bat lying beside a white baseball, no writing or logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear sports bat sense",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_boat_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815113483,
+      "prompt": "Create a standalone storybook illustration: one small simple rowboat floating on calm water with two oars inside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear rowboat",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_catch_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815121118,
+      "prompt": "Create a standalone storybook illustration: one child catching a red ball securely with both hands while it arrives through the air. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear catching action",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_climb_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815128654,
+      "prompt": "Create a standalone storybook illustration: a child wearing a safety harness actively climbing an indoor rock wall with colored holds. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear climbing action",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_cricket_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815136188,
+      "prompt": "Create a standalone storybook illustration: a cricket batter using a flat wooden bat beside three plain stumps as a ball approaches. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear cricket sport sense",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_enter_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815143722,
+      "prompt": "Create a standalone storybook illustration: an athlete stepping through an open stadium gate to enter a sports competition, no sign. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear entering stadium action",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_fishing_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815151261,
+      "prompt": "Create a standalone storybook illustration: a person fishing peacefully with a rod beside a lake while a fish approaches the hook. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear fishing",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_football_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815158796,
+      "prompt": "Create a standalone storybook illustration: one classic black-and-white football resting beside a plain goal net, no logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear football",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_football_player_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815166328,
+      "prompt": "Create a standalone storybook illustration: one football player in a plain kit dribbling a ball on a grass pitch, no number or logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear football player",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_game_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815173857,
+      "prompt": "Create a standalone storybook illustration: four children actively playing a simple team ball game together on a playground. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear group game",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_goal_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815181388,
+      "prompt": "Create a standalone storybook illustration: a football flying into a clear goal net while a goalkeeper reaches for it, no scoreboard. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear football goal",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_golf_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815188920,
+      "prompt": "Create a standalone storybook illustration: a golfer swinging a club toward a ball on a green golf course with a plain flag. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear golf",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_hockey_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815196456,
+      "prompt": "Create a standalone storybook illustration: two field hockey players using curved sticks to compete for a ball on grass, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear hockey",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_luck_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815203994,
+      "prompt": "Create a standalone storybook illustration: a football unexpectedly bouncing into the goal off the post while both teams react with surprise. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "ordinary ball game does not communicate luck",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_player_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815211525,
+      "prompt": "Create a standalone storybook illustration: one clearly recognizable sports player in a plain uniform holding a ball ready to join a game. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear player and OCR is false positive",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_pool_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815219062,
+      "prompt": "Create a standalone storybook illustration: one small round backyard pool filled with clear water beside a garden chair. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear small pool",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_prize_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815226595,
+      "prompt": "Create a standalone storybook illustration: one gold trophy cup with a plain medal and ribbon arranged beside it, no writing or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear trophy prize",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_race_n_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815235633,
+      "prompt": "Create a standalone storybook illustration: several runners competing side by side in a race toward a plain finish ribbon, no lane numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear running race and OCR is false positive",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_racket_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815243164,
+      "prompt": "Create a standalone storybook illustration: one plain tennis racket with visible strings lying beside a tennis ball, no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear racket and OCR is false positive",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_ride_n_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815250802,
+      "prompt": "Create a standalone storybook illustration: a helmeted child actively riding a bicycle along a safe park path. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bicycle riding",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_riding_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815258330,
+      "prompt": "Create a standalone storybook illustration: a helmeted rider practicing horse riding in a safe fenced arena. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear horse riding",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_rugby_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815265873,
+      "prompt": "Create a standalone storybook illustration: two rugby players safely passing an oval ball on a grass field, plain kits with no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear rugby and OCR is false positive",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_sailing_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-182435",
+      "seed": 782815273411,
+      "prompt": "Create a standalone storybook illustration: a sailor controlling a small sailboat with one white sail across open blue water. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear sailing",
+      "reviewedAt": "2026-06-30T15:56:08.017921+00:00"
+    },
+    {
+      "wordId": "ket_sea_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782834995224,
+      "prompt": "Create a standalone storybook illustration: a wide open blue sea with waves stretching to the horizon and one tiny distant sailboat. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear open sea",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_skate_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835002774,
+      "prompt": "Create a standalone storybook illustration: a child wearing ice skates and actively skating across a safe frozen rink. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear ice skating",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_skateboard_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835010327,
+      "prompt": "Create a standalone storybook illustration: one plain skateboard shown from the side with deck, trucks, and four wheels, no graphic. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear plain skateboard",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_ski_v",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835017875,
+      "prompt": "Create a standalone storybook illustration: one skier actively skiing downhill between safe course markers on a snowy slope, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "slope signs contain exclamation marks",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_skiing_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835025429,
+      "prompt": "Create a standalone storybook illustration: several people enjoying downhill skiing together on a broad snowy mountain slope. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear group skiing",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_snowboard_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835032976,
+      "prompt": "Create a standalone storybook illustration: one plain snowboard with bindings standing upright in clean snow, no graphics. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear snowboard",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_snowboarding_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835040524,
+      "prompt": "Create a standalone storybook illustration: a snowboarder in helmet and plain winter clothes carving safely down a snowy slope. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear snowboarding and OCR is false positive",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_soccer_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835048082,
+      "prompt": "Create a standalone storybook illustration: children actively playing soccer together on a grass field with a ball and two plain goals. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear soccer game",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_sport_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835055629,
+      "prompt": "Create a standalone storybook illustration: four athletes together demonstrating different sports: running, tennis, basketball, and swimming. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "multiple sports and OCR is false positive",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_sports_centre_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835063171,
+      "prompt": "Create a standalone storybook illustration: a large indoor sports centre cutaway showing a basketball court, swimming pool, and gym, no sign. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear multi-sport centre",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_stadium_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835070702,
+      "prompt": "Create a standalone storybook illustration: a large open sports stadium with field, running track, stands, and cheering crowd, no scoreboard text. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear stadium",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_surf_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835078261,
+      "prompt": "Create a standalone storybook illustration: one surfer actively riding along the face of a curling ocean wave on a plain board. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear surfing action",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_surfboard_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835085805,
+      "prompt": "Create a standalone storybook illustration: one plain colorful surfboard with fins resting upright in sand, no writing or logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear surfboard",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_surfboarding_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835093355,
+      "prompt": "Create a standalone storybook illustration: a person balancing on a surfboard while riding a medium ocean wave, safe and clearly visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear surfboard riding",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_swimming_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835100908,
+      "prompt": "Create a standalone storybook illustration: one swimmer actively swimming freestyle through a clear pool lane, no lane numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear swimming",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_swimming_pool_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835108451,
+      "prompt": "Create a standalone storybook illustration: a full swimming pool with clear blue water, lane ropes, starting blocks, and swimmers, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear lane pool",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_table_tennis_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835115994,
+      "prompt": "Create a standalone storybook illustration: two players hitting a small ball across a table tennis table and net. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear table tennis and OCR is false positive",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_team_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835123542,
+      "prompt": "Create a standalone storybook illustration: a diverse sports team in matching plain uniforms forming a supportive huddle, no logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear team huddle",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_tennis_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835131085,
+      "prompt": "Create a standalone storybook illustration: two tennis players rallying a ball across a court net with plain rackets. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear tennis match",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_tennis_player_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835138647,
+      "prompt": "Create a standalone storybook illustration: one tennis player in plain sportswear serving a ball with a racket, no logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear tennis player",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_throw_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835146205,
+      "prompt": "Create a standalone storybook illustration: one child clearly throwing a red ball through the air toward a friend. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear throwing action and OCR is false positive",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_v_versus_prep",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835153751,
+      "prompt": "Create a standalone storybook illustration: two opposing teams facing each other across a central line before a match, one team red and one blue, no letters. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "team shirts contain visible numbers",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_volleyball_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835161292,
+      "prompt": "Create a standalone storybook illustration: two teams hitting a volleyball over a high net on a beach court, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear volleyball",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_win_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835168832,
+      "prompt": "Create a standalone storybook illustration: one runner clearly winning by crossing a plain finish ribbon ahead of the other runners, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear winning finish",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_windsurfing_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835176387,
+      "prompt": "Create a standalone storybook illustration: a windsurfer controlling a tall colorful sail on a board across breezy blue water. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear windsurfing",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_winner_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260630-235635",
+      "seed": 782835183944,
+      "prompt": "Create a standalone storybook illustration: a happy athlete standing on the highest center podium holding a trophy while others applaud, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "podium contains visible ranking numbers",
+      "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
     }
   ]
 }

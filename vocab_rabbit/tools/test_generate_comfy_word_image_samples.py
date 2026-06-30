@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import importlib.util
+import json
 import unittest
 from pathlib import Path
 
@@ -15,6 +16,7 @@ SPEC.loader.exec_module(MODULE)
 class FamilyPromptTests(unittest.TestCase):
     def test_generator_exposes_deterministic_word_selection(self) -> None:
         self.assertTrue(callable(getattr(MODULE, "select_words", None)))
+        self.assertTrue(callable(getattr(MODULE, "load_processed_ids", None)))
 
     def test_select_words_excludes_accepted_ids_and_sorts_by_word_id(self) -> None:
         words = [
@@ -33,6 +35,26 @@ class FamilyPromptTests(unittest.TestCase):
         )
 
         self.assertEqual([word["id"] for word in selected], ["ket_d"])
+
+    def test_load_processed_ids_includes_accepted_images_and_rejected_reviews(self) -> None:
+        import tempfile
+
+        loader = getattr(MODULE, "load_processed_ids", None)
+        self.assertTrue(callable(loader))
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            manifest_path = Path(temporary_directory) / "manifest.json"
+            manifest_path.write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "images": [{"wordId": "ket_a", "status": "accepted"}],
+                        "reviews": [{"wordId": "ket_b", "status": "REJECT"}],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(loader(manifest_path), {"ket_a", "ket_b"})
 
     def test_workflow_template_is_bundled_with_the_project(self) -> None:
         self.assertTrue(MODULE.WORKFLOW_TEMPLATE_PATH.is_relative_to(MODULE.PROJECT_ROOT))
@@ -382,6 +404,33 @@ class FamilyPromptTests(unittest.TestCase):
         self.assertIn(
             "no tonearm or turntable",
             MODULE.build_prompt(next(word for word in words if word["id"] == "ket_dvd_player_n")),
+        )
+
+    def test_every_sport_word_has_a_dedicated_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        sport_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "运动和比赛"
+        }
+        sport_scenes = getattr(MODULE, "SPORT_SCENES", {})
+
+        self.assertEqual(sport_ids, set(sport_scenes))
+        self.assertIn(
+            "wooden baseball bat",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_bat_n")),
+        )
+        self.assertIn(
+            "two opposing teams facing each other",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_v_versus_prep")),
+        )
+        self.assertIn(
+            "several runners competing side by side",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_race_n_v")),
+        )
+        self.assertIn(
+            "throwing a basketball backward over one shoulder with eyes closed",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_luck_n")),
         )
 
 

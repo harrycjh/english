@@ -435,6 +435,62 @@ HOUSE_SCENES = {
     "ket_washing_up_n": "a person washing plates and cups in a kitchen sink with bubbles and a drying rack nearby",
 }
 
+SPORT_SCENES = {
+    "ket_ball_n": "one simple colorful round ball resting on grass, shown clearly as the main object with no logo",
+    "ket_football_n": "one classic black-and-white football resting beside a plain goal net, no logos",
+    "ket_riding_n": "a helmeted rider practicing horse riding in a safe fenced arena",
+    "ket_swimming_n": "one swimmer actively swimming freestyle through a clear pool lane, no lane numbers",
+    "ket_badminton_n": "two players hitting a shuttlecock across a badminton net with plain rackets",
+    "ket_football_player_n": "one football player in a plain kit dribbling a ball on a grass pitch, no number or logo",
+    "ket_rugby_n": "two rugby players safely passing an oval ball on a grass field, plain kits with no numbers",
+    "ket_baseball_n": "a baseball player swinging a wooden bat toward a pitched white ball on a baseball field",
+    "ket_game_n": "four children actively playing a simple team ball game together on a playground",
+    "ket_swimming_pool_n": "a full swimming pool with clear blue water, lane ropes, starting blocks, and swimmers, no numbers",
+    "ket_basketball_n": "a basketball player shooting an orange ball toward a hoop on an outdoor court",
+    "ket_goal_n": "a football flying into a clear goal net while a goalkeeper reaches for it, no scoreboard",
+    "ket_sailing_n": "a sailor controlling a small sailboat with one white sail across open blue water",
+    "ket_bat_n": "one plain wooden baseball bat lying beside a white baseball, no writing or logo",
+    "ket_golf_n": "a golfer swinging a club toward a ball on a green golf course with a plain flag",
+    "ket_sea_n": "a wide open blue sea with waves stretching to the horizon and one tiny distant sailboat",
+    "ket_table_tennis_n": "two players hitting a small ball across a table tennis table and net",
+    "ket_hockey_n": "two field hockey players using curved sticks to compete for a ball on grass, no numbers",
+    "ket_skate_v": "a child wearing ice skates and actively skating across a safe frozen rink",
+    "ket_team_n": "a diverse sports team in matching plain uniforms forming a supportive huddle, no logos",
+    "ket_skateboard_n": "one plain skateboard shown from the side with deck, trucks, and four wheels, no graphic",
+    "ket_tennis_n": "two tennis players rallying a ball across a court net with plain rackets",
+    "ket_luck_n": "a child throwing a basketball backward over one shoulder with eyes closed while facing away from the hoop, the ball dropping perfectly into the basket as two friends react with surprise, a clearly lucky shot",
+    "ket_ski_v": "one skier actively skiing downhill between safe course markers on a snowy slope, no signs",
+    "ket_tennis_player_n": "one tennis player in plain sportswear serving a ball with a racket, no logos",
+    "ket_skiing_n": "several people enjoying downhill skiing together on a broad snowy mountain slope",
+    "ket_throw_v": "one child clearly throwing a red ball through the air toward a friend",
+    "ket_boat_n": "one small simple rowboat floating on calm water with two oars inside",
+    "ket_snowboard_n": "one plain snowboard with bindings standing upright in clean snow, no graphics",
+    "ket_catch_v": "one child catching a red ball securely with both hands while it arrives through the air",
+    "ket_player_n": "one clearly recognizable sports player in a plain uniform holding a ball ready to join a game",
+    "ket_snowboarding_n": "a snowboarder in helmet and plain winter clothes carving safely down a snowy slope",
+    "ket_climb_v": "a child wearing a safety harness actively climbing an indoor rock wall with colored holds",
+    "ket_pool_n": "one small round backyard pool filled with clear water beside a garden chair",
+    "ket_soccer_n": "children actively playing soccer together on a grass field with a ball and two plain goals",
+    "ket_sport_n": "four athletes together demonstrating different sports: running, tennis, basketball, and swimming",
+    "ket_v_versus_prep": "two opposing teams facing each other across a central line before a match, one team red and one blue, no letters",
+    "ket_sports_centre_n": "a large indoor sports centre cutaway showing a basketball court, swimming pool, and gym, no sign",
+    "ket_volleyball_n": "two teams hitting a volleyball over a high net on a beach court, no numbers",
+    "ket_prize_n": "one gold trophy cup with a plain medal and ribbon arranged beside it, no writing or numbers",
+    "ket_stadium_n": "a large open sports stadium with field, running track, stands, and cheering crowd, no scoreboard text",
+    "ket_cricket_n": "a cricket batter using a flat wooden bat beside three plain stumps as a ball approaches",
+    "ket_race_n_v": "several runners competing side by side in a race toward a plain finish ribbon, no lane numbers",
+    "ket_surf_v": "one surfer actively riding along the face of a curling ocean wave on a plain board",
+    "ket_racket_n": "one plain tennis racket with visible strings lying beside a tennis ball, no logo",
+    "ket_surfboard_n": "one plain colorful surfboard with fins resting upright in sand, no writing or logo",
+    "ket_win_v": "one runner clearly winning by crossing a plain finish ribbon ahead of the other runners, no numbers",
+    "ket_enter_v": "an athlete stepping through an open stadium gate to enter a sports competition, no sign",
+    "ket_surfboarding_n": "a person balancing on a surfboard while riding a medium ocean wave, safe and clearly visible",
+    "ket_windsurfing_n": "a windsurfer controlling a tall colorful sail on a board across breezy blue water",
+    "ket_fishing_n": "a person fishing peacefully with a rod beside a lake while a fish approaches the hook",
+    "ket_ride_n_v": "a helmeted child actively riding a bicycle along a safe park path",
+    "ket_winner_n": "a happy athlete standing on the highest center podium holding a trophy while others applaud, no numbers",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -525,15 +581,21 @@ def select_words(
     return candidates[offset : offset + limit]
 
 
-def load_accepted_ids(path: Path) -> set[str]:
+def load_processed_ids(path: Path) -> set[str]:
     if not path.exists():
         return set()
     manifest = json.loads(path.read_text(encoding="utf-8"))
-    return {
+    accepted_ids = {
         record["wordId"]
         for record in manifest.get("images", [])
         if record.get("status") == "accepted"
     }
+    reviewed_ids = {
+        record["wordId"]
+        for record in manifest.get("reviews", [])
+        if record.get("status") in {"ACCEPT", "REJECT"}
+    }
+    return accepted_ids | reviewed_ids
 
 
 def build_prompt(word: dict[str, Any]) -> str:
@@ -740,7 +802,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                         word["id"],
                                                         HOUSE_SCENES.get(
                                                             word["id"],
-                                                            scene_hints.get(english, fallback_scene),
+                                                            SPORT_SCENES.get(
+                                                                word["id"],
+                                                                scene_hints.get(english, fallback_scene),
+                                                            ),
                                                         ),
                                                     ),
                                                 ),
@@ -878,7 +943,7 @@ def main() -> None:
     args = parser.parse_args()
 
     all_words = load_words(include_approved=True)
-    accepted_ids = set() if args.allow_approved else load_accepted_ids(args.accepted_manifest)
+    accepted_ids = set() if args.allow_approved else load_processed_ids(args.accepted_manifest)
     if args.word_ids:
         by_id = {word["id"]: word for word in all_words}
         selected_words = [

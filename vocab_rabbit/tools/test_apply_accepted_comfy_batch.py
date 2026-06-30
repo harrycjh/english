@@ -146,6 +146,14 @@ class ApplyAcceptedComfyBatchTests(unittest.TestCase):
             self.assertEqual(records_by_id["ket_a"]["seed"], 101)
             self.assertEqual(records_by_id["ket_a"]["reviewNotes"], "clear meaning")
             self.assertNotIn("ket_b", records_by_id)
+            reviews_by_id = {
+                record["wordId"]: record
+                for record in updated_manifest.get("reviews", [])
+            }
+            self.assertEqual(set(reviews_by_id), {"ket_a", "ket_b"})
+            self.assertEqual(reviews_by_id["ket_a"]["status"], "ACCEPT")
+            self.assertEqual(reviews_by_id["ket_b"]["status"], "REJECT")
+            self.assertEqual(reviews_by_id["ket_b"]["reviewNotes"], "wrong sense")
 
 
 if __name__ == "__main__":
