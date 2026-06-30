@@ -13,6 +13,27 @@ SPEC.loader.exec_module(MODULE)
 
 
 class FamilyPromptTests(unittest.TestCase):
+    def test_generator_exposes_deterministic_word_selection(self) -> None:
+        self.assertTrue(callable(getattr(MODULE, "select_words", None)))
+
+    def test_select_words_excludes_accepted_ids_and_sorts_by_word_id(self) -> None:
+        words = [
+            {"id": "ket_c", "category": "食物和饮料"},
+            {"id": "ket_a", "category": "食物和饮料"},
+            {"id": "ket_b", "category": "天气"},
+            {"id": "ket_d", "category": "食物和饮料"},
+        ]
+
+        selected = MODULE.select_words(
+            words,
+            accepted_ids={"ket_c"},
+            category="食物和饮料",
+            offset=1,
+            limit=1,
+        )
+
+        self.assertEqual([word["id"] for word in selected], ["ket_d"])
+
     def test_workflow_template_is_bundled_with_the_project(self) -> None:
         self.assertTrue(MODULE.WORKFLOW_TEMPLATE_PATH.is_relative_to(MODULE.PROJECT_ROOT))
         self.assertTrue(MODULE.WORKFLOW_TEMPLATE_PATH.exists())

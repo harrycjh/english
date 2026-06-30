@@ -18,6 +18,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 WORD_LIST_PATH = PROJECT_ROOT / "public/content/words/ket_vocabulary.json"
+COMFY_MANIFEST_PATH = PROJECT_ROOT / "public/content/words/comfy-image-manifest.json"
 WORKFLOW_TEMPLATE_PATH = PROJECT_ROOT / "tools/workflows/z-image-turbo.api-prompt.json"
 COMFY_OUTPUT_ROOT = Path("/Users/chujianhe/ComfyUI-Shared/output")
 DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "design-output/word-image-generation"
@@ -345,6 +346,34 @@ def load_words(include_approved: bool) -> list[dict[str, Any]]:
     ]
 
 
+def select_words(
+    words: list[dict[str, Any]],
+    accepted_ids: set[str],
+    category: str | None,
+    offset: int,
+    limit: int,
+) -> list[dict[str, Any]]:
+    candidates = [
+        word
+        for word in words
+        if word["id"] not in accepted_ids
+        and (category is None or word.get("category") == category)
+    ]
+    candidates.sort(key=lambda word: word["id"])
+    return candidates[offset : offset + limit]
+
+
+def load_accepted_ids(path: Path) -> set[str]:
+    if not path.exists():
+        return set()
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    return {
+        record["wordId"]
+        for record in manifest.get("images", [])
+        if record.get("status") == "accepted"
+    }
+
+
 def build_prompt(word: dict[str, Any]) -> str:
     english = word["english"]
     scene_hints = {
@@ -665,8 +694,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate sample word images through local ComfyUI.")
     parser.add_argument("--limit", type=int, default=10)
     parser.add_argument("--offset", type=int, default=0)
+    parser.add_argument("--category", help="Generate only words in this exact category.")
     parser.add_argument("--word-ids", nargs="*", help="Generate specific word ids instead of offset/limit selection.")
-    parser.add_argument("--allow-approved", action="store_true", help="Allow regenerating words that are already imageApproved.")
+    parser.add_argument("--allow-approved", action="store_true", help="Allow regenerating words already accepted in the Comfy manifest.")
+    parser.add_argument("--accepted-manifest", type=Path, default=COMFY_MANIFEST_PATH)
+    parser.add_argument("--list-only", action="store_true", help="Print the selected words without queueing ComfyUI.")
     parser.add_argument("--width", type=int, default=512)
     parser.add_argument("--height", type=int, default=512)
     parser.add_argument("--timeout", type=int, default=600)
@@ -674,16 +706,38 @@ def main() -> None:
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT_ROOT)
     args = parser.parse_args()
 
-    template = json.loads(WORKFLOW_TEMPLATE_PATH.read_text(encoding="utf-8"))
-    missing_words = load_words(args.allow_approved)
+    all_words = load_words(include_approved=True)
+    accepted_ids = set() if args.allow_approved else load_accepted_ids(args.accepted_manifest)
     if args.word_ids:
-        by_id = {word["id"]: word for word in missing_words}
-        selected_words = [by_id[word_id] for word_id in args.word_ids if word_id in by_id]
-        missing_ids = [word_id for word_id in args.word_ids if word_id not in by_id]
+        by_id = {word["id"]: word for word in all_words}
+        selected_words = [
+            by_id[word_id]
+            for word_id in args.word_ids
+            if word_id in by_id and word_id not in accepted_ids
+        ]
+        missing_ids = [
+            word_id
+            for word_id in args.word_ids
+            if word_id not in by_id or word_id in accepted_ids
+        ]
         if missing_ids:
-            raise SystemExit(f"Unknown or already-approved word ids: {', '.join(missing_ids)}")
+            raise SystemExit(f"Unknown or already-accepted word ids: {', '.join(missing_ids)}")
     else:
-        selected_words = missing_words[args.offset : args.offset + args.limit]
+        selected_words = select_words(
+            all_words,
+            accepted_ids=accepted_ids,
+            category=args.category,
+            offset=args.offset,
+            limit=args.limit,
+        )
+    if args.list_only:
+        for word in selected_words:
+            print(f"{word['id']}\t{word['english']}\t{word.get('category', '')}")
+        return
+    if not selected_words:
+        raise SystemExit("No words selected for generation")
+
+    template = json.loads(WORKFLOW_TEMPLATE_PATH.read_text(encoding="utf-8"))
     run_id = datetime.now().strftime("comfy-sample-%Y%m%d-%H%M%S")
     run_dir = args.output_root / run_id
     sample_dir = run_dir / "samples"
