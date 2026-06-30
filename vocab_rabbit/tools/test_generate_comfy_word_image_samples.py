@@ -267,6 +267,49 @@ class FamilyPromptTests(unittest.TestCase):
         self.assertIn("paramedics pushing an empty stretcher", ambulance_prompt)
         self.assertIn("fresh apple beside a visibly rotten apple", bad_prompt)
 
+    def test_every_work_word_has_a_dedicated_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        work_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "工作和职业"
+        }
+        work_scenes = getattr(MODULE, "WORK_SCENES", {})
+
+        self.assertEqual(work_ids, set(work_scenes))
+        self.assertIn(
+            "small shop exchanging goods",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_business_n")),
+        )
+        self.assertIn(
+            "coins after completing a repair",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_earn_v")),
+        )
+        self.assertIn(
+            "three stages of one person's working life",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_career_n")),
+        )
+        self.assertIn(
+            "same female doctor shown at three clear career stages",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_career_n")),
+        )
+        self.assertIn(
+            "no frames, boards, papers, signs, or screens",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_department_n")),
+        )
+        self.assertIn(
+            "three open work areas with no walls",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_department_n")),
+        )
+        self.assertIn(
+            "placing a pile of coins into the repair worker's open hand",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_earn_v")),
+        )
+        self.assertIn(
+            "one clearly visible adult writer seated at a desk",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_writer_n")),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

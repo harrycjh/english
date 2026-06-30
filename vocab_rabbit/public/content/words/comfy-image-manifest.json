@@ -58,6 +58,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_artist_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812542701,
+      "prompt": "Create a standalone storybook illustration: an artist in a paint-marked apron creating a colorful landscape on an easel in a bright studio. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear profession and no text",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_august_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -162,6 +174,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_boss_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812550245,
+      "prompt": "Create a standalone storybook illustration: a confident workplace boss leading a small team discussion around a table with completely blank papers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "leads a team discussion",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_boy_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -226,10 +250,46 @@
       "height": 512
     },
     {
+      "wordId": "ket_business_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812557781,
+      "prompt": "Create a standalone storybook illustration: a small shop exchanging goods and coins between a shopkeeper and customer, with shelves of products and no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear shop transaction",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_business_person_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_businessman_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812565313,
+      "prompt": "Create a standalone storybook illustration: a professional businessman in a suit carrying a briefcase and shaking hands with a customer in an office lobby. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear professional man",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_businesswoman_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812572840,
+      "prompt": "Create a standalone storybook illustration: a professional businesswoman in a suit carrying a briefcase and shaking hands with a customer in an office lobby. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear professional woman",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
       "width": 512,
       "height": 512
     },
@@ -262,6 +322,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_career_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174758",
+      "seed": 782812878909,
+      "prompt": "Create a standalone storybook illustration: three stages of one person's working life: the same female doctor shown at three clear career stages as a young medical trainee, experienced doctor, and senior doctor mentoring a trainee, all wearing plain medical clothes with no badges. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "three medical career stages and OCR is false positive",
+      "acceptedAt": "2026-06-30T09:50:51.402251+00:00",
       "width": 512,
       "height": 512
     },
@@ -346,6 +418,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_cleaner_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812587906,
+      "prompt": "Create a standalone storybook illustration: a cleaner wearing gloves and using a mop and bucket to clean a shiny floor. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear cleaning action",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_cloud_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -374,6 +458,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_company_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812595434,
+      "prompt": "Create a standalone storybook illustration: a whole company team working together at desks inside one bright office, viewed through an open wall, no company name. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear office team",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
       "width": 512,
       "height": 512
     },
@@ -482,6 +578,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_department_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174928",
+      "seed": 782812968199,
+      "prompt": "Create a standalone storybook illustration: three open work areas with no walls inside one large store: bakers arranging bread, produce workers arranging vegetables, and clothing workers folding shirts, no frames, boards, papers, signs, or screens. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "three clear store departments and no text",
+      "acceptedAt": "2026-06-30T09:50:51.477315+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_department_store_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -578,6 +686,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_earn_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174758",
+      "seed": 782812893983,
+      "prompt": "Create a standalone storybook illustration: a close clear view of a bicycle repair worker receiving coins after completing a repair, with a happy customer placing a pile of coins into the repair worker's open hand and the repaired bicycle beside them, no price labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear coin payment after bicycle work",
+      "acceptedAt": "2026-06-30T09:50:51.402251+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_east_n_adj_adv",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -666,6 +786,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_farmer_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812618039,
+      "prompt": "Create a standalone storybook illustration: a farmer in boots tending vegetables beside a tractor and barn on a sunny farm. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear farm work",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_father_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -734,6 +866,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_footballer_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812625568,
+      "prompt": "Create a standalone storybook illustration: a footballer in a plain sports kit skillfully kicking a football on a grass pitch, no numbers or logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear football action",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
       "width": 512,
       "height": 512
     },
@@ -970,6 +1114,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_guide_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812633105,
+      "prompt": "Create a standalone storybook illustration: a tour guide leading a small group around a famous castle and pointing out its features, no flag or sign. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "visual check confirms OCR false positive",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_guy_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1082,6 +1238,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_job_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812640634,
+      "prompt": "Create a standalone storybook illustration: a bakery worker doing a clear paid job by serving fresh bread to a customer across a counter, no signs or prices. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bakery job",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_journalist_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812648170,
+      "prompt": "Create a standalone storybook illustration: a journalist holding a plain microphone while interviewing a firefighter as a camera operator records them, no logos or writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear interview scene",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_july_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1110,6 +1290,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_king_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812655700,
+      "prompt": "Create a standalone storybook illustration: a friendly king wearing a gold crown and royal robe while seated on a simple throne. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear royal identity",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
       "width": 512,
       "height": 512
     },
@@ -1182,6 +1374,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_manager_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812663225,
+      "prompt": "Create a standalone storybook illustration: a store manager in smart clothes checking shelves while guiding two employees in a tidy shop, no signs or labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear store management",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
       "width": 512,
       "height": 512
     },
@@ -1378,6 +1582,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_occupation_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812670756,
+      "prompt": "Create a standalone storybook illustration: four adults clearly showing different occupations: a builder, chef, nurse, and farmer in their work clothes. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "multiple distinct occupations",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_ocean_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1562,6 +1778,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_police_officer_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812678286,
+      "prompt": "Create a standalone storybook illustration: a friendly police officer in a plain recognizable uniform helping a child safely cross a street, no badge text. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear helping action and no text",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_police_station_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1610,6 +1838,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_queen_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812685820,
+      "prompt": "Create a standalone storybook illustration: a friendly queen wearing a jeweled crown and royal gown while seated on a simple throne. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear royal identity",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_rabbit_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1646,6 +1886,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_receptionist_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812693350,
+      "prompt": "Create a standalone storybook illustration: a receptionist behind a front desk warmly welcoming a visitor and handing over a plain room key, no desk sign. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear front desk scene",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
       "width": 512,
       "height": 512
     },
@@ -1698,10 +1950,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_scientist_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812700883,
+      "prompt": "Create a standalone storybook illustration: a scientist in a lab coat carefully examining colorful liquid in glass beakers at a safe laboratory bench, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear laboratory work",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_scissors_n_pl",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_secretary_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812708406,
+      "prompt": "Create a standalone storybook illustration: an office secretary organizing blank papers, answering a telephone, and arranging a manager's appointments at a tidy desk. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear office support action",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
       "width": 512,
       "height": 512
     },
@@ -1830,6 +2106,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_staff_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812715931,
+      "prompt": "Create a standalone storybook illustration: a group of five friendly staff members wearing matching plain uniforms together inside a cafe, no logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "visual check confirms OCR false positive",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
       "width": 512,
       "height": 512
     },
@@ -1998,6 +2286,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_trainer_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812723470,
+      "prompt": "Create a standalone storybook illustration: an athletic trainer coaching two runners through warm-up exercises beside a running track, no stopwatch numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear athletic coaching",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
       "width": 512,
       "height": 512
     },
@@ -2186,10 +2486,46 @@
       "height": 512
     },
     {
+      "wordId": "ket_work_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812731003,
+      "prompt": "Create a standalone storybook illustration: a person actively working with hand tools to repair a wooden chair in a workshop. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear repair work",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_worker_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174222",
+      "seed": 782812738532,
+      "prompt": "Create a standalone storybook illustration: a construction worker in a hard hat building a brick wall with tools at a safe building site. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear construction work",
+      "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_world_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_writer_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-174758",
+      "seed": 782812901517,
+      "prompt": "Create a standalone storybook illustration: one clearly visible adult writer seated at a desk, actively writing a story by hand on completely blank-looking paper, with their face, writing hand, and pencil clearly visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "visible person writing and no text",
+      "acceptedAt": "2026-06-30T09:50:51.402251+00:00",
       "width": 512,
       "height": 512
     },

@@ -273,6 +273,37 @@ NATURE_SCENES = {
     "ket_nature_n": "a rich natural landscape combining mountains, forest, river, flowers, birds, and wild animals",
 }
 
+WORK_SCENES = {
+    "ket_journalist_n": "a journalist holding a plain microphone while interviewing a firefighter as a camera operator records them, no logos or writing",
+    "ket_secretary_n": "an office secretary organizing blank papers, answering a telephone, and arranging a manager's appointments at a tidy desk",
+    "ket_artist_n": "an artist in a paint-marked apron creating a colorful landscape on an easel in a bright studio",
+    "ket_king_n": "a friendly king wearing a gold crown and royal robe while seated on a simple throne",
+    "ket_boss_n": "a confident workplace boss leading a small team discussion around a table with completely blank papers",
+    "ket_manager_n": "a store manager in smart clothes checking shelves while guiding two employees in a tidy shop, no signs or labels",
+    "ket_business_n": "a small shop exchanging goods and coins between a shopkeeper and customer, with shelves of products and no signs",
+    "ket_earn_v": "a close clear view of a bicycle repair worker receiving coins after completing a repair, with a happy customer placing a pile of coins into the repair worker's open hand and the repaired bicycle beside them, no price labels",
+    "ket_staff_n": "a group of five friendly staff members wearing matching plain uniforms together inside a cafe, no logos",
+    "ket_businessman_n": "a professional businessman in a suit carrying a briefcase and shaking hands with a customer in an office lobby",
+    "ket_businesswoman_n": "a professional businesswoman in a suit carrying a briefcase and shaking hands with a customer in an office lobby",
+    "ket_cleaner_n": "a cleaner wearing gloves and using a mop and bucket to clean a shiny floor",
+    "ket_occupation_n": "four adults clearly showing different occupations: a builder, chef, nurse, and farmer in their work clothes",
+    "ket_company_n": "a whole company team working together at desks inside one bright office, viewed through an open wall, no company name",
+    "ket_farmer_n": "a farmer in boots tending vegetables beside a tractor and barn on a sunny farm",
+    "ket_footballer_n": "a footballer in a plain sports kit skillfully kicking a football on a grass pitch, no numbers or logos",
+    "ket_work_n_v": "a person actively working with hand tools to repair a wooden chair in a workshop",
+    "ket_worker_n": "a construction worker in a hard hat building a brick wall with tools at a safe building site",
+    "ket_writer_n": "one clearly visible adult writer seated at a desk, actively writing a story by hand on completely blank-looking paper, with their face, writing hand, and pencil clearly visible",
+    "ket_guide_n": "a tour guide leading a small group around a famous castle and pointing out its features, no flag or sign",
+    "ket_police_officer_n": "a friendly police officer in a plain recognizable uniform helping a child safely cross a street, no badge text",
+    "ket_queen_n": "a friendly queen wearing a jeweled crown and royal gown while seated on a simple throne",
+    "ket_job_n": "a bakery worker doing a clear paid job by serving fresh bread to a customer across a counter, no signs or prices",
+    "ket_receptionist_n": "a receptionist behind a front desk warmly welcoming a visitor and handing over a plain room key, no desk sign",
+    "ket_career_n": "three stages of one person's working life: the same female doctor shown at three clear career stages as a young medical trainee, experienced doctor, and senior doctor mentoring a trainee, all wearing plain medical clothes with no badges",
+    "ket_department_n": "three open work areas with no walls inside one large store: bakers arranging bread, produce workers arranging vegetables, and clothing workers folding shirts, no frames, boards, papers, signs, or screens",
+    "ket_scientist_n": "a scientist in a lab coat carefully examining colorful liquid in glass beakers at a safe laboratory bench, no labels",
+    "ket_trainer_n": "an athletic trainer coaching two runners through warm-up exercises beside a running track, no stopwatch numbers",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -572,7 +603,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                             word["id"],
                                             NATURE_SCENES.get(
                                                 word["id"],
-                                                scene_hints.get(english, fallback_scene),
+                                                WORK_SCENES.get(
+                                                    word["id"],
+                                                    scene_hints.get(english, fallback_scene),
+                                                ),
                                             ),
                                         ),
                                     ),
