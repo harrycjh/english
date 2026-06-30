@@ -2,6 +2,30 @@
   "version": 1,
   "images": [
     {
+      "wordId": "ket_accommodation_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814060865,
+      "prompt": "Create a standalone storybook illustration: a welcoming temporary accommodation room with made bed, bedside lamp, bathroom door, and travel suitcase. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear guest room and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_address_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814068403,
+      "prompt": "Create a standalone storybook illustration: a courier arriving at one clearly chosen home in a row of houses and handing a plain parcel to the resident, no numbers, maps, labels, or writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear courier arrival and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_air_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -14,6 +38,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_alarm_clock_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814075934,
+      "prompt": "Create a standalone storybook illustration: one twin-bell alarm clock ringing with motion lines, simple clock hands, and no written numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear alarm clock without numbers",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
       "width": 512,
       "height": 512
     },
@@ -42,6 +78,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_apartment_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814083461,
+      "prompt": "Create a standalone storybook illustration: a cutaway view of one furnished apartment inside a multi-storey apartment building, no building signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear apartment cutaway",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_april_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -54,6 +102,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_armchair_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814091005,
+      "prompt": "Create a standalone storybook illustration: one comfortable upholstered armchair with two clear armrests and a high back. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear armchair",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
       "width": 512,
       "height": 512
     },
@@ -134,6 +194,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_bath_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814098543,
+      "prompt": "Create a standalone storybook illustration: a child safely taking a warm bubble bath with a toy duck while a parent waits nearby, fully modest. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "child-safe bath scene and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bathing_suit_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -142,6 +214,30 @@
       "prompt": "Create a standalone storybook illustration: one modest colorful bathing suit displayed clearly on a plain clothes hanger beside a beach towel. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear bathing suit and OCR is false positive",
       "acceptedAt": "2026-06-30T10:05:24.457339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bathroom_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814106069,
+      "prompt": "Create a standalone storybook illustration: a complete clean bathroom containing bathtub, sink, toilet, mirror, and towel, no people. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bathroom and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bathtub_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814113603,
+      "prompt": "Create a standalone storybook illustration: one empty clean white bathtub with faucet and folded towel, clearly shown as the main object. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bathtub",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
       "width": 512,
       "height": 512
     },
@@ -158,6 +254,30 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bed_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814121133,
+      "prompt": "Create a standalone storybook illustration: one complete bed with mattress, headboard, pillow, sheet, and blanket. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bed",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bedroom_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814128669,
+      "prompt": "Create a standalone storybook illustration: a cozy bedroom with a bed, bedside table, wardrobe, lamp, and window. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bedroom",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
       "width": 512,
       "height": 512
     },
@@ -190,6 +310,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_bin_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814136192,
+      "prompt": "Create a standalone storybook illustration: one household rubbish bin with its lid open beside a person dropping in a plain wrapper. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear rubbish bin action",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bird_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -202,6 +334,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_blanket_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814143723,
+      "prompt": "Create a standalone storybook illustration: one thick warm blanket spread partly across a bed with its soft texture clearly visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear blanket",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
       "width": 512,
       "height": 512
     },
@@ -234,6 +378,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_bookcase_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814151253,
+      "prompt": "Create a standalone storybook illustration: one tall freestanding wooden bookcase with several shelves full of colorful blank-spine books. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear freestanding bookcase",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bookshelf_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814158779,
+      "prompt": "Create a standalone storybook illustration: one long wall-mounted bookshelf holding a row of colorful blank-spine books. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear wall bookshelf",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_boot_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -254,6 +422,42 @@
       "prompt": "Create a standalone storybook illustration: a confident workplace boss leading a small team discussion around a table with completely blank papers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "leads a team discussion",
       "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bottom_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814166303,
+      "prompt": "Create a standalone storybook illustration: a stack of three plain boxes with the lowest red box clearly emphasized at the bottom. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bottom position",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bowl_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814173826,
+      "prompt": "Create a standalone storybook illustration: one empty round ceramic bowl shown clearly from a slight angle on a plain table. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bowl",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_box_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814181356,
+      "prompt": "Create a standalone storybook illustration: one plain cardboard box opened to show its four sides and empty inside, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear open box",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
       "width": 512,
       "height": 512
     },
@@ -386,6 +590,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_cabinet_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814188890,
+      "prompt": "Create a standalone storybook illustration: one freestanding storage cabinet with doors open to show neatly arranged household items. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear storage cabinet",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_camel_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -434,6 +650,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_carpet_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814196418,
+      "prompt": "Create a standalone storybook illustration: one large soft wall-to-wall carpet covering most of a room floor, with its texture clearly visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "full rectangular carpet visible",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_castle_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -462,6 +690,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_ceiling_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814203949,
+      "prompt": "Create a standalone storybook illustration: an upward interior view focused on a room ceiling with light fixture and the tops of four walls. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear upward ceiling view",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
       "width": 512,
       "height": 512
     },
@@ -502,6 +742,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_chair_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814211479,
+      "prompt": "Create a standalone storybook illustration: one simple wooden dining chair with four legs, seat, and backrest. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear chair",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_child_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -534,6 +786,30 @@
       "prompt": "Create a standalone storybook illustration: a cleaner wearing gloves and using a mop and bucket to clean a shiny floor. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear cleaning action",
       "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_clock_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814219008,
+      "prompt": "Create a standalone storybook illustration: one round wall clock with two clear hands and simple tick marks but no written numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear clock without numbers",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_closet_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814226545,
+      "prompt": "Create a standalone storybook illustration: one built-in closet with sliding doors open to show hanging clothes and shoes. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear built-in closet",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
       "width": 512,
       "height": 512
     },
@@ -602,6 +878,30 @@
       "prompt": "Create a standalone storybook illustration: a whole company team working together at desks inside one bright office, viewed through an open wall, no company name. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear office team",
       "acceptedAt": "2026-06-30T09:50:51.290369+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_computer_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814234079,
+      "prompt": "Create a standalone storybook illustration: one desktop computer with monitor, keyboard, and mouse on a desk, screen completely blank. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear computer with blank screen",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cooker_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814241614,
+      "prompt": "Create a standalone storybook illustration: one freestanding kitchen cooker with four plain burners and an oven below, no labels or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear cooker",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
       "width": 512,
       "height": 512
     },
@@ -690,6 +990,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_cupboard_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-180740",
+      "seed": 782814249140,
+      "prompt": "Create a standalone storybook illustration: one kitchen cupboard with two doors open to show neatly stacked plates and cups. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear cupboard",
+      "acceptedAt": "2026-06-30T10:22:19.842436+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_curtain_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814317242,
+      "prompt": "Create a standalone storybook illustration: a matching pair of fabric curtains hanging on both sides of a sunny window. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear curtains",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_dad_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -750,10 +1074,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_desk_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814324783,
+      "prompt": "Create a standalone storybook illustration: one study desk with drawers, a plain lamp, and a closed blank notebook. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear desk and blank pages",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_digital_camera_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_dining_room_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814332310,
+      "prompt": "Create a standalone storybook illustration: a dining room with a large table set for a family meal and chairs around it. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear family dining room",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
       "width": 512,
       "height": 512
     },
@@ -806,6 +1154,42 @@
       "height": 512
     },
     {
+      "wordId": "ket_door_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814339836,
+      "prompt": "Create a standalone storybook illustration: one plain wooden front door with handle and hinges shown clearly, no number or sign. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear plain door",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_downstairs_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814347368,
+      "prompt": "Create a standalone storybook illustration: a person walking down a staircase from the upper floor toward the clearly visible lower floor. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear downward stairs movement",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_drawer_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814354899,
+      "prompt": "Create a standalone storybook illustration: one desk drawer pulled fully open to show a few simple objects inside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear open drawer",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_dress_n_v",
       "status": "accepted",
       "source": "comfy-run",
@@ -830,6 +1214,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_dvd_player_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181627",
+      "seed": 782814587299,
+      "prompt": "Create a standalone storybook illustration: one slim rectangular black DVD player below a blank television, with a flat disc tray extended, a plain shiny disc on the tray, and a remote control beside it, no tonearm or turntable, letters, display text, or logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear tray player with disc and remote",
+      "acceptedAt": "2026-06-30T10:22:20.436464+00:00",
       "width": 512,
       "height": 512
     },
@@ -898,6 +1294,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_entrance_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814369970,
+      "prompt": "Create a standalone storybook illustration: a clear building entrance with open double doors and two people walking into it, no sign. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear people entering",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_environment_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -942,6 +1350,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_fan_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814377504,
+      "prompt": "Create a standalone storybook illustration: one electric standing fan with round protective grille and clearly visible blades, no control labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear electric fan",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
       "width": 512,
       "height": 512
     },
@@ -1026,6 +1446,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_flat_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814385039,
+      "prompt": "Create a standalone storybook illustration: one compact furnished flat interior high above a city, combining a small living area and kitchen. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear compact flat interior",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_floor_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814392574,
+      "prompt": "Create a standalone storybook illustration: a close view of a clean wooden floor while a person mops across the floor surface. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear floor cleaning",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_flower_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1078,6 +1522,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_fridge_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814400101,
+      "prompt": "Create a standalone storybook illustration: one compact fridge with its door open to show milk, fruit, and vegetables with blank packaging. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear fridge with text-free food",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_friend_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1102,10 +1558,70 @@
       "height": 512
     },
     {
+      "wordId": "ket_front_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814407635,
+      "prompt": "Create a standalone storybook illustration: a straight-on view of the front of one house showing its door, windows, and porch symmetrically. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear front view of house",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_furniture_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814415172,
+      "prompt": "Create a standalone storybook illustration: a coordinated group of household furniture together in one room: sofa, armchair, table, chair, and cabinet. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear furniture group",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_gallery_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_garage_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814422700,
+      "prompt": "Create a standalone storybook illustration: one home garage with its wide door open and a car parked safely inside, no signs or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear garage",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_garden_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814430235,
+      "prompt": "Create a standalone storybook illustration: a tidy home garden with flower beds, vegetables, a small path, and a person watering plants. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear garden",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_gate_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814437765,
+      "prompt": "Create a standalone storybook illustration: one garden gate standing open in a low fence at the start of a path. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear gate",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
       "width": 512,
       "height": 512
     },
@@ -1298,6 +1814,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_ground_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814445303,
+      "prompt": "Create a standalone storybook illustration: a child standing firmly on the outdoor ground beside a house, with the soil and grass surface clearly emphasized. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear ground surface",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_group_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1358,6 +1886,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_hall_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814452833,
+      "prompt": "Create a standalone storybook illustration: a spacious entrance hall inside a home with several doorways, stairs, and a coat stand. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear entrance hall",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_handbag_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -1390,6 +1930,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_heating_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814460368,
+      "prompt": "Create a standalone storybook illustration: a warm home radiator glowing gently while a child warms their hands nearby on a cold day. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear radiator heat scene",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_hill_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1402,6 +1954,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_home_n_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814467901,
+      "prompt": "Create a standalone storybook illustration: a family relaxing together inside their cozy home with familiar furniture, photos shown only as blank color shapes, and a pet. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear family at home",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
       "width": 512,
       "height": 512
     },
@@ -1438,6 +2002,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_house_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814475433,
+      "prompt": "Create a standalone storybook illustration: the exterior of one detached house with roof, windows, front door, chimney, and small garden, no number. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear house and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
       "width": 512,
       "height": 512
     },
@@ -1562,6 +2138,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_key_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814482962,
+      "prompt": "Create a standalone storybook illustration: one large plain metal house key beside a simple door lock, no key-ring tag. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear house key",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_kid_s_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1594,6 +2182,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_kitchen_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814490497,
+      "prompt": "Create a standalone storybook illustration: a complete home kitchen with counters, sink, cooker, refrigerator, cupboards, and food preparation area. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear kitchen",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_kitten_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1606,6 +2206,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_lamp_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814498037,
+      "prompt": "Create a standalone storybook illustration: one table lamp with shade, stand, and warm glowing bulb on a bedside table. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear table lamp",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
       "width": 512,
       "height": 512
     },
@@ -1626,10 +2238,46 @@
       "height": 512
     },
     {
+      "wordId": "ket_light_n_adj",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181157",
+      "seed": 782814505573,
+      "prompt": "Create a standalone storybook illustration: one bright ceiling light switched on and clearly illuminating an otherwise dim room. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear emitted light",
+      "acceptedAt": "2026-06-30T10:22:20.341904+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_lion_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_live_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814627915,
+      "prompt": "Create a standalone storybook illustration: a family living in their home while cooking, reading, and playing together in connected rooms. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear family living at home",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_living_room_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814635449,
+      "prompt": "Create a standalone storybook illustration: a complete family living room with sofa, coffee table, rug, lamp, and family relaxing together. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear family living room",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
       "width": 512,
       "height": 512
     },
@@ -1806,6 +2454,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_mug_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814642973,
+      "prompt": "Create a standalone storybook illustration: one ceramic drinking mug with a large handle and warm drink inside, no writing or picture. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear mug",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_mum_n_br_eng",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1942,6 +2602,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_oven_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814650504,
+      "prompt": "Create a standalone storybook illustration: one built-in kitchen oven with its door open and a tray of bread inside, no controls with letters or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear oven with no readable display",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_pale_adj",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2042,6 +2714,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_pillow_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814658035,
+      "prompt": "Create a standalone storybook illustration: one soft plump sleeping pillow resting at the head of a neatly made bed. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear pillow",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
       "width": 512,
       "height": 512
     },
@@ -2246,6 +2930,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_refrigerator_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814665566,
+      "prompt": "Create a standalone storybook illustration: one tall refrigerator with its door open to show neatly arranged fresh food, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear refrigerator with text-free food",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_restaurant_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2282,10 +2978,58 @@
       "height": 512
     },
     {
+      "wordId": "ket_roof_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814673093,
+      "prompt": "Create a standalone storybook illustration: a close exterior view of the sloping tiled roof on top of a small house. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear roof",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_room_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814680625,
+      "prompt": "Create a standalone storybook illustration: one simple furnished room with four walls, window, chair, small table, and rug. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear furnished room",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_roundabout_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_rubbish_unc_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814688163,
+      "prompt": "Create a standalone storybook illustration: a small pile of household rubbish including crumpled paper, empty plain containers, and food scraps. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear rubbish pile",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_safe_adj",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814695699,
+      "prompt": "Create a standalone storybook illustration: a family protected safely inside a strong cozy home while heavy rain and wind remain outside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear protected family scene",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
       "width": 512,
       "height": 512
     },
@@ -2366,6 +3110,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_sheet_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814703233,
+      "prompt": "Create a standalone storybook illustration: one clean plain bed sheet being spread smoothly across a mattress. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear bed sheet",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_shelf_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814710768,
+      "prompt": "Create a standalone storybook illustration: one simple wall shelf holding three plain household objects, clearly showing the flat shelf board. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear wall shelf",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_shirt_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -2398,6 +3166,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_shower_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814718307,
+      "prompt": "Create a standalone storybook illustration: one bathroom shower spraying clear water from a wall-mounted shower head into an empty shower area. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear shower",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_silver_n_adj",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2406,10 +3186,34 @@
       "height": 512
     },
     {
+      "wordId": "ket_sink_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814725837,
+      "prompt": "Create a standalone storybook illustration: one porcelain kitchen sink with faucet, drain, and a little clear water, shown as the main object. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear kitchen sink",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_sister_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sitting_room_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814733375,
+      "prompt": "Create a standalone storybook illustration: a comfortable sitting room arranged for conversation with two armchairs facing a small table. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear conversation seating and OCR is false positive",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
       "width": 512,
       "height": 512
     },
@@ -2466,6 +3270,18 @@
       "prompt": "Create a standalone storybook illustration: a matching pair of colorful ankle socks placed side by side, no pattern letters. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear socks",
       "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sofa_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814740911,
+      "prompt": "Create a standalone storybook illustration: one long comfortable three-seat sofa with cushions, shown as the main object. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear sofa",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
       "width": 512,
       "height": 512
     },
@@ -2530,6 +3346,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_stairs_n_pl",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814748449,
+      "prompt": "Create a standalone storybook illustration: one complete indoor staircase with many steps, handrail, upper landing, and lower floor visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear stairs",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_star_n_v",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2542,6 +3370,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_stay_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814755986,
+      "prompt": "Create a standalone storybook illustration: a traveler temporarily staying in a guest bedroom with an open suitcase beside the bed. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear temporary guest stay",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
       "width": 512,
       "height": 512
     },
@@ -2678,6 +3518,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_table_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814763519,
+      "prompt": "Create a standalone storybook illustration: one plain rectangular dining table with four legs, shown alone as the main object. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear table",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_tail_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -2758,10 +3610,46 @@
       "height": 512
     },
     {
+      "wordId": "ket_toilet_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814771046,
+      "prompt": "Create a standalone storybook illustration: one clean modern toilet with lid, seat, tank, and flush handle, shown alone in a bathroom. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear toilet",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_top_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814778578,
+      "prompt": "Create a standalone storybook illustration: a stack of three plain boxes with one bright red ball resting clearly on the top. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear top position",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_tortoise_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_towel_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814786113,
+      "prompt": "Create a standalone storybook illustration: one folded bath towel beside one towel hanging neatly from a rail. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear towel",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
       "width": 512,
       "height": 512
     },
@@ -2890,6 +3778,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_wall_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814793648,
+      "prompt": "Create a standalone storybook illustration: one plain interior wall being painted with a roller, clearly showing the broad wall surface. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear wall painting",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_wallet_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -2898,6 +3798,18 @@
       "prompt": "Create a standalone storybook illustration: one open bifold wallet showing plain cards and a few notes with no readable details. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear bifold wallet",
       "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wardrobe_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814801186,
+      "prompt": "Create a standalone storybook illustration: one tall bedroom wardrobe with two doors open to show hanging clothes and folded items. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear wardrobe",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
       "width": 512,
       "height": 512
     },
@@ -2914,6 +3826,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_washing_up_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260630-181707",
+      "seed": 782814808720,
+      "prompt": "Create a standalone storybook illustration: a person washing plates and cups in a kitchen sink with bubbles and a drying rack nearby. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "clear dish washing action",
+      "acceptedAt": "2026-06-30T10:22:20.938339+00:00",
       "width": 512,
       "height": 512
     },

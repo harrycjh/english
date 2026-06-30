@@ -353,6 +353,37 @@ class FamilyPromptTests(unittest.TestCase):
             MODULE.build_prompt(next(word for word in words if word["id"] == "ket_umbrella_n")),
         )
 
+    def test_every_house_word_has_a_dedicated_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        house_ids = {
+            word["id"]
+            for word in words
+            if word.get("category") == "房子和家具"
+        }
+        house_scenes = getattr(MODULE, "HOUSE_SCENES", {})
+
+        self.assertEqual(house_ids, set(house_scenes))
+        self.assertIn(
+            "exterior of one detached house",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_house_n")),
+        )
+        self.assertIn(
+            "family relaxing together inside",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_home_n_adv")),
+        )
+        self.assertIn(
+            "traveler temporarily staying",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_stay_v")),
+        )
+        self.assertIn(
+            "porcelain kitchen sink",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_sink_n")),
+        )
+        self.assertIn(
+            "no tonearm or turntable",
+            MODULE.build_prompt(next(word for word in words if word["id"] == "ket_dvd_player_n")),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
