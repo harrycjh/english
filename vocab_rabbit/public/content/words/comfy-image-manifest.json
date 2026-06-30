@@ -1,0 +1,2229 @@
+{
+  "version": 1,
+  "images": [
+    {
+      "wordId": "ket_air_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_airport_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_ambulance_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "1153805",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_animal_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_apartment_building_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_april_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_area_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_august_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_aunt_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_autumn_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bad_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "1153805",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bank_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_battery_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bear_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bee_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_beetle_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bird_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_black_adj_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_block_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_blue_adj_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_boy_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_boyfriend_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bridge_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_brother_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_brown_adj_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_building_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bus_station_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_bus_stop_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_business_person_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_butterfly_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_camel_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_camera_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_capital_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_castle_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cat_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cd_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cd_player_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_celebrity_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cell_phone_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_centre_center_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_child_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_city_centre_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_city_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cloud_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cloudy_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_coast_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_colleague_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_corner_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_country_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_countryside_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_court_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cousin_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_cow_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_creature_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_crocodile_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_crossing_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_dad_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_dark_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_daughter_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_december_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_department_store_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_desert_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_digital_camera_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_dinosaur_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_directions_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_dog_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_doll_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_dolphin_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_donkey_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_duck_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_dvd_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_eagle_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_east_n_adj_adv",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_electric_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_electricity_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_elephant_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_environment_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_equipment_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_exit_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_explorer_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_factory_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_family_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_farm_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_father_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_february_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_field_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_fire_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_first_adv_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_first_name_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_flower_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_fog_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_foggy_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_forest_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_friday_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_friend_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_friendly_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_frog_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_gallery_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_gift_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_giraffe_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_girl_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_girlfriend_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_goat_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_golden_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grand_d_ad_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grandchild_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_granddaughter_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grandfather_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grandma_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grandmother_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grandpa_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grandparent_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grandson_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_granny_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grass_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_green_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grocery_store_n_am_eng",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_group_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_grow_v",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_guest_house_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_guest_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_guy_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_gym_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_headteacher_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_hill_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_hippo_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_horse_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_hot_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_hotel_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_housewife_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_husband_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_insect_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_island_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_january_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_jellyfish_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_july_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_june_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_kangaroo_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_kid_s_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_kitten_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_lake_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_laptop_computer_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_lift_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_lion_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_lizard_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_love_n_v",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_make_up_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_man_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_march_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_market_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_married_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_may_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_miss_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_miss_v",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_mobile_phone_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_monday_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_monkey_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_moon_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_mother_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_motorway_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_mountain_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_mr_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_mrs_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_ms_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_mum_n_br_eng",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_name_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_nationality_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_nature_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_neighbour_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_nest_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_north_n_adj_adv",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_november_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_ocean_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_october_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_octopus_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_office_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_one_det_pron",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_orange_adj_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_pale_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_panda_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_parent_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_parrot_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_path_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_pc_personal_computer_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_penfriend_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_penguin_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_perfume_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_pet_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_petrol_station_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_pharmacy_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_phone_v_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_pink_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_plant_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_playground_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_polar_bear_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_police_station_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_post_office_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_present_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_puppy_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_purple_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_puzzle_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_rabbit_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_radio_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_railway_station_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_rain_n_v",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_rainforest_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_red_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_restaurant_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_river_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_road_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_roundabout_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_saturday_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_scissors_n_pl",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_september_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_shark_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sheep_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_shop_n_v",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_silver_n_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sister_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sky_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_snail_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_snake_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_snow_n_v",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_son_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_south_n_adj_adv",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_space_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_spider_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_spring_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_square_n_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_star_n_v",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_station_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_storm_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_street_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_summer_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sun_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sunday_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_sunny_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_supermarket_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_surname_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_swan_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tail_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_teenager_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_telephone_n_v",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_television_tv_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_thunderstorm_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_thursday_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tiger_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tortoise_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_town_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_toy_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tree_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tuesday_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_uncle_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_underground_n_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_video_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_village_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_warm_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_washing_machine_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_water_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_weather_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wednesday_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_west_n_adj_adv",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wet_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_whale_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_white_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wife_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wildlife_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wind_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_windy_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wing_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_winter_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wood_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wool_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_world_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_yellow_adj",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_zebra_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_zero_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "72f1e3a",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_zoo_n",
+      "status": "accepted",
+      "source": "historical-verified-commit",
+      "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    }
+  ]
+}
