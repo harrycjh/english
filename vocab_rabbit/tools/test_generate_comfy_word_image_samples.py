@@ -90,6 +90,31 @@ class FamilyPromptTests(unittest.TestCase):
             MODULE.build_prompt(words["ket_bear_n"]),
         )
 
+    def test_prompt_explicitly_forbids_displaying_the_concept_name(self) -> None:
+        words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
+
+        self.assertIn(
+            "Never display the concept name",
+            MODULE.build_prompt(words["ket_deliver_v"]),
+        )
+
+    def test_remaining_common_action_words_use_specific_scenes(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        remaining_action_words = [
+            word
+            for word in words
+            if word.get("category") == "常用动作动词"
+            and word["id"] >= "ket_guess_what_v"
+        ]
+
+        self.assertTrue(remaining_action_words)
+        for word in remaining_action_words:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
     def test_animal_body_parts_are_the_clear_subject(self) -> None:
         words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
 
