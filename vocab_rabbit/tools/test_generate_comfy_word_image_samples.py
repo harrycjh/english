@@ -582,6 +582,25 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_failed_frequency_words_use_strict_panel_constraints(self) -> None:
+        words = {
+            word["id"]: word for word in MODULE.load_words(include_approved=True)
+        }
+        expected_fragments = {
+            "ket_afterwards_adv": "left scene",
+            "ket_again_adv": "exactly two side-by-side scenes",
+            "ket_already_adv": "loose pieces",
+            "ket_never_adv": "five separate scenes",
+            "ket_often_adv": "exactly five",
+            "ket_sometimes_adv": "exactly two",
+            "ket_then_adv": "left panel",
+            "ket_twice_adv": "exactly two child figures",
+        }
+
+        for word_id, fragment in expected_fragments.items():
+            with self.subTest(word_id=word_id):
+                self.assertIn(fragment, MODULE.build_prompt(words[word_id]))
+
     def test_every_quantity_word_uses_a_specific_scene(self) -> None:
         words = MODULE.load_words(include_approved=True)
         quantity_words = [
