@@ -153,6 +153,34 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_third_round_action_prompts_use_strict_relationships(self) -> None:
+        words = {
+            word["id"]: word for word in MODULE.load_words(include_approved=True)
+        }
+        expected_fragments = {
+            "ket_become_v": "caterpillar on the left",
+            "ket_belong_v": "one empty puzzle-shaped hole",
+            "ket_bring_back_v": "exactly two children facing each other",
+            "ket_come_v": "waiting adult with open arms",
+            "ket_copy_v": "left reference card",
+            "ket_excuse_v": "crowded doorway",
+            "ket_fix_v": "bicycle upside down",
+            "ket_get_fit_v": "three exercise stations",
+            "ket_help_v_n": "exactly two children",
+            "ket_invent_v": "loose gears and wheels",
+            "ket_invite_v": "exactly two children",
+            "ket_lose_v": "hidden completely behind a bench",
+            "ket_make_sure_that_v": "stationary child",
+            "ket_sell_v": "coin into the seller's hand",
+            "ket_share_digitally_v": "exactly two phones",
+            "ket_spell_v": "counting four spoken sounds on four fingers",
+            "ket_take_v": "lifting one apple out of a bowl",
+        }
+
+        for word_id, fragment in expected_fragments.items():
+            with self.subTest(word_id=word_id):
+                self.assertIn(fragment, MODULE.build_prompt(words[word_id]))
+
     def test_rejected_food_words_use_specific_scenes(self) -> None:
         retry_ids = {
             "ket_boil_v",
