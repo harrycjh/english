@@ -1088,6 +1088,36 @@ DOCUMENT_SCENES = {
     "ket_title_n": "a child pointing to the large blank top area of a book cover where a title belongs",
 }
 
+HOBBY_SCENES = {
+    "ket_beach_n": "a wide sandy beach with gentle sea waves, umbrellas, sandcastle, and families relaxing",
+    "ket_bicycle_n": "one complete plain bicycle viewed clearly from the side with no logo",
+    "ket_bike_n": "one child riding a plain bicycle safely along a park path with a helmet",
+    "ket_camp_v": "a family actively setting up a tent to camp beside a lake",
+    "ket_camping_n": "a family enjoying camping with tents, sleeping bags, and a safe small campfire",
+    "ket_campsite_n": "a complete campsite with several tents, picnic tables, trees, and a safe fire area",
+    "ket_climbing_n": "a helmeted child climbing an indoor wall with a safety harness",
+    "ket_club_n": "a hobby club of children meeting regularly to build model airplanes together",
+    "ket_collect_v": "a child collecting colorful stones into a neatly arranged display box",
+    "ket_cooking_n": "a child cooking a simple meal with an adult in a safe kitchen",
+    "ket_cycling_n": "several helmeted cyclists riding bicycles together along a countryside path",
+    "ket_dancing_n": "a group of children enjoying dancing together in a bright studio",
+    "ket_ice_skating_n": "a child wearing ice skates gliding across a frozen rink",
+    "ket_join_v": "one child stepping into a circle to join friends doing a shared craft activity",
+    "ket_kite_n": "one colorful diamond-shaped kite flying in a blue sky on a long string",
+    "ket_member_n": "one club member wearing the same plain colored shirt as the rest of a hobby group",
+    "ket_painting_n": "one finished colorful painting of flowers displayed on an easel",
+    "ket_park_n_v": "families relaxing in a green public park while one car is parked neatly nearby",
+    "ket_party_n": "children enjoying a birthday party with cake, balloons, and games, no writing",
+    "ket_quiz_n": "two teams answering a picture quiz by choosing matching objects, no words or numbers",
+    "ket_running_n": "several people running for leisure along a safe park path",
+    "ket_singing_n": "a group of children singing together into plain microphones with music notes",
+    "ket_skateboarding_n": "a helmeted child skateboarding safely on a smooth skate park ramp",
+    "ket_skating_n": "children wearing roller skates and skating together on a safe smooth rink",
+    "ket_surfing_n": "a surfer riding a medium ocean wave on a plain surfboard",
+    "ket_tent_n": "one complete camping tent pitched securely on grass with the entrance open",
+    "ket_walking_n": "friends walking for leisure together along a scenic countryside trail",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1421,7 +1451,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                                     word["id"],
                                                                                                     DOCUMENT_SCENES.get(
                                                                                                         word["id"],
-                                                                                                        scene_hints.get(english, fallback_scene),
+                                                                                                        HOBBY_SCENES.get(
+                                                                                                            word["id"],
+                                                                                                            scene_hints.get(english, fallback_scene),
+                                                                                                        ),
                                                                                                     ),
                                                                                                 ),
                                                                                             ),
