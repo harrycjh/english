@@ -1476,6 +1476,28 @@ TIME_FREQUENCY_SCENES = {
     "ket_yet_adv": "a child waiting beside an oven because the cake is not ready yet",
 }
 
+QUANTITY_SCENES = {
+    "ket_a_few_det_adj_pron": "a small pleasant group of exactly three red apples on a plain table",
+    "ket_all_adv_det_pron": "every apple from an empty table gathered together inside one full basket",
+    "ket_another_det_pron": "one apple on a table while a hand adds another apple beside it",
+    "ket_any_det_pron": "a child free to choose any one object from a basket of many different objects",
+    "ket_both_pron_det": "two apples together with a child holding both of them, one in each hand",
+    "ket_each_det_pron": "three children each holding exactly one apple of their own",
+    "ket_enough_adv_det_pron": "four children with exactly four chairs, enough for everyone and none left over",
+    "ket_every_det": "a row of five baskets with one apple in every basket and no empty basket",
+    "ket_few_det_adj": "only two apples sitting in a very large mostly empty basket",
+    "ket_less_adj_det_pron": "two clear bowls side by side with one bowl containing visibly less rice",
+    "ket_little_adj": "a glass containing only a little water at the very bottom",
+    "ket_lots_a_lot_n": "a very large abundant pile of colorful balls filling a wide basket",
+    "ket_many_det_pron": "many red apples spread across a large table",
+    "ket_more_adj_adv_det_pron": "two bowls of apples with one bowl clearly containing more than the other",
+    "ket_most_adj_adv_det_pron": "six apples together with five red apples and only one green apple",
+    "ket_much_adj_adv_det_pron": "a large transparent tank containing a great amount of water",
+    "ket_no_adv_det_pron": "a completely empty basket with no apples anywhere nearby",
+    "ket_same_adj_pron": "two exactly identical plain blue socks placed side by side",
+    "ket_some_det_pron": "a hand selecting some apples from a larger group while several remain behind",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1829,7 +1851,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                                                                             word["id"],
                                                                                                                                             TIME_FREQUENCY_SCENES.get(
                                                                                                                                                 word["id"],
-                                                                                                                                                scene_hints.get(english, fallback_scene),
+                                                                                                                                                QUANTITY_SCENES.get(
+                                                                                                                                                    word["id"],
+                                                                                                                                                    scene_hints.get(english, fallback_scene),
+                                                                                                                                                ),
                                                                                                                                             ),
                                                                                                                                         ),
                                                                                                                                     ),
