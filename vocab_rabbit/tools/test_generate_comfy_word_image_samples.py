@@ -257,6 +257,32 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(words[word_id]),
                 )
 
+    def test_last_retry_prompts_use_simplified_compositions(self) -> None:
+        words = {
+            word["id"]: word for word in MODULE.load_words(include_approved=True)
+        }
+        expected_fragments = {
+            "ket_behind_adv_prep": "hiding directly behind one thick tree trunk",
+            "ket_better_adj_adv": "same blue toy car",
+            "ket_euro_n": "simplified map shape of Europe",
+            "ket_exactly_adv": "hand pressing one green puzzle piece",
+            "ket_half_price_adj": "eight smooth blank coins",
+            "ket_left_hand_adj": "overhead view of both hands",
+            "ket_look_out_phr_v": "ball falling toward the second child's head",
+            "ket_mistake_n": "triangle piece over the round hole",
+            "ket_never_adv": "broccoli in every panel",
+            "ket_off_adv": "dark unlit lamp filling the left half",
+            "ket_problem_n": "front wheel completely detached",
+            "ket_ruler_n": "tick marks without any digits",
+            "ket_sale_n": "shopkeeper handing one toy",
+            "ket_sometimes_adv": "exactly one panel shows cycling",
+            "ket_total_adj_n": "both bowls being poured",
+        }
+
+        for word_id, fragment in expected_fragments.items():
+            with self.subTest(word_id=word_id):
+                self.assertIn(fragment, MODULE.build_prompt(words[word_id]))
+
     def test_rejected_food_words_use_specific_scenes(self) -> None:
         retry_ids = {
             "ket_boil_v",
@@ -694,9 +720,9 @@ class FamilyPromptTests(unittest.TestCase):
             "ket_afterwards_adv": "left scene",
             "ket_again_adv": "exactly two side-by-side scenes",
             "ket_already_adv": "loose pieces",
-            "ket_never_adv": "exactly four side-by-side scenes",
+            "ket_never_adv": "broccoli in every panel",
             "ket_often_adv": "exactly five",
-            "ket_sometimes_adv": "exactly two",
+            "ket_sometimes_adv": "exactly one panel shows cycling",
             "ket_then_adv": "left panel",
             "ket_twice_adv": "exactly two child figures",
         }
