@@ -474,6 +474,20 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_every_exclamation_and_response_uses_a_specific_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        response_words = [
+            word for word in words if word.get("category") == "感叹词和回应语"
+        ]
+
+        self.assertEqual(len(response_words), 24)
+        for word in response_words:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
     def test_animal_body_parts_are_the_clear_subject(self) -> None:
         words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
 

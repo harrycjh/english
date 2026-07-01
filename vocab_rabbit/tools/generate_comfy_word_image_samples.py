@@ -1403,6 +1403,33 @@ ABSTRACT_CONCEPT_SCENES = {
     "ket_view_n": "a person standing at a lookout enjoying a wide scenic mountain and lake view",
 }
 
+EXCLAMATION_RESPONSE_SCENES = {
+    "ket_all_right_alright_adj_adv_exclam": "a reassuring child helping a friend up after a tiny fall and giving a thumbs-up",
+    "ket_alright_adj_adv_exclam": "a calm child smiling, nodding, and giving a clear okay thumbs-up",
+    "ket_bye_exclam": "a child walking away casually while turning back to wave to a friend",
+    "ket_congratulations_exclam": "friends celebrating a happy winner with a medal, applause, and confetti, no writing",
+    "ket_good_afternoon_exclam": "two neighbors greeting each other outdoors in bright afternoon sunshine",
+    "ket_good_evening_exclam": "two friends warmly greeting each other as the sun sets and street lamps begin to glow",
+    "ket_good_morning_exclam": "two cheerful family members greeting each other at breakfast in warm sunrise light",
+    "ket_good_night_exclam": "a parent gently tucking a sleepy child into bed beneath a moonlit window",
+    "ket_goodbye_exclam": "two close friends sharing a heartfelt farewell beside a departing train, no signs",
+    "ket_hello_exclam": "two people meeting for the first time and warmly shaking hands",
+    "ket_hey_exclam": "a child raising one hand high to call the attention of a friend walking ahead",
+    "ket_hi_exclam": "two children giving each other a quick friendly wave when they meet",
+    "ket_of_course_not_adv": "a child firmly shaking their head and crossing their arms to refuse an unsafe suggestion",
+    "ket_oh_dear_exclam": "a worried adult reacting with both hands on cheeks after seeing a dropped cake",
+    "ket_oh_exclam": "a child suddenly realizing something with widened eyes and one raised finger",
+    "ket_ok_okay_exclam": "one smiling child giving a large clear thumbs-up to show agreement",
+    "ket_pardon_exclam": "a child leaning closer and cupping one ear to ask someone to repeat what was said",
+    "ket_please_v_exclam": "a child making a polite request with gentle open hands toward a shared toy",
+    "ket_thank_you_exclam": "a grateful child receiving a gift and warmly placing one hand over their heart",
+    "ket_thanks_exclam": "a smiling child giving an appreciative thumbs-up after a friend helps carry books",
+    "ket_welcome_adj_exclam": "a friendly host opening a front door and warmly gesturing for a guest to come inside",
+    "ket_wow_exclam": "a child staring upward in amazement at a spectacular colorful fireworks display",
+    "ket_yeah_exclam": "an excited child jumping with both fists raised in enthusiastic agreement",
+    "ket_yes_adv": "a smiling child nodding clearly and calmly to show agreement",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1750,7 +1777,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                                                                 word["id"],
                                                                                                                                 ABSTRACT_CONCEPT_SCENES.get(
                                                                                                                                     word["id"],
-                                                                                                                                    scene_hints.get(english, fallback_scene),
+                                                                                                                                    EXCLAMATION_RESPONSE_SCENES.get(
+                                                                                                                                        word["id"],
+                                                                                                                                        scene_hints.get(english, fallback_scene),
+                                                                                                                                    ),
                                                                                                                                 ),
                                                                                                                             ),
                                                                                                                         ),
