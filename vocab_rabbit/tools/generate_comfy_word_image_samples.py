@@ -1017,6 +1017,38 @@ DIGITAL_SCENES = {
     "ket_website_n": "the same blank web page layout displayed across laptop, tablet, and phone with no text",
 }
 
+SHOPPING_SCENES = {
+    "ket_assistant_n": "a helpful store assistant handing a product to a customer at a plain counter",
+    "ket_buy_v": "a customer buying a toy by giving coins to a cashier and receiving the toy",
+    "ket_cash_n_v": "a small group of plain banknotes and coins arranged beside an open cash drawer, no numbers",
+    "ket_cent_n": "one small copper coin displayed beside several larger coins, with no symbol or number",
+    "ket_change_v_n": "a cashier returning several small coins as change to a customer after a purchase",
+    "ket_cheap_adj": "two similar toys with one requiring only one small coin and the other a large pile of coins",
+    "ket_cheque_n": "one blank bank cheque shape with signature line and boxes but no readable writing",
+    "ket_close_adj_v": "a shop worker actively closing the front doors and pulling down a plain shutter",
+    "ket_closed_adj": "a shop with doors shut, lights off, and a fully lowered plain shutter, no sign",
+    "ket_cost_n_v": "a customer counting a pile of coins needed to receive one product from a cashier",
+    "ket_credit_card_n": "one plain blank credit card beside a payment terminal, no numbers or logo",
+    "ket_euro_n": "a group of European-style gold and silver coins with all symbols and numbers omitted",
+    "ket_expensive_adj": "a luxury watch requiring a very large pile of coins while a simple watch needs only one coin",
+    "ket_for_sale_n": "a seller presenting a bicycle to an interested buyer with a handshake, no signs",
+    "ket_money_n": "an assortment of plain banknotes and coins with all numbers and symbols omitted",
+    "ket_open_adj_v": "a shop worker actively opening wide front doors as customers approach",
+    "ket_pair_n": "one matching pair of shoes displayed side by side",
+    "ket_pay_v": "a customer paying a cashier with a plain card while receiving a shopping bag",
+    "ket_pence_n": "several small British-style copper coins with all numbers and symbols omitted",
+    "ket_penny_n": "one small copper penny-style coin shown clearly with no visible symbol or number",
+    "ket_pound_n": "one large British-style coin and a plain banknote with all writing and symbols omitted",
+    "ket_price_n": "a product beside the exact pile of coins required to buy it, no written price tag",
+    "ket_receipt_n": "a cash register printing a long narrow blank receipt with no readable writing",
+    "ket_rent_v": "a customer temporarily receiving a bicycle and key from a rental worker beside a plain clock",
+    "ket_sale_n": "many shoppers choosing reduced-price clothes from a special rack, no sale signs",
+    "ket_shopping_n": "a shopper selecting groceries into a cart in a bright store aisle, no signs",
+    "ket_size_n": "the same shirt displayed in three clearly different sizes from small to large",
+    "ket_spend_v": "a shopper handing over several coins to purchase groceries at a counter",
+    "ket_store_n": "a complete general store interior with shelves, products, checkout, and customers, no signs",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1346,7 +1378,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                             word["id"],
                                                                                             DIGITAL_SCENES.get(
                                                                                                 word["id"],
-                                                                                                scene_hints.get(english, fallback_scene),
+                                                                                                SHOPPING_SCENES.get(
+                                                                                                    word["id"],
+                                                                                                    scene_hints.get(english, fallback_scene),
+                                                                                                ),
                                                                                             ),
                                                                                         ),
                                                                                     ),
