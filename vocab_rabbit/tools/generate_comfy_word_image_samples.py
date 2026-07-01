@@ -1339,6 +1339,39 @@ TIME_DATE_SCENES = {
     "ket_yesterday_adv": "a child today looking at a fresh photo of the picnic they enjoyed the previous day",
 }
 
+OTHER_COMMON_SCENES = {
+    "ket_circle_n": "one perfect thick circular ring centered on a plain background",
+    "ket_crowd_n": "a large dense crowd of many different people gathered together",
+    "ket_design_drawing_n": "a child carefully drawing a detailed chair design on blank paper with no writing",
+    "ket_design_planning_n": "a child planning a model house by arranging materials and a small prototype before building",
+    "ket_design_process_n": "a clear visual sequence from a simple idea sketch to a cardboard prototype to a finished chair",
+    "ket_experiment_n": "a child wearing safety goggles performing a safe colorful bubbling science experiment",
+    "ket_fur_n": "a close clear view of a fluffy cat showing its soft thick fur texture",
+    "ket_length_n": "a long rope stretched beside a plain ruler with tick marks and no numbers",
+    "ket_match_n": "two children's football teams playing an active match on a field with no logos",
+    "ket_middle_n": "one red ball placed exactly in the middle of four blue balls",
+    "ket_mile_n": "a long-distance runner traveling along a very long countryside road toward the horizon",
+    "ket_million_n": "an enormous field filled with a seemingly countless multitude of sparkling stars",
+    "ket_mom_n_am_eng": "a loving mother warmly hugging her young child",
+    "ket_part_n": "one wheel shown as a necessary part of a partly assembled toy car",
+    "ket_partner_n": "two children working as partners to carry and assemble one shared model",
+    "ket_people_n_pl": "a varied group of adults and children standing together",
+    "ket_person_n": "one single adult person standing alone, full body and clearly visible",
+    "ket_piece_n": "one single jigsaw puzzle piece separated from a nearly complete puzzle",
+    "ket_police_n": "a friendly police officer in a plain uniform helping a child cross a road, no writing or logos",
+    "ket_runner_n": "one athletic runner moving quickly along a track",
+    "ket_set_n": "one complete matching tea set with teapot, cups, saucers, and milk jug",
+    "ket_shoe_n": "one complete plain sneaker viewed clearly from the side with no logo",
+    "ket_shopping_centre_n": "a bright indoor shopping centre with several plain storefronts and shoppers, no signs or writing",
+    "ket_side_n": "a simple cube with one side face highlighted in a contrasting color",
+    "ket_smoking_n": "an extinguished cigarette in an ashtray with a thin curl of smoke, no person and no writing",
+    "ket_stage_n": "an empty theatre stage under bright spotlights with curtains open and no signs",
+    "ket_stripes_n": "a close view of bold alternating black and white stripes on a zebra",
+    "ket_training_transitive_and_intransitive_n": "a young athlete training with a coach using cones and simple exercises",
+    "ket_wish_n": "a child closing their eyes and making a wish while blowing dandelion seeds",
+    "ket_woman_n": "one adult woman standing alone, full body and clearly visible",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1682,7 +1715,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                                                         word["id"],
                                                                                                                         TIME_DATE_SCENES.get(
                                                                                                                             word["id"],
-                                                                                                                            scene_hints.get(english, fallback_scene),
+                                                                                                                            OTHER_COMMON_SCENES.get(
+                                                                                                                                word["id"],
+                                                                                                                                scene_hints.get(english, fallback_scene),
+                                                                                                                            ),
                                                                                                                         ),
                                                                                                                     ),
                                                                                                                 ),
