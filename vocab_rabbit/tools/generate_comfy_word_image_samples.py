@@ -1453,6 +1453,29 @@ PHRASAL_VERB_SCENES = {
     "ket_write_down_phr_v": "a child writing down an idea in a plain notebook with no readable letters or words",
 }
 
+TIME_FREQUENCY_SCENES = {
+    "ket_afterwards_adv": "a muddy child taking a shower and changing clothes afterwards after a football game",
+    "ket_again_adv": "a child rebuilding the same block tower again beside the pieces of the first fallen tower",
+    "ket_already_adv": "one child has already completed a puzzle while a friend is only beginning theirs",
+    "ket_always_adv": "the same child brushing teeth across every panel from morning through evening, no labels",
+    "ket_early_adj_adv": "a child arriving early at an empty school entrance in the first sunrise light",
+    "ket_ever_adv": "a thoughtful child looking through many different past adventure memories in a photo album, no writing",
+    "ket_just_adv": "a child beside a freshly finished painting with a wet brush still in hand",
+    "ket_late_adv_adj": "a worried child rushing toward a bus that has already begun to leave",
+    "ket_later_adv": "two connected scenes showing a child setting a toy aside now and returning to it later",
+    "ket_never_adv": "the same child consistently keeping both hands safely away from a hot stove in every panel",
+    "ket_now_adv": "a child actively tying a shoelace at the present moment beside a plain clock",
+    "ket_often_adv": "six activity panels with the same child cycling in five of them and resting in one",
+    "ket_once_adv": "a row of several blank activity panels with the child appearing in exactly one panel",
+    "ket_sometimes_adv": "six activity panels with the child cycling in only two separated panels",
+    "ket_soon_adv": "a child waiting at a bus stop while the bus is visibly approaching nearby",
+    "ket_still_adv": "a child still reading the same book as daylight changes and other children leave",
+    "ket_then_adv": "two clear sequential scenes showing a child washing hands first and then eating",
+    "ket_twice_adv": "two matching panels showing the same child jumping exactly two times",
+    "ket_usually_adv": "six morning panels with the child eating cereal in five and toast in one",
+    "ket_yet_adv": "a child waiting beside an oven because the cake is not ready yet",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1804,7 +1827,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                                                                         word["id"],
                                                                                                                                         PHRASAL_VERB_SCENES.get(
                                                                                                                                             word["id"],
-                                                                                                                                            scene_hints.get(english, fallback_scene),
+                                                                                                                                            TIME_FREQUENCY_SCENES.get(
+                                                                                                                                                word["id"],
+                                                                                                                                                scene_hints.get(english, fallback_scene),
+                                                                                                                                            ),
                                                                                                                                         ),
                                                                                                                                     ),
                                                                                                                                 ),

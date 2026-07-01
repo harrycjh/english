@@ -502,6 +502,20 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_every_time_and_frequency_adverb_uses_a_specific_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        frequency_words = [
+            word for word in words if word.get("category") == "时间和频率副词"
+        ]
+
+        self.assertEqual(len(frequency_words), 20)
+        for word in frequency_words:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
     def test_animal_body_parts_are_the_clear_subject(self) -> None:
         words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
 

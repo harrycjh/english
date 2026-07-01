@@ -426,6 +426,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_always_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900163907,
+      "prompt": "Create a standalone storybook illustration: the same child brushing teeth across every panel from morning through evening, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_amazed_adj",
       "status": "accepted",
       "source": "comfy-run",
@@ -4286,6 +4298,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_early_adj_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900171438,
+      "prompt": "Create a standalone storybook illustration: a child arriving early at an empty school entrance in the first sunrise light. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_earn_v",
       "status": "accepted",
       "source": "comfy-run",
@@ -4546,6 +4570,18 @@
       "prompt": "Create a standalone storybook illustration: a lively community sports event with participants, spectators, and simple decorations. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-07-01T09:42:39.140096+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_ever_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900178964,
+      "prompt": "Create a standalone storybook illustration: a thoughtful child looking through many different past adventure memories in a photo album, no writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
       "width": 512,
       "height": 512
     },
@@ -7434,6 +7470,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_just_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900186494,
+      "prompt": "Create a standalone storybook illustration: a child beside a freshly finished painting with a wet brush still in hand. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_kangaroo_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -7638,6 +7686,30 @@
       "prompt": "Create a standalone storybook illustration: one large suitcase beside a much smaller suitcase for clear size comparison. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-06-30T17:04:14.854835+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_late_adv_adj",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900194028,
+      "prompt": "Create a standalone storybook illustration: a worried child rushing toward a bus that has already begun to leave. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_later_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900201555,
+      "prompt": "Create a standalone storybook illustration: two connected scenes showing a child setting a toy aside now and returning to it later. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
       "width": 512,
       "height": 512
     },
@@ -9358,6 +9430,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_now_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900216617,
+      "prompt": "Create a standalone storybook illustration: a child actively tying a shoelace at the present moment beside a plain clock. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_number_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -9542,6 +9626,18 @@
       "prompt": "Create a standalone storybook illustration: one red ball resting securely on top of a blue wooden box. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-07-01T09:04:13.780879+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_once_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900231686,
+      "prompt": "Create a standalone storybook illustration: a row of several blank activity panels with the child appearing in exactly one panel. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
       "width": 512,
       "height": 512
     },
@@ -12846,6 +12942,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_soon_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900246756,
+      "prompt": "Create a standalone storybook illustration: a child waiting at a bus stop while the bus is visibly approaching nearby. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_sorry_adj",
       "status": "accepted",
       "source": "comfy-run",
@@ -13126,6 +13234,18 @@
       "prompt": "Create a standalone storybook illustration: a sneaky hand taking a wallet from an unattended open bag while the owner looks away. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-06-30T16:50:18.976305+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_still_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900254295,
+      "prompt": "Create a standalone storybook illustration: a child still reading the same book as daylight changes and other children leave. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
       "width": 512,
       "height": 512
     },
@@ -14934,6 +15054,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_usually_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900276902,
+      "prompt": "Create a standalone storybook illustration: six morning panels with the child eating cereal in five and toast in one. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_variety_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -15942,6 +16074,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_yet_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900284432,
+      "prompt": "Create a standalone storybook illustration: a child waiting beside an oven because the cake is not ready yet. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T10:07:30.012316+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_yog_h_urt_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -16223,6 +16367,24 @@
       "reviewedAt": "2026-07-01T09:26:38.504576+00:00"
     },
     {
+      "wordId": "ket_afterwards_adv",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900141290,
+      "prompt": "Create a standalone storybook illustration: a muddy child taking a shower and changing clothes afterwards after a football game. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "The image shows only a muddy child and no clear action occurring afterwards.",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
+      "wordId": "ket_again_adv",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900148836,
+      "prompt": "Create a standalone storybook illustration: a child rebuilding the same block tower again beside the pieces of the first fallen tower. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "The child is building one tower and no repeated or second attempt is visible.",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
       "wordId": "ket_against_prep",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-165403",
@@ -16340,6 +16502,15 @@
       "reviewedAt": "2026-07-01T09:04:13.780879+00:00"
     },
     {
+      "wordId": "ket_already_adv",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900156371,
+      "prompt": "Create a standalone storybook illustration: one child has already completed a puzzle while a friend is only beginning theirs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "The two children are working on one puzzle together and no already-completed state is shown.",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
       "wordId": "ket_alright_adj_adv_exclam",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-174555",
@@ -16356,6 +16527,15 @@
       "prompt": "Create a standalone storybook illustration: one child placing an apple in a basket and a second child adding another apple too. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-07-01T08:50:52.567730+00:00"
+    },
+    {
+      "wordId": "ket_always_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900163907,
+      "prompt": "Create a standalone storybook illustration: the same child brushing teeth across every panel from morning through evening, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
     },
     {
       "wordId": "ket_amazed_adj",
@@ -18815,6 +18995,15 @@
       "reviewedAt": "2026-07-01T02:31:14.561521+00:00"
     },
     {
+      "wordId": "ket_early_adj_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900171438,
+      "prompt": "Create a standalone storybook illustration: a child arriving early at an empty school entrance in the first sunrise light. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
       "wordId": "ket_easily_adv",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-164016",
@@ -18975,6 +19164,15 @@
       "prompt": "Create a standalone storybook illustration: a lively community sports event with participants, spectators, and simple decorations. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-07-01T09:42:39.140096+00:00"
+    },
+    {
+      "wordId": "ket_ever_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900178964,
+      "prompt": "Create a standalone storybook illustration: a thoughtful child looking through many different past adventure memories in a photo album, no writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
     },
     {
       "wordId": "ket_everybody_pron",
@@ -20903,6 +21101,15 @@
       "reviewedAt": "2026-06-30T16:40:56.026138+00:00"
     },
     {
+      "wordId": "ket_just_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900186494,
+      "prompt": "Create a standalone storybook illustration: a child beside a freshly finished painting with a wet brush still in hand. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
       "wordId": "ket_keep_v",
       "status": "REJECT",
       "runId": "comfy-sample-20260701-003539",
@@ -20991,6 +21198,24 @@
       "prompt": "Create a standalone storybook illustration: one large suitcase beside a much smaller suitcase for clear size comparison. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T17:04:14.854835+00:00"
+    },
+    {
+      "wordId": "ket_late_adv_adj",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900194028,
+      "prompt": "Create a standalone storybook illustration: a worried child rushing toward a bus that has already begun to leave. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
+      "wordId": "ket_later_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900201555,
+      "prompt": "Create a standalone storybook illustration: two connected scenes showing a child setting a toy aside now and returning to it later. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
     },
     {
       "wordId": "ket_latest_adj",
@@ -22019,6 +22244,15 @@
       "reviewedAt": "2026-07-01T07:58:12.836428+00:00"
     },
     {
+      "wordId": "ket_never_adv",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900209083,
+      "prompt": "Create a standalone storybook illustration: the same child consistently keeping both hands safely away from a hot stove in every panel. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "The repeated panels show the child doing the activity every time rather than never doing it.",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
       "wordId": "ket_new_adj",
       "status": "REJECT",
       "runId": "comfy-sample-20260701-010724",
@@ -22190,6 +22424,15 @@
       "reviewedAt": "2026-07-01T08:25:18.254011+00:00"
     },
     {
+      "wordId": "ket_now_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900216617,
+      "prompt": "Create a standalone storybook illustration: a child actively tying a shoelace at the present moment beside a plain clock. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
       "wordId": "ket_number_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-105533",
@@ -22251,6 +22494,15 @@
       "prompt": "Create a standalone storybook illustration: a child holding out a tray with a cup for a friend to take. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T16:40:56.026138+00:00"
+    },
+    {
+      "wordId": "ket_often_adv",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900224142,
+      "prompt": "Create a standalone storybook illustration: six activity panels with the same child cycling in five of them and resting in one. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Every panel shows cycling, which reads as always rather than often.",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
     },
     {
       "wordId": "ket_oh_dear_exclam",
@@ -22323,6 +22575,15 @@
       "prompt": "Create a standalone storybook illustration: one red ball resting securely on top of a blue wooden box. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-07-01T09:04:13.780879+00:00"
+    },
+    {
+      "wordId": "ket_once_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900231686,
+      "prompt": "Create a standalone storybook illustration: a row of several blank activity panels with the child appearing in exactly one panel. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
     },
     {
       "wordId": "ket_onion_n",
@@ -24566,6 +24827,15 @@
       "reviewedAt": "2026-07-01T09:15:13.824673+00:00"
     },
     {
+      "wordId": "ket_sometimes_adv",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900239218,
+      "prompt": "Create a standalone storybook illustration: six activity panels with the child cycling in only two separated panels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Every panel shows cycling rather than only some of the panels.",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
       "wordId": "ket_somewhere_adv",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-164016",
@@ -24582,6 +24852,15 @@
       "prompt": "Create a standalone storybook illustration: a singer performing one melody with flowing music notes and guitar accompaniment. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-07-01T03:16:54.716376+00:00"
+    },
+    {
+      "wordId": "ket_soon_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900246756,
+      "prompt": "Create a standalone storybook illustration: a child waiting at a bus stop while the bus is visibly approaching nearby. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
     },
     {
       "wordId": "ket_sorry_adj",
@@ -24762,6 +25041,15 @@
       "prompt": "Create a standalone storybook illustration: a sneaky hand taking a wallet from an unattended open bag while the owner looks away. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T16:50:18.976305+00:00"
+    },
+    {
+      "wordId": "ket_still_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900254295,
+      "prompt": "Create a standalone storybook illustration: a child still reading the same book as daylight changes and other children leave. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
     },
     {
       "wordId": "ket_stomach_ache_n",
@@ -25367,6 +25655,15 @@
       "reviewedAt": "2026-07-01T09:15:13.824673+00:00"
     },
     {
+      "wordId": "ket_then_adv",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900261825,
+      "prompt": "Create a standalone storybook illustration: two clear sequential scenes showing a child washing hands first and then eating. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Both scenes show eating and no first-then sequence is visible.",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
       "wordId": "ket_there_adv",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-164016",
@@ -25835,6 +26132,15 @@
       "reviewedAt": "2026-06-30T16:50:18.976305+00:00"
     },
     {
+      "wordId": "ket_twice_adv",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900269369,
+      "prompt": "Create a standalone storybook illustration: two matching panels showing the same child jumping exactly two times. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "The image contains four repeated jumping figures rather than exactly two.",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
+    },
+    {
       "wordId": "ket_type_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-173703",
@@ -25968,6 +26274,15 @@
       "prompt": "Create a standalone storybook illustration: a child calmly following the familiar daily routine of eating breakfast before school. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T17:18:27.832966+00:00"
+    },
+    {
+      "wordId": "ket_usually_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900276902,
+      "prompt": "Create a standalone storybook illustration: six morning panels with the child eating cereal in five and toast in one. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
     },
     {
       "wordId": "ket_v_versus_prep",
@@ -26607,6 +26922,15 @@
       "prompt": "Create a standalone storybook illustration: a child today looking at a fresh photo of the picnic they enjoyed the previous day. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-07-01T09:26:38.504576+00:00"
+    },
+    {
+      "wordId": "ket_yet_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-180221",
+      "seed": 782900284432,
+      "prompt": "Create a standalone storybook illustration: a child waiting beside an oven because the cake is not ready yet. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T10:07:30.012316+00:00"
     },
     {
       "wordId": "ket_yog_h_urt_n",
