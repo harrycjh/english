@@ -544,6 +544,48 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_every_article_and_determiner_uses_a_specific_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        determiner_words = [
+            word for word in words if word.get("category") == "冠词和限定词"
+        ]
+
+        self.assertEqual(len(determiner_words), 11)
+        for word in determiner_words:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
+    def test_every_modal_word_uses_a_specific_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        modal_words = [
+            word for word in words if word.get("category") == "情态动词和语气"
+        ]
+
+        self.assertEqual(len(modal_words), 11)
+        for word in modal_words:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
+    def test_every_conjunction_uses_a_specific_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        conjunction_words = [
+            word for word in words if word.get("category") == "连词和句子连接词"
+        ]
+
+        self.assertEqual(len(conjunction_words), 7)
+        for word in conjunction_words:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
     def test_animal_body_parts_are_the_clear_subject(self) -> None:
         words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
 

@@ -1513,6 +1513,44 @@ SPEAKING_THINKING_SCENES = {
     "ket_write_v": "a child writing carefully in a plain notebook with no readable letters or words",
 }
 
+ARTICLE_DETERMINER_SCENES = {
+    "ket_a_an_det": "one single apple and one single umbrella shown separately on a plain background",
+    "ket_all_the_time_det": "the same child watching and caring for a small plant across every time-of-day panel",
+    "ket_an_det": "one single orange resting alone on an otherwise empty table",
+    "ket_its_det": "one dog sitting beside its own bowl and its own collar",
+    "ket_last_adj_det": "one child clearly last at the back of a line of runners",
+    "ket_my_det": "one child hugging their own backpack and pointing clearly to themself",
+    "ket_our_det": "two children jointly holding one shared model house that belongs to both",
+    "ket_such_det": "a child staring in amazement at such an unusually enormous pumpkin",
+    "ket_the_det": "a foreground hand pointing to the one specific red ball among several blue balls",
+    "ket_their_det": "a group of children standing proudly beside their shared tent",
+    "ket_your_det": "a child offering one backpack directly toward the viewer as the viewer's backpack",
+}
+
+MODAL_SCENES = {
+    "ket_cannot_mv": "a child trying but unable to lift an enormous heavy rock from the ground",
+    "ket_could_mv": "a child considering two possible safe paths they could take across a park",
+    "ket_have_got_to_mv": "a child urgently putting on a backpack because it is time to leave for school",
+    "ket_have_to_mv": "a child completing a required household chore before going outside to play",
+    "ket_may_mv": "a child politely asking an adult for permission to take one cookie",
+    "ket_might_mv": "an uncertain child holding an umbrella under a sky that is half sunny and half cloudy",
+    "ket_must_mv": "a child putting on a safety helmet before riding a bicycle because it is required",
+    "ket_shall_mv": "one child inviting a friend to go together by gesturing toward an open path",
+    "ket_should_mv": "a child choosing a healthy apple rather than candy after receiving good advice",
+    "ket_will_ll_mv": "a determined child preparing garden tools for a tree they intend to plant",
+    "ket_would_mv": "a child politely choosing a cup of tea offered from a tray",
+}
+
+CONJUNCTION_SCENES = {
+    "ket_and_conj": "one apple and one banana placed together as a combined pair",
+    "ket_because_conj": "a child opening an umbrella because heavy rain is falling",
+    "ket_but_conj": "a child ready to play outside but stopped at the door by heavy rain",
+    "ket_if_conj": "two connected scenes showing that if a seed receives water it grows into a plant",
+    "ket_or_conj": "a child choosing either an apple or a banana from two separate options",
+    "ket_so_conj_adv": "heavy rain begins, so a child opens an umbrella as the clear result",
+    "ket_while_conj": "one child reading while another child draws at the same time beside them",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1870,7 +1908,16 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                                                                                     word["id"],
                                                                                                                                                     SPEAKING_THINKING_SCENES.get(
                                                                                                                                                         word["id"],
-                                                                                                                                                        scene_hints.get(english, fallback_scene),
+                                                                                                                                                        ARTICLE_DETERMINER_SCENES.get(
+                                                                                                                                                            word["id"],
+                                                                                                                                                            MODAL_SCENES.get(
+                                                                                                                                                                word["id"],
+                                                                                                                                                                CONJUNCTION_SCENES.get(
+                                                                                                                                                                    word["id"],
+                                                                                                                                                                    scene_hints.get(english, fallback_scene),
+                                                                                                                                                                ),
+                                                                                                                                                            ),
+                                                                                                                                                        ),
                                                                                                                                                     ),
                                                                                                                                                 ),
                                                                                                                                             ),
