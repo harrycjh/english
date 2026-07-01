@@ -1430,6 +1430,29 @@ EXCLAMATION_RESPONSE_SCENES = {
     "ket_yes_adv": "a smiling child nodding clearly and calmly to show agreement",
 }
 
+PHRASAL_VERB_SCENES = {
+    "ket_break_down_phr_v": "a family car broken down at the roadside with its hood open and the engine stopped",
+    "ket_fall_over_phr_v": "a child losing balance and falling over onto a soft grassy field",
+    "ket_fill_in_phr_v": "a child filling in empty picture boxes on a simple form using colored shapes, no writing",
+    "ket_find_out_phr_v": "a curious child opening a mystery box and finding out what is hidden inside",
+    "ket_get_off_phr_v": "a child stepping down and getting off a stopped city bus",
+    "ket_get_on_phr_v": "a child stepping up and getting on a stopped city bus",
+    "ket_get_up_phr_v": "a sleepy child getting up from bed and placing both feet on the floor",
+    "ket_grow_up_phr_v": "the same person shown growing up from a small child into a tall adult",
+    "ket_look_after_phr_v": "an older child carefully looking after a puppy by feeding and brushing it",
+    "ket_look_for_phr_v": "a child looking under a sofa and behind cushions for a missing red ball",
+    "ket_look_out_phr_v": "one child urgently warning a friend to look out for a fast bicycle approaching nearby",
+    "ket_pick_up_phr_v": "a child bending down to pick up a toy from the floor",
+    "ket_put_on_phr_v": "a child actively putting on a warm jacket with one arm entering a sleeve",
+    "ket_sit_down_phr_v": "a child bending their knees and sitting down onto a chair",
+    "ket_take_off_phr_v": "a child actively taking off a jacket by pulling both arms out of the sleeves",
+    "ket_turn_off_phr_v": "a hand pressing a switch while a nearby lamp becomes completely dark and unlit",
+    "ket_turn_on_phr_v": "a hand pressing a switch while a nearby lamp turns bright and visibly lit",
+    "ket_wake_up_phr_v": "a child waking up in bed with eyes open as a plain alarm clock rings",
+    "ket_work_out_phr_v": "a child working out with simple stretches and light exercise equipment",
+    "ket_write_down_phr_v": "a child writing down an idea in a plain notebook with no readable letters or words",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1779,7 +1802,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                                                                     word["id"],
                                                                                                                                     EXCLAMATION_RESPONSE_SCENES.get(
                                                                                                                                         word["id"],
-                                                                                                                                        scene_hints.get(english, fallback_scene),
+                                                                                                                                        PHRASAL_VERB_SCENES.get(
+                                                                                                                                            word["id"],
+                                                                                                                                            scene_hints.get(english, fallback_scene),
+                                                                                                                                        ),
                                                                                                                                     ),
                                                                                                                                 ),
                                                                                                                             ),
