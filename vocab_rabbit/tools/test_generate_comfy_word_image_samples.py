@@ -217,6 +217,28 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_first_body_health_batch_uses_specific_scenes(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        first_batch_ids = {
+            "ket_accident_n", "ket_appointment_n", "ket_arm_n", "ket_baby_n",
+            "ket_back_n_adv_adj", "ket_beard_n", "ket_blood_n", "ket_body_n",
+            "ket_brain_n", "ket_break_n_v", "ket_check_v", "ket_clean_adj_v",
+            "ket_cold_adj_n", "ket_comb_n", "ket_cut_v", "ket_danger_n",
+            "ket_dangerous_adj", "ket_dead_adj", "ket_dentist_n", "ket_die_v",
+            "ket_doctor_n", "ket_dr_n", "ket_ear_n", "ket_exercise_n_v",
+            "ket_eye_n", "ket_face_n", "ket_fall_n_v", "ket_feel_v",
+            "ket_finger_n", "ket_fit_adj",
+        }
+        first_batch = [word for word in words if word["id"] in first_batch_ids]
+
+        self.assertEqual(len(first_batch), 30)
+        for word in first_batch:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
     def test_animal_body_parts_are_the_clear_subject(self) -> None:
         words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
 

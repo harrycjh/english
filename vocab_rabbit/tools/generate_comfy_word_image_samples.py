@@ -747,6 +747,39 @@ FEELING_SCENES = {
     "ket_young_adj": "a very young toddler standing safely beside a grown adult",
 }
 
+BODY_SCENES = {
+    "ket_accident_n": "a bicycle lying on its side after a minor accident while an adult helps an unhurt child stand",
+    "ket_appointment_n": "a child arriving at a clinic at an arranged time while a doctor waits beside a plain clock",
+    "ket_arm_n": "a child raising one bare arm with the complete shoulder, elbow, wrist, and hand clearly visible",
+    "ket_baby_n": "a happy baby sitting safely on a soft blanket with a simple toy",
+    "ket_back_n_adv_adj": "a person viewed clearly from behind with the whole back visible",
+    "ket_beard_n": "a close portrait of a smiling adult man with a full neat beard",
+    "ket_blood_n": "one small red drop of blood on a fingertip beside a clean bandage, non-graphic",
+    "ket_body_n": "a full standing human figure with head, torso, arms, hands, legs, and feet all visible",
+    "ket_brain_n": "a clean child-friendly anatomical model of a human brain on a plain background",
+    "ket_break_n_v": "a child with one arm safely supported in a cast after a simple bone break, no injury detail",
+    "ket_check_v": "a doctor checking a child's heartbeat with a stethoscope",
+    "ket_clean_adj_v": "a child washing both hands with soap until they are visibly clean",
+    "ket_cold_adj_n": "a child with a cold resting under a blanket while sneezing into a tissue",
+    "ket_comb_n": "one plain hair comb shown clearly beside a small lock of neatly combed hair",
+    "ket_cut_v": "a child safely cutting colored paper with blunt round-tipped scissors",
+    "ket_danger_n": "an adult stopping a child before a slippery puddle beside a hot cooking area, no warning text",
+    "ket_dangerous_adj": "an adult keeping a child safely away from a hot stove and steaming pan",
+    "ket_dead_adj": "a completely dead dry plant with brown leaves beside a healthy green plant",
+    "ket_dentist_n": "a friendly dentist examining a child's teeth in a bright clean dental clinic",
+    "ket_die_v": "a sequence of one green flower gradually wilting and becoming a dry lifeless plant",
+    "ket_doctor_n": "a friendly doctor in a plain coat holding a stethoscope in a clinic",
+    "ket_dr_n": "a professional doctor wearing a stethoscope and gently greeting a young patient",
+    "ket_ear_n": "a clear close side view of one human ear as the main subject",
+    "ket_exercise_n_v": "a child exercising with jumping jacks on a safe gym mat",
+    "ket_eye_n": "a clear close view of one open human eye with eyelashes and iris visible",
+    "ket_face_n": "a front portrait of a smiling child's complete face with eyes, nose, mouth, and ears visible",
+    "ket_fall_n_v": "a child safely falling backward onto a thick gym mat while practicing balance",
+    "ket_feel_v": "a child using fingertips to feel one fluffy cloth and one rough cloth",
+    "ket_finger_n": "a close view of one hand with one index finger clearly extended as the focus",
+    "ket_fit_adj": "a healthy fit child jogging energetically in a park after stretching",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1066,7 +1099,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                         word["id"],
                                                                         FEELING_SCENES.get(
                                                                             word["id"],
-                                                                            scene_hints.get(english, fallback_scene),
+                                                                            BODY_SCENES.get(
+                                                                                word["id"],
+                                                                                scene_hints.get(english, fallback_scene),
+                                                                            ),
                                                                         ),
                                                                     ),
                                                                 ),
