@@ -1372,6 +1372,37 @@ OTHER_COMMON_SCENES = {
     "ket_woman_n": "one adult woman standing alone, full body and clearly visible",
 }
 
+ABSTRACT_CONCEPT_SCENES = {
+    "ket_activity_n": "children actively taking part in a shared arts and crafts activity",
+    "ket_advice_n": "a caring adult giving advice by showing a child the safer of two paths",
+    "ket_character_n": "a colorful storybook hero character appearing from an open picture book with no writing",
+    "ket_difference_n": "two nearly identical socks side by side with one clear stripe different between them",
+    "ket_event_n": "a lively community sports event with participants, spectators, and simple decorations",
+    "ket_example_n": "one completed model airplane displayed as an example beside unfinished craft materials",
+    "ket_experience_n": "a child remembering a rich camping experience with a tent, fire, lake, and stars around them",
+    "ket_fact_n": "a child verifying a fact by observing an ice cube melt during a simple experiment",
+    "ket_feelings_n": "four children clearly showing happiness, sadness, anger, and fear through expressions and posture",
+    "ket_identification_n": "a child matching one person's face to a plain photo card with no writing",
+    "ket_invention_n": "a proud child demonstrating a newly invented homemade robot built from simple parts",
+    "ket_life_n": "a complete plant life cycle from seed to sprout to flower to fruit, no labels",
+    "ket_noise_n": "a loud construction drill and clattering tools with visible sound waves, no writing",
+    "ket_opinion_n": "two children viewing the same painting and showing clearly different personal reactions",
+    "ket_pity_n": "one child showing pity by gently comforting a sad friend with a broken toy",
+    "ket_place_n": "one special picnic place clearly marked by a small plain flag in a wide park",
+    "ket_reason_n": "a child discovering that a tipped cup is the clear reason for a puddle on the floor",
+    "ket_shame_n": "an embarrassed child looking down after accidentally breaking a vase",
+    "ket_sort_n": "a child sorting mixed blocks into separate groups by color and shape",
+    "ket_stuff_n": "an open box overflowing with many miscellaneous everyday objects",
+    "ket_success_n": "a joyful child celebrating after successfully completing a tall difficult block tower",
+    "ket_surprise_n": "a child with a surprised expression as a toy suddenly pops from a gift box",
+    "ket_thing_n": "one single unfamiliar but clearly visible object resting alone on a table",
+    "ket_topic_n": "a group of children discussing a planet model as the shared topic, no speech text",
+    "ket_trouble_n": "a worried child beside a bicycle with a clearly broken chain",
+    "ket_type_n": "three clear groups showing different types of leaves arranged by shape",
+    "ket_variety_n": "a wide variety of fruits with many shapes, sizes, and colors arranged together",
+    "ket_view_n": "a person standing at a lookout enjoying a wide scenic mountain and lake view",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1717,7 +1748,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                                                             word["id"],
                                                                                                                             OTHER_COMMON_SCENES.get(
                                                                                                                                 word["id"],
-                                                                                                                                scene_hints.get(english, fallback_scene),
+                                                                                                                                ABSTRACT_CONCEPT_SCENES.get(
+                                                                                                                                    word["id"],
+                                                                                                                                    scene_hints.get(english, fallback_scene),
+                                                                                                                                ),
                                                                                                                             ),
                                                                                                                         ),
                                                                                                                     ),
