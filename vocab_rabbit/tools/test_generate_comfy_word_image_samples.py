@@ -56,6 +56,30 @@ class FamilyPromptTests(unittest.TestCase):
 
             self.assertEqual(loader(manifest_path), {"ket_a", "ket_b"})
 
+    def test_load_retryable_rejected_ids_excludes_words_with_accepted_images(self) -> None:
+        import tempfile
+
+        loader = getattr(MODULE, "load_retryable_rejected_ids", None)
+        self.assertTrue(callable(loader))
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            manifest_path = Path(temporary_directory) / "manifest.json"
+            manifest_path.write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "images": [{"wordId": "ket_accepted", "status": "accepted"}],
+                        "reviews": [
+                            {"wordId": "ket_accepted", "status": "REJECT"},
+                            {"wordId": "ket_retry", "status": "REJECT"},
+                            {"wordId": "ket_passed", "status": "ACCEPT"},
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(loader(manifest_path), {"ket_retry"})
+
     def test_workflow_template_is_bundled_with_the_project(self) -> None:
         self.assertTrue(MODULE.WORKFLOW_TEMPLATE_PATH.is_relative_to(MODULE.PROJECT_ROOT))
         self.assertTrue(MODULE.WORKFLOW_TEMPLATE_PATH.exists())
@@ -109,6 +133,20 @@ class FamilyPromptTests(unittest.TestCase):
 
         self.assertTrue(remaining_action_words)
         for word in remaining_action_words:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
+    def test_every_common_action_word_uses_a_specific_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        action_words = [
+            word for word in words if word.get("category") == "常用动作动词"
+        ]
+
+        self.assertEqual(len(action_words), 143)
+        for word in action_words:
             with self.subTest(word_id=word["id"]):
                 self.assertNotIn(
                     "a simple real-life scene that clearly represents",

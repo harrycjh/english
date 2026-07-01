@@ -492,6 +492,63 @@ SPORT_SCENES = {
 }
 
 ACTION_SCENES = {
+    "ket_add_v": "a hand clearly adding one red apple to two apples already together in a basket",
+    "ket_agree_v": "two children nodding and shaking hands after choosing the same model-building plan",
+    "ket_allow_v": "an adult holding a garden gate open and gesturing for a child to pass through",
+    "ket_arrive_v": "a child stepping off a stopped bus and arriving where family members wait to welcome them",
+    "ket_be_av_v": "one solid colorful child calmly present in a real scene beside a faint empty outline where nobody is",
+    "ket_become_v": "a clear transformation sequence showing a caterpillar becoming a butterfly, no labels",
+    "ket_begin_v": "a runner leaning forward at a plain starting line at the exact moment a race begins",
+    "ket_believe_v": "a hopeful child planting a seed and confidently imagining the healthy flower it will become",
+    "ket_belong_v": "one uniquely shaped puzzle piece returning to the exact matching space where it belongs",
+    "ket_born_v": "happy parents gently holding their newborn baby immediately after birth",
+    "ket_borrow_v": "one child temporarily receiving a book from a friend who hands it over",
+    "ket_bother_v": "one child repeatedly poking the shoulder of another child who is trying to read",
+    "ket_bring_v": "a child walking toward a waiting parent while carrying a full fruit basket",
+    "ket_bring_back_v": "a child returning a borrowed red ball back into a friend's waiting hands",
+    "ket_brush_n_v": "a child brushing their hair carefully with a plain hairbrush in front of a mirror",
+    "ket_build_v": "a child actively building a small model house from wooden blocks",
+    "ket_carry_v": "a child carrying a large box securely with both arms while walking",
+    "ket_celebrate_v": "children celebrating a friend's success with applause, balloons, and confetti, no writing",
+    "ket_colour_n_v": "a child coloring a simple flower picture with bright crayons, no letters or words",
+    "ket_come_v": "a child clearly walking toward a waiting friend who gestures for them to come closer",
+    "ket_come_back_v": "a child coming back through the front door while family members welcome them home",
+    "ket_complete_v": "a child placing the final missing piece into a nearly completed jigsaw puzzle",
+    "ket_contact_n_v": "two friends contacting each other on two plain phones in a split scene, screens without text",
+    "ket_continue_v": "a child continuing to paint a long fence from the finished section into the unpainted section",
+    "ket_copy_v": "a child carefully drawing the same simple flower shape shown on a separate reference card",
+    "ket_cover_v_n": "a child gently covering a sleeping doll completely with a small blanket",
+    "ket_cross_n_v": "a child safely crossing a road from one side to the other on a plain zebra crossing",
+    "ket_cry_v": "a sad child crying with visible tears running down both cheeks",
+    "ket_cycle_v": "a helmeted child actively cycling a bicycle along a safe park path",
+    "ket_decide_v": "a child deciding between an apple and candy, with one hand clearly choosing the apple",
+    "ket_deliver_v": "a delivery worker handing a plain sealed parcel directly to a person at their front door",
+    "ket_design_v": "a child designing a chair by sketching its shape and building a small matching model",
+    "ket_discuss_v": "two children discussing a globe together with expressive gestures and no speech text",
+    "ket_dive_v": "a trained swimmer diving headfirst safely from a low pool starting block into clear water",
+    "ket_do_av_v": "a child actively doing a clear household task by sweeping the floor with a broom",
+    "ket_dream_n_v": "a sleeping child dreaming of flying gently above clouds in a soft dream scene, no text",
+    "ket_drop_v": "a child's open hand releasing a red ball that is visibly falling through the air",
+    "ket_dry_adj_v": "wet clothes drying on an outdoor line in warm sunshine with water drops disappearing",
+    "ket_end_v_n": "a runner crossing a plain finish ribbon at the clear end of a race",
+    "ket_enjoy_v": "children laughing and clearly enjoying themselves together on playground swings",
+    "ket_excuse_v": "a polite child gently tapping an adult's shoulder to ask to pass by",
+    "ket_explore_v": "a curious child with backpack and magnifying glass exploring a forest trail",
+    "ket_fail_v": "a disappointed child beside a collapsed block tower after an unsuccessful building attempt",
+    "ket_fill_v": "a child pouring water into an empty glass until the glass becomes full",
+    "ket_find_v": "a delighted child finding a missing red ball hidden under a sofa",
+    "ket_finish_v": "a child placing the last brick on a model and celebrating that the work is finished",
+    "ket_fix_v": "a child using simple tools to fix a clearly broken bicycle chain",
+    "ket_follow_v": "one child walking directly behind and following another child along a winding trail",
+    "ket_follow_social_media_v": "a child tapping a plain person-plus icon on a friend's picture profile, no letters or words",
+    "ket_forget_v": "a child at a bus stop suddenly realizing their backpack was left behind at home",
+    "ket_get_v": "a child receiving and getting a red ball directly from an adult's hands",
+    "ket_get_back_v": "a child getting back home after a journey while family welcomes them at the door",
+    "ket_get_fit_v": "a child becoming fitter through regular running, stretching, and healthy exercise",
+    "ket_get_married_v": "two adults getting married in a simple joyful ceremony with flowers and no writing",
+    "ket_give_v": "one child clearly giving a wrapped gift into a friend's open hands",
+    "ket_go_v": "a child clearly going away from home along a path toward a visible destination",
+    "ket_guess_v": "a child with eyes closed feeling a hidden object inside a bag and trying to guess what it is",
     "ket_happen_v": "a cup suddenly tipping off a table while a surprised child reacts to the unexpected spill",
     "ket_hate_v": "a child frowning and pushing away a plate of broccoli with both hands",
     "ket_have_av_v": "a smiling child holding their own red ball securely against their chest",
@@ -1658,6 +1715,23 @@ def load_processed_ids(path: Path) -> set[str]:
     return accepted_ids | reviewed_ids
 
 
+def load_retryable_rejected_ids(path: Path) -> set[str]:
+    if not path.exists():
+        return set()
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    accepted_ids = {
+        record["wordId"]
+        for record in manifest.get("images", [])
+        if record.get("status") == "accepted"
+    }
+    rejected_ids = {
+        record["wordId"]
+        for record in manifest.get("reviews", [])
+        if record.get("status") == "REJECT"
+    }
+    return rejected_ids - accepted_ids
+
+
 def build_prompt(word: dict[str, Any]) -> str:
     english = word["english"]
     scene_hints = {
@@ -2068,7 +2142,17 @@ def main() -> None:
     parser.add_argument("--offset", type=int, default=0)
     parser.add_argument("--category", help="Generate only words in this exact category.")
     parser.add_argument("--word-ids", nargs="*", help="Generate specific word ids instead of offset/limit selection.")
-    parser.add_argument("--allow-approved", action="store_true", help="Allow regenerating words already accepted in the Comfy manifest.")
+    selection_mode = parser.add_mutually_exclusive_group()
+    selection_mode.add_argument(
+        "--allow-approved",
+        action="store_true",
+        help="Allow regenerating words already accepted in the Comfy manifest.",
+    )
+    selection_mode.add_argument(
+        "--retry-rejected",
+        action="store_true",
+        help="Generate only words currently rejected and not yet accepted.",
+    )
     parser.add_argument("--accepted-manifest", type=Path, default=COMFY_MANIFEST_PATH)
     parser.add_argument("--list-only", action="store_true", help="Print the selected words without queueing ComfyUI.")
     parser.add_argument("--width", type=int, default=512)
@@ -2079,7 +2163,13 @@ def main() -> None:
     args = parser.parse_args()
 
     all_words = load_words(include_approved=True)
-    accepted_ids = set() if args.allow_approved else load_processed_ids(args.accepted_manifest)
+    if args.allow_approved:
+        accepted_ids = set()
+    elif args.retry_rejected:
+        retryable_ids = load_retryable_rejected_ids(args.accepted_manifest)
+        accepted_ids = {word["id"] for word in all_words} - retryable_ids
+    else:
+        accepted_ids = load_processed_ids(args.accepted_manifest)
     if args.word_ids:
         by_id = {word["id"]: word for word in all_words}
         selected_words = [
