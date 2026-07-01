@@ -408,6 +408,20 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_every_preposition_and_direction_word_uses_a_specific_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        direction_words = [
+            word for word in words if word.get("category") == "介词和方向词"
+        ]
+
+        self.assertEqual(len(direction_words), 55)
+        for word in direction_words:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
     def test_animal_body_parts_are_the_clear_subject(self) -> None:
         words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
 
