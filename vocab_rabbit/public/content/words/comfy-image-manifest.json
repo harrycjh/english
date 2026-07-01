@@ -110,6 +110,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_aeroplane_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891317004,
+      "prompt": "Create a standalone storybook illustration: one complete passenger aeroplane viewed clearly from the side on a runway, no logos or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_afraid_adj",
       "status": "accepted",
       "source": "comfy-run",
@@ -1242,6 +1254,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_bus_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891326055,
+      "prompt": "Create a standalone storybook illustration: one city bus viewed clearly from the side with blank destination display and no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_bus_station_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -1442,6 +1466,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_car_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891333586,
+      "prompt": "Create a standalone storybook illustration: one simple family car viewed clearly from the side with blank number plates. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_career_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -1498,6 +1534,18 @@
       "prompt": "Create a standalone storybook illustration: a television showing a cheerful animated animal character with no captions or interface. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-07-01T03:10:04.995910+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_case_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891341119,
+      "prompt": "Create a standalone storybook illustration: one small hard travel case with handle and closed latches, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
       "width": 512,
       "height": 512
     },
@@ -2498,6 +2546,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_delay_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891348652,
+      "prompt": "Create a standalone storybook illustration: a stationary train beside waiting passengers and a plain clock showing that departure is delayed. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_deliver_v",
       "status": "accepted",
       "source": "comfy-run",
@@ -2918,6 +2978,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_drive_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891363720,
+      "prompt": "Create a standalone storybook illustration: an adult safely driving a car with both hands on the steering wheel. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_driver_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891371252,
+      "prompt": "Create a standalone storybook illustration: one driver seated behind the steering wheel of a bus, viewed through the front window. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_drum_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -3078,6 +3162,30 @@
       "prompt": "Create a standalone storybook illustration: one completely empty transparent glass beside a full jug for contrast. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-06-30T16:57:49.606727+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_engine_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891378784,
+      "prompt": "Create a standalone storybook illustration: one complete car engine outside a vehicle with major mechanical parts clearly visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_engineer_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891386321,
+      "prompt": "Create a standalone storybook illustration: a transport engineer inspecting a large vehicle engine with tools and safety clothing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
       "width": 512,
       "height": 512
     },
@@ -3294,6 +3402,18 @@
       "prompt": "Create a standalone storybook illustration: a child gazing joyfully at a magnificent castle surrounded by colorful fireworks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-06-30T16:57:49.606727+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_far_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891393855,
+      "prompt": "Create a standalone storybook illustration: a car travelling on a road toward very distant mountains, shown tiny far away. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
       "width": 512,
       "height": 512
     },
@@ -3534,6 +3654,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_flight_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891401398,
+      "prompt": "Create a standalone storybook illustration: a passenger aeroplane taking off into the sky while travellers watch from the terminal window. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_floor_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -3550,6 +3682,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_fly_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891408939,
+      "prompt": "Create a standalone storybook illustration: an aeroplane actively flying high through clouds with wings level. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
       "width": 512,
       "height": 512
     },
@@ -4394,6 +4538,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_harbour_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891416471,
+      "prompt": "Create a standalone storybook illustration: a sheltered harbour filled with small boats tied to docks and a lighthouse, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_hard_adj_adv",
       "status": "accepted",
       "source": "comfy-run",
@@ -4530,6 +4686,18 @@
       "prompt": "Create a standalone storybook illustration: a child straining to lift a heavy suitcase while a small light bag rests nearby. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-07-01T02:20:45.316852+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_helicopter_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891424006,
+      "prompt": "Create a standalone storybook illustration: one complete helicopter hovering safely above an open field, no logos or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
       "width": 512,
       "height": 512
     },
@@ -5054,6 +5222,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_journey_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891431537,
+      "prompt": "Create a standalone storybook illustration: a family making a long journey by car along a winding road from town to mountains. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_juice_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -5362,6 +5542,30 @@
       "height": 512
     },
     {
+      "wordId": "ket_leave_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891439068,
+      "prompt": "Create a standalone storybook illustration: a traveller waving goodbye while boarding a departing train with luggage. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_left_adj_adv_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891446590,
+      "prompt": "Create a standalone storybook illustration: a car turning left at a clear road fork while the right branch remains empty, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_leg_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -5590,6 +5794,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_lorry_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891454124,
+      "prompt": "Create a standalone storybook illustration: one large delivery lorry viewed clearly from the side with a blank cargo box. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_lost_adj",
       "status": "accepted",
       "source": "comfy-run",
@@ -5658,6 +5874,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_luggage_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891461667,
+      "prompt": "Create a standalone storybook illustration: several suitcases and travel bags grouped together beside an airport trolley, no tags. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_lunch_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -5666,6 +5894,18 @@
       "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents lunch, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_machine_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891469197,
+      "prompt": "Create a standalone storybook illustration: one large working mechanical machine with gears, belts, and moving parts, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
       "width": 512,
       "height": 512
     },
@@ -5742,6 +5982,18 @@
       "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents mango, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-06-30T16:12:40.667780+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_map_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891476729,
+      "prompt": "Create a standalone storybook illustration: one illustrated road map with rivers, roads, mountains, and landmarks but no place names. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
       "width": 512,
       "height": 512
     },
@@ -5898,6 +6150,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_mirror_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891491797,
+      "prompt": "Create a standalone storybook illustration: one car side mirror reflecting the road behind with no writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_miss_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -6002,6 +6266,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_motorbike_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891499328,
+      "prompt": "Create a standalone storybook illustration: one complete plain motorbike viewed clearly from the side, no logos or plate numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_motorway_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -6026,6 +6302,18 @@
       "prompt": "Create a standalone storybook illustration: a close view of a smiling open human mouth with lips and teeth clearly visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-07-01T02:40:47.825668+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_move_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891506861,
+      "prompt": "Create a standalone storybook illustration: a moving van carrying boxes away from one house while helpers load the last box. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
       "width": 512,
       "height": 512
     },
@@ -6606,6 +6894,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_passenger_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891514400,
+      "prompt": "Create a standalone storybook illustration: one passenger seated inside a bus beside luggage while a separate driver is visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_pasta_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -6762,6 +7062,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_petrol_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891521934,
+      "prompt": "Create a standalone storybook illustration: a red fuel can beside a small toy car, no labels, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_petrol_station_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -6914,6 +7226,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_plane_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891537002,
+      "prompt": "Create a standalone storybook illustration: one passenger plane flying across a clear blue sky with no logos or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:40:23.696961+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_plant_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -7034,6 +7358,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_police_car_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891737504,
+      "prompt": "Create a standalone storybook illustration: one blank police car with red and blue roof lights beside two uniformed officers, no text or emblems. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_police_officer_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -7122,6 +7458,18 @@
       "prompt": "Create a standalone storybook illustration: one cheerful child surrounded by many friendly classmates eager to play together. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-06-30T17:12:38.188280+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_port_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891745045,
+      "prompt": "Create a standalone storybook illustration: a busy sea port with cargo ships, cranes, containers, and docks, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
       "width": 512,
       "height": 512
     },
@@ -7598,6 +7946,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_repair_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891752579,
+      "prompt": "Create a standalone storybook illustration: a mechanic actively repairing a car wheel with tools while the car is safely raised. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_repeat_v",
       "status": "accepted",
       "source": "comfy-run",
@@ -7626,6 +7986,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_return_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891760111,
+      "prompt": "Create a standalone storybook illustration: a traveller returning home with a suitcase while family warmly welcomes them at the door. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
       "width": 512,
       "height": 512
     },
@@ -8042,6 +8414,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_scooter_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891767648,
+      "prompt": "Create a standalone storybook illustration: one simple two-wheeled kick scooter shown clearly from the side, no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_score_n_v",
       "status": "accepted",
       "source": "comfy-run",
@@ -8074,6 +8458,18 @@
       "prompt": "Create a standalone storybook illustration: a wide open blue sea with waves stretching to the horizon and one tiny distant sailboat. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear open sea",
       "acceptedAt": "2026-06-30T16:01:42.287278+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_seat_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891775185,
+      "prompt": "Create a standalone storybook illustration: one empty padded passenger seat inside a train with the window beside it. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
       "width": 512,
       "height": 512
     },
@@ -8222,6 +8618,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_ship_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891782720,
+      "prompt": "Create a standalone storybook illustration: one large passenger ship sailing across open water with no name or logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_shirt_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -8326,6 +8734,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_sightseeing_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891790264,
+      "prompt": "Create a standalone storybook illustration: a family looking at a scenic landmark from a viewpoint, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_silver_n_adj",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -8410,6 +8830,18 @@
       "prompt": "Create a standalone storybook illustration: a child sitting upright on a simple chair with both feet on the floor. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-06-30T16:46:10.414676+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_site_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891797796,
+      "prompt": "Create a standalone storybook illustration: tourists visiting a clearly defined ancient castle site with paths and ruins, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
       "width": 512,
       "height": 512
     },
@@ -8966,6 +9398,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_stop_n_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891805341,
+      "prompt": "Create a standalone storybook illustration: a moving car coming to a complete stop before a pedestrian crossing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_storm_n",
       "status": "accepted",
       "source": "historical-verified-commit",
@@ -9110,6 +9554,18 @@
       "prompt": "Create a standalone storybook illustration: an adult wearing a complete smart suit with matching jacket and trousers, plain shirt, and tie. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear formal suit",
       "acceptedAt": "2026-06-30T10:05:24.997286+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_suitcase_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891812867,
+      "prompt": "Create a standalone storybook illustration: one upright rolling suitcase with handle and wheels shown clearly, no tags. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
       "width": 512,
       "height": 512
     },
@@ -9426,6 +9882,18 @@
       "prompt": "Create a standalone storybook illustration: a delighted child enjoying a colorful healthy meal with an eager smile. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-06-30T17:18:27.832966+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_taxi_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891820404,
+      "prompt": "Create a standalone storybook illustration: one yellow taxi with a plain blank roof light and no writing or plate numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
       "width": 512,
       "height": 512
     },
@@ -9774,6 +10242,42 @@
       "height": 512
     },
     {
+      "wordId": "ket_tour_guide_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891827939,
+      "prompt": "Create a standalone storybook illustration: a friendly guide leading a small group through a scenic place, with no flag symbols or signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tour_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891835473,
+      "prompt": "Create a standalone storybook illustration: a small tour group following a guide past several city landmarks, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_tourist_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891850563,
+      "prompt": "Create a standalone storybook illustration: one tourist carrying a camera and blank map while looking at a landmark. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_towel_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -9802,6 +10306,42 @@
       "height": 512
     },
     {
+      "wordId": "ket_traffic_light_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891858096,
+      "prompt": "Create a standalone storybook illustration: one complete traffic light showing red, amber, and green lenses, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_traffic_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891865628,
+      "prompt": "Create a standalone storybook illustration: many cars, buses, and bicycles moving closely along a busy city road, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_train_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891873159,
+      "prompt": "Create a standalone storybook illustration: one complete passenger train travelling along railway tracks, no numbers or logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_train_transitive_and_intransitive_v",
       "status": "accepted",
       "source": "comfy-run",
@@ -9826,10 +10366,58 @@
       "height": 512
     },
     {
+      "wordId": "ket_tram_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891880694,
+      "prompt": "Create a standalone storybook illustration: one city tram running on street rails beneath overhead wires, no route text. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_transport_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891888230,
+      "prompt": "Create a standalone storybook illustration: several forms of transport together: bus, train, bicycle, car, ship, and aeroplane. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_travel_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891895779,
+      "prompt": "Create a standalone storybook illustration: a family travelling with luggage by train while countryside passes outside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_tree_n",
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "8b246d2",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_trip_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891903311,
+      "prompt": "Create a standalone storybook illustration: a family taking a day trip by car to a scenic lake with picnic bags. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
       "width": 512,
       "height": 512
     },
@@ -10114,6 +10702,42 @@
       "height": 512
     },
     {
+      "wordId": "ket_visit_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891910840,
+      "prompt": "Create a standalone storybook illustration: a friendly visit with guests arriving at a family home and being welcomed inside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_visit_v",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891918386,
+      "prompt": "Create a standalone storybook illustration: a family actively visiting grandparents and greeting them at their home. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_visitor_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891925916,
+      "prompt": "Create a standalone storybook illustration: one visitor arriving at a museum entrance with camera and blank map. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_volleyball_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -10294,6 +10918,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_way_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891933449,
+      "prompt": "Create a standalone storybook illustration: a clear winding path showing the way from a house to a distant bridge, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_wear_v",
       "status": "accepted",
       "source": "comfy-run",
@@ -10366,6 +11002,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_wheel_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891942493,
+      "prompt": "Create a standalone storybook illustration: one complete vehicle wheel with tyre, rim, hub, and spokes shown clearly. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
       "width": 512,
       "height": 512
     },
@@ -10446,6 +11094,18 @@
       "status": "accepted",
       "source": "historical-verified-commit",
       "commit": "d8d94aa",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_window_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891950031,
+      "prompt": "Create a standalone storybook illustration: one large train window showing moving countryside outside from a passenger seat. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "acceptedAt": "2026-07-01T07:47:50.223123+00:00",
       "width": 512,
       "height": 512
     },
@@ -10767,6 +11427,15 @@
       "prompt": "Create a standalone storybook illustration: children on a safe adventurous forest hike crossing a small bridge toward a waterfall. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-07-01T03:10:04.995910+00:00"
+    },
+    {
+      "wordId": "ket_aeroplane_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891317004,
+      "prompt": "Create a standalone storybook illustration: one complete passenger aeroplane viewed clearly from the side on a runway, no logos or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
     },
     {
       "wordId": "ket_afraid_adj",
@@ -11390,6 +12059,15 @@
       "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
     },
     {
+      "wordId": "ket_bus_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891326055,
+      "prompt": "Create a standalone storybook illustration: one city bus viewed clearly from the side with blank destination display and no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_busy_adj",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-012102",
@@ -11453,6 +12131,15 @@
       "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
     },
     {
+      "wordId": "ket_car_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891333586,
+      "prompt": "Create a standalone storybook illustration: one simple family car viewed clearly from the side with blank number plates. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_careful_adj",
       "status": "REJECT",
       "runId": "comfy-sample-20260701-012102",
@@ -11487,6 +12174,15 @@
       "prompt": "Create a standalone storybook illustration: a television showing a cheerful animated animal character with no captions or interface. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-07-01T03:10:04.995910+00:00"
+    },
+    {
+      "wordId": "ket_case_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891341119,
+      "prompt": "Create a standalone storybook illustration: one small hard travel case with handle and closed latches, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
     },
     {
       "wordId": "ket_catch_v",
@@ -12038,6 +12734,24 @@
       "reviewedAt": "2026-06-30T16:57:49.606727+00:00"
     },
     {
+      "wordId": "ket_delay_n_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891348652,
+      "prompt": "Create a standalone storybook illustration: a stationary train beside waiting passengers and a plain clock showing that departure is delayed. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
+      "wordId": "ket_delayed_adj",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891356182,
+      "prompt": "Create a standalone storybook illustration: tired passengers still waiting beside a stationary bus as daylight fades, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Shows a normal full bus without a visible delayed state.",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_delicious_adj",
       "status": "REJECT",
       "runId": "comfy-sample-20260701-000802",
@@ -12281,6 +12995,24 @@
       "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
     },
     {
+      "wordId": "ket_drive_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891363720,
+      "prompt": "Create a standalone storybook illustration: an adult safely driving a car with both hands on the steering wheel. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
+      "wordId": "ket_driver_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891371252,
+      "prompt": "Create a standalone storybook illustration: one driver seated behind the steering wheel of a bus, viewed through the front window. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_drop_v",
       "status": "REJECT",
       "runId": "comfy-sample-20260701-002728",
@@ -12360,6 +13092,24 @@
       "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents end, specifically in the context of common physical actions. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "Contains visible English text and does not show an ending.",
       "reviewedAt": "2026-06-30T16:32:38.653453+00:00"
+    },
+    {
+      "wordId": "ket_engine_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891378784,
+      "prompt": "Create a standalone storybook illustration: one complete car engine outside a vehicle with major mechanical parts clearly visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
+      "wordId": "ket_engineer_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891386321,
+      "prompt": "Create a standalone storybook illustration: a transport engineer inspecting a large vehicle engine with tools and safety clothing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
     },
     {
       "wordId": "ket_enjoy_v",
@@ -12533,6 +13283,15 @@
       "reviewedAt": "2026-06-30T16:57:49.606727+00:00"
     },
     {
+      "wordId": "ket_far_adv",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891393855,
+      "prompt": "Create a standalone storybook illustration: a car travelling on a road toward very distant mountains, shown tiny far away. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_fast_adj_adv",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-012102",
@@ -12684,6 +13443,24 @@
       "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents fix, specifically in the context of common physical actions. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "Contains visible Chinese text and does not show a repair.",
       "reviewedAt": "2026-06-30T16:32:38.653453+00:00"
+    },
+    {
+      "wordId": "ket_flight_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891401398,
+      "prompt": "Create a standalone storybook illustration: a passenger aeroplane taking off into the sky while travellers watch from the terminal window. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
+      "wordId": "ket_fly_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891408939,
+      "prompt": "Create a standalone storybook illustration: an aeroplane actively flying high through clouds with wings level. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
     },
     {
       "wordId": "ket_follow_social_media_v",
@@ -13127,6 +13904,15 @@
       "reviewedAt": "2026-06-30T17:26:12.520468+00:00"
     },
     {
+      "wordId": "ket_harbour_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891416471,
+      "prompt": "Create a standalone storybook illustration: a sheltered harbour filled with small boats tied to docks and a lighthouse, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_hard_adj_adv",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-101538",
@@ -13215,6 +14001,15 @@
       "prompt": "Create a standalone storybook illustration: a child straining to lift a heavy suitcase while a small light bag rests nearby. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-07-01T02:20:45.316852+00:00"
+    },
+    {
+      "wordId": "ket_helicopter_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891424006,
+      "prompt": "Create a standalone storybook illustration: one complete helicopter hovering safely above an open field, no logos or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
     },
     {
       "wordId": "ket_help_v_n",
@@ -13559,6 +14354,15 @@
       "reviewedAt": "2026-07-01T03:16:54.716376+00:00"
     },
     {
+      "wordId": "ket_journey_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891431537,
+      "prompt": "Create a standalone storybook illustration: a family making a long journey by car along a winding road from town to mountains. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_juice_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-000802",
@@ -13703,6 +14507,24 @@
       "reviewedAt": "2026-06-30T17:04:14.854835+00:00"
     },
     {
+      "wordId": "ket_leave_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891439068,
+      "prompt": "Create a standalone storybook illustration: a traveller waving goodbye while boarding a departing train with luggage. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
+      "wordId": "ket_left_adj_adv_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891446590,
+      "prompt": "Create a standalone storybook illustration: a car turning left at a clear road fork while the right branch remains empty, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_left_hand_adj",
       "status": "REJECT",
       "runId": "comfy-sample-20260701-005908",
@@ -13838,6 +14660,15 @@
       "reviewedAt": "2026-06-30T16:40:56.026138+00:00"
     },
     {
+      "wordId": "ket_lorry_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891454124,
+      "prompt": "Create a standalone storybook illustration: one large delivery lorry viewed clearly from the side with a blank cargo box. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_lose_v",
       "status": "REJECT",
       "runId": "comfy-sample-20260701-003539",
@@ -13901,6 +14732,15 @@
       "reviewedAt": "2026-07-01T02:20:45.316852+00:00"
     },
     {
+      "wordId": "ket_luggage_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891461667,
+      "prompt": "Create a standalone storybook illustration: several suitcases and travel bags grouped together beside an airport trolley, no tags. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_lunch_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-000802",
@@ -13908,6 +14748,15 @@
       "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents lunch, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
+    },
+    {
+      "wordId": "ket_machine_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891469197,
+      "prompt": "Create a standalone storybook illustration: one large working mechanical machine with gears, belts, and moving parts, no labels. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
     },
     {
       "wordId": "ket_mad_adj",
@@ -13955,6 +14804,15 @@
       "reviewedAt": "2026-06-30T16:12:40.667780+00:00"
     },
     {
+      "wordId": "ket_map_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891476729,
+      "prompt": "Create a standalone storybook illustration: one illustrated road map with rivers, roads, mountains, and landmarks but no place names. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_mark_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-104728",
@@ -13989,6 +14847,15 @@
       "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents meat, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_mechanic_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891484268,
+      "prompt": "Create a standalone storybook illustration: a mechanic fixing a small red car with tools in a clean garage. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Shows a person beside a toy-sized car without a repair action or tools.",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
     },
     {
       "wordId": "ket_medicine_n",
@@ -14072,6 +14939,15 @@
       "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
     },
     {
+      "wordId": "ket_mirror_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891491797,
+      "prompt": "Create a standalone storybook illustration: one car side mirror reflecting the road behind with no writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_missing_adj",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-005908",
@@ -14117,6 +14993,15 @@
       "reviewedAt": "2026-07-01T02:20:45.316852+00:00"
     },
     {
+      "wordId": "ket_motorbike_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891499328,
+      "prompt": "Create a standalone storybook illustration: one complete plain motorbike viewed clearly from the side, no logos or plate numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_mouth_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-103520",
@@ -14124,6 +15009,15 @@
       "prompt": "Create a standalone storybook illustration: a close view of a smiling open human mouth with lips and teeth clearly visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-07-01T02:40:47.825668+00:00"
+    },
+    {
+      "wordId": "ket_move_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891506861,
+      "prompt": "Create a standalone storybook illustration: a moving van carrying boxes away from one house while helpers load the last box. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
     },
     {
       "wordId": "ket_museum_n",
@@ -14441,6 +15335,15 @@
       "reviewedAt": "2026-06-30T16:46:10.414676+00:00"
     },
     {
+      "wordId": "ket_passenger_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891514400,
+      "prompt": "Create a standalone storybook illustration: one passenger seated inside a bus beside luggage while a separate driver is visible. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_pasta_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-001252",
@@ -14522,6 +15425,15 @@
       "reviewedAt": "2026-07-01T03:16:54.716376+00:00"
     },
     {
+      "wordId": "ket_petrol_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891521934,
+      "prompt": "Create a standalone storybook illustration: a red fuel can beside a small toy car, no labels, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_photo_graph_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-111156",
@@ -14585,6 +15497,15 @@
       "reviewedAt": "2026-07-01T03:16:54.716376+00:00"
     },
     {
+      "wordId": "ket_pilot_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891529468,
+      "prompt": "Create a standalone storybook illustration: one aeroplane pilot seated in a cockpit holding the controls, no screen text. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "The controls and seat look like a car rather than an aircraft cockpit.",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_pizza_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-001252",
@@ -14603,6 +15524,15 @@
       "reviewedAt": "2026-06-30T16:46:10.414676+00:00"
     },
     {
+      "wordId": "ket_plane_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-153517",
+      "seed": 782891537002,
+      "prompt": "Create a standalone storybook illustration: one passenger plane flying across a clear blue sky with no logos or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:40:23.696961+00:00"
+    },
+    {
       "wordId": "ket_plastic_n_adj",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-010724",
@@ -14619,6 +15549,15 @@
       "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents plate, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T16:17:28.266984+00:00"
+    },
+    {
+      "wordId": "ket_platform_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891729967,
+      "prompt": "Create a standalone storybook illustration: a railway platform beside a waiting train with passengers and benches, no signs or numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "The vehicle dominates the image and a railway platform is not clearly visible.",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_play_v_n",
@@ -14664,6 +15603,15 @@
       "prompt": "Create a standalone storybook illustration: a child clearly pointing one finger toward a red ball on a shelf. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T16:46:10.414676+00:00"
+    },
+    {
+      "wordId": "ket_police_car_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891737504,
+      "prompt": "Create a standalone storybook illustration: one blank police car with red and blue roof lights beside two uniformed officers, no text or emblems. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_polite_adj",
@@ -14718,6 +15666,15 @@
       "prompt": "Create a standalone storybook illustration: one cheerful child surrounded by many friendly classmates eager to play together. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T17:12:38.188280+00:00"
+    },
+    {
+      "wordId": "ket_port_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891745045,
+      "prompt": "Create a standalone storybook illustration: a busy sea port with cargo ships, cranes, containers, and docks, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_possible_adj",
@@ -15008,6 +15965,15 @@
       "reviewedAt": "2026-07-01T03:00:36.656641+00:00"
     },
     {
+      "wordId": "ket_repair_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891752579,
+      "prompt": "Create a standalone storybook illustration: a mechanic actively repairing a car wheel with tools while the car is safely raised. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
       "wordId": "ket_repeat_v",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-004114",
@@ -15024,6 +15990,15 @@
       "prompt": "Create a standalone storybook illustration: a tired child resting peacefully in a hammock beneath a tree. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-07-01T02:40:47.825668+00:00"
+    },
+    {
+      "wordId": "ket_return_n_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891760111,
+      "prompt": "Create a standalone storybook illustration: a traveller returning home with a suitcase while family warmly welcomes them at the door. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_rice_n",
@@ -15269,6 +16244,15 @@
       "reviewedAt": "2026-07-01T03:00:36.656641+00:00"
     },
     {
+      "wordId": "ket_scooter_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891767648,
+      "prompt": "Create a standalone storybook illustration: one simple two-wheeled kick scooter shown clearly from the side, no logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
       "wordId": "ket_score_n_v",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-004114",
@@ -15294,6 +16278,15 @@
       "prompt": "Create a standalone storybook illustration: a wide open blue sea with waves stretching to the horizon and one tiny distant sailboat. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear open sea",
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_seat_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891775185,
+      "prompt": "Create a standalone storybook illustration: one empty padded passenger seat inside a train with the window beside it. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_see_v",
@@ -15386,6 +16379,15 @@
       "reviewedAt": "2026-06-30T16:46:10.414676+00:00"
     },
     {
+      "wordId": "ket_ship_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891782720,
+      "prompt": "Create a standalone storybook illustration: one large passenger ship sailing across open water with no name or logo. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
       "wordId": "ket_short_adj",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-010724",
@@ -15440,6 +16442,15 @@
       "reviewedAt": "2026-07-01T02:40:47.825668+00:00"
     },
     {
+      "wordId": "ket_sightseeing_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891790264,
+      "prompt": "Create a standalone storybook illustration: a family looking at a scenic landmark from a viewpoint, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
       "wordId": "ket_similar_adj",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-010724",
@@ -15492,6 +16503,15 @@
       "prompt": "Create a standalone storybook illustration: a child sitting upright on a simple chair with both feet on the floor. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T16:46:10.414676+00:00"
+    },
+    {
+      "wordId": "ket_site_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891797796,
+      "prompt": "Create a standalone storybook illustration: tourists visiting a clearly defined ancient castle site with paths and ruins, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_skate_v",
@@ -15818,6 +16838,15 @@
       "reviewedAt": "2026-07-01T02:40:47.825668+00:00"
     },
     {
+      "wordId": "ket_stop_n_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891805341,
+      "prompt": "Create a standalone storybook illustration: a moving car coming to a complete stop before a pedestrian crossing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
       "wordId": "ket_story_n",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-111156",
@@ -15915,6 +16944,15 @@
       "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents sugar, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "Looks like a glass of milk rather than visible sugar.",
       "reviewedAt": "2026-06-30T16:19:36.910019+00:00"
+    },
+    {
+      "wordId": "ket_suitcase_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891812867,
+      "prompt": "Create a standalone storybook illustration: one upright rolling suitcase with handle and wheels shown clearly, no tags. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_supper_n",
@@ -16068,6 +17106,15 @@
       "prompt": "Create a standalone storybook illustration: a delighted child enjoying a colorful healthy meal with an eager smile. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T17:18:27.832966+00:00"
+    },
+    {
+      "wordId": "ket_taxi_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891820404,
+      "prompt": "Create a standalone storybook illustration: one yellow taxi with a plain blank roof light and no writing or plate numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_tea_n",
@@ -16295,6 +17342,69 @@
       "reviewedAt": "2026-06-30T17:18:27.832966+00:00"
     },
     {
+      "wordId": "ket_tour_guide_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891827939,
+      "prompt": "Create a standalone storybook illustration: a friendly guide leading a small group through a scenic place, with no flag symbols or signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_tour_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891835473,
+      "prompt": "Create a standalone storybook illustration: a small tour group following a guide past several city landmarks, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_tourist_information_centre_n",
+      "status": "REJECT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891843024,
+      "prompt": "Create a standalone storybook illustration: a helpful desk where a traveler asks for directions, with blank maps and no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Shows an empty desk and blank boards without a recognizable tourist service centre.",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_tourist_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891850563,
+      "prompt": "Create a standalone storybook illustration: one tourist carrying a camera and blank map while looking at a landmark. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_traffic_light_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891858096,
+      "prompt": "Create a standalone storybook illustration: one complete traffic light showing red, amber, and green lenses, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_traffic_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891865628,
+      "prompt": "Create a standalone storybook illustration: many cars, buses, and bicycles moving closely along a busy city road, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_train_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891873159,
+      "prompt": "Create a standalone storybook illustration: one complete passenger train travelling along railway tracks, no numbers or logos. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
       "wordId": "ket_train_transitive_and_intransitive_v",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-004620",
@@ -16302,6 +17412,42 @@
       "prompt": "Create a standalone storybook illustration: a sports coach training a young runner by demonstrating a stretching exercise. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "reviewedAt": "2026-06-30T16:50:18.976305+00:00"
+    },
+    {
+      "wordId": "ket_tram_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891880694,
+      "prompt": "Create a standalone storybook illustration: one city tram running on street rails beneath overhead wires, no route text. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_transport_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891888230,
+      "prompt": "Create a standalone storybook illustration: several forms of transport together: bus, train, bicycle, car, ship, and aeroplane. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "OCR false positive; no readable text is visible.",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_travel_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891895779,
+      "prompt": "Create a standalone storybook illustration: a family travelling with luggage by train while countryside passes outside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_trip_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891903311,
+      "prompt": "Create a standalone storybook illustration: a family taking a day trip by car to a scenic lake with picnic bags. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_true_adj",
@@ -16466,6 +17612,33 @@
       "reviewedAt": "2026-07-01T03:18:22.902598+00:00"
     },
     {
+      "wordId": "ket_visit_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891910840,
+      "prompt": "Create a standalone storybook illustration: a friendly visit with guests arriving at a family home and being welcomed inside. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_visit_v",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891918386,
+      "prompt": "Create a standalone storybook illustration: a family actively visiting grandparents and greeting them at their home. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
+      "wordId": "ket_visitor_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891925916,
+      "prompt": "Create a standalone storybook illustration: one visitor arriving at a museum entrance with camera and blank map. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
       "wordId": "ket_vocabulary_n",
       "status": "REJECT",
       "runId": "comfy-sample-20260701-110046",
@@ -16556,6 +17729,15 @@
       "reviewedAt": "2026-06-30T16:50:18.976305+00:00"
     },
     {
+      "wordId": "ket_way_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891933449,
+      "prompt": "Create a standalone storybook illustration: a clear winding path showing the way from a house to a distant bridge, no signs. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
+    },
+    {
       "wordId": "ket_well_adv_adj",
       "status": "ACCEPT",
       "runId": "comfy-sample-20260701-104101",
@@ -16572,6 +17754,15 @@
       "prompt": "Create a standalone storybook illustration: a friendly performer on a small stage waving to a happy crowd, with no banners or writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "OCR false positive; no readable text is visible.",
       "reviewedAt": "2026-06-30T17:18:27.832966+00:00"
+    },
+    {
+      "wordId": "ket_wheel_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891942493,
+      "prompt": "Create a standalone storybook illustration: one complete vehicle wheel with tyre, rim, hub, and spokes shown clearly. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_whole_adj_n",
@@ -16608,6 +17799,15 @@
       "prompt": "Create a standalone storybook illustration: one runner clearly winning by crossing a plain finish ribbon ahead of the other runners, no numbers. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "clear winning finish",
       "reviewedAt": "2026-06-30T16:01:42.287278+00:00"
+    },
+    {
+      "wordId": "ket_window_n",
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260701-154209",
+      "seed": 782891950031,
+      "prompt": "Create a standalone storybook illustration: one large train window showing moving countryside outside from a passenger seat. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "",
+      "reviewedAt": "2026-07-01T07:47:50.223123+00:00"
     },
     {
       "wordId": "ket_windsurfing_n",
