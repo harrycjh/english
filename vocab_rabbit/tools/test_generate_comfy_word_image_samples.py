@@ -282,6 +282,37 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_first_entertainment_batch_uses_specific_scenes(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        first_batch = [
+            word
+            for word in words
+            if word.get("category") == "娱乐和表演"
+            and "ket_act_v" <= word["id"] <= "ket_instrument_n"
+        ]
+
+        self.assertEqual(len(first_batch), 30)
+        for word in first_batch:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
+    def test_every_entertainment_word_uses_a_specific_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        entertainment_words = [
+            word for word in words if word.get("category") == "娱乐和表演"
+        ]
+
+        self.assertEqual(len(entertainment_words), 63)
+        for word in entertainment_words:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
     def test_animal_body_parts_are_the_clear_subject(self) -> None:
         words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
 
