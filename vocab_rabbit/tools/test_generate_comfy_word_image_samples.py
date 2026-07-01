@@ -368,6 +368,20 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_every_document_word_uses_a_specific_scene(self) -> None:
+        words = MODULE.load_words(include_approved=True)
+        document_words = [
+            word for word in words if word.get("category") == "书本、证件和文字"
+        ]
+
+        self.assertEqual(len(document_words), 40)
+        for word in document_words:
+            with self.subTest(word_id=word["id"]):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(word),
+                )
+
     def test_animal_body_parts_are_the_clear_subject(self) -> None:
         words = {word["id"]: word for word in MODULE.load_words(include_approved=True)}
 
