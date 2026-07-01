@@ -1498,6 +1498,21 @@ QUANTITY_SCENES = {
     "ket_some_det_pron": "a hand selecting some apples from a larger group while several remain behind",
 }
 
+SPEAKING_THINKING_SCENES = {
+    "ket_answer_n_v": "a confident child raising a hand and answering a teacher's question, no speech text",
+    "ket_ask_v": "a curious child raising a hand and asking an adult for help, no speech text",
+    "ket_choose_v": "a child carefully choosing one apple from two clearly different fruits",
+    "ket_describe_v": "a child describing the shape and features of a toy while a friend listens closely",
+    "ket_explain_v": "an older child explaining how simple gears work by demonstrating them to a friend",
+    "ket_mean_v": "a child understanding what dark rain clouds mean and reaching for an umbrella",
+    "ket_say_v": "one child saying a short message directly to one listening friend, no speech text",
+    "ket_speak_v": "a child speaking clearly into a plain microphone to a small audience",
+    "ket_tell_v": "a child telling an animated story to friends using expressive hand gestures",
+    "ket_think_v": "a thoughtful child resting chin on one hand while considering how puzzle pieces fit",
+    "ket_understand_v": "a child smiling with understanding after fitting the final piece into a puzzle",
+    "ket_write_v": "a child writing carefully in a plain notebook with no readable letters or words",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1853,7 +1868,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                                                                                 word["id"],
                                                                                                                                                 QUANTITY_SCENES.get(
                                                                                                                                                     word["id"],
-                                                                                                                                                    scene_hints.get(english, fallback_scene),
+                                                                                                                                                    SPEAKING_THINKING_SCENES.get(
+                                                                                                                                                        word["id"],
+                                                                                                                                                        scene_hints.get(english, fallback_scene),
+                                                                                                                                                    ),
                                                                                                                                                 ),
                                                                                                                                             ),
                                                                                                                                         ),
