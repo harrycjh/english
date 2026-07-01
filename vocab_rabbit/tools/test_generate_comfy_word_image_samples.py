@@ -169,17 +169,93 @@ class FamilyPromptTests(unittest.TestCase):
             "ket_help_v_n": "exactly two children",
             "ket_invent_v": "loose gears and wheels",
             "ket_invite_v": "exactly two children",
-            "ket_lose_v": "hidden completely behind a bench",
+            "ket_lose_v": "one red mitten",
             "ket_make_sure_that_v": "stationary child",
             "ket_sell_v": "coin into the seller's hand",
             "ket_share_digitally_v": "exactly two phones",
-            "ket_spell_v": "counting four spoken sounds on four fingers",
+            "ket_spell_v": "four colored round dots",
             "ket_take_v": "lifting one apple out of a bowl",
         }
 
         for word_id, fragment in expected_fragments.items():
             with self.subTest(word_id=word_id):
                 self.assertIn(fragment, MODULE.build_prompt(words[word_id]))
+
+    def test_final_retry_scenes_cover_every_remaining_rejected_word(self) -> None:
+        expected_ids = {
+            "ket_already_adv",
+            "ket_anymore_adv",
+            "ket_away_adv",
+            "ket_before_adv_conj_prep",
+            "ket_behind_adv_prep",
+            "ket_better_adj_adv",
+            "ket_bit_n_adv",
+            "ket_cent_n",
+            "ket_could_mv",
+            "ket_delayed_adj",
+            "ket_design_process_n",
+            "ket_discount_n",
+            "ket_euro_n",
+            "ket_exactly_adv",
+            "ket_folder_n",
+            "ket_full_adj",
+            "ket_half_price_adj",
+            "ket_have_to_mv",
+            "ket_important_adj",
+            "ket_impossible_adj",
+            "ket_left_hand_adj",
+            "ket_look_out_phr_v",
+            "ket_lose_v",
+            "ket_mechanic_n",
+            "ket_mistake_n",
+            "ket_must_mv",
+            "ket_my_det",
+            "ket_never_adv",
+            "ket_new_adj",
+            "ket_off_adv",
+            "ket_olympic_adj",
+            "ket_opinion_n",
+            "ket_outside_prep_adv",
+            "ket_paragraph_n",
+            "ket_part_n",
+            "ket_pence_n",
+            "ket_possibly_adv",
+            "ket_pound_n",
+            "ket_price_n",
+            "ket_problem_n",
+            "ket_real_adj",
+            "ket_ruler_n",
+            "ket_sale_n",
+            "ket_social_media_n",
+            "ket_sometimes_adv",
+            "ket_spare_adj",
+            "ket_spell_v",
+            "ket_spelling_n",
+            "ket_suddenly_adv",
+            "ket_thin_adj",
+            "ket_title_n",
+            "ket_tomorrow_n_adv",
+            "ket_total_adj_n",
+            "ket_trouble_n",
+            "ket_true_adj",
+            "ket_turn_off_phr_v",
+            "ket_vocabulary_n",
+            "ket_winner_n",
+            "ket_without_prep",
+            "ket_year_n",
+            "ket_yes_adv",
+        }
+
+        self.assertEqual(expected_ids, set(MODULE.FINAL_RETRY_SCENES))
+        words = {
+            word["id"]: word for word in MODULE.load_words(include_approved=True)
+        }
+        for word_id in expected_ids:
+            with self.subTest(word_id=word_id):
+                self.assertIn(
+                    MODULE.FINAL_RETRY_SCENES[word_id],
+                    MODULE.build_prompt(words[word_id]),
+                )
 
     def test_rejected_food_words_use_specific_scenes(self) -> None:
         retry_ids = {
@@ -618,7 +694,7 @@ class FamilyPromptTests(unittest.TestCase):
             "ket_afterwards_adv": "left scene",
             "ket_again_adv": "exactly two side-by-side scenes",
             "ket_already_adv": "loose pieces",
-            "ket_never_adv": "five separate scenes",
+            "ket_never_adv": "exactly four side-by-side scenes",
             "ket_often_adv": "exactly five",
             "ket_sometimes_adv": "exactly two",
             "ket_then_adv": "left panel",
