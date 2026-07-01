@@ -263,20 +263,20 @@ class FamilyPromptTests(unittest.TestCase):
         }
         expected_fragments = {
             "ket_behind_adv_prep": "hiding directly behind one thick tree trunk",
-            "ket_better_adj_adv": "same blue toy car",
+            "ket_better_adj_adv": "child proudly holding the repaired car",
             "ket_euro_n": "simplified map shape of Europe",
             "ket_exactly_adv": "hand pressing one green puzzle piece",
-            "ket_half_price_adj": "eight smooth blank coins",
+            "ket_half_price_adj": "right coin pile exactly half as tall",
             "ket_left_hand_adj": "overhead view of both hands",
             "ket_look_out_phr_v": "ball falling toward the second child's head",
             "ket_mistake_n": "triangle piece over the round hole",
-            "ket_never_adv": "broccoli in every panel",
-            "ket_off_adv": "dark unlit lamp filling the left half",
-            "ket_problem_n": "front wheel completely detached",
+            "ket_never_adv": "arms firmly crossed",
+            "ket_off_adv": "power plug visibly disconnected",
+            "ket_problem_n": "holding the detached front wheel",
             "ket_ruler_n": "tick marks without any digits",
             "ket_sale_n": "shopkeeper handing one toy",
             "ket_sometimes_adv": "exactly one panel shows cycling",
-            "ket_total_adj_n": "both bowls being poured",
+            "ket_total_adj_n": "apples visibly falling",
         }
 
         for word_id, fragment in expected_fragments.items():
@@ -720,7 +720,7 @@ class FamilyPromptTests(unittest.TestCase):
             "ket_afterwards_adv": "left scene",
             "ket_again_adv": "exactly two side-by-side scenes",
             "ket_already_adv": "loose pieces",
-            "ket_never_adv": "broccoli in every panel",
+            "ket_never_adv": "arms firmly crossed",
             "ket_often_adv": "exactly five",
             "ket_sometimes_adv": "exactly one panel shows cycling",
             "ket_then_adv": "left panel",

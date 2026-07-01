@@ -1666,6 +1666,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_better_adj_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923413235,
+      "prompt": "Create a standalone storybook illustration: one blue toy car with all four wheels newly repaired and rolling smoothly while a child proudly holding the repaired car gives a strong thumbs up; one broken wheel lies discarded behind. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Repaired car and discarded damaged wheel clearly show improvement.",
+      "acceptedAt": "2026-07-01T16:31:44.739027+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_between_prep",
       "status": "accepted",
       "source": "comfy-run",
@@ -7586,6 +7598,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_half_price_adj",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923420794,
+      "prompt": "Create a standalone storybook illustration: two identical red toy boats beside two vertical stacks of smooth blank coins, with the left stack tall and the right coin pile exactly half as tall. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "One coin stack is clearly about half the height of the other.",
+      "acceptedAt": "2026-07-01T16:31:44.739027+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_hall_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -11082,6 +11106,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_never_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923428341,
+      "prompt": "Create a standalone storybook illustration: one child with arms firmly crossed, head shaking and face turned away from a bowl of broccoli pushed far across the table, showing complete refusal. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Child firmly crosses arms and refuses the broccoli.",
+      "acceptedAt": "2026-07-01T16:31:44.739027+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_new_adj",
       "status": "accepted",
       "source": "comfy-run",
@@ -11442,6 +11478,18 @@
       "prompt": "Create a standalone storybook illustration: a clear cup full of water centered on a plain table. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "",
       "acceptedAt": "2026-07-01T09:04:13.780879+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_off_adv",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923435889,
+      "prompt": "Create a standalone storybook illustration: one table lamp with a completely black unlit bulb and its power plug visibly disconnected from the wall socket, no hand and no glow anywhere. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Black bulb and visibly disconnected plug clearly show off.",
+      "acceptedAt": "2026-07-01T16:31:44.739027+00:00",
       "width": 512,
       "height": 512
     },
@@ -13090,6 +13138,18 @@
       "prompt": "Create a standalone storybook illustration: a child confidently taking an umbrella before leaving because dark rain clouds fill the sky. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
       "reviewNotes": "OCR false positive; no readable text is visible.",
       "acceptedAt": "2026-07-01T08:50:52.567730+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
+      "wordId": "ket_problem_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923443439,
+      "prompt": "Create a standalone storybook illustration: a worried child holding the detached front wheel in both hands far away from a bicycle frame whose empty front fork has no wheel. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Child holds a detached wheel beside the incomplete bicycle.",
+      "acceptedAt": "2026-07-01T16:31:44.739027+00:00",
       "width": 512,
       "height": 512
     },
@@ -17274,6 +17334,18 @@
       "height": 512
     },
     {
+      "wordId": "ket_total_adj_n",
+      "status": "accepted",
+      "source": "comfy-run",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923450989,
+      "prompt": "Create a standalone storybook illustration: two empty bowls held upside down above one center basket, with apples visibly falling from both bowls into the same basket to form one combined group. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Two empty bowls visibly combine their apples into one basket.",
+      "acceptedAt": "2026-07-01T16:31:44.739027+00:00",
+      "width": 512,
+      "height": 512
+    },
+    {
       "wordId": "ket_tour_guide_n",
       "status": "accepted",
       "source": "comfy-run",
@@ -20154,12 +20226,12 @@
     },
     {
       "wordId": "ket_better_adj_adv",
-      "status": "REJECT",
-      "runId": "comfy-sample-20260702-002534",
-      "seed": 782923141582,
-      "prompt": "Create a standalone storybook illustration: exactly two copies of the same blue toy car: the left copy has a wheel fully detached beside it, while the right copy has all four wheels attached and a child gives it thumbs up. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "Both cars appear intact, with no visible improvement.",
-      "reviewedAt": "2026-07-01T16:28:25.848590+00:00"
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923413235,
+      "prompt": "Create a standalone storybook illustration: one blue toy car with all four wheels newly repaired and rolling smoothly while a child proudly holding the repaired car gives a strong thumbs up; one broken wheel lies discarded behind. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Repaired car and discarded damaged wheel clearly show improvement.",
+      "reviewedAt": "2026-07-01T16:31:44.739027+00:00"
     },
     {
       "wordId": "ket_between_prep",
@@ -23421,12 +23493,12 @@
     },
     {
       "wordId": "ket_half_price_adj",
-      "status": "REJECT",
-      "runId": "comfy-sample-20260702-002534",
-      "seed": 782923164227,
-      "prompt": "Create a standalone storybook illustration: exactly two identical red toy boats: the left boat beside eight smooth blank coins and the right boat beside exactly four smooth blank coins. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "Both boats have equal coin amounts; OCR false positive.",
-      "reviewedAt": "2026-07-01T16:28:25.848590+00:00"
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923420794,
+      "prompt": "Create a standalone storybook illustration: two identical red toy boats beside two vertical stacks of smooth blank coins, with the left stack tall and the right coin pile exactly half as tall. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "One coin stack is clearly about half the height of the other.",
+      "reviewedAt": "2026-07-01T16:31:44.739027+00:00"
     },
     {
       "wordId": "ket_hand_n",
@@ -25572,12 +25644,12 @@
     },
     {
       "wordId": "ket_never_adv",
-      "status": "REJECT",
-      "runId": "comfy-sample-20260702-002534",
-      "seed": 782923194417,
-      "prompt": "Create a standalone storybook illustration: exactly four equal panels of the same child pushing away the same bowl of broccoli in every panel, with broccoli in every panel and no other food. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "Children appear to handle or eat broccoli rather than reject it.",
-      "reviewedAt": "2026-07-01T16:28:25.848590+00:00"
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923428341,
+      "prompt": "Create a standalone storybook illustration: one child with arms firmly crossed, head shaking and face turned away from a bowl of broccoli pushed far across the table, showing complete refusal. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Child firmly crosses arms and refuses the broccoli.",
+      "reviewedAt": "2026-07-01T16:31:44.739027+00:00"
     },
     {
       "wordId": "ket_new_adj",
@@ -25815,12 +25887,12 @@
     },
     {
       "wordId": "ket_off_adv",
-      "status": "REJECT",
-      "runId": "comfy-sample-20260702-002534",
-      "seed": 782923201960,
-      "prompt": "Create a standalone storybook illustration: one dark unlit lamp filling the left half of the image and one close hand pressing a plain wall switch downward on the right half, no glow anywhere. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "Lamp is visibly lit, showing the opposite state.",
-      "reviewedAt": "2026-07-01T16:28:25.848590+00:00"
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923435889,
+      "prompt": "Create a standalone storybook illustration: one table lamp with a completely black unlit bulb and its power plug visibly disconnected from the wall socket, no hand and no glow anywhere. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Black bulb and visibly disconnected plug clearly show off.",
+      "reviewedAt": "2026-07-01T16:31:44.739027+00:00"
     },
     {
       "wordId": "ket_offer_n_v",
@@ -26886,12 +26958,12 @@
     },
     {
       "wordId": "ket_problem_n",
-      "status": "REJECT",
-      "runId": "comfy-sample-20260702-002534",
-      "seed": 782923209505,
-      "prompt": "Create a standalone storybook illustration: a complete bicycle standing still with its front wheel completely detached and lying far beside the empty front fork while a worried child examines both. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "Bicycle remains intact and the problem is unclear.",
-      "reviewedAt": "2026-07-01T16:28:25.848590+00:00"
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923443439,
+      "prompt": "Create a standalone storybook illustration: a worried child holding the detached front wheel in both hands far away from a bicycle frame whose empty front fork has no wheel. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Child holds a detached wheel beside the incomplete bicycle.",
+      "reviewedAt": "2026-07-01T16:31:44.739027+00:00"
     },
     {
       "wordId": "ket_program_n",
@@ -29406,12 +29478,12 @@
     },
     {
       "wordId": "ket_total_adj_n",
-      "status": "REJECT",
-      "runId": "comfy-sample-20260702-002534",
-      "seed": 782923239730,
-      "prompt": "Create a standalone storybook illustration: two side bowls tilted inward with both bowls being poured at the same time into one center basket that collects all five apples together. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "Fruit is not visibly combined from two groups into a total.",
-      "reviewedAt": "2026-07-01T16:28:25.848590+00:00"
+      "status": "ACCEPT",
+      "runId": "comfy-sample-20260702-003013",
+      "seed": 782923450989,
+      "prompt": "Create a standalone storybook illustration: two empty bowls held upside down above one center basket, with apples visibly falling from both bowls into the same basket to form one combined group. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Two empty bowls visibly combine their apples into one basket.",
+      "reviewedAt": "2026-07-01T16:31:44.739027+00:00"
     },
     {
       "wordId": "ket_tour_guide_n",
