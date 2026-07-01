@@ -989,6 +989,34 @@ TRANSPORT_SCENES = {
     "ket_window_n": "one large train window showing moving countryside outside from a passenger seat",
 }
 
+DIGITAL_SCENES = {
+    "ket_at_prep": "one email travelling from a sender's laptop to one specific recipient's laptop, all screens blank",
+    "ket_call_n_v": "a child making a phone call with a plain smartphone held to one ear",
+    "ket_chat_n": "two friends chatting live through plain tablets showing each other's faces with no text",
+    "ket_click_n_v": "a close hand pressing a computer mouse button beside a blank monitor",
+    "ket_conversation_n": "two people having an engaged face-to-face conversation with clear listening gestures",
+    "ket_digital_adj": "a collection of digital devices with colorful pixel-like images on blank screens",
+    "ket_dot_n": "one small solid colored round dot centered alone on a plain white surface",
+    "ket_envelope_n": "one sealed blank paper envelope shown clearly from the front with no address",
+    "ket_file_n": "one plain digital file folder icon displayed beside a laptop with no text",
+    "ket_headphones_n": "one complete pair of over-ear headphones shown clearly on a plain background",
+    "ket_internet_n": "a globe connected by glowing lines to several blank computers and phones around it",
+    "ket_it_n": "an information technology worker repairing several computers and network devices",
+    "ket_link_technology_n": "two digital devices visibly connected by a glowing chain of linked nodes",
+    "ket_microphone_n": "one plain studio microphone on a stand shown clearly with no logo",
+    "ket_mouse_n": "one plain computer mouse with cable shown beside a blank keyboard",
+    "ket_net_n": "a mesh-like digital network connecting many devices around a globe",
+    "ket_printer_n": "one home printer producing a page with a simple flower picture and no writing",
+    "ket_program_n": "a computer screen showing a visual program made only of connected colored blocks, no text",
+    "ket_selfie_n": "friends holding a phone toward themselves and taking a cheerful selfie",
+    "ket_speaker_n": "one plain audio speaker playing music with curved sound waves, no logo",
+    "ket_tablet_n": "one slim touchscreen tablet with a blank colorful screen, no interface or logo",
+    "ket_talk_n_v": "two friends talking animatedly face to face with natural hand gestures",
+    "ket_text_message_n": "a phone sending several blank message bubbles to a friend's phone, no letters",
+    "ket_web_n": "a globe surrounded by an interconnected web of glowing digital lines and devices",
+    "ket_website_n": "the same blank web page layout displayed across laptop, tablet, and phone with no text",
+}
+
 CATEGORY_CONTEXTS = {
     "动物和昆虫": "animals and insects",
     "颜色": "colors and shades",
@@ -1316,7 +1344,10 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                                         word["id"],
                                                                                         TRANSPORT_SCENES.get(
                                                                                             word["id"],
-                                                                                            scene_hints.get(english, fallback_scene),
+                                                                                            DIGITAL_SCENES.get(
+                                                                                                word["id"],
+                                                                                                scene_hints.get(english, fallback_scene),
+                                                                                            ),
                                                                                         ),
                                                                                     ),
                                                                                 ),
