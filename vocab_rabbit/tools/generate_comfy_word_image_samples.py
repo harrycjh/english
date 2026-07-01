@@ -631,6 +631,22 @@ ACTION_SCENES = {
     "ket_worry_v": "an anxious child looking at a broken toy with hands pressed to their cheeks",
 }
 
+FOOD_RETRY_SCENES = {
+    "ket_boil_v": "a metal cooking pot on a stove with water visibly bubbling vigorously and steam rising",
+    "ket_boiled_adj": "a peeled hard-boiled egg cut in half to show the firm white and yellow center",
+    "ket_cream_adj_n": "a small bowl of thick whipped cream with soft white peaks and a plain spoon",
+    "ket_delicious_adj": "a child tasting a colorful meal and reacting with obvious delight and enjoyment",
+    "ket_fast_food_n": "a plain unbranded meal of burger, fries, and a drink on one tray with blank packaging",
+    "ket_food_n": "a broad spread of varied food including bread, fruit, vegetables, rice, eggs, and soup",
+    "ket_menu_n": "an open restaurant menu showing only clear meal photographs in separate blank panels, no writing",
+    "ket_recipe_n": "a cook following a row of step-by-step picture cards showing ingredients, mixing, and a finished cake, no writing",
+    "ket_salt_n": "a close view of coarse white salt crystals beside a plain glass salt shaker with no label",
+    "ket_sugar_n": "a bowl of sparkling white sugar crystals beside several plain white sugar cubes",
+    "ket_thirsty_adj": "a hot thirsty child sweating and holding an empty bottle while reaching toward fresh water",
+    "ket_toast_n": "two slices of clearly browned crisp toast rising from a plain toaster",
+    "ket_wash_up_phr_v": "a person washing dirty plates and cups in a kitchen sink full of soap bubbles",
+}
+
 ADJECTIVE_SCENES = {
     "ket_action_adj": "a movie camera filming an actor making a dramatic safe leap across a small obstacle, no clapper text",
     "ket_adult_adj_n": "one clearly grown adult standing beside a young child in a neutral family scene",
@@ -1940,55 +1956,58 @@ def build_prompt(word: dict[str, Any]) -> str:
                                                                 word["id"],
                                                                 ACTION_SCENES.get(
                                                                     word["id"],
-                                                                    ADJECTIVE_SCENES.get(
+                                                                    FOOD_RETRY_SCENES.get(
                                                                         word["id"],
-                                                                        FEELING_SCENES.get(
+                                                                        ADJECTIVE_SCENES.get(
                                                                             word["id"],
-                                                                            BODY_SCENES.get(
+                                                                            FEELING_SCENES.get(
                                                                                 word["id"],
-                                                                                SCHOOL_SCENES.get(
+                                                                                BODY_SCENES.get(
                                                                                     word["id"],
-                                                                                    ENTERTAINMENT_SCENES.get(
+                                                                                    SCHOOL_SCENES.get(
                                                                                         word["id"],
-                                                                                        TRANSPORT_SCENES.get(
+                                                                                        ENTERTAINMENT_SCENES.get(
                                                                                             word["id"],
-                                                                                            DIGITAL_SCENES.get(
+                                                                                            TRANSPORT_SCENES.get(
                                                                                                 word["id"],
-                                                                                                SHOPPING_SCENES.get(
+                                                                                                DIGITAL_SCENES.get(
                                                                                                     word["id"],
-                                                                                                    DOCUMENT_SCENES.get(
+                                                                                                    SHOPPING_SCENES.get(
                                                                                                         word["id"],
-                                                                                                        HOBBY_SCENES.get(
+                                                                                                        DOCUMENT_SCENES.get(
                                                                                                             word["id"],
-                                                                                                            MANNER_DEGREE_SCENES.get(
+                                                                                                            HOBBY_SCENES.get(
                                                                                                                 word["id"],
-                                                                                                                PREPOSITION_DIRECTION_SCENES.get(
+                                                                                                                MANNER_DEGREE_SCENES.get(
                                                                                                                     word["id"],
-                                                                                                                    PERSON_REFERENCE_SCENES.get(
+                                                                                                                    PREPOSITION_DIRECTION_SCENES.get(
                                                                                                                         word["id"],
-                                                                                                                        TIME_DATE_SCENES.get(
+                                                                                                                        PERSON_REFERENCE_SCENES.get(
                                                                                                                             word["id"],
-                                                                                                                            OTHER_COMMON_SCENES.get(
+                                                                                                                            TIME_DATE_SCENES.get(
                                                                                                                                 word["id"],
-                                                                                                                                ABSTRACT_CONCEPT_SCENES.get(
+                                                                                                                                OTHER_COMMON_SCENES.get(
                                                                                                                                     word["id"],
-                                                                                                                                    EXCLAMATION_RESPONSE_SCENES.get(
+                                                                                                                                    ABSTRACT_CONCEPT_SCENES.get(
                                                                                                                                         word["id"],
-                                                                                                                                        PHRASAL_VERB_SCENES.get(
+                                                                                                                                        EXCLAMATION_RESPONSE_SCENES.get(
                                                                                                                                             word["id"],
-                                                                                                                                            TIME_FREQUENCY_SCENES.get(
+                                                                                                                                            PHRASAL_VERB_SCENES.get(
                                                                                                                                                 word["id"],
-                                                                                                                                                QUANTITY_SCENES.get(
+                                                                                                                                                TIME_FREQUENCY_SCENES.get(
                                                                                                                                                     word["id"],
-                                                                                                                                                    SPEAKING_THINKING_SCENES.get(
+                                                                                                                                                    QUANTITY_SCENES.get(
                                                                                                                                                         word["id"],
-                                                                                                                                                        ARTICLE_DETERMINER_SCENES.get(
+                                                                                                                                                        SPEAKING_THINKING_SCENES.get(
                                                                                                                                                             word["id"],
-                                                                                                                                                            MODAL_SCENES.get(
+                                                                                                                                                            ARTICLE_DETERMINER_SCENES.get(
                                                                                                                                                                 word["id"],
-                                                                                                                                                                CONJUNCTION_SCENES.get(
+                                                                                                                                                                MODAL_SCENES.get(
                                                                                                                                                                     word["id"],
-                                                                                                                                                                    scene_hints.get(english, fallback_scene),
+                                                                                                                                                                    CONJUNCTION_SCENES.get(
+                                                                                                                                                                        word["id"],
+                                                                                                                                                                        scene_hints.get(english, fallback_scene),
+                                                                                                                                                                    ),
                                                                                                                                                                 ),
                                                                                                                                                             ),
                                                                                                                                                         ),

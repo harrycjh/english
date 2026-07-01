@@ -153,6 +153,34 @@ class FamilyPromptTests(unittest.TestCase):
                     MODULE.build_prompt(word),
                 )
 
+    def test_rejected_food_words_use_specific_scenes(self) -> None:
+        retry_ids = {
+            "ket_boil_v",
+            "ket_boiled_adj",
+            "ket_cream_adj_n",
+            "ket_delicious_adj",
+            "ket_fast_food_n",
+            "ket_food_n",
+            "ket_menu_n",
+            "ket_recipe_n",
+            "ket_salt_n",
+            "ket_sugar_n",
+            "ket_thirsty_adj",
+            "ket_toast_n",
+            "ket_wash_up_phr_v",
+        }
+        words = {
+            word["id"]: word for word in MODULE.load_words(include_approved=True)
+        }
+
+        self.assertTrue(retry_ids <= words.keys())
+        for word_id in retry_ids:
+            with self.subTest(word_id=word_id):
+                self.assertNotIn(
+                    "a simple real-life scene that clearly represents",
+                    MODULE.build_prompt(words[word_id]),
+                )
+
     def test_first_common_adjective_batch_uses_specific_scenes(self) -> None:
         words = MODULE.load_words(include_approved=True)
         first_batch = [
