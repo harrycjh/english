@@ -46,6 +46,7 @@ import {
 } from '../services/local-media-service';
 import { loadWordPayload } from '../services/word-service';
 import { APP_VERSION } from '../config/app-meta';
+import { BottomDock } from '../components/BottomDock';
 
 function getPreviewWords(payload: WordPayload | null, task: DailyTaskSummary | null) {
   if (!payload || !task) {
@@ -484,58 +485,85 @@ export default function App() {
 
     if (route === 'settings') {
       return (
-        <SettingsPage
-          settings={parentSetting}
-          task={task}
-          onBackHome={handleBackHome}
-          onOpenSelection={handleOpenSelection}
-          onOpenStats={handleOpenStats}
-          onUpdateSettings={handleUpdateSetting}
-          onExportStudyData={handleExportStudyData}
-          onImportStudyData={handleImportStudyData}
-          onResetTodayTask={handleResetTodayTask}
-          onResetLearningProgress={handleResetLearningProgress}
-          onImportLifePhotoPackage={handleImportLifePhotoPackage}
-          localLifePhotoCount={Object.keys(localLifePhotosById).length}
-          localLifePhotoImportedAt={localLifePhotoImportedAt}
-        />
+        <>
+          <SettingsPage
+            settings={parentSetting}
+            task={task}
+            onBackHome={handleBackHome}
+            onOpenSelection={handleOpenSelection}
+            onOpenStats={handleOpenStats}
+            onUpdateSettings={handleUpdateSetting}
+            onExportStudyData={handleExportStudyData}
+            onImportStudyData={handleImportStudyData}
+            onResetTodayTask={handleResetTodayTask}
+            onResetLearningProgress={handleResetLearningProgress}
+            onImportLifePhotoPackage={handleImportLifePhotoPackage}
+            localLifePhotoCount={Object.keys(localLifePhotosById).length}
+            localLifePhotoImportedAt={localLifePhotoImportedAt}
+          />
+          <BottomDock
+            active="settings"
+            onOpenReview={handleBackHome}
+            onOpenSelection={handleOpenSelection}
+            onOpenStats={handleOpenStats}
+            onOpenSettings={handleOpenSettings}
+          />
+        </>
       );
     }
 
     if (route === 'stats') {
       return (
-        <StatsPage
-          payload={payload}
-          task={task}
-          recentTasks={recentTasks}
-          recordsById={recordsById}
-          answerEvents={answerEvents}
-          selectionById={selectionById}
-          setting={parentSetting}
-          onBackHome={handleBackHome}
-          onOpenSelection={handleOpenSelection}
-          onOpenSettings={handleOpenSettings}
-          onPracticeWrongWords={handlePracticeWrongWords}
-        />
+        <>
+          <StatsPage
+            payload={payload}
+            task={task}
+            recentTasks={recentTasks}
+            recordsById={recordsById}
+            answerEvents={answerEvents}
+            selectionById={selectionById}
+            setting={parentSetting}
+            onBackHome={handleBackHome}
+            onOpenSelection={handleOpenSelection}
+            onOpenSettings={handleOpenSettings}
+            onPracticeWrongWords={handlePracticeWrongWords}
+          />
+          <BottomDock
+            active="stats"
+            onOpenReview={handleBackHome}
+            onOpenSelection={handleOpenSelection}
+            onOpenStats={handleOpenStats}
+            onOpenSettings={handleOpenSettings}
+          />
+        </>
       );
     }
 
     if (route === 'selection') {
       return (
-        <SelectionPage
-          payload={payload}
-          recordsById={recordsById}
-          selectionById={selectionById}
-          answerEvents={answerEvents}
-          setting={parentSetting}
-          task={task}
-          localLifePhotosById={localLifePhotosById}
-          onBackHome={handleBackHome}
-          onOpenSettings={handleOpenSettings}
-          onOpenStats={handleOpenStats}
-          onSaveSelectionStates={handleSaveSelectionStates}
-          onApplySelectionPlan={handleApplySelectionPlan}
-        />
+        <>
+          <SelectionPage
+            payload={payload}
+            recordsById={recordsById}
+            selectionById={selectionById}
+            answerEvents={answerEvents}
+            setting={parentSetting}
+            task={task}
+            localLifePhotosById={localLifePhotosById}
+            onBackHome={handleBackHome}
+            onOpenSettings={handleOpenSettings}
+            onOpenStats={handleOpenStats}
+            onSaveSelectionStates={handleSaveSelectionStates}
+            onApplySelectionPlan={handleApplySelectionPlan}
+          />
+          <BottomDock
+            active="selection"
+            onOpenReview={handleBackHome}
+            onOpenSelection={handleOpenSelection}
+            onOpenStats={handleOpenStats}
+            onOpenSettings={handleOpenSettings}
+          />
+        </>
       );
     }
 

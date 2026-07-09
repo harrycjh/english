@@ -6750,3 +6750,94 @@ button {
     min-width: 1024px;
   }
 }
+
+/* ─── Unified bottom navigation dock (selection / stats / settings) ─── */
+.app-bottom-dock {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 60;
+  width: min(1103px, calc(100vw - 40px));
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: clamp(8px, 3vw, 40px);
+  padding: 0 clamp(18px, 5vw, 72px);
+  border-radius: 34px;
+  background: linear-gradient(180deg, rgba(255, 253, 247, 0.98), rgba(255, 246, 225, 0.98));
+  border: 1px solid rgba(237, 208, 152, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(241, 214, 171, 0.62),
+    0 12px 30px rgba(120, 96, 40, 0.16),
+    0 2px 6px rgba(120, 96, 40, 0.08);
+}
+
+.app-bottom-dock::before {
+  content: '';
+  position: absolute;
+  left: 36px;
+  right: 36px;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(237, 199, 130, 0.9), transparent);
+}
+
+.app-bottom-dock__button {
+  flex: 0 1 158px;
+  width: 158px;
+  height: 54px;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  color: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  touch-action: manipulation;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.app-bottom-dock__button:hover {
+  transform: translateY(-1px);
+  opacity: 0.98;
+}
+
+.app-bottom-dock__button.is-active {
+  transform: scale(1.02);
+  cursor: default;
+}
+
+.app-bottom-dock__button.is-active:hover {
+  transform: scale(1.02);
+  opacity: 1;
+}
+
+.app-bottom-dock__button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 181, 67, 0.78);
+}
+
+.app-bottom-dock__label {
+  display: none;
+}
+
+/* iPad fixed shell: pin dock to the bottom of the stage and keep scrollable
+   content clear of it. */
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock {
+  bottom: 10px;
+  width: min(var(--ipad-shell-stage-width), calc(100vw - 24px));
+  height: 66px;
+}
+
+html[data-shell-mode='ipad-fixed'] .selection-mockup-frame,
+html[data-shell-mode='ipad-fixed'] .stats-mockup-frame,
+html[data-shell-mode='ipad-fixed'] .settings-mockup-frame {
+  padding-bottom: 96px;
+}

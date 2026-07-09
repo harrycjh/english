@@ -19,7 +19,6 @@ import { APP_VERSION } from '../config/app-meta';
 type StatusFilter = 'all' | 'new' | 'learning' | 'mastered' | 'paused' | 'disabled';
 type SortMode = 'level' | 'difficulty' | 'recent' | 'alphabetical';
 type ViewMode = 'grid' | 'list';
-type SelectionDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
 type PaginationToken = number | 'ellipsis';
 
 interface SelectionPageProps {
@@ -59,13 +58,6 @@ interface SelectionWordRowProps {
   onTogglePaused: () => void;
   isEnabled: boolean;
   isPaused: boolean;
-}
-
-interface SelectionDockButtonProps {
-  active?: boolean;
-  glyph: SelectionDockGlyph;
-  label: string;
-  onClick: () => void;
 }
 
 interface SelectionCardVisualOverride {
@@ -254,34 +246,6 @@ function SelectionWordRow({
         ) : null}
       </div>
     </article>
-  );
-}
-
-function getSelectionDockButtonUrl(glyph: SelectionDockGlyph, active: boolean) {
-  if (glyph === 'selection' && active) {
-    return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-selection-active-transparent.png?v=2`;
-  }
-  const state = active ? 'active' : 'default';
-  return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-${glyph}-${state}-transparent.png?v=2`;
-}
-
-function SelectionDockButton({ active = false, glyph, label, onClick }: SelectionDockButtonProps) {
-  const bgUrl = getSelectionDockButtonUrl(glyph, active);
-  return (
-    <button
-      className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      style={{
-        backgroundImage: `url(${bgUrl})`,
-        backgroundSize: 'contain',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-      <span className="review-dock__label">{label}</span>
-    </button>
   );
 }
 
@@ -737,14 +701,6 @@ export function SelectionPage({
             </div>
           </aside>
         </section>
-
-        {/* Dock bar */}
-        <nav className="home-dock review-dock selection-dock" aria-label="主页面导航">
-          <SelectionDockButton glyph="review" label="复习" onClick={onBackHome} />
-          <SelectionDockButton active glyph="selection" label="选词" onClick={() => {}} />
-          <SelectionDockButton glyph="stats" label="统计" onClick={onOpenStats} />
-          <SelectionDockButton glyph="settings" label="设置" onClick={onOpenSettings} />
-        </nav>
       </div>
 
       <WordDetailDrawer

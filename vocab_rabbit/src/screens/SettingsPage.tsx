@@ -11,8 +11,6 @@ import { APP_VERSION } from '../config/app-meta';
 import type { LifePhotoImportResult } from '../services/local-media-service';
 import type { StudyDataImportResult } from '../services/study-data-import';
 
-type SettingsDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
-
 interface SettingsPageProps {
   settings: ParentSetting;
   task: DailyTaskSummary;
@@ -49,22 +47,7 @@ interface SettingsToggleRowProps {
   onToggle: () => void;
 }
 
-interface SettingsDockButtonProps {
-  active?: boolean;
-  glyph: SettingsDockGlyph;
-  label: string;
-  onClick: () => void;
-}
-
 /* ─── helpers ─── */
-
-function getSettingsDockButtonUrl(glyph: SettingsDockGlyph, active: boolean) {
-  if (glyph === 'settings' && active) {
-    return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-settings-active-transparent.png?v=2`;
-  }
-  const state = active ? 'active' : 'default';
-  return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-${glyph}-${state}-transparent.png?v=2`;
-}
 
 function formatImportedAt(value: string | null): string | null {
   if (!value) {
@@ -133,26 +116,6 @@ function SettingsToggleRow({ icon, label, description, enabled, onToggle }: Sett
         onClick={onToggle}
       />
     </article>
-  );
-}
-
-function SettingsDockButton({ active = false, glyph, label, onClick }: SettingsDockButtonProps) {
-  const bgUrl = getSettingsDockButtonUrl(glyph, active);
-  return (
-    <button
-      className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      style={{
-        backgroundImage: `url(${bgUrl})`,
-        backgroundSize: 'contain',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-      <span className="review-dock__label">{label}</span>
-    </button>
   );
 }
 
@@ -532,14 +495,6 @@ export function SettingsPage({
             </div>
           </section>
         </section>
-
-        {/* ─── Dock ─── */}
-        <nav className="home-dock review-dock settings-dock" aria-label="主页面导航">
-          <SettingsDockButton glyph="review" label="复习" onClick={onBackHome} />
-          <SettingsDockButton glyph="selection" label="选词" onClick={onOpenSelection} />
-          <SettingsDockButton glyph="stats" label="统计" onClick={onOpenStats} />
-          <SettingsDockButton active glyph="settings" label="设置" onClick={() => {}} />
-        </nav>
       </div>
     </main>
   );

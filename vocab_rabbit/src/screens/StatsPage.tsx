@@ -10,8 +10,6 @@ import { APP_VERSION } from '../config/app-meta';
 import { summarizeAnswerEvents } from '../services/answer-event-service';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
 
-type StatsDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
-
 interface StatsPageProps {
   payload: WordPayload;
   task: DailyTaskSummary;
@@ -24,13 +22,6 @@ interface StatsPageProps {
   onOpenSelection: () => void;
   onOpenSettings: () => void;
   onPracticeWrongWords: () => void;
-}
-
-interface StatsDockButtonProps {
-  active?: boolean;
-  glyph: StatsDockGlyph;
-  label: string;
-  onClick: () => void;
 }
 
 /* ─── helpers ─── */
@@ -55,14 +46,6 @@ function formatDateKey(dateKey: string): string {
     month: '2-digit',
     day: '2-digit',
   });
-}
-
-function getStatsDockButtonUrl(glyph: StatsDockGlyph, active: boolean) {
-  if (glyph === 'stats' && active) {
-    return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-stats-active-transparent.png?v=2`;
-  }
-  const state = active ? 'active' : 'default';
-  return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-${glyph}-${state}-transparent.png?v=2`;
 }
 
 /* ─── DonutChart ─── */
@@ -138,28 +121,6 @@ function HorizontalBar({ label, value, max, color }: { label: string; value: num
       </div>
       <strong className="stats-hbar__value">{value}</strong>
     </div>
-  );
-}
-
-/* ─── Dock Button ─── */
-
-function StatsDockButton({ active = false, glyph, label, onClick }: StatsDockButtonProps) {
-  const bgUrl = getStatsDockButtonUrl(glyph, active);
-  return (
-    <button
-      className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      style={{
-        backgroundImage: `url(${bgUrl})`,
-        backgroundSize: 'contain',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-      <span className="review-dock__label">{label}</span>
-    </button>
   );
 }
 
@@ -529,14 +490,6 @@ export function StatsPage({
             </div>
           </section>
         </section>
-
-        {/* ─── Dock ─── */}
-        <nav className="home-dock review-dock stats-dock" aria-label="主页面导航">
-          <StatsDockButton glyph="review" label="复习" onClick={onBackHome} />
-          <StatsDockButton glyph="selection" label="选词" onClick={onOpenSelection} />
-          <StatsDockButton active glyph="stats" label="统计" onClick={() => {}} />
-          <StatsDockButton glyph="settings" label="设置" onClick={onOpenSettings} />
-        </nav>
       </div>
     </main>
   );
