@@ -14,19 +14,15 @@ https://harrycjh.github.io/english/
 
 ## 默认构建命令
 
-在 `vocab_rabbit` 目录执行：
-
-```bash
-npm run build
-```
-
-这个命令当前等价于：
+GitHub Pages 发布必须使用 `build:github`（base 路径为 `/english/`）。在 `vocab_rabbit` 目录执行：
 
 ```bash
 npm run build:github
 ```
 
-生成的 `dist/` 就是 GitHub Pages 使用的产物。
+生成的 `dist/` 就是 GitHub Pages 使用的产物。CI（`.github/workflows/deploy-vocab-rabbit.yml`）也执行这条命令。
+
+> 注意：`npm run build` 现在指向 `build:esa`（base 路径为 `/`，供 ESA 边缘部署使用），**不要**用它来发布 GitHub Pages，否则线上资源会 404 并陷入无限刷新。
 
 ## 本地预览
 
