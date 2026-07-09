@@ -98,7 +98,22 @@ export function WordDetailDrawer({
   const isEnabled = selectionState ? selectionState.isEnabled : true;
   const isPaused = selectionState?.isPaused ?? false;
   const relatedMedia = word.relatedMedia;
-  const hasRelatedMedia = Boolean(relatedMedia?.oxford || localLifePhoto || relatedMedia?.lifePhoto);
+  const lifePhoto = localLifePhoto
+    ? {
+        src: localLifePhoto.objectUrl,
+        caption: localLifePhoto.caption,
+        match: localLifePhoto.match,
+        confidence: localLifePhoto.confidence,
+      }
+    : relatedMedia?.lifePhoto
+      ? {
+          src: getAssetUrl(relatedMedia.lifePhoto.imagePath),
+          caption: relatedMedia.lifePhoto.caption,
+          match: relatedMedia.lifePhoto.match,
+          confidence: relatedMedia.lifePhoto.confidence,
+        }
+      : null;
+  const hasRelatedMedia = Boolean(relatedMedia?.oxford || lifePhoto);
 
   return (
     <div className="word-detail-drawer-backdrop is-open" onClick={onClose}>
@@ -155,27 +170,19 @@ export function WordDetailDrawer({
                 </article>
               ) : null}
 
-              {localLifePhoto ? (
+              {lifePhoto ? (
                 <article className="word-detail-drawer__related-card">
                   <img
-                    src={localLifePhoto.objectUrl}
+                    src={lifePhoto.src}
                     alt={`${getStudyText(word)} 的生活照片`}
                   />
                   <div>
                     <strong>生活照片</strong>
                     <span>
-                      {getLifePhotoMatchLabel(localLifePhoto.match)} · 置信度{' '}
-                      {Math.round(localLifePhoto.confidence * 100)}%
+                      {getLifePhotoMatchLabel(lifePhoto.match)} · 置信度{' '}
+                      {Math.round(lifePhoto.confidence * 100)}%
                     </span>
-                    <p>{localLifePhoto.caption}</p>
-                  </div>
-                </article>
-              ) : relatedMedia?.lifePhoto ? (
-                <article className="word-detail-drawer__related-card word-detail-drawer__related-card--missing">
-                  <div>
-                    <strong>生活照片未导入</strong>
-                    <span>设置页导入本地照片包后显示</span>
-                    <p>{relatedMedia.lifePhoto.caption}</p>
+                    <p>{lifePhoto.caption}</p>
                   </div>
                 </article>
               ) : null}
