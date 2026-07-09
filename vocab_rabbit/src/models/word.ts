@@ -46,6 +46,31 @@ export interface WordRelatedMediaManifest {
   entries: WordRelatedMediaManifestEntry[];
 }
 
+export interface WordImageAtlasEntry {
+  atlasPath: string;
+  row: number;
+  column: number;
+}
+
+export interface WordImageAtlasManifestEntry extends WordImageAtlasEntry {
+  imagePath: string;
+}
+
+export interface WordImageAtlasManifest {
+  schemaVersion: 1;
+  generatedAt: string;
+  grid: {
+    columns: number;
+    rows: number;
+    cellSize: number;
+  };
+  stats: {
+    sourceImages: number;
+    atlasImages: number;
+  };
+  entries: WordImageAtlasManifestEntry[];
+}
+
 export interface LifePhotoPackageManifest {
   schemaVersion: 1;
   generatedAt: string;
@@ -70,6 +95,7 @@ export interface WordRecord {
   difficulty: number;
   imagePath: string;
   imageApproved: boolean;
+  imageAtlas?: WordImageAtlasEntry;
   oxfordRefs: OxfordRef[];
   relatedMedia?: WordRelatedMedia;
   example?: string;

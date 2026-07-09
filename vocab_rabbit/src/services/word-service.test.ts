@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { APP_VERSION, CONTENT_VERSION } from '../config/app-meta';
 import type { WordPayload } from '../models/word';
-import { getWordImageUrl, getWordPayloadUrl, getWordRelatedMediaUrl, mergeRelatedMedia } from './word-service';
+import {
+  getWordImageAtlasUrl,
+  getWordImageUrl,
+  getWordPayloadUrl,
+  getWordRelatedMediaUrl,
+  mergeRelatedMedia,
+} from './word-service';
 
 describe('getWordPayloadUrl', () => {
   it('adds the app version to avoid stale cached vocabulary payloads', () => {
@@ -20,6 +26,14 @@ describe('getWordImageUrl', () => {
 describe('getWordRelatedMediaUrl', () => {
   it('adds the content version to the related media manifest', () => {
     expect(getWordRelatedMediaUrl()).toBe(`/content/words/word_related_media.json?v=${CONTENT_VERSION}`);
+  });
+});
+
+describe('getWordImageAtlasUrl', () => {
+  it('adds the content version to the optional atlas manifest', () => {
+    expect(getWordImageAtlasUrl()).toBe(
+      `/content/words/word_image_atlas.json?v=${CONTENT_VERSION}`,
+    );
   });
 });
 

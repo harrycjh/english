@@ -1,5 +1,12 @@
-import type { OxfordRef, WordPayload, WordRecord, WordRelatedMediaManifest } from '../models/word';
+import type {
+  OxfordRef,
+  WordImageAtlasManifest,
+  WordPayload,
+  WordRecord,
+  WordRelatedMediaManifest,
+} from '../models/word';
 import { CONTENT_VERSION } from '../config/app-meta';
+import { mergeWordAtlasManifest } from './word-atlas-service';
 
 let payloadPromise: Promise<WordPayload> | null = null;
 
@@ -9,6 +16,10 @@ export function getWordPayloadUrl(): string {
 
 export function getWordRelatedMediaUrl(): string {
   return `${import.meta.env.BASE_URL}content/words/word_related_media.json?v=${CONTENT_VERSION}`;
+}
+
+export function getWordImageAtlasUrl(): string {
+  return `${import.meta.env.BASE_URL}content/words/word_image_atlas.json?v=${CONTENT_VERSION}`;
 }
 
 export function mergeRelatedMedia(payload: WordPayload, manifest: WordRelatedMediaManifest | null): WordPayload {
@@ -36,6 +47,17 @@ async function loadWordRelatedMediaManifest(): Promise<WordRelatedMediaManifest 
   return (await response.json()) as WordRelatedMediaManifest;
 }
 
+async function loadWordImageAtlasManifest(): Promise<WordImageAtlasManifest | null> {
+  const response = await fetch(getWordImageAtlasUrl());
+  if (response.status === 404) {
+    return null;
+  }
+  if (!response.ok) {
+    throw new Error('无法加载单词图集清单。');
+  }
+  return (await response.json()) as WordImageAtlasManifest;
+}
+
 export async function loadWordPayload(): Promise<WordPayload> {
   if (!payloadPromise) {
     payloadPromise = Promise.all([
@@ -46,7 +68,10 @@ export async function loadWordPayload(): Promise<WordPayload> {
         return (await response.json()) as WordPayload;
       }),
       loadWordRelatedMediaManifest(),
-    ]).then(([payload, relatedMediaManifest]) => mergeRelatedMedia(payload, relatedMediaManifest));
+      loadWordImageAtlasManifest(),
+    ]).then(([payload, relatedMediaManifest, atlasManifest]) => (
+      mergeWordAtlasManifest(mergeRelatedMedia(payload, relatedMediaManifest), atlasManifest)
+    ));
   }
 
   return payloadPromise;
