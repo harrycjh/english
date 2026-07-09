@@ -11,8 +11,9 @@ import {
 } from '../models/word-selection-state';
 import type { WordPayload } from '../models/word';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
+import { WordImage } from '../components/WordImage';
 import { APP_VERSION } from '../config/app-meta';
-import { getPrimaryOxfordRefLabel, getStudyText, getWordImageUrl } from '../services/word-service';
+import { getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
 import reviewLayoutData from '../../design-output/ui-concepts/review-page-layout.json';
 import reviewSlicesManifestData from '../../design-output/ui-concepts/review-page-slices-manifest.json';
 
@@ -319,9 +320,9 @@ function ReviewPreviewCard({ word, index, layout, onOpenDetails }: ReviewPreview
           zIndex: reviewLayerZIndex.slices,
         }}
       >
-        <img
+        <WordImage
+          word={word}
           className="review-preview-card__word-image"
-          src={getWordImageUrl(word.imagePath)}
           alt=""
         />
         <span

@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { WordImageAtlasManifest, WordPayload } from '../models/word';
-import { getWordAtlasStyle, mergeWordAtlasManifest } from './word-atlas-service';
+import {
+  getWordAtlasStyle,
+  mergeWordAtlasManifest,
+  readWordAtlasManifestResponse,
+} from './word-atlas-service';
 
 const payload: WordPayload = {
   generatedAt: '',
@@ -68,5 +72,16 @@ describe('getWordAtlasStyle', () => {
       backgroundSize: '300% 300%',
       backgroundPosition: '100% 50%',
     });
+  });
+});
+
+describe('readWordAtlasManifestResponse', () => {
+  it('treats an HTML SPA fallback as an unavailable optional manifest', async () => {
+    const response = new Response('<!doctype html>', {
+      status: 200,
+      headers: { 'content-type': 'text/html' },
+    });
+
+    await expect(readWordAtlasManifestResponse(response)).resolves.toBeNull();
   });
 });

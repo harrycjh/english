@@ -1,7 +1,8 @@
 import { AudioIconButton } from './AudioIconButton';
 import type { ChoiceQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
-import { getPrimaryOxfordRefLabel, getWordImageUrl } from '../services/word-service';
+import { getPrimaryOxfordRefLabel } from '../services/word-service';
+import { WordImage } from './WordImage';
 
 interface QuestionImageProps {
   question: ChoiceQuestion;
@@ -19,7 +20,7 @@ export function QuestionImage({ question, disabled, enableAudio, selectedAnswer,
       <div className="image-stage">
         {enableAudio ? <AudioIconButton onClick={() => speakWord(question.word)} className="audio-icon-button--overlay" /> : null}
         {question.word.imageApproved ? (
-          <img src={getWordImageUrl(question.word.imagePath)} alt={question.word.chinese} className="image-stage__image" />
+          <WordImage word={question.word} alt={question.word.chinese} className="image-stage__image" />
         ) : (
           <div className="image-stage__placeholder">
             <span className="image-stage__tag">本地图片待接入</span>

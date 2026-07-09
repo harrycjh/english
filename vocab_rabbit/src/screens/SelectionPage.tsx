@@ -11,8 +11,9 @@ import {
 } from '../models/word-selection-state';
 import type { WordPayload, WordRecord } from '../models/word';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
-import { getAssetUrl, getPrimaryOxfordRefLabel, getStudyText, getWordImageUrl } from '../services/word-service';
+import { getAssetUrl, getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
+import { WordImage } from '../components/WordImage';
 import { APP_VERSION } from '../config/app-meta';
 
 type StatusFilter = 'all' | 'new' | 'learning' | 'mastered' | 'paused' | 'disabled';
@@ -160,11 +161,9 @@ function SelectionWordCard({
 }: SelectionWordCardProps) {
   const displayWord = getStudyText(word);
   const [hasArt, setHasArt] = useState(true);
-  const artSrc = visualOverride?.demoArtPath
+  const demoArtSrc = visualOverride?.demoArtPath
     ? getAssetUrl(visualOverride.demoArtPath)
-    : hasArt
-      ? getWordImageUrl(word.imagePath)
-      : null;
+    : null;
   const categoryLabel = visualOverride?.categoryLabel ?? word.category;
   const chineseLabel = visualOverride?.chineseLabel ?? word.chinese;
   const partOfSpeechLabel = visualOverride?.partOfSpeechLabel ?? formatPartOfSpeech(word.partOfSpeech);
@@ -180,11 +179,16 @@ function SelectionWordCard({
         </div>
         <div className="selection-word-card__content">
           <div className="selection-word-card__art">
-            {artSrc ? (
+            {demoArtSrc ? (
               <img
-                src={artSrc}
+                src={demoArtSrc}
                 alt={chineseLabel}
-                onError={visualOverride?.demoArtPath ? undefined : () => setHasArt(false)}
+              />
+            ) : hasArt ? (
+              <WordImage
+                word={word}
+                alt={chineseLabel}
+                onError={() => setHasArt(false)}
               />
             ) : (
               <span className="selection-word-card__art-fallback">{displayWord.slice(0, 2).toUpperCase()}</span>

@@ -5,6 +5,25 @@ import type {
   WordPayload,
 } from '../models/word';
 
+export async function readWordAtlasManifestResponse(
+  response: Response,
+): Promise<WordImageAtlasManifest | null> {
+  if (response.status === 404) {
+    return null;
+  }
+  if (!response.ok) {
+    throw new Error('无法加载单词图集清单。');
+  }
+
+  const body = await response.text();
+  const contentType = response.headers.get('content-type')?.toLowerCase() ?? '';
+  if (contentType.includes('text/html') || body.trimStart().startsWith('<')) {
+    return null;
+  }
+
+  return JSON.parse(body) as WordImageAtlasManifest;
+}
+
 export function mergeWordAtlasManifest(
   payload: WordPayload,
   manifest: WordImageAtlasManifest | null,

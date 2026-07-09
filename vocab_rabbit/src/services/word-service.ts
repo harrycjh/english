@@ -6,7 +6,10 @@ import type {
   WordRelatedMediaManifest,
 } from '../models/word';
 import { CONTENT_VERSION } from '../config/app-meta';
-import { mergeWordAtlasManifest } from './word-atlas-service';
+import {
+  mergeWordAtlasManifest,
+  readWordAtlasManifestResponse,
+} from './word-atlas-service';
 
 let payloadPromise: Promise<WordPayload> | null = null;
 
@@ -49,13 +52,7 @@ async function loadWordRelatedMediaManifest(): Promise<WordRelatedMediaManifest 
 
 async function loadWordImageAtlasManifest(): Promise<WordImageAtlasManifest | null> {
   const response = await fetch(getWordImageAtlasUrl());
-  if (response.status === 404) {
-    return null;
-  }
-  if (!response.ok) {
-    throw new Error('无法加载单词图集清单。');
-  }
-  return (await response.json()) as WordImageAtlasManifest;
+  return readWordAtlasManifestResponse(response);
 }
 
 export async function loadWordPayload(): Promise<WordPayload> {
