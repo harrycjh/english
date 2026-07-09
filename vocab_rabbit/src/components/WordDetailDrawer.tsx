@@ -1,5 +1,6 @@
 import type { AnswerEvent } from '../models/answer-event';
 import type { LearningRecord } from '../models/learning-record';
+import type { LocalLifePhotoView } from '../models/local-media';
 import type { ParentSetting } from '../models/parent-setting';
 import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordRecord } from '../models/word';
@@ -7,7 +8,7 @@ import { speakWord } from '../services/audio-service';
 import { AudioIconButton } from './AudioIconButton';
 import { getExampleSentences } from '../services/example-service';
 import { getWordAnswerStats } from '../services/answer-event-service';
-import { getOxfordRefLabels, getStudyText, getWordImageUrl } from '../services/word-service';
+import { getAssetUrl, getOxfordRefLabels, getStudyText, getWordImageUrl } from '../services/word-service';
 
 export type WordDetailDrawerContext = 'review' | 'selection';
 
@@ -18,6 +19,7 @@ interface WordDetailDrawerProps {
   selectionState: WordSelectionState | undefined;
   answerEvents?: AnswerEvent[];
   setting: ParentSetting;
+  localLifePhoto?: LocalLifePhotoView;
   context: WordDetailDrawerContext;
   onClose: () => void;
   onToggleEnabled?: () => void;
@@ -68,6 +70,10 @@ function getQuestionKindLabel(questionKind: AnswerEvent['questionKind']): string
   return questionKind;
 }
 
+function getLifePhotoMatchLabel(match: 'primary' | 'secondary'): string {
+  return match === 'primary' ? '主匹配' : '辅助匹配';
+}
+
 export function WordDetailDrawer({
   isOpen,
   word,
@@ -75,6 +81,7 @@ export function WordDetailDrawer({
   selectionState,
   answerEvents = [],
   setting,
+  localLifePhoto,
   context,
   onClose,
   onToggleEnabled,
@@ -89,6 +96,8 @@ export function WordDetailDrawer({
   const answerStats = getWordAnswerStats(answerEvents, word.id);
   const isEnabled = selectionState ? selectionState.isEnabled : true;
   const isPaused = selectionState?.isPaused ?? false;
+  const relatedMedia = word.relatedMedia;
+  const hasRelatedMedia = Boolean(relatedMedia?.oxford || localLifePhoto || relatedMedia?.lifePhoto);
 
   return (
     <div className="word-detail-drawer-backdrop is-open" onClick={onClose}>
@@ -127,6 +136,51 @@ export function WordDetailDrawer({
             </div>
           )}
         </section>
+
+        {hasRelatedMedia ? (
+          <section className="word-detail-drawer__panel">
+            <h3>关联图片</h3>
+            <div className="word-detail-drawer__related-grid">
+              {relatedMedia?.oxford ? (
+                <article className="word-detail-drawer__related-card">
+                  <img
+                    src={getAssetUrl(relatedMedia.oxford.imagePath)}
+                    alt={`${getStudyText(word)} 的牛津树关联页`}
+                  />
+                  <div>
+                    <strong>牛津树图</strong>
+                    <span>{relatedMedia.oxford.label}</span>
+                  </div>
+                </article>
+              ) : null}
+
+              {localLifePhoto ? (
+                <article className="word-detail-drawer__related-card">
+                  <img
+                    src={localLifePhoto.objectUrl}
+                    alt={`${getStudyText(word)} 的生活照片`}
+                  />
+                  <div>
+                    <strong>生活照片</strong>
+                    <span>
+                      {getLifePhotoMatchLabel(localLifePhoto.match)} · 置信度{' '}
+                      {Math.round(localLifePhoto.confidence * 100)}%
+                    </span>
+                    <p>{localLifePhoto.caption}</p>
+                  </div>
+                </article>
+              ) : relatedMedia?.lifePhoto ? (
+                <article className="word-detail-drawer__related-card word-detail-drawer__related-card--missing">
+                  <div>
+                    <strong>生活照片未导入</strong>
+                    <span>设置页导入本地照片包后显示</span>
+                    <p>{relatedMedia.lifePhoto.caption}</p>
+                  </div>
+                </article>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
 
         <section className="word-detail-drawer__panel">
           <h3>牛津树定位</h3>

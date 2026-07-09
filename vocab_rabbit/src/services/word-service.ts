@@ -1,4 +1,4 @@
-import type { OxfordRef, WordPayload, WordRecord } from '../models/word';
+import type { OxfordRef, WordPayload, WordRecord, WordRelatedMediaManifest } from '../models/word';
 import { CONTENT_VERSION } from '../config/app-meta';
 
 let payloadPromise: Promise<WordPayload> | null = null;
@@ -7,14 +7,46 @@ export function getWordPayloadUrl(): string {
   return `${import.meta.env.BASE_URL}content/words/ket_vocabulary.json?v=${CONTENT_VERSION}`;
 }
 
+export function getWordRelatedMediaUrl(): string {
+  return `${import.meta.env.BASE_URL}content/words/word_related_media.json?v=${CONTENT_VERSION}`;
+}
+
+export function mergeRelatedMedia(payload: WordPayload, manifest: WordRelatedMediaManifest | null): WordPayload {
+  const relatedByWordId = new Map(
+    (manifest?.entries ?? []).map((entry) => [entry.wordId, entry.relatedMedia])
+  );
+
+  return {
+    ...payload,
+    words: payload.words.map((word) => {
+      const relatedMedia = relatedByWordId.get(word.id);
+      return relatedMedia ? { ...word, relatedMedia } : word;
+    }),
+  };
+}
+
+async function loadWordRelatedMediaManifest(): Promise<WordRelatedMediaManifest | null> {
+  const response = await fetch(getWordRelatedMediaUrl());
+  if (response.status === 404) {
+    return null;
+  }
+  if (!response.ok) {
+    throw new Error('无法加载关联图片清单。请先运行关联图片导出脚本。');
+  }
+  return (await response.json()) as WordRelatedMediaManifest;
+}
+
 export async function loadWordPayload(): Promise<WordPayload> {
   if (!payloadPromise) {
-    payloadPromise = fetch(getWordPayloadUrl()).then(async (response) => {
-      if (!response.ok) {
-        throw new Error('无法加载词表 JSON。请先运行构建脚本。');
-      }
-      return (await response.json()) as WordPayload;
-    });
+    payloadPromise = Promise.all([
+      fetch(getWordPayloadUrl()).then(async (response) => {
+        if (!response.ok) {
+          throw new Error('无法加载词表 JSON。请先运行构建脚本。');
+        }
+        return (await response.json()) as WordPayload;
+      }),
+      loadWordRelatedMediaManifest(),
+    ]).then(([payload, relatedMediaManifest]) => mergeRelatedMedia(payload, relatedMediaManifest));
   }
 
   return payloadPromise;

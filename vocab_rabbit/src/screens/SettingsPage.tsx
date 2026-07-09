@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { type ChangeEvent, useMemo, useRef, useState } from 'react';
 import type { DailyTaskSummary } from '../models/daily-task';
 import {
   MAX_NEW_WORD_COUNT,
@@ -8,6 +8,8 @@ import {
   type ParentSetting,
 } from '../models/parent-setting';
 import { APP_VERSION } from '../config/app-meta';
+import type { LifePhotoImportResult } from '../services/local-media-service';
+import type { StudyDataImportResult } from '../services/study-data-import';
 
 type SettingsDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
 
@@ -19,8 +21,12 @@ interface SettingsPageProps {
   onOpenStats: () => void;
   onUpdateSettings: (nextSetting: ParentSetting) => Promise<void>;
   onExportStudyData: () => Promise<void>;
+  onImportStudyData: (file: File) => Promise<StudyDataImportResult>;
   onResetTodayTask: () => Promise<void>;
   onResetLearningProgress: () => Promise<void>;
+  onImportLifePhotoPackage: (file: File) => Promise<LifePhotoImportResult>;
+  localLifePhotoCount: number;
+  localLifePhotoImportedAt: string | null;
 }
 
 interface SettingsNumberControlProps {
@@ -58,6 +64,22 @@ function getSettingsDockButtonUrl(glyph: SettingsDockGlyph, active: boolean) {
   }
   const state = active ? 'active' : 'default';
   return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-${glyph}-${state}-transparent.png?v=2`;
+}
+
+function formatImportedAt(value: string | null): string | null {
+  if (!value) {
+    return null;
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+  return date.toLocaleString('zh-CN', {
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 }
 
 /* ─── Sub-components ─── */
@@ -144,11 +166,23 @@ export function SettingsPage({
   onOpenStats,
   onUpdateSettings,
   onExportStudyData,
+  onImportStudyData,
   onResetTodayTask,
   onResetLearningProgress,
+  onImportLifePhotoPackage,
+  localLifePhotoCount,
+  localLifePhotoImportedAt,
 }: SettingsPageProps) {
   const [isSaving, setIsSaving] = useState(false);
+  const [isImportingPhotos, setIsImportingPhotos] = useState(false);
+  const [isImportingStudyData, setIsImportingStudyData] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
+  const [lifePhotoImportSummary, setLifePhotoImportSummary] = useState<string | null>(null);
+  const [lifePhotoImportError, setLifePhotoImportError] = useState<string | null>(null);
+  const [studyDataImportSummary, setStudyDataImportSummary] = useState<string | null>(null);
+  const [studyDataImportError, setStudyDataImportError] = useState<string | null>(null);
+  const lifePhotoInputRef = useRef<HTMLInputElement>(null);
+  const studyDataInputRef = useRef<HTMLInputElement>(null);
 
   const runtimeInfo = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -195,6 +229,75 @@ export function SettingsPage({
     await onExportStudyData();
     setLastSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
   }
+
+  async function handleLifePhotoPackageChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.currentTarget.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    if (
+      localLifePhotoCount > 0
+      && !window.confirm(`当前设备已有 ${localLifePhotoCount} 张生活照片。新照片包会完整替换旧照片包，继续吗？`)
+    ) {
+      event.currentTarget.value = '';
+      return;
+    }
+
+    setIsImportingPhotos(true);
+    setLifePhotoImportError(null);
+    try {
+      const result = await onImportLifePhotoPackage(file);
+      const importedTime = formatImportedAt(result.importedAt);
+      setLifePhotoImportSummary(
+        `已导入 ${result.imported} 张，跳过 ${result.skipped} 张${importedTime ? ` · 导入时间 ${importedTime}` : ''}`,
+      );
+      setLastSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
+    } catch (caughtError) {
+      setLifePhotoImportSummary(null);
+      setLifePhotoImportError(
+        `导入失败：${caughtError instanceof Error ? caughtError.message : '无法读取生活照片包。'}`,
+      );
+    } finally {
+      setIsImportingPhotos(false);
+      event.currentTarget.value = '';
+    }
+  }
+
+  async function handleStudyDataChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.currentTarget.files?.[0];
+    if (!file) {
+      return;
+    }
+    if (!window.confirm('导入备份会替换当前学习进度、设置、选词状态和答题记录，但会保留本地生活照片。继续吗？')) {
+      event.currentTarget.value = '';
+      return;
+    }
+
+    setIsImportingStudyData(true);
+    setStudyDataImportError(null);
+    try {
+      const result = await onImportStudyData(file);
+      setStudyDataImportSummary(
+        `已恢复 ${result.learningRecords} 条学习记录、${result.answerEvents} 条答题记录`,
+      );
+      setLastSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
+    } catch (caughtError) {
+      setStudyDataImportSummary(null);
+      setStudyDataImportError(
+        `恢复失败：${caughtError instanceof Error ? caughtError.message : '无法读取学习数据备份。'}`,
+      );
+    } finally {
+      setIsImportingStudyData(false);
+      event.currentTarget.value = '';
+    }
+  }
+
+  const savedLifePhotoTime = formatImportedAt(localLifePhotoImportedAt);
+  const lifePhotoStatus = lifePhotoImportSummary
+    ?? (localLifePhotoCount > 0
+      ? `已导入 ${localLifePhotoCount} 张${savedLifePhotoTime ? ` · 导入时间 ${savedLifePhotoTime}` : ''}，只保存在这台设备。`
+      : '尚未导入生活照片，只会保存在当前设备。');
 
   return (
     <main className="page page--home page--settings">
@@ -368,6 +471,52 @@ export function SettingsPage({
                 </div>
                 <button className="secondary-button" type="button" onClick={() => void handleExportDataClick()}>
                   导出数据
+                </button>
+              </article>
+              <article className="settings-data-item">
+                <span className="settings-data-item__icon">⬇️</span>
+                <div>
+                  <strong>导入学习数据</strong>
+                  <p>{studyDataImportSummary ?? '从 VocaRabbit JSON 备份恢复学习进度和设置。'}</p>
+                  {studyDataImportError && <p className="settings-data-error" role="alert">{studyDataImportError}</p>}
+                </div>
+                <input
+                  ref={studyDataInputRef}
+                  type="file"
+                  accept=".json,application/json"
+                  hidden
+                  onChange={(event) => void handleStudyDataChange(event)}
+                />
+                <button
+                  className="secondary-button"
+                  type="button"
+                  disabled={isImportingStudyData}
+                  onClick={() => studyDataInputRef.current?.click()}
+                >
+                  {isImportingStudyData ? '恢复中…' : '选择备份'}
+                </button>
+              </article>
+              <article className="settings-data-item">
+                <span className="settings-data-item__icon">🖼</span>
+                <div>
+                  <strong>导入生活照片包</strong>
+                  <p>{lifePhotoStatus}</p>
+                  {lifePhotoImportError && <p className="settings-data-error" role="alert">{lifePhotoImportError}</p>}
+                </div>
+                <input
+                  ref={lifePhotoInputRef}
+                  type="file"
+                  accept=".zip,application/zip"
+                  hidden
+                  onChange={(event) => void handleLifePhotoPackageChange(event)}
+                />
+                <button
+                  className="secondary-button"
+                  type="button"
+                  disabled={isImportingPhotos}
+                  onClick={() => lifePhotoInputRef.current?.click()}
+                >
+                  {isImportingPhotos ? '导入中…' : '选择照片包'}
                 </button>
               </article>
               <article className="settings-data-item settings-data-item--danger">

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
+import type { LocalLifePhotoView } from '../models/local-media';
 import type { ParentSetting } from '../models/parent-setting';
 import {
   createDefaultWordSelectionState,
@@ -27,6 +28,7 @@ interface SelectionPageProps {
   answerEvents: AnswerEvent[];
   setting: ParentSetting;
   task: DailyTaskSummary;
+  localLifePhotosById: Record<string, LocalLifePhotoView>;
   onBackHome: () => void;
   onOpenSettings: () => void;
   onOpenStats: () => void;
@@ -342,6 +344,7 @@ export function SelectionPage({
   answerEvents,
   setting,
   task,
+  localLifePhotosById,
   onBackHome,
   onOpenSettings,
   onOpenStats,
@@ -747,6 +750,7 @@ export function SelectionPage({
         selectionState={selectedWordSelectionState}
         answerEvents={answerEvents}
         setting={setting}
+        localLifePhoto={selectedWord ? localLifePhotosById[selectedWord.id] : undefined}
         context="selection"
         onClose={() => setSelectedWordId(null)}
         onToggleEnabled={

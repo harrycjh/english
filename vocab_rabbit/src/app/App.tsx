@@ -2,6 +2,7 @@ import { startTransition, useEffect, useMemo, useState } from 'react';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary, SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
+import type { LocalLifePhotoView } from '../models/local-media';
 import type { ParentSetting } from '../models/parent-setting';
 import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordPayload } from '../models/word';
@@ -25,6 +26,7 @@ import {
   listLearningRecords,
   listRecentTasks,
   listWordSelectionStates,
+  replaceStudyData,
   saveAnswerEvent,
   saveDailyTask,
   saveLearningRecord,
@@ -32,6 +34,16 @@ import {
   saveWordSelectionStates,
 } from '../services/storage-service';
 import { buildStudyDataExport, downloadJsonFile } from '../services/study-data-export';
+import {
+  readStudyDataImport,
+  type StudyDataImportResult,
+} from '../services/study-data-import';
+import {
+  importLifePhotoPackage,
+  loadLocalLifePhotoViews,
+  revokeLocalLifePhotoViews,
+  type LifePhotoImportResult,
+} from '../services/local-media-service';
 import { loadWordPayload } from '../services/word-service';
 import { APP_VERSION } from '../config/app-meta';
 
@@ -61,6 +73,7 @@ export default function App() {
   const [recordsById, setRecordsById] = useState<Record<string, LearningRecord>>({});
   const [answerEvents, setAnswerEvents] = useState<AnswerEvent[]>([]);
   const [selectionById, setSelectionById] = useState<Record<string, WordSelectionState>>({});
+  const [localLifePhotosById, setLocalLifePhotosById] = useState<Record<string, LocalLifePhotoView>>({});
   const [parentSetting, setParentSetting] = useState<ParentSetting | null>(null);
   const [task, setTask] = useState<DailyTaskSummary | null>(null);
   const [practiceWordIds, setPracticeWordIds] = useState<string[] | null>(null);
@@ -75,12 +88,20 @@ export default function App() {
     async function bootstrap() {
       try {
         setLoading(true);
-        const [payloadValue, savedRecords, savedSetting, savedSelection, savedAnswerEvents] = await Promise.all([
+        const [
+          payloadValue,
+          savedRecords,
+          savedSetting,
+          savedSelection,
+          savedAnswerEvents,
+          savedLocalLifePhotos,
+        ] = await Promise.all([
           loadWordPayload(),
           listLearningRecords(),
           getParentSetting(),
           listWordSelectionStates(),
           listAnswerEvents(500),
+          loadLocalLifePhotoViews(),
         ]);
         const todayKey = createDateKey();
         const { nextSelectionById, missingStates } = ensureSelectionStateMap(payloadValue.words, savedSelection);
@@ -102,6 +123,7 @@ export default function App() {
           setRecordsById(savedRecords);
           setAnswerEvents(savedAnswerEvents);
           setSelectionById(nextSelectionById);
+          setLocalLifePhotosById(savedLocalLifePhotos);
           setParentSetting(savedSetting);
           setTask(todayTask);
           setRecentTasks(history);
@@ -123,6 +145,12 @@ export default function App() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    return () => {
+      revokeLocalLifePhotoViews(localLifePhotosById);
+    };
+  }, [localLifePhotosById]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -162,6 +190,13 @@ export default function App() {
     () => Object.values(recordsById).filter((record) => isMastered(record)).length,
     [recordsById]
   );
+  const localLifePhotoImportedAt = useMemo(() => {
+    const importedTimes = Object.values(localLifePhotosById)
+      .map((photo) => photo.importedAt)
+      .filter(Boolean)
+      .sort();
+    return importedTimes.at(-1) ?? null;
+  }, [localLifePhotosById]);
 
   async function refreshRecentTasks() {
     setRecentTasks(await listRecentTasks(14));
@@ -345,6 +380,63 @@ export default function App() {
     downloadJsonFile(`vocab-rabbit-study-data-${exportedAt.slice(0, 10)}.json`, exportPayload);
   }
 
+  async function handleImportLifePhotoPackage(file: File): Promise<LifePhotoImportResult> {
+    const result = await importLifePhotoPackage(file);
+    const nextLocalLifePhotos = await loadLocalLifePhotoViews();
+    setLocalLifePhotosById(nextLocalLifePhotos);
+    return result;
+  }
+
+  async function handleImportStudyData(file: File): Promise<StudyDataImportResult> {
+    if (!payload) {
+      throw new Error('词库尚未加载完成，请稍后再试。');
+    }
+
+    const backup = await readStudyDataImport(file);
+    await replaceStudyData(backup);
+
+    const records = Object.fromEntries(
+      backup.tables.learningRecords.map((record) => [record.wordId, record]),
+    );
+    const importedSelection = Object.fromEntries(
+      backup.tables.wordSelectionStates.map((state) => [state.wordId, state]),
+    );
+    const { nextSelectionById, missingStates } = ensureSelectionStateMap(payload.words, importedSelection);
+    if (missingStates.length > 0) {
+      await saveWordSelectionStates(missingStates);
+    }
+
+    const todayKey = createDateKey();
+    let restoredTask = await getDailyTask(todayKey);
+    if (!restoredTask) {
+      restoredTask = buildDailyTask(
+        payload.words,
+        records,
+        backup.tables.parentSetting,
+        new Date(),
+        nextSelectionById,
+      );
+      await saveDailyTask(restoredTask);
+    }
+
+    setRecordsById(records);
+    setAnswerEvents(backup.tables.answerEvents.slice(-500));
+    setSelectionById(nextSelectionById);
+    setParentSetting(backup.tables.parentSetting);
+    setTask(restoredTask);
+    setRecentTasks(await listRecentTasks(14));
+    setSessionResult(null);
+    setPracticeWordIds(null);
+
+    return {
+      learningRecords: backup.tables.learningRecords.length,
+      dailyTasks: backup.tables.dailyTasks.length,
+      wordSelectionStates: backup.tables.wordSelectionStates.length,
+      answerEvents: backup.tables.answerEvents.length,
+      exportedAt: backup.exportedAt,
+    };
+  }
+
   function renderCurrentRoute() {
     if (loading) {
       return (
@@ -400,8 +492,12 @@ export default function App() {
           onOpenStats={handleOpenStats}
           onUpdateSettings={handleUpdateSetting}
           onExportStudyData={handleExportStudyData}
+          onImportStudyData={handleImportStudyData}
           onResetTodayTask={handleResetTodayTask}
           onResetLearningProgress={handleResetLearningProgress}
+          onImportLifePhotoPackage={handleImportLifePhotoPackage}
+          localLifePhotoCount={Object.keys(localLifePhotosById).length}
+          localLifePhotoImportedAt={localLifePhotoImportedAt}
         />
       );
     }
@@ -433,6 +529,7 @@ export default function App() {
           answerEvents={answerEvents}
           setting={parentSetting}
           task={task}
+          localLifePhotosById={localLifePhotosById}
           onBackHome={handleBackHome}
           onOpenSettings={handleOpenSettings}
           onOpenStats={handleOpenStats}
@@ -453,6 +550,7 @@ export default function App() {
         masteredCount={masteredCount}
         recentTasks={recentTasks}
         previewWords={previewWords}
+        localLifePhotosById={localLifePhotosById}
         onStart={handleStart}
         onOpenSelection={handleOpenSelection}
         onOpenStats={handleOpenStats}

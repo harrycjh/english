@@ -2,6 +2,7 @@ import { type CSSProperties, type ReactNode, useState } from 'react';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
+import type { LocalLifePhotoView } from '../models/local-media';
 import type { ParentSetting } from '../models/parent-setting';
 import {
   createDefaultWordSelectionState,
@@ -439,6 +440,7 @@ interface ReviewPageProps {
   masteredCount: number;
   recentTasks: DailyTaskSummary[];
   previewWords: WordPayload['words'];
+  localLifePhotosById: Record<string, LocalLifePhotoView>;
   onStart: () => void;
   onOpenSelection: () => void;
   onOpenStats: () => void;
@@ -456,6 +458,7 @@ export function ReviewPage({
   masteredCount,
   recentTasks,
   previewWords,
+  localLifePhotosById,
   onStart,
   onOpenSelection,
   onOpenStats,
@@ -757,6 +760,7 @@ export function ReviewPage({
         selectionState={selectedWordSelectionState}
         answerEvents={answerEvents}
         setting={setting}
+        localLifePhoto={selectedWord ? localLifePhotosById[selectedWord.id] : undefined}
         context="review"
         onClose={() => setSelectedWordId(null)}
         onToggleEnabled={

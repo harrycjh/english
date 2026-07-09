@@ -2,12 +2,14 @@ import Dexie, { type Table } from 'dexie';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
+import type { LocalLifePhotoRecord } from '../models/local-media';
 import {
   defaultParentSetting,
   normalizeParentSetting,
   type ParentSetting,
 } from '../models/parent-setting';
 import { type WordSelectionState } from '../models/word-selection-state';
+import type { StudyDataExport } from './study-data-export';
 
 interface StoredParentSetting extends ParentSetting {
   id: string;
@@ -21,6 +23,7 @@ class VocabRabbitDatabase extends Dexie {
   dailyTasks!: Table<DailyTaskSummary, string>;
   parentSettings!: Table<StoredParentSetting, string>;
   wordSelectionStates!: Table<WordSelectionState, string>;
+  localLifePhotos!: Table<LocalLifePhotoRecord, string>;
 
   constructor() {
     super('vocab-rabbit');
@@ -45,6 +48,14 @@ class VocabRabbitDatabase extends Dexie {
       parentSettings: 'id',
       wordSelectionStates: 'wordId,isEnabled,isPaused,updatedAt',
       answerEvents: 'id,wordId,dateKey,answeredAt,questionKind,isCorrect',
+    });
+    this.version(5).stores({
+      learningRecords: 'wordId,nextDueAt,masteryLevel',
+      dailyTasks: 'dateKey,completedAt',
+      parentSettings: 'id',
+      wordSelectionStates: 'wordId,isEnabled,isPaused,updatedAt',
+      answerEvents: 'id,wordId,dateKey,answeredAt,questionKind,isCorrect',
+      localLifePhotos: 'wordId,importedAt',
     });
   }
 }
@@ -132,6 +143,66 @@ export async function listAnswerEvents(limit?: number): Promise<AnswerEvent[]> {
 
   const events = await database.answerEvents.orderBy('answeredAt').reverse().limit(limit).toArray();
   return events.reverse();
+}
+
+export async function listLocalLifePhotos(): Promise<Record<string, LocalLifePhotoRecord>> {
+  const photos = await database.localLifePhotos.toArray();
+  return Object.fromEntries(photos.map((photo) => [photo.wordId, photo]));
+}
+
+export async function saveLocalLifePhotos(photos: LocalLifePhotoRecord[]): Promise<void> {
+  if (photos.length === 0) {
+    return;
+  }
+
+  await database.localLifePhotos.bulkPut(photos);
+}
+
+export async function replaceLocalLifePhotos(photos: LocalLifePhotoRecord[]): Promise<void> {
+  await database.transaction('rw', database.localLifePhotos, async () => {
+    await database.localLifePhotos.clear();
+    if (photos.length > 0) {
+      await database.localLifePhotos.bulkPut(photos);
+    }
+  });
+}
+
+export async function clearLocalLifePhotos(): Promise<void> {
+  await database.localLifePhotos.clear();
+}
+
+export async function replaceStudyData(backup: StudyDataExport): Promise<void> {
+  const storedSetting: StoredParentSetting = {
+    id: PARENT_SETTING_ID,
+    ...normalizeParentSetting(backup.tables.parentSetting),
+  };
+
+  await database.transaction(
+    'rw',
+    [
+      database.learningRecords,
+      database.dailyTasks,
+      database.parentSettings,
+      database.wordSelectionStates,
+      database.answerEvents,
+    ],
+    async () => {
+      await Promise.all([
+        database.learningRecords.clear(),
+        database.dailyTasks.clear(),
+        database.parentSettings.clear(),
+        database.wordSelectionStates.clear(),
+        database.answerEvents.clear(),
+      ]);
+      await Promise.all([
+        database.learningRecords.bulkPut(backup.tables.learningRecords),
+        database.dailyTasks.bulkPut(backup.tables.dailyTasks),
+        database.parentSettings.put(storedSetting),
+        database.wordSelectionStates.bulkPut(backup.tables.wordSelectionStates),
+        database.answerEvents.bulkPut(backup.tables.answerEvents),
+      ]);
+    },
+  );
 }
 
 export async function clearStudyData(): Promise<void> {

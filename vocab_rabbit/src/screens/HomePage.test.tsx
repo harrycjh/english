@@ -46,6 +46,7 @@ describe('ReviewPage', () => {
         masteredCount={0}
         recentTasks={[]}
         previewWords={[previewWord]}
+        localLifePhotosById={{}}
         onStart={() => undefined}
         onOpenSelection={() => undefined}
         onOpenStats={() => undefined}

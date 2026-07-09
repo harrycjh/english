@@ -34,6 +34,8 @@ vision_extraction_log.txt
 # Web app build artifacts
 vocab_rabbit/node_modules/
 vocab_rabbit/dist/
+vocab_rabbit/test-results/
+vocab_rabbit/playwright-report/
 vocab_rabbit/design-output/
 vocab_rabbit/.superpowers/
 .worktrees/

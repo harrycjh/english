@@ -1844,6 +1844,59 @@ button {
   object-fit: contain;
 }
 
+.word-detail-drawer__related-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.word-detail-drawer__related-card {
+  overflow: hidden;
+  border: 1px solid rgba(174, 216, 255, 0.58);
+  border-radius: 20px;
+  background: #f7fbff;
+}
+
+.word-detail-drawer__related-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #eef6ff;
+}
+
+.word-detail-drawer__related-card div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+}
+
+.word-detail-drawer__related-card strong {
+  color: #163857;
+  font-size: 15px;
+}
+
+.word-detail-drawer__related-card span,
+.word-detail-drawer__related-card p {
+  margin: 0;
+  color: #67819a;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.word-detail-drawer__related-card p {
+  color: #45647f;
+}
+
+.word-detail-drawer__related-card--missing {
+  display: flex;
+  min-height: 150px;
+  justify-content: center;
+  background: linear-gradient(180deg, #fff8e7, #f7fbff);
+}
+
 .word-detail-drawer__placeholder {
   display: grid;
   place-items: center;
@@ -1855,6 +1908,12 @@ button {
 .word-detail-drawer__placeholder strong {
   font-size: 28px;
   color: #163857;
+}
+
+@media (max-width: 720px) {
+  .word-detail-drawer__related-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .word-detail-drawer__stats {
@@ -6602,6 +6661,11 @@ button {
   margin: 2px 0 0;
   font-size: 11px;
   color: #6b614f;
+}
+
+.page--settings .settings-data-item .settings-data-error {
+  color: #b3261e;
+  font-weight: 700;
 }
 
 .page--settings .settings-data-item--danger strong {
