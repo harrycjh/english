@@ -35,7 +35,7 @@ describe('review preview atlas rendering', () => {
       /\.page--review \.review-preview-card__word-image\s*\{[^}]*width:\s*70%;[^}]*height:\s*70%;/s,
     );
     expect(css).toMatch(
-      /\.page--review \.review-preview-card__art\s*\{[^}]*background:\s*#fff;/s,
+      /\.page--review \.review-preview-card__art\s*\{[^}]*background:\s*transparent;/s,
     );
   });
 });
