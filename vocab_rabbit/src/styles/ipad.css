@@ -6881,11 +6881,11 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button.is-active {
 }
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:not(.is-active) {
-  transform: scale(0.9);
+  transform: scale(0.8);
 }
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:not(.is-active):hover {
-  transform: translateY(-1px) scale(0.9);
+  transform: translateY(-1px) scale(0.8);
 }
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(4).is-active {

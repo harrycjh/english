@@ -56,9 +56,9 @@ describe('fixed iPad shell', () => {
     );
   });
 
-  it('reduces inactive dock buttons by ten percent', () => {
+  it('reduces inactive dock buttons by twenty percent', () => {
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:not\(\.is-active\)\s*\{[^}]*transform:\s*scale\(0\.9\);/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:not\(\.is-active\)\s*\{[^}]*transform:\s*scale\(0\.8\);/s,
     );
   });
 });
