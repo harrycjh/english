@@ -3822,7 +3822,7 @@ button {
   min-height: 110px;
   height: 110px;
   padding: 0;
-  background: #f4ead9;
+  background: #fff;
 }
 
 .page--review .review-preview-card__art::before {
