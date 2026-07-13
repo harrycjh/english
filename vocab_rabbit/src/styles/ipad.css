@@ -6087,6 +6087,317 @@ button {
   color: #2e7d32;
 }
 
+/* Statistics reference layout: keep the complete overview above the fixed dock. */
+html[data-shell-mode='ipad-fixed'] .page--stats .stats-mockup-frame {
+  padding: 10px 18px 0;
+  scrollbar-gutter: auto;
+}
+
+.page--stats .stats-shell__chrome {
+  min-height: 24px;
+  margin-bottom: 7px;
+}
+
+.page--stats .stats-shell__brand,
+.page--stats .stats-shell__profile {
+  min-height: 24px;
+  padding: 0 8px;
+  font-size: 10px;
+}
+
+.page--stats .stats-shell__brand {
+  gap: 6px;
+}
+
+.page--stats .stats-shell__brand-mark {
+  width: 11px;
+  height: 11px;
+}
+
+.page--stats .stats-shell__profile {
+  padding-left: 29px;
+  padding-right: 17px;
+}
+
+.page--stats .stats-shell__profile::before {
+  left: 7px;
+  width: 15px;
+  height: 15px;
+}
+
+.page--stats .stats-shell__profile::after {
+  right: 8px;
+  width: 5px;
+  height: 5px;
+}
+
+.page--stats .stats-hero {
+  min-height: 150px;
+  padding: 10px;
+  grid-template-columns: 88px minmax(0, 1fr) 246px;
+  gap: 12px;
+  border-radius: 18px;
+}
+
+.page--stats .stats-hero__art {
+  min-height: 128px;
+  border-radius: 16px;
+  background-size: auto, auto, 88px auto, auto;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.76);
+}
+
+.page--stats .stats-hero__content,
+.page--stats .stats-hero__aside {
+  gap: 6px;
+}
+
+.page--stats .stats-hero .hero-card__eyebrow {
+  min-height: 18px;
+  padding: 0 7px;
+  font-size: 9px;
+}
+
+.page--stats .stats-hero h1 {
+  font-size: 24px;
+  line-height: 1.08;
+}
+
+.page--stats .stats-hero p {
+  max-width: 520px;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.page--stats .stats-hero .review-pill-row {
+  gap: 5px;
+}
+
+.page--stats .stats-hero .review-pill {
+  min-height: 21px;
+  padding: 0 7px;
+  font-size: 9px;
+}
+
+.page--stats .stats-hero__aside {
+  padding: 11px 12px 56px;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.74);
+}
+
+.page--stats .stats-hero__aside strong {
+  font-size: 18px;
+}
+
+.page--stats .stats-hero__focus-art {
+  right: 11px;
+  bottom: 9px;
+  width: 78px;
+  height: 48px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.76);
+}
+
+.page--stats .review-dashboard,
+.page--stats .stats-panel-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  justify-content: stretch;
+}
+
+.page--stats .review-dashboard {
+  margin-top: 10px;
+}
+
+.page--stats .stat-card {
+  min-height: 76px;
+  padding: 9px 10px 9px 46px;
+  border-radius: 14px;
+}
+
+.page--stats .stat-card::before {
+  left: 12px;
+  top: 12px;
+  width: 25px;
+  height: 25px;
+  border-radius: 9px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.72);
+}
+
+.page--stats .stat-card::after {
+  right: -12px;
+  bottom: 5px;
+  width: 72px;
+  height: 26px;
+}
+
+.page--stats .stat-card span,
+.page--stats .section-block__header h2 {
+  font-size: 10px;
+}
+
+.page--stats .stat-card strong {
+  margin-top: 2px;
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.page--stats .stat-card small {
+  margin-top: 3px;
+  font-size: 9px;
+}
+
+.page--stats .stats-panel-grid {
+  margin-top: 10px;
+}
+
+.page--stats .stats-panel {
+  min-height: 268px;
+  padding: 12px;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(155, 104, 24, 0.07);
+}
+
+.page--stats .section-block__header {
+  gap: 3px;
+}
+
+.page--stats .section-block__header h2 {
+  font-size: 14px;
+}
+
+.page--stats .section-block__header p,
+.page--stats .stats-inline-note {
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.page--stats .stats-panel--progress::after {
+  display: none;
+}
+
+.page--stats .stats-panel--progress .section-block__header {
+  max-width: calc(100% - 70px);
+}
+
+.page--stats .stats-donut {
+  margin: 5px auto 6px;
+}
+
+.page--stats .stats-donut-legend {
+  gap: 3px;
+}
+
+.page--stats .stats-donut-legend li,
+.page--stats .stats-hbar__label,
+.page--stats .stats-hbar__value {
+  font-size: 9px;
+}
+
+.page--stats .stats-donut-legend__dot {
+  width: 6px;
+  height: 6px;
+}
+
+.page--stats .stats-donut-legend__value,
+.page--stats .stats-donut-legend__pct {
+  min-width: 27px;
+}
+
+.page--stats .stats-inline-note--encourage {
+  margin-top: 6px;
+  padding: 5px 7px;
+  font-size: 9px;
+}
+
+.page--stats .stats-panel--pressure {
+  padding-bottom: 12px;
+}
+
+.page--stats .stats-panel--pressure::after {
+  display: none;
+}
+
+.page--stats .stats-pressure-bars {
+  margin-top: 6px;
+}
+
+.page--stats .stats-hbar {
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.page--stats .stats-hbar__label {
+  min-width: 35px;
+}
+
+.page--stats .stats-hbar__track {
+  height: 7px;
+}
+
+.page--stats .stats-pressure-summary {
+  gap: 6px;
+  margin-top: 8px;
+  padding: 7px;
+  border-radius: 10px;
+}
+
+.page--stats .stats-pressure-summary__icon {
+  font-size: 16px;
+}
+
+.page--stats .stats-pressure-summary strong,
+.page--stats .stats-pressure-summary p {
+  font-size: 9px;
+}
+
+.page--stats .heatmap {
+  gap: 3px;
+  margin-top: 6px;
+  padding: 5px;
+  border-radius: 12px;
+}
+
+.page--stats .heatmap__cell {
+  border-radius: 5px;
+}
+
+.page--stats .stats-recent-activity {
+  margin-top: 7px;
+}
+
+.page--stats .stats-recent-activity h3,
+.page--stats .stats-coverage-section h3 {
+  margin-bottom: 4px;
+  font-size: 10px;
+}
+
+.page--stats .stats-activity-list {
+  gap: 3px;
+}
+
+.page--stats .stats-activity-list li {
+  gap: 4px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  font-size: 8px;
+}
+
+.page--stats .stats-activity__status {
+  font-size: 10px;
+}
+
+.page--stats .stats-activity__date {
+  min-width: 30px;
+}
+
+.page--stats .stats-coverage-section {
+  margin-top: 8px;
+}
+
+.page--stats .stats-coverage-section:first-child {
+  margin-top: 5px;
+}
+
 @media (max-width: 1100px) {
   .page--stats {
     padding-inline: 10px;

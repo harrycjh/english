@@ -96,6 +96,20 @@ describe('selection card actions', () => {
   });
 });
 
+describe('statistics reference layout', () => {
+  it('keeps the overview in a compact four-column dashboard above the dock', () => {
+    expect(css).toMatch(
+      /\.page--stats \.stats-hero\s*\{[^}]*min-height:\s*150px;[^}]*grid-template-columns:\s*88px minmax\(0, 1fr\) 246px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--stats \.review-dashboard,\s*\.page--stats \.stats-panel-grid\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);[^}]*gap:\s*10px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--stats \.stats-panel\s*\{[^}]*min-height:\s*268px;[^}]*padding:\s*12px;[^}]*border-radius:\s*16px;/s,
+    );
+  });
+});
+
 describe('review preview atlas rendering', () => {
   it('uses cover-style atlas sizing in the portrait preview slot', () => {
     expect(css).toMatch(

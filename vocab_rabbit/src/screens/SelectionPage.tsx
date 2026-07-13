@@ -11,7 +11,7 @@ import {
 } from '../models/word-selection-state';
 import type { WordPayload, WordRecord } from '../models/word';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
-import { getAssetUrl, getStudyText } from '../services/word-service';
+import { getAssetUrl, getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
 import { APP_VERSION } from '../config/app-meta';

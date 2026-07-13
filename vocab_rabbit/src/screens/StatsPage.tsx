@@ -57,11 +57,11 @@ interface DonutSlice {
 }
 
 function DonutChart({ slices, total, centerLabel }: { slices: DonutSlice[]; total: number; centerLabel: string }) {
-  const size = 140;
+  const size = 112;
   const cx = size / 2;
   const cy = size / 2;
-  const radius = 54;
-  const strokeWidth = 22;
+  const radius = 43;
+  const strokeWidth = 18;
 
   let cumulativePercent = 0;
   const paths = slices.filter((s) => s.value > 0).map((slice) => {
