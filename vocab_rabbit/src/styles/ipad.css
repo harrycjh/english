@@ -6875,6 +6875,11 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(4) {
   left: 795px;
 }
 
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button.is-active {
+  z-index: 1;
+  transform: scale(1.5);
+}
+
 html[data-shell-mode='ipad-fixed'] .selection-mockup-frame,
 html[data-shell-mode='ipad-fixed'] .stats-mockup-frame,
 html[data-shell-mode='ipad-fixed'] .settings-mockup-frame {

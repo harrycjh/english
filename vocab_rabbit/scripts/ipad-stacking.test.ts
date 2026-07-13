@@ -43,6 +43,12 @@ describe('fixed iPad shell', () => {
     expect(appSource).toMatch(/<BottomDock\s+active="review"/s);
     expect(reviewSource).not.toContain('<nav className="home-dock review-dock"');
   });
+
+  it('enlarges the active dock button without moving its anchor', () => {
+    expect(css).toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\.is-active\s*\{[^}]*z-index:\s*1;[^}]*transform:\s*scale\(1\.5\);/s,
+    );
+  });
 });
 
 describe('review preview atlas rendering', () => {
