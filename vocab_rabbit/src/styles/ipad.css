@@ -6659,6 +6659,261 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-mockup-frame {
   margin-top: 5px;
 }
 
+/* Statistics one-screen layout: include the diagnostic panels above the dock. */
+.page--stats .stats-hero {
+  min-height: 176px;
+}
+
+.page--stats .stats-hero__art {
+  min-height: 176px;
+}
+
+.page--stats .stats-hero__content,
+.page--stats .stats-hero__aside {
+  gap: 5px;
+}
+
+.page--stats .stats-hero .hero-card__eyebrow {
+  min-height: 18px;
+  font-size: 9px;
+}
+
+.page--stats .stats-hero h1 {
+  font-size: 28px;
+  line-height: 1.02;
+}
+
+.page--stats .stats-hero p {
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.page--stats .stats-hero .review-pill {
+  min-height: 20px;
+  padding: 0 6px;
+  font-size: 8px;
+}
+
+.page--stats .stats-hero__aside {
+  padding: 12px 14px 58px;
+}
+
+.page--stats .stats-hero__aside strong {
+  font-size: 19px;
+}
+
+.page--stats .stats-hero__focus-art {
+  right: 10px;
+  bottom: 8px;
+  width: 122px;
+  height: 76px;
+  border-radius: 12px;
+}
+
+.page--stats .review-dashboard,
+.page--stats .stats-panel-grid {
+  gap: 8px;
+}
+
+.page--stats .review-dashboard,
+.page--stats .stats-panel-grid {
+  margin-top: 8px;
+}
+
+.page--stats .stat-card {
+  min-height: 86px;
+  height: 86px;
+  padding: 11px 12px 9px 50px;
+  border-radius: 15px;
+}
+
+.page--stats .stat-card::before {
+  left: 12px;
+  top: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+}
+
+.page--stats .stat-card span {
+  font-size: 9px;
+}
+
+.page--stats .stat-card strong {
+  margin-top: 2px;
+  font-size: 23px;
+}
+
+.page--stats .stat-card small {
+  margin-top: 2px;
+  font-size: 8px;
+}
+
+.page--stats .stats-panel {
+  height: 215px;
+  min-height: 215px;
+  max-height: 215px;
+  padding: 10px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.page--stats .stats-panel-grid--events {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.page--stats .stats-panel-grid--events .stats-panel {
+  height: 155px;
+  min-height: 155px;
+  max-height: 155px;
+}
+
+.page--stats .section-block__header h2 {
+  font-size: 13px;
+}
+
+.page--stats .section-block__header p,
+.page--stats .stats-inline-note {
+  font-size: 8px;
+  line-height: 1.25;
+}
+
+.page--stats .stats-donut {
+  margin: 2px auto;
+}
+
+.page--stats .stats-donut__center-label {
+  font-size: 7px;
+}
+
+.page--stats .stats-donut__center-value {
+  font-size: 12px;
+}
+
+.page--stats .stats-donut-legend {
+  gap: 1px;
+}
+
+.page--stats .stats-donut-legend li,
+.page--stats .stats-hbar__label,
+.page--stats .stats-hbar__value {
+  font-size: 8px;
+  line-height: 1.15;
+}
+
+.page--stats .stats-donut-legend__dot {
+  width: 5px;
+  height: 5px;
+}
+
+.page--stats .stats-donut-legend__value,
+.page--stats .stats-donut-legend__pct {
+  min-width: 22px;
+}
+
+.page--stats .stats-inline-note--encourage {
+  margin-top: 2px;
+  padding: 3px 5px;
+  font-size: 7px;
+}
+
+.page--stats .stats-pressure-bars {
+  margin-top: 3px;
+}
+
+.page--stats .stats-hbar {
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.page--stats .stats-hbar__label {
+  min-width: 31px;
+}
+
+.page--stats .stats-hbar__track {
+  height: 5px;
+}
+
+.page--stats .stats-pressure-summary {
+  gap: 4px;
+  margin-top: 5px;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.page--stats .stats-pressure-summary__icon {
+  font-size: 13px;
+}
+
+.page--stats .stats-pressure-summary strong,
+.page--stats .stats-pressure-summary p {
+  font-size: 7px;
+}
+
+.page--stats .heatmap {
+  gap: 2px;
+  margin-top: 3px;
+  padding: 3px;
+  border-radius: 9px;
+}
+
+.page--stats .stats-recent-activity {
+  margin-top: 4px;
+}
+
+.page--stats .stats-recent-activity h3,
+.page--stats .stats-coverage-section h3 {
+  margin-bottom: 2px;
+  font-size: 8px;
+}
+
+.page--stats .stats-activity-list {
+  gap: 2px;
+}
+
+.page--stats .stats-activity-list li {
+  gap: 3px;
+  padding: 3px 4px;
+  border-radius: 6px;
+  font-size: 7px;
+}
+
+.page--stats .stats-activity__status {
+  font-size: 8px;
+}
+
+.page--stats .stats-activity__date {
+  min-width: 26px;
+}
+
+.page--stats .stats-coverage-section {
+  margin-top: 4px;
+}
+
+.page--stats .stats-coverage-section:first-child {
+  margin-top: 3px;
+}
+
+.page--stats .stats-panel-grid--events .stats-activity-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.page--stats .stats-panel-grid--events .stats-activity-list li {
+  min-width: 0;
+}
+
+.page--stats .stats-panel-grid--events .primary-button,
+.page--stats .stats-panel-grid--events .secondary-button {
+  min-height: 28px;
+  margin-top: 6px;
+  padding: 0 10px;
+  border-radius: 9px;
+  font-size: 8px;
+}
+
 @media (max-width: 1100px) {
   .page--stats {
     padding-inline: 10px;

@@ -119,15 +119,21 @@ describe('selection one-screen layout', () => {
 });
 
 describe('statistics reference layout', () => {
-  it('keeps the overview in a compact four-column dashboard above the dock', () => {
+  it('keeps overview and diagnostics in a compact dashboard above the dock', () => {
     expect(css).toMatch(
-      /\.page--stats \.stats-hero\s*\{[^}]*min-height:\s*228px;[^}]*grid-template-columns:\s*190px minmax\(0, 1fr\) 330px;/s,
+      /\.page--stats \.stats-hero\s*\{[^}]*min-height:\s*176px;/s,
     );
     expect(css).toMatch(
       /\.page--stats \.review-dashboard,\s*\.page--stats \.stats-panel-grid\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);[^}]*gap:\s*12px;/s,
     );
     expect(css).toMatch(
-      /\.page--stats \.stats-panel\s*\{[^}]*height:\s*295px;[^}]*min-height:\s*295px;[^}]*max-height:\s*295px;[^}]*margin:\s*0;[^}]*padding:\s*14px;[^}]*border-radius:\s*18px;/s,
+      /\.page--stats \.stats-panel\s*\{[^}]*height:\s*215px;[^}]*min-height:\s*215px;[^}]*max-height:\s*215px;[^}]*padding:\s*10px;[^}]*overflow:\s*hidden;/s,
+    );
+    expect(css).toMatch(
+      /\.page--stats \.stats-panel-grid--events\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\);/s,
+    );
+    expect(css).toMatch(
+      /\.page--stats \.stats-panel-grid--events \.stats-panel\s*\{[^}]*height:\s*155px;[^}]*min-height:\s*155px;[^}]*max-height:\s*155px;/s,
     );
   });
 });
