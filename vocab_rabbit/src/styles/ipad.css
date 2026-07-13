@@ -3837,6 +3837,7 @@ button {
   display: block;
   width: 70%;
   height: 70%;
+  transform: translateY(-5px);
   object-fit: cover;
 }
 
