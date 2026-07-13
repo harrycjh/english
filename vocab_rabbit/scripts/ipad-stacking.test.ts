@@ -44,6 +44,12 @@ describe('fixed iPad shell', () => {
     expect(reviewSource).not.toContain('<nav className="home-dock review-dock"');
   });
 
+  it('does not reserve a colored spacer beneath scrollable main-page content', () => {
+    expect(css).not.toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.selection-mockup-frame,\s*html\[data-shell-mode='ipad-fixed'\] \.stats-mockup-frame,\s*html\[data-shell-mode='ipad-fixed'\] \.settings-mockup-frame\s*\{[^}]*padding-bottom:\s*96px;/s,
+    );
+  });
+
   it('enlarges the active dock button without moving its anchor', () => {
     expect(css).toMatch(
       /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\.is-active\s*\{[^}]*z-index:\s*1;[^}]*transform:\s*scale\(1\.5\);/s,

@@ -6892,9 +6892,3 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(4).is-acti
   transform: scale(1.725);
   background-size: auto 100%;
 }
-
-html[data-shell-mode='ipad-fixed'] .selection-mockup-frame,
-html[data-shell-mode='ipad-fixed'] .stats-mockup-frame,
-html[data-shell-mode='ipad-fixed'] .settings-mockup-frame {
-  padding-bottom: 96px;
-}
