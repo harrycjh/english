@@ -23,19 +23,22 @@ describe('modal stacking', () => {
 });
 
 describe('fixed iPad shell', () => {
-  it('uses one 1024 by 768 canvas for every device', () => {
+  it('uses one 1194 by 834 iPad Pro canvas for every device', () => {
     expect(css).toMatch(
-      /:root\s*\{[^}]*--ipad-pro-11-landscape-width:\s*1024px;[^}]*--ipad-pro-11-landscape-height:\s*768px;[^}]*--ipad-shell-padding:\s*0px;[^}]*--ipad-shell-stage-width:\s*var\(--ipad-pro-11-landscape-width\);[^}]*--ipad-shell-stage-height:\s*var\(--ipad-pro-11-landscape-height\);/s,
+      /:root\s*\{[^}]*--ipad-pro-11-landscape-width:\s*1194px;[^}]*--ipad-pro-11-landscape-height:\s*834px;[^}]*--ipad-shell-padding:\s*0px;[^}]*--ipad-shell-stage-width:\s*var\(--ipad-pro-11-landscape-width\);[^}]*--ipad-shell-stage-height:\s*var\(--ipad-pro-11-landscape-height\);/s,
     );
     expect(appSource).toContain('const shouldLockIpadShell = true;');
+    expect(css).toMatch(
+      /\.page--selection \.selection-layout\s*\{[^}]*grid-template-columns:\s*250px minmax\(0, 1fr\) 242px;[^}]*gap:\s*18px;/s,
+    );
   });
 
   it('pins every route dock to the fixed iPad canvas instead of the browser viewport', () => {
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*top:\s*calc\(var\(--ipad-shell-stage-height\) - 44px - 77px\);[^}]*bottom:\s*auto;[^}]*width:\s*975px;[^}]*height:\s*77px;/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*top:\s*calc\(var\(--ipad-shell-stage-height\) - 51px - 90px\);[^}]*bottom:\s*auto;[^}]*width:\s*1137px;[^}]*height:\s*90px;/s,
     );
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\s*\{[^}]*top:\s*14px;[^}]*width:\s*140px;[^}]*height:\s*48px;/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\s*\{[^}]*top:\s*16px;[^}]*width:\s*163px;[^}]*height:\s*56px;/s,
     );
   });
 

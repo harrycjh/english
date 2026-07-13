@@ -63,8 +63,8 @@ const reviewManifestByFile = Object.fromEntries(
 
 const REVIEW_FRAME_WIDTH = 1158;
 const REVIEW_FRAME_HEIGHT = 808;
-const IPAD_REFERENCE_WIDTH = 1024;
-const IPAD_REFERENCE_HEIGHT = 768;
+const IPAD_REFERENCE_WIDTH = 1194;
+const IPAD_REFERENCE_HEIGHT = 834;
 const REVIEW_HEATMAP_WEEKDAY_LABELS = ['日', '一', '二', '三', '四', '五', '六'] as const;
 const REVIEW_HEATMAP_REFERENCE_CELLS: ReviewHeatmapLevel[] = [
   'soft',

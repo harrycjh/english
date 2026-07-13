@@ -1,6 +1,6 @@
 :root {
-  --ipad-pro-11-landscape-width: 1024px;
-  --ipad-pro-11-landscape-height: 768px;
+  --ipad-pro-11-landscape-width: 1194px;
+  --ipad-pro-11-landscape-height: 834px;
   --ipad-shell-padding: 0px;
   --ipad-shell-stage-width: var(--ipad-pro-11-landscape-width);
   --ipad-shell-stage-height: var(--ipad-pro-11-landscape-height);
@@ -3020,10 +3020,10 @@ button {
 
 .page--review .review-mockup-frame {
   position: relative;
-  width: 1024px;
-  min-width: 1024px;
-  height: 768px;
-  min-height: 768px;
+  width: var(--ipad-shell-stage-width);
+  min-width: var(--ipad-shell-stage-width);
+  height: var(--ipad-shell-stage-height);
+  min-height: var(--ipad-shell-stage-height);
   margin: 0 auto;
   padding: 0;
   border-radius: var(--review-shell-radius);
@@ -4396,10 +4396,10 @@ button {
 
 .page--selection .selection-mockup-frame {
   position: relative;
-  width: 1024px;
-  min-width: 1024px;
-  height: 768px;
-  min-height: 768px;
+  width: var(--ipad-shell-stage-width);
+  min-width: var(--ipad-shell-stage-width);
+  height: var(--ipad-shell-stage-height);
+  min-height: var(--ipad-shell-stage-height);
   margin: 0 auto;
   padding: 14px 22px 0;
   border-radius: 30px;
@@ -4499,8 +4499,8 @@ button {
 }
 
 .page--selection .selection-layout {
-  grid-template-columns: 214px 530px 206px;
-  gap: 15px;
+  grid-template-columns: 250px minmax(0, 1fr) 242px;
+  gap: 18px;
   margin-top: 10px;
   align-items: start;
   flex: 1;
@@ -5248,7 +5248,7 @@ button {
   }
 
   .page--selection .selection-mockup-frame {
-    min-width: 1024px;
+    min-width: var(--ipad-shell-stage-width);
   }
 }
 
@@ -5260,8 +5260,8 @@ button {
 
 .page--stats .stats-mockup-frame {
   position: relative;
-  width: 1024px;
-  min-width: 1024px;
+  width: var(--ipad-shell-stage-width);
+  min-width: var(--ipad-shell-stage-width);
   margin: 0 auto;
   padding: 0;
   border-radius: 0;
@@ -6088,7 +6088,7 @@ button {
   }
 
   .page--stats .stats-mockup-frame {
-    min-width: 1024px;
+    min-width: var(--ipad-shell-stage-width);
   }
 }
 
@@ -6100,8 +6100,8 @@ button {
 
 .page--settings .settings-mockup-frame {
   position: relative;
-  width: 1024px;
-  min-width: 1024px;
+  width: var(--ipad-shell-stage-width);
+  min-width: var(--ipad-shell-stage-width);
   margin: 0 auto;
   padding: 0;
   border-radius: 0;
@@ -6759,7 +6759,7 @@ button {
   }
 
   .page--settings .settings-mockup-frame {
-    min-width: 1024px;
+    min-width: var(--ipad-shell-stage-width);
   }
 }
 
@@ -6840,10 +6840,10 @@ button {
 /* iPad fixed shell: pin dock to the bottom of the stage and keep scrollable
    content clear of it. */
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock {
-  top: calc(var(--ipad-shell-stage-height) - 44px - 77px);
+  top: calc(var(--ipad-shell-stage-height) - 51px - 90px);
   bottom: auto;
-  width: 975px;
-  height: 77px;
+  width: 1137px;
+  height: 90px;
   padding: 0;
   gap: 0;
   justify-content: initial;
@@ -6852,25 +6852,25 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock {
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button {
   position: absolute;
-  top: 14px;
-  width: 140px;
-  height: 48px;
+  top: 16px;
+  width: 163px;
+  height: 56px;
 }
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(1) {
-  left: 87px;
+  left: 101px;
 }
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(2) {
-  left: 323px;
+  left: 377px;
 }
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(3) {
-  left: 559px;
+  left: 652px;
 }
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(4) {
-  left: 795px;
+  left: 927px;
 }
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button.is-active {
