@@ -81,6 +81,23 @@ describe('fixed iPad shell', () => {
   });
 });
 
+describe('selection card actions', () => {
+  it('places clear action buttons five pixels lower in each card', () => {
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-card__body\s*\{[^}]*height:\s*137px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-card footer\s*\{[^}]*padding-top:\s*0;[^}]*font-size:\s*9px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-card__actions\s*\{[^}]*padding:\s*0 11px 5px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-card__actions \.secondary-button\s*\{[^}]*border:\s*1px solid rgba\(229, 198, 145, 0\.86\);[^}]*background:\s*rgba\(255, 255, 255, 0\.96\);/s,
+    );
+  });
+});
+
 describe('review preview atlas rendering', () => {
   it('uses cover-style atlas sizing in the portrait preview slot', () => {
     expect(css).toMatch(
