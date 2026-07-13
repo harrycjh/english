@@ -4906,24 +4906,6 @@ button {
   font-size: 11px;
 }
 
-.page--selection .selection-word-card footer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: auto;
-  padding-top: 0;
-  border-top: 1px solid rgba(237, 225, 203, 0.96);
-  color: #6b5b45;
-  font-size: 9px;
-}
-
-.page--selection .selection-word-card__source-mark {
-  width: 14px;
-  height: 14px;
-  background: url('/design-reference/slices/review-oxford-tree-icon.png?v=1') center center / contain no-repeat;
-  flex: 0 0 auto;
-}
-
 .page--selection .selection-word-card__actions,
 .page--selection .selection-word-card__meta {
   display: none;

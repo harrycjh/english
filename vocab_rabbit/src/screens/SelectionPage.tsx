@@ -11,7 +11,7 @@ import {
 } from '../models/word-selection-state';
 import type { WordPayload, WordRecord } from '../models/word';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
-import { getAssetUrl, getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
+import { getAssetUrl, getStudyText } from '../services/word-service';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
 import { APP_VERSION } from '../config/app-meta';
@@ -159,7 +159,6 @@ function SelectionWordCard({
   const categoryLabel = visualOverride?.categoryLabel ?? word.category;
   const chineseLabel = visualOverride?.chineseLabel ?? word.chinese;
   const partOfSpeechLabel = visualOverride?.partOfSpeechLabel ?? formatPartOfSpeech(word.partOfSpeech);
-  const sourceLabel = visualOverride?.sourceLabel ?? getPrimaryOxfordRefLabel(word);
   const colorSlot = getCategoryColorSlot(categoryLabel);
 
   return (
@@ -192,10 +191,6 @@ function SelectionWordCard({
             <small>{partOfSpeechLabel}</small>
           </div>
         </div>
-        <footer>
-          <span className="selection-word-card__source-mark" aria-hidden="true" />
-          <span>{sourceLabel ? sourceLabel : 'Oxford Tree · 暂未回填位置'}</span>
-        </footer>
       </button>
       <div className="selection-word-card__actions">
         <button className={isEnabled ? 'secondary-button' : 'primary-button'} type="button" onClick={onToggleEnabled}>

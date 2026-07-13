@@ -82,13 +82,11 @@ describe('fixed iPad shell', () => {
 });
 
 describe('selection card actions', () => {
-  it('places clear action buttons five pixels lower in each card', () => {
+  it('keeps the action buttons clear after removing the Oxford Tree source line', () => {
     expect(css).toMatch(
       /\.page--selection \.selection-word-card__body\s*\{[^}]*height:\s*137px;/s,
     );
-    expect(css).toMatch(
-      /\.page--selection \.selection-word-card footer\s*\{[^}]*padding-top:\s*0;[^}]*font-size:\s*9px;/s,
-    );
+    expect(css).not.toContain('.page--selection .selection-word-card footer');
     expect(css).toMatch(
       /\.page--selection \.selection-word-card__actions\s*\{[^}]*padding:\s*0 11px 5px;/s,
     );
