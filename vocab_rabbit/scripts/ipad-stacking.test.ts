@@ -50,6 +50,12 @@ describe('fixed iPad shell', () => {
     );
   });
 
+  it('does not cast a translucent overlay above the fixed dock', () => {
+    expect(css).toMatch(
+      /\.app-bottom-dock\s*\{[^}]*box-shadow:\s*inset 0 1px 0 rgba\(241, 214, 171, 0\.62\);/s,
+    );
+  });
+
   it('enlarges the active dock button without moving its anchor', () => {
     expect(css).toMatch(
       /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\.is-active\s*\{[^}]*z-index:\s*1;[^}]*transform:\s*scale\(1\.5\);/s,
