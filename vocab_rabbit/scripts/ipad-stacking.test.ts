@@ -49,6 +49,12 @@ describe('fixed iPad shell', () => {
       /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\.is-active\s*\{[^}]*z-index:\s*1;[^}]*transform:\s*scale\(1\.5\);/s,
     );
   });
+
+  it('compensates for the wider settings active artwork', () => {
+    expect(css).toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:nth-child\(4\)\.is-active\s*\{[^}]*background-size:\s*auto 100%;/s,
+    );
+  });
 });
 
 describe('review preview atlas rendering', () => {
