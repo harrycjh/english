@@ -32,7 +32,7 @@ describe('review preview atlas rendering', () => {
       /\.page--review \.review-preview-card__art\s*\{[^}]*display:\s*flex;[^}]*align-items:\s*center;[^}]*justify-content:\s*center;/s,
     );
     expect(css).toMatch(
-      /\.page--review \.review-preview-card__word-image\s*\{[^}]*width:\s*70%;[^}]*height:\s*70%;[^}]*transform:\s*translateY\(-5px\);/s,
+      /\.page--review \.review-preview-card__word-image\s*\{[^}]*width:\s*70%;[^}]*height:\s*70%;[^}]*transform:\s*translateY\(-10px\);/s,
     );
     expect(css).toMatch(
       /\.page--review \.review-preview-card__art\s*\{[^}]*background:\s*transparent;/s,
