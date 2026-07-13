@@ -7091,6 +7091,393 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-mockup-frame {
   }
 }
 
+/* Settings reference layout: compact four-column control console. */
+html[data-shell-mode='ipad-fixed'] .page--settings .settings-mockup-frame {
+  padding: 18px 42px 0;
+  scrollbar-gutter: auto;
+}
+
+.page--settings .settings-shell__chrome {
+  min-height: 24px;
+  margin-bottom: 8px;
+}
+
+.page--settings .settings-shell__brand,
+.page--settings .settings-shell__profile {
+  min-height: 24px;
+  padding: 0 8px;
+  font-size: 10px;
+}
+
+.page--settings .settings-shell__brand {
+  gap: 6px;
+}
+
+.page--settings .settings-shell__brand-mark {
+  width: 11px;
+  height: 11px;
+}
+
+.page--settings .settings-shell__profile {
+  padding-left: 29px;
+  padding-right: 17px;
+}
+
+.page--settings .settings-shell__profile::before {
+  left: 7px;
+  width: 15px;
+  height: 15px;
+}
+
+.page--settings .settings-shell__profile::after {
+  right: 8px;
+  width: 5px;
+  height: 5px;
+}
+
+.page--settings .settings-hero {
+  min-height: 280px;
+  padding: 0;
+  grid-template-columns: 207px minmax(0, 1fr) 370px;
+  gap: 18px;
+  border-radius: 0;
+  background: transparent;
+}
+
+.page--settings .settings-hero__art {
+  min-height: 280px;
+  border-radius: 18px;
+  background: url('/design-reference/slices/settings-rabbit-hero-crop.png?v=1') center / cover no-repeat;
+  box-shadow: none;
+}
+
+.page--settings .settings-hero__content {
+  justify-content: flex-start;
+  gap: 9px;
+  padding-top: 22px;
+}
+
+.page--settings .settings-hero__content .hero-card__eyebrow {
+  align-self: flex-start;
+  min-height: 22px;
+  padding: 0;
+  color: #58769a;
+  font-size: 10px;
+  background: transparent;
+}
+
+.page--settings .settings-hero h1 {
+  font-size: 36px;
+  line-height: 1.06;
+}
+
+.page--settings .settings-hero p {
+  max-width: 500px;
+  font-size: 12px;
+  line-height: 1.42;
+}
+
+.page--settings .settings-hero__content > .review-pill-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: min(100%, 430px);
+}
+
+.page--settings .settings-hero__content > .review-pill-row .review-pill {
+  min-height: 46px;
+  padding: 0 10px;
+  border-radius: 12px;
+  font-size: 10px;
+}
+
+.page--settings .settings-hero__aside {
+  gap: 8px;
+  padding: 16px 18px 78px;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.74);
+}
+
+.page--settings .settings-hero__label {
+  min-height: 22px;
+  padding: 0;
+  font-size: 10px;
+  background: transparent;
+}
+
+.page--settings .settings-hero__aside strong {
+  font-size: 23px;
+}
+
+.page--settings .settings-hero__aside p {
+  max-width: 170px;
+}
+
+.page--settings .settings-hero__aside .review-pill-row {
+  gap: 5px;
+}
+
+.page--settings .settings-hero__aside .review-pill {
+  min-height: 22px;
+  padding: 0 7px;
+  font-size: 9px;
+}
+
+.page--settings .settings-hero__focus-art {
+  right: 12px;
+  bottom: 10px;
+  width: 182px;
+  height: 118px;
+  border-radius: 0;
+  background: url('/design-reference/slices/settings-focus-house.png?v=1') right bottom / contain no-repeat;
+  box-shadow: none;
+  mix-blend-mode: multiply;
+}
+
+.page--settings .settings-panel-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-areas: 'volume experience device danger';
+  gap: 12px;
+  margin-top: 12px;
+  justify-content: stretch;
+}
+
+.page--settings .settings-panel {
+  height: 390px;
+  min-height: 390px;
+  max-height: 390px;
+  margin: 0;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(235, 216, 181, 0.62);
+  box-shadow: 0 8px 18px rgba(155, 104, 24, 0.07);
+}
+
+.page--settings .settings-panel--volume,
+.page--settings .settings-panel--experience,
+.page--settings .settings-panel--device {
+  background: rgba(255, 253, 247, 0.96);
+}
+
+.page--settings .settings-panel--danger {
+  background: rgba(255, 249, 245, 0.97);
+}
+
+.page--settings .settings-panel .section-block__header {
+  display: block;
+  gap: 3px;
+}
+
+.page--settings .settings-panel .section-block__header h2 {
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.page--settings .settings-panel .section-block__header p {
+  margin-top: 3px;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.page--settings .settings-panel__icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+  font-size: 10px;
+}
+
+.page--settings .settings-control-grid,
+.page--settings .settings-toggle-list,
+.page--settings .settings-device-list,
+.page--settings .settings-data-list {
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.page--settings .settings-number-control,
+.page--settings .settings-toggle-row,
+.page--settings .settings-device-item,
+.page--settings .settings-data-item {
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.page--settings .settings-number-control {
+  display: block;
+  min-height: 126px;
+  padding: 10px;
+}
+
+.page--settings .settings-number-control__header {
+  gap: 5px;
+  margin-bottom: 7px;
+}
+
+.page--settings .settings-number-control__icon {
+  font-size: 13px;
+}
+
+.page--settings .settings-number-control__label {
+  font-size: 11px;
+}
+
+.page--settings .settings-number-control__body {
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.page--settings .settings-stepper {
+  gap: 5px;
+  padding: 5px;
+  border-radius: 12px;
+}
+
+.page--settings .settings-stepper button {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+.page--settings .settings-number-control strong {
+  margin-top: 0;
+  font-size: 27px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.page--settings .settings-number-control strong small {
+  font-size: 10px;
+}
+
+.page--settings .settings-number-control__hint,
+.page--settings .settings-number-control__desc {
+  font-size: 9px;
+}
+
+.page--settings .settings-toggle-list {
+  gap: 7px;
+}
+
+.page--settings .settings-toggle-row {
+  grid-template-columns: 18px minmax(0, 1fr) 38px;
+  column-gap: 7px;
+  min-height: 68px;
+  padding: 8px 9px;
+}
+
+.page--settings .settings-toggle-row__icon {
+  font-size: 14px;
+}
+
+.page--settings .settings-toggle-row__text strong,
+.page--settings .settings-device-item strong,
+.page--settings .settings-data-item strong {
+  font-size: 10px;
+}
+
+.page--settings .settings-toggle-row__text p,
+.page--settings .settings-device-item p,
+.page--settings .settings-data-item p {
+  margin-top: 1px;
+  font-size: 8px;
+  line-height: 1.3;
+}
+
+.page--settings .settings-toggle-button {
+  position: relative;
+  min-width: 36px;
+  width: 36px;
+  min-height: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 999px;
+  justify-self: end;
+  background: #e9e1d6;
+  box-shadow: inset 0 0 0 1px rgba(117, 95, 68, 0.12);
+}
+
+.page--settings .settings-toggle-button::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(71, 50, 27, 0.2);
+  transition: transform 160ms ease;
+}
+
+.page--settings .settings-toggle-button.is-on {
+  background: #ff9500;
+  box-shadow: inset 0 0 0 1px rgba(216, 111, 0, 0.12);
+}
+
+.page--settings .settings-toggle-button.is-on::before {
+  transform: translateX(16px);
+}
+
+.page--settings .settings-device-item {
+  grid-template-columns: 18px minmax(0, 1fr) 46px;
+  column-gap: 7px;
+  min-height: 76px;
+  padding: 9px;
+}
+
+.page--settings .settings-device-item__icon {
+  font-size: 15px;
+}
+
+.page--settings .settings-badge {
+  width: 46px;
+  min-height: 20px;
+  padding: 0 5px;
+  font-size: 8px;
+}
+
+.page--settings .settings-data-list {
+  gap: 6px;
+}
+
+.page--settings .settings-data-item {
+  grid-template-columns: 16px minmax(0, 1fr) 72px;
+  column-gap: 6px;
+  min-height: 55px;
+  padding: 6px 8px;
+}
+
+.page--settings .settings-data-item__icon {
+  font-size: 13px;
+}
+
+.page--settings .settings-data-item p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.page--settings .settings-data-item .secondary-button,
+.page--settings .secondary-button {
+  width: 72px;
+  min-height: 28px;
+  padding: 0 6px;
+  border-radius: 8px;
+  font-size: 9px;
+}
+
+.page--settings .settings-data-item--danger {
+  background: rgba(255, 234, 229, 0.86);
+}
+
+.page--settings .settings-danger-button {
+  background: linear-gradient(135deg, #f15b48, #f36d53);
+}
+
 /* ─── Unified bottom navigation dock (selection / stats / settings) ─── */
 .app-bottom-dock {
   position: fixed;

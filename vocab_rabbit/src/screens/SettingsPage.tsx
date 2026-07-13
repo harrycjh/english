@@ -299,7 +299,7 @@ export function SettingsPage({
           </div>
         </section>
 
-        {/* ─── 2×2 Panel Grid ─── */}
+        {/* ─── Four-column settings console ─── */}
         <section className="settings-panel-grid">
           {/* Top-left: 学习负荷设置 */}
           <section className="section-block settings-panel settings-panel--volume">

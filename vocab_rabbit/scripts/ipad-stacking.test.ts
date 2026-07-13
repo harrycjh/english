@@ -110,6 +110,29 @@ describe('statistics reference layout', () => {
   });
 });
 
+describe('settings reference layout', () => {
+  it('keeps the hero and all four settings groups visible above the dock', () => {
+    expect(css).toMatch(
+      /\.page--settings \.settings-hero\s*\{[^}]*min-height:\s*280px;[^}]*grid-template-columns:\s*207px minmax\(0, 1fr\) 370px;[^}]*gap:\s*18px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--settings \.settings-panel-grid\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);[^}]*grid-template-areas:\s*'volume experience device danger';[^}]*gap:\s*12px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--settings \.settings-panel\s*\{[^}]*height:\s*390px;[^}]*min-height:\s*390px;[^}]*max-height:\s*390px;[^}]*margin:\s*0;[^}]*padding:\s*14px;/s,
+    );
+  });
+
+  it('uses compact switch controls that preserve the existing setting actions', () => {
+    expect(css).toMatch(
+      /\.page--settings \.settings-toggle-button\s*\{[^}]*min-width:\s*36px;[^}]*width:\s*36px;[^}]*min-height:\s*20px;[^}]*height:\s*20px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--settings \.settings-toggle-button\.is-on::before\s*\{[^}]*transform:\s*translateX\(16px\);/s,
+    );
+  });
+});
+
 describe('review preview atlas rendering', () => {
   it('uses cover-style atlas sizing in the portrait preview slot', () => {
     expect(css).toMatch(
