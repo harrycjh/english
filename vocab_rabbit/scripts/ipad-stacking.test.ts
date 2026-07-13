@@ -26,4 +26,13 @@ describe('review preview atlas rendering', () => {
       /\.page--review \.review-preview-card__word-image\.word-image--atlas\s*\{[^}]*background-size:\s*auto 300% !important;/s,
     );
   });
+
+  it('centers preview images at seventy percent of the art slot', () => {
+    expect(css).toMatch(
+      /\.page--review \.review-preview-card__art\s*\{[^}]*display:\s*flex;[^}]*align-items:\s*center;[^}]*justify-content:\s*center;/s,
+    );
+    expect(css).toMatch(
+      /\.page--review \.review-preview-card__word-image\s*\{[^}]*width:\s*70%;[^}]*height:\s*70%;/s,
+    );
+  });
 });
