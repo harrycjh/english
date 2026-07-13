@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isLoopbackAddress } from './scripts/dev-life-photo-access.mjs';
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const devLifePhotosDir = path.join(rootDir, 'dev-life-photos');
@@ -70,9 +71,15 @@ function devLifePhotosPlugin(): Plugin {
 
       server.middlewares.use((req, res, next) => {
         const pathname = req.url ? req.url.split('?')[0] : '';
+        const isLocalRequest = isLoopbackAddress(req.socket.remoteAddress);
 
         // 1) Serve local life-photo image files.
         if (pathname.startsWith('/life-photos/')) {
+          if (!isLocalRequest) {
+            res.statusCode = 404;
+            res.end('Not found');
+            return;
+          }
           const relative = decodeURIComponent(pathname.replace(/^\/life-photos\//, ''));
           const filePath = path.join(photosRoot, relative);
           if (!filePath.startsWith(photosRoot) || !fs.existsSync(filePath)) {
@@ -91,7 +98,7 @@ function devLifePhotosPlugin(): Plugin {
 
         // 2) Merge local life photos into the shipped related-media manifest.
         if (pathname === '/content/words/word_related_media.json') {
-          if (!fs.existsSync(localManifestFile)) {
+          if (!isLocalRequest || !fs.existsSync(localManifestFile)) {
             next();
             return;
           }

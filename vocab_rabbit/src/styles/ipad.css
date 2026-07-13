@@ -1736,7 +1736,7 @@ button {
 .word-detail-drawer-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 30;
+  z-index: 80;
   display: flex;
   justify-content: flex-end;
   background: rgba(17, 27, 41, 0.28);
