@@ -58,16 +58,6 @@ function getPreviewWords(payload: WordPayload | null, task: DailyTaskSummary | n
   return wordIds.map((wordId) => wordsById.get(wordId)).filter(Boolean) as WordPayload['words'];
 }
 
-function isIpadFamilyDevice() {
-  if (typeof window === 'undefined') {
-    return false;
-  }
-
-  const platform = window.navigator.platform ?? '';
-  const hasTouch = window.navigator.maxTouchPoints > 1;
-  return /iPad/i.test(window.navigator.userAgent) || (platform === 'MacIntel' && hasTouch);
-}
-
 export default function App() {
   const [route, setRoute] = useState<AppRoute>('home');
   const [payload, setPayload] = useState<WordPayload | null>(null);
@@ -162,7 +152,7 @@ export default function App() {
     const body = document.body;
 
     function syncShellState() {
-      const shouldLockIpadShell = isIpadFamilyDevice() && (parentSetting?.preferLandscape ?? true);
+      const shouldLockIpadShell = true;
       const orientation = window.innerWidth >= window.innerHeight ? 'landscape' : 'portrait';
       const shellMode = shouldLockIpadShell ? 'ipad-fixed' : 'fluid';
 
@@ -184,7 +174,7 @@ export default function App() {
       delete body.dataset.shellMode;
       delete body.dataset.orientation;
     };
-  }, [parentSetting?.preferLandscape]);
+  }, []);
 
   const previewWords = useMemo(() => getPreviewWords(payload, task), [payload, task]);
   const masteredCount = useMemo(

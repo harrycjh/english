@@ -1,9 +1,9 @@
 :root {
   --ipad-pro-11-landscape-width: 1024px;
   --ipad-pro-11-landscape-height: 768px;
-  --ipad-shell-padding: 18px;
-  --ipad-shell-stage-width: min(100vw, var(--ipad-pro-11-landscape-width));
-  --ipad-shell-stage-height: min(100dvh, var(--ipad-pro-11-landscape-height));
+  --ipad-shell-padding: 0px;
+  --ipad-shell-stage-width: var(--ipad-pro-11-landscape-width);
+  --ipad-shell-stage-height: var(--ipad-pro-11-landscape-height);
   --ipad-shell-frame-height: calc(var(--ipad-shell-stage-height) - (var(--ipad-shell-padding) * 2));
   color-scheme: light;
   font-family: 'Avenir Next', 'PingFang SC', 'Helvetica Neue', sans-serif;

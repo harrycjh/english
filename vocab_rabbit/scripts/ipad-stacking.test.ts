@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const css = readFileSync(new URL('../src/styles/ipad.css', import.meta.url), 'utf8');
+const appSource = readFileSync(new URL('../src/app/App.tsx', import.meta.url), 'utf8');
 
 function getZIndex(selector: string): number {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -17,6 +18,15 @@ describe('modal stacking', () => {
     expect(getZIndex('.word-detail-drawer-backdrop')).toBeGreaterThan(
       getZIndex('.app-bottom-dock'),
     );
+  });
+});
+
+describe('fixed iPad shell', () => {
+  it('uses one 1024 by 768 canvas for every device', () => {
+    expect(css).toMatch(
+      /:root\s*\{[^}]*--ipad-pro-11-landscape-width:\s*1024px;[^}]*--ipad-pro-11-landscape-height:\s*768px;[^}]*--ipad-shell-padding:\s*0px;[^}]*--ipad-shell-stage-width:\s*var\(--ipad-pro-11-landscape-width\);[^}]*--ipad-shell-stage-height:\s*var\(--ipad-pro-11-landscape-height\);/s,
+    );
+    expect(appSource).toContain('const shouldLockIpadShell = true;');
   });
 });
 
