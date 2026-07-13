@@ -11,7 +11,7 @@ import {
 } from '../models/word-selection-state';
 import type { WordPayload, WordRecord } from '../models/word';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
-import { getAssetUrl, getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
+import { getAssetUrl, getStudyText } from '../services/word-service';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
 import { APP_VERSION } from '../config/app-meta';
@@ -217,8 +217,6 @@ function SelectionWordRow({
   isEnabled,
   isPaused,
 }: SelectionWordRowProps) {
-  const oxfordLabel = getPrimaryOxfordRefLabel(word);
-
   return (
     <article className="selection-word-row">
       <button className="selection-word-row__main" type="button" onClick={onOpenDetails}>
@@ -226,7 +224,6 @@ function SelectionWordRow({
         <span>{word.chinese}</span>
         <span>{word.category}</span>
         <span>{word.partOfSpeech}</span>
-        <span>{oxfordLabel ?? '暂无定位'}</span>
       </button>
       <span className={`selection-status-chip selection-status-chip--${statusTone}`}>{statusLabel}</span>
       <span className="selection-word-row__updated">{updatedAtLabel}</span>

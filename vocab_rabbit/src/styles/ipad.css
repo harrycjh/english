@@ -4840,16 +4840,16 @@ button {
 
 .page--selection .selection-word-card__content {
   display: grid;
-  grid-template-columns: 52px minmax(0, 1fr);
+  grid-template-columns: 68px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
-  margin-top: 24px;
+  margin-top: 10px;
 }
 
 .page--selection .selection-word-card__art {
   display: grid;
   place-items: center;
-  height: 60px;
+  height: 78px;
   border-radius: 12px;
   overflow: hidden;
   background:
@@ -4880,6 +4880,7 @@ button {
   flex-direction: column;
   gap: 3px;
   min-width: 0;
+  margin-left: 10px;
 }
 
 .page--selection .selection-word-card h3,
@@ -5372,9 +5373,9 @@ html[data-shell-mode='ipad-fixed'] .page--selection .selection-layout {
 
 .page--selection .selection-word-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto 58px 100px;
+  grid-template-columns: minmax(0, 1fr) auto 46px 76px;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   height: 56px;
   min-height: 56px;
   padding: 7px 9px;
@@ -5383,7 +5384,7 @@ html[data-shell-mode='ipad-fixed'] .page--selection .selection-layout {
 
 .page--selection .selection-word-row__main {
   display: grid;
-  grid-template-columns: 72px 52px 68px 42px minmax(0, 1fr);
+  grid-template-columns: 144px 44px minmax(0, 1fr) 32px;
   align-items: center;
   gap: 4px;
   min-width: 0;
@@ -5417,15 +5418,15 @@ html[data-shell-mode='ipad-fixed'] .page--selection .selection-layout {
 
 .page--selection .selection-word-row__actions {
   flex-wrap: nowrap;
-  gap: 4px;
+  gap: 2px;
 }
 
 .page--selection .selection-word-row__actions .primary-button,
 .page--selection .selection-word-row__actions .secondary-button {
   min-height: 28px;
-  padding: 0 6px;
+  padding: 0 3px;
   border-radius: 8px;
-  font-size: 9px;
+  font-size: 8px;
 }
 
 .page--selection .selection-pagination {

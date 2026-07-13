@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 const css = readFileSync(new URL('../src/styles/ipad.css', import.meta.url), 'utf8');
 const appSource = readFileSync(new URL('../src/app/App.tsx', import.meta.url), 'utf8');
 const reviewSource = readFileSync(new URL('../src/screens/HomePage.tsx', import.meta.url), 'utf8');
+const selectionSource = readFileSync(new URL('../src/screens/SelectionPage.tsx', import.meta.url), 'utf8');
 
 function getZIndex(selector: string): number {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -110,6 +111,10 @@ describe('selection one-screen layout', () => {
     expect(css).toMatch(
       /\.page--selection \.selection-word-row\s*\{[^}]*display:\s*grid;[^}]*height:\s*56px;[^}]*min-height:\s*56px;/s,
     );
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-row__main\s*\{[^}]*grid-template-columns:\s*144px 44px minmax\(0, 1fr\) 32px;/s,
+    );
+    expect(selectionSource).not.toContain('getPrimaryOxfordRefLabel');
   });
 });
 
@@ -172,6 +177,15 @@ describe('review preview atlas rendering', () => {
 
 describe('selection card image rendering', () => {
   it('centers images at seventy percent while preserving atlas proportions', () => {
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-card__content\s*\{[^}]*grid-template-columns:\s*68px minmax\(0, 1fr\);[^}]*margin-top:\s*10px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-card__art\s*\{[^}]*height:\s*78px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-card__copy\s*\{[^}]*margin-left:\s*10px;/s,
+    );
     expect(css).toMatch(
       /\.page--selection \.selection-word-card__art img,\s*\.page--selection \.selection-word-card__art \.word-image--atlas\s*\{[^}]*width:\s*70%;[^}]*height:\s*70%;/s,
     );
