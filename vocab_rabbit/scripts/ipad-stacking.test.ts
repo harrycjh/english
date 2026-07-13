@@ -39,3 +39,14 @@ describe('review preview atlas rendering', () => {
     );
   });
 });
+
+describe('selection card image rendering', () => {
+  it('centers images at seventy percent while preserving atlas proportions', () => {
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-card__art img,\s*\.page--selection \.selection-word-card__art \.word-image--atlas\s*\{[^}]*width:\s*70%;[^}]*height:\s*70%;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-card__art \.word-image--atlas\s*\{[^}]*background-size:\s*auto 300% !important;/s,
+    );
+  });
+});
