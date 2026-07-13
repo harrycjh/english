@@ -30,9 +30,9 @@ describe('fixed iPad shell', () => {
     expect(appSource).toContain('const shouldLockIpadShell = true;');
   });
 
-  it('aligns every route dock to the review page baseline', () => {
+  it('pins every route dock to the fixed iPad canvas instead of the browser viewport', () => {
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*bottom:\s*44px;[^}]*width:\s*975px;[^}]*height:\s*77px;/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*top:\s*calc\(var\(--ipad-shell-stage-height\) - 44px - 77px\);[^}]*bottom:\s*auto;[^}]*width:\s*975px;[^}]*height:\s*77px;/s,
     );
     expect(css).toMatch(
       /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\s*\{[^}]*top:\s*14px;[^}]*width:\s*140px;[^}]*height:\s*48px;/s,
