@@ -6843,9 +6843,36 @@ button {
 /* iPad fixed shell: pin dock to the bottom of the stage and keep scrollable
    content clear of it. */
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock {
-  bottom: 10px;
-  width: min(var(--ipad-shell-stage-width), calc(100vw - 24px));
-  height: 66px;
+  bottom: 28px;
+  width: 975px;
+  height: 77px;
+  padding: 0;
+  gap: 0;
+  justify-content: initial;
+  border-radius: 0 0 30px 30px;
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button {
+  position: absolute;
+  top: 14px;
+  width: 140px;
+  height: 48px;
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(1) {
+  left: 87px;
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(2) {
+  left: 323px;
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(3) {
+  left: 559px;
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(4) {
+  left: 795px;
 }
 
 html[data-shell-mode='ipad-fixed'] .selection-mockup-frame,
