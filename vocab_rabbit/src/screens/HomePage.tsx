@@ -18,7 +18,6 @@ import reviewLayoutData from '../../design-output/ui-concepts/review-page-layout
 import reviewSlicesManifestData from '../../design-output/ui-concepts/review-page-slices-manifest.json';
 
 type ReviewPreviewWord = WordPayload['words'][number];
-type ReviewDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
 type ReviewSummaryTone = 'library' | 'mastered' | 'completion';
 type ReviewAdviceAccent = 'tea' | 'bars' | 'bag';
 type ReviewHeatmapLevel = 'empty' | 'soft' | 'warm' | 'outline';
@@ -35,7 +34,6 @@ type ReviewBounds = {
 type ReviewMetricLayout = ReviewLayout['cards']['metrics'][number];
 type ReviewPreviewLayout = ReviewLayout['cards']['previews'][number];
 type ReviewGuidanceLayout = ReviewLayout['cards']['guidance'][number];
-type ReviewDockButtonLayout = ReviewLayout['cards']['dockButtons'][number];
 type ReviewSummaryLayout = ReviewLayout['modules']['summaryPills']['children'][number];
 type ReviewSlicePlacement = ReviewLayout['slices'][number];
 
@@ -53,9 +51,6 @@ const reviewSummaryLayouts = Object.fromEntries(
 const reviewGuidanceLayouts = Object.fromEntries(
   reviewLayout.cards.guidance.map((layout) => [layout.id, layout]),
 ) as Record<ReviewAdviceAccent, ReviewGuidanceLayout>;
-const reviewDockLayouts = Object.fromEntries(
-  reviewLayout.cards.dockButtons.map((layout) => [layout.id, layout]),
-) as Record<ReviewDockGlyph, ReviewDockButtonLayout>;
 const reviewPreviewLayouts = Object.fromEntries(
   reviewLayout.cards.previews.map((layout) => [layout.id, layout]),
 ) as Record<'family' | 'hello' | 'body' | 'spark', ReviewPreviewLayout>;
@@ -107,14 +102,6 @@ const reviewFocusArtLayout = reviewSlicePlacementsByFile['review-focus-art.png']
 
 function getReviewSliceUrl(file: string) {
   return `${import.meta.env.BASE_URL}design-reference/slices/${file}?v=4`;
-}
-
-function getReviewDockButtonUrl(glyph: ReviewDockGlyph, active: boolean) {
-  if (glyph === 'review' && active) {
-    return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-review-active-latest.png?v=8`;
-  }
-  const state = active ? 'active' : 'default';
-  return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-${glyph}-${state}-transparent.png?v=2`;
 }
 
 function formatPreviewPartOfSpeech(partOfSpeech: string) {
@@ -221,14 +208,6 @@ interface ReviewAdviceCardProps {
   value: string;
   description: string;
   layout: ReviewGuidanceLayout;
-}
-
-interface ReviewDockButtonProps {
-  active?: boolean;
-  glyph: ReviewDockGlyph;
-  label: string;
-  layout: ReviewDockButtonLayout;
-  onClick: () => void;
 }
 
 function ReviewMetricCard({ tone, label, value, note, layout, children }: ReviewMetricCardProps) {
@@ -400,37 +379,6 @@ function ReviewAdviceCard({ accent, label, value, description, layout }: ReviewA
   );
 }
 
-function ReviewDockButton({ active = false, glyph, label, layout, onClick }: ReviewDockButtonProps) {
-  const backgroundSize =
-    glyph === 'review' && active
-      ? '102% auto'
-      : glyph === 'selection' || glyph === 'stats' || glyph === 'settings'
-        ? '70% auto'
-        : undefined;
-  return (
-    <button
-      className={`home-dock__button review-dock__button${active ? ' is-active' : ''}`}
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      style={{
-        ...getRelativeBoundsStyle(layout, reviewLayout.modules.bottomDock),
-        backgroundImage: `url(${getReviewDockButtonUrl(glyph, active)})`,
-        ...(backgroundSize ? { backgroundSize } : null),
-      }}
-    >
-      <ReviewSliceIcon
-        className={`review-dock__glyph review-dock__glyph--${glyph}`}
-        file={layout.iconAnchor.file}
-        style={{ ...getRelativeBoundsStyle(layout.iconAnchor, layout), zIndex: reviewLayerZIndex.decorativeIcons }}
-      />
-      <span className="review-dock__label" style={getRelativeTextStyle(layout.textSafe, layout)}>
-        {label}
-      </span>
-    </button>
-  );
-}
-
 interface ReviewPageProps {
   payload: WordPayload;
   task: DailyTaskSummary;
@@ -443,8 +391,6 @@ interface ReviewPageProps {
   previewWords: WordPayload['words'];
   localLifePhotosById: Record<string, LocalLifePhotoView>;
   onStart: () => void;
-  onOpenSelection: () => void;
-  onOpenStats: () => void;
   onOpenSettings: () => void;
   onSaveSelectionStates: (states: WordSelectionState[]) => Promise<void>;
 }
@@ -461,8 +407,6 @@ export function ReviewPage({
   previewWords,
   localLifePhotosById,
   onStart,
-  onOpenSelection,
-  onOpenStats,
   onOpenSettings,
   onSaveSelectionStates,
 }: ReviewPageProps) {
@@ -525,10 +469,6 @@ export function ReviewPage({
   const reviewScale = Math.min(IPAD_REFERENCE_WIDTH / REVIEW_FRAME_WIDTH, IPAD_REFERENCE_HEIGHT / REVIEW_FRAME_HEIGHT);
   const reviewInsetLeft = Math.round((IPAD_REFERENCE_WIDTH - (REVIEW_FRAME_WIDTH * reviewScale)) / 2);
   const reviewInsetTop = Math.round((IPAD_REFERENCE_HEIGHT - (REVIEW_FRAME_HEIGHT * reviewScale)) / 2);
-
-  function scrollToSection(sectionId: string) {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
 
   async function savePatchedSelectionStates(states: Array<Partial<WordSelectionState> & Pick<WordSelectionState, 'wordId'>>) {
     const nextStates = states.map((state) => {
@@ -745,12 +685,6 @@ export function ReviewPage({
             </div>
           </section>
 
-          <nav className="home-dock review-dock" aria-label="主页面导航" style={getAbsoluteBoundsStyle(reviewLayout.modules.bottomDock)}>
-            <ReviewDockButton active glyph="review" label="复习" layout={reviewDockLayouts.review} onClick={() => scrollToSection('review-top')} />
-            <ReviewDockButton glyph="selection" label="选词" layout={reviewDockLayouts.selection} onClick={onOpenSelection} />
-            <ReviewDockButton glyph="stats" label="统计" layout={reviewDockLayouts.stats} onClick={onOpenStats} />
-            <ReviewDockButton glyph="settings" label="设置" layout={reviewDockLayouts.settings} onClick={onOpenSettings} />
-          </nav>
         </div>
       </div>
 

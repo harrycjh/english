@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 const css = readFileSync(new URL('../src/styles/ipad.css', import.meta.url), 'utf8');
 const appSource = readFileSync(new URL('../src/app/App.tsx', import.meta.url), 'utf8');
+const reviewSource = readFileSync(new URL('../src/screens/HomePage.tsx', import.meta.url), 'utf8');
 
 function getZIndex(selector: string): number {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -36,6 +37,11 @@ describe('fixed iPad shell', () => {
     expect(css).toMatch(
       /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\s*\{[^}]*top:\s*14px;[^}]*width:\s*140px;[^}]*height:\s*48px;/s,
     );
+  });
+
+  it('uses the shared fixed dock on the review route too', () => {
+    expect(appSource).toMatch(/<BottomDock\s+active="review"/s);
+    expect(reviewSource).not.toContain('<nav className="home-dock review-dock"');
   });
 });
 

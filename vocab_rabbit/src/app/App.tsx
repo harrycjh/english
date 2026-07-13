@@ -558,23 +558,30 @@ export default function App() {
     }
 
     return (
-      <ReviewPage
-        payload={payload}
-        task={task}
-        setting={parentSetting}
-        recordsById={recordsById}
-        selectionById={selectionById}
-        answerEvents={answerEvents}
-        masteredCount={masteredCount}
-        recentTasks={recentTasks}
-        previewWords={previewWords}
-        localLifePhotosById={localLifePhotosById}
-        onStart={handleStart}
-        onOpenSelection={handleOpenSelection}
-        onOpenStats={handleOpenStats}
-        onOpenSettings={handleOpenSettings}
-        onSaveSelectionStates={handleSaveSelectionStates}
-      />
+      <>
+        <ReviewPage
+          payload={payload}
+          task={task}
+          setting={parentSetting}
+          recordsById={recordsById}
+          selectionById={selectionById}
+          answerEvents={answerEvents}
+          masteredCount={masteredCount}
+          recentTasks={recentTasks}
+          previewWords={previewWords}
+          localLifePhotosById={localLifePhotosById}
+          onStart={handleStart}
+          onOpenSettings={handleOpenSettings}
+          onSaveSelectionStates={handleSaveSelectionStates}
+        />
+        <BottomDock
+          active="review"
+          onOpenReview={handleBackHome}
+          onOpenSelection={handleOpenSelection}
+          onOpenStats={handleOpenStats}
+          onOpenSettings={handleOpenSettings}
+        />
+      </>
     );
   }
 
