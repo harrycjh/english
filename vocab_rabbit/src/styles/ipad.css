@@ -6880,6 +6880,14 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button.is-active {
   transform: scale(1.5);
 }
 
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:not(.is-active) {
+  transform: scale(0.9);
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:not(.is-active):hover {
+  transform: translateY(-1px) scale(0.9);
+}
+
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(4).is-active {
   background-size: auto 100%;
 }

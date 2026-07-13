@@ -55,6 +55,12 @@ describe('fixed iPad shell', () => {
       /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:nth-child\(4\)\.is-active\s*\{[^}]*background-size:\s*auto 100%;/s,
     );
   });
+
+  it('reduces inactive dock buttons by ten percent', () => {
+    expect(css).toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:not\(\.is-active\)\s*\{[^}]*transform:\s*scale\(0\.9\);/s,
+    );
+  });
 });
 
 describe('review preview atlas rendering', () => {
