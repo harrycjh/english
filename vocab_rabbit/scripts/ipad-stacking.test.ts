@@ -96,6 +96,23 @@ describe('selection card actions', () => {
   });
 });
 
+describe('selection one-screen layout', () => {
+  it('keeps the complete vocabulary workspace above the fixed dock', () => {
+    expect(css).toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.page--selection \.selection-layout\s*\{[^}]*flex:\s*0 0 654px;[^}]*height:\s*654px;[^}]*max-height:\s*654px;[^}]*overflow:\s*hidden;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-layout > \.section-block\s*\{[^}]*height:\s*644px;[^}]*max-height:\s*644px;[^}]*margin-top:\s*10px;[^}]*overflow:\s*hidden;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-bulk-actions\s*\{[^}]*flex-wrap:\s*nowrap;[^}]*gap:\s*8px;[^}]*margin-top:\s*10px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-word-row\s*\{[^}]*display:\s*grid;[^}]*height:\s*56px;[^}]*min-height:\s*56px;/s,
+    );
+  });
+});
+
 describe('statistics reference layout', () => {
   it('keeps the overview in a compact four-column dashboard above the dock', () => {
     expect(css).toMatch(
