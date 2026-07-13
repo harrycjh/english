@@ -73,12 +73,23 @@ html[data-shell-mode='ipad-fixed'][data-orientation='portrait'] body::before {
 }
 
 html[data-shell-mode='ipad-fixed'] .page {
+  position: relative;
   width: var(--ipad-shell-stage-width);
   height: var(--ipad-shell-stage-height);
   min-height: var(--ipad-shell-stage-height);
   margin: 0 auto;
   padding: var(--ipad-shell-padding);
   overflow: hidden;
+}
+
+html[data-shell-mode='ipad-fixed'] .page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 70;
+  border: 3px solid rgba(65, 43, 23, 0.78);
+  border-radius: 22px;
+  pointer-events: none;
 }
 
 html[data-shell-mode='ipad-fixed'] .page--home,

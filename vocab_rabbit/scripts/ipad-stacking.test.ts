@@ -31,6 +31,9 @@ describe('fixed iPad shell', () => {
     expect(css).toMatch(
       /\.page--selection \.selection-layout\s*\{[^}]*grid-template-columns:\s*250px minmax\(0, 1fr\) 242px;[^}]*gap:\s*18px;/s,
     );
+    expect(css).toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.page::after\s*\{[^}]*inset:\s*0;[^}]*z-index:\s*70;[^}]*border:\s*3px solid rgba\(65, 43, 23, 0\.78\);[^}]*border-radius:\s*22px;/s,
+    );
   });
 
   it('pins every route dock to the fixed iPad canvas instead of the browser viewport', () => {
