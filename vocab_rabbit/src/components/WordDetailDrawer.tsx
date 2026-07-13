@@ -119,13 +119,7 @@ export function WordDetailDrawer({
     <div className="word-detail-drawer-backdrop is-open" onClick={onClose}>
       <aside className="word-detail-drawer" aria-label="单词详情抽屉" onClick={(event) => event.stopPropagation()}>
         <header className="word-detail-drawer__header">
-          <div>
-            <span className="word-detail-drawer__eyebrow">{context === 'review' ? '复习页详情' : '选词页详情'}</span>
-            <h2>{getStudyText(word)}</h2>
-            <p>
-              {word.chinese} · {word.partOfSpeech}
-            </p>
-          </div>
+          <span className="word-detail-drawer__eyebrow">{context === 'review' ? '复习页详情' : '选词页详情'}</span>
           <div className="word-detail-drawer__header-actions">
             {setting.enableAudio ? <AudioIconButton onClick={() => speakWord(word)} className="word-detail-drawer__audio" /> : null}
             <button className="word-detail-drawer__close" type="button" onClick={onClose}>
@@ -134,23 +128,28 @@ export function WordDetailDrawer({
           </div>
         </header>
 
-        <section className="word-detail-drawer__meta-strip">
-          <span className="word-detail-chip">{word.category}</span>
-          <span className="word-detail-chip">Lv.{word.difficulty}</span>
-          <span className="word-detail-chip">{getLearningLabel(record)}</span>
-          <span className="word-detail-chip">{getSelectionLabel(selectionState)}</span>
-        </section>
-
-        <section className="word-detail-drawer__panel">
-          <h3>图片</h3>
-          {word.imageApproved ? (
-            <WordImage className="word-detail-drawer__image" word={word} alt={word.chinese} />
-          ) : (
-            <div className="word-detail-drawer__placeholder">
-              <strong>{getStudyText(word)}</strong>
-              <p>本地图片暂未接入</p>
+        <section className="word-detail-drawer__hero">
+          <div className="word-detail-drawer__primary-media">
+            {word.imageApproved ? (
+              <WordImage className="word-detail-drawer__image" word={word} alt={word.chinese} />
+            ) : (
+              <div className="word-detail-drawer__placeholder">
+                <strong>{getStudyText(word)}</strong>
+                <p>本地图片暂未接入</p>
+              </div>
+            )}
+          </div>
+          <div className="word-detail-drawer__summary">
+            <h2>{getStudyText(word)}</h2>
+            <p className="word-detail-drawer__meaning">{word.chinese}</p>
+            <p className="word-detail-drawer__part-of-speech">{word.partOfSpeech}</p>
+            <div className="word-detail-drawer__meta-strip">
+              <span className="word-detail-chip">{word.category}</span>
+              <span className="word-detail-chip">Lv.{word.difficulty}</span>
+              <span className="word-detail-chip">{getLearningLabel(record)}</span>
+              <span className="word-detail-chip">{getSelectionLabel(selectionState)}</span>
             </div>
-          )}
+          </div>
         </section>
 
         {hasRelatedMedia ? (

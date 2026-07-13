@@ -5,6 +5,7 @@ const css = readFileSync(new URL('../src/styles/ipad.css', import.meta.url), 'ut
 const appSource = readFileSync(new URL('../src/app/App.tsx', import.meta.url), 'utf8');
 const reviewSource = readFileSync(new URL('../src/screens/HomePage.tsx', import.meta.url), 'utf8');
 const selectionSource = readFileSync(new URL('../src/screens/SelectionPage.tsx', import.meta.url), 'utf8');
+const wordDetailSource = readFileSync(new URL('../src/components/WordDetailDrawer.tsx', import.meta.url), 'utf8');
 
 function getZIndex(selector: string): number {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -93,6 +94,20 @@ describe('selection card actions', () => {
     );
     expect(css).toMatch(
       /\.page--selection \.selection-word-card__actions \.secondary-button\s*\{[^}]*border:\s*1px solid rgba\(229, 198, 145, 0\.86\);[^}]*background:\s*rgba\(255, 255, 255, 0\.96\);/s,
+    );
+  });
+});
+
+describe('shared word detail drawer', () => {
+  it('places a half-size primary image beside the word summary', () => {
+    expect(wordDetailSource).toMatch(
+      /<section className="word-detail-drawer__hero">[\s\S]*word-detail-drawer__primary-media[\s\S]*word-detail-drawer__summary[\s\S]*<h2>\{getStudyText\(word\)\}<\/h2>/,
+    );
+    expect(css).toMatch(
+      /\.word-detail-drawer__hero\s*\{[^}]*grid-template-columns:\s*150px minmax\(0, 1fr\);[^}]*gap:\s*20px;/s,
+    );
+    expect(css).toMatch(
+      /\.word-detail-drawer__image,\s*\.word-detail-drawer__placeholder\s*\{[^}]*width:\s*150px;[^}]*height:\s*150px;[^}]*margin:\s*0;/s,
     );
   });
 });
