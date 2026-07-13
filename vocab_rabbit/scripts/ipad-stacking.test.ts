@@ -52,7 +52,7 @@ describe('fixed iPad shell', () => {
 
   it('compensates for the wider settings active artwork', () => {
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:nth-child\(4\)\.is-active\s*\{[^}]*background-size:\s*auto 100%;/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:nth-child\(4\)\.is-active\s*\{[^}]*transform:\s*scale\(1\.725\);[^}]*background-size:\s*auto 100%;/s,
     );
   });
 

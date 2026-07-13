@@ -6889,6 +6889,7 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:not(.is-active):hove
 }
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(4).is-active {
+  transform: scale(1.725);
   background-size: auto 100%;
 }
 
