@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import zipfile
 from pathlib import Path
@@ -29,9 +30,12 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
     entries = manifest.get("entries", [])
     with_oxford = 0
     with_life_photo = 0
+    with_red_rocket = 0
+    red_rocket_atlases: set[str] = set()
+    red_rocket_cells: set[tuple[str, int, int]] = set()
 
-    if manifest.get("schemaVersion") != 1:
-        errors.append("public manifest schemaVersion must be 1")
+    if manifest.get("schemaVersion") not in (1, 2):
+        errors.append("public manifest schemaVersion must be 1 or 2")
 
     for entry in entries:
         word_id = entry.get("wordId")
@@ -42,6 +46,7 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
         related_media = entry.get("relatedMedia") or {}
         oxford = related_media.get("oxford")
         life_photo = related_media.get("lifePhoto")
+        red_rocket = related_media.get("redRocket")
 
         if oxford:
             with_oxford += 1
@@ -55,6 +60,20 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
             with_life_photo += 1
             errors.append(f"{word_id} public manifest must not include lifePhoto")
 
+        if red_rocket:
+            with_red_rocket += 1
+            atlas_path = red_rocket.get("atlasPath", "")
+            row = red_rocket.get("row")
+            column = red_rocket.get("column")
+            red_rocket_atlases.add(atlas_path)
+            red_rocket_cells.add((atlas_path, row, column))
+            if not atlas_path.startswith("/content/images/red-rocket-atlases/"):
+                errors.append(f"{word_id} Red Rocket atlasPath must stay under /content/images/red-rocket-atlases/")
+            if not public_path_exists(atlas_path):
+                errors.append(f"{word_id} Red Rocket atlas is missing: {atlas_path}")
+            if row not in (0, 1, 2) or column not in (0, 1, 2):
+                errors.append(f"{word_id} Red Rocket atlas cell is invalid")
+
     stats = manifest.get("stats", {})
     if stats.get("entries") != len(entries):
         errors.append("public stats.entries does not match entry count")
@@ -62,6 +81,12 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
         errors.append("public stats.withOxford does not match entry count")
     if stats.get("withLifePhoto") != with_life_photo:
         errors.append("public stats.withLifePhoto does not match entry count")
+    if stats.get("withRedRocket", 0) != with_red_rocket:
+        errors.append("public stats.withRedRocket does not match entry count")
+    if stats.get("uniqueRedRocketImages", 0) != len(red_rocket_cells):
+        errors.append("public stats.uniqueRedRocketImages does not match unique atlas cells")
+    if stats.get("redRocketAtlases", 0) != len(red_rocket_atlases):
+        errors.append("public stats.redRocketAtlases does not match unique atlas paths")
     if (PUBLIC_ROOT / "content/images/life-photos").exists():
         errors.append("public/content/images/life-photos must not exist")
 
@@ -113,13 +138,15 @@ def validate_local_life_photo_package(word_ids: set[str]) -> list[str]:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Validate VocaRabbit related media assets.")
+    parser.add_argument("--public-only", action="store_true")
+    args = parser.parse_args()
     words = load_json(WORD_LIST_PATH)["words"]
     word_ids = {word["id"] for word in words}
 
-    errors = [
-        *validate_public_manifest(word_ids),
-        *validate_local_life_photo_package(word_ids),
-    ]
+    errors = validate_public_manifest(word_ids)
+    if not args.public_only:
+        errors.extend(validate_local_life_photo_package(word_ids))
     result = {
         "totalWords": len(word_ids),
         "publicManifest": str(PUBLIC_MANIFEST_PATH),

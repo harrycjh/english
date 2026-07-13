@@ -20,8 +20,19 @@ export interface RelatedLifePhoto {
   confidence: number;
 }
 
+export interface RelatedRedRocketImage extends WordImageAtlasEntry {
+  label: string;
+  level: string;
+  title: string;
+  page: number;
+  matchKind: 'exact' | 'inflection' | 'title';
+  matchedTerm: string;
+  confidence: number;
+}
+
 export interface WordRelatedMedia {
   oxford?: RelatedOxfordImage;
+  redRocket?: RelatedRedRocketImage;
   lifePhoto?: RelatedLifePhoto;
 }
 
@@ -32,6 +43,9 @@ export interface WordRelatedMediaManifestStats {
   withLifePhoto: number;
   uniqueOxfordImages: number;
   lifePhotoPackageImages: number;
+  withRedRocket?: number;
+  uniqueRedRocketImages?: number;
+  redRocketAtlases?: number;
 }
 
 export interface WordRelatedMediaManifestEntry {
@@ -40,8 +54,13 @@ export interface WordRelatedMediaManifestEntry {
 }
 
 export interface WordRelatedMediaManifest {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
   generatedAt: string;
+  redRocketAtlasGrid?: {
+    columns: number;
+    rows: number;
+    cellSize: number;
+  };
   stats: WordRelatedMediaManifestStats;
   entries: WordRelatedMediaManifestEntry[];
 }

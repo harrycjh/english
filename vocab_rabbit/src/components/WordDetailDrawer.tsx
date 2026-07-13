@@ -9,7 +9,8 @@ import { AudioIconButton } from './AudioIconButton';
 import { WordImage } from './WordImage';
 import { getExampleSentences } from '../services/example-service';
 import { getWordAnswerStats } from '../services/answer-event-service';
-import { getAssetUrl, getStudyText } from '../services/word-service';
+import { getWordAtlasStyle } from '../services/word-atlas-service';
+import { getAssetUrl, getStudyText, getWordImageUrl } from '../services/word-service';
 
 export type WordDetailDrawerContext = 'review' | 'selection';
 
@@ -112,7 +113,7 @@ export function WordDetailDrawer({
           confidence: relatedMedia.lifePhoto.confidence,
         }
       : null;
-  const hasRelatedMedia = Boolean(relatedMedia?.oxford || lifePhoto);
+  const hasRelatedMedia = Boolean(relatedMedia?.oxford || relatedMedia?.redRocket || lifePhoto);
 
   return (
     <div className="word-detail-drawer-backdrop is-open" onClick={onClose}>
@@ -164,6 +165,24 @@ export function WordDetailDrawer({
                   <div>
                     <strong>牛津树图</strong>
                     <span>{relatedMedia.oxford.label}</span>
+                  </div>
+                </article>
+              ) : null}
+
+              {relatedMedia?.redRocket ? (
+                <article className="word-detail-drawer__related-card">
+                  <span
+                    className="word-detail-drawer__red-rocket-image word-image--atlas"
+                    role="img"
+                    aria-label={`${getStudyText(word)} 的红火箭关联页`}
+                    style={{
+                      ...getWordAtlasStyle(relatedMedia.redRocket, { columns: 3, rows: 3, cellSize: 512 }),
+                      backgroundImage: `url(${getWordImageUrl(relatedMedia.redRocket.atlasPath)})`,
+                    }}
+                  />
+                  <div>
+                    <strong>红火箭图</strong>
+                    <span>{relatedMedia.redRocket.label}</span>
                   </div>
                 </article>
               ) : null}

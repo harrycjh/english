@@ -72,8 +72,9 @@ describe('mergeRelatedMedia', () => {
     };
 
     const merged = mergeRelatedMedia(payload, {
-      schemaVersion: 1,
+      schemaVersion: 2,
       generatedAt: '2026-07-08T00:00:00.000Z',
+      redRocketAtlasGrid: { columns: 3, rows: 3, cellSize: 512 },
       stats: {
         totalWords: 2,
         entries: 1,
@@ -81,6 +82,9 @@ describe('mergeRelatedMedia', () => {
         withLifePhoto: 0,
         uniqueOxfordImages: 1,
         lifePhotoPackageImages: 0,
+        withRedRocket: 1,
+        uniqueRedRocketImages: 1,
+        redRocketAtlases: 1,
       },
       entries: [
         {
@@ -93,12 +97,25 @@ describe('mergeRelatedMedia', () => {
               book: 1,
               page: 3,
             },
+            redRocket: {
+              atlasPath: '/content/images/red-rocket-atlases/atlas-000.webp',
+              row: 1,
+              column: 2,
+              label: 'Early Level 1, My Hands, Page 4',
+              level: 'Early Level 1',
+              title: 'My Hands',
+              page: 4,
+              matchKind: 'exact',
+              matchedTerm: 'dad',
+              confidence: 0.94,
+            },
           },
         },
       ],
     });
 
     expect(merged.words[0].relatedMedia?.oxford?.label).toBe('Level 1, Book 1, Page 3');
+    expect(merged.words[0].relatedMedia?.redRocket?.title).toBe('My Hands');
     expect(merged.words[1].relatedMedia).toBeUndefined();
   });
 });

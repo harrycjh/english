@@ -115,6 +115,14 @@ describe('shared word detail drawer', () => {
     expect(wordDetailSource).not.toContain('牛津树定位');
     expect(wordDetailSource).not.toContain('getOxfordRefLabels');
   });
+
+  it('renders Red Rocket pages from the compact related-media atlas', () => {
+    expect(wordDetailSource).toContain('word-detail-drawer__red-rocket-image');
+    expect(wordDetailSource).toContain('<strong>红火箭图</strong>');
+    expect(css).toMatch(
+      /\.word-detail-drawer__red-rocket-image\s*\{[^}]*width:\s*100%;[^}]*aspect-ratio:\s*1;/s,
+    );
+  });
 });
 
 describe('selection one-screen layout', () => {

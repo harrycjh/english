@@ -195,6 +195,12 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
     words = load_words()
     oxford_root = resolve_oxford_root(args.oxford_root)
     photo_candidates = collect_photo_candidates({word["id"] for word in words})
+    existing_manifest = load_json(MANIFEST_PATH) if MANIFEST_PATH.exists() else {"entries": []}
+    existing_red_rocket = {
+        entry["wordId"]: (entry.get("relatedMedia") or {}).get("redRocket")
+        for entry in existing_manifest.get("entries", [])
+        if (entry.get("relatedMedia") or {}).get("redRocket")
+    }
 
     entries: list[dict[str, Any]] = []
     skipped_oxford: list[dict[str, Any]] = []
@@ -206,6 +212,8 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
     for word in words:
         word_id = word["id"]
         related_media: dict[str, Any] = {}
+        if word_id in existing_red_rocket:
+            related_media["redRocket"] = existing_red_rocket[word_id]
 
         first_ref = (word.get("oxfordRefs") or [None])[0]
         if first_ref:
@@ -266,8 +274,9 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
         if related_media:
             entries.append({"wordId": word_id, "relatedMedia": related_media})
 
+    with_red_rocket = sum(1 for entry in entries if "redRocket" in entry["relatedMedia"])
     manifest = {
-        "schemaVersion": 1,
+        "schemaVersion": 2 if with_red_rocket else 1,
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "stats": {
             "totalWords": len(words),
@@ -276,9 +285,18 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
             "withLifePhoto": 0,
             "uniqueOxfordImages": len(exported_oxford_refs),
             "lifePhotoPackageImages": len(life_photo_package_entries),
+            "withRedRocket": with_red_rocket,
+            "uniqueRedRocketImages": (existing_manifest.get("stats") or {}).get("uniqueRedRocketImages", 0),
+            "redRocketAtlases": (existing_manifest.get("stats") or {}).get("redRocketAtlases", 0),
         },
         "entries": entries,
     }
+    if with_red_rocket:
+        manifest["redRocketAtlasGrid"] = existing_manifest.get("redRocketAtlasGrid") or {
+            "columns": 3,
+            "rows": 3,
+            "cellSize": 512,
+        }
     life_photo_package_manifest = {
         "schemaVersion": 1,
         "generatedAt": manifest["generatedAt"],

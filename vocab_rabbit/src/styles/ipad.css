@@ -1918,6 +1918,13 @@ button {
   background: #eef6ff;
 }
 
+.word-detail-drawer__red-rocket-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: #eef6ff;
+}
+
 .word-detail-drawer__related-card div {
   display: flex;
   flex-direction: column;
