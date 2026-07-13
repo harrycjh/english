@@ -6845,7 +6845,7 @@ button {
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock {
   bottom: 28px;
   width: 975px;
-  height: 77px;
+  height: 62px;
   padding: 0;
   gap: 0;
   justify-content: initial;
