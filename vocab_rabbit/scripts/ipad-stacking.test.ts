@@ -110,6 +110,11 @@ describe('shared word detail drawer', () => {
       /\.word-detail-drawer__image,\s*\.word-detail-drawer__placeholder\s*\{[^}]*width:\s*150px;[^}]*height:\s*150px;[^}]*margin:\s*0;/s,
     );
   });
+
+  it('does not repeat the Oxford Tree location below related media', () => {
+    expect(wordDetailSource).not.toContain('牛津树定位');
+    expect(wordDetailSource).not.toContain('getOxfordRefLabels');
+  });
 });
 
 describe('selection one-screen layout', () => {

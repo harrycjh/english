@@ -9,7 +9,7 @@ import { AudioIconButton } from './AudioIconButton';
 import { WordImage } from './WordImage';
 import { getExampleSentences } from '../services/example-service';
 import { getWordAnswerStats } from '../services/answer-event-service';
-import { getAssetUrl, getOxfordRefLabels, getStudyText } from '../services/word-service';
+import { getAssetUrl, getStudyText } from '../services/word-service';
 
 export type WordDetailDrawerContext = 'review' | 'selection';
 
@@ -92,7 +92,6 @@ export function WordDetailDrawer({
     return null;
   }
 
-  const oxfordLabels = getOxfordRefLabels(word, 2);
   const exampleSentences = getExampleSentences(word);
   const answerStats = getWordAnswerStats(answerEvents, word.id);
   const isEnabled = selectionState ? selectionState.isEnabled : true;
@@ -188,19 +187,6 @@ export function WordDetailDrawer({
             </div>
           </section>
         ) : null}
-
-        <section className="word-detail-drawer__panel">
-          <h3>牛津树定位</h3>
-          {oxfordLabels.length > 0 ? (
-            <ul className="word-detail-drawer__list">
-              {oxfordLabels.map((label) => (
-                <li key={label}>{label}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>暂无牛津树定位</p>
-          )}
-        </section>
 
         <section className="word-detail-drawer__panel">
           <h3>例句</h3>
