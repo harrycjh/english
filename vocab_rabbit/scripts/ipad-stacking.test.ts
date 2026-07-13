@@ -38,7 +38,7 @@ describe('fixed iPad shell', () => {
 
   it('pins every route dock to the fixed iPad canvas instead of the browser viewport', () => {
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*top:\s*calc\(var\(--ipad-shell-stage-height\) - 51px - 90px\);[^}]*bottom:\s*auto;[^}]*width:\s*1137px;[^}]*height:\s*90px;/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*top:\s*calc\(var\(--ipad-shell-stage-height\) - 90px\);[^}]*bottom:\s*auto;[^}]*width:\s*1137px;[^}]*height:\s*90px;/s,
     );
     expect(css).toMatch(
       /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\s*\{[^}]*top:\s*16px;[^}]*width:\s*163px;[^}]*height:\s*56px;/s,

@@ -6851,7 +6851,7 @@ button {
 /* iPad fixed shell: pin dock to the bottom of the stage and keep scrollable
    content clear of it. */
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock {
-  top: calc(var(--ipad-shell-stage-height) - 51px - 90px);
+  top: calc(var(--ipad-shell-stage-height) - 90px);
   bottom: auto;
   width: 1137px;
   height: 90px;
