@@ -5516,7 +5516,7 @@ button {
 }
 
 .page--stats .stat-card--planned {
-  background: linear-gradient(180deg, rgba(255, 240, 210, 0.98), rgba(255, 226, 178, 0.98));
+  background: linear-gradient(180deg, rgba(255, 249, 236, 0.98), rgba(255, 239, 207, 0.98));
 }
 
 .page--stats .stat-card--planned::before {
@@ -5526,7 +5526,7 @@ button {
 }
 
 .page--stats .stat-card--active {
-  background: linear-gradient(180deg, rgba(235, 246, 255, 0.98), rgba(220, 237, 255, 0.98));
+  background: linear-gradient(180deg, rgba(247, 252, 255, 0.98), rgba(230, 243, 255, 0.98));
 }
 
 .page--stats .stat-card--active::before {
@@ -5534,7 +5534,7 @@ button {
 }
 
 .page--stats .stat-card--mastered {
-  background: linear-gradient(180deg, rgba(232, 247, 239, 0.98), rgba(215, 241, 225, 0.98));
+  background: linear-gradient(180deg, rgba(248, 254, 250, 0.98), rgba(229, 247, 236, 0.98));
 }
 
 .page--stats .stat-card--mastered::before {
@@ -5542,7 +5542,7 @@ button {
 }
 
 .page--stats .stat-card--accuracy {
-  background: linear-gradient(180deg, rgba(255, 246, 220, 0.98), rgba(255, 236, 190, 0.98));
+  background: linear-gradient(180deg, rgba(255, 252, 241, 0.98), rgba(255, 243, 212, 0.98));
 }
 
 .page--stats .stat-card--accuracy::before {
@@ -6089,13 +6089,13 @@ button {
 
 /* Statistics reference layout: keep the complete overview above the fixed dock. */
 html[data-shell-mode='ipad-fixed'] .page--stats .stats-mockup-frame {
-  padding: 10px 18px 0;
+  padding: 18px 42px 0;
   scrollbar-gutter: auto;
 }
 
 .page--stats .stats-shell__chrome {
   min-height: 24px;
-  margin-bottom: 7px;
+  margin-bottom: 8px;
 }
 
 .page--stats .stats-shell__brand,
@@ -6132,40 +6132,46 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-mockup-frame {
 }
 
 .page--stats .stats-hero {
-  min-height: 150px;
-  padding: 10px;
-  grid-template-columns: 88px minmax(0, 1fr) 246px;
-  gap: 12px;
-  border-radius: 18px;
+  min-height: 228px;
+  padding: 0;
+  grid-template-columns: 190px minmax(0, 1fr) 330px;
+  gap: 18px;
+  border-radius: 0;
+  background: transparent;
 }
 
 .page--stats .stats-hero__art {
-  min-height: 128px;
-  border-radius: 16px;
-  background-size: auto, auto, 88px auto, auto;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.76);
+  min-height: 228px;
+  border-radius: 18px;
+  background:
+    url('/design-reference/slices/stats-rabbit-hero-crop.png?v=2') center / 100% 100% no-repeat,
+    #fff8e8;
+  box-shadow: none;
 }
 
 .page--stats .stats-hero__content,
 .page--stats .stats-hero__aside {
-  gap: 6px;
+  gap: 9px;
 }
 
 .page--stats .stats-hero .hero-card__eyebrow {
-  min-height: 18px;
-  padding: 0 7px;
-  font-size: 9px;
+  align-self: flex-start;
+  min-height: 22px;
+  padding: 0;
+  font-size: 10px;
+  color: #58769a;
+  background: transparent;
 }
 
 .page--stats .stats-hero h1 {
-  font-size: 24px;
-  line-height: 1.08;
+  font-size: 36px;
+  line-height: 1.06;
 }
 
 .page--stats .stats-hero p {
-  max-width: 520px;
-  font-size: 10px;
-  line-height: 1.35;
+  max-width: 500px;
+  font-size: 12px;
+  line-height: 1.42;
 }
 
 .page--stats .stats-hero .review-pill-row {
@@ -6173,87 +6179,93 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-mockup-frame {
 }
 
 .page--stats .stats-hero .review-pill {
-  min-height: 21px;
-  padding: 0 7px;
-  font-size: 9px;
+  min-height: 24px;
+  padding: 0 8px;
+  font-size: 10px;
 }
 
 .page--stats .stats-hero__aside {
-  padding: 11px 12px 56px;
-  border-radius: 16px;
+  padding: 16px 18px 78px;
+  border-radius: 18px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.74);
 }
 
 .page--stats .stats-hero__aside strong {
-  font-size: 18px;
+  font-size: 23px;
+  color: #61a83e;
 }
 
 .page--stats .stats-hero__focus-art {
-  right: 11px;
-  bottom: 9px;
-  width: 78px;
-  height: 48px;
-  border-radius: 12px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.76);
+  right: 14px;
+  bottom: 12px;
+  width: 158px;
+  height: 104px;
+  border-radius: 16px;
+  background: url('/design-reference/slices/stats-focus-art-v3.png?v=5') center / cover no-repeat;
+  box-shadow: none;
 }
 
 .page--stats .review-dashboard,
 .page--stats .stats-panel-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
   justify-content: stretch;
 }
 
 .page--stats .review-dashboard {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .page--stats .stat-card {
-  min-height: 76px;
-  padding: 9px 10px 9px 46px;
-  border-radius: 14px;
+  min-height: 126px;
+  padding: 17px 16px 15px 66px;
+  border-radius: 18px;
+  background: rgba(255, 253, 248, 0.96);
+  border: 1px solid rgba(235, 216, 181, 0.72);
+  box-shadow: 0 7px 16px rgba(151, 105, 36, 0.06);
 }
 
 .page--stats .stat-card::before {
-  left: 12px;
-  top: 12px;
-  width: 25px;
-  height: 25px;
-  border-radius: 9px;
+  left: 17px;
+  top: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.72);
 }
 
 .page--stats .stat-card::after {
-  right: -12px;
-  bottom: 5px;
-  width: 72px;
-  height: 26px;
+  display: none;
 }
 
 .page--stats .stat-card span,
 .page--stats .section-block__header h2 {
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .page--stats .stat-card strong {
-  margin-top: 2px;
-  font-size: 22px;
+  margin-top: 5px;
+  font-size: 29px;
   line-height: 1.1;
 }
 
 .page--stats .stat-card small {
-  margin-top: 3px;
-  font-size: 9px;
+  margin-top: 6px;
+  font-size: 10px;
 }
 
 .page--stats .stats-panel-grid {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .page--stats .stats-panel {
-  min-height: 268px;
-  padding: 12px;
-  border-radius: 16px;
+  height: 295px;
+  min-height: 295px;
+  max-height: 295px;
+  margin: 0;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 253, 247, 0.96);
   box-shadow: 0 8px 18px rgba(155, 104, 24, 0.07);
 }
 
@@ -6262,12 +6274,12 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-mockup-frame {
 }
 
 .page--stats .section-block__header h2 {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .page--stats .section-block__header p,
 .page--stats .stats-inline-note {
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.35;
 }
 
@@ -6276,7 +6288,7 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-mockup-frame {
 }
 
 .page--stats .stats-panel--progress .section-block__header {
-  max-width: calc(100% - 70px);
+  max-width: 100%;
 }
 
 .page--stats .stats-donut {
@@ -6290,7 +6302,7 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-mockup-frame {
 .page--stats .stats-donut-legend li,
 .page--stats .stats-hbar__label,
 .page--stats .stats-hbar__value {
-  font-size: 9px;
+  font-size: 10px;
 }
 
 .page--stats .stats-donut-legend__dot {
