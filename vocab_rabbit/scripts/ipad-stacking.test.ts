@@ -19,3 +19,11 @@ describe('modal stacking', () => {
     );
   });
 });
+
+describe('review preview atlas rendering', () => {
+  it('uses cover-style atlas sizing in the portrait preview slot', () => {
+    expect(css).toMatch(
+      /\.page--review \.review-preview-card__word-image\.word-image--atlas\s*\{[^}]*background-size:\s*auto 300% !important;/s,
+    );
+  });
+});

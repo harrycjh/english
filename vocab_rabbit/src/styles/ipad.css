@@ -3837,6 +3837,10 @@ button {
   object-fit: cover;
 }
 
+.page--review .review-preview-card__word-image.word-image--atlas {
+  background-size: auto 300% !important;
+}
+
 .page--review .review-preview-card__index {
   position: absolute;
   left: 10px;
