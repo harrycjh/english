@@ -2,7 +2,7 @@
 
 ## Scope
 
-Only the word-detail drawer opened from the selection page changes. The review-page drawer keeps its current width and layout.
+Only the right-side detail overlay opened after clicking a word card on the selection page changes. The selection page behind it and the review-page detail drawer keep their current layout.
 
 ## Layout
 
