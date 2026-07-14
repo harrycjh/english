@@ -14,7 +14,15 @@ const word: WordRecord = {
   imagePath: '/content/images/words/ket_hand_n.webp',
   imageApproved: true,
   oxfordRefs: [],
+  examples: ['This is my hand.'],
   relatedMedia: {
+    oxford: {
+      imagePath: '/content/images/oxford-tree/level-1/book-1/page-4.webp',
+      label: 'Level 1, Book 1, Page 4',
+      level: 1,
+      book: 1,
+      page: 4,
+    },
     redRocket: {
       atlasPath: '/content/images/red-rocket-atlases/atlas-001.webp',
       row: 1,
@@ -31,6 +39,46 @@ const word: WordRecord = {
 };
 
 describe('WordDetailDrawer', () => {
+  it('uses the existing compact layout in review context', () => {
+    const markup = renderToStaticMarkup(
+      <WordDetailDrawer
+        isOpen
+        word={word}
+        record={undefined}
+        selectionState={undefined}
+        setting={{ ...defaultParentSetting, enableAudio: false }}
+        context="review"
+        onClose={() => undefined}
+      />,
+    );
+
+    expect(markup).not.toContain('word-detail-drawer--selection');
+    expect(markup).not.toContain('word-detail-drawer__selection-overview');
+  });
+
+  it('places inline examples and the Oxford page in the selection overview', () => {
+    const markup = renderToStaticMarkup(
+      <WordDetailDrawer
+        isOpen
+        word={word}
+        record={undefined}
+        selectionState={undefined}
+        setting={{ ...defaultParentSetting, enableAudio: false }}
+        context="selection"
+        onClose={() => undefined}
+      />,
+    );
+
+    expect(markup).toContain('word-detail-drawer--selection');
+    expect(markup).toContain('word-detail-drawer__selection-overview');
+    expect(markup).toContain('word-detail-drawer__inline-examples');
+    expect(markup).toContain('word-detail-drawer__selection-oxford');
+    expect(markup).toContain('This is my hand.');
+    expect(markup.indexOf('word-detail-drawer__inline-examples')).toBeLessThan(
+      markup.indexOf('word-detail-drawer__selection-oxford'),
+    );
+  });
+
   it('renders the Red Rocket atlas cell and source location', () => {
     const markup = renderToStaticMarkup(
       <WordDetailDrawer

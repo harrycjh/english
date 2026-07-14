@@ -1763,6 +1763,10 @@ button {
   box-shadow: -20px 0 60px rgba(17, 27, 41, 0.18);
 }
 
+.word-detail-drawer--selection {
+  width: min(920px, calc(100% - 24px));
+}
+
 .word-detail-drawer__header,
 .word-detail-drawer__header-actions,
 .word-detail-drawer__actions {
@@ -1838,6 +1842,64 @@ button {
   border: 1px solid rgba(174, 216, 255, 0.5);
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.96);
+}
+
+.word-detail-drawer__selection-overview {
+  display: grid;
+  grid-template-columns: 150px minmax(220px, 1fr) minmax(300px, 390px);
+  align-items: start;
+  gap: 20px;
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid rgba(174, 216, 255, 0.5);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.word-detail-drawer__selection-overview--without-oxford {
+  grid-template-columns: 150px minmax(0, 1fr);
+}
+
+.word-detail-drawer__inline-examples {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(174, 216, 255, 0.5);
+}
+
+.word-detail-drawer__inline-examples h3 {
+  margin: 0;
+  color: #163857;
+  font-size: 17px;
+}
+
+.word-detail-drawer__inline-examples .word-detail-drawer__list {
+  margin-top: 10px;
+}
+
+.word-detail-drawer__selection-oxford {
+  min-width: 0;
+}
+
+.word-detail-drawer--selection .word-detail-drawer__selection-oxford img {
+  display: block;
+  width: 100%;
+  height: 390px;
+  max-height: none;
+  object-fit: contain;
+  background: #eef6ff;
+}
+
+.word-detail-drawer--selection .word-detail-drawer__related-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.word-detail-drawer--selection .word-detail-drawer__related-card:only-child {
+  width: 100%;
+  max-width: 390px;
+}
+
+.word-detail-drawer--selection .word-detail-drawer__stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .word-detail-drawer__primary-media {
@@ -1974,6 +2036,32 @@ button {
 @media (max-width: 720px) {
   .word-detail-drawer__related-grid {
     grid-template-columns: 1fr;
+  }
+
+  .word-detail-drawer--selection {
+    width: 100%;
+  }
+
+  .word-detail-drawer__selection-overview,
+  .word-detail-drawer__selection-overview--without-oxford {
+    grid-template-columns: 1fr;
+  }
+
+  .word-detail-drawer__selection-overview .word-detail-drawer__primary-media {
+    justify-self: center;
+  }
+
+  .word-detail-drawer__selection-oxford img {
+    height: auto;
+    max-height: 390px;
+  }
+
+  .word-detail-drawer--selection .word-detail-drawer__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .word-detail-drawer--selection .word-detail-drawer__related-card:only-child {
+    max-width: none;
   }
 }
 

@@ -101,7 +101,10 @@ describe('selection card actions', () => {
 describe('shared word detail drawer', () => {
   it('places a half-size primary image beside the word summary', () => {
     expect(wordDetailSource).toMatch(
-      /<section className="word-detail-drawer__hero">[\s\S]*word-detail-drawer__primary-media[\s\S]*word-detail-drawer__summary[\s\S]*<h2>\{getStudyText\(word\)\}<\/h2>/,
+      /const primaryMedia = \([\s\S]*word-detail-drawer__primary-media[\s\S]*const wordSummary = \([\s\S]*word-detail-drawer__summary[\s\S]*<h2>\{getStudyText\(word\)\}<\/h2>/,
+    );
+    expect(wordDetailSource).toMatch(
+      /<section className="word-detail-drawer__hero">[\s\S]*\{primaryMedia\}[\s\S]*\{wordSummary\}/,
     );
     expect(css).toMatch(
       /\.word-detail-drawer__hero\s*\{[^}]*grid-template-columns:\s*150px minmax\(0, 1fr\);[^}]*gap:\s*20px;/s,
@@ -122,6 +125,20 @@ describe('shared word detail drawer', () => {
     expect(css).toMatch(
       /\.word-detail-drawer__red-rocket-image\s*\{[^}]*width:\s*100%;[^}]*aspect-ratio:\s*1;/s,
     );
+  });
+
+  it('widens and reorganizes only the selection detail overlay', () => {
+    expect(css).toMatch(
+      /\.word-detail-drawer--selection\s*\{[^}]*width:\s*min\(920px, calc\(100% - 24px\)\);/s,
+    );
+    expect(css).toMatch(
+      /\.word-detail-drawer__selection-overview\s*\{[^}]*grid-template-columns:\s*150px minmax\(220px, 1fr\) minmax\(300px, 390px\);/s,
+    );
+    expect(css).toMatch(
+      /\.word-detail-drawer--selection \.word-detail-drawer__selection-oxford img\s*\{[^}]*height:\s*390px;[^}]*max-height:\s*none;/s,
+    );
+    expect(wordDetailSource).toContain('word-detail-drawer__inline-examples');
+    expect(wordDetailSource).toContain('word-detail-drawer__selection-oxford');
   });
 });
 

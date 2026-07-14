@@ -113,11 +113,52 @@ export function WordDetailDrawer({
           confidence: relatedMedia.lifePhoto.confidence,
         }
       : null;
-  const hasRelatedMedia = Boolean(relatedMedia?.oxford || relatedMedia?.redRocket || lifePhoto);
+  const hasRelatedMedia = Boolean(
+    (context === 'review' && relatedMedia?.oxford) || relatedMedia?.redRocket || lifePhoto,
+  );
+  const primaryMedia = (
+    <div className="word-detail-drawer__primary-media">
+      {word.imageApproved ? (
+        <WordImage className="word-detail-drawer__image" word={word} alt={word.chinese} />
+      ) : (
+        <div className="word-detail-drawer__placeholder">
+          <strong>{getStudyText(word)}</strong>
+          <p>本地图片暂未接入</p>
+        </div>
+      )}
+    </div>
+  );
+  const wordSummary = (
+    <div className="word-detail-drawer__summary">
+      <h2>{getStudyText(word)}</h2>
+      <p className="word-detail-drawer__meaning">{word.chinese}</p>
+      <p className="word-detail-drawer__part-of-speech">{word.partOfSpeech}</p>
+      <div className="word-detail-drawer__meta-strip">
+        <span className="word-detail-chip">{word.category}</span>
+        <span className="word-detail-chip">Lv.{word.difficulty}</span>
+        <span className="word-detail-chip">{getLearningLabel(record)}</span>
+        <span className="word-detail-chip">{getSelectionLabel(selectionState)}</span>
+      </div>
+      {context === 'selection' ? (
+        <div className="word-detail-drawer__inline-examples">
+          <h3>例句</h3>
+          <ul className="word-detail-drawer__list">
+            {exampleSentences.map((example) => (
+              <li key={example}>{example}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
 
   return (
     <div className="word-detail-drawer-backdrop is-open" onClick={onClose}>
-      <aside className="word-detail-drawer" aria-label="单词详情抽屉" onClick={(event) => event.stopPropagation()}>
+      <aside
+        className={`word-detail-drawer${context === 'selection' ? ' word-detail-drawer--selection' : ''}`}
+        aria-label="单词详情抽屉"
+        onClick={(event) => event.stopPropagation()}
+      >
         <header className="word-detail-drawer__header">
           <span className="word-detail-drawer__eyebrow">{context === 'review' ? '复习页详情' : '选词页详情'}</span>
           <div className="word-detail-drawer__header-actions">
@@ -128,35 +169,37 @@ export function WordDetailDrawer({
           </div>
         </header>
 
-        <section className="word-detail-drawer__hero">
-          <div className="word-detail-drawer__primary-media">
-            {word.imageApproved ? (
-              <WordImage className="word-detail-drawer__image" word={word} alt={word.chinese} />
-            ) : (
-              <div className="word-detail-drawer__placeholder">
-                <strong>{getStudyText(word)}</strong>
-                <p>本地图片暂未接入</p>
-              </div>
-            )}
-          </div>
-          <div className="word-detail-drawer__summary">
-            <h2>{getStudyText(word)}</h2>
-            <p className="word-detail-drawer__meaning">{word.chinese}</p>
-            <p className="word-detail-drawer__part-of-speech">{word.partOfSpeech}</p>
-            <div className="word-detail-drawer__meta-strip">
-              <span className="word-detail-chip">{word.category}</span>
-              <span className="word-detail-chip">Lv.{word.difficulty}</span>
-              <span className="word-detail-chip">{getLearningLabel(record)}</span>
-              <span className="word-detail-chip">{getSelectionLabel(selectionState)}</span>
-            </div>
-          </div>
-        </section>
+        {context === 'selection' ? (
+          <section
+            className={`word-detail-drawer__selection-overview${relatedMedia?.oxford ? '' : ' word-detail-drawer__selection-overview--without-oxford'}`}
+          >
+            {primaryMedia}
+            {wordSummary}
+            {relatedMedia?.oxford ? (
+              <article className="word-detail-drawer__related-card word-detail-drawer__selection-oxford">
+                <img
+                  src={getAssetUrl(relatedMedia.oxford.imagePath)}
+                  alt={`${getStudyText(word)} 的牛津树关联页`}
+                />
+                <div>
+                  <strong>牛津树图</strong>
+                  <span>{relatedMedia.oxford.label}</span>
+                </div>
+              </article>
+            ) : null}
+          </section>
+        ) : (
+          <section className="word-detail-drawer__hero">
+            {primaryMedia}
+            {wordSummary}
+          </section>
+        )}
 
         {hasRelatedMedia ? (
           <section className="word-detail-drawer__panel">
             <h3>关联图片</h3>
             <div className="word-detail-drawer__related-grid">
-              {relatedMedia?.oxford ? (
+              {context === 'review' && relatedMedia?.oxford ? (
                 <article className="word-detail-drawer__related-card">
                   <img
                     src={getAssetUrl(relatedMedia.oxford.imagePath)}
@@ -207,14 +250,16 @@ export function WordDetailDrawer({
           </section>
         ) : null}
 
-        <section className="word-detail-drawer__panel">
-          <h3>例句</h3>
-          <ul className="word-detail-drawer__list">
-            {exampleSentences.map((example) => (
-              <li key={example}>{example}</li>
-            ))}
-          </ul>
-        </section>
+        {context === 'review' ? (
+          <section className="word-detail-drawer__panel">
+            <h3>例句</h3>
+            <ul className="word-detail-drawer__list">
+              {exampleSentences.map((example) => (
+                <li key={example}>{example}</li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
         <section className="word-detail-drawer__panel">
           <h3>学习状态</h3>
