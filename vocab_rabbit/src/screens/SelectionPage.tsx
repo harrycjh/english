@@ -17,6 +17,7 @@ import { WordImage } from '../components/WordImage';
 import { APP_VERSION } from '../config/app-meta';
 
 type StatusFilter = 'all' | 'new' | 'learning' | 'mastered' | 'paused' | 'disabled';
+type RedRocketFilter = 'all' | 'linked' | 'unlinked';
 type SortMode = 'level' | 'difficulty' | 'recent' | 'alphabetical';
 type ViewMode = 'grid' | 'list';
 type PaginationToken = number | 'ellipsis';
@@ -245,6 +246,12 @@ function getPrimaryLevel(word: WordRecord): number | null {
   return word.oxfordRefs[0]?.level ?? null;
 }
 
+export function matchesRedRocketFilter(word: WordRecord, filter: RedRocketFilter): boolean {
+  if (filter === 'all') return true;
+  const hasRedRocket = Boolean(word.relatedMedia?.redRocket);
+  return filter === 'linked' ? hasRedRocket : !hasRedRocket;
+}
+
 function formatUpdatedAt(updatedAt: string): string {
   return new Date(updatedAt).toLocaleString('zh-CN', {
     month: '2-digit',
@@ -316,6 +323,7 @@ export function SelectionPage({
   const [selectedLevel, setSelectedLevel] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState<StatusFilter>('all');
+  const [redRocketFilter, setRedRocketFilter] = useState<RedRocketFilter>('all');
   const [imageOnly, setImageOnly] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>('alphabetical');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -351,6 +359,7 @@ export function SelectionPage({
       selectedLevel === 'all' &&
       selectedDifficulty === 'all' &&
       selectedStatus === 'all' &&
+      redRocketFilter === 'all' &&
       !imageOnly &&
       sortMode === 'alphabetical';
 
@@ -366,9 +375,11 @@ export function SelectionPage({
       const matchesLevel = selectedLevel === 'all' || primaryLevel === Number(selectedLevel);
       const matchesDifficulty = selectedDifficulty === 'all' || word.difficulty === Number(selectedDifficulty);
       const matchesStatus = selectedStatus === 'all' || learningBucket === selectedStatus;
+      const matchesRedRocket = matchesRedRocketFilter(word, redRocketFilter);
       const matchesImage = !imageOnly || word.imageApproved;
 
-      return matchesSearch && matchesCategory && matchesLevel && matchesDifficulty && matchesStatus && matchesImage;
+      return matchesSearch && matchesCategory && matchesLevel && matchesDifficulty && matchesStatus &&
+        matchesRedRocket && matchesImage;
     });
 
     return nextWords.sort((left, right) => {
@@ -394,7 +405,7 @@ export function SelectionPage({
         left.difficulty - right.difficulty ||
         left.english.localeCompare(right.english);
     });
-  }, [imageOnly, payload.words, recordsById, searchText, selectedCategory, selectedDifficulty, selectedLevel, selectedStatus, selectionById, sortMode]);
+  }, [imageOnly, payload.words, recordsById, redRocketFilter, searchText, selectedCategory, selectedDifficulty, selectedLevel, selectedStatus, selectionById, sortMode]);
 
   const pageSize = 6;
   const totalPages = Math.max(1, Math.ceil(filteredWords.length / pageSize));
@@ -426,6 +437,7 @@ export function SelectionPage({
     selectedLevel === 'all' &&
     selectedDifficulty === 'all' &&
     selectedStatus === 'all' &&
+    redRocketFilter === 'all' &&
     !imageOnly &&
     sortMode === 'alphabetical';
   const pagination = useMemo(() => buildPagination(totalPages, activePage), [activePage, totalPages]);
@@ -455,6 +467,7 @@ export function SelectionPage({
     setSelectedLevel('all');
     setSelectedDifficulty('all');
     setSelectedStatus('all');
+    setRedRocketFilter('all');
     setImageOnly(false);
     setSortMode('alphabetical');
     setCurrentPage(1);
@@ -524,6 +537,14 @@ export function SelectionPage({
                 <option value="mastered">已掌握</option>
                 <option value="paused">已暂停</option>
                 <option value="disabled">未启用</option>
+              </select>
+            </label>
+            <label className="selection-field">
+              <span>Red Rocket</span>
+              <select className="selection-select" value={redRocketFilter} onChange={(e) => { setRedRocketFilter(e.target.value as RedRocketFilter); setCurrentPage(1); }}>
+                <option value="all">全部单词</option>
+                <option value="linked">有关联图</option>
+                <option value="unlinked">无关联图</option>
               </select>
             </label>
             <label className="selection-toggle">
