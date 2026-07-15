@@ -105,6 +105,13 @@ export interface LifePhotoPackageManifest {
   }>;
 }
 
+export interface LifePhotoCoverageManifest {
+  schemaVersion: 1;
+  generatedAt: string;
+  count: number;
+  wordIds: string[];
+}
+
 export interface WordRecord {
   id: string;
   english: string;
@@ -114,6 +121,7 @@ export interface WordRecord {
   difficulty: number;
   imagePath: string;
   imageApproved: boolean;
+  hasLifePhoto?: boolean;
   imageAtlas?: WordImageAtlasEntry;
   oxfordRefs: OxfordRef[];
   relatedMedia?: WordRelatedMedia;

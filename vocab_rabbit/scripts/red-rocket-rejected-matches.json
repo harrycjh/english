@@ -1,0 +1,762 @@
+{
+  "schemaVersion": 1,
+  "source": "Red Rocket full OCR and manual review, 2026-07-14",
+  "matches": [
+    {
+      "wordId": "ket_a_m_adv",
+      "level": "Early Level 1",
+      "title": "Who Helps Me",
+      "page": 7,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_act_v",
+      "level": "Early Level 3",
+      "title": "Time For A Swim",
+      "page": 12,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_ad_n",
+      "level": "Early Level 2",
+      "title": "After Dark",
+      "page": 4,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_age_n",
+      "level": "Early Level 1",
+      "title": "Paits Df Feet",
+      "page": 17,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_ago_adv",
+      "level": "Early Level 1",
+      "title": "In My Lunchbox",
+      "page": 14,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_all_kinds_of_det_pron",
+      "level": "Emergent Level",
+      "title": "All Kinds Of Ears",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_an_det",
+      "level": "Early Level 1",
+      "title": "Busy Buddy",
+      "page": 4,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_any_det_pron",
+      "level": "Early Level 2",
+      "title": "The Great Outdoors",
+      "page": 12,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_bake_v",
+      "level": "Early Level 1",
+      "title": "As Fast As You Can",
+      "page": 6,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_bee_n",
+      "level": "Emergent Level",
+      "title": "How Tall",
+      "page": 15,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_bin_n",
+      "level": "Early Level 4",
+      "title": "Book Art",
+      "page": 16,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_bit_n_adv",
+      "level": "Early Level 3",
+      "title": "Our Family Band",
+      "page": 9,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_born_v",
+      "level": "Early Level 1",
+      "title": "What Is In The Sky",
+      "page": 9,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_brave_adj",
+      "level": "Pre-Reading Level",
+      "title": "A Brave Girl",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_buy_v",
+      "level": "Early Level 4",
+      "title": "Book Art",
+      "page": 14,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_by_prep",
+      "level": "Early Level 4",
+      "title": "Discover Dinosaurs",
+      "page": 7,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_bye_exclam",
+      "level": "Early Level 3",
+      "title": "Go Left Or Right",
+      "page": 12,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_cafe_caf_n",
+      "level": "Early Level 2",
+      "title": "Pockets",
+      "page": 18,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_case_n",
+      "level": "Emergent Level",
+      "title": "Round And Round",
+      "page": 5,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_cash_n_v",
+      "level": "Early Level 1",
+      "title": "What Goes Fast",
+      "page": 14,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_cd_n",
+      "level": "Early Level 2",
+      "title": "Charlie's Boat",
+      "page": 16,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_centimetre_centimeter_cm_n",
+      "level": "Early Level 3",
+      "title": "Who Wins The Race",
+      "page": 16,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_close_to_prep_phr",
+      "level": "Early Level 1",
+      "title": "Close To Home",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_coat_n",
+      "level": "Early Level 1",
+      "title": "Busy Buddy",
+      "page": 11,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_cry_v",
+      "level": "Early Level 3",
+      "title": "Umbrellas Go Up",
+      "page": 17,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_dear_adj",
+      "level": "Early Level 1",
+      "title": "How Many Wheels",
+      "page": 5,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_die_v",
+      "level": "Emergent Level",
+      "title": "Who Has Whiskers?",
+      "page": 5,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_discover_v",
+      "level": "Early Level 4",
+      "title": "Discover Dinosaurs",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_dr_n",
+      "level": "Early Level 1",
+      "title": "Max Monkey",
+      "page": 6,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_ear_n",
+      "level": "Early Level 4",
+      "title": "Why Is A Bird A Bird",
+      "page": 18,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_earn_v",
+      "level": "Early Level 3",
+      "title": "Life Cycle Of A Plant",
+      "page": 13,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_email_n_v",
+      "level": "Early Level 4",
+      "title": "Animal Defences",
+      "page": 10,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_everywhere_adv",
+      "level": "Early Level 1",
+      "title": "Sand Everywhere",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_eye_n",
+      "level": "Early Level 3",
+      "title": "Lost Of Legs",
+      "page": 8,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_fan_n",
+      "level": "Early Level 1",
+      "title": "High Higher Highest",
+      "page": 12,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_feelings_n",
+      "level": "Early Level 1",
+      "title": "Faces Show Feelings",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_few_det_adj",
+      "level": "Early Level 4",
+      "title": "Patterns",
+      "page": 4,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_file_n",
+      "level": "Early Level 1",
+      "title": "Busy Buddy",
+      "page": 5,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_fine_adj",
+      "level": "Early Level 4",
+      "title": "What Can You Read",
+      "page": 5,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_form_n",
+      "level": "Early Level 3",
+      "title": "Masks",
+      "page": 9,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_great_adj",
+      "level": "Early Level 2",
+      "title": "The Great Outdoors",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_hat_n",
+      "level": "Emergent Level",
+      "title": "Listen To That",
+      "page": 15,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_helpful_adj",
+      "level": "Early Level 2",
+      "title": "Helpful Max Monkey",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_huge_adj",
+      "level": "Early Level 4",
+      "title": "Once Upon A Time",
+      "page": 7,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_id_n",
+      "level": "Early Level 3",
+      "title": "Our Puppet Show",
+      "page": 5,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_if_conj",
+      "level": "Early Level 4",
+      "title": "Animal Art",
+      "page": 6,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_ill_adj",
+      "level": "Emergent Level",
+      "title": "Listen To That",
+      "page": 5,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_jam_n",
+      "level": "Early Level 1",
+      "title": "As Fast As You Can",
+      "page": 5,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_join_v",
+      "level": "Early Level 1",
+      "title": "Make A Snowman",
+      "page": 18,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_leg_n",
+      "level": "Emergent Level",
+      "title": "Yes Please",
+      "page": 10,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_link_technology_n",
+      "level": "Early Level 4",
+      "title": "Simple Technology",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_mad_adj",
+      "level": "Early Level 3",
+      "title": "Umbrellas Go Up",
+      "page": 16,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_mail_n",
+      "level": "Early Level 2",
+      "title": "Big Machines",
+      "page": 13,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_may_mv",
+      "level": "Early Level 3",
+      "title": "Don't Smile",
+      "page": 9,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_may_n",
+      "level": "Early Level 3",
+      "title": "Don't Smile",
+      "page": 9,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_meal_n",
+      "level": "Early Level 3",
+      "title": "Wind",
+      "page": 4,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_mean_v",
+      "level": "Emergent Level",
+      "title": "Baby Animals",
+      "page": 9,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_meet_v",
+      "level": "Early Level 1",
+      "title": "Dinosaur Days",
+      "page": 15,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_mile_n",
+      "level": "Early Level 3",
+      "title": "Brave Grace",
+      "page": 9,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_mine_pron",
+      "level": "Emergent Level",
+      "title": "Yes Please",
+      "page": 18,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_missing_adj",
+      "level": "Early Level 2",
+      "title": "Missing Heads",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_ms_n",
+      "level": "Early Level 2",
+      "title": "A Stormy Day",
+      "page": 16,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_musical_adj",
+      "level": "Early Level 4",
+      "title": "Musical Chairs",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_nature_n",
+      "level": "Early Level 2",
+      "title": "Sets In Nature",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_nice_adj",
+      "level": "Emergent Level",
+      "title": "Go Go Go",
+      "page": 12,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_oh_exclam",
+      "level": "Emergent Level",
+      "title": "What Is Soft?",
+      "page": 9,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_ok_okay_exclam",
+      "level": "Early Level 4",
+      "title": "Funny Races",
+      "page": 15,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_outdoors_adv",
+      "level": "Early Level 2",
+      "title": "The Great Outdoors",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_page_n",
+      "level": "Early Level 3",
+      "title": "Learning To Swim",
+      "page": 7,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_pain_n",
+      "level": "Early Level 4",
+      "title": "Odd One Out",
+      "page": 14,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_pale_adj",
+      "level": "Early Level 2",
+      "title": "Which One Is It",
+      "page": 4,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_pass_v",
+      "level": "Early Level 4",
+      "title": "Img20180724 13290231",
+      "page": 10,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_path_n",
+      "level": "Early Level 1",
+      "title": "Heavy Or Light",
+      "page": 11,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_pay_v",
+      "level": "Emergent Level",
+      "title": "Up And Down",
+      "page": 18,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_pc_personal_computer_n",
+      "level": "Early Level 3",
+      "title": "T Rex",
+      "page": 9,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_pen_n",
+      "level": "Early Level 2",
+      "title": "Helping The Zookeeper",
+      "page": 12,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_per_prep",
+      "level": "Early Level 4",
+      "title": "Baby Elephant's Trunk",
+      "page": 12,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_post_v_n",
+      "level": "Early Level 1",
+      "title": "Close To Home",
+      "page": 15,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_red_adj",
+      "level": "Emergent Level",
+      "title": "We Like Fishing",
+      "page": 13,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_rent_v",
+      "level": "Early Level 2",
+      "title": "Which One Is It",
+      "page": 7,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_room_n",
+      "level": "Early Level 4",
+      "title": "Shark And Crab",
+      "page": 13,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_sale_n",
+      "level": "Early Level 2",
+      "title": "Hatching Eggs",
+      "page": 16,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_say_v",
+      "level": "Early Level 1",
+      "title": "Spots And Stripes",
+      "page": 13,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_seat_n",
+      "level": "Early Level 3",
+      "title": "The Chocolate Factory",
+      "page": 8,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_seem_v",
+      "level": "Early Level 4",
+      "title": "Living Underground",
+      "page": 11,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_sell_v",
+      "level": "Early Level 3",
+      "title": "The Mailbox Man",
+      "page": 9,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_share_digitally_v",
+      "level": "Early Level 2",
+      "title": "Underground Explorers",
+      "page": 4,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_share_v",
+      "level": "Early Level 2",
+      "title": "Underground Explorers",
+      "page": 4,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_shy_adj",
+      "level": "Early Level 2",
+      "title": "Underground Explorers",
+      "page": 7,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_simple_adj",
+      "level": "Early Level 4",
+      "title": "Simple Technology",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_site_n",
+      "level": "Early Level 4",
+      "title": "Once Upon A Time",
+      "page": 17,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_slice_n",
+      "level": "Emergent Level",
+      "title": "Going Up",
+      "page": 8,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_so_conj_adv",
+      "level": "Early Level 2",
+      "title": "So Strong",
+      "page": 18,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_son_n",
+      "level": "Early Level 3",
+      "title": "T Rex",
+      "page": 4,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_song_n",
+      "level": "Early Level 3",
+      "title": "Go Left Or Right",
+      "page": 10,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_sort_n",
+      "level": "Early Level 3",
+      "title": "T Rex",
+      "page": 17,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_stuff_n",
+      "level": "Emergent Level",
+      "title": "Hot Stuff",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_surprise_n",
+      "level": "Early Level 2",
+      "title": "The Birthday Surprise",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_tea_n",
+      "level": "Early Level 2",
+      "title": "Off To School",
+      "page": 14,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_technology_n",
+      "level": "Early Level 4",
+      "title": "Simple Technology",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_test_n",
+      "level": "Early Level 1",
+      "title": "Paits Df Feet",
+      "page": 16,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_toe_n",
+      "level": "Emergent Level",
+      "title": "Look How We Cook",
+      "page": 18,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_tour_n",
+      "level": "Early Level 4",
+      "title": "Help Our Oceans",
+      "page": 4,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_toy_n",
+      "level": "Emergent Level",
+      "title": "Go Go Go",
+      "page": 17,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_v_versus_prep",
+      "level": "Early Level 1",
+      "title": "What Tastes Good",
+      "page": 17,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_whose_det_pron",
+      "level": "Early Level 1",
+      "title": "Whose Tail Is This",
+      "page": 4,
+      "reason": "title_only_target_absent"
+    },
+    {
+      "wordId": "ket_wow_exclam",
+      "level": "Early Level 3",
+      "title": "Umbrellas Go Up",
+      "page": 16,
+      "reason": "confirmed_wrong"
+    },
+    {
+      "wordId": "ket_yet_adv",
+      "level": "Early Level 2",
+      "title": "No Bridge",
+      "page": 8,
+      "reason": "confirmed_wrong"
+    }
+  ]
+}

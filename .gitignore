@@ -33,6 +33,8 @@ vision_extraction_log.txt
 
 # Web app build artifacts
 vocab_rabbit/node_modules/
+vocab_rabbit/functions/vocab-sync/node_modules/
+vocab_rabbit/functions/vocab-sync/.env
 vocab_rabbit/dist/
 
 # Local-only life photos (personal/family photos: dev-served, never uploaded)

@@ -48,7 +48,7 @@ describe('ReviewPage', () => {
         previewWords={[previewWord]}
         localLifePhotosById={{}}
         onStart={() => undefined}
-        onOpenSettings={() => undefined}
+        onSelectProfile={async () => undefined}
         onSaveSelectionStates={async () => undefined}
       />,
     );

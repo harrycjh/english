@@ -10,6 +10,7 @@ import {
   RED_ROCKET_ATLAS_ROWS,
   RED_ROCKET_CELL_SIZE,
   createRedRocketAtlasPlan,
+  filterRejectedRedRocketMatches,
   matchWordsToRedRocket,
   mergeRedRocketMediaManifest,
   normalizeRedRocketText,
@@ -22,6 +23,7 @@ const wordListPath = path.join(projectRoot, 'public/content/words/ket_vocabulary
 const mediaManifestPath = path.join(projectRoot, 'public/content/words/word_related_media.json');
 const atlasOutputRoot = path.join(projectRoot, 'public/content/images/red-rocket-atlases');
 const reportPath = path.join(projectRoot, 'design-output/red-rocket-media/export-report.json');
+const rejectedMatchesPath = path.join(projectRoot, 'scripts/red-rocket-rejected-matches.json');
 
 async function loadBooks(sourceRoot) {
   const extractedRoot = path.join(sourceRoot, 'extracted');
@@ -129,16 +131,19 @@ async function main() {
   const dryRun = args.has('--dry-run');
   const quality = Number(args.get('--quality') ?? 82);
   const generatedAt = new Date().toISOString();
-  const [wordPayload, manifest, books] = await Promise.all([
+  const [wordPayload, manifest, books, rejectedPayload] = await Promise.all([
     readFile(wordListPath, 'utf8').then(JSON.parse),
     readFile(mediaManifestPath, 'utf8').then(JSON.parse),
     loadBooks(sourceRoot),
+    readFile(rejectedMatchesPath, 'utf8').then(JSON.parse),
   ]);
   const words = wordPayload.words ?? [];
-  const matches = matchWordsToRedRocket(words, books);
+  const unfilteredMatches = matchWordsToRedRocket(words, books);
+  const matches = filterRejectedRedRocketMatches(unfilteredMatches, rejectedPayload.matches ?? []);
+  const matchedWordIds = new Set(matches.map((match) => match.wordId));
+  const rejectedMatches = unfilteredMatches.filter((match) => !matchedWordIds.has(match.wordId));
   const atlasPlan = createRedRocketAtlasPlan(matches);
   const nextManifest = mergeRedRocketMediaManifest(manifest, words, matches, atlasPlan, generatedAt);
-  const matchedWordIds = new Set(matches.map((match) => match.wordId));
   const report = {
     generatedAt,
     sourceRoot,
@@ -146,6 +151,7 @@ async function main() {
       totalWords: words.length,
       matchedWords: matches.length,
       unmatchedWords: words.length - matches.length,
+      rejectedMatches: rejectedMatches.length,
       exactMatches: matches.filter((match) => match.matchKind === 'exact').length,
       inflectionMatches: matches.filter((match) => match.matchKind === 'inflection').length,
       titleMatches: matches.filter((match) => match.matchKind === 'title').length,
@@ -155,6 +161,14 @@ async function main() {
     unmatchedWords: words
       .filter((word) => !matchedWordIds.has(word.id))
       .map(({ id, english, partOfSpeech }) => ({ id, english, partOfSpeech })),
+    rejectedMatches: rejectedMatches.map((match) => ({
+      wordId: match.wordId,
+      english: match.english,
+      level: match.page.level,
+      title: match.page.title,
+      page: match.page.page,
+      matchKind: match.matchKind,
+    })),
     matches: matches.map((match) => ({
       wordId: match.wordId,
       english: match.english,

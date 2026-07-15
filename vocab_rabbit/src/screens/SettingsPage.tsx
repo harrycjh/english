@@ -6,8 +6,10 @@ import {
   MIN_NEW_WORD_COUNT,
   MIN_REVIEW_LIMIT,
   type ParentSetting,
+  type ProfileId,
 } from '../models/parent-setting';
 import { APP_VERSION } from '../config/app-meta';
+import { ProfileSelector } from '../components/ProfileSelector';
 import type { LifePhotoImportResult } from '../services/local-media-service';
 import type { StudyDataImportResult } from '../services/study-data-import';
 
@@ -18,10 +20,10 @@ interface SettingsPageProps {
   onOpenSelection: () => void;
   onOpenStats: () => void;
   onUpdateSettings: (nextSetting: ParentSetting) => Promise<void>;
+  onSelectProfile: (profileId: ProfileId) => Promise<void>;
   onExportStudyData: () => Promise<void>;
   onImportStudyData: (file: File) => Promise<StudyDataImportResult>;
-  onResetTodayTask: () => Promise<void>;
-  onResetLearningProgress: () => Promise<void>;
+  onClearLocalData: (familyCode: string) => Promise<void>;
   onImportLifePhotoPackage: (file: File) => Promise<LifePhotoImportResult>;
   localLifePhotoCount: number;
   localLifePhotoImportedAt: string | null;
@@ -128,10 +130,10 @@ export function SettingsPage({
   onOpenSelection,
   onOpenStats,
   onUpdateSettings,
+  onSelectProfile,
   onExportStudyData,
   onImportStudyData,
-  onResetTodayTask,
-  onResetLearningProgress,
+  onClearLocalData,
   onImportLifePhotoPackage,
   localLifePhotoCount,
   localLifePhotoImportedAt,
@@ -173,19 +175,14 @@ export function SettingsPage({
     setLastSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
   }
 
-  async function handleResetTodayClick() {
-    const confirmed = window.confirm('这会按当前设置重新生成今天的任务。今天已有的完成状态会被覆盖，继续吗？');
-    if (confirmed) await onResetTodayTask();
-  }
-
-  async function handleResetProgressClick() {
-    const confirmed = window.confirm('这会清空全部学习记录和历史任务，但会保留当前设置。继续吗？');
-    if (confirmed) await onResetLearningProgress();
-  }
-
   async function handleClearAllData() {
-    const confirmed = window.confirm('⚠️ 这会永久删除所有本地学习数据，且无法恢复。确定要清空吗？');
-    if (confirmed) await onResetLearningProgress();
+    const familyCode = window.prompt('请输入首次连接设备时使用的家庭验证码：');
+    if (familyCode === null || !familyCode.trim()) return;
+    try {
+      await onClearLocalData(familyCode.trim());
+    } catch (caughtError) {
+      window.alert(caughtError instanceof Error ? caughtError.message : '验证码校验失败，请稍后重试。');
+    }
   }
 
   async function handleExportDataClick() {
@@ -266,12 +263,16 @@ export function SettingsPage({
     <main className="page page--home page--settings">
       <div className="settings-mockup-frame">
         <div className="settings-shell__chrome">
-          <div className="settings-shell__brand">
-            <span className="settings-shell__brand-mark" aria-hidden="true" />
-            <span>VocaRabbit</span>
+          <div className="settings-shell__brand app-brand-lockup">
+            <span className="app-brand-lockup__mark" aria-hidden="true" />
+            <span className="app-brand-lockup__wordmark">VocaRabbit</span>
             <span className="app-version-badge">{APP_VERSION}</span>
           </div>
-          <div className="settings-shell__profile">小雨的家长</div>
+          <ProfileSelector
+            value={settings.profileId}
+            buttonClassName="settings-shell__profile app-profile-chip"
+            onChange={onSelectProfile}
+          />
         </div>
 
         {/* ─── Hero ─── */}
@@ -417,16 +418,6 @@ export function SettingsPage({
             </div>
             <div className="settings-data-list">
               <article className="settings-data-item">
-                <span className="settings-data-item__icon">🔄</span>
-                <div>
-                  <strong>重置进度</strong>
-                  <p>清空当前进度，保留学习设置。</p>
-                </div>
-                <button className="secondary-button" type="button" onClick={() => void handleResetTodayClick()}>
-                  重置进度
-                </button>
-              </article>
-              <article className="settings-data-item">
                 <span className="settings-data-item__icon">⬆️</span>
                 <div>
                   <strong>导出数据</strong>
@@ -486,10 +477,10 @@ export function SettingsPage({
                 <span className="settings-data-item__icon">🗑</span>
                 <div>
                   <strong>清空本地学习数据</strong>
-                  <p>将永久删除所有本地学习数据，且无法恢复。</p>
+                  <p>验证家庭验证码后，只清空当前设备；云端数据不会删除。</p>
                 </div>
                 <button className="secondary-button settings-danger-button" type="button" onClick={() => void handleClearAllData()}>
-                  清空并确认
+                  清空本机
                 </button>
               </article>
             </div>

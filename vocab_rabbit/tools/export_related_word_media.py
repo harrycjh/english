@@ -24,6 +24,7 @@ MASTER_INDEX_PATH = (
 )
 PATH_MAPPING_PATH = PROJECT_ROOT / "design-output/photo-word-linking/path-mapping.local.json"
 MANIFEST_PATH = PROJECT_ROOT / "public/content/words/word_related_media.json"
+LIFE_PHOTO_COVERAGE_PATH = PROJECT_ROOT / "public/content/words/life_photo_coverage.json"
 REPORT_PATH = (
     PROJECT_ROOT
     / "design-output/photo-word-linking/master-index/exported-related-word-media.json"
@@ -306,6 +307,12 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
         },
         "entries": life_photo_package_entries,
     }
+    life_photo_coverage_manifest = {
+        "schemaVersion": 1,
+        "generatedAt": manifest["generatedAt"],
+        "count": len(life_photo_package_entries),
+        "wordIds": sorted(entry["wordId"] for entry in life_photo_package_entries),
+    }
     report = {
         "meta": {
             "script": "tools/export_related_word_media.py",
@@ -321,6 +328,7 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
 
     if not args.dry_run:
         write_json(MANIFEST_PATH, manifest)
+        write_json(LIFE_PHOTO_COVERAGE_PATH, life_photo_coverage_manifest)
         write_json(REPORT_PATH, report)
         LOCAL_LIFE_PHOTO_PACKAGE_PATH.parent.mkdir(parents=True, exist_ok=True)
         with zipfile.ZipFile(LOCAL_LIFE_PHOTO_PACKAGE_PATH, "w", compression=zipfile.ZIP_DEFLATED) as archive:

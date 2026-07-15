@@ -1,4 +1,7 @@
+export type ProfileId = 'cute-junjun' | 'stinky-dog' | 'fragrant-rabbit';
+
 export interface ParentSetting {
+  profileId: ProfileId;
   enableAudio: boolean;
   dailyNewWordCount: number;
   dailyReviewLimit: number;
@@ -14,6 +17,7 @@ export const MIN_REVIEW_LIMIT = 5;
 export const MAX_REVIEW_LIMIT = 50;
 
 export const defaultParentSetting: ParentSetting = {
+  profileId: 'cute-junjun',
   enableAudio: true,
   dailyNewWordCount: 6,
   dailyReviewLimit: 8,
@@ -28,7 +32,11 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 export function normalizeParentSetting(setting: Partial<ParentSetting> | ParentSetting): ParentSetting {
+  const profileId = setting.profileId === 'stinky-dog' || setting.profileId === 'fragrant-rabbit'
+    ? setting.profileId
+    : defaultParentSetting.profileId;
   return {
+    profileId,
     enableAudio: setting.enableAudio ?? defaultParentSetting.enableAudio,
     dailyNewWordCount: clamp(
       setting.dailyNewWordCount ?? defaultParentSetting.dailyNewWordCount,

@@ -1,4 +1,5 @@
 import type { QuestionKind } from '../services/question-service';
+import type { LearningRecord } from './learning-record';
 
 export interface AnswerEvent {
   id: string;
@@ -10,4 +11,9 @@ export interface AnswerEvent {
   correctAnswer: string;
   isCorrect: boolean;
   responseTimeMs: number;
+  deviceId?: string;
+  schemaVersion?: number;
+  generation?: number;
+  learningStateBefore?: LearningRecord;
+  learningStateAfter?: LearningRecord;
 }

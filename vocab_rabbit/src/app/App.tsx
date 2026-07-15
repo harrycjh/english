@@ -3,7 +3,7 @@ import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary, SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { LocalLifePhotoView } from '../models/local-media';
-import type { ParentSetting } from '../models/parent-setting';
+import type { ParentSetting, ProfileId } from '../models/parent-setting';
 import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordPayload } from '../models/word';
 import type { AppRoute } from './routes';
@@ -18,8 +18,9 @@ import { getWrongPracticeWordIds } from '../services/answer-event-service';
 import { ensureSelectionStateMap } from '../services/selection-service';
 import { createEmptyRecord, evaluateAnswer, isMastered } from '../services/spaced-repetition';
 import {
-  clearStudyData,
+  clearLocalDeviceData,
   getDailyTask,
+  getOrCreateSyncMetadata,
   getParentSetting,
   listAnswerEvents,
   listDailyTasks,
@@ -27,12 +28,12 @@ import {
   listRecentTasks,
   listWordSelectionStates,
   replaceStudyData,
-  saveAnswerEvent,
+  saveAnswerAndLearningRecord,
   saveDailyTask,
-  saveLearningRecord,
   saveParentSetting,
   saveWordSelectionStates,
 } from '../services/storage-service';
+import { verifyFamilyCode } from '../services/cloud-sync-service';
 import { buildStudyDataExport, downloadJsonFile } from '../services/study-data-export';
 import {
   readStudyDataImport,
@@ -211,10 +212,11 @@ export default function App() {
   async function handleAnswer(event: AnswerEvent) {
     const currentRecord = recordsById[event.wordId] ?? createEmptyRecord(event.wordId);
     const nextRecord = evaluateAnswer(currentRecord, event.isCorrect, new Date(event.answeredAt));
-    await Promise.all([
-      saveLearningRecord(nextRecord),
-      saveAnswerEvent(event),
-    ]);
+    await saveAnswerAndLearningRecord({
+      ...event,
+      learningStateBefore: currentRecord,
+      learningStateAfter: nextRecord,
+    }, nextRecord);
     setAnswerEvents((previous) => [...previous.slice(-499), event]);
 
     if (!practiceWordIds && task && !task.completedAt) {
@@ -304,6 +306,13 @@ export default function App() {
     }
   }
 
+  async function handleSelectProfile(profileId: ProfileId) {
+    if (!parentSetting || parentSetting.profileId === profileId) return;
+    const nextSetting = { ...parentSetting, profileId };
+    await saveParentSetting(nextSetting);
+    setParentSetting(nextSetting);
+  }
+
   async function handleSaveSelectionStates(states: WordSelectionState[]) {
     await saveWordSelectionStates(states);
     setSelectionById((previous) => {
@@ -323,28 +332,19 @@ export default function App() {
     startTransition(() => setRoute('home'));
   }
 
-  async function handleResetTodayTask() {
-    setSessionResult(null);
-    await rebuildTodayTask();
-    startTransition(() => setRoute('home'));
-  }
-
-  async function handleResetLearningProgress() {
-    if (!payload || !parentSetting) {
-      return;
+  async function handleClearLocalData(familyCode: string) {
+    const metadata = await getOrCreateSyncMetadata();
+    if (!metadata.deviceToken) {
+      throw new Error('当前设备尚未连接云端，无法校验家庭验证码。');
     }
-
-    await clearStudyData();
-    const nextRecords: Record<string, LearningRecord> = {};
-    const nextTask = buildDailyTask(payload.words, nextRecords, parentSetting, new Date(), selectionById);
-    await saveDailyTask(nextTask);
-
-    setRecordsById(nextRecords);
-    setAnswerEvents([]);
-    setTask(nextTask);
-    setSessionResult(null);
-    await refreshRecentTasks();
-    startTransition(() => setRoute('home'));
+    const verification = await verifyFamilyCode(familyCode, metadata.deviceToken);
+    if (!verification.valid) {
+      throw new Error('家庭验证码不正确。');
+    }
+    const confirmed = window.confirm('验证码正确。确定只清空这台设备的学习数据和生活照片吗？云端数据不会删除。');
+    if (!confirmed) return;
+    await clearLocalDeviceData();
+    window.location.reload();
   }
 
   async function handleExportStudyData() {
@@ -483,10 +483,10 @@ export default function App() {
             onOpenSelection={handleOpenSelection}
             onOpenStats={handleOpenStats}
             onUpdateSettings={handleUpdateSetting}
+            onSelectProfile={handleSelectProfile}
             onExportStudyData={handleExportStudyData}
             onImportStudyData={handleImportStudyData}
-            onResetTodayTask={handleResetTodayTask}
-            onResetLearningProgress={handleResetLearningProgress}
+            onClearLocalData={handleClearLocalData}
             onImportLifePhotoPackage={handleImportLifePhotoPackage}
             localLifePhotoCount={Object.keys(localLifePhotosById).length}
             localLifePhotoImportedAt={localLifePhotoImportedAt}
@@ -515,7 +515,7 @@ export default function App() {
             setting={parentSetting}
             onBackHome={handleBackHome}
             onOpenSelection={handleOpenSelection}
-            onOpenSettings={handleOpenSettings}
+            onSelectProfile={handleSelectProfile}
             onPracticeWrongWords={handlePracticeWrongWords}
           />
           <BottomDock
@@ -541,7 +541,7 @@ export default function App() {
             task={task}
             localLifePhotosById={localLifePhotosById}
             onBackHome={handleBackHome}
-            onOpenSettings={handleOpenSettings}
+            onSelectProfile={handleSelectProfile}
             onOpenStats={handleOpenStats}
             onSaveSelectionStates={handleSaveSelectionStates}
             onApplySelectionPlan={handleApplySelectionPlan}
@@ -571,7 +571,7 @@ export default function App() {
           previewWords={previewWords}
           localLifePhotosById={localLifePhotosById}
           onStart={handleStart}
-          onOpenSettings={handleOpenSettings}
+          onSelectProfile={handleSelectProfile}
           onSaveSelectionStates={handleSaveSelectionStates}
         />
         <BottomDock

@@ -56,7 +56,7 @@ describe('WordDetailDrawer', () => {
     expect(markup).not.toContain('word-detail-drawer__selection-overview');
   });
 
-  it('places inline examples and the Oxford page in the selection overview', () => {
+  it('uses the review layout in selection context', () => {
     const markup = renderToStaticMarkup(
       <WordDetailDrawer
         isOpen
@@ -69,14 +69,15 @@ describe('WordDetailDrawer', () => {
       />,
     );
 
-    expect(markup).toContain('word-detail-drawer--selection');
-    expect(markup).toContain('word-detail-drawer__selection-overview');
-    expect(markup).toContain('word-detail-drawer__inline-examples');
-    expect(markup).toContain('word-detail-drawer__selection-oxford');
+    expect(markup).not.toContain('word-detail-drawer--selection');
+    expect(markup).not.toContain('word-detail-drawer__selection-overview');
+    expect(markup).not.toContain('word-detail-drawer__inline-examples');
+    expect(markup).toContain('word-detail-drawer__hero');
+    expect(markup).toContain('关联图片');
+    expect(markup).toContain('牛津树图');
+    expect(markup).toContain('红火箭图');
     expect(markup).toContain('This is my hand.');
-    expect(markup.indexOf('word-detail-drawer__inline-examples')).toBeLessThan(
-      markup.indexOf('word-detail-drawer__selection-oxford'),
-    );
+    expect(markup.indexOf('牛津树图')).toBeLessThan(markup.indexOf('例句'));
   });
 
   it('renders the Red Rocket atlas cell and source location', () => {

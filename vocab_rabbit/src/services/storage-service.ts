@@ -9,21 +9,37 @@ import {
   type ParentSetting,
 } from '../models/parent-setting';
 import { type WordSelectionState } from '../models/word-selection-state';
+import {
+  SYNC_SCHEMA_VERSION,
+  type SyncMetadata,
+  type SyncRequest,
+  type SyncResponse,
+  type VersionedParentSetting,
+  type VersionedWordSelectionState,
+} from '../models/sync';
 import type { StudyDataExport } from './study-data-export';
+import { replayLearningRecords } from './sync-merge-service';
 
 interface StoredParentSetting extends ParentSetting {
   id: string;
 }
 
+interface StoredVersionedParentSetting extends VersionedParentSetting {
+  id: string;
+}
+
 const PARENT_SETTING_ID = 'default';
+const SYNC_METADATA_ID = 'sync';
 
 class VocabRabbitDatabase extends Dexie {
   answerEvents!: Table<AnswerEvent, string>;
   learningRecords!: Table<LearningRecord, string>;
   dailyTasks!: Table<DailyTaskSummary, string>;
   parentSettings!: Table<StoredParentSetting, string>;
-  wordSelectionStates!: Table<WordSelectionState, string>;
+  wordSelectionStates!: Table<VersionedWordSelectionState, string>;
   localLifePhotos!: Table<LocalLifePhotoRecord, string>;
+  syncMetadata!: Table<SyncMetadata, string>;
+  parentSettingSync!: Table<StoredVersionedParentSetting, string>;
 
   constructor() {
     super('vocab-rabbit');
@@ -57,10 +73,136 @@ class VocabRabbitDatabase extends Dexie {
       answerEvents: 'id,wordId,dateKey,answeredAt,questionKind,isCorrect',
       localLifePhotos: 'wordId,importedAt',
     });
+    this.version(6).stores({
+      learningRecords: 'wordId,nextDueAt,masteryLevel',
+      dailyTasks: 'dateKey,completedAt',
+      parentSettings: 'id',
+      wordSelectionStates: 'wordId,isEnabled,isPaused,updatedAt,updatedByDeviceId',
+      answerEvents: 'id,wordId,dateKey,answeredAt,questionKind,isCorrect,deviceId,generation',
+      localLifePhotos: 'wordId,importedAt',
+      syncMetadata: 'id,deviceId,lastSyncedAt,pendingSince',
+      parentSettingSync: 'id',
+    });
   }
 }
 
 const database = new VocabRabbitDatabase();
+
+function createDeviceId(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID();
+  }
+  return `device-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function createSyncMetadata(): SyncMetadata {
+  return {
+    id: SYNC_METADATA_ID,
+    deviceId: createDeviceId(),
+    deviceToken: null,
+    serverCursor: null,
+    generation: 0,
+    lastSyncedAt: null,
+    pendingSince: null,
+    checkpoint: null,
+  };
+}
+
+async function ensureSyncMetadata(): Promise<SyncMetadata> {
+  const existing = await database.syncMetadata.get(SYNC_METADATA_ID);
+  if (existing) {
+    return { ...existing, checkpoint: existing.checkpoint ?? null };
+  }
+  const metadata = createSyncMetadata();
+  await database.syncMetadata.put(metadata);
+  return metadata;
+}
+
+async function markPending(metadata?: SyncMetadata): Promise<SyncMetadata> {
+  const current = metadata ?? await ensureSyncMetadata();
+  const next = {
+    ...current,
+    pendingSince: current.pendingSince ?? new Date().toISOString(),
+  };
+  await database.syncMetadata.put(next);
+  return next;
+}
+
+export async function getOrCreateSyncMetadata(): Promise<SyncMetadata> {
+  return ensureSyncMetadata();
+}
+
+export async function saveDeviceToken(deviceToken: string | null): Promise<SyncMetadata> {
+  const metadata = await ensureSyncMetadata();
+  const next = { ...metadata, deviceToken };
+  await database.syncMetadata.put(next);
+  return next;
+}
+
+export async function buildLocalSyncRequest(): Promise<SyncRequest> {
+  const metadata = await ensureSyncMetadata();
+  const [events, records, dailyTasks, storedSetting, storedVersionedSetting, selectionStates] = await Promise.all([
+    database.answerEvents.orderBy('answeredAt').toArray(),
+    database.learningRecords.toArray(),
+    database.dailyTasks.orderBy('dateKey').toArray(),
+    database.parentSettings.get(PARENT_SETTING_ID),
+    database.parentSettingSync.get(PARENT_SETTING_ID),
+    database.wordSelectionStates.toArray(),
+  ]);
+  const now = new Date().toISOString();
+  const parentSetting = normalizeParentSetting(storedSetting ?? defaultParentSetting);
+  const versionedParentSetting: VersionedParentSetting = storedVersionedSetting ?? {
+    value: parentSetting,
+    fieldRevisions: Object.fromEntries(
+      (Object.keys(parentSetting) as (keyof ParentSetting)[]).map((field) => [
+        field,
+        { updatedAt: now, deviceId: metadata.deviceId },
+      ]),
+    ),
+  };
+  const selectionNeedsUpgrade = selectionStates.some((state) => !state.updatedByDeviceId);
+  const versionedSelectionStates = selectionStates.map((state) => ({
+    ...state,
+    updatedByDeviceId: state.updatedByDeviceId ?? metadata.deviceId,
+  }));
+  const checkpoint = metadata.checkpoint ?? (records.length > 0 ? {
+    capturedAt: now,
+    deviceId: metadata.deviceId,
+    generation: metadata.generation,
+    records,
+  } : null);
+
+  if (!storedVersionedSetting || checkpoint !== metadata.checkpoint || selectionNeedsUpgrade) {
+    await database.transaction(
+      'rw',
+      database.parentSettingSync,
+      database.wordSelectionStates,
+      database.syncMetadata,
+      async () => {
+        await database.parentSettingSync.put({ id: PARENT_SETTING_ID, ...versionedParentSetting });
+        if (versionedSelectionStates.length > 0) {
+          await database.wordSelectionStates.bulkPut(versionedSelectionStates);
+        }
+        await database.syncMetadata.put({ ...metadata, checkpoint });
+      },
+    );
+  }
+
+  return {
+    schemaVersion: SYNC_SCHEMA_VERSION,
+    deviceId: metadata.deviceId,
+    cursor: metadata.serverCursor,
+    snapshot: {
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      generation: metadata.generation,
+      events,
+      checkpoint,
+      dailyTasks,
+      wordSelectionStates: versionedSelectionStates,
+      parentSetting: versionedParentSetting,
+    },
+  };
+}
 
 function normalizeDailyTask(task: DailyTaskSummary): DailyTaskSummary {
   return {
@@ -76,7 +218,10 @@ export async function listLearningRecords(): Promise<Record<string, LearningReco
 }
 
 export async function saveLearningRecord(record: LearningRecord): Promise<void> {
-  await database.learningRecords.put(record);
+  await database.transaction('rw', database.learningRecords, database.syncMetadata, async () => {
+    await database.learningRecords.put(record);
+    await markPending();
+  });
 }
 
 export async function getDailyTask(dateKey: string): Promise<DailyTaskSummary | undefined> {
@@ -85,7 +230,10 @@ export async function getDailyTask(dateKey: string): Promise<DailyTaskSummary | 
 }
 
 export async function saveDailyTask(task: DailyTaskSummary): Promise<void> {
-  await database.dailyTasks.put(task);
+  await database.transaction('rw', database.dailyTasks, database.syncMetadata, async () => {
+    await database.dailyTasks.put(task);
+    await markPending();
+  });
 }
 
 export async function listRecentTasks(limit: number): Promise<DailyTaskSummary[]> {
@@ -109,9 +257,25 @@ export async function getParentSetting(): Promise<ParentSetting> {
 }
 
 export async function saveParentSetting(setting: ParentSetting): Promise<void> {
-  await database.parentSettings.put({
-    id: PARENT_SETTING_ID,
-    ...normalizeParentSetting(setting),
+  await database.transaction('rw', database.parentSettings, database.parentSettingSync, database.syncMetadata, async () => {
+    const metadata = await ensureSyncMetadata();
+    const normalized = normalizeParentSetting(setting);
+    const previous = await database.parentSettings.get(PARENT_SETTING_ID);
+    const previousVersioned = await database.parentSettingSync.get(PARENT_SETTING_ID);
+    const now = new Date().toISOString();
+    const fieldRevisions = { ...(previousVersioned?.fieldRevisions ?? {}) };
+    for (const field of Object.keys(normalized) as (keyof ParentSetting)[]) {
+      if (!previous || previous[field] !== normalized[field] || !fieldRevisions[field]) {
+        fieldRevisions[field] = { updatedAt: now, deviceId: metadata.deviceId };
+      }
+    }
+    await database.parentSettings.put({ id: PARENT_SETTING_ID, ...normalized });
+    await database.parentSettingSync.put({
+      id: PARENT_SETTING_ID,
+      value: normalized,
+      fieldRevisions,
+    });
+    await markPending(metadata);
   });
 }
 
@@ -121,7 +285,7 @@ export async function listWordSelectionStates(): Promise<Record<string, WordSele
 }
 
 export async function saveWordSelectionState(state: WordSelectionState): Promise<void> {
-  await database.wordSelectionStates.put(state);
+  await saveWordSelectionStates([state]);
 }
 
 export async function saveWordSelectionStates(states: WordSelectionState[]): Promise<void> {
@@ -129,11 +293,51 @@ export async function saveWordSelectionStates(states: WordSelectionState[]): Pro
     return;
   }
 
-  await database.wordSelectionStates.bulkPut(states);
+  await database.transaction('rw', database.wordSelectionStates, database.syncMetadata, async () => {
+    const metadata = await ensureSyncMetadata();
+    await database.wordSelectionStates.bulkPut(states.map((state) => ({
+      ...state,
+      updatedByDeviceId: (state as VersionedWordSelectionState).updatedByDeviceId ?? metadata.deviceId,
+    })));
+    await markPending(metadata);
+  });
 }
 
 export async function saveAnswerEvent(event: AnswerEvent): Promise<void> {
-  await database.answerEvents.put(event);
+  await database.transaction('rw', database.answerEvents, database.syncMetadata, async () => {
+    const metadata = await ensureSyncMetadata();
+    await database.answerEvents.put({
+      ...event,
+      deviceId: event.deviceId ?? metadata.deviceId,
+      schemaVersion: event.schemaVersion ?? SYNC_SCHEMA_VERSION,
+      generation: event.generation ?? metadata.generation,
+    });
+    await markPending(metadata);
+  });
+}
+
+export async function saveAnswerAndLearningRecord(
+  event: AnswerEvent,
+  record: LearningRecord,
+): Promise<void> {
+  await database.transaction(
+    'rw',
+    database.answerEvents,
+    database.learningRecords,
+    database.syncMetadata,
+    async () => {
+      const metadata = await ensureSyncMetadata();
+      await database.answerEvents.put({
+        ...event,
+        deviceId: event.deviceId ?? metadata.deviceId,
+        schemaVersion: event.schemaVersion ?? SYNC_SCHEMA_VERSION,
+        generation: event.generation ?? metadata.generation,
+        learningStateAfter: event.learningStateAfter ?? record,
+      });
+      await database.learningRecords.put(record);
+      await markPending(metadata);
+    },
+  );
 }
 
 export async function listAnswerEvents(limit?: number): Promise<AnswerEvent[]> {
@@ -185,8 +389,10 @@ export async function replaceStudyData(backup: StudyDataExport): Promise<void> {
       database.parentSettings,
       database.wordSelectionStates,
       database.answerEvents,
+      database.syncMetadata,
     ],
     async () => {
+      const metadata = await ensureSyncMetadata();
       await Promise.all([
         database.learningRecords.clear(),
         database.dailyTasks.clear(),
@@ -198,17 +404,100 @@ export async function replaceStudyData(backup: StudyDataExport): Promise<void> {
         database.learningRecords.bulkPut(backup.tables.learningRecords),
         database.dailyTasks.bulkPut(backup.tables.dailyTasks),
         database.parentSettings.put(storedSetting),
-        database.wordSelectionStates.bulkPut(backup.tables.wordSelectionStates),
+        database.wordSelectionStates.bulkPut(backup.tables.wordSelectionStates.map((state) => ({
+          ...state,
+          updatedByDeviceId: metadata.deviceId,
+        }))),
         database.answerEvents.bulkPut(backup.tables.answerEvents),
+        markPending(),
       ]);
     },
   );
 }
 
 export async function clearStudyData(): Promise<void> {
-  await database.transaction('rw', database.learningRecords, database.dailyTasks, database.answerEvents, async () => {
+  await database.transaction('rw', database.learningRecords, database.dailyTasks, database.answerEvents, database.syncMetadata, async () => {
     await database.learningRecords.clear();
     await database.dailyTasks.clear();
     await database.answerEvents.clear();
+    await markPending();
   });
+}
+
+export async function applySyncResponse(response: SyncResponse): Promise<void> {
+  if (response.schemaVersion !== SYNC_SCHEMA_VERSION || response.snapshot.schemaVersion !== SYNC_SCHEMA_VERSION) {
+    throw new Error('云端数据版本高于当前应用，请先升级应用。');
+  }
+
+  const records = Object.values(replayLearningRecords(response.snapshot.events, response.snapshot.checkpoint));
+  await database.transaction(
+    'rw',
+    [
+      database.answerEvents,
+      database.learningRecords,
+      database.dailyTasks,
+      database.parentSettings,
+      database.parentSettingSync,
+      database.wordSelectionStates,
+      database.syncMetadata,
+    ],
+    async () => {
+      const metadata = await ensureSyncMetadata();
+      await Promise.all([
+        database.answerEvents.clear(),
+        database.learningRecords.clear(),
+        database.dailyTasks.clear(),
+        database.parentSettings.clear(),
+        database.parentSettingSync.clear(),
+        database.wordSelectionStates.clear(),
+      ]);
+      await Promise.all([
+        database.answerEvents.bulkPut(response.snapshot.events),
+        database.learningRecords.bulkPut(records),
+        database.dailyTasks.bulkPut(response.snapshot.dailyTasks),
+        database.parentSettings.put({
+          id: PARENT_SETTING_ID,
+          ...normalizeParentSetting(response.snapshot.parentSetting.value),
+        }),
+        database.parentSettingSync.put({ id: PARENT_SETTING_ID, ...response.snapshot.parentSetting }),
+        database.wordSelectionStates.bulkPut(response.snapshot.wordSelectionStates),
+        database.syncMetadata.put({
+          ...metadata,
+          serverCursor: response.cursor,
+          generation: response.snapshot.generation,
+          lastSyncedAt: response.serverTime,
+          pendingSince: null,
+          checkpoint: response.snapshot.checkpoint,
+        }),
+      ]);
+    },
+  );
+}
+
+export async function clearLocalDeviceData(): Promise<void> {
+  await database.transaction(
+    'rw',
+    [
+      database.answerEvents,
+      database.learningRecords,
+      database.dailyTasks,
+      database.parentSettings,
+      database.parentSettingSync,
+      database.wordSelectionStates,
+      database.localLifePhotos,
+      database.syncMetadata,
+    ],
+    async () => {
+      await Promise.all([
+        database.answerEvents.clear(),
+        database.learningRecords.clear(),
+        database.dailyTasks.clear(),
+        database.parentSettings.clear(),
+        database.parentSettingSync.clear(),
+        database.wordSelectionStates.clear(),
+        database.localLifePhotos.clear(),
+        database.syncMetadata.clear(),
+      ]);
+    },
+  );
 }

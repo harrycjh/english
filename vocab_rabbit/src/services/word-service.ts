@@ -1,4 +1,5 @@
 import type {
+  LifePhotoCoverageManifest,
   OxfordRef,
   WordImageAtlasManifest,
   WordPayload,
@@ -21,6 +22,10 @@ export function getWordRelatedMediaUrl(): string {
   return `${import.meta.env.BASE_URL}content/words/word_related_media.json?v=${CONTENT_VERSION}`;
 }
 
+export function getLifePhotoCoverageUrl(): string {
+  return `${import.meta.env.BASE_URL}content/words/life_photo_coverage.json?v=${CONTENT_VERSION}`;
+}
+
 export function getWordImageAtlasUrl(): string {
   return `${import.meta.env.BASE_URL}content/words/word_image_atlas.json?v=${CONTENT_VERSION}`;
 }
@@ -39,6 +44,19 @@ export function mergeRelatedMedia(payload: WordPayload, manifest: WordRelatedMed
   };
 }
 
+export function mergeLifePhotoCoverage(
+  payload: WordPayload,
+  manifest: LifePhotoCoverageManifest | null,
+): WordPayload {
+  const coveredWordIds = new Set(manifest?.wordIds ?? []);
+  return {
+    ...payload,
+    words: payload.words.map((word) => (
+      coveredWordIds.has(word.id) ? { ...word, hasLifePhoto: true } : word
+    )),
+  };
+}
+
 async function loadWordRelatedMediaManifest(): Promise<WordRelatedMediaManifest | null> {
   const response = await fetch(getWordRelatedMediaUrl());
   if (response.status === 404) {
@@ -48,6 +66,17 @@ async function loadWordRelatedMediaManifest(): Promise<WordRelatedMediaManifest 
     throw new Error('无法加载关联图片清单。请先运行关联图片导出脚本。');
   }
   return (await response.json()) as WordRelatedMediaManifest;
+}
+
+async function loadLifePhotoCoverageManifest(): Promise<LifePhotoCoverageManifest | null> {
+  const response = await fetch(getLifePhotoCoverageUrl());
+  if (response.status === 404) {
+    return null;
+  }
+  if (!response.ok) {
+    throw new Error('无法加载生活图片覆盖索引。请先运行关联图片导出脚本。');
+  }
+  return (await response.json()) as LifePhotoCoverageManifest;
 }
 
 async function loadWordImageAtlasManifest(): Promise<WordImageAtlasManifest | null> {
@@ -66,8 +95,12 @@ export async function loadWordPayload(): Promise<WordPayload> {
       }),
       loadWordRelatedMediaManifest(),
       loadWordImageAtlasManifest(),
-    ]).then(([payload, relatedMediaManifest, atlasManifest]) => (
-      mergeWordAtlasManifest(mergeRelatedMedia(payload, relatedMediaManifest), atlasManifest)
+      loadLifePhotoCoverageManifest(),
+    ]).then(([payload, relatedMediaManifest, atlasManifest, lifePhotoCoverageManifest]) => (
+      mergeLifePhotoCoverage(
+        mergeWordAtlasManifest(mergeRelatedMedia(payload, relatedMediaManifest), atlasManifest),
+        lifePhotoCoverageManifest,
+      )
     ));
   }
 

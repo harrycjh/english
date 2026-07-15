@@ -3,6 +3,7 @@ import {
   buildRedRocketSearchTerms,
   buildRedRocketWordForms,
   createRedRocketAtlasPlan,
+  filterRejectedRedRocketMatches,
   matchWordsToRedRocket,
   mergeRedRocketMediaManifest,
   normalizeRedRocketText,
@@ -71,6 +72,21 @@ describe('Red Rocket matching', () => {
       ['lift', 'inflection'],
       ['brave', 'title'],
     ]);
+  });
+
+  it('removes only the audited page match while leaving other matches available', () => {
+    const matches = matchWordsToRedRocket([
+      { id: 'hand', english: 'hand', partOfSpeech: 'n' },
+      { id: 'brave', english: 'brave', partOfSpeech: 'adj' },
+    ], books);
+    const filtered = filterRejectedRedRocketMatches(matches, [{
+      wordId: 'brave',
+      level: 'Emergent Level',
+      title: 'Brave Grace',
+      page: 4,
+    }]);
+
+    expect(filtered.map((match) => match.wordId)).toEqual(['hand']);
   });
 });
 

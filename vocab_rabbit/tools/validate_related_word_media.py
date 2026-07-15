@@ -12,6 +12,7 @@ from typing import Any
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 WORD_LIST_PATH = PROJECT_ROOT / "public/content/words/ket_vocabulary.json"
 PUBLIC_MANIFEST_PATH = PROJECT_ROOT / "public/content/words/word_related_media.json"
+LIFE_PHOTO_COVERAGE_PATH = PROJECT_ROOT / "public/content/words/life_photo_coverage.json"
 PUBLIC_ROOT = PROJECT_ROOT / "public"
 LOCAL_PACKAGE_PATH = PROJECT_ROOT / "design-output/local-life-photo-package/vocab-rabbit-life-photos.zip"
 
@@ -137,6 +138,26 @@ def validate_local_life_photo_package(word_ids: set[str]) -> list[str]:
     return errors
 
 
+def validate_life_photo_coverage(word_ids: set[str]) -> list[str]:
+    errors: list[str] = []
+    if not LIFE_PHOTO_COVERAGE_PATH.exists():
+        return [f"life photo coverage is missing: {LIFE_PHOTO_COVERAGE_PATH}"]
+
+    manifest = load_json(LIFE_PHOTO_COVERAGE_PATH)
+    coverage_word_ids = manifest.get("wordIds", [])
+    unique_word_ids = set(coverage_word_ids)
+    if manifest.get("schemaVersion") != 1:
+        errors.append("life photo coverage schemaVersion must be 1")
+    if manifest.get("count") != len(coverage_word_ids):
+        errors.append("life photo coverage count does not match wordIds")
+    if len(unique_word_ids) != len(coverage_word_ids):
+        errors.append("life photo coverage contains duplicate wordIds")
+    unknown_word_ids = unique_word_ids - word_ids
+    if unknown_word_ids:
+        errors.append(f"life photo coverage has unknown wordIds: {sorted(unknown_word_ids)}")
+    return errors
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Validate VocaRabbit related media assets.")
     parser.add_argument("--public-only", action="store_true")
@@ -145,6 +166,7 @@ def main() -> None:
     word_ids = {word["id"] for word in words}
 
     errors = validate_public_manifest(word_ids)
+    errors.extend(validate_life_photo_coverage(word_ids))
     if not args.public_only:
         errors.extend(validate_local_life_photo_package(word_ids))
     result = {

@@ -273,6 +273,17 @@ export function matchWordsToRedRocket(words, books) {
   return words.map((word) => matchWordToRedRocket(word, books)).filter(Boolean);
 }
 
+function getRedRocketMatchIdentity(match) {
+  const page = typeof match.page === 'object' ? match.page : match;
+  const pageNumber = typeof match.page === 'object' ? match.page.page : match.page;
+  return [match.wordId, page.level, page.title, pageNumber].join('|');
+}
+
+export function filterRejectedRedRocketMatches(matches, rejectedMatches = []) {
+  const rejectedKeys = new Set(rejectedMatches.map(getRedRocketMatchIdentity));
+  return matches.filter((match) => !rejectedKeys.has(getRedRocketMatchIdentity(match)));
+}
+
 export function getRedRocketPageKey(page) {
   return [page.level, page.sourceFile, page.page].join('|');
 }

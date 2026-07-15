@@ -127,18 +127,24 @@ describe('shared word detail drawer', () => {
     );
   });
 
-  it('widens and reorganizes only the selection detail overlay', () => {
+  it('uses the review detail layout in both contexts', () => {
+    expect(wordDetailSource).not.toContain('word-detail-drawer--selection');
+    expect(wordDetailSource).not.toContain('word-detail-drawer__selection-overview');
+    expect(wordDetailSource).not.toContain('word-detail-drawer__inline-examples');
+    expect(css).not.toContain('.word-detail-drawer--selection');
+    expect(css).not.toContain('.word-detail-drawer__selection-overview');
+  });
+
+  it('keeps learning and answer metrics on one compact row', () => {
     expect(css).toMatch(
-      /\.word-detail-drawer--selection\s*\{[^}]*width:\s*min\(920px, calc\(100% - 24px\)\);/s,
+      /\.word-detail-drawer__stats\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);[^}]*gap:\s*8px;/s,
     );
     expect(css).toMatch(
-      /\.word-detail-drawer__selection-overview\s*\{[^}]*grid-template-columns:\s*150px minmax\(220px, 1fr\) minmax\(300px, 390px\);/s,
+      /\.word-detail-drawer__stats article\s*\{[^}]*padding:\s*10px 8px;[^}]*border-radius:\s*14px;/s,
     );
     expect(css).toMatch(
-      /\.word-detail-drawer--selection \.word-detail-drawer__selection-oxford img\s*\{[^}]*height:\s*390px;[^}]*max-height:\s*none;/s,
+      /\.word-detail-drawer__stats strong\s*\{[^}]*margin-top:\s*5px;[^}]*font-size:\s*18px;/s,
     );
-    expect(wordDetailSource).toContain('word-detail-drawer__inline-examples');
-    expect(wordDetailSource).toContain('word-detail-drawer__selection-oxford');
   });
 });
 
@@ -167,6 +173,21 @@ describe('statistics reference layout', () => {
   it('keeps overview and diagnostics in a compact dashboard above the dock', () => {
     expect(css).toMatch(
       /\.page--stats \.stats-hero\s*\{[^}]*min-height:\s*176px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--stats \.stats-hero__art\s*\{[^}]*stats-rabbit-reading-v1\.webp[^}]*center\s*\/\s*cover\s+no-repeat/s,
+    );
+    expect(css).toMatch(
+      /\.page--stats \.stats-hero__art\s*\{[^}]*-webkit-mask-image:\s*radial-gradient\([^;]+#000 0 56%[^;]+transparent 100%\);[^}]*mask-image:\s*radial-gradient\([^;]+#000 0 56%[^;]+transparent 100%\);/s,
+    );
+    expect(css).toMatch(
+      /\.page--stats \.stats-hero__art\s*\{[^}]*box-shadow:\s*inset 0 0 34px 22px rgba\(255, 250, 240, 0\.97\);/s,
+    );
+    expect(css).toMatch(
+      /\.page--stats \.stats-hero__aside\s*\{[^}]*stats-rhythm-house-v1\.webp[^}]*center\s*\/\s*cover\s+no-repeat;/s,
+    );
+    expect(css).toMatch(
+      /\.page--stats \.stats-hero__focus-art\s*\{[^}]*display:\s*none;/s,
     );
     expect(css).toMatch(
       /\.page--stats \.review-dashboard,\s*\.page--stats \.stats-panel-grid\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);[^}]*gap:\s*12px;/s,
@@ -227,18 +248,18 @@ describe('review preview atlas rendering', () => {
 });
 
 describe('selection card image rendering', () => {
-  it('centers images at seventy percent while preserving atlas proportions', () => {
+  it('uses the enlarged art slot while preserving atlas proportions', () => {
     expect(css).toMatch(
-      /\.page--selection \.selection-word-card__content\s*\{[^}]*grid-template-columns:\s*68px minmax\(0, 1fr\);[^}]*margin-top:\s*10px;/s,
+      /\.page--selection \.selection-word-card__content\s*\{[^}]*grid-template-columns:\s*78px minmax\(0, 1fr\);[^}]*margin-top:\s*7px;/s,
     );
     expect(css).toMatch(
-      /\.page--selection \.selection-word-card__art\s*\{[^}]*height:\s*78px;/s,
+      /\.page--selection \.selection-word-card__art\s*\{[^}]*height:\s*90px;/s,
     );
     expect(css).toMatch(
       /\.page--selection \.selection-word-card__copy\s*\{[^}]*margin-left:\s*10px;/s,
     );
     expect(css).toMatch(
-      /\.page--selection \.selection-word-card__art img,\s*\.page--selection \.selection-word-card__art \.word-image--atlas\s*\{[^}]*width:\s*70%;[^}]*height:\s*70%;/s,
+      /\.page--selection \.selection-word-card__art img,\s*\.page--selection \.selection-word-card__art \.word-image--atlas\s*\{[^}]*width:\s*87\.5%;[^}]*height:\s*87\.5%;/s,
     );
     expect(css).toMatch(
       /\.page--selection \.selection-word-card__art \.word-image--atlas\s*\{[^}]*background-size:\s*auto 300% !important;/s,

@@ -3,7 +3,7 @@ import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { LocalLifePhotoView } from '../models/local-media';
-import type { ParentSetting } from '../models/parent-setting';
+import type { ParentSetting, ProfileId } from '../models/parent-setting';
 import {
   createDefaultWordSelectionState,
   normalizeWordSelectionState,
@@ -13,6 +13,7 @@ import type { WordPayload } from '../models/word';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
 import { APP_VERSION } from '../config/app-meta';
+import { ProfileSelector } from '../components/ProfileSelector';
 import { getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
 import reviewLayoutData from '../../design-output/ui-concepts/review-page-layout.json';
 import reviewSlicesManifestData from '../../design-output/ui-concepts/review-page-slices-manifest.json';
@@ -391,7 +392,7 @@ interface ReviewPageProps {
   previewWords: WordPayload['words'];
   localLifePhotosById: Record<string, LocalLifePhotoView>;
   onStart: () => void;
-  onOpenSettings: () => void;
+  onSelectProfile: (profileId: ProfileId) => Promise<void>;
   onSaveSelectionStates: (states: WordSelectionState[]) => Promise<void>;
 }
 
@@ -407,7 +408,7 @@ export function ReviewPage({
   previewWords,
   localLifePhotosById,
   onStart,
-  onOpenSettings,
+  onSelectProfile,
   onSaveSelectionStates,
 }: ReviewPageProps) {
   const plannedCount = task.newWordIds.length + task.reviewWordIds.length;
@@ -508,21 +509,16 @@ export function ReviewPage({
         >
           <section className="review-plan-shell" id="review-top">
             <div className="review-plan-shell__chrome" style={getAbsoluteBoundsStyle(reviewLayout.modules.topChrome)}>
-              <div className="review-plan-shell__brand">
-                <ReviewSliceIcon
-                  className="review-plan-shell__brand-mark"
-                  file={reviewLayout.modules.brandCluster.iconAnchor.file}
-                />
-                <span className="review-plan-shell__brand-wordmark">VocaRabbit</span>
+              <div className="review-plan-shell__brand app-brand-lockup">
+                <span className="app-brand-lockup__mark" aria-hidden="true" />
+                <span className="review-plan-shell__brand-wordmark app-brand-lockup__wordmark">VocaRabbit</span>
                 <span className="app-version-badge">{APP_VERSION}</span>
               </div>
-              <button className="review-plan-shell__profile" type="button" onClick={onOpenSettings}>
-                <ReviewSliceIcon
-                  className="review-plan-shell__profile-avatar"
-                  file={reviewLayout.modules.profileButton.iconAnchor.file}
-                />
-                <span className="review-plan-shell__profile-label">小树的家长版</span>
-              </button>
+              <ProfileSelector
+                value={setting.profileId}
+                buttonClassName="review-plan-shell__profile app-profile-chip"
+                onChange={onSelectProfile}
+              />
             </div>
 
             <div className="review-plan-shell__hero" style={getAbsoluteBoundsStyle(reviewHeroBounds)}>

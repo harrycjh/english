@@ -3,7 +3,7 @@ import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { LocalLifePhotoView } from '../models/local-media';
-import type { ParentSetting } from '../models/parent-setting';
+import type { ParentSetting, ProfileId } from '../models/parent-setting';
 import {
   createDefaultWordSelectionState,
   normalizeWordSelectionState,
@@ -11,13 +11,14 @@ import {
 } from '../models/word-selection-state';
 import type { WordPayload, WordRecord } from '../models/word';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
-import { getAssetUrl, getStudyText } from '../services/word-service';
+import { getStudyText } from '../services/word-service';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
 import { APP_VERSION } from '../config/app-meta';
+import { ProfileSelector } from '../components/ProfileSelector';
 
 type StatusFilter = 'all' | 'new' | 'learning' | 'mastered' | 'paused' | 'disabled';
-type RedRocketFilter = 'all' | 'linked' | 'unlinked';
+type WordSourceFilter = 'all' | 'oxford' | 'redRocket' | 'lifePhoto';
 type SortMode = 'level' | 'difficulty' | 'recent' | 'alphabetical';
 type ViewMode = 'grid' | 'list';
 type PaginationToken = number | 'ellipsis';
@@ -31,7 +32,7 @@ interface SelectionPageProps {
   task: DailyTaskSummary;
   localLifePhotosById: Record<string, LocalLifePhotoView>;
   onBackHome: () => void;
-  onOpenSettings: () => void;
+  onSelectProfile: (profileId: ProfileId) => Promise<void>;
   onOpenStats: () => void;
   onSaveSelectionStates: (states: WordSelectionState[]) => Promise<void>;
   onApplySelectionPlan: () => Promise<void>;
@@ -66,7 +67,6 @@ interface SelectionCardVisualOverride {
   chineseLabel?: string;
   partOfSpeechLabel?: string;
   sourceLabel?: string;
-  demoArtPath?: string;
   statusLabel?: string;
   statusTone?: 'active' | 'paused' | 'disabled';
 }
@@ -90,7 +90,6 @@ const REFERENCE_SELECTION_CARD_OVERRIDES: Record<string, SelectionCardVisualOver
     chineseLabel: '家庭',
     partOfSpeechLabel: 'n. 名词',
     sourceLabel: 'Oxford Tree · Lv.2 Unit 1',
-    demoArtPath: '/design-reference/slices/selection-card-family-art.png',
     statusLabel: '已启用',
     statusTone: 'active',
   },
@@ -99,7 +98,6 @@ const REFERENCE_SELECTION_CARD_OVERRIDES: Record<string, SelectionCardVisualOver
     chineseLabel: '朋友',
     partOfSpeechLabel: 'n. 名词',
     sourceLabel: 'Oxford Tree · Lv.1 Unit 4',
-    demoArtPath: '/design-reference/slices/selection-card-friend-art.png',
     statusLabel: '已启用',
     statusTone: 'active',
   },
@@ -108,7 +106,6 @@ const REFERENCE_SELECTION_CARD_OVERRIDES: Record<string, SelectionCardVisualOver
     chineseLabel: '手臂',
     partOfSpeechLabel: 'n. 名词',
     sourceLabel: 'Oxford Tree · Lv.1 Unit 5',
-    demoArtPath: '/design-reference/slices/selection-card-arm-art.png',
     statusLabel: '已启用',
     statusTone: 'active',
   },
@@ -117,7 +114,6 @@ const REFERENCE_SELECTION_CARD_OVERRIDES: Record<string, SelectionCardVisualOver
     chineseLabel: '更好',
     partOfSpeechLabel: 'adj. 形容词',
     sourceLabel: 'Oxford Tree · Lv.3 Unit 8',
-    demoArtPath: '/design-reference/slices/selection-card-better-art.png',
     statusLabel: '已启用',
     statusTone: 'active',
   },
@@ -126,7 +122,6 @@ const REFERENCE_SELECTION_CARD_OVERRIDES: Record<string, SelectionCardVisualOver
     chineseLabel: '在……之后',
     partOfSpeechLabel: 'prep. 介词',
     sourceLabel: 'Oxford Tree · Lv.2 Unit 2',
-    demoArtPath: '/design-reference/slices/selection-card-after-art.png',
     statusLabel: '已暂停',
     statusTone: 'paused',
   },
@@ -135,7 +130,6 @@ const REFERENCE_SELECTION_CARD_OVERRIDES: Record<string, SelectionCardVisualOver
     chineseLabel: '再一次',
     partOfSpeechLabel: 'adv. 副词',
     sourceLabel: 'Oxford Tree · Lv.2 Unit 5',
-    demoArtPath: '/design-reference/slices/selection-card-again-art.png',
     statusLabel: '已启用',
     statusTone: 'active',
   },
@@ -154,9 +148,6 @@ function SelectionWordCard({
 }: SelectionWordCardProps) {
   const displayWord = getStudyText(word);
   const [hasArt, setHasArt] = useState(true);
-  const demoArtSrc = visualOverride?.demoArtPath
-    ? getAssetUrl(visualOverride.demoArtPath)
-    : null;
   const categoryLabel = visualOverride?.categoryLabel ?? word.category;
   const chineseLabel = visualOverride?.chineseLabel ?? word.chinese;
   const partOfSpeechLabel = visualOverride?.partOfSpeechLabel ?? formatPartOfSpeech(word.partOfSpeech);
@@ -171,12 +162,7 @@ function SelectionWordCard({
         </div>
         <div className="selection-word-card__content">
           <div className="selection-word-card__art">
-            {demoArtSrc ? (
-              <img
-                src={demoArtSrc}
-                alt={chineseLabel}
-              />
-            ) : hasArt ? (
+            {hasArt ? (
               <WordImage
                 word={word}
                 alt={chineseLabel}
@@ -246,10 +232,14 @@ function getPrimaryLevel(word: WordRecord): number | null {
   return word.oxfordRefs[0]?.level ?? null;
 }
 
-export function matchesRedRocketFilter(word: WordRecord, filter: RedRocketFilter): boolean {
+export function matchesWordSourceFilter(
+  word: WordRecord,
+  filter: WordSourceFilter,
+): boolean {
   if (filter === 'all') return true;
-  const hasRedRocket = Boolean(word.relatedMedia?.redRocket);
-  return filter === 'linked' ? hasRedRocket : !hasRedRocket;
+  if (filter === 'oxford') return Boolean(word.relatedMedia?.oxford);
+  if (filter === 'redRocket') return Boolean(word.relatedMedia?.redRocket);
+  return Boolean(word.hasLifePhoto);
 }
 
 function formatUpdatedAt(updatedAt: string): string {
@@ -313,30 +303,21 @@ export function SelectionPage({
   task,
   localLifePhotosById,
   onBackHome,
-  onOpenSettings,
+  onSelectProfile,
   onOpenStats,
   onSaveSelectionStates,
   onApplySelectionPlan,
 }: SelectionPageProps) {
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedLevel, setSelectedLevel] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState<StatusFilter>('all');
-  const [redRocketFilter, setRedRocketFilter] = useState<RedRocketFilter>('all');
+  const [wordSourceFilter, setWordSourceFilter] = useState<WordSourceFilter>('all');
   const [imageOnly, setImageOnly] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>('alphabetical');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
-
-  const levelOptions = useMemo(
-    () =>
-      [...new Set(payload.words.map(getPrimaryLevel).filter((level): level is number => level !== null))].sort(
-        (left, right) => left - right
-      ),
-    [payload.words]
-  );
 
   const masteredCount = useMemo(
     () => Object.values(recordsById).filter((record) => record.masteryLevel >= 4).length,
@@ -356,30 +337,30 @@ export function SelectionPage({
     const normalizedSearch = searchText.trim().toLowerCase();
     const shouldUseReferenceOrder = !normalizedSearch &&
       selectedCategory === 'all' &&
-      selectedLevel === 'all' &&
       selectedDifficulty === 'all' &&
       selectedStatus === 'all' &&
-      redRocketFilter === 'all' &&
+      wordSourceFilter === 'all' &&
       !imageOnly &&
       sortMode === 'alphabetical';
 
     const nextWords = payload.words.filter((word) => {
       const selectionState = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
       const learningBucket = getWordLearningBucket(word.id, recordsById[word.id], selectionState);
-      const primaryLevel = getPrimaryLevel(word);
       const matchesSearch = !normalizedSearch ||
         word.english.toLowerCase().includes(normalizedSearch) ||
         word.chinese.includes(searchText.trim()) ||
         word.category.includes(searchText.trim());
       const matchesCategory = selectedCategory === 'all' || word.category === selectedCategory;
-      const matchesLevel = selectedLevel === 'all' || primaryLevel === Number(selectedLevel);
       const matchesDifficulty = selectedDifficulty === 'all' || word.difficulty === Number(selectedDifficulty);
       const matchesStatus = selectedStatus === 'all' || learningBucket === selectedStatus;
-      const matchesRedRocket = matchesRedRocketFilter(word, redRocketFilter);
+      const matchesSource = matchesWordSourceFilter(
+        word,
+        wordSourceFilter,
+      );
       const matchesImage = !imageOnly || word.imageApproved;
 
-      return matchesSearch && matchesCategory && matchesLevel && matchesDifficulty && matchesStatus &&
-        matchesRedRocket && matchesImage;
+      return matchesSearch && matchesCategory && matchesDifficulty && matchesStatus &&
+        matchesSource && matchesImage;
     });
 
     return nextWords.sort((left, right) => {
@@ -405,7 +386,7 @@ export function SelectionPage({
         left.difficulty - right.difficulty ||
         left.english.localeCompare(right.english);
     });
-  }, [imageOnly, payload.words, recordsById, redRocketFilter, searchText, selectedCategory, selectedDifficulty, selectedLevel, selectedStatus, selectionById, sortMode]);
+  }, [imageOnly, payload.words, recordsById, searchText, selectedCategory, selectedDifficulty, selectedStatus, selectionById, sortMode, wordSourceFilter]);
 
   const pageSize = 6;
   const totalPages = Math.max(1, Math.ceil(filteredWords.length / pageSize));
@@ -434,10 +415,9 @@ export function SelectionPage({
   const isReferenceGridState = viewMode === 'grid' &&
     !searchText.trim() &&
     selectedCategory === 'all' &&
-    selectedLevel === 'all' &&
     selectedDifficulty === 'all' &&
     selectedStatus === 'all' &&
-    redRocketFilter === 'all' &&
+    wordSourceFilter === 'all' &&
     !imageOnly &&
     sortMode === 'alphabetical';
   const pagination = useMemo(() => buildPagination(totalPages, activePage), [activePage, totalPages]);
@@ -464,10 +444,9 @@ export function SelectionPage({
   function resetFilters() {
     setSearchText('');
     setSelectedCategory('all');
-    setSelectedLevel('all');
     setSelectedDifficulty('all');
     setSelectedStatus('all');
-    setRedRocketFilter('all');
+    setWordSourceFilter('all');
     setImageOnly(false);
     setSortMode('alphabetical');
     setCurrentPage(1);
@@ -479,14 +458,16 @@ export function SelectionPage({
 
         {/* Chrome bar */}
         <div className="selection-shell__chrome">
-          <div className="selection-shell__brand">
-            <span className="selection-shell__brand-mark" aria-hidden="true" />
-            <span>VocaRabbit</span>
+          <div className="selection-shell__brand app-brand-lockup">
+            <span className="app-brand-lockup__mark" aria-hidden="true" />
+            <span className="app-brand-lockup__wordmark">VocaRabbit</span>
+            <span className="app-version-badge">{APP_VERSION}</span>
           </div>
-          <button className="selection-shell__profile" type="button" onClick={onOpenSettings}>
-            <span className="selection-shell__profile-avatar" aria-hidden="true" />
-            <span>小雨的家长</span>
-          </button>
+          <ProfileSelector
+            value={setting.profileId}
+            buttonClassName="selection-shell__profile app-profile-chip"
+            onChange={onSelectProfile}
+          />
         </div>
 
         {/* Three-column layout */}
@@ -515,10 +496,12 @@ export function SelectionPage({
               </select>
             </label>
             <label className="selection-field">
-              <span>Oxford Tree</span>
-              <select className="selection-select" value={selectedLevel} onChange={(e) => { setSelectedLevel(e.target.value); setCurrentPage(1); }}>
-                <option value="all">全部等级</option>
-                {levelOptions.map((lv) => <option key={lv} value={lv}>Level {lv}</option>)}
+              <span>词语来源</span>
+              <select className="selection-select" value={wordSourceFilter} onChange={(e) => { setWordSourceFilter(e.target.value as WordSourceFilter); setCurrentPage(1); }}>
+                <option value="all">全部来源</option>
+                <option value="oxford">Oxford</option>
+                <option value="redRocket">Red Rocket</option>
+                <option value="lifePhoto">生活图片</option>
               </select>
             </label>
             <label className="selection-field">
@@ -537,14 +520,6 @@ export function SelectionPage({
                 <option value="mastered">已掌握</option>
                 <option value="paused">已暂停</option>
                 <option value="disabled">未启用</option>
-              </select>
-            </label>
-            <label className="selection-field">
-              <span>Red Rocket</span>
-              <select className="selection-select" value={redRocketFilter} onChange={(e) => { setRedRocketFilter(e.target.value as RedRocketFilter); setCurrentPage(1); }}>
-                <option value="all">全部单词</option>
-                <option value="linked">有关联图</option>
-                <option value="unlinked">无关联图</option>
               </select>
             </label>
             <label className="selection-toggle">

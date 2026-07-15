@@ -1,0 +1,20 @@
+{
+  "name": "vocab-rabbit-sync-function",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "check": "node --check index.mjs && node --check tablestore-repository.mjs && node --check create-tables.mjs",
+    "create:tables": "node create-tables.mjs"
+  },
+  "dependencies": {
+    "tablestore": "^5.6.5"
+  },
+  "overrides": {
+    "buffer": "4.9.2",
+    "protobufjs": "7.6.3"
+  }
+}

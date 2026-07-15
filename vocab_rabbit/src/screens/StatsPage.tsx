@@ -3,12 +3,13 @@ import { HeatmapCalendar } from '../components/HeatmapCalendar';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
-import type { ParentSetting } from '../models/parent-setting';
+import type { ParentSetting, ProfileId } from '../models/parent-setting';
 import { createDefaultWordSelectionState, type WordSelectionState } from '../models/word-selection-state';
 import type { WordPayload, WordRecord } from '../models/word';
 import { APP_VERSION } from '../config/app-meta';
 import { summarizeAnswerEvents } from '../services/answer-event-service';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
+import { ProfileSelector } from '../components/ProfileSelector';
 
 interface StatsPageProps {
   payload: WordPayload;
@@ -20,7 +21,7 @@ interface StatsPageProps {
   setting: ParentSetting;
   onBackHome: () => void;
   onOpenSelection: () => void;
-  onOpenSettings: () => void;
+  onSelectProfile: (profileId: ProfileId) => Promise<void>;
   onPracticeWrongWords: () => void;
 }
 
@@ -136,7 +137,7 @@ export function StatsPage({
   setting,
   onBackHome,
   onOpenSelection,
-  onOpenSettings,
+  onSelectProfile,
   onPracticeWrongWords,
 }: StatsPageProps) {
   const plannedCount = task.newWordIds.length + task.reviewWordIds.length;
@@ -272,12 +273,16 @@ export function StatsPage({
     <main className="page page--home page--stats">
       <div className="stats-mockup-frame">
         <div className="stats-shell__chrome">
-          <div className="stats-shell__brand">
-            <span className="stats-shell__brand-mark" aria-hidden="true" />
-            <span>VocaRabbit</span>
+          <div className="stats-shell__brand app-brand-lockup">
+            <span className="app-brand-lockup__mark" aria-hidden="true" />
+            <span className="app-brand-lockup__wordmark">VocaRabbit</span>
             <span className="app-version-badge">{APP_VERSION}</span>
           </div>
-          <div className="stats-shell__profile">小雨的家长</div>
+          <ProfileSelector
+            value={setting.profileId}
+            buttonClassName="stats-shell__profile app-profile-chip"
+            onChange={onSelectProfile}
+          />
         </div>
 
         {/* ─── Hero ─── */}
