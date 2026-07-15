@@ -60,6 +60,21 @@ describe('connectDevice', () => {
     expect(JSON.parse(String(capturedInit?.body))).toEqual({ familyCode: '2468', deviceId: 'device-a' });
     expect(result.deviceToken).toBe('token-a');
   });
+
+  it('retries a transient gateway timeout before reporting success', async () => {
+    let attempts = 0;
+    const fetchImpl: typeof fetch = async () => {
+      attempts += 1;
+      return attempts === 1
+        ? jsonResponse({ message: 'gateway timeout' }, 504)
+        : jsonResponse({ deviceToken: 'token-a' });
+    };
+
+    const result = await connectDevice('2468', 'device-a', fetchImpl);
+
+    expect(attempts).toBe(2);
+    expect(result.deviceToken).toBe('token-a');
+  });
 });
 
 describe('verifyFamilyCode', () => {

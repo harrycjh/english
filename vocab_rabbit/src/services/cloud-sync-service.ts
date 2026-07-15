@@ -21,27 +21,52 @@ interface VerifyResponse {
   valid: boolean;
 }
 
+const RETRY_DELAYS_MS = [0, 250, 750];
+const RETRYABLE_GATEWAY_STATUSES = new Set([502, 503, 504]);
+
+function wait(delayMs: number): Promise<void> {
+  return new Promise((resolve) => globalThis.setTimeout(resolve, delayMs));
+}
+
 async function postJson<T>(
   path: string,
   body: unknown,
   token: string | null,
   fetchImpl: typeof fetch,
 ): Promise<T> {
-  let response: Response;
-  try {
-    response = await fetchImpl(path, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      body: JSON.stringify(body),
-    });
-  } catch (error) {
-    throw new CloudSyncError(
-      'unavailable',
-      error instanceof Error ? error.message : '无法连接同步服务器。',
-    );
+  const requestInit: RequestInit = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(body),
+  };
+  let response: Response | null = null;
+  let networkError: unknown;
+
+  for (let attempt = 0; attempt < RETRY_DELAYS_MS.length; attempt += 1) {
+    if (RETRY_DELAYS_MS[attempt] > 0) {
+      await wait(RETRY_DELAYS_MS[attempt]);
+    }
+    try {
+      response = await fetchImpl(path, requestInit);
+      networkError = null;
+      if (!RETRYABLE_GATEWAY_STATUSES.has(response.status) || attempt === RETRY_DELAYS_MS.length - 1) {
+        break;
+      }
+    } catch (error) {
+      networkError = error;
+      if (attempt === RETRY_DELAYS_MS.length - 1) {
+        break;
+      }
+    }
+  }
+
+  if (!response) {
+    throw new CloudSyncError('unavailable', networkError instanceof Error
+      ? networkError.message
+      : '无法连接同步服务器。');
   }
 
   if (response.status === 401) {
