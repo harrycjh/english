@@ -24,6 +24,13 @@ interface VerifyResponse {
 const RETRY_DELAYS_MS = [0, 250, 750];
 const RETRYABLE_GATEWAY_STATUSES = new Set([502, 503, 504]);
 
+export function resolveSyncApiUrl(
+  path: string,
+  baseUrl: string = import.meta.env.VITE_SYNC_API_BASE_URL ?? '',
+): string {
+  return baseUrl ? `${baseUrl.replace(/\/$/, '')}${path}` : path;
+}
+
 function wait(delayMs: number): Promise<void> {
   return new Promise((resolve) => globalThis.setTimeout(resolve, delayMs));
 }
@@ -50,7 +57,7 @@ async function postJson<T>(
       await wait(RETRY_DELAYS_MS[attempt]);
     }
     try {
-      response = await fetchImpl(path, requestInit);
+      response = await fetchImpl(resolveSyncApiUrl(path), requestInit);
       networkError = null;
       if (!RETRYABLE_GATEWAY_STATUSES.has(response.status) || attempt === RETRY_DELAYS_MS.length - 1) {
         break;

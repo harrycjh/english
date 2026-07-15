@@ -3,6 +3,7 @@ import { SYNC_SCHEMA_VERSION, type SyncRequest } from '../models/sync';
 import {
   CloudSyncError,
   connectDevice,
+  resolveSyncApiUrl,
   synchronizeDevice,
   verifyFamilyCode,
 } from './cloud-sync-service';
@@ -74,6 +75,15 @@ describe('connectDevice', () => {
 
     expect(attempts).toBe(2);
     expect(result.deviceToken).toBe('token-a');
+  });
+});
+
+describe('resolveSyncApiUrl', () => {
+  it('uses the direct Function Compute endpoint only when a base URL is configured', () => {
+    expect(resolveSyncApiUrl('/api/sync', '')).toBe('/api/sync');
+    expect(resolveSyncApiUrl('/api/sync', 'https://sync.example.com/')).toBe(
+      'https://sync.example.com/api/sync',
+    );
   });
 });
 
