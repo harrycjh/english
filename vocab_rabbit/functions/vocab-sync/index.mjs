@@ -81,6 +81,7 @@ function mergeParentSetting(local, remote) {
 
 function mergeTasks(local = [], remote = []) {
   const byDate = new Map();
+  const wordIds = (value) => Array.isArray(value) ? value : [];
   for (const task of [...local, ...remote]) {
     const current = byDate.get(task.dateKey);
     if (!current) {
@@ -89,13 +90,15 @@ function mergeTasks(local = [], remote = []) {
     }
     byDate.set(task.dateKey, {
       ...current,
-      newWordIds: [...new Set([...current.newWordIds, ...task.newWordIds])],
-      reviewWordIds: [...new Set([...current.reviewWordIds, ...task.reviewWordIds])],
+      newWordIds: [...new Set([...wordIds(current.newWordIds), ...wordIds(task.newWordIds)])],
+      reviewWordIds: [...new Set([...wordIds(current.reviewWordIds), ...wordIds(task.reviewWordIds)])],
       completedAt: [current.completedAt, task.completedAt].filter(Boolean).sort()[0] ?? null,
-      correctCount: Math.max(current.correctCount, task.correctCount),
-      wrongCount: Math.max(current.wrongCount, task.wrongCount),
-      totalAnswered: Math.max(current.totalAnswered, task.totalAnswered),
-      answeredWordIds: [...new Set([...current.answeredWordIds, ...task.answeredWordIds])],
+      correctCount: Math.max(current.correctCount ?? 0, task.correctCount ?? 0),
+      wrongCount: Math.max(current.wrongCount ?? 0, task.wrongCount ?? 0),
+      totalAnswered: Math.max(current.totalAnswered ?? 0, task.totalAnswered ?? 0),
+      answeredWordIds: [
+        ...new Set([...wordIds(current.answeredWordIds), ...wordIds(task.answeredWordIds)]),
+      ],
     });
   }
   return [...byDate.values()].sort((left, right) => left.dateKey.localeCompare(right.dateKey));

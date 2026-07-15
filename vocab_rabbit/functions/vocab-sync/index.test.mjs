@@ -3,6 +3,7 @@ import {
   createHandler,
   createMemoryRepository,
   hashFamilyCode,
+  mergeSnapshots,
 } from './index.mjs';
 
 const env = {
@@ -181,6 +182,37 @@ describe('vocab sync Function Compute handler', () => {
       wrongCount: 1,
       totalAnswered: 2,
       answeredWordIds: ['word-a', 'word-b'],
+    });
+  });
+
+  it('merges legacy daily tasks that do not have answered word ids', () => {
+    const legacy = emptySnapshot();
+    legacy.dailyTasks = [{
+      dateKey: '2026-07-14',
+      newWordIds: ['word-a'],
+      reviewWordIds: [],
+      completedAt: null,
+      correctCount: 0,
+      wrongCount: 0,
+      totalAnswered: 0,
+    }];
+    const current = emptySnapshot();
+    current.dailyTasks = [{
+      dateKey: '2026-07-14',
+      newWordIds: ['word-b'],
+      reviewWordIds: [],
+      completedAt: null,
+      correctCount: 0,
+      wrongCount: 0,
+      totalAnswered: 0,
+      answeredWordIds: ['word-b'],
+    }];
+
+    const merged = mergeSnapshots(legacy, current);
+
+    expect(merged.dailyTasks[0]).toMatchObject({
+      newWordIds: ['word-a', 'word-b'],
+      answeredWordIds: [],
     });
   });
 

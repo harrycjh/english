@@ -4,7 +4,7 @@
   "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "landscape",
   "background_color": "#fff8ea",
   "theme_color": "#ffd66b",

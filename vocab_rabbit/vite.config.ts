@@ -145,6 +145,7 @@ function devLifePhotosPlugin(): Plugin {
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  const syncProxyTarget = env.VITE_SYNC_PROXY_TARGET || 'https://english.cw2017.com';
 
   return {
     base: command === 'build' ? env.VITE_BASE_PATH || '/english/' : '/',
@@ -153,6 +154,18 @@ export default defineConfig(({ command, mode }) => {
       allowedHosts: true,
       host: '0.0.0.0',
       port: 4173,
+      proxy: {
+        '/api': {
+          target: syncProxyTarget,
+          changeOrigin: true,
+          secure: true,
+          configure(proxy) {
+            proxy.on('proxyReq', (proxyRequest) => {
+              proxyRequest.setHeader('Origin', syncProxyTarget);
+            });
+          },
+        },
+      },
     },
     preview: {
       host: '0.0.0.0',
