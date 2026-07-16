@@ -485,7 +485,7 @@ export function ReviewPage({
   }
 
   return (
-    <main className="page page--review">
+    <main className="page page--review" data-profile={setting.profileId}>
       <div
         className="review-mockup-frame"
         style={{

@@ -121,22 +121,37 @@ function deriveWordStates(snapshot) {
 }
 
 export function createTablestoreRepository(client, tables = DEFAULT_TABLES) {
-  async function readSnapshot(userId) {
-    const [appResult, events] = await Promise.all([
-      client.getRow({
-        tableName: tables.app,
-        primaryKey: [
-          { user_id: userId },
-          { state_type: 'sync_snapshot' },
-          { state_id: 'current' },
-        ],
-        maxVersions: 1,
-      }),
-      readAllEvents(client, tables.events, userId),
-    ]);
+  async function readAppState(userId) {
+    const appResult = await client.getRow({
+      tableName: tables.app,
+      primaryKey: [
+        { user_id: userId },
+        { state_type: 'sync_snapshot' },
+        { state_id: 'current' },
+      ],
+      columnsToGet: ['payload_json', 'cursor'],
+      maxVersions: 1,
+    });
     if (!appResult.row) return null;
     const snapshotWithoutEvents = parseJsonColumn(appResult.row, 'payload_json', null);
-    return snapshotWithoutEvents ? { ...snapshotWithoutEvents, events } : null;
+    return snapshotWithoutEvents ? {
+      cursor: columnValue(appResult.row, 'cursor') ?? null,
+      snapshotWithoutEvents,
+    } : null;
+  }
+
+  async function getSyncState(userId, clientCursor) {
+    const appState = await readAppState(userId);
+    if (!appState) return { cursor: null, isCurrent: false, snapshot: null };
+    if (clientCursor && clientCursor === appState.cursor) {
+      return { cursor: appState.cursor, isCurrent: true, snapshot: null };
+    }
+    const events = await readAllEvents(client, tables.events, userId);
+    return {
+      cursor: appState.cursor,
+      isCurrent: false,
+      snapshot: { ...appState.snapshotWithoutEvents, events },
+    };
   }
 
   return {
@@ -168,8 +183,9 @@ export function createTablestoreRepository(client, tables = DEFAULT_TABLES) {
       });
       return result.row ? columnValue(result.row, 'active') === true : false;
     },
+    getSyncState,
     async mergeSnapshot(userId, incoming) {
-      const current = await readSnapshot(userId);
+      const current = (await getSyncState(userId, null)).snapshot;
       const merged = mergeSnapshots(current, incoming);
       const eventRows = incoming.events.map((event) => ({
         type: 'PUT',

@@ -159,7 +159,6 @@ export function LearningPage({
           <ProgressRing value={currentIndex + 1} total={queue.length} />
           <div className="learning-header__meta">
             <span>{currentWord.category}</span>
-            <strong>{currentWord.chinese}</strong>
           </div>
         </header>
 

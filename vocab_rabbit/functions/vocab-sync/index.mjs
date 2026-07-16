@@ -218,6 +218,7 @@ export function mergeSnapshots(local, remote) {
 export function createMemoryRepository() {
   let snapshot = null;
   let cursor = 0;
+  let mergeCount = 0;
   const activeDevices = new Set();
   return {
     async registerDevice(userId, deviceId) {
@@ -229,13 +230,26 @@ export function createMemoryRepository() {
     revokeDevice(userId, deviceId) {
       activeDevices.delete(`${userId}\u0000${deviceId}`);
     },
+    async getSyncState(_userId, clientCursor) {
+      const serverCursor = snapshot ? String(cursor) : null;
+      const isCurrent = Boolean(serverCursor && clientCursor === serverCursor);
+      return {
+        cursor: serverCursor,
+        isCurrent,
+        snapshot: isCurrent || !snapshot ? null : structuredClone(snapshot),
+      };
+    },
     async mergeSnapshot(_userId, incoming) {
       snapshot = mergeSnapshots(snapshot, incoming);
       cursor += 1;
+      mergeCount += 1;
       return { snapshot: structuredClone(snapshot), cursor: String(cursor) };
     },
     getEventCount() {
       return snapshot?.events.length ?? 0;
+    },
+    getMergeCount() {
+      return mergeCount;
     },
   };
 }
@@ -315,17 +329,40 @@ export function createHandler(repository, env) {
 
       if (request.path === '/api/sync') {
         if (request.body.schemaVersion !== SYNC_SCHEMA_VERSION
-          || request.body.snapshot?.schemaVersion !== SYNC_SCHEMA_VERSION) {
+          || (request.body.snapshot
+            && request.body.snapshot.schemaVersion !== SYNC_SCHEMA_VERSION)) {
           return response(409, { code: 'SCHEMA_MISMATCH' }, env.ALLOWED_ORIGIN);
         }
         if (request.body.deviceId !== tokenPayload.deviceId) {
           return response(401, { code: 'DEVICE_TOKEN_MISMATCH' }, env.ALLOWED_ORIGIN);
+        }
+
+        if (request.body.hasLocalChanges === false) {
+          if (!request.body.cursor) {
+            return response(400, { code: 'CURSOR_REQUIRED' }, env.ALLOWED_ORIGIN);
+          }
+          const current = await repository.getSyncState(env.FIXED_USER_ID, request.body.cursor);
+          if (!current.cursor) {
+            return response(409, { code: 'FULL_SNAPSHOT_REQUIRED' }, env.ALLOWED_ORIGIN);
+          }
+          return response(200, {
+            schemaVersion: SYNC_SCHEMA_VERSION,
+            cursor: current.cursor,
+            serverTime: new Date().toISOString(),
+            upToDate: current.isCurrent,
+            snapshot: current.snapshot,
+          }, env.ALLOWED_ORIGIN);
+        }
+
+        if (!request.body.snapshot) {
+          return response(400, { code: 'SNAPSHOT_REQUIRED' }, env.ALLOWED_ORIGIN);
         }
         const merged = await repository.mergeSnapshot(env.FIXED_USER_ID, request.body.snapshot);
         return response(200, {
           schemaVersion: SYNC_SCHEMA_VERSION,
           cursor: merged.cursor,
           serverTime: new Date().toISOString(),
+          upToDate: false,
           snapshot: merged.snapshot,
         }, env.ALLOWED_ORIGIN);
       }

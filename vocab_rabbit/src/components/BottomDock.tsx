@@ -1,3 +1,5 @@
+import { BookOpen, ChartPie, LayoutGrid, Settings as SettingsIcon, type LucideIcon } from 'lucide-react';
+
 export type BottomDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
 
 interface BottomDockProps {
@@ -6,14 +8,6 @@ interface BottomDockProps {
   onOpenSelection: () => void;
   onOpenStats: () => void;
   onOpenSettings: () => void;
-}
-
-function getBottomDockButtonUrl(glyph: BottomDockGlyph, active: boolean): string {
-  if (glyph === 'review' && active) {
-    return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-review-active-latest.png?v=8`;
-  }
-  const state = active ? 'active' : 'default';
-  return `${import.meta.env.BASE_URL}design-reference/slices/review-dock-${glyph}-${state}-transparent.png?v=2`;
 }
 
 /**
@@ -29,17 +23,18 @@ export function BottomDock({
   onOpenStats,
   onOpenSettings,
 }: BottomDockProps) {
-  const items: Array<{ glyph: BottomDockGlyph; label: string; onClick: () => void }> = [
-    { glyph: 'review', label: '复习', onClick: onOpenReview },
-    { glyph: 'selection', label: '选词', onClick: onOpenSelection },
-    { glyph: 'stats', label: '统计', onClick: onOpenStats },
-    { glyph: 'settings', label: '设置', onClick: onOpenSettings },
+  const items: Array<{ glyph: BottomDockGlyph; label: string; icon: LucideIcon; onClick: () => void }> = [
+    { glyph: 'review', label: '复习', icon: BookOpen, onClick: onOpenReview },
+    { glyph: 'selection', label: '选词', icon: LayoutGrid, onClick: onOpenSelection },
+    { glyph: 'stats', label: '统计', icon: ChartPie, onClick: onOpenStats },
+    { glyph: 'settings', label: '设置', icon: SettingsIcon, onClick: onOpenSettings },
   ];
 
   return (
     <nav className="app-bottom-dock" aria-label="主页面导航">
       {items.map((item) => {
         const isActive = item.glyph === active;
+        const Icon = item.icon;
         return (
           <button
             key={item.glyph}
@@ -48,8 +43,8 @@ export function BottomDock({
             aria-label={item.label}
             aria-current={isActive ? 'page' : undefined}
             onClick={isActive ? undefined : item.onClick}
-            style={{ backgroundImage: `url(${getBottomDockButtonUrl(item.glyph, isActive)})` }}
           >
+            <Icon className="app-bottom-dock__icon" aria-hidden="true" strokeWidth={2.8} />
             <span className="app-bottom-dock__label">{item.label}</span>
           </button>
         );

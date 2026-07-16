@@ -82,3 +82,15 @@ After deployment:
 3. Answer one word offline, reconnect, and confirm the event exists once in `vocab_learning_events`.
 4. Open a second device and confirm both devices converge on the same event count.
 5. Clear local data from Settings and confirm the Tablestore rows remain.
+
+## Cursor Fast Path
+
+After a successful merge, the browser stores the returned server cursor. On a
+later startup with no pending local changes, it sends only that cursor with
+`hasLocalChanges: false` and `snapshot: null`.
+
+- Matching cursors return `upToDate: true` and no snapshot.
+- A stale cursor returns the current cloud snapshot without rewriting it.
+- Pending local changes still use the full merge path.
+- Requests from older clients without `hasLocalChanges` continue to use the
+  full merge path.

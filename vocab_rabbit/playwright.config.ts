@@ -19,6 +19,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         channel: 'chrome',
+        viewport: { width: 1280, height: 900 },
       },
     },
   ],

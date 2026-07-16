@@ -77,9 +77,9 @@ describe('answer persistence', () => {
     const request = await buildLocalSyncRequest();
     const secondRequest = await buildLocalSyncRequest();
 
-    expect(request.snapshot.checkpoint?.records).toEqual([makeRecord()]);
-    expect(secondRequest.snapshot.checkpoint?.capturedAt).toBe(request.snapshot.checkpoint?.capturedAt);
-    expect(request.snapshot.events).toHaveLength(1);
+    expect(request.snapshot?.checkpoint?.records).toEqual([makeRecord()]);
+    expect(secondRequest.snapshot?.checkpoint?.capturedAt).toBe(request.snapshot?.checkpoint?.capturedAt);
+    expect(request.snapshot?.events).toHaveLength(1);
   });
 });
 
@@ -108,5 +108,51 @@ describe('cloud merge persistence', () => {
     expect(nextMetadata.serverCursor).toBe('cursor-2');
     expect(nextMetadata.pendingSince).toBeNull();
     expect((await listLearningRecords())['word-a']).toMatchObject({ masteryLevel: 1, reviewStage: 1 });
+  });
+
+  it('builds a cursor-only request after a successful sync with no new local changes', async () => {
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-2',
+      serverTime: '2026-07-14T10:00:00.000Z',
+      upToDate: false,
+      snapshot: {
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        generation: 0,
+        events: [],
+        checkpoint: null,
+        dailyTasks: [],
+        wordSelectionStates: [],
+        parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+      },
+    });
+
+    const request = await buildLocalSyncRequest();
+
+    expect(request).toMatchObject({
+      cursor: 'cursor-2',
+      hasLocalChanges: false,
+      snapshot: null,
+    });
+  });
+
+  it('acknowledges an unchanged cursor without replacing local learning data', async () => {
+    await saveAnswerAndLearningRecord(makeEvent(), makeRecord());
+    const before = await listLearningRecords();
+
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-3',
+      serverTime: '2026-07-14T11:00:00.000Z',
+      upToDate: true,
+      snapshot: null,
+    });
+
+    expect(await listLearningRecords()).toEqual(before);
+    expect(await getOrCreateSyncMetadata()).toMatchObject({
+      serverCursor: 'cursor-3',
+      lastSyncedAt: '2026-07-14T11:00:00.000Z',
+      pendingSince: null,
+    });
   });
 });

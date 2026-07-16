@@ -260,7 +260,7 @@ export function SettingsPage({
       : '尚未导入生活照片，只会保存在当前设备。');
 
   return (
-    <main className="page page--home page--settings">
+    <main className="page page--home page--settings" data-profile={settings.profileId}>
       <div className="settings-mockup-frame">
         <div className="settings-shell__chrome">
           <div className="settings-shell__brand app-brand-lockup">

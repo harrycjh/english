@@ -127,7 +127,7 @@ export async function synchronizeDevice(
   fetchImpl: typeof fetch = fetch,
 ): Promise<SyncResponse> {
   const result = await postJson<SyncResponse>('/api/sync', request, deviceToken, fetchImpl);
-  if (!result.cursor || !result.snapshot || !result.serverTime) {
+  if (!result.cursor || !result.serverTime || (!result.snapshot && result.upToDate !== true)) {
     throw new CloudSyncError('invalid-response', '同步服务器返回的数据不完整。');
   }
   return result;

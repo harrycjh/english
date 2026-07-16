@@ -54,12 +54,14 @@ export interface SyncRequest {
   schemaVersion: typeof SYNC_SCHEMA_VERSION;
   deviceId: string;
   cursor: string | null;
-  snapshot: SyncSnapshot;
+  hasLocalChanges?: boolean;
+  snapshot: SyncSnapshot | null;
 }
 
 export interface SyncResponse {
   schemaVersion: typeof SYNC_SCHEMA_VERSION;
   cursor: string;
   serverTime: string;
-  snapshot: SyncSnapshot;
+  upToDate?: boolean;
+  snapshot: SyncSnapshot | null;
 }

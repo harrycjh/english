@@ -453,7 +453,7 @@ export function SelectionPage({
   }
 
   return (
-    <main className="page page--home page--selection">
+    <main className="page page--home page--selection" data-profile={setting.profileId}>
       <div className="selection-mockup-frame">
 
         {/* Chrome bar */}

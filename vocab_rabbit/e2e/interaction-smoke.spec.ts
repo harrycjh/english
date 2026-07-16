@@ -7,10 +7,18 @@ const dbName = 'vocab-rabbit';
 
 async function resetApp(page: Page) {
   await page.goto('/');
-  await page.evaluate((name) => {
-    indexedDB.deleteDatabase(name);
+  await page.evaluate(async (name) => {
+    await new Promise<void>((resolve, reject) => {
+      const request = indexedDB.deleteDatabase(name);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+      request.onblocked = () => reject(new Error(`Database ${name} deletion was blocked`));
+    });
   }, dbName);
   await page.reload();
+  const offlineEntry = page.getByRole('button', { name: '暂时离线进入' });
+  await expect(offlineEntry).toBeVisible();
+  await offlineEntry.click();
   await expect(page.getByRole('heading', { name: '今日学习计划' })).toBeVisible();
 }
 
@@ -93,8 +101,7 @@ test.describe('main app interactions', () => {
     await expect(page.getByRole('button', { name: '返回首页' })).toBeVisible();
 
     for (let index = 0; index < 12 && await page.locator('.celebration-card').count() === 0; index += 1) {
-      const correctChinese = (await page.locator('.learning-header__meta strong').innerText()).trim();
-      const choice = page.locator('.choice-button:not([disabled])').filter({ hasText: correctChinese }).first();
+      const choice = page.locator('.choice-button:not([disabled])').first();
       await expect(choice).toBeVisible();
       await choice.click();
       await page.waitForTimeout(760);
@@ -105,7 +112,10 @@ test.describe('main app interactions', () => {
     await expect(page.getByRole('heading', { name: '今日学习计划' })).toBeVisible();
 
     await page.getByRole('button', { name: '统计' }).last().click();
-    await expect(page.getByRole('heading', { name: /把学习节奏看成一张图/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '学习统计' })).toBeVisible();
+    await expect(page.getByRole('tab', { name: '遗忘曲线' })).toBeVisible();
+    await expect(page.getByRole('tab', { name: '学习情况' })).toBeVisible();
+    await expect(page.getByRole('tab', { name: '记忆持久度' })).toBeVisible();
     await page.getByRole('button', { name: '选词' }).last().click();
     await expect(page.getByRole('heading', { name: '词库管理' })).toBeVisible();
   });

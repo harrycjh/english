@@ -141,6 +141,16 @@ export async function saveDeviceToken(deviceToken: string | null): Promise<SyncM
 
 export async function buildLocalSyncRequest(): Promise<SyncRequest> {
   const metadata = await ensureSyncMetadata();
+  if (metadata.serverCursor && !metadata.pendingSince) {
+    return {
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      deviceId: metadata.deviceId,
+      cursor: metadata.serverCursor,
+      hasLocalChanges: false,
+      snapshot: null,
+    };
+  }
+
   const [events, records, dailyTasks, storedSetting, storedVersionedSetting, selectionStates] = await Promise.all([
     database.answerEvents.orderBy('answeredAt').toArray(),
     database.learningRecords.toArray(),
@@ -192,6 +202,7 @@ export async function buildLocalSyncRequest(): Promise<SyncRequest> {
     schemaVersion: SYNC_SCHEMA_VERSION,
     deviceId: metadata.deviceId,
     cursor: metadata.serverCursor,
+    hasLocalChanges: true,
     snapshot: {
       schemaVersion: SYNC_SCHEMA_VERSION,
       generation: metadata.generation,
@@ -425,11 +436,27 @@ export async function clearStudyData(): Promise<void> {
 }
 
 export async function applySyncResponse(response: SyncResponse): Promise<void> {
-  if (response.schemaVersion !== SYNC_SCHEMA_VERSION || response.snapshot.schemaVersion !== SYNC_SCHEMA_VERSION) {
+  if (response.schemaVersion !== SYNC_SCHEMA_VERSION
+    || (!response.snapshot && response.upToDate !== true)
+    || (response.snapshot && response.snapshot.schemaVersion !== SYNC_SCHEMA_VERSION)) {
     throw new Error('云端数据版本高于当前应用，请先升级应用。');
   }
 
-  const records = Object.values(replayLearningRecords(response.snapshot.events, response.snapshot.checkpoint));
+  if (!response.snapshot) {
+    await database.transaction('rw', database.syncMetadata, async () => {
+      const metadata = await ensureSyncMetadata();
+      await database.syncMetadata.put({
+        ...metadata,
+        serverCursor: response.cursor,
+        lastSyncedAt: response.serverTime,
+        pendingSince: null,
+      });
+    });
+    return;
+  }
+
+  const snapshot = response.snapshot;
+  const records = Object.values(replayLearningRecords(snapshot.events, snapshot.checkpoint));
   await database.transaction(
     'rw',
     [
@@ -452,22 +479,22 @@ export async function applySyncResponse(response: SyncResponse): Promise<void> {
         database.wordSelectionStates.clear(),
       ]);
       await Promise.all([
-        database.answerEvents.bulkPut(response.snapshot.events),
+        database.answerEvents.bulkPut(snapshot.events),
         database.learningRecords.bulkPut(records),
-        database.dailyTasks.bulkPut(response.snapshot.dailyTasks),
+        database.dailyTasks.bulkPut(snapshot.dailyTasks),
         database.parentSettings.put({
           id: PARENT_SETTING_ID,
-          ...normalizeParentSetting(response.snapshot.parentSetting.value),
+          ...normalizeParentSetting(snapshot.parentSetting.value),
         }),
-        database.parentSettingSync.put({ id: PARENT_SETTING_ID, ...response.snapshot.parentSetting }),
-        database.wordSelectionStates.bulkPut(response.snapshot.wordSelectionStates),
+        database.parentSettingSync.put({ id: PARENT_SETTING_ID, ...snapshot.parentSetting }),
+        database.wordSelectionStates.bulkPut(snapshot.wordSelectionStates),
         database.syncMetadata.put({
           ...metadata,
           serverCursor: response.cursor,
-          generation: response.snapshot.generation,
+          generation: snapshot.generation,
           lastSyncedAt: response.serverTime,
           pendingSince: null,
-          checkpoint: response.snapshot.checkpoint,
+          checkpoint: snapshot.checkpoint,
         }),
       ]);
     },

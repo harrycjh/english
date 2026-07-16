@@ -43,7 +43,7 @@ describe('fixed iPad shell', () => {
       /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*top:\s*calc\(var\(--ipad-shell-stage-height\) - 90px\);[^}]*bottom:\s*auto;[^}]*width:\s*1137px;[^}]*height:\s*90px;/s,
     );
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\s*\{[^}]*top:\s*16px;[^}]*width:\s*163px;[^}]*height:\s*56px;/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\s*\{[^}]*top:\s*13px;[^}]*width:\s*215px;[^}]*height:\s*64px;/s,
     );
   });
 
@@ -64,21 +64,27 @@ describe('fixed iPad shell', () => {
     );
   });
 
-  it('enlarges the active dock button without moving its anchor', () => {
+  it('uses one restrained active scale for every dock button', () => {
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\.is-active\s*\{[^}]*z-index:\s*1;[^}]*transform:\s*scale\(1\.5\);/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\.is-active\s*\{[^}]*z-index:\s*1;[^}]*transform:\s*scale\(1\.06\);/s,
     );
   });
 
-  it('compensates for the wider settings active artwork', () => {
-    expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:nth-child\(4\)\.is-active\s*\{[^}]*transform:\s*scale\(1\.725\);[^}]*background-size:\s*auto 100%;/s,
+  it('does not give the settings button a special active size', () => {
+    expect(css).not.toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:nth-child\(4\)\.is-active/,
     );
   });
 
-  it('reduces inactive dock buttons by twenty percent', () => {
+  it('keeps every inactive dock button at the same base size', () => {
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:not\(\.is-active\)\s*\{[^}]*transform:\s*scale\(0\.8\);/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button:not\(\.is-active\)\s*\{[^}]*transform:\s*none;/s,
+    );
+    expect(css).toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__icon\s*\{[^}]*width:\s*43px;[^}]*height:\s*43px;/s,
+    );
+    expect(css).toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__label\s*\{[^}]*font-size:\s*29px;/s,
     );
   });
 });

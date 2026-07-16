@@ -133,6 +133,66 @@ describe('vocab sync Function Compute handler', () => {
     expect(repository.getEventCount()).toBe(1);
   });
 
+  it('returns a cursor-only response without merging when local and cloud cursors match', async () => {
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env);
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+    const first = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: null,
+      snapshot: emptySnapshot(),
+    }, connect.json.deviceToken)));
+
+    const fast = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: first.json.cursor,
+      hasLocalChanges: false,
+      snapshot: null,
+    }, connect.json.deviceToken)));
+
+    expect(fast.statusCode).toBe(200);
+    expect(fast.json).toMatchObject({
+      cursor: first.json.cursor,
+      upToDate: true,
+      snapshot: null,
+    });
+    expect(repository.getMergeCount()).toBe(1);
+  });
+
+  it('returns the cloud snapshot without rewriting it when a clean device has a stale cursor', async () => {
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env);
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+    const first = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: null,
+      snapshot: emptySnapshot(),
+    }, connect.json.deviceToken)));
+
+    const pull = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: 'stale-cursor',
+      hasLocalChanges: false,
+      snapshot: null,
+    }, connect.json.deviceToken)));
+
+    expect(pull.statusCode).toBe(200);
+    expect(pull.json.cursor).toBe(first.json.cursor);
+    expect(pull.json.upToDate).toBe(false);
+    expect(pull.json.snapshot).toEqual(emptySnapshot());
+    expect(repository.getMergeCount()).toBe(1);
+  });
+
   it('rebuilds daily counts from events learned on two devices', async () => {
     const repository = createMemoryRepository();
     const handler = createHandler(repository, env);

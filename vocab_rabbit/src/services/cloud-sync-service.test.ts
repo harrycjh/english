@@ -102,6 +102,22 @@ describe('verifyFamilyCode', () => {
 });
 
 describe('synchronizeDevice', () => {
+  it('accepts a cursor-only up-to-date response without a full snapshot', async () => {
+    const fetchImpl: typeof fetch = async () => jsonResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-1',
+      serverTime: '2026-07-14T10:00:00.000Z',
+      upToDate: true,
+      snapshot: null,
+    });
+
+    await expect(synchronizeDevice('token-a', makeRequest(), fetchImpl)).resolves.toMatchObject({
+      cursor: 'cursor-1',
+      upToDate: true,
+      snapshot: null,
+    });
+  });
+
   it('classifies a server outage separately from a revoked token', async () => {
     const unavailableFetch: typeof fetch = async () => jsonResponse({ message: 'busy' }, 503);
     const revokedFetch: typeof fetch = async () => jsonResponse({ message: 'revoked' }, 401);

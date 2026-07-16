@@ -31,26 +31,28 @@ export function QuestionImage({ question, disabled, enableAudio, selectedAnswer,
         )}
       </div>
 
-      <div className="question-panel__meta">
-        <p>{question.prompt}</p>
-      </div>
+      <div className="question-panel__answer-column">
+        <div className="question-panel__meta">
+          <p>{question.prompt}</p>
+        </div>
 
-      <div className="option-grid">
-        {question.options.map((option) => {
-          const isSelected = selectedAnswer === option;
-          const isCorrect = option === question.correctAnswer;
-          return (
-            <button
-              key={option}
-              type="button"
-              className={`choice-button${isSelected ? ' is-selected' : ''}${disabled && isCorrect ? ' is-correct' : ''}${disabled && isSelected && !isCorrect ? ' is-wrong' : ''}`}
-              disabled={disabled}
-              onClick={() => onSubmit(option)}
-            >
-              {option}
-            </button>
-          );
-        })}
+        <div className="option-grid">
+          {question.options.map((option) => {
+            const isSelected = selectedAnswer === option;
+            const isCorrect = option === question.correctAnswer;
+            return (
+              <button
+                key={option}
+                type="button"
+                className={`choice-button${isSelected ? ' is-selected' : ''}${disabled && isCorrect ? ' is-correct' : ''}${disabled && isSelected && !isCorrect ? ' is-wrong' : ''}`}
+                disabled={disabled}
+                onClick={() => onSubmit(option)}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
