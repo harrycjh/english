@@ -81,13 +81,16 @@ describe('memory statistics', () => {
     expect(statistics.durabilityThresholds.map((point) => point.thresholdDays)).toEqual([10, 30, 60, 90]);
   });
 
-  it('uses the Ebbinghaus 1885 savings formula', () => {
+  it('uses the Ebbinghaus savings formula with calibrated long-term anchors', () => {
     expect(estimateEbbinghausSavings(20 / 1440)).toBeCloseTo(56.99, 1);
     expect(estimateEbbinghausSavings(1)).toBeCloseTo(30.4, 1);
-    expect(estimateEbbinghausSavings(31)).toBeCloseTo(21.2, 1);
-    expect(estimateEbbinghausSavings(365)).toBeGreaterThan(15);
-    expect(estimateEbbinghausSavings(365)).toBeLessThan(20);
-
+    expect(estimateEbbinghausSavings(30)).toBe(21);
+    expect(estimateEbbinghausSavings(31)).toBeLessThan(21);
+    expect(estimateEbbinghausSavings(31)).toBeGreaterThan(18);
+    expect(estimateEbbinghausSavings(60)).toBe(18);
+    expect(estimateEbbinghausSavings(90)).toBe(15);
+    expect(estimateEbbinghausSavings(180)).toBe(12);
+    expect(estimateEbbinghausSavings(365)).toBe(5);
   });
 
   it('uses a slightly higher default curve until repeated formal answers are available', () => {

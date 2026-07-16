@@ -2,33 +2,70 @@ import type { DailyTaskSummary } from '../models/daily-task';
 
 interface HeatmapCalendarProps {
   tasks: DailyTaskSummary[];
+  endDateKey?: string;
 }
 
-function buildRecentDates(length: number): string[] {
+export interface HeatmapDay {
+  dateKey: string;
+  task?: DailyTaskSummary;
+  answered: number;
+  correct: number;
+  intensity: 0 | 1 | 2 | 3;
+  weekdayLabel: string;
+}
+
+const WEEKDAY_LABELS = ['日', '一', '二', '三', '四', '五', '六'] as const;
+
+function buildRecentDates(endDateKey: string, length: number): string[] {
   const dates: string[] = [];
-  const today = new Date();
+  const endDate = new Date(`${endDateKey}T12:00:00.000Z`);
   for (let offset = length - 1; offset >= 0; offset -= 1) {
-    const current = new Date(today);
-    current.setDate(today.getDate() - offset);
+    const current = new Date(endDate);
+    current.setUTCDate(endDate.getUTCDate() - offset);
     dates.push(current.toISOString().slice(0, 10));
   }
   return dates;
 }
 
-export function HeatmapCalendar({ tasks }: HeatmapCalendarProps) {
+export function buildHeatmapDays(
+  tasks: DailyTaskSummary[],
+  endDateKey: string,
+  length = 14,
+): HeatmapDay[] {
   const taskMap = new Map(tasks.map((task) => [task.dateKey, task]));
-  const recentDates = buildRecentDates(14);
+  const recentDates = buildRecentDates(endDateKey, length);
+  const maxAnswered = Math.max(0, ...recentDates.map((dateKey) => taskMap.get(dateKey)?.totalAnswered ?? 0));
+
+  return recentDates.map((dateKey) => {
+    const task = taskMap.get(dateKey);
+    const answered = task?.totalAnswered ?? 0;
+    const ratio = maxAnswered > 0 ? answered / maxAnswered : 0;
+    const intensity: HeatmapDay['intensity'] = answered === 0 ? 0 : ratio <= 1 / 3 ? 1 : ratio <= 2 / 3 ? 2 : 3;
+    const weekday = new Date(`${dateKey}T12:00:00.000Z`).getUTCDay();
+    return {
+      dateKey,
+      task,
+      answered,
+      correct: task?.correctCount ?? 0,
+      intensity,
+      weekdayLabel: WEEKDAY_LABELS[weekday],
+    };
+  });
+}
+
+export function HeatmapCalendar({ tasks, endDateKey = new Date().toISOString().slice(0, 10) }: HeatmapCalendarProps) {
+  const days = buildHeatmapDays(tasks, endDateKey);
 
   return (
     <div className="heatmap" aria-label="最近 14 天学习热力图">
-      {recentDates.map((dateKey) => {
-        const task = taskMap.get(dateKey);
-        const intensity = task?.completedAt ? Math.min(Math.max(task.correctCount, 1), 5) : 0;
+      {days.map((day) => {
         return (
           <span
-            key={dateKey}
-            className={`heatmap__cell heatmap__cell--${intensity}`}
-            title={`${dateKey}${task?.completedAt ? ` · ${task.correctCount}/${task.totalAnswered}` : ' · 未完成'}`}
+            key={day.dateKey}
+            className={`heatmap__cell heatmap__cell--${day.intensity}`}
+            data-date-key={day.dateKey}
+            data-answered={day.answered}
+            title={`${day.dateKey}${day.answered > 0 ? ` · 已答 ${day.answered} 题 · 正确 ${day.correct} 题` : ' · 未学习'}`}
           />
         );
       })}

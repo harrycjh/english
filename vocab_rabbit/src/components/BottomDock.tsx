@@ -1,4 +1,5 @@
 import { BookOpen, ChartPie, LayoutGrid, Settings as SettingsIcon, type LucideIcon } from 'lucide-react';
+import type { CSSProperties } from 'react';
 
 export type BottomDockGlyph = 'review' | 'selection' | 'stats' | 'settings';
 
@@ -29,9 +30,14 @@ export function BottomDock({
     { glyph: 'stats', label: '统计', icon: ChartPie, onClick: onOpenStats },
     { glyph: 'settings', label: '设置', icon: SettingsIcon, onClick: onOpenSettings },
   ];
+  const activeIndex = items.findIndex((item) => item.glyph === active);
+  const dockStyle = { '--dock-active-index': activeIndex } as CSSProperties;
 
   return (
-    <nav className="app-bottom-dock" aria-label="主页面导航">
+    <nav className="app-bottom-dock" aria-label="主页面导航" data-active={active} style={dockStyle}>
+      <span className="app-bottom-dock__indicator" aria-hidden="true">
+        <span key={active} className="app-bottom-dock__indicator-surface" />
+      </span>
       {items.map((item) => {
         const isActive = item.glyph === active;
         const Icon = item.icon;

@@ -1,6 +1,7 @@
-import { type FormEvent, type ReactNode, useEffect, useState } from 'react';
+import { type FormEvent, type ReactNode, useEffect, useRef, useState } from 'react';
 import {
-  connectAndSynchronize,
+  connectDeviceForBackgroundSync,
+  hasConnectedDevice,
   performStartupSync,
   type StartupSyncResult,
 } from '../services/startup-sync-service';
@@ -34,8 +35,8 @@ export function StartupSyncPanel({
       <main className="page page--status sync-gate-page">
         <section className="status-card sync-gate-card" aria-live="polite">
           <span className="sync-gate-card__mark" aria-hidden="true">VR</span>
-          <h1>{state.kind === 'connecting' ? '正在连接学习进度' : '正在同步学习进度'}</h1>
-          <p>完成本地与云端合并后再进入今天的学习。</p>
+          <h1>{state.kind === 'connecting' ? '正在验证设备' : '正在打开学习空间'}</h1>
+          <p>{state.kind === 'connecting' ? '验证成功后立即进入，同步会在后台继续。' : '正在读取这台设备的连接状态。'}</p>
           <span className="sync-gate-spinner" aria-hidden="true" />
         </section>
       </main>
@@ -60,7 +61,7 @@ export function StartupSyncPanel({
               onChange={(event) => onCodeChange(event.currentTarget.value)}
             />
             {state.message && <p className="sync-gate-message sync-gate-message--error" role="alert">{state.message}</p>}
-            <button className="primary-button" type="submit" disabled={!code.trim()}>连接并同步</button>
+            <button className="primary-button" type="submit" disabled={!code.trim()}>连接并进入</button>
           </form>
           <button className="secondary-button" type="button" onClick={onEnterOffline}>暂时离线进入</button>
         </section>
@@ -97,38 +98,124 @@ export function StartupSyncPanel({
   );
 }
 
-export function StartupSyncGate({ children }: { children: ReactNode }) {
+export type BackgroundSyncState = StartupSyncResult | { kind: 'syncing' };
+
+export function BackgroundSyncNotice({
+  state,
+  onRetry,
+  onReconnect,
+}: {
+  state: BackgroundSyncState;
+  onRetry: () => void;
+  onReconnect: () => void;
+}) {
+  if (state.kind === 'syncing') {
+    return (
+      <aside className="background-sync-notice" role="status" aria-live="polite">
+        <span className="background-sync-notice__spinner" aria-hidden="true" />
+        <span>正在后台同步学习进度…</span>
+      </aside>
+    );
+  }
+
+  if (state.kind === 'synced') {
+    return (
+      <aside className="background-sync-notice background-sync-notice--success" role="status" aria-live="polite">
+        <span aria-hidden="true">✓</span>
+        <span>学习进度已合并</span>
+      </aside>
+    );
+  }
+
+  if (state.kind === 'needs-code') {
+    return (
+      <aside className="background-sync-notice background-sync-notice--error" role="status" aria-live="polite">
+        <span>云端连接已失效，本地学习不受影响。</span>
+        <button type="button" onClick={onReconnect}>重新连接</button>
+      </aside>
+    );
+  }
+
+  return (
+    <aside className="background-sync-notice background-sync-notice--error" role="status" aria-live="polite">
+      <span>{state.message} 本地学习不受影响。</span>
+      <button type="button" onClick={onRetry}>重试</button>
+    </aside>
+  );
+}
+
+export function StartupSyncGate({ children }: { children: (syncRevision: number) => ReactNode }) {
   const [state, setState] = useState<StartupSyncViewState>({ kind: 'checking' });
   const [code, setCode] = useState('');
   const [isReady, setIsReady] = useState(false);
+  const [backgroundState, setBackgroundState] = useState<BackgroundSyncState | null>(null);
+  const [syncRevision, setSyncRevision] = useState(0);
+  const hideNoticeTimer = useRef<number | null>(null);
 
-  async function runSync() {
-    setState({ kind: 'checking' });
+  function clearNoticeTimer() {
+    if (hideNoticeTimer.current !== null) {
+      window.clearTimeout(hideNoticeTimer.current);
+      hideNoticeTimer.current = null;
+    }
+  }
+
+  async function runBackgroundSync() {
+    clearNoticeTimer();
+    setBackgroundState({ kind: 'syncing' });
     const result = await performStartupSync();
+    setBackgroundState(result);
     if (result.kind === 'synced') {
+      setSyncRevision((revision) => revision + 1);
+      hideNoticeTimer.current = window.setTimeout(() => setBackgroundState(null), 2_500);
+    }
+  }
+
+  async function checkConnection() {
+    setState({ kind: 'checking' });
+    if (await hasConnectedDevice()) {
       setIsReady(true);
+      void runBackgroundSync();
       return;
     }
-    setState(result);
+    setState({ kind: 'needs-code' });
   }
 
   useEffect(() => {
-    void runSync();
+    void checkConnection();
+    return clearNoticeTimer;
   }, []);
 
   async function handleConnect() {
     if (!code.trim()) return;
     setState({ kind: 'connecting' });
-    const result = await connectAndSynchronize(code.trim());
-    if (result.kind === 'synced') {
+    const result = await connectDeviceForBackgroundSync(code.trim());
+    if (result.kind === 'connected') {
       setIsReady(true);
+      setCode('');
+      void runBackgroundSync();
       return;
     }
     setState(result);
   }
 
   if (isReady) {
-    return children;
+    return (
+      <>
+        {children(syncRevision)}
+        {backgroundState && (
+          <BackgroundSyncNotice
+            state={backgroundState}
+            onRetry={() => void runBackgroundSync()}
+            onReconnect={() => {
+              clearNoticeTimer();
+              setBackgroundState(null);
+              setState({ kind: 'needs-code', message: '请重新输入家庭验证码。' });
+              setIsReady(false);
+            }}
+          />
+        )}
+      </>
+    );
   }
 
   return (
@@ -137,7 +224,7 @@ export function StartupSyncGate({ children }: { children: ReactNode }) {
       code={code}
       onCodeChange={setCode}
       onConnect={() => void handleConnect()}
-      onRetry={() => void runSync()}
+      onRetry={() => code.trim() ? void handleConnect() : void checkConnection()}
       onEnterOffline={() => setIsReady(true)}
     />
   );

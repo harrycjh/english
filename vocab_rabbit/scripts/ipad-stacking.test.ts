@@ -40,7 +40,7 @@ describe('fixed iPad shell', () => {
 
   it('pins every route dock to the fixed iPad canvas instead of the browser viewport', () => {
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*top:\s*calc\(var\(--ipad-shell-stage-height\) - 90px\);[^}]*bottom:\s*auto;[^}]*width:\s*1137px;[^}]*height:\s*90px;/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*top:\s*calc\(var\(--ipad-shell-stage-height\) - 93px\);[^}]*bottom:\s*auto;[^}]*width:\s*var\(--ipad-shell-stage-width\);[^}]*height:\s*90px;/s,
     );
     expect(css).toMatch(
       /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\s*\{[^}]*top:\s*13px;[^}]*width:\s*215px;[^}]*height:\s*64px;/s,
@@ -48,8 +48,35 @@ describe('fixed iPad shell', () => {
   });
 
   it('uses the shared fixed dock on the review route too', () => {
-    expect(appSource).toMatch(/<BottomDock\s+active="review"/s);
+    expect(appSource.match(/<BottomDock\b/g)).toHaveLength(1);
+    expect(appSource).toContain("const activeDock = currentMainRoute === 'home' ? 'review' : currentMainRoute;");
+    expect(appSource).toMatch(/<BottomDock\s+active=\{activeDock\}/s);
     expect(reviewSource).not.toContain('<nav className="home-dock review-dock"');
+  });
+
+  it('keeps one shared top chrome outside the moving route layers', () => {
+    expect(appSource.match(/<MainShellChrome\b/g)).toHaveLength(1);
+    expect(appSource).toMatch(/<MainShellChrome[\s\S]*?<div className="main-route-stage"/);
+    expect(css).toMatch(
+      /\.main-route-stage :is\([\s\S]*?\.settings-shell__chrome[\s\S]*?visibility:\s*hidden !important;/,
+    );
+    expect(css).toMatch(
+      /\.main-shell-chrome\s*\{[^}]*position:\s*fixed;[^}]*top:\s*18px;[^}]*z-index:\s*120;/s,
+    );
+  });
+
+  it('does not leave the previous route page background covering the incoming page', () => {
+    expect(css).toMatch(
+      /\.main-route-layer--previous\s*>\s*\.page\s*\{[^}]*background:\s*transparent !important;/s,
+    );
+  });
+
+  it('moves the review mascot feathering layer with the mascot artwork', () => {
+    for (const transition of ['enter-forward', 'exit-forward', 'enter-backward', 'exit-backward']) {
+      expect(css).toMatch(
+        new RegExp(`\\.main-route-layer--${transition} \\.review-dom-surface::before,\\s*\\.main-route-layer--${transition} \\.review-dom-surface::after`),
+      );
+    }
   });
 
   it('does not reserve a colored spacer beneath scrollable main-page content', () => {

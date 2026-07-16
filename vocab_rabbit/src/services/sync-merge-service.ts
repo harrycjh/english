@@ -109,7 +109,7 @@ function mergeTaskBase(left: DailyTaskSummary, right: DailyTaskSummary): DailyTa
     correctCount: 0,
     wrongCount: 0,
     totalAnswered: 0,
-    answeredWordIds: [],
+    answeredWordIds: [...new Set([...left.answeredWordIds, ...right.answeredWordIds])],
   };
 }
 
@@ -133,12 +133,19 @@ export function mergeDailyTasks(
 
   for (const [dateKey, task] of byDate) {
     const dateEvents = (eventsByDate.get(dateKey) ?? []).sort(compareEvents);
+    const answeredWordIds = dateEvents.length > 0
+      ? [...new Set(dateEvents.map((event) => event.wordId))]
+      : task.answeredWordIds;
+    const answeredWordIdSet = new Set(answeredWordIds);
+    const plannedWordIds = new Set([...task.reviewWordIds, ...task.newWordIds]);
+    const isFullyAnswered = [...plannedWordIds].every((wordId) => answeredWordIdSet.has(wordId));
     byDate.set(dateKey, {
       ...task,
+      completedAt: task.completedAt && isFullyAnswered ? task.completedAt : null,
       correctCount: dateEvents.filter((event) => event.isCorrect).length,
       wrongCount: dateEvents.filter((event) => !event.isCorrect).length,
       totalAnswered: dateEvents.length,
-      answeredWordIds: [...new Set(dateEvents.map((event) => event.wordId))],
+      answeredWordIds,
     });
   }
 

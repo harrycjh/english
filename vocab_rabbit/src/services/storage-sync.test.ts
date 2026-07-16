@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { AnswerEvent } from '../models/answer-event';
 import type { LearningRecord } from '../models/learning-record';
 import { defaultParentSetting } from '../models/parent-setting';
-import { SYNC_SCHEMA_VERSION, type SyncResponse } from '../models/sync';
+import { SYNC_SCHEMA_VERSION, type SyncRequest, type SyncResponse } from '../models/sync';
 import {
   applySyncResponse,
   clearLocalDeviceData,
@@ -154,5 +154,30 @@ describe('cloud merge persistence', () => {
       lastSyncedAt: '2026-07-14T11:00:00.000Z',
       pendingSince: null,
     });
+  });
+
+  it('preserves answers saved after a background sync request was created', async () => {
+    await saveAnswerAndLearningRecord(makeEvent(), makeRecord());
+    const request = await buildLocalSyncRequest() as SyncRequest;
+    const capturedAt = request.snapshot?.checkpoint?.capturedAt ?? new Date().toISOString();
+    const lateEvent: AnswerEvent = {
+      ...makeEvent(),
+      id: 'event-b',
+      wordId: 'word-b',
+      answeredAt: new Date(new Date(capturedAt).getTime() + 1_000).toISOString(),
+    };
+    const lateRecord: LearningRecord = { ...makeRecord(), wordId: 'word-b', lastStudiedAt: lateEvent.answeredAt };
+    await saveAnswerAndLearningRecord(lateEvent, lateRecord);
+
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-background',
+      serverTime: '2026-07-14T12:00:00.000Z',
+      snapshot: request.snapshot,
+    }, request);
+
+    expect((await listAnswerEvents()).map((event) => event.id)).toEqual(['event-a', 'event-b']);
+    expect((await listLearningRecords())['word-b']).toBeDefined();
+    expect((await getOrCreateSyncMetadata()).pendingSince).not.toBeNull();
   });
 });

@@ -9,6 +9,34 @@ export function createDateKey(date: Date = new Date()): string {
   return date.toISOString().slice(0, 10);
 }
 
+function parseDateKey(dateKey: string): [number, number, number] {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateKey);
+  if (!match) {
+    throw new Error(`Invalid date key: ${dateKey}`);
+  }
+  return [Number(match[1]), Number(match[2]), Number(match[3])];
+}
+
+export function addDaysToDateKey(dateKey: string, days: number): string {
+  const [year, month, day] = parseDateKey(dateKey);
+  const date = new Date(Date.UTC(year, month - 1, day, 12));
+  date.setUTCDate(date.getUTCDate() + days);
+  return createDateKey(date);
+}
+
+export function createDateTimeForDateKey(dateKey: string, clock: Date = new Date()): Date {
+  const [year, month, day] = parseDateKey(dateKey);
+  return new Date(Date.UTC(
+    year,
+    month - 1,
+    day,
+    clock.getUTCHours(),
+    clock.getUTCMinutes(),
+    clock.getUTCSeconds(),
+    clock.getUTCMilliseconds(),
+  ));
+}
+
 function isDue(record: LearningRecord, date: Date): boolean {
   if (!record.nextDueAt) {
     return true;
@@ -82,6 +110,41 @@ export function buildDailyTask(
     totalAnswered: 0,
     answeredWordIds: [],
   };
+}
+
+export function getTaskPlannedWordIds(task: DailyTaskSummary): string[] {
+  return [...new Set([...task.reviewWordIds, ...task.newWordIds])];
+}
+
+export function isTaskFullyAnswered(task: DailyTaskSummary): boolean {
+  const answeredWordIds = new Set(task.answeredWordIds);
+  return getTaskPlannedWordIds(task).every((wordId) => answeredWordIds.has(wordId));
+}
+
+export function reconcileTaskCompletion(
+  task: DailyTaskSummary,
+  authoritativeAnsweredWordIds: string[] = task.answeredWordIds,
+): DailyTaskSummary {
+  const answeredWordIds = [...new Set(authoritativeAnsweredWordIds)];
+  const reconciledTask = { ...task, answeredWordIds };
+  const completedAt = task.completedAt && isTaskFullyAnswered(reconciledTask)
+    ? task.completedAt
+    : null;
+  const answersUnchanged = answeredWordIds.length === task.answeredWordIds.length
+    && answeredWordIds.every((wordId, index) => wordId === task.answeredWordIds[index]);
+  if (answersUnchanged && completedAt === task.completedAt) {
+    return task;
+  }
+  return { ...reconciledTask, completedAt };
+}
+
+export function getTaskStudyQueue(task: DailyTaskSummary): string[] {
+  const plannedWordIds = getTaskPlannedWordIds(task);
+  if (task.completedAt && isTaskFullyAnswered(task)) {
+    return plannedWordIds;
+  }
+  const answeredWordIds = new Set(task.answeredWordIds);
+  return plannedWordIds.filter((wordId) => !answeredWordIds.has(wordId));
 }
 
 export function recordTaskAnswer(task: DailyTaskSummary, isCorrect: boolean, wordId?: string): DailyTaskSummary {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { Activity, BrainCircuit, CalendarRange, ShieldCheck } from 'lucide-react';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { APP_VERSION } from '../config/app-meta';
@@ -10,8 +10,7 @@ import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordPayload } from '../models/word';
 import {
   buildLearningStatistics,
-  type FutureLearningPoint,
-  type HistoricalLearningPoint,
+  type LearningLoadPoint,
 } from '../services/learning-statistics';
 import {
   buildMemoryStatistics,
@@ -147,62 +146,172 @@ function MemoryCurveChart({ predicted, reference }: {
   );
 }
 
-function LearningHistoryChart({ points }: { points: HistoricalLearningPoint[] }) {
-  const width = 720;
-  const height = 250;
-  const left = 48;
-  const right = 18;
-  const top = 20;
-  const bottom = 36;
-  const plotWidth = width - left - right;
-  const plotHeight = height - top - bottom;
-  const maximum = Math.max(...points.map((point) => point.learnedWordCount), 1);
-  const xForIndex = (index: number) => left + (points.length <= 1 ? 0 : index / (points.length - 1)) * plotWidth;
-  const yForCount = (count: number) => top + (1 - count / maximum) * plotHeight;
-  const path = points.map((point, index) => (
-    `${index === 0 ? 'M' : 'L'} ${xForIndex(index).toFixed(1)} ${yForCount(point.learnedWordCount).toFixed(1)}`
-  )).join(' ');
-  const labelIndexes = [...new Set([0, Math.floor((points.length - 1) / 2), points.length - 1])];
-  const yTicks = [maximum, Math.round(maximum / 2), 0].filter((value, index, values) => values.indexOf(value) === index);
-
-  return (
-    <svg className="learning-history-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="全部历史每日学习单词数">
-      {yTicks.map((tick) => (
-        <g key={tick}>
-          <line x1={left} y1={yForCount(tick)} x2={width - right} y2={yForCount(tick)} className="memory-chart-grid" />
-          <text x={left - 10} y={yForCount(tick) + 4} textAnchor="end" className="memory-chart-label">{tick}</text>
-        </g>
-      ))}
-      <path d={`${path} L ${xForIndex(points.length - 1)} ${yForCount(0)} L ${xForIndex(0)} ${yForCount(0)} Z`} className="learning-history-area" />
-      <path d={path} className="learning-history-line" />
-      {labelIndexes.map((index) => (
-        <text key={index} x={xForIndex(index)} y={height - 12} textAnchor={index === 0 ? 'start' : index === points.length - 1 ? 'end' : 'middle'} className="memory-chart-label">
-          {formatDate(points[index].dateKey)}
-        </text>
-      ))}
-    </svg>
-  );
+function formatRelativeDayLabel(dateKey: string, todayKey: string): string {
+  const dayMs = 24 * 60 * 60 * 1000;
+  const offset = Math.round((new Date(`${dateKey}T12:00:00.000Z`).getTime() - new Date(`${todayKey}T12:00:00.000Z`).getTime()) / dayMs);
+  if (offset === -2) return '前天';
+  if (offset === -1) return '昨天';
+  if (offset === 0) return '今天';
+  if (offset === 1) return '明天';
+  if (offset === 2) return '后天';
+  return offset < 0 ? `${Math.abs(offset)}天前` : `${offset}天后`;
 }
 
-function LearningForecastBars({ points }: { points: FutureLearningPoint[] }) {
-  const maximum = Math.max(...points.map((point) => point.totalCount), 1);
+function LearningLoadChart({ points, todayKey }: { points: LearningLoadPoint[]; todayKey: string }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const mouseDragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startScrollLeft: number;
+    lastX: number;
+    lastTime: number;
+    velocity: number;
+  } | null>(null);
+  const momentumFrameRef = useRef<number | null>(null);
+  const rawMaximum = Math.max(...points.map((point) => point.totalCount), 1);
+  const tickStep = Math.max(1, Math.ceil(rawMaximum / 4));
+  const maximum = tickStep * 4;
+  const ticks = [maximum, maximum - tickStep, maximum - (tickStep * 2), tickStep, 0];
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      const scroller = scrollRef.current;
+      const today = scroller?.querySelector<HTMLElement>('[data-today="true"]');
+      if (!scroller || !today) return;
+      scroller.scrollLeft = today.offsetLeft - ((scroller.clientWidth - today.offsetWidth) / 2);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [points.length, todayKey]);
+
+  useEffect(() => () => {
+    if (momentumFrameRef.current !== null) {
+      window.cancelAnimationFrame(momentumFrameRef.current);
+    }
+  }, []);
+
+  function stopMouseMomentum(scroller?: HTMLDivElement) {
+    if (momentumFrameRef.current !== null) {
+      window.cancelAnimationFrame(momentumFrameRef.current);
+      momentumFrameRef.current = null;
+    }
+    scroller?.classList.remove('is-gliding');
+  }
+
+  function startMouseMomentum(scroller: HTMLDivElement, initialVelocity: number) {
+    if (Math.abs(initialVelocity) < 0.06 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    let velocity = Math.max(-2.8, Math.min(2.8, initialVelocity));
+    let lastFrameTime = window.performance.now();
+    scroller.classList.add('is-gliding');
+
+    function glide(frameTime: number) {
+      const elapsed = Math.min(34, frameTime - lastFrameTime);
+      lastFrameTime = frameTime;
+      const previousScrollLeft = scroller.scrollLeft;
+      scroller.scrollLeft += velocity * elapsed;
+      const reachedEdge = Math.abs(scroller.scrollLeft - previousScrollLeft) < 0.5;
+      velocity *= Math.pow(0.96, elapsed / 16.67);
+
+      if (Math.abs(velocity) < 0.018 || reachedEdge) {
+        stopMouseMomentum(scroller);
+        return;
+      }
+      momentumFrameRef.current = window.requestAnimationFrame(glide);
+    }
+
+    momentumFrameRef.current = window.requestAnimationFrame(glide);
+  }
+
+  function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+    if (event.pointerType !== 'mouse' || event.button !== 0) return;
+    stopMouseMomentum(event.currentTarget);
+    mouseDragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startScrollLeft: event.currentTarget.scrollLeft,
+      lastX: event.clientX,
+      lastTime: event.timeStamp,
+      velocity: 0,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+    event.currentTarget.classList.add('is-dragging');
+  }
+
+  function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    const drag = mouseDragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    event.preventDefault();
+    event.currentTarget.scrollLeft = drag.startScrollLeft - (event.clientX - drag.startX);
+    const elapsed = Math.max(1, event.timeStamp - drag.lastTime);
+    const instantaneousVelocity = -(event.clientX - drag.lastX) / elapsed;
+    drag.velocity = (drag.velocity * 0.35) + (instantaneousVelocity * 0.65);
+    drag.lastX = event.clientX;
+    drag.lastTime = event.timeStamp;
+  }
+
+  function finishPointerDrag(event: ReactPointerEvent<HTMLDivElement>, shouldGlide: boolean) {
+    const drag = mouseDragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    mouseDragRef.current = null;
+    event.currentTarget.classList.remove('is-dragging');
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    if (shouldGlide) {
+      startMouseMomentum(event.currentTarget, drag.velocity);
+    }
+  }
+
   return (
-    <div className="learning-bars learning-bars--forecast" aria-label="未来十五天预计学习单词数">
-      {points.map((point, index) => {
-        const newHeight = (point.newCount / maximum) * 100;
-        const reviewHeight = (point.reviewCount / maximum) * 100;
-        return (
-          <div className={`learning-bars__day${index === 0 ? ' is-first-day' : ''}`} key={point.dateKey} title={`${formatDate(point.dateKey)}：预计新词 ${point.newCount}，复习 ${point.reviewCount}`}>
-            <div className="learning-bars__plot">
-              <div className="learning-bars__stack" style={{ height: `${newHeight + reviewHeight}%` }}>
-                <span className="learning-bars__review" style={{ flexGrow: point.reviewCount }} />
-                <span className="learning-bars__new" style={{ flexGrow: point.newCount }} />
-              </div>
-            </div>
-            <span>{index === 0 ? '明' : new Date(`${point.dateKey}T00:00:00`).getDate()}</span>
+    <div className="learning-load-chart" role="group" aria-label="每日复习词与新认识词堆叠柱状图">
+      <div className="learning-load-chart__axis" aria-hidden="true">
+        <div className="learning-load-chart__scale">
+          {ticks.map((tick) => <span key={tick}>{tick}</span>)}
+        </div>
+        <small>词数</small>
+      </div>
+      <div
+        className="learning-load-chart__scroll"
+        ref={scrollRef}
+        tabIndex={0}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={(event) => finishPointerDrag(event, true)}
+        onPointerCancel={(event) => finishPointerDrag(event, false)}
+      >
+        <div className="learning-load-chart__plot" style={{ width: `${points.length * 48}px` }}>
+          <div className="learning-load-chart__grid" aria-hidden="true">
+            {ticks.map((tick) => <span key={tick} />)}
           </div>
-        );
-      })}
+          <div className="learning-load-chart__days">
+            {points.map((point) => {
+              const height = (point.totalCount / maximum) * 100;
+              const relativeLabel = formatRelativeDayLabel(point.dateKey, todayKey);
+              return (
+                <div
+                  className={`learning-load-day learning-load-day--${point.kind}`}
+                  data-today={point.kind === 'today' ? 'true' : undefined}
+                  key={point.dateKey}
+                  title={`${formatDate(point.dateKey)}：复习 ${point.reviewCount}，新认识 ${point.newCount}`}
+                >
+                  <div className="learning-load-day__plot">
+                    {point.totalCount > 0 && (
+                      <strong style={{ bottom: `calc(${height}% + 8px)` }}>{point.totalCount}</strong>
+                    )}
+                    <div className="learning-load-day__stack" style={{ height: `${height}%` }}>
+                      {point.newCount > 0 && <span className="learning-load-day__new" style={{ flexGrow: point.newCount }} />}
+                      {point.reviewCount > 0 && <span className="learning-load-day__review" style={{ flexGrow: point.reviewCount }} />}
+                    </div>
+                  </div>
+                  <span className="learning-load-day__label">{relativeLabel}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -266,8 +375,6 @@ export function StatsPage({
     selectionById,
     setting,
   }), [answerEvents, payload.words, recentTasks, recordsById, selectionById, setting, task]);
-  const historyStart = learning.history[0]?.dateKey ?? task.dateKey;
-
   const tabs: Array<{ id: StatsTab; label: string; icon: typeof Activity }> = [
     { id: 'forgetting', label: '遗忘曲线', icon: Activity },
     { id: 'learning', label: '学习情况', icon: CalendarRange },
@@ -349,32 +456,20 @@ export function StatsPage({
           )}
 
           {activeTab === 'learning' && (
-            <div className="stats-tab-panel" role="tabpanel">
-              <div className="stats-memory-metrics">
-                <StatMetric label="累计已学单词" value={`${learning.totalLearnedWords} 个`} note={`统计开始于 ${formatDate(historyStart)}`} tone="orange" />
-                <StatMetric label="累计作答" value={`${learning.totalAnswers} 次`} note={`${learning.activeDays} 天有学习记录`} tone="blue" />
-                <StatMetric label="全部历史正确率" value={learning.totalAnswers ? `${Math.round(learning.accuracy)}%` : '--'} note="基于全部逐题记录" tone="green" />
-                <StatMetric label="未来 15 天" value={`${learning.forecastTotal} 个`} note={`连续完成 ${learning.streak} 天`} tone="red" />
-              </div>
-              <div className="stats-memory-main-grid stats-memory-main-grid--learning">
-                <section className="memory-panel memory-panel--history-chart">
-                  <div className="memory-panel__header">
-                    <div><h2>全部学习历史</h2><p>{formatDate(historyStart)} 至今，每天实际学习的单词数</p></div>
-                    <strong className="memory-panel__summary">{learning.activeDays} 个学习日</strong>
+            <div className="stats-tab-panel stats-tab-panel--learning" role="tabpanel">
+              <section className="memory-panel memory-panel--learning-load">
+                <div className="memory-panel__header">
+                  <div>
+                    <h2>每日学习负荷</h2>
+                    <p>当天待复习词与新认识词的叠加数量</p>
                   </div>
-                  <LearningHistoryChart points={learning.history} />
-                </section>
-                <section className="memory-panel memory-panel--forecast-chart">
-                  <div className="memory-panel__header">
-                    <div><h2>未来 15 天预计学习</h2><p>从明天开始，当前排期复习词 + 每日计划新词</p></div>
-                    <div className="memory-chart-legend">
-                      <span><i className="is-new" />新词</span>
-                      <span><i className="is-review" />复习</span>
-                    </div>
+                  <div className="memory-chart-legend">
+                    <span><i className="is-review" />复习词</span>
+                    <span><i className="is-new" />新认识词</span>
                   </div>
-                  <LearningForecastBars points={learning.forecast} />
-                </section>
-              </div>
+                </div>
+                <LearningLoadChart points={learning.timeline} todayKey={task.dateKey} />
+              </section>
             </div>
           )}
 

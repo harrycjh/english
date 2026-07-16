@@ -14,6 +14,8 @@ import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
+import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
+import { addDaysToDateKey } from '../services/task-service';
 import { getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
 import reviewLayoutData from '../../design-output/ui-concepts/review-page-layout.json';
 import reviewSlicesManifestData from '../../design-output/ui-concepts/review-page-slices-manifest.json';
@@ -21,7 +23,7 @@ import reviewSlicesManifestData from '../../design-output/ui-concepts/review-pag
 type ReviewPreviewWord = WordPayload['words'][number];
 type ReviewSummaryTone = 'library' | 'mastered' | 'completion';
 type ReviewAdviceAccent = 'tea' | 'bars' | 'bag';
-type ReviewHeatmapLevel = 'empty' | 'soft' | 'warm' | 'outline';
+type ReviewHeatmapLevel = 'empty' | 'soft' | 'warm' | 'strong';
 
 type ReviewLayout = typeof reviewLayoutData;
 type ReviewBounds = {
@@ -66,23 +68,6 @@ const REVIEW_FRAME_WIDTH = 1158;
 const REVIEW_FRAME_HEIGHT = 808;
 const IPAD_REFERENCE_WIDTH = 1194;
 const IPAD_REFERENCE_HEIGHT = 834;
-const REVIEW_HEATMAP_WEEKDAY_LABELS = ['日', '一', '二', '三', '四', '五', '六'] as const;
-const REVIEW_HEATMAP_REFERENCE_CELLS: ReviewHeatmapLevel[] = [
-  'soft',
-  'soft',
-  'soft',
-  'soft',
-  'soft',
-  'soft',
-  'warm',
-  'soft',
-  'soft',
-  'warm',
-  'empty',
-  'soft',
-  'soft',
-  'outline',
-];
 const reviewHeroBounds = {
   x: Math.min(reviewLayout.modules.heroMascot.x, reviewLayout.modules.heroHeadline.x, reviewLayout.modules.focusCard.x),
   y: Math.min(reviewLayout.modules.heroMascot.y, reviewLayout.modules.heroHeadline.y, reviewLayout.modules.focusCard.y),
@@ -242,20 +227,27 @@ function ReviewMetricCard({ tone, label, value, note, layout, children }: Review
   );
 }
 
-function ReviewReferenceHeatmap() {
+function getReviewHeatmapLevel(day: HeatmapDay): ReviewHeatmapLevel {
+  return (['empty', 'soft', 'warm', 'strong'] as const)[day.intensity];
+}
+
+function ReviewTaskHeatmap({ days, currentDateKey }: { days: HeatmapDay[]; currentDateKey: string }) {
   return (
     <div className="review-reference-heatmap" aria-label="最近 14 天学习热力图">
-      <div className="review-reference-heatmap__grid" aria-hidden="true">
-        {REVIEW_HEATMAP_REFERENCE_CELLS.map((level, index) => (
+      <div className="review-reference-heatmap__grid">
+        {days.map((day) => (
           <span
-            key={`${level}-${index}`}
-            className={`review-reference-heatmap__cell review-reference-heatmap__cell--${level}`}
+            key={day.dateKey}
+            className={`review-reference-heatmap__cell review-reference-heatmap__cell--${getReviewHeatmapLevel(day)}${day.dateKey === currentDateKey ? ' is-current' : ''}`}
+            data-date-key={day.dateKey}
+            data-answered={day.answered}
+            title={`${day.dateKey}${day.answered > 0 ? ` · 已答 ${day.answered} 题 · 正确 ${day.correct} 题` : ' · 未学习'}`}
           />
         ))}
       </div>
       <div className="review-reference-heatmap__weekdays" aria-hidden="true">
-        {REVIEW_HEATMAP_WEEKDAY_LABELS.map((label) => (
-          <span key={label}>{label}</span>
+        {days.slice(0, 7).map((day) => (
+          <span key={day.dateKey}>{day.weekdayLabel}</span>
         ))}
       </div>
     </div>
@@ -392,6 +384,7 @@ interface ReviewPageProps {
   previewWords: WordPayload['words'];
   localLifePhotosById: Record<string, LocalLifePhotoView>;
   onStart: () => void;
+  onAdvanceDay: () => Promise<void>;
   onSelectProfile: (profileId: ProfileId) => Promise<void>;
   onSaveSelectionStates: (states: WordSelectionState[]) => Promise<void>;
 }
@@ -408,18 +401,23 @@ export function ReviewPage({
   previewWords,
   localLifePhotosById,
   onStart,
+  onAdvanceDay,
   onSelectProfile,
   onSaveSelectionStates,
 }: ReviewPageProps) {
   const plannedCount = task.newWordIds.length + task.reviewWordIds.length;
-  const completedDays = recentTasks.filter((recentTask) => recentTask.completedAt).length;
+  const heatmapTasks = [...recentTasks.filter((recentTask) => recentTask.dateKey !== task.dateKey), task];
+  const heatmapDays = buildHeatmapDays(heatmapTasks, task.dateKey);
+  const completedDays = heatmapDays.filter((day) => day.task?.completedAt).length;
   const completionRate = Math.round((completedDays / 14) * 100);
   const previewCategoryCount = new Set(previewWords.map((word) => word.category)).size;
-  const estimatedMinutes = Math.max(6, plannedCount * 2);
+  const estimatedMinutes = plannedCount * 0.25;
   const hasStarted = task.totalAnswered > 0 && !task.completedAt;
   const reviewLoad = task.reviewWordIds.length;
   const isReviewHeavy = reviewLoad >= task.newWordIds.length;
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
+  const [isAdvancingDay, setIsAdvancingDay] = useState(false);
+  const nextDateKey = addDaysToDateKey(task.dateKey, 1);
 
   const heroBadge = task.completedAt ? '今日完成 · 复习页' : hasStarted ? '进行中 · 复习页' : '今日任务 · 复习页';
   const primaryActionLabel = task.completedAt ? '再复习一轮' : hasStarted ? '继续学习' : '开始学习';
@@ -484,6 +482,16 @@ export function ReviewPage({
     await onSaveSelectionStates(nextStates);
   }
 
+  async function advanceDay() {
+    if (isAdvancingDay) return;
+    setIsAdvancingDay(true);
+    try {
+      await onAdvanceDay();
+    } finally {
+      setIsAdvancingDay(false);
+    }
+  }
+
   return (
     <main className="page page--review" data-profile={setting.profileId}>
       <div
@@ -522,8 +530,8 @@ export function ReviewPage({
             </div>
 
             <div className="review-plan-shell__hero" style={getAbsoluteBoundsStyle(reviewHeroBounds)}>
-              <div className="review-mascot-card" style={getRelativeBoundsStyle(reviewLayout.modules.heroMascot, reviewHeroBounds)} aria-hidden="true">
-                <div className="review-mascot-scene">
+              <div className="review-mascot-card" style={getRelativeBoundsStyle(reviewLayout.modules.heroMascot, reviewHeroBounds)}>
+                <div className="review-mascot-scene" aria-hidden="true">
                   <span className="review-mascot-scene__sun" />
                   <span className="review-mascot-scene__cloud review-mascot-scene__cloud--one" />
                   <span className="review-mascot-scene__cloud review-mascot-scene__cloud--two" />
@@ -536,6 +544,19 @@ export function ReviewPage({
                   </div>
                 </div>
               </div>
+              {setting.profileId === 'stinky-dog' ? (
+                <button
+                  className="review-day-forward-button"
+                  type="button"
+                  aria-label={`前往下一天，${nextDateKey}`}
+                  title={`切换到 ${nextDateKey}`}
+                  disabled={isAdvancingDay}
+                  onClick={() => void advanceDay()}
+                >
+                  <span>{isAdvancingDay ? '切换中' : '下一天'}</span>
+                  <small>{nextDateKey.slice(5).replace('-', '.')}</small>
+                </button>
+              ) : null}
 
               <div className="review-plan-shell__headline" style={getRelativeBoundsStyle(reviewLayout.modules.heroHeadline, reviewHeroBounds)}>
                 <div
@@ -632,7 +653,7 @@ export function ReviewPage({
               note=""
               layout={reviewLayout.cards.metrics[3]}
             >
-              <ReviewReferenceHeatmap />
+              <ReviewTaskHeatmap days={heatmapDays} currentDateKey={task.dateKey} />
             </ReviewMetricCard>
           </section>
 

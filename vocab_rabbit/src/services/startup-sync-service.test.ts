@@ -6,7 +6,12 @@ import {
   getOrCreateSyncMetadata,
   saveDeviceToken,
 } from './storage-service';
-import { connectAndSynchronize, performStartupSync } from './startup-sync-service';
+import {
+  connectAndSynchronize,
+  connectDeviceForBackgroundSync,
+  hasConnectedDevice,
+  performStartupSync,
+} from './startup-sync-service';
 
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -44,6 +49,26 @@ describe('performStartupSync', () => {
     });
 
     expect(result).toMatchObject({ kind: 'unavailable' });
+  });
+});
+
+describe('background startup connection', () => {
+  it('checks the saved device token without contacting the server', async () => {
+    expect(await hasConnectedDevice()).toBe(false);
+    await saveDeviceToken('token-a');
+    expect(await hasConnectedDevice()).toBe(true);
+  });
+
+  it('validates and saves a new device without waiting for the sync endpoint', async () => {
+    const paths: string[] = [];
+    const result = await connectDeviceForBackgroundSync('2468', async (input) => {
+      paths.push(String(input));
+      return jsonResponse({ deviceToken: 'token-a' });
+    });
+
+    expect(result.kind).toBe('connected');
+    expect(paths).toEqual(['/api/device/connect']);
+    expect((await getOrCreateSyncMetadata()).deviceToken).toBe('token-a');
   });
 });
 

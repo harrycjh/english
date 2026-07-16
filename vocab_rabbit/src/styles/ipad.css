@@ -3102,6 +3102,59 @@ button {
   animation: sync-gate-spin 800ms linear infinite;
 }
 
+.background-sync-notice {
+  position: fixed;
+  top: max(68px, calc(env(safe-area-inset-top) + 16px));
+  left: 50%;
+  z-index: 120;
+  display: flex;
+  min-height: 42px;
+  max-width: min(560px, calc(100vw - 32px));
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border: 1px solid rgba(219, 188, 139, 0.78);
+  border-radius: 8px;
+  background: rgba(255, 253, 248, 0.97);
+  color: #5d4938;
+  box-shadow: 0 8px 20px rgba(93, 73, 56, 0.14);
+  font-size: 13px;
+  font-weight: 700;
+  transform: translateX(-50%);
+}
+
+.background-sync-notice--success {
+  border-color: rgba(83, 166, 112, 0.55);
+  color: #2f7d4a;
+}
+
+.background-sync-notice--error {
+  border-color: rgba(201, 102, 78, 0.5);
+  color: #8c3d2c;
+}
+
+.background-sync-notice button {
+  min-height: 28px;
+  flex: 0 0 auto;
+  padding: 0 10px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.background-sync-notice__spinner {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  border: 2px solid #f3d4a6;
+  border-top-color: #ff9412;
+  border-radius: 50%;
+  animation: sync-gate-spin 800ms linear infinite;
+}
+
 @keyframes sync-gate-spin {
   to { transform: rotate(360deg); }
 }
@@ -3996,6 +4049,15 @@ button {
 .page--review .review-reference-heatmap__cell--warm {
   background: linear-gradient(180deg, #ffd05f 0%, #ffb236 100%);
   box-shadow: inset 0 0 0 1px rgba(239, 157, 43, 0.45);
+}
+
+.page--review .review-reference-heatmap__cell--strong {
+  background: linear-gradient(180deg, #ffb43c 0%, #f58b1f 100%);
+  box-shadow: inset 0 0 0 1px rgba(222, 118, 20, 0.48);
+}
+
+.page--review .review-reference-heatmap__cell.is-current {
+  box-shadow: inset 0 0 0 2px rgba(230, 124, 20, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.88);
 }
 
 .page--review .review-reference-heatmap__cell--outline {
@@ -8280,6 +8342,207 @@ html[data-shell-mode='ipad-fixed'] .page--settings .settings-mockup-frame {
   background: linear-gradient(135deg, #f15b48, #f36d53);
 }
 
+/* Main tab pages briefly overlap during navigation. Their top chrome and the
+   bottom dock stay fixed; only the content modules move. */
+.main-route-stage {
+  --main-route-slide-distance: min(100vw, var(--ipad-shell-stage-width));
+  position: relative;
+  width: 100%;
+  height: var(--ipad-shell-stage-height);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.main-route-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.main-route-layer::before {
+  content: '';
+  position: absolute;
+  inset: 60px 0 86px;
+  z-index: 0;
+  background: #fffaf1;
+}
+
+.main-route-layer > main {
+  position: relative;
+  z-index: 1;
+}
+
+.main-route-layer--current {
+  z-index: 1;
+}
+
+.main-route-layer--previous {
+  z-index: 2;
+  pointer-events: none;
+}
+
+.main-route-layer--previous > .page {
+  background: transparent !important;
+}
+
+.main-route-layer--previous :is(
+  .review-mockup-frame,
+  .selection-mockup-frame,
+  .stats-mockup-frame,
+  .settings-mockup-frame
+) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.main-route-layer--previous :is(
+  .review-plan-shell__chrome,
+  .selection-shell__chrome,
+  .stats-shell__chrome,
+  .settings-shell__chrome
+) {
+  visibility: hidden;
+}
+
+.main-route-stage :is(
+  .review-plan-shell__chrome,
+  .selection-shell__chrome,
+  .stats-shell__chrome,
+  .settings-shell__chrome
+) {
+  visibility: hidden !important;
+  pointer-events: none;
+}
+
+.main-shell-chrome {
+  position: fixed;
+  left: 50%;
+  top: 18px;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: var(--ipad-shell-stage-width);
+  height: 36px;
+  min-height: 36px;
+  padding: 0 42px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.main-shell-chrome > * {
+  pointer-events: auto;
+}
+
+html[data-shell-mode='ipad-fixed'] .main-shell-chrome .app-profile-selector {
+  transform: translateX(-46px);
+}
+
+.main-shell-chrome .app-brand-lockup {
+  transform: scale(1.0310880829);
+}
+
+.main-route-layer--previous .word-detail-drawer {
+  display: none;
+}
+
+.main-route-layer--enter-forward :is(
+  .review-plan-shell__hero,
+  .review-dom-surface > :not(.review-plan-shell),
+  .selection-mockup-frame > :not(.selection-shell__chrome),
+  .stats-mockup-frame > :not(.stats-shell__chrome),
+  .settings-mockup-frame > :not(.settings-shell__chrome)
+) {
+  animation: main-route-enter-right 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--exit-forward :is(
+  .review-plan-shell__hero,
+  .review-dom-surface > :not(.review-plan-shell),
+  .selection-mockup-frame > :not(.selection-shell__chrome),
+  .stats-mockup-frame > :not(.stats-shell__chrome),
+  .settings-mockup-frame > :not(.settings-shell__chrome)
+) {
+  animation: main-route-exit-left 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--enter-backward :is(
+  .review-plan-shell__hero,
+  .review-dom-surface > :not(.review-plan-shell),
+  .selection-mockup-frame > :not(.selection-shell__chrome),
+  .stats-mockup-frame > :not(.stats-shell__chrome),
+  .settings-mockup-frame > :not(.settings-shell__chrome)
+) {
+  animation: main-route-enter-left 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--exit-backward :is(
+  .review-plan-shell__hero,
+  .review-dom-surface > :not(.review-plan-shell),
+  .selection-mockup-frame > :not(.selection-shell__chrome),
+  .stats-mockup-frame > :not(.stats-shell__chrome),
+  .settings-mockup-frame > :not(.settings-shell__chrome)
+) {
+  animation: main-route-exit-right 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--enter-forward .review-dom-surface::before,
+.main-route-layer--enter-forward .review-dom-surface::after {
+  animation: main-route-enter-right 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--exit-forward .review-dom-surface::before,
+.main-route-layer--exit-forward .review-dom-surface::after {
+  animation: main-route-exit-left 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--enter-backward .review-dom-surface::before,
+.main-route-layer--enter-backward .review-dom-surface::after {
+  animation: main-route-enter-left 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--exit-backward .review-dom-surface::before,
+.main-route-layer--exit-backward .review-dom-surface::after {
+  animation: main-route-exit-right 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--enter-forward::before {
+  animation: main-route-enter-right 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--exit-forward::before {
+  animation: main-route-exit-left 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--enter-backward::before {
+  animation: main-route-enter-left 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.main-route-layer--exit-backward::before {
+  animation: main-route-exit-right 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes main-route-enter-right {
+  from { transform: translate3d(var(--main-route-slide-distance), 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes main-route-exit-left {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(calc(0px - var(--main-route-slide-distance)), 0, 0); }
+}
+
+@keyframes main-route-enter-left {
+  from { transform: translate3d(calc(0px - var(--main-route-slide-distance)), 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes main-route-exit-right {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(var(--main-route-slide-distance), 0, 0); }
+}
+
 /* ─── Unified bottom navigation dock (selection / stats / settings) ─── */
 .app-bottom-dock {
   position: fixed;
@@ -8291,9 +8554,9 @@ html[data-shell-mode='ipad-fixed'] .page--settings .settings-mockup-frame {
   height: 74px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  gap: clamp(8px, 3vw, 40px);
-  padding: 0 clamp(18px, 5vw, 72px);
+  justify-content: flex-start;
+  gap: 0;
+  padding: 0;
   border-radius: 34px;
   background: linear-gradient(180deg, rgba(255, 253, 247, 0.98), rgba(255, 246, 225, 0.98));
   border: 1px solid rgba(237, 208, 152, 0.55);
@@ -8310,9 +8573,83 @@ html[data-shell-mode='ipad-fixed'] .page--settings .settings-mockup-frame {
   background: linear-gradient(90deg, transparent, rgba(237, 199, 130, 0.9), transparent);
 }
 
+.app-bottom-dock__indicator {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  z-index: 0;
+  width: 25%;
+  height: 54px;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  transition: transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.app-bottom-dock[data-active='selection'] .app-bottom-dock__indicator {
+  transform: translate3d(100%, 0, 0);
+}
+
+.app-bottom-dock[data-active='stats'] .app-bottom-dock__indicator {
+  transform: translate3d(200%, 0, 0);
+}
+
+.app-bottom-dock[data-active='settings'] .app-bottom-dock__indicator {
+  transform: translate3d(300%, 0, 0);
+}
+
+.app-bottom-dock__indicator-surface {
+  position: relative;
+  display: block;
+  width: min(158px, calc(100% - 12px));
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(255, 202, 104, 0.5);
+  border-radius: 18px;
+  background: rgba(255, 246, 210, 0.72);
+  box-shadow:
+    0 7px 20px rgba(216, 143, 22, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(235, 166, 48, 0.16);
+  animation: dock-liquid-settle 620ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+
+.app-bottom-dock__indicator-surface::before {
+  content: '';
+  position: absolute;
+  inset: 2px 10px auto;
+  height: 42%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+  filter: blur(3px);
+}
+
+.app-bottom-dock__indicator-surface::after {
+  content: '';
+  position: absolute;
+  right: 10%;
+  bottom: 8%;
+  width: 34%;
+  height: 20%;
+  border-radius: 999px;
+  background: rgba(255, 176, 38, 0.18);
+  filter: blur(5px);
+}
+
+@keyframes dock-liquid-settle {
+  0% { transform: scaleX(0.86) scaleY(0.98); }
+  48% { transform: scaleX(1.12) scaleY(0.93); }
+  72% { transform: scaleX(0.985) scaleY(1.015); }
+  100% { transform: scaleX(1) scaleY(1); }
+}
+
 .app-bottom-dock__button {
-  flex: 0 1 158px;
-  width: 158px;
+  position: relative;
+  z-index: 1;
+  flex: 1 1 25%;
+  width: 25%;
   height: 54px;
   min-width: 0;
   padding: 0;
@@ -8338,8 +8675,8 @@ html[data-shell-mode='ipad-fixed'] .page--settings .settings-mockup-frame {
 
 .app-bottom-dock__button.is-active {
   color: #ff8a00;
-  background: linear-gradient(180deg, rgba(255, 251, 231, 0.98), rgba(255, 241, 194, 0.92));
-  box-shadow: 0 4px 14px rgba(222, 150, 25, 0.13), inset 0 0 0 1px rgba(246, 198, 101, 0.24);
+  background: transparent;
+  box-shadow: none;
   transform: scale(1.06);
   cursor: default;
 }
@@ -8372,9 +8709,9 @@ html[data-shell-mode='ipad-fixed'] .page--settings .settings-mockup-frame {
 /* iPad fixed shell: pin dock to the bottom of the stage and keep scrollable
    content clear of it. */
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock {
-  top: calc(var(--ipad-shell-stage-height) - 90px);
+  top: calc(var(--ipad-shell-stage-height) - 93px);
   bottom: auto;
-  width: 1137px;
+  width: var(--ipad-shell-stage-width);
   height: 90px;
   padding: 0;
   gap: 0;
@@ -8391,20 +8728,44 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button {
   border-radius: 32px;
 }
 
-html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(1) {
-  left: 75px;
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-of-type(1) {
+  left: 103.5px;
 }
 
-html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(2) {
-  left: 351px;
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-of-type(2) {
+  left: 379.5px;
 }
 
-html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(3) {
-  left: 626px;
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-of-type(3) {
+  left: 654.5px;
 }
 
-html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-child(4) {
-  left: 901px;
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button:nth-of-type(4) {
+  left: 929.5px;
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__indicator {
+  top: 13px;
+  left: 103.5px;
+  width: 215px;
+  height: 64px;
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock[data-active='selection'] .app-bottom-dock__indicator {
+  transform: translate3d(276px, 0, 0);
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock[data-active='stats'] .app-bottom-dock__indicator {
+  transform: translate3d(551px, 0, 0);
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock[data-active='settings'] .app-bottom-dock__indicator {
+  transform: translate3d(826px, 0, 0);
+}
+
+html[data-shell-mode='ipad-fixed'] .app-bottom-dock__indicator-surface {
+  width: 100%;
+  border-radius: 32px;
 }
 
 html[data-shell-mode='ipad-fixed'] .app-bottom-dock__button.is-active {
@@ -8429,8 +8790,35 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock__label {
   font-size: 29px;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .main-route-layer--previous {
+    display: none;
+  }
+
+  .main-route-layer--current :is(
+    .review-plan-shell__hero,
+    .review-dom-surface > :not(.review-plan-shell),
+    .selection-mockup-frame > :not(.selection-shell__chrome),
+    .stats-mockup-frame > :not(.stats-shell__chrome),
+    .settings-mockup-frame > :not(.settings-shell__chrome)
+  ),
+  .main-route-layer--current .review-dom-surface::before,
+  .main-route-layer--current .review-dom-surface::after,
+  .main-route-layer--current::before {
+    animation: none !important;
+  }
+
+  .app-bottom-dock__indicator {
+    transition: none;
+  }
+
+  .app-bottom-dock__indicator-surface {
+    animation: none;
+  }
+}
+
 /* One profile-chip size and treatment across every main sheet. */
-.page .app-profile-chip {
+:is(.page, .main-shell-chrome) .app-profile-chip {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -8453,7 +8841,7 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock__label {
   white-space: nowrap;
 }
 
-.page .app-profile-chip::before {
+:is(.page, .main-shell-chrome) .app-profile-chip::before {
   content: '';
   position: absolute;
   display: block;
@@ -8467,7 +8855,7 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock__label {
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.75);
 }
 
-.page .app-profile-chip::after {
+:is(.page, .main-shell-chrome) .app-profile-chip::after {
   content: '';
   position: absolute;
   display: block;
@@ -8481,8 +8869,8 @@ html[data-shell-mode='ipad-fixed'] .app-bottom-dock__label {
   transform: rotate(45deg);
 }
 
-.page .app-profile-chip .review-plan-shell__profile-avatar,
-.page .app-profile-chip .selection-shell__profile-avatar {
+:is(.page, .main-shell-chrome) .app-profile-chip .review-plan-shell__profile-avatar,
+:is(.page, .main-shell-chrome) .app-profile-chip .selection-shell__profile-avatar {
   display: none;
 }
 
@@ -8617,7 +9005,7 @@ html[data-shell-mode='ipad-fixed'] .page--review .review-plan-shell__chrome .app
 }
 
 /* Reuse the review sheet's brand lockup on every main sheet. */
-.page .app-brand-lockup {
+:is(.page, .main-shell-chrome) .app-brand-lockup {
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
@@ -8639,7 +9027,7 @@ html[data-shell-mode='ipad-fixed'] .page--review .review-plan-shell__chrome .app
   transform-origin: left center;
 }
 
-.page .app-brand-lockup__mark {
+:is(.page, .main-shell-chrome) .app-brand-lockup__mark {
   display: inline-block;
   width: 31px;
   height: 31px;
@@ -8647,13 +9035,13 @@ html[data-shell-mode='ipad-fixed'] .page--review .review-plan-shell__chrome .app
   background: url('/design-reference/slices/brand-rabbit-outline-v1.png?v=1') center / contain no-repeat;
 }
 
-.page .app-brand-lockup__mark::before,
-.page .app-brand-lockup__mark::after {
+:is(.page, .main-shell-chrome) .app-brand-lockup__mark::before,
+:is(.page, .main-shell-chrome) .app-brand-lockup__mark::after {
   content: none;
 }
 
 /* Switch only interface mascots for the dog profile; vocabulary artwork stays semantic. */
-.page[data-profile='stinky-dog'] .app-brand-lockup__mark {
+:is(.page, .main-shell-chrome)[data-profile='stinky-dog'] .app-brand-lockup__mark {
   background-image: url('/design-reference/slices/brand-dog-outline-v1.png?v=1');
 }
 
@@ -8661,6 +9049,49 @@ html[data-shell-mode='ipad-fixed'] .page--review .review-plan-shell__chrome .app
   background-image: url('/design-reference/slices/review-dog-scene-v1.webp?v=1');
   background-position: center;
   background-size: cover;
+}
+
+.page--review .review-day-forward-button {
+  position: absolute;
+  left: 12px;
+  top: 157px;
+  z-index: 8;
+  display: none;
+  width: 66px;
+  min-height: 58px;
+  padding: 7px 8px;
+  border: 1px solid rgba(234, 168, 57, 0.58);
+  border-radius: 18px;
+  color: #704519;
+  font: 700 13px/1.15 var(--review-font-ui);
+  cursor: pointer;
+  background: rgba(255, 250, 236, 0.92);
+  box-shadow: 0 8px 18px rgba(123, 78, 28, 0.16), inset 0 1px rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.page--review[data-profile='stinky-dog'] .review-day-forward-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.page--review .review-day-forward-button small {
+  color: #a87536;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.page--review .review-day-forward-button:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.page--review .review-day-forward-button:disabled {
+  cursor: wait;
+  opacity: 0.68;
 }
 
 .page--stats[data-profile='stinky-dog'] .stats-hero__art {
@@ -8673,12 +9104,12 @@ html[data-shell-mode='ipad-fixed'] .page--review .review-plan-shell__chrome .app
   background: url('/design-reference/slices/settings-cyber-dog-hero-v1.webp?v=1') center / cover no-repeat;
 }
 
-.page .app-brand-lockup__wordmark {
+:is(.page, .main-shell-chrome) .app-brand-lockup__wordmark {
   display: inline-block;
   line-height: 1;
 }
 
-.page .app-brand-lockup .app-version-badge {
+:is(.page, .main-shell-chrome) .app-brand-lockup .app-version-badge {
   min-height: 22px;
   padding: 0 8px;
   font-family: 'PingFang SC', 'SF Pro Text', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
@@ -8862,6 +9293,10 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   grid-template-rows: minmax(0, 1fr);
 }
 
+.page--stats .stats-tab-panel--learning {
+  grid-template-rows: minmax(0, 1fr);
+}
+
 .page--stats .stats-memory-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -9039,6 +9474,178 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
 }
 
+.page--stats .memory-panel--learning-load {
+  display: grid;
+  grid-template-rows: 45px minmax(0, 1fr);
+  padding: 13px 13px 9px;
+}
+
+.page--stats .learning-load-chart {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding-top: 6px;
+}
+
+.page--stats .learning-load-chart__axis {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 45px;
+  min-height: 0;
+  color: #958574;
+  font-size: 10px;
+  text-align: right;
+}
+
+.page--stats .learning-load-chart__scale {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
+  padding: 50px 9px 0 0;
+}
+
+.page--stats .learning-load-chart__axis small {
+  align-self: center;
+  padding-right: 9px;
+  color: #aa9988;
+  font-size: 9px;
+}
+
+.page--stats .learning-load-chart__scroll {
+  min-width: 0;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  scroll-snap-type: none;
+  touch-action: pan-x;
+  cursor: grab;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page--stats .learning-load-chart__scroll.is-dragging,
+.page--stats .learning-load-chart__scroll.is-gliding {
+  cursor: grabbing;
+}
+
+.page--stats .learning-load-chart__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.page--stats .learning-load-chart__scroll:focus-visible {
+  outline: 2px solid rgba(255, 159, 28, 0.34);
+  outline-offset: -2px;
+}
+
+.page--stats .learning-load-chart__plot {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+}
+
+.page--stats .learning-load-chart__grid {
+  position: absolute;
+  inset: 50px 0 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.page--stats .learning-load-chart__grid span {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: #eee5d6;
+}
+
+.page--stats .learning-load-chart__days {
+  position: absolute;
+  inset: 50px 0 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 46px;
+  gap: 2px;
+}
+
+.page--stats .learning-load-day {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 45px;
+  min-height: 0;
+  scroll-snap-align: center;
+}
+
+.page--stats .learning-load-day__plot {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 7px 7px 0 0;
+}
+
+.page--stats .learning-load-day--today .learning-load-day__plot {
+  background: linear-gradient(180deg, rgba(255, 183, 66, 0.03), rgba(255, 183, 66, 0.12));
+  box-shadow: inset 0 0 0 1px rgba(255, 167, 35, 0.2);
+}
+
+.page--stats .learning-load-day__plot > strong {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  color: #5d4a36;
+  font-size: 11px;
+  line-height: 1;
+  text-align: center;
+}
+
+.page--stats .learning-load-day__stack {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 32px;
+  min-height: 0;
+  max-height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 5px 14px rgba(77, 119, 160, 0.12);
+}
+
+.page--stats .learning-load-day__stack span {
+  display: block;
+  min-height: 0;
+}
+
+.page--stats .learning-load-day__new {
+  background: linear-gradient(180deg, #ffc363, #ffa42b);
+}
+
+.page--stats .learning-load-day__review {
+  background: linear-gradient(180deg, #ffe8a3, #f6cf72);
+}
+
+.page--stats .learning-load-day__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8e7d6c;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.page--stats .learning-load-day--today .learning-load-day__label {
+  color: #e88912;
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .page--stats .memory-chart-legend {
   display: flex;
   align-items: center;
@@ -9074,7 +9681,7 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
 }
 
 .page--stats .memory-chart-legend i.is-review {
-  background: #62a5ee;
+  background: #f8d77d;
 }
 
 .page--stats .memory-curve-chart {

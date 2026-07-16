@@ -12,7 +12,7 @@ import { buildQuestion, getCorrectAnswer, isCorrectAnswer, type Question } from 
 import { createAnswerEventId } from '../services/answer-event-service';
 import { getExampleSentences } from '../services/example-service';
 import { createEmptyRecord } from '../services/spaced-repetition';
-import { createDateKey } from '../services/task-service';
+import { createDateTimeForDateKey } from '../services/task-service';
 import { indexWordsById } from '../services/word-service';
 
 interface LearningPageProps {
@@ -20,6 +20,7 @@ interface LearningPageProps {
   initialWordIds: string[];
   recordsById: Record<string, LearningRecord>;
   setting: ParentSetting;
+  studyDateKey: string;
   onAnswer: (event: AnswerEvent) => Promise<void>;
   onComplete: (result: SessionResult) => Promise<void>;
   onExit: () => void;
@@ -30,6 +31,7 @@ export function LearningPage({
   initialWordIds,
   recordsById,
   setting,
+  studyDateKey,
   onAnswer,
   onComplete,
   onExit,
@@ -78,12 +80,12 @@ export function LearningPage({
 
     const correct = isCorrectAnswer(currentQuestion, answer);
     const correctAnswer = getCorrectAnswer(currentQuestion);
-    const answeredAt = new Date();
+    const answeredAt = createDateTimeForDateKey(studyDateKey);
     const answeredAtText = answeredAt.toISOString();
     const answerEvent: AnswerEvent = {
       id: createAnswerEventId(currentWordId, answeredAtText),
       wordId: currentWordId,
-      dateKey: createDateKey(answeredAt),
+      dateKey: studyDateKey,
       answeredAt: answeredAtText,
       questionKind: currentQuestion.kind,
       selectedAnswer: answer,

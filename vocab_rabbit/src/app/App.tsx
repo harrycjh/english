@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useMemo, useState } from 'react';
+import { startTransition, useEffect, useMemo, useRef, useState } from 'react';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary, SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
@@ -6,14 +6,28 @@ import type { LocalLifePhotoView } from '../models/local-media';
 import type { ParentSetting, ProfileId } from '../models/parent-setting';
 import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordPayload } from '../models/word';
-import type { AppRoute } from './routes';
+import {
+  getMainRouteDirection,
+  isMainAppRoute,
+  type AppRoute,
+  type MainAppRoute,
+  type MainRouteDirection,
+} from './routes';
 import { CompletionPage } from '../screens/CompletionPage';
 import { ReviewPage } from '../screens/HomePage';
 import { LearningPage } from '../screens/LearningPage';
 import { SelectionPage } from '../screens/SelectionPage';
 import { StatsPage } from '../screens/StatsPage';
 import { SettingsPage } from '../screens/SettingsPage';
-import { buildDailyTask, createDateKey, recordTaskAnswer } from '../services/task-service';
+import {
+  buildDailyTask,
+  addDaysToDateKey,
+  createDateKey,
+  createDateTimeForDateKey,
+  getTaskStudyQueue,
+  reconcileTaskCompletion,
+  recordTaskAnswer,
+} from '../services/task-service';
 import { getWrongPracticeWordIds } from '../services/answer-event-service';
 import { ensureSelectionStateMap } from '../services/selection-service';
 import { createEmptyRecord, evaluateAnswer, isMastered } from '../services/spaced-repetition';
@@ -48,6 +62,29 @@ import {
 import { loadWordPayload } from '../services/word-service';
 import { APP_VERSION } from '../config/app-meta';
 import { BottomDock } from '../components/BottomDock';
+import { ProfileSelector } from '../components/ProfileSelector';
+
+interface MainShellChromeProps {
+  profileId: ProfileId;
+  onSelectProfile: (profileId: ProfileId) => void | Promise<void>;
+}
+
+function MainShellChrome({ profileId, onSelectProfile }: MainShellChromeProps) {
+  return (
+    <header className="main-shell-chrome" data-profile={profileId}>
+      <div className="app-brand-lockup">
+        <span className="app-brand-lockup__mark" aria-hidden="true" />
+        <span className="app-brand-lockup__wordmark">VocaRabbit</span>
+        <span className="app-version-badge">{APP_VERSION}</span>
+      </div>
+      <ProfileSelector
+        value={profileId}
+        buttonClassName="main-shell-chrome__profile app-profile-chip"
+        onChange={onSelectProfile}
+      />
+    </header>
+  );
+}
 
 function getPreviewWords(payload: WordPayload | null, task: DailyTaskSummary | null) {
   if (!payload || !task) {
@@ -59,8 +96,18 @@ function getPreviewWords(payload: WordPayload | null, task: DailyTaskSummary | n
   return wordIds.map((wordId) => wordsById.get(wordId)).filter(Boolean) as WordPayload['words'];
 }
 
-export default function App() {
+function getAuthoritativeTaskAnswerIds(task: DailyTaskSummary, events: AnswerEvent[]): string[] {
+  const eventWordIds = [...new Set(
+    events.filter((event) => event.dateKey === task.dateKey).map((event) => event.wordId),
+  )];
+  return eventWordIds.length > 0 ? eventWordIds : task.answeredWordIds;
+}
+
+export default function App({ syncRevision = 0 }: { syncRevision?: number }) {
   const [route, setRoute] = useState<AppRoute>('home');
+  const [previousMainRoute, setPreviousMainRoute] = useState<MainAppRoute | null>(null);
+  const [mainRouteDirection, setMainRouteDirection] = useState<MainRouteDirection>('forward');
+  const mainRouteTransitionTimer = useRef<number | null>(null);
   const [payload, setPayload] = useState<WordPayload | null>(null);
   const [recordsById, setRecordsById] = useState<Record<string, LearningRecord>>({});
   const [answerEvents, setAnswerEvents] = useState<AnswerEvent[]>([]);
@@ -79,7 +126,7 @@ export default function App() {
 
     async function bootstrap() {
       try {
-        setLoading(true);
+        if (syncRevision === 0) setLoading(true);
         const [
           payloadValue,
           savedRecords,
@@ -106,9 +153,18 @@ export default function App() {
         if (!todayTask) {
           todayTask = buildDailyTask(payloadValue.words, savedRecords, savedSetting, new Date(), nextSelectionById);
           await saveDailyTask(todayTask);
+        } else {
+          const reconciledTask = reconcileTaskCompletion(
+            todayTask,
+            getAuthoritativeTaskAnswerIds(todayTask, savedAnswerEvents),
+          );
+          if (reconciledTask !== todayTask) {
+            todayTask = reconciledTask;
+            await saveDailyTask(todayTask);
+          }
         }
 
-        const history = await listRecentTasks(14);
+        const history = await listRecentTasks(90);
 
         if (!cancelled) {
           setPayload(payloadValue);
@@ -136,7 +192,7 @@ export default function App() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [syncRevision]);
 
   useEffect(() => {
     return () => {
@@ -190,8 +246,19 @@ export default function App() {
     return importedTimes.at(-1) ?? null;
   }, [localLifePhotosById]);
 
+  useEffect(() => {
+    if (!task) return;
+    const reconciledTask = reconcileTaskCompletion(
+      task,
+      getAuthoritativeTaskAnswerIds(task, answerEvents),
+    );
+    if (reconciledTask === task) return;
+    setTask(reconciledTask);
+    void saveDailyTask(reconciledTask).then(refreshRecentTasks);
+  }, [answerEvents, task]);
+
   async function refreshRecentTasks() {
-    setRecentTasks(await listRecentTasks(14));
+    setRecentTasks(await listRecentTasks(90));
   }
 
   async function rebuildTodayTask(
@@ -244,17 +311,19 @@ export default function App() {
       return;
     }
 
-    const completedTask: DailyTaskSummary = {
-      ...task,
-      completedAt: new Date().toISOString(),
-      correctCount: result.correctCount,
-      wrongCount: result.wrongCount,
-      totalAnswered: result.totalAnswered,
-      answeredWordIds: [...new Set([...task.answeredWordIds, ...task.newWordIds, ...task.reviewWordIds])],
-    };
+    const latestTask = await getDailyTask(task.dateKey) ?? task;
+    const completedTask = reconcileTaskCompletion({
+      ...latestTask,
+      completedAt: createDateTimeForDateKey(task.dateKey).toISOString(),
+    });
 
     await saveDailyTask(completedTask);
     setTask(completedTask);
+    if (!completedTask.completedAt) {
+      setSessionResult(null);
+      startTransition(() => setRoute('home'));
+      return;
+    }
     setSessionResult(result);
     await refreshRecentTasks();
     startTransition(() => setRoute('complete'));
@@ -263,6 +332,34 @@ export default function App() {
   function handleStart() {
     setPracticeWordIds(null);
     startTransition(() => setRoute('learning'));
+  }
+
+  async function handleAdvanceDay() {
+    if (!payload || !parentSetting || !task) return;
+
+    const nextDateKey = addDaysToDateKey(task.dateKey, 1);
+    let nextTask = await getDailyTask(nextDateKey);
+    if (nextTask) {
+      nextTask = reconcileTaskCompletion(
+        nextTask,
+        getAuthoritativeTaskAnswerIds(nextTask, answerEvents),
+      );
+    } else {
+      nextTask = buildDailyTask(
+        payload.words,
+        recordsById,
+        parentSetting,
+        createDateTimeForDateKey(nextDateKey),
+        selectionById,
+      );
+    }
+
+    await saveDailyTask(nextTask);
+    setTask(nextTask);
+    setPracticeWordIds(null);
+    setSessionResult(null);
+    setRoute('home');
+    await refreshRecentTasks();
   }
 
   function handlePracticeWrongWords() {
@@ -280,21 +377,47 @@ export default function App() {
     startTransition(() => setRoute('learning'));
   }
 
+  function navigateToMainRoute(nextRoute: MainAppRoute) {
+    if (route === nextRoute) return;
+    if (mainRouteTransitionTimer.current !== null) {
+      window.clearTimeout(mainRouteTransitionTimer.current);
+      mainRouteTransitionTimer.current = null;
+    }
+
+    if (isMainAppRoute(route)) {
+      setPreviousMainRoute(route);
+      setMainRouteDirection(getMainRouteDirection(route, nextRoute));
+    } else {
+      setPreviousMainRoute(null);
+    }
+    setRoute(nextRoute);
+    mainRouteTransitionTimer.current = window.setTimeout(() => {
+      setPreviousMainRoute(null);
+      mainRouteTransitionTimer.current = null;
+    }, 540);
+  }
+
+  useEffect(() => () => {
+    if (mainRouteTransitionTimer.current !== null) {
+      window.clearTimeout(mainRouteTransitionTimer.current);
+    }
+  }, []);
+
   function handleOpenSettings() {
-    startTransition(() => setRoute('settings'));
+    navigateToMainRoute('settings');
   }
 
   function handleOpenSelection() {
-    startTransition(() => setRoute('selection'));
+    navigateToMainRoute('selection');
   }
 
   function handleOpenStats() {
-    startTransition(() => setRoute('stats'));
+    navigateToMainRoute('stats');
   }
 
   function handleBackHome() {
     setPracticeWordIds(null);
-    startTransition(() => setRoute('home'));
+    navigateToMainRoute('home');
   }
 
   async function handleUpdateSetting(nextSetting: ParentSetting) {
@@ -329,7 +452,7 @@ export default function App() {
       await rebuildTodayTask(recordsById, parentSetting, selectionById);
     }
 
-    startTransition(() => setRoute('home'));
+    navigateToMainRoute('home');
   }
 
   async function handleClearLocalData(familyCode: string) {
@@ -415,7 +538,7 @@ export default function App() {
     setSelectionById(nextSelectionById);
     setParentSetting(backup.tables.parentSetting);
     setTask(restoredTask);
-    setRecentTasks(await listRecentTasks(14));
+    setRecentTasks(await listRecentTasks(90));
     setSessionResult(null);
     setPracticeWordIds(null);
 
@@ -426,6 +549,86 @@ export default function App() {
       answerEvents: backup.tables.answerEvents.length,
       exportedAt: backup.exportedAt,
     };
+  }
+
+  function renderMainRoute(targetRoute: MainAppRoute) {
+    if (!payload || !task || !parentSetting) return null;
+
+    if (targetRoute === 'settings') {
+      return (
+        <SettingsPage
+          settings={parentSetting}
+          task={task}
+          onBackHome={handleBackHome}
+          onOpenSelection={handleOpenSelection}
+          onOpenStats={handleOpenStats}
+          onUpdateSettings={handleUpdateSetting}
+          onSelectProfile={handleSelectProfile}
+          onExportStudyData={handleExportStudyData}
+          onImportStudyData={handleImportStudyData}
+          onClearLocalData={handleClearLocalData}
+          onImportLifePhotoPackage={handleImportLifePhotoPackage}
+          localLifePhotoCount={Object.keys(localLifePhotosById).length}
+          localLifePhotoImportedAt={localLifePhotoImportedAt}
+        />
+      );
+    }
+
+    if (targetRoute === 'stats') {
+      return (
+        <StatsPage
+          payload={payload}
+          task={task}
+          recentTasks={recentTasks}
+          recordsById={recordsById}
+          answerEvents={answerEvents}
+          selectionById={selectionById}
+          setting={parentSetting}
+          onBackHome={handleBackHome}
+          onOpenSelection={handleOpenSelection}
+          onSelectProfile={handleSelectProfile}
+          onPracticeWrongWords={handlePracticeWrongWords}
+        />
+      );
+    }
+
+    if (targetRoute === 'selection') {
+      return (
+        <SelectionPage
+          payload={payload}
+          recordsById={recordsById}
+          selectionById={selectionById}
+          answerEvents={answerEvents}
+          setting={parentSetting}
+          task={task}
+          localLifePhotosById={localLifePhotosById}
+          onBackHome={handleBackHome}
+          onSelectProfile={handleSelectProfile}
+          onOpenStats={handleOpenStats}
+          onSaveSelectionStates={handleSaveSelectionStates}
+          onApplySelectionPlan={handleApplySelectionPlan}
+        />
+      );
+    }
+
+    return (
+      <ReviewPage
+        payload={payload}
+        task={task}
+        setting={parentSetting}
+        recordsById={recordsById}
+        selectionById={selectionById}
+        answerEvents={answerEvents}
+        masteredCount={masteredCount}
+        recentTasks={recentTasks}
+        previewWords={previewWords}
+        localLifePhotosById={localLifePhotosById}
+        onStart={handleStart}
+        onAdvanceDay={handleAdvanceDay}
+        onSelectProfile={handleSelectProfile}
+        onSaveSelectionStates={handleSaveSelectionStates}
+      />
+    );
   }
 
   function renderCurrentRoute() {
@@ -452,16 +655,13 @@ export default function App() {
     }
 
     if (route === 'learning') {
-      const dailyWordIds = [...task.newWordIds, ...task.reviewWordIds];
-      const remainingDailyWordIds = task.completedAt
-        ? dailyWordIds
-        : dailyWordIds.filter((wordId) => !task.answeredWordIds.includes(wordId));
       return (
         <LearningPage
           payload={payload}
-          initialWordIds={practiceWordIds ?? remainingDailyWordIds}
+          initialWordIds={practiceWordIds ?? getTaskStudyQueue(task)}
           recordsById={recordsById}
           setting={parentSetting}
+          studyDateKey={task.dateKey}
           onAnswer={handleAnswer}
           onComplete={handleComplete}
           onExit={handleBackHome}
@@ -473,109 +673,34 @@ export default function App() {
       return <CompletionPage result={sessionResult} onBackHome={handleBackHome} />;
     }
 
-    if (route === 'settings') {
-      return (
-        <>
-          <SettingsPage
-            settings={parentSetting}
-            task={task}
-            onBackHome={handleBackHome}
-            onOpenSelection={handleOpenSelection}
-            onOpenStats={handleOpenStats}
-            onUpdateSettings={handleUpdateSetting}
-            onSelectProfile={handleSelectProfile}
-            onExportStudyData={handleExportStudyData}
-            onImportStudyData={handleImportStudyData}
-            onClearLocalData={handleClearLocalData}
-            onImportLifePhotoPackage={handleImportLifePhotoPackage}
-            localLifePhotoCount={Object.keys(localLifePhotosById).length}
-            localLifePhotoImportedAt={localLifePhotoImportedAt}
-          />
-          <BottomDock
-            active="settings"
-            onOpenReview={handleBackHome}
-            onOpenSelection={handleOpenSelection}
-            onOpenStats={handleOpenStats}
-            onOpenSettings={handleOpenSettings}
-          />
-        </>
-      );
-    }
-
-    if (route === 'stats') {
-      return (
-        <>
-          <StatsPage
-            payload={payload}
-            task={task}
-            recentTasks={recentTasks}
-            recordsById={recordsById}
-            answerEvents={answerEvents}
-            selectionById={selectionById}
-            setting={parentSetting}
-            onBackHome={handleBackHome}
-            onOpenSelection={handleOpenSelection}
-            onSelectProfile={handleSelectProfile}
-            onPracticeWrongWords={handlePracticeWrongWords}
-          />
-          <BottomDock
-            active="stats"
-            onOpenReview={handleBackHome}
-            onOpenSelection={handleOpenSelection}
-            onOpenStats={handleOpenStats}
-            onOpenSettings={handleOpenSettings}
-          />
-        </>
-      );
-    }
-
-    if (route === 'selection') {
-      return (
-        <>
-          <SelectionPage
-            payload={payload}
-            recordsById={recordsById}
-            selectionById={selectionById}
-            answerEvents={answerEvents}
-            setting={parentSetting}
-            task={task}
-            localLifePhotosById={localLifePhotosById}
-            onBackHome={handleBackHome}
-            onSelectProfile={handleSelectProfile}
-            onOpenStats={handleOpenStats}
-            onSaveSelectionStates={handleSaveSelectionStates}
-            onApplySelectionPlan={handleApplySelectionPlan}
-          />
-          <BottomDock
-            active="selection"
-            onOpenReview={handleBackHome}
-            onOpenSelection={handleOpenSelection}
-            onOpenStats={handleOpenStats}
-            onOpenSettings={handleOpenSettings}
-          />
-        </>
-      );
-    }
-
+    const currentMainRoute = isMainAppRoute(route) ? route : 'home';
+    const activeDock = currentMainRoute === 'home' ? 'review' : currentMainRoute;
+    const isTransitioning = previousMainRoute !== null && previousMainRoute !== currentMainRoute;
     return (
       <>
-        <ReviewPage
-          payload={payload}
-          task={task}
-          setting={parentSetting}
-          recordsById={recordsById}
-          selectionById={selectionById}
-          answerEvents={answerEvents}
-          masteredCount={masteredCount}
-          recentTasks={recentTasks}
-          previewWords={previewWords}
-          localLifePhotosById={localLifePhotosById}
-          onStart={handleStart}
+        <MainShellChrome
+          profileId={parentSetting.profileId}
           onSelectProfile={handleSelectProfile}
-          onSaveSelectionStates={handleSaveSelectionStates}
         />
+        <div className="main-route-stage" data-direction={mainRouteDirection}>
+          {isTransitioning && (
+            <div
+              className={`main-route-layer main-route-layer--previous main-route-layer--exit-${mainRouteDirection}`}
+              key={previousMainRoute}
+              aria-hidden="true"
+            >
+              {renderMainRoute(previousMainRoute)}
+            </div>
+          )}
+          <div
+            className={`main-route-layer main-route-layer--current${isTransitioning ? ` main-route-layer--enter-${mainRouteDirection}` : ''}`}
+            key={currentMainRoute}
+          >
+            {renderMainRoute(currentMainRoute)}
+          </div>
+        </div>
         <BottomDock
-          active="review"
+          active={activeDock}
           onOpenReview={handleBackHome}
           onOpenSelection={handleOpenSelection}
           onOpenStats={handleOpenStats}

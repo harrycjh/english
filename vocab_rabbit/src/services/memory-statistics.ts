@@ -3,7 +3,7 @@ import type { LearningRecord } from '../models/learning-record';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const TARGET_RETENTION_AT_DUE = 0.75;
-const FALLBACK_INTERVAL_DAYS = [0.25, 0.5, 1.5, 3, 7, 14, 30];
+const FALLBACK_INTERVAL_DAYS = [0.25, 2, 4, 7, 14, 30, 60];
 const CURVE_INTERVAL_DAYS = [
   0,
   1,
@@ -25,6 +25,13 @@ const OBSERVED_INTERVAL_LIMITS = [0.25, 0.5, 1, 2, 3, 7, 14, 21, 30, 60, 90, 180
 const DURABILITY_THRESHOLDS = [10, 30, 60, 90];
 const MIN_PERSONAL_MODEL_SAMPLES = 6;
 const MIN_PERSONAL_MODEL_BUCKETS = 2;
+const EBBINGHAUS_LONG_TERM_ANCHORS = [
+  { intervalDays: 30, retention: 21 },
+  { intervalDays: 60, retention: 18 },
+  { intervalDays: 90, retention: 15 },
+  { intervalDays: 180, retention: 12 },
+  { intervalDays: 365, retention: 5 },
+];
 
 export interface WordMemoryEstimate {
   wordId: string;
@@ -101,7 +108,20 @@ export function estimateRetention(record: LearningRecord, at: Date = new Date())
 export function estimateEbbinghausSavings(intervalDays: number): number {
   if (intervalDays <= 0) return 100;
   const minutes = Math.max(1, intervalDays * 24 * 60);
-  return 100 * 1.84 / (Math.log10(minutes) ** 1.25 + 1.84);
+  const formulaRetention = 100 * 1.84 / (Math.log10(minutes) ** 1.25 + 1.84);
+  if (intervalDays < 30) return formulaRetention;
+
+  const anchors = EBBINGHAUS_LONG_TERM_ANCHORS;
+  const upperIndex = anchors.findIndex((anchor) => intervalDays <= anchor.intervalDays);
+  if (upperIndex < 0) {
+    return EBBINGHAUS_LONG_TERM_ANCHORS.at(-1)!.retention;
+  }
+  if (upperIndex === 0) return anchors[0].retention;
+
+  const upper = anchors[upperIndex];
+  const lower = anchors[upperIndex - 1];
+  const progress = (intervalDays - lower.intervalDays) / (upper.intervalDays - lower.intervalDays);
+  return lower.retention + ((upper.retention - lower.retention) * progress);
 }
 
 interface RecallSample {

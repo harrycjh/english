@@ -172,4 +172,60 @@ describe('mergeDailyTasks', () => {
       answeredWordIds: ['word-a', 'word-b'],
     });
   });
+
+  it('reopens a completed review-only task when merged new words are still unanswered', () => {
+    const completedReviewTask = {
+      dateKey: '2026-07-16',
+      newWordIds: [],
+      reviewWordIds: ['review-a', 'review-b'],
+      completedAt: '2026-07-16T09:00:00.000Z',
+      correctCount: 2,
+      wrongCount: 0,
+      totalAnswered: 2,
+      answeredWordIds: ['review-a', 'review-b'],
+    };
+    const expandedTask = {
+      ...completedReviewTask,
+      newWordIds: ['new-a', 'new-b'],
+      reviewWordIds: [],
+      completedAt: null,
+      correctCount: 0,
+      totalAnswered: 0,
+      answeredWordIds: [],
+    };
+    const events = [
+      makeEvent('review-event-a', 'review-a', '2026-07-16T08:00:00.000Z', true),
+      makeEvent('review-event-b', 'review-b', '2026-07-16T08:30:00.000Z', true),
+    ];
+
+    const [merged] = mergeDailyTasks([completedReviewTask], [expandedTask], events);
+
+    expect(merged).toMatchObject({
+      newWordIds: ['new-a', 'new-b'],
+      reviewWordIds: ['review-a', 'review-b'],
+      answeredWordIds: ['review-a', 'review-b'],
+      completedAt: null,
+    });
+  });
+
+  it('replaces fabricated answered ids with the actual event word ids', () => {
+    const task = {
+      dateKey: '2026-07-16',
+      newWordIds: ['new-a', 'new-b'],
+      reviewWordIds: ['review-a'],
+      completedAt: '2026-07-16T09:00:00.000Z',
+      correctCount: 1,
+      wrongCount: 0,
+      totalAnswered: 1,
+      answeredWordIds: ['review-a', 'new-a', 'new-b'],
+    };
+    const events = [makeEvent('review-event', 'review-a', '2026-07-16T08:00:00.000Z', true)];
+
+    const [merged] = mergeDailyTasks([task], [], events);
+
+    expect(merged).toMatchObject({
+      answeredWordIds: ['review-a'],
+      completedAt: null,
+    });
+  });
 });

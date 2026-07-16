@@ -17,6 +17,8 @@ describe('BottomDock', () => {
     expect(markup.match(/app-bottom-dock__button/g)).toHaveLength(4);
     expect(markup.match(/app-bottom-dock__icon/g)).toHaveLength(4);
     expect(markup.match(/app-bottom-dock__label/g)).toHaveLength(4);
+    expect(markup.match(/app-bottom-dock__indicator"/g)).toHaveLength(1);
+    expect(markup).toContain('--dock-active-index:0');
     expect(markup).toContain('aria-current="page"');
     expect(markup).not.toContain('review-dock-');
   });
