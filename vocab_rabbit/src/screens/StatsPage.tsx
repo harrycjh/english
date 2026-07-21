@@ -14,9 +14,16 @@ import {
 } from '../services/learning-statistics';
 import {
   buildMemoryStatistics,
+  type DurabilityTimelinePoint,
   type DurabilityThresholdPoint,
   type RetentionPoint,
 } from '../services/memory-statistics';
+import {
+  aggregateDurabilityTimeline,
+  aggregateLearningLoadTimeline,
+  getStatisticsBucketKey,
+  type StatisticsTimeScale,
+} from '../services/statistics-time-buckets';
 
 interface StatsPageProps {
   payload: WordPayload;
@@ -50,21 +57,6 @@ function formatDate(dateKey: string): string {
 
 function getCurveRetention(points: RetentionPoint[], intervalDays: number): number {
   return points.find((point) => point.intervalDays === intervalDays)?.retention ?? 0;
-}
-
-function StatMetric({ label, value, note, tone = 'blue' }: {
-  label: string;
-  value: string;
-  note: string;
-  tone?: 'blue' | 'green' | 'orange' | 'red';
-}) {
-  return (
-    <article className={`memory-metric memory-metric--${tone}`}>
-      <span>{label}</span>
-      <strong>{value}</strong>
-      <small>{note}</small>
-    </article>
-  );
 }
 
 function MemoryCurveChart({ predicted, reference }: {
@@ -157,7 +149,58 @@ function formatRelativeDayLabel(dateKey: string, todayKey: string): string {
   return offset < 0 ? `${Math.abs(offset)}天前` : `${offset}天后`;
 }
 
-function LearningLoadChart({ points, todayKey }: { points: LearningLoadPoint[]; todayKey: string }) {
+function formatTimelineLabel(dateKey: string, todayKey: string, scale: StatisticsTimeScale): string {
+  if (scale === 'day') return formatRelativeDayLabel(dateKey, todayKey);
+  if (scale === 'week') {
+    const weekMs = 7 * 24 * 60 * 60 * 1000;
+    const currentWeek = getStatisticsBucketKey(todayKey, 'week');
+    const offset = Math.round(
+      (new Date(`${dateKey}T12:00:00.000Z`).getTime() - new Date(`${currentWeek}T12:00:00.000Z`).getTime()) / weekMs,
+    );
+    if (offset === -1) return '上周';
+    if (offset === 0) return '本周';
+    if (offset === 1) return '下周';
+    return offset < 0 ? `${Math.abs(offset)}周前` : `${offset}周后`;
+  }
+
+  const date = new Date(`${dateKey}T12:00:00.000Z`);
+  const today = new Date(`${todayKey}T12:00:00.000Z`);
+  const offset = (date.getUTCFullYear() - today.getUTCFullYear()) * 12
+    + date.getUTCMonth() - today.getUTCMonth();
+  if (offset === -1) return '上月';
+  if (offset === 0) return '本月';
+  if (offset === 1) return '下月';
+  return offset < 0 ? `${Math.abs(offset)}月前` : `${offset}月后`;
+}
+
+function TimeScaleSwitch({ value, onChange, label }: {
+  value: StatisticsTimeScale;
+  onChange: (value: StatisticsTimeScale) => void;
+  label: string;
+}) {
+  const options: Array<{ value: StatisticsTimeScale; label: string }> = [
+    { value: 'day', label: '日' },
+    { value: 'week', label: '周' },
+    { value: 'month', label: '月' },
+  ];
+  return (
+    <div className="stats-time-scale-switch" role="group" aria-label={label}>
+      {options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          aria-pressed={value === option.value}
+          className={value === option.value ? 'is-active' : ''}
+          onClick={() => onChange(option.value)}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function useInertialTimelineScroll() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const mouseDragRef = useRef<{
     pointerId: number;
@@ -168,20 +211,6 @@ function LearningLoadChart({ points, todayKey }: { points: LearningLoadPoint[]; 
     velocity: number;
   } | null>(null);
   const momentumFrameRef = useRef<number | null>(null);
-  const rawMaximum = Math.max(...points.map((point) => point.totalCount), 1);
-  const tickStep = Math.max(1, Math.ceil(rawMaximum / 4));
-  const maximum = tickStep * 4;
-  const ticks = [maximum, maximum - tickStep, maximum - (tickStep * 2), tickStep, 0];
-
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      const scroller = scrollRef.current;
-      const today = scroller?.querySelector<HTMLElement>('[data-today="true"]');
-      if (!scroller || !today) return;
-      scroller.scrollLeft = today.offsetLeft - ((scroller.clientWidth - today.offsetWidth) / 2);
-    });
-    return () => window.cancelAnimationFrame(frame);
-  }, [points.length, todayKey]);
 
   useEffect(() => () => {
     if (momentumFrameRef.current !== null) {
@@ -264,8 +293,41 @@ function LearningLoadChart({ points, todayKey }: { points: LearningLoadPoint[]; 
     }
   }
 
+  return {
+    scrollRef,
+    pointerHandlers: {
+      onPointerDown: handlePointerDown,
+      onPointerMove: handlePointerMove,
+      onPointerUp: (event: ReactPointerEvent<HTMLDivElement>) => finishPointerDrag(event, true),
+      onPointerCancel: (event: ReactPointerEvent<HTMLDivElement>) => finishPointerDrag(event, false),
+    },
+  };
+}
+
+function LearningLoadChart({ points, todayKey, scale }: {
+  points: LearningLoadPoint[];
+  todayKey: string;
+  scale: StatisticsTimeScale;
+}) {
+  const { scrollRef, pointerHandlers } = useInertialTimelineScroll();
+  const columnWidth = scale === 'day' ? 48 : scale === 'week' ? 72 : 96;
+  const rawMaximum = Math.max(...points.map((point) => point.totalCount), 1);
+  const tickStep = Math.max(1, Math.ceil(rawMaximum / 4));
+  const maximum = tickStep * 4;
+  const ticks = [maximum, maximum - tickStep, maximum - (tickStep * 2), tickStep, 0];
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      const scroller = scrollRef.current;
+      const today = scroller?.querySelector<HTMLElement>('[data-today="true"]');
+      if (!scroller || !today) return;
+      scroller.scrollLeft = today.offsetLeft - ((scroller.clientWidth - today.offsetWidth) / 2);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [points.length, scrollRef, todayKey]);
+
   return (
-    <div className="learning-load-chart" role="group" aria-label="每日复习词与新认识词堆叠柱状图">
+    <div className="learning-load-chart" role="group" aria-label="每日实际与预测学习负荷堆叠柱状图">
       <div className="learning-load-chart__axis" aria-hidden="true">
         <div className="learning-load-chart__scale">
           {ticks.map((tick) => <span key={tick}>{tick}</span>)}
@@ -276,25 +338,23 @@ function LearningLoadChart({ points, todayKey }: { points: LearningLoadPoint[]; 
         className="learning-load-chart__scroll"
         ref={scrollRef}
         tabIndex={0}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={(event) => finishPointerDrag(event, true)}
-        onPointerCancel={(event) => finishPointerDrag(event, false)}
+        {...pointerHandlers}
       >
-        <div className="learning-load-chart__plot" style={{ width: `${points.length * 48}px` }}>
+        <div className="learning-load-chart__plot" style={{ width: `max(100%, ${points.length * columnWidth}px)` }}>
           <div className="learning-load-chart__grid" aria-hidden="true">
             {ticks.map((tick) => <span key={tick} />)}
           </div>
-          <div className="learning-load-chart__days">
+          <div className="learning-load-chart__days" style={{ gridAutoColumns: `minmax(${columnWidth - 2}px, 1fr)` }}>
             {points.map((point) => {
               const height = (point.totalCount / maximum) * 100;
-              const relativeLabel = formatRelativeDayLabel(point.dateKey, todayKey);
+              const relativeLabel = formatTimelineLabel(point.dateKey, todayKey, scale);
               return (
                 <div
                   className={`learning-load-day learning-load-day--${point.kind}`}
                   data-today={point.kind === 'today' ? 'true' : undefined}
+                  data-kind={point.kind}
                   key={point.dateKey}
-                  title={`${formatDate(point.dateKey)}：复习 ${point.reviewCount}，新认识 ${point.newCount}`}
+                  title={`${formatDate(point.dateKey)}：复习 ${point.reviewCount}，新认识 ${point.newCount}${point.deferredReviewCount > 0 ? `，顺延复习 ${point.deferredReviewCount}` : ''}${point.kind === 'forecast' ? '（预测）' : '（实际）'}`}
                 >
                   <div className="learning-load-day__plot">
                     {point.totalCount > 0 && (
@@ -316,40 +376,119 @@ function LearningLoadChart({ points, todayKey }: { points: LearningLoadPoint[]; 
   );
 }
 
-function DurabilityLineChart({ points }: { points: DurabilityThresholdPoint[] }) {
-  const width = 760;
-  const height = 286;
-  const left = 58;
-  const right = 30;
-  const top = 28;
-  const bottom = 48;
-  const plotWidth = width - left - right;
+function DurabilityLineChart({ timeline, thresholds, todayKey, scale }: {
+  timeline: DurabilityTimelinePoint[];
+  thresholds: DurabilityThresholdPoint[];
+  todayKey: string;
+  scale: StatisticsTimeScale;
+}) {
+  const { scrollRef, pointerHandlers } = useInertialTimelineScroll();
+  const dayWidth = scale === 'day' ? 48 : scale === 'week' ? 72 : 96;
+  const width = Math.max(dayWidth, timeline.length * dayWidth);
+  const height = 430;
+  const top = 36;
+  const bottom = 46;
   const plotHeight = height - top - bottom;
-  const maximum = Math.max(...points.map((point) => point.count), 1);
-  const xForDays = (days: number) => left + (days / 90) * plotWidth;
+  const rawMaximum = Math.max(
+    ...timeline.flatMap((point) => thresholds.map((threshold) => point.counts[threshold.thresholdDays] ?? 0)),
+    1,
+  );
+  const tickStep = Math.max(1, Math.ceil(rawMaximum / 4));
+  const maximum = tickStep * 4;
+  const ticks = [maximum, maximum - tickStep, maximum - (tickStep * 2), tickStep, 0];
+  const xForIndex = (index: number) => index * dayWidth + dayWidth / 2;
   const yForCount = (count: number) => top + (1 - count / maximum) * plotHeight;
-  const yTicks = [maximum, Math.round(maximum / 2), 0].filter((value, index, values) => values.indexOf(value) === index);
-  const path = points.map((point, index) => (
-    `${index === 0 ? 'M' : 'L'} ${xForDays(point.thresholdDays).toFixed(1)} ${yForCount(point.count).toFixed(1)}`
-  )).join(' ');
+  const pathForThreshold = (thresholdDays: number) => timeline.map((point, index) => {
+    const prefix = index === 0 ? 'M' : 'L';
+    return `${prefix} ${xForIndex(index).toFixed(1)} ${yForCount(point.counts[thresholdDays] ?? 0).toFixed(1)}`;
+  }).join(' ');
+  const currentBucketKey = getStatisticsBucketKey(todayKey, scale);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      const scroller = scrollRef.current;
+      if (!scroller) return;
+      scroller.scrollLeft = scroller.scrollWidth - scroller.clientWidth;
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [scrollRef, timeline.length, todayKey]);
 
   return (
-    <svg className="memory-durability-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="不同记忆持久天数的单词数量">
-      {yTicks.map((tick) => (
-        <g key={tick}>
-          <line x1={left} y1={yForCount(tick)} x2={width - right} y2={yForCount(tick)} className="memory-chart-grid" />
-          <text x={left - 12} y={yForCount(tick) + 4} textAnchor="end" className="memory-chart-label">{tick}</text>
-        </g>
-      ))}
-      <path d={path} className="memory-durability-line" />
-      {points.map((point) => (
-        <g key={point.thresholdDays}>
-          <circle cx={xForDays(point.thresholdDays)} cy={yForCount(point.count)} r="6" fill={point.color} className="memory-durability-node" />
-          <text x={xForDays(point.thresholdDays)} y={yForCount(point.count) - 13} textAnchor="middle" className="memory-durability-value">{point.count}</text>
-          <text x={xForDays(point.thresholdDays)} y={height - 15} textAnchor="middle" className="memory-chart-label">≥{point.thresholdDays} 天</text>
-        </g>
-      ))}
-    </svg>
+    <div className="durability-timeline-chart" role="group" aria-label="每日记忆持久度四曲线图">
+      <div className="durability-timeline-chart__axis" aria-hidden="true">
+        <div className="durability-timeline-chart__scale">
+          {ticks.map((tick) => <span key={tick}>{tick}</span>)}
+        </div>
+        <small>词数</small>
+      </div>
+      <div
+        className="durability-timeline-chart__scroll"
+        ref={scrollRef}
+        tabIndex={0}
+        {...pointerHandlers}
+      >
+        <div
+          className="durability-timeline-chart__plot"
+          style={{ width: `max(100%, ${width}px)` }}
+        >
+          <svg
+            className="memory-durability-chart"
+            width={width}
+            height="100%"
+            viewBox={`0 0 ${width} ${height}`}
+            preserveAspectRatio="none"
+            role="img"
+            aria-label="过去九十天每天达到不同记忆持久度的单词数量"
+          >
+            {ticks.map((tick) => (
+              <line key={tick} x1={0} y1={yForCount(tick)} x2={width} y2={yForCount(tick)} className="memory-chart-grid" />
+            ))}
+            <rect
+              x={Math.max(0, width - dayWidth)}
+              y={top}
+              width={dayWidth}
+              height={plotHeight}
+              className="memory-durability-today"
+            />
+            {thresholds.map((threshold) => (
+              <path
+                key={threshold.thresholdDays}
+                d={pathForThreshold(threshold.thresholdDays)}
+                className="memory-durability-line"
+                style={{ stroke: threshold.color }}
+              />
+            ))}
+            {thresholds.map((threshold) => {
+              const currentCount = timeline.at(-1)?.counts[threshold.thresholdDays] ?? 0;
+              return (
+                <circle
+                  key={threshold.thresholdDays}
+                  cx={xForIndex(timeline.length - 1)}
+                  cy={yForCount(currentCount)}
+                  r="5"
+                  className="memory-durability-node"
+                  style={{ fill: threshold.color }}
+                />
+              );
+            })}
+          </svg>
+          <div
+            className="durability-timeline-chart__labels"
+            style={{ gridTemplateColumns: `repeat(${timeline.length}, minmax(0, 1fr))` }}
+          >
+            {timeline.map((point) => (
+              <span
+                key={point.dateKey}
+                className={point.dateKey === currentBucketKey ? 'is-today' : ''}
+                title={`${formatDate(point.dateKey)}：${thresholds.map((threshold) => `≥${threshold.thresholdDays}天 ${point.counts[threshold.thresholdDays] ?? 0}词`).join('，')}`}
+              >
+                {formatTimelineLabel(point.dateKey, todayKey, scale)}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -361,10 +500,11 @@ export function StatsPage({
   answerEvents,
   selectionById,
   setting,
-  onOpenSelection,
   onSelectProfile,
 }: StatsPageProps) {
-  const [activeTab, setActiveTab] = useState<StatsTab>('forgetting');
+  const [activeTab, setActiveTab] = useState<StatsTab>('learning');
+  const [learningTimeScale, setLearningTimeScale] = useState<StatisticsTimeScale>('day');
+  const [durabilityTimeScale, setDurabilityTimeScale] = useState<StatisticsTimeScale>('day');
   const memory = useMemo(() => buildMemoryStatistics(recordsById, answerEvents), [recordsById, answerEvents]);
   const learning = useMemo(() => buildLearningStatistics({
     currentTask: task,
@@ -375,6 +515,14 @@ export function StatsPage({
     selectionById,
     setting,
   }), [answerEvents, payload.words, recentTasks, recordsById, selectionById, setting, task]);
+  const learningTimeline = useMemo(
+    () => aggregateLearningLoadTimeline(learning.timeline, learningTimeScale),
+    [learning.timeline, learningTimeScale],
+  );
+  const durabilityTimeline = useMemo(
+    () => aggregateDurabilityTimeline(memory.durabilityTimeline, durabilityTimeScale),
+    [durabilityTimeScale, memory.durabilityTimeline],
+  );
   const tabs: Array<{ id: StatsTab; label: string; icon: typeof Activity }> = [
     { id: 'forgetting', label: '遗忘曲线', icon: Activity },
     { id: 'learning', label: '学习情况', icon: CalendarRange },
@@ -460,52 +608,65 @@ export function StatsPage({
               <section className="memory-panel memory-panel--learning-load">
                 <div className="memory-panel__header">
                   <div>
-                    <h2>每日学习负荷</h2>
-                    <p>当天待复习词与新认识词的叠加数量</p>
+                    <h2>{learningTimeScale === 'day' ? '每日' : learningTimeScale === 'week' ? '每周' : '每月'}学习负荷</h2>
+                    <p>
+                      历史显示真实完成量；未来按每日新词 {learning.forecastModel.dailyNewTarget}、
+                      历史正确率 {Math.round(learning.forecastModel.expectedAccuracy * 100)}% 与当前记忆阶段预测
+                    </p>
                   </div>
-                  <div className="memory-chart-legend">
-                    <span><i className="is-review" />复习词</span>
-                    <span><i className="is-new" />新认识词</span>
+                  <div className="memory-panel__chart-tools">
+                    <TimeScaleSwitch
+                      value={learningTimeScale}
+                      onChange={setLearningTimeScale}
+                      label="学习情况统计周期"
+                    />
+                    <div className="memory-chart-legend">
+                      <span><i className="is-review" />复习词</span>
+                      <span><i className="is-new" />新认识词</span>
+                      <span><i className="is-forecast" />未来预测</span>
+                    </div>
                   </div>
                 </div>
-                <LearningLoadChart points={learning.timeline} todayKey={task.dateKey} />
+                <LearningLoadChart
+                  points={learningTimeline}
+                  todayKey={task.dateKey}
+                  scale={learningTimeScale}
+                />
               </section>
             </div>
           )}
 
           {activeTab === 'durability' && (
-            <div className="stats-tab-panel" role="tabpanel">
-              <div className="stats-memory-metrics">
-                {memory.durabilityThresholds.map((point, index) => (
-                  <StatMetric
-                    key={point.thresholdDays}
-                    label={`记忆 ≥ ${point.thresholdDays} 天`}
-                    value={`${point.count} 个`}
-                    note="按当前单词半衰期统计"
-                    tone={(['blue', 'green', 'orange', 'red'] as const)[index]}
-                  />
-                ))}
-              </div>
-              <div className="stats-memory-main-grid stats-memory-main-grid--durability">
-                <section className="memory-panel memory-panel--durability">
-                  <div className="memory-panel__header"><div><h2>记忆持久度折线图</h2><p>横轴为记忆天数门槛，纵轴为达到该门槛的单词数量</p></div></div>
-                  <DurabilityLineChart points={memory.durabilityThresholds} />
-                </section>
-                <aside className="memory-side-stack">
-                  <section className="memory-panel memory-panel--compact">
-                    <div className="memory-panel__header"><h2>当前记忆概况</h2><button type="button" onClick={onOpenSelection}>查看词库</button></div>
-                    <dl className="memory-definition-list">
-                      <div><dt>平均半衰期</dt><dd>{formatDayCount(memory.averageHalfLifeDays)}</dd></div>
-                      <div><dt>中位半衰期</dt><dd>{formatDayCount(memory.medianHalfLifeDays)}</dd></div>
-                      <div><dt>已建立记忆</dt><dd>{memory.estimates.length} / {payload.wordCount}</dd></div>
-                    </dl>
-                  </section>
-                  <section className="memory-panel memory-panel--note">
-                    <strong>折线为什么向下？</strong>
-                    <p>门槛越高，能保持这么久的单词自然越少。答对并拉开间隔后，单词会逐步跨过 10、30、60、90 天门槛。</p>
-                  </section>
-                </aside>
-              </div>
+            <div className="stats-tab-panel stats-tab-panel--durability" role="tabpanel">
+              <section className="memory-panel memory-panel--durability-timeline">
+                <div className="memory-panel__header">
+                  <div>
+                    <h2>{durabilityTimeScale === 'day' ? '每日' : durabilityTimeScale === 'week' ? '每周' : '每月'}记忆持久度</h2>
+                    <p>横轴为时间，纵轴为周期末达到不同记忆持久度的单词数量；左右拖动可查看历史</p>
+                  </div>
+                  <div className="memory-panel__chart-tools">
+                    <TimeScaleSwitch
+                      value={durabilityTimeScale}
+                      onChange={setDurabilityTimeScale}
+                      label="记忆持久度统计周期"
+                    />
+                    <div className="memory-chart-legend memory-chart-legend--durability">
+                      {memory.durabilityThresholds.map((point) => (
+                        <span key={point.thresholdDays}>
+                          <i style={{ background: point.color }} />
+                          ≥{point.thresholdDays} 天 · {point.count}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <DurabilityLineChart
+                  timeline={durabilityTimeline}
+                  thresholds={memory.durabilityThresholds}
+                  todayKey={task.dateKey}
+                  scale={durabilityTimeScale}
+                />
+              </section>
             </div>
           )}
         </section>

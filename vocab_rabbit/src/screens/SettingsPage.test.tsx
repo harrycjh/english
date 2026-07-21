@@ -21,7 +21,7 @@ describe('SettingsPage local data controls', () => {
         onBackHome={() => undefined}
         onOpenSelection={() => undefined}
         onOpenStats={() => undefined}
-        onUpdateSettings={async () => undefined}
+        onUpdateSettings={async () => 'synced'}
         onSelectProfile={async () => undefined}
         onExportStudyData={async () => undefined}
         onImportStudyData={async () => ({
@@ -44,6 +44,8 @@ describe('SettingsPage local data controls', () => {
     );
 
     expect(markup).toContain('清空本地学习数据');
+    expect(markup).toContain('class="primary-button settings-volume-confirm"');
+    expect(markup).toContain('>确定</button>');
     expect(markup).not.toContain('重置进度');
     expect(markup).not.toContain('云端重置');
   });

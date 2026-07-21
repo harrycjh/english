@@ -1,12 +1,43 @@
 import { describe, expect, it } from 'vitest';
 import type { DailyTaskSummary } from '../models/daily-task';
+import type { LearningRecord } from '../models/learning-record';
+import { defaultParentSetting } from '../models/parent-setting';
+import type { WordRecord } from '../models/word';
 import {
   addDaysToDateKey,
+  buildDailyTask,
   createDateTimeForDateKey,
+  expandDailyTaskPlan,
   getTaskStudyQueue,
   reconcileTaskCompletion,
   recordTaskAnswer,
 } from './task-service';
+
+function makeWord(id: string, category = '测试'): WordRecord {
+  return {
+    id,
+    english: id,
+    chinese: id,
+    partOfSpeech: 'noun',
+    category,
+    difficulty: 1,
+    imagePath: `/images/${id}.webp`,
+    imageApproved: true,
+    oxfordRefs: [],
+  };
+}
+
+function makeDueRecord(wordId: string, nextDueAt = '2026-07-19T08:00:00.000Z'): LearningRecord {
+  return {
+    wordId,
+    masteryLevel: 1,
+    reviewStage: 1,
+    correctStreak: 1,
+    wrongCount: 0,
+    lastStudiedAt: '2026-07-18T08:00:00.000Z',
+    nextDueAt,
+  };
+}
 
 function makeTask(): DailyTaskSummary {
   return {
@@ -83,6 +114,104 @@ describe('daily task queue', () => {
       completedAt: null,
       answeredWordIds: ['review-a'],
     });
+  });
+});
+
+describe('review-first daily planning', () => {
+  it('uses new-word capacity for overdue reviews before adding new words', () => {
+    const reviewWords = Array.from({ length: 4 }, (_, index) => makeWord(`review-${index}`));
+    const newWords = Array.from({ length: 4 }, (_, index) => makeWord(`new-${index}`));
+    const records = Object.fromEntries(reviewWords.map((word) => [word.id, makeDueRecord(word.id)]));
+
+    const task = buildDailyTask(
+      [...reviewWords, ...newWords],
+      records,
+      { ...defaultParentSetting, dailyReviewLimit: 2, dailyNewWordCount: 3 },
+      new Date('2026-07-20T08:00:00.000Z'),
+    );
+
+    expect(task.reviewWordIds).toHaveLength(4);
+    expect(task.newWordIds).toHaveLength(1);
+  });
+
+  it('keeps the full new-word allowance when reviews do not exceed their limit', () => {
+    const reviewWords = Array.from({ length: 2 }, (_, index) => makeWord(`review-${index}`));
+    const newWords = Array.from({ length: 4 }, (_, index) => makeWord(`new-${index}`));
+    const records = Object.fromEntries(reviewWords.map((word) => [word.id, makeDueRecord(word.id)]));
+
+    const task = buildDailyTask(
+      [...reviewWords, ...newWords],
+      records,
+      { ...defaultParentSetting, dailyReviewLimit: 2, dailyNewWordCount: 3 },
+      new Date('2026-07-20T08:00:00.000Z'),
+    );
+
+    expect(task.reviewWordIds).toHaveLength(2);
+    expect(task.newWordIds).toHaveLength(3);
+  });
+
+  it('adds only the missing new words to a started or completed task', () => {
+    const existingNewWords = [makeWord('new-a'), makeWord('new-b')];
+    const availableNewWords = [makeWord('new-c'), makeWord('new-d'), makeWord('new-e')];
+    const existingReview = makeWord('review-a');
+    const task: DailyTaskSummary = {
+      ...makeTask(),
+      newWordIds: existingNewWords.map((word) => word.id),
+      reviewWordIds: [existingReview.id],
+      totalAnswered: 3,
+      correctCount: 3,
+      answeredWordIds: [existingReview.id, existingNewWords[0].id, existingNewWords[1].id],
+      completedAt: '2026-07-20T09:00:00.000Z',
+    };
+    const records = {
+      [existingReview.id]: makeDueRecord(existingReview.id, '2026-07-21T08:00:00.000Z'),
+      [existingNewWords[0].id]: makeDueRecord(existingNewWords[0].id, '2026-07-21T08:00:00.000Z'),
+      [existingNewWords[1].id]: makeDueRecord(existingNewWords[1].id, '2026-07-21T08:00:00.000Z'),
+    };
+
+    const expanded = expandDailyTaskPlan(
+      task,
+      [...existingNewWords, ...availableNewWords, existingReview],
+      records,
+      { ...defaultParentSetting, dailyReviewLimit: 2, dailyNewWordCount: 4 },
+      new Date('2026-07-20T10:00:00.000Z'),
+    );
+
+    expect(expanded.newWordIds).toEqual(['new-a', 'new-b', 'new-c', 'new-d']);
+    expect(expanded.reviewWordIds).toEqual(['review-a']);
+    expect(expanded.totalAnswered).toBe(3);
+    expect(expanded.answeredWordIds).toEqual(task.answeredWordIds);
+    expect(expanded.completedAt).toBeNull();
+  });
+
+  it('uses increased capacity to extend the review plan when reviews are backlogged', () => {
+    const reviewWords = Array.from({ length: 5 }, (_, index) => makeWord(`review-${index}`));
+    const records = Object.fromEntries(reviewWords.map((word) => [word.id, makeDueRecord(word.id)]));
+    const task: DailyTaskSummary = {
+      ...makeTask(),
+      newWordIds: [],
+      reviewWordIds: ['review-0', 'review-1'],
+      totalAnswered: 1,
+      answeredWordIds: ['review-0'],
+    };
+
+    const expanded = expandDailyTaskPlan(
+      task,
+      reviewWords,
+      records,
+      { ...defaultParentSetting, dailyReviewLimit: 3, dailyNewWordCount: 2 },
+      new Date('2026-07-20T10:00:00.000Z'),
+    );
+
+    expect(expanded.reviewWordIds).toEqual([
+      'review-0',
+      'review-1',
+      'review-2',
+      'review-3',
+      'review-4',
+    ]);
+    expect(expanded.newWordIds).toEqual([]);
+    expect(expanded.totalAnswered).toBe(1);
   });
 });
 

@@ -161,6 +161,16 @@ export function LearningPage({
           <ProgressRing value={currentIndex + 1} total={queue.length} />
           <div className="learning-header__meta">
             <span>{currentWord.category}</span>
+            {setting.profileId === 'stinky-dog' ? (
+              <button
+                className="learning-direct-correct"
+                type="button"
+                disabled={isLocked}
+                onClick={() => void handleAnswer(getCorrectAnswer(currentQuestion))}
+              >
+                直接答对
+              </button>
+            ) : null}
           </div>
         </header>
 

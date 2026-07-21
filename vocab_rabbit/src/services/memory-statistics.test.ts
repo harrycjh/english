@@ -165,4 +165,33 @@ describe('memory statistics', () => {
     const statistics = buildMemoryStatistics(records, [], now);
     expect(statistics.durabilityThresholds.map((point) => point.count)).toEqual([4, 3, 2, 1]);
   });
+
+  it('rebuilds daily durability threshold counts from saved answer snapshots', () => {
+    const shortMemory = createRecord({
+      wordId: 'word-short',
+      lastStudiedAt: '2026-07-13T08:00:00.000Z',
+      nextDueAt: '2026-07-18T08:00:00.000Z',
+    });
+    const longMemory = createRecord({
+      wordId: 'word-long',
+      lastStudiedAt: '2026-07-14T08:00:00.000Z',
+      nextDueAt: '2026-08-28T08:00:00.000Z',
+    });
+    const events = [
+      { ...createEvent('short', '2026-07-13T08:00:00.000Z', true), wordId: shortMemory.wordId, learningStateAfter: shortMemory },
+      { ...createEvent('long', '2026-07-14T08:00:00.000Z', true), wordId: longMemory.wordId, learningStateAfter: longMemory },
+    ];
+
+    const statistics = buildMemoryStatistics({
+      [shortMemory.wordId]: shortMemory,
+      [longMemory.wordId]: longMemory,
+    }, events, now);
+
+    expect(statistics.durabilityTimeline.find((point) => point.dateKey === '2026-07-12')?.counts)
+      .toMatchObject({ 10: 0, 30: 0, 60: 0, 90: 0 });
+    expect(statistics.durabilityTimeline.find((point) => point.dateKey === '2026-07-13')?.counts)
+      .toMatchObject({ 10: 1, 30: 0, 60: 0, 90: 0 });
+    expect(statistics.durabilityTimeline.find((point) => point.dateKey === '2026-07-14')?.counts)
+      .toMatchObject({ 10: 2, 30: 1, 60: 1, 90: 1 });
+  });
 });

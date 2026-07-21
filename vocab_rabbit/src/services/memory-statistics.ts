@@ -55,6 +55,11 @@ export interface DurabilityThresholdPoint {
   color: string;
 }
 
+export interface DurabilityTimelinePoint {
+  dateKey: string;
+  counts: Record<number, number>;
+}
+
 export interface PersonalCurveModel {
   source: 'default' | 'answer-data';
   alpha: number | null;
@@ -71,6 +76,7 @@ export interface MemoryStatistics {
   observedRecallPoints: RetentionPoint[];
   personalCurveModel: PersonalCurveModel;
   durabilityThresholds: DurabilityThresholdPoint[];
+  durabilityTimeline: DurabilityTimelinePoint[];
   averageHalfLifeDays: number;
   medianHalfLifeDays: number;
   averageRetentionNow: number;
@@ -247,6 +253,70 @@ function createDurabilityThresholds(estimates: WordMemoryEstimate[]): Durability
   }));
 }
 
+function createDateKey(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function addDays(dateKey: string, days: number): string {
+  const date = new Date(`${dateKey}T12:00:00`);
+  date.setDate(date.getDate() + days);
+  return createDateKey(date);
+}
+
+function createTimelineCounts(records: Iterable<LearningRecord>): Record<number, number> {
+  const estimates = [...records]
+    .filter((record): record is LearningRecord & { lastStudiedAt: string } => Boolean(record.lastStudiedAt))
+    .map((record) => ({
+      wordId: record.wordId,
+      halfLifeDays: estimateHalfLifeDays(record),
+      retentionNow: 0,
+      lastStudiedAt: record.lastStudiedAt,
+      nextDueAt: record.nextDueAt,
+      masteryLevel: record.masteryLevel,
+      reviewStage: record.reviewStage,
+    }));
+  return Object.fromEntries(
+    createDurabilityThresholds(estimates).map((point) => [point.thresholdDays, point.count]),
+  );
+}
+
+export function buildDurabilityTimeline(
+  recordsById: Record<string, LearningRecord>,
+  answerEvents: AnswerEvent[],
+  now: Date = new Date(),
+  historyDays = 90,
+): DurabilityTimelinePoint[] {
+  const todayKey = createDateKey(now);
+  const startKey = addDays(todayKey, -Math.max(0, historyDays));
+  const snapshots = answerEvents
+    .filter((event): event is AnswerEvent & { learningStateAfter: LearningRecord } => Boolean(event.learningStateAfter))
+    .sort((left, right) => left.answeredAt.localeCompare(right.answeredAt));
+  const stateByWord = new Map<string, LearningRecord>();
+  const timeline: DurabilityTimelinePoint[] = [];
+  let snapshotIndex = 0;
+
+  for (let dateKey = startKey; dateKey <= todayKey; dateKey = addDays(dateKey, 1)) {
+    while (snapshotIndex < snapshots.length && snapshots[snapshotIndex].dateKey <= dateKey) {
+      const snapshot = snapshots[snapshotIndex].learningStateAfter;
+      stateByWord.set(snapshot.wordId, snapshot);
+      snapshotIndex += 1;
+    }
+
+    if (dateKey === todayKey) {
+      for (const record of Object.values(recordsById)) {
+        stateByWord.set(record.wordId, record);
+      }
+    }
+
+    timeline.push({ dateKey, counts: createTimelineCounts(stateByWord.values()) });
+  }
+
+  return timeline;
+}
+
 export function buildMemoryStatistics(
   recordsById: Record<string, LearningRecord>,
   answerEvents: AnswerEvent[],
@@ -298,6 +368,7 @@ export function buildMemoryStatistics(
     observedRecallPoints,
     personalCurveModel,
     durabilityThresholds: createDurabilityThresholds(estimates),
+    durabilityTimeline: buildDurabilityTimeline(recordsById, answerEvents, now),
     averageHalfLifeDays: estimates.length > 0
       ? estimates.reduce((sum, estimate) => sum + estimate.halfLifeDays, 0) / estimates.length
       : 0,

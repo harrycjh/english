@@ -1,4 +1,4 @@
-import { type ChangeEvent, useMemo, useRef, useState } from 'react';
+import { type ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 import type { DailyTaskSummary } from '../models/daily-task';
 import {
   MAX_NEW_WORD_COUNT,
@@ -19,7 +19,7 @@ interface SettingsPageProps {
   onBackHome: () => void;
   onOpenSelection: () => void;
   onOpenStats: () => void;
-  onUpdateSettings: (nextSetting: ParentSetting) => Promise<void>;
+  onUpdateSettings: (nextSetting: ParentSetting) => Promise<'synced' | 'pending'>;
   onSelectProfile: (profileId: ProfileId) => Promise<void>;
   onExportStudyData: () => Promise<void>;
   onImportStudyData: (file: File) => Promise<StudyDataImportResult>;
@@ -139,15 +139,27 @@ export function SettingsPage({
   localLifePhotoImportedAt,
 }: SettingsPageProps) {
   const [isSaving, setIsSaving] = useState(false);
+  const [loadDraft, setLoadDraft] = useState(() => ({
+    dailyNewWordCount: settings.dailyNewWordCount,
+    dailyReviewLimit: settings.dailyReviewLimit,
+  }));
   const [isImportingPhotos, setIsImportingPhotos] = useState(false);
   const [isImportingStudyData, setIsImportingStudyData] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
+  const [lastSaveStatus, setLastSaveStatus] = useState<'synced' | 'pending' | 'error' | null>(null);
   const [lifePhotoImportSummary, setLifePhotoImportSummary] = useState<string | null>(null);
   const [lifePhotoImportError, setLifePhotoImportError] = useState<string | null>(null);
   const [studyDataImportSummary, setStudyDataImportSummary] = useState<string | null>(null);
   const [studyDataImportError, setStudyDataImportError] = useState<string | null>(null);
   const lifePhotoInputRef = useRef<HTMLInputElement>(null);
   const studyDataInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setLoadDraft({
+      dailyNewWordCount: settings.dailyNewWordCount,
+      dailyReviewLimit: settings.dailyReviewLimit,
+    });
+  }, [settings.dailyNewWordCount, settings.dailyReviewLimit]);
 
   const runtimeInfo = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -161,7 +173,17 @@ export function SettingsPage({
     };
   }, []);
 
-  const saveText = isSaving ? '正在保存设置…' : lastSavedAt ? `已自动保存于 ${lastSavedAt}` : '已根据孩子的学习情况同步设置，调整后会即时生效。';
+  const saveText = isSaving
+    ? '正在保存并同步设置…'
+    : lastSaveStatus === 'synced' && lastSavedAt
+      ? `已保存并同步到服务器 · ${lastSavedAt}`
+      : lastSaveStatus === 'pending' && lastSavedAt
+        ? `已保存在本机，等待服务器连接后同步 · ${lastSavedAt}`
+        : lastSaveStatus === 'error'
+          ? '设置保存失败，请稍后重试。'
+          : '调整学习负荷后点击确定，其他设置会即时生效。';
+  const hasPendingLoadSetting = loadDraft.dailyNewWordCount !== settings.dailyNewWordCount
+    || loadDraft.dailyReviewLimit !== settings.dailyReviewLimit;
   const taskStatus = task.completedAt ? '今日已完成' : task.totalAnswered > 0 ? '今日进行中' : '今日未开始';
   const taskEffectText = !task.completedAt && task.totalAnswered === 0
     ? '今日设置将影响今天的任务分配，建议在开始前完成调整。'
@@ -170,9 +192,21 @@ export function SettingsPage({
   async function applySetting(patch: Partial<ParentSetting>) {
     const nextSetting = { ...settings, ...patch };
     setIsSaving(true);
-    await onUpdateSettings(nextSetting);
-    setIsSaving(false);
-    setLastSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
+    setLastSaveStatus(null);
+    try {
+      const saveStatus = await onUpdateSettings(nextSetting);
+      setLastSaveStatus(saveStatus);
+      setLastSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
+    } catch {
+      setLastSaveStatus('error');
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function confirmLoadSetting() {
+    if (!hasPendingLoadSetting || isSaving) return;
+    await applySetting(loadDraft);
   }
 
   async function handleClearAllData() {
@@ -313,25 +347,33 @@ export function SettingsPage({
                 icon="🌿"
                 label="每日新词"
                 description=""
-                value={settings.dailyNewWordCount}
+                value={loadDraft.dailyNewWordCount}
                 min={MIN_NEW_WORD_COUNT}
                 max={MAX_NEW_WORD_COUNT}
                 suffix=" 个"
                 hint={`建议 ${MIN_NEW_WORD_COUNT}-${MAX_NEW_WORD_COUNT} 个`}
-                onChange={(v) => void applySetting({ dailyNewWordCount: v })}
+                onChange={(dailyNewWordCount) => setLoadDraft((current) => ({ ...current, dailyNewWordCount }))}
               />
               <SettingsNumberControl
                 icon="🕐"
                 label="每日复习上限"
                 description=""
-                value={settings.dailyReviewLimit}
+                value={loadDraft.dailyReviewLimit}
                 min={MIN_REVIEW_LIMIT}
                 max={MAX_REVIEW_LIMIT}
                 suffix=" 个"
                 hint={`建议 ${MIN_REVIEW_LIMIT}-${MAX_REVIEW_LIMIT} 个`}
-                onChange={(v) => void applySetting({ dailyReviewLimit: v })}
+                onChange={(dailyReviewLimit) => setLoadDraft((current) => ({ ...current, dailyReviewLimit }))}
               />
             </div>
+            <button
+              className="primary-button settings-volume-confirm"
+              type="button"
+              disabled={!hasPendingLoadSetting || isSaving}
+              onClick={() => void confirmLoadSetting()}
+            >
+              {isSaving ? '保存中…' : '确定'}
+            </button>
           </section>
 
           {/* Top-right: 设备与使用方式 */}

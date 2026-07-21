@@ -71,18 +71,12 @@ function pickBalancedNewWords(words: WordRecord[], limit: number): string[] {
   return selected;
 }
 
-export function buildDailyTask(
-  words: WordRecord[],
+function getOrderedDueReviewWords(
+  studyWords: WordRecord[],
   recordsById: Record<string, LearningRecord>,
-  setting: ParentSetting = defaultParentSetting,
-  date: Date = new Date(),
-  selectionById: Record<string, WordSelectionState> = {}
-): DailyTaskSummary {
-  const reviewLimit = Math.max(1, setting.dailyReviewLimit);
-  const newWordLimit = Math.max(1, setting.dailyNewWordCount);
-  const studyWords = getActiveStudyWords(words, selectionById);
-
-  const dueReviewWordIds = studyWords
+  date: Date,
+): WordRecord[] {
+  return studyWords
     .filter((word) => {
       const record = recordsById[word.id];
       return record && isDue(record, date);
@@ -93,12 +87,36 @@ export function buildDailyTask(
       const leftDue = leftRecord?.nextDueAt ?? '';
       const rightDue = rightRecord?.nextDueAt ?? '';
       return leftDue.localeCompare(rightDue) || left.difficulty - right.difficulty;
-    })
-    .slice(0, reviewLimit)
+    });
+}
+
+export function getReviewFirstPlanLimits(dueReviewCount: number, setting: ParentSetting) {
+  const reviewLimit = Math.max(1, setting.dailyReviewLimit);
+  const newWordLimit = Math.max(1, setting.dailyNewWordCount);
+  const reviewCount = Math.min(dueReviewCount, reviewLimit + newWordLimit);
+  const reviewOverflow = Math.max(0, reviewCount - reviewLimit);
+  return {
+    reviewCount,
+    newWordCount: Math.max(0, newWordLimit - reviewOverflow),
+  };
+}
+
+export function buildDailyTask(
+  words: WordRecord[],
+  recordsById: Record<string, LearningRecord>,
+  setting: ParentSetting = defaultParentSetting,
+  date: Date = new Date(),
+  selectionById: Record<string, WordSelectionState> = {}
+): DailyTaskSummary {
+  const studyWords = getActiveStudyWords(words, selectionById);
+  const orderedDueReviewWords = getOrderedDueReviewWords(studyWords, recordsById, date);
+  const limits = getReviewFirstPlanLimits(orderedDueReviewWords.length, setting);
+  const dueReviewWordIds = orderedDueReviewWords
+    .slice(0, limits.reviewCount)
     .map((word) => word.id);
 
   const unseenWords = studyWords.filter((word) => !recordsById[word.id]);
-  const newWordIds = pickBalancedNewWords(unseenWords, newWordLimit);
+  const newWordIds = pickBalancedNewWords(unseenWords, limits.newWordCount);
 
   return {
     dateKey: createDateKey(date),
@@ -109,6 +127,46 @@ export function buildDailyTask(
     wrongCount: 0,
     totalAnswered: 0,
     answeredWordIds: [],
+  };
+}
+
+export function expandDailyTaskPlan(
+  task: DailyTaskSummary,
+  words: WordRecord[],
+  recordsById: Record<string, LearningRecord>,
+  setting: ParentSetting = defaultParentSetting,
+  date: Date = new Date(),
+  selectionById: Record<string, WordSelectionState> = {},
+): DailyTaskSummary {
+  const studyWords = getActiveStudyWords(words, selectionById);
+  const plannedWordIds = new Set([...task.reviewWordIds, ...task.newWordIds]);
+  const unplannedDueReviewWords = getOrderedDueReviewWords(studyWords, recordsById, date)
+    .filter((word) => !plannedWordIds.has(word.id));
+  const dueReviewCount = task.reviewWordIds.length + unplannedDueReviewWords.length;
+  const limits = getReviewFirstPlanLimits(dueReviewCount, setting);
+  const reviewTarget = Math.max(task.reviewWordIds.length, limits.reviewCount);
+  const additionalReviewWordIds = unplannedDueReviewWords
+    .slice(0, reviewTarget - task.reviewWordIds.length)
+    .map((word) => word.id);
+
+  const newWordTarget = Math.max(task.newWordIds.length, limits.newWordCount);
+  const unplannedUnseenWords = studyWords.filter(
+    (word) => !recordsById[word.id] && !plannedWordIds.has(word.id),
+  );
+  const additionalNewWordIds = pickBalancedNewWords(
+    unplannedUnseenWords,
+    newWordTarget - task.newWordIds.length,
+  );
+
+  if (additionalReviewWordIds.length === 0 && additionalNewWordIds.length === 0) {
+    return task;
+  }
+
+  return {
+    ...task,
+    reviewWordIds: [...task.reviewWordIds, ...additionalReviewWordIds],
+    newWordIds: [...task.newWordIds, ...additionalNewWordIds],
+    completedAt: null,
   };
 }
 

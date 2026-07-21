@@ -12,6 +12,7 @@ import {
   listAnswerEvents,
   listLearningRecords,
   saveAnswerAndLearningRecord,
+  saveParentSetting,
 } from './storage-service';
 
 function makeEvent(): AnswerEvent {
@@ -52,6 +53,26 @@ describe('sync metadata storage', () => {
     expect(first.deviceId).toBeTruthy();
     expect(second.deviceId).toBe(first.deviceId);
     expect(second.deviceToken).toBeNull();
+  });
+
+  it('includes updated daily learning limits in the pending cloud snapshot', async () => {
+    const nextSetting = {
+      ...defaultParentSetting,
+      dailyNewWordCount: 15,
+      dailyReviewLimit: 30,
+    };
+
+    await saveParentSetting(nextSetting);
+    const request = await buildLocalSyncRequest();
+
+    expect(request.hasLocalChanges).toBe(true);
+    expect(request.snapshot?.parentSetting.value).toMatchObject({
+      dailyNewWordCount: 15,
+      dailyReviewLimit: 30,
+    });
+    expect(request.snapshot?.parentSetting.fieldRevisions.dailyNewWordCount).toBeDefined();
+    expect(request.snapshot?.parentSetting.fieldRevisions.dailyReviewLimit).toBeDefined();
+    expect((await getOrCreateSyncMetadata()).pendingSince).not.toBeNull();
   });
 });
 

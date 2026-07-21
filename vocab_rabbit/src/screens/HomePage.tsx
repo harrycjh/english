@@ -15,7 +15,7 @@ import { WordImage } from '../components/WordImage';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
-import { addDaysToDateKey } from '../services/task-service';
+import { addDaysToDateKey, isTaskFullyAnswered } from '../services/task-service';
 import { getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
 import reviewLayoutData from '../../design-output/ui-concepts/review-page-layout.json';
 import reviewSlicesManifestData from '../../design-output/ui-concepts/review-page-slices-manifest.json';
@@ -411,29 +411,30 @@ export function ReviewPage({
   const completedDays = heatmapDays.filter((day) => day.task?.completedAt).length;
   const completionRate = Math.round((completedDays / 14) * 100);
   const previewCategoryCount = new Set(previewWords.map((word) => word.category)).size;
-  const estimatedMinutes = plannedCount * 0.25;
-  const hasStarted = task.totalAnswered > 0 && !task.completedAt;
+  const estimatedMinutes = plannedCount === 0 ? 0 : Math.max(1, Math.round(plannedCount * 0.25));
+  const isTaskComplete = Boolean(task.completedAt) && isTaskFullyAnswered(task);
+  const hasStarted = task.totalAnswered > 0 && !isTaskComplete;
   const reviewLoad = task.reviewWordIds.length;
   const isReviewHeavy = reviewLoad >= task.newWordIds.length;
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
   const [isAdvancingDay, setIsAdvancingDay] = useState(false);
   const nextDateKey = addDaysToDateKey(task.dateKey, 1);
 
-  const heroBadge = task.completedAt ? '今日完成 · 复习页' : hasStarted ? '进行中 · 复习页' : '今日任务 · 复习页';
-  const primaryActionLabel = task.completedAt ? '再复习一轮' : hasStarted ? '继续学习' : '开始学习';
-  const heroDescription = task.completedAt
+  const heroBadge = isTaskComplete ? '今日完成 · 复习页' : hasStarted ? '进行中 · 复习页' : '今日任务 · 复习页';
+  const primaryActionLabel = isTaskComplete ? '再复习一轮' : hasStarted ? '继续学习' : '开始学习';
+  const heroDescription = isTaskComplete
     ? '今天的新词和复习词都已经完成，可以回看代表词，或者再练一轮薄弱词。'
     : hasStarted
       ? `今天安排 ${task.newWordIds.length} 个新词、${task.reviewWordIds.length} 个复习词。你已经答了 ${task.totalAnswered} 题，继续就能接上刚才的节奏。`
       : `新增学习 ${task.newWordIds.length} 个，复习巩固 ${task.reviewWordIds.length} 个，稳步提升词汇量。`;
-  const focusLabel = task.completedAt ? '今日完成' : isReviewHeavy ? '先做复习' : '可以加新词';
-  const focusDescription = task.completedAt
+  const focusLabel = isTaskComplete ? '今日完成' : isReviewHeavy ? '先做复习' : '可以加新词';
+  const focusDescription = isTaskComplete
     ? '今天已经完成，可以轻松回看。'
     : isReviewHeavy
       ? '复习词比新词多，建议先完成复习部分。'
       : '今天节奏正常，适合直接开始。';
-  const suggestionTitle = task.completedAt ? '今天可以轻松回看' : isReviewHeavy ? '今天建议先做复习' : '今天可以正常加入新词';
-  const suggestionText = task.completedAt
+  const suggestionTitle = isTaskComplete ? '今天可以轻松回看' : isReviewHeavy ? '今天建议先做复习' : '今天可以正常加入新词';
+  const suggestionText = isTaskComplete
     ? '已经完成的任务不用再压速度，优先回看刚答错或还不稳的词。'
     : isReviewHeavy
       ? '复习量已经接近今天的主任务，先把旧词做完会更稳。'

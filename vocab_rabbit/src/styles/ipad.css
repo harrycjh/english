@@ -5,6 +5,8 @@
   --ipad-shell-stage-width: var(--ipad-pro-11-landscape-width);
   --ipad-shell-stage-height: var(--ipad-pro-11-landscape-height);
   --ipad-shell-frame-height: calc(var(--ipad-shell-stage-height) - (var(--ipad-shell-padding) * 2));
+  --ipad-shell-scale: 1;
+  --ipad-shell-viewport-top: 0px;
   color-scheme: light;
   font-family: 'Avenir Next', 'PingFang SC', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
@@ -46,6 +48,16 @@ html[data-shell-mode='ipad-fixed'] #root {
 body[data-shell-mode='ipad-fixed'] {
   min-height: 100dvh;
   overscroll-behavior: none;
+}
+
+html[data-shell-mode='ipad-fixed'] .ipad-stage-shell {
+  position: relative;
+  top: var(--ipad-shell-viewport-top);
+  width: var(--ipad-shell-stage-width);
+  height: var(--ipad-shell-stage-height);
+  margin: 0 auto;
+  transform: scale(var(--ipad-shell-scale));
+  transform-origin: top center;
 }
 
 html[data-shell-mode='ipad-fixed'][data-orientation='portrait'] #root {
@@ -191,6 +203,11 @@ html[data-shell-mode='ipad-fixed'] .learning-header .progress-ring__label strong
 
 html[data-shell-mode='ipad-fixed'] .learning-header__meta strong {
   font-size: 21px;
+}
+
+html[data-shell-mode='ipad-fixed'] .learning-direct-correct {
+  min-height: 32px;
+  padding: 0 14px;
 }
 
 html[data-shell-mode='ipad-fixed'] .question-panel:not(.question-panel--fill) {
@@ -2747,6 +2764,22 @@ button {
   font-size: 24px;
 }
 
+.learning-direct-correct {
+  min-height: 36px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 151, 34, 0.42);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff7df, #ffe8af);
+  color: #8a4a00;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(214, 132, 21, 0.16);
+}
+
+.learning-direct-correct:disabled {
+  opacity: 0.5;
+}
+
 .progress-ring {
   position: relative;
   width: 96px;
@@ -3104,7 +3137,7 @@ button {
 
 .background-sync-notice {
   position: fixed;
-  top: max(68px, calc(env(safe-area-inset-top) + 16px));
+  top: max(15px, env(safe-area-inset-top));
   left: 50%;
   z-index: 120;
   display: flex;
@@ -8059,6 +8092,9 @@ html[data-shell-mode='ipad-fixed'] .page--settings .settings-mockup-frame {
   gap: 8px;
   padding: 16px 18px 78px;
   border-radius: 18px;
+  background:
+    linear-gradient(90deg, rgba(255, 253, 245, 0.94) 0%, rgba(255, 250, 235, 0.82) 42%, rgba(255, 245, 217, 0.18) 72%, rgba(255, 245, 217, 0.05) 100%),
+    url('/design-reference/slices/settings-task-impact-doghouse-v1.webp?v=1') center / cover no-repeat;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.74);
 }
 
@@ -8088,14 +8124,7 @@ html[data-shell-mode='ipad-fixed'] .page--settings .settings-mockup-frame {
 }
 
 .page--settings .settings-hero__focus-art {
-  right: 12px;
-  bottom: 10px;
-  width: 182px;
-  height: 118px;
-  border-radius: 0;
-  background: url('/design-reference/slices/settings-focus-house.png?v=1') right bottom / contain no-repeat;
-  box-shadow: none;
-  mix-blend-mode: multiply;
+  display: none;
 }
 
 .page--settings .settings-panel-grid {
@@ -8219,6 +8248,26 @@ html[data-shell-mode='ipad-fixed'] .page--settings .settings-mockup-frame {
 .page--settings .settings-number-control__hint,
 .page--settings .settings-number-control__desc {
   font-size: 9px;
+}
+
+.page--settings .settings-volume-confirm {
+  width: 100%;
+  min-height: 34px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 750;
+  background: linear-gradient(135deg, #ffad37, #ff8b18);
+  box-shadow: 0 8px 18px rgba(227, 131, 17, 0.2);
+}
+
+.page--settings .settings-volume-confirm:disabled {
+  color: #9a8b78;
+  cursor: default;
+  background: #eee7dc;
+  box-shadow: none;
 }
 
 .page--settings .settings-toggle-list {
@@ -9045,6 +9094,15 @@ html[data-shell-mode='ipad-fixed'] .page--review .review-plan-shell__chrome .app
   background-image: url('/design-reference/slices/brand-dog-outline-v1.png?v=1');
 }
 
+.page--review[data-profile='cute-junjun'] .review-dom-surface::before {
+  background-image: url('/design-reference/slices/review-junjun-cutout-v1.webp?v=1');
+  background-position: center top;
+  background-size: 125% auto;
+  background-repeat: no-repeat;
+  opacity: 1;
+  filter: none;
+}
+
 .page--review[data-profile='stinky-dog'] .review-dom-surface::before {
   background-image: url('/design-reference/slices/review-dog-scene-v1.webp?v=1');
   background-position: center;
@@ -9297,6 +9355,10 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   grid-template-rows: minmax(0, 1fr);
 }
 
+.page--stats .stats-tab-panel--durability {
+  grid-template-rows: minmax(0, 1fr);
+}
+
 .page--stats .stats-memory-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -9480,6 +9542,118 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   padding: 13px 13px 9px;
 }
 
+.page--stats .memory-panel--durability-timeline {
+  display: grid;
+  grid-template-rows: 48px minmax(0, 1fr);
+  padding: 13px 13px 9px;
+}
+
+.page--stats .memory-chart-legend--durability {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 5px 13px;
+}
+
+.page--stats .durability-timeline-chart {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding-top: 6px;
+}
+
+.page--stats .durability-timeline-chart__axis {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 46px;
+  min-height: 0;
+  color: #958574;
+  font-size: 10px;
+  text-align: right;
+}
+
+.page--stats .durability-timeline-chart__scale {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
+  padding: 36px 9px 0 0;
+}
+
+.page--stats .durability-timeline-chart__axis small {
+  align-self: center;
+  padding-right: 9px;
+  color: #aa9988;
+  font-size: 9px;
+}
+
+.page--stats .durability-timeline-chart__scroll {
+  min-width: 0;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  touch-action: pan-x;
+  cursor: grab;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page--stats .durability-timeline-chart__scroll.is-dragging,
+.page--stats .durability-timeline-chart__scroll.is-gliding {
+  cursor: grabbing;
+}
+
+.page--stats .durability-timeline-chart__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.page--stats .durability-timeline-chart__scroll:focus-visible {
+  outline: 2px solid rgba(255, 159, 28, 0.34);
+  outline-offset: -2px;
+}
+
+.page--stats .durability-timeline-chart__plot {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+}
+
+.page--stats .durability-timeline-chart__plot .memory-durability-chart {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+}
+
+.page--stats .durability-timeline-chart__labels {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  align-items: center;
+  height: 46px;
+  pointer-events: none;
+}
+
+.page--stats .durability-timeline-chart__labels span {
+  overflow: hidden;
+  color: #8a7865;
+  font-size: 11px;
+  line-height: 1;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page--stats .durability-timeline-chart__labels span.is-today {
+  color: #e88912;
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .page--stats .learning-load-chart {
   display: grid;
   grid-template-columns: 48px minmax(0, 1fr);
@@ -9593,6 +9767,10 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   box-shadow: inset 0 0 0 1px rgba(255, 167, 35, 0.2);
 }
 
+.page--stats .learning-load-day--forecast .learning-load-day__plot {
+  border-top: 1px dashed rgba(191, 143, 69, 0.3);
+}
+
 .page--stats .learning-load-day__plot > strong {
   position: absolute;
   left: 0;
@@ -9616,6 +9794,23 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   overflow: hidden;
   border-radius: 0 0 2px 2px;
   box-shadow: 0 5px 14px rgba(77, 119, 160, 0.12);
+}
+
+.page--stats .learning-load-day--forecast .learning-load-day__stack {
+  opacity: 0.72;
+  box-shadow: 0 4px 10px rgba(77, 119, 160, 0.08);
+}
+
+.page--stats .learning-load-day--forecast .learning-load-day__stack::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.32) 0 3px,
+    transparent 3px 7px
+  );
+  pointer-events: none;
 }
 
 .page--stats .learning-load-day__stack span {
@@ -9655,6 +9850,42 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   white-space: nowrap;
 }
 
+.page--stats .memory-panel__chart-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  min-width: 0;
+}
+
+.page--stats .stats-time-scale-switch {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 34px);
+  flex: none;
+  padding: 2px;
+  border: 1px solid rgba(231, 196, 140, 0.72);
+  border-radius: 7px;
+  background: rgba(255, 249, 237, 0.9);
+}
+
+.page--stats .memory-panel__header .stats-time-scale-switch button {
+  min-width: 0;
+  min-height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #8b7762;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.page--stats .memory-panel__header .stats-time-scale-switch button.is-active {
+  background: #ffa12b;
+  color: #fff;
+  box-shadow: 0 2px 7px rgba(221, 133, 18, 0.2);
+}
+
 .page--stats .memory-chart-legend span {
   display: inline-flex;
   align-items: center;
@@ -9682,6 +9913,17 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
 
 .page--stats .memory-chart-legend i.is-review {
   background: #f8d77d;
+}
+
+.page--stats .memory-chart-legend i.is-forecast {
+  height: 8px;
+  border: 1px dashed #b98b48;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 185, 74, 0.45) 0 2px,
+    transparent 2px 4px
+  );
 }
 
 .page--stats .memory-curve-chart {
@@ -9893,15 +10135,26 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
 
 .page--stats .memory-durability-line {
   fill: none;
-  stroke: #4f8fcf;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 4;
+  stroke-width: 3;
 }
 
 .page--stats .memory-durability-node {
   stroke: #fff;
-  stroke-width: 3;
+  stroke-width: 2;
+}
+
+.page--stats .memory-durability-today {
+  fill: rgba(255, 183, 66, 0.1);
+  stroke: rgba(255, 167, 35, 0.22);
+  stroke-width: 1;
+}
+
+.page--stats .memory-chart-label.is-today {
+  fill: #e88912;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .page--stats .memory-durability-value {

@@ -164,6 +164,36 @@ describe('vocab sync Function Compute handler', () => {
     expect(repository.getMergeCount()).toBe(1);
   });
 
+  it('stores daily learning limits in the cloud snapshot', async () => {
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env);
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+    const snapshot = emptySnapshot();
+    snapshot.parentSetting.value.dailyNewWordCount = 15;
+    snapshot.parentSetting.value.dailyReviewLimit = 30;
+    snapshot.parentSetting.fieldRevisions = {
+      dailyNewWordCount: { updatedAt: '2026-07-20T03:00:00.000Z', deviceId: 'device-a' },
+      dailyReviewLimit: { updatedAt: '2026-07-20T03:00:00.000Z', deviceId: 'device-a' },
+    };
+
+    const response = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: null,
+      hasLocalChanges: true,
+      snapshot,
+    }, connect.json.deviceToken)));
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json.snapshot.parentSetting.value).toMatchObject({
+      dailyNewWordCount: 15,
+      dailyReviewLimit: 30,
+    });
+  });
+
   it('returns the cloud snapshot without rewriting it when a clean device has a stale cursor', async () => {
     const repository = createMemoryRepository();
     const handler = createHandler(repository, env);

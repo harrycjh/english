@@ -144,7 +144,14 @@ export function BackgroundSyncNotice({
   );
 }
 
-export function StartupSyncGate({ children }: { children: (syncRevision: number) => ReactNode }) {
+interface StartupSyncGateProps {
+  children: (
+    syncRevision: number,
+    requestSync: () => Promise<StartupSyncResult>,
+  ) => ReactNode;
+}
+
+export function StartupSyncGate({ children }: StartupSyncGateProps) {
   const [state, setState] = useState<StartupSyncViewState>({ kind: 'checking' });
   const [code, setCode] = useState('');
   const [isReady, setIsReady] = useState(false);
@@ -159,7 +166,7 @@ export function StartupSyncGate({ children }: { children: (syncRevision: number)
     }
   }
 
-  async function runBackgroundSync() {
+  async function runBackgroundSync(): Promise<StartupSyncResult> {
     clearNoticeTimer();
     setBackgroundState({ kind: 'syncing' });
     const result = await performStartupSync();
@@ -168,6 +175,7 @@ export function StartupSyncGate({ children }: { children: (syncRevision: number)
       setSyncRevision((revision) => revision + 1);
       hideNoticeTimer.current = window.setTimeout(() => setBackgroundState(null), 2_500);
     }
+    return result;
   }
 
   async function checkConnection() {
@@ -201,7 +209,7 @@ export function StartupSyncGate({ children }: { children: (syncRevision: number)
   if (isReady) {
     return (
       <>
-        {children(syncRevision)}
+        {children(syncRevision, runBackgroundSync)}
         {backgroundState && (
           <BackgroundSyncNotice
             state={backgroundState}

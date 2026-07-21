@@ -54,6 +54,8 @@ registerServiceWorker();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StartupSyncGate>
-    {(syncRevision) => <App syncRevision={syncRevision} />}
+    {(syncRevision, requestSync) => (
+      <App syncRevision={syncRevision} onRequestSync={requestSync} />
+    )}
   </StartupSyncGate>,
 );

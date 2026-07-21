@@ -88,4 +88,87 @@ describe('learning statistics', () => {
     expect(statistics.totalLearnedWords).toBe(1);
     expect(statistics.totalAnswers).toBe(2);
   });
+
+  it('projects reviews created by future daily new words', () => {
+    const statistics = buildLearningStatistics({
+      currentTask: task({ dateKey: '2026-07-15' }),
+      tasks: [],
+      answerEvents: [],
+      words: Array.from({ length: 20 }, (_, index) => ({ id: `word-${index}` })),
+      recordsById: {},
+      selectionById: {},
+      setting: { ...defaultParentSetting, dailyNewWordCount: 2, dailyReviewLimit: 5 },
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    });
+
+    expect(statistics.forecast[0]).toMatchObject({ newCount: 2, reviewCount: 0 });
+    expect(statistics.forecast.slice(1, 4).some((point) => point.reviewCount > 0)).toBe(true);
+    expect(statistics.forecastModel).toMatchObject({
+      dailyNewTarget: 2,
+      dailyReviewBaseline: 5,
+      historicalAnswerSamples: 0,
+      expectedAccuracy: 0.85,
+    });
+  });
+
+  it('uses historical answer accuracy when advancing projected review stages', () => {
+    const correctEvents = Array.from({ length: 20 }, (_, index) => (
+      event(`correct-${index}`, `word-${index}`, '2026-07-14', true)
+    ));
+    const wrongEvents = Array.from({ length: 20 }, (_, index) => (
+      event(`wrong-${index}`, `word-${index}`, '2026-07-14', false)
+    ));
+    const input = {
+      currentTask: task({ dateKey: '2026-07-15' }),
+      tasks: [],
+      words: Array.from({ length: 30 }, (_, index) => ({ id: `word-${index}` })),
+      recordsById: {},
+      selectionById: {},
+      setting: { ...defaultParentSetting, dailyNewWordCount: 2, dailyReviewLimit: 5 },
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    };
+
+    const highAccuracy = buildLearningStatistics({ ...input, answerEvents: correctEvents });
+    const lowAccuracy = buildLearningStatistics({ ...input, answerEvents: wrongEvents });
+
+    expect(highAccuracy.forecastModel.historicalAnswerSamples).toBe(20);
+    expect(highAccuracy.forecastModel.expectedAccuracy).toBeGreaterThan(0.9);
+    expect(lowAccuracy.forecastModel.expectedAccuracy).toBeLessThan(0.4);
+  });
+
+  it('shows deferred reviews when forecast demand exceeds the review-first daily capacity', () => {
+    const recordsById = Object.fromEntries(Array.from({ length: 6 }, (_, index) => {
+      const wordId = `review-${index}`;
+      return [wordId, {
+        wordId,
+        masteryLevel: 1,
+        reviewStage: 1,
+        correctStreak: 1,
+        wrongCount: 0,
+        lastStudiedAt: '2026-07-14T08:00:00.000Z',
+        nextDueAt: '2026-07-16T08:00:00.000Z',
+      } satisfies LearningRecord];
+    }));
+
+    const statistics = buildLearningStatistics({
+      currentTask: task({ dateKey: '2026-07-15' }),
+      tasks: [],
+      answerEvents: [],
+      words: [
+        ...Object.keys(recordsById).map((id) => ({ id })),
+        ...Array.from({ length: 5 }, (_, index) => ({ id: `new-${index}` })),
+      ],
+      recordsById,
+      selectionById: {},
+      setting: { ...defaultParentSetting, dailyNewWordCount: 2, dailyReviewLimit: 2 },
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    });
+
+    expect(statistics.forecast[0]).toMatchObject({
+      reviewCount: 4,
+      newCount: 0,
+      deferredReviewCount: 2,
+      totalCount: 4,
+    });
+  });
 });

@@ -24,6 +24,7 @@ import {
   addDaysToDateKey,
   createDateKey,
   createDateTimeForDateKey,
+  expandDailyTaskPlan,
   getTaskStudyQueue,
   reconcileTaskCompletion,
   recordTaskAnswer,
@@ -48,6 +49,7 @@ import {
   saveWordSelectionStates,
 } from '../services/storage-service';
 import { verifyFamilyCode } from '../services/cloud-sync-service';
+import type { StartupSyncResult } from '../services/startup-sync-service';
 import { buildStudyDataExport, downloadJsonFile } from '../services/study-data-export';
 import {
   readStudyDataImport,
@@ -63,6 +65,7 @@ import { loadWordPayload } from '../services/word-service';
 import { APP_VERSION } from '../config/app-meta';
 import { BottomDock } from '../components/BottomDock';
 import { ProfileSelector } from '../components/ProfileSelector';
+import { calculateIpadStageScale, getConservativeViewportLength } from './ipad-viewport';
 
 interface MainShellChromeProps {
   profileId: ProfileId;
@@ -103,7 +106,12 @@ function getAuthoritativeTaskAnswerIds(task: DailyTaskSummary, events: AnswerEve
   return eventWordIds.length > 0 ? eventWordIds : task.answeredWordIds;
 }
 
-export default function App({ syncRevision = 0 }: { syncRevision?: number }) {
+interface AppProps {
+  syncRevision?: number;
+  onRequestSync?: () => Promise<StartupSyncResult>;
+}
+
+export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
   const [route, setRoute] = useState<AppRoute>('home');
   const [previousMainRoute, setPreviousMainRoute] = useState<MainAppRoute | null>(null);
   const [mainRouteDirection, setMainRouteDirection] = useState<MainRouteDirection>('forward');
@@ -139,7 +147,7 @@ export default function App({ syncRevision = 0 }: { syncRevision?: number }) {
           listLearningRecords(),
           getParentSetting(),
           listWordSelectionStates(),
-          listAnswerEvents(500),
+          listAnswerEvents(),
           loadLocalLifePhotoViews(),
         ]);
         const todayKey = createDateKey();
@@ -154,9 +162,17 @@ export default function App({ syncRevision = 0 }: { syncRevision?: number }) {
           todayTask = buildDailyTask(payloadValue.words, savedRecords, savedSetting, new Date(), nextSelectionById);
           await saveDailyTask(todayTask);
         } else {
-          const reconciledTask = reconcileTaskCompletion(
+          const expandedTask = expandDailyTaskPlan(
             todayTask,
-            getAuthoritativeTaskAnswerIds(todayTask, savedAnswerEvents),
+            payloadValue.words,
+            savedRecords,
+            savedSetting,
+            new Date(),
+            nextSelectionById,
+          );
+          const reconciledTask = reconcileTaskCompletion(
+            expandedTask,
+            getAuthoritativeTaskAnswerIds(expandedTask, savedAnswerEvents),
           );
           if (reconciledTask !== todayTask) {
             todayTask = reconciledTask;
@@ -207,29 +223,86 @@ export default function App({ syncRevision = 0 }: { syncRevision?: number }) {
 
     const root = document.documentElement;
     const body = document.body;
+    const viewport = window.visualViewport;
+    let syncFrame: number | null = null;
+    let settleTimer: number | null = null;
 
     function syncShellState() {
       const shouldLockIpadShell = true;
-      const orientation = window.innerWidth >= window.innerHeight ? 'landscape' : 'portrait';
+      // Standalone WebKit can briefly disagree about viewport dimensions after
+      // resume. The smallest current measurement keeps the fixed stage visible.
+      const viewportWidth = getConservativeViewportLength(
+        viewport?.width,
+        window.innerWidth,
+        root.clientWidth,
+      );
+      const viewportHeight = getConservativeViewportLength(
+        viewport?.height,
+        window.innerHeight,
+        root.clientHeight,
+      );
+      const orientation = viewportWidth >= viewportHeight ? 'landscape' : 'portrait';
       const shellMode = shouldLockIpadShell ? 'ipad-fixed' : 'fluid';
+      const stageScale = calculateIpadStageScale(viewportWidth, viewportHeight);
+      const viewportTop = Math.max(0, viewport?.offsetTop ?? 0);
 
       root.dataset.shellMode = shellMode;
       root.dataset.orientation = orientation;
       body.dataset.shellMode = shellMode;
       body.dataset.orientation = orientation;
+      root.style.setProperty('--ipad-shell-scale', String(stageScale));
+      root.style.setProperty('--ipad-shell-viewport-top', `${viewportTop}px`);
     }
 
-    syncShellState();
-    window.addEventListener('resize', syncShellState);
-    window.addEventListener('orientationchange', syncShellState);
+    function scheduleShellSync() {
+      syncShellState();
+
+      if (syncFrame !== null) {
+        window.cancelAnimationFrame(syncFrame);
+      }
+      syncFrame = window.requestAnimationFrame(() => {
+        syncFrame = null;
+        syncShellState();
+      });
+
+      if (settleTimer !== null) {
+        window.clearTimeout(settleTimer);
+      }
+      settleTimer = window.setTimeout(() => {
+        settleTimer = null;
+        syncShellState();
+      }, 250);
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState === 'visible') {
+        scheduleShellSync();
+      }
+    }
+
+    scheduleShellSync();
+    window.addEventListener('resize', scheduleShellSync);
+    window.addEventListener('orientationchange', scheduleShellSync);
+    window.addEventListener('pageshow', scheduleShellSync);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    viewport?.addEventListener('resize', scheduleShellSync);
+    viewport?.addEventListener('scroll', scheduleShellSync);
 
     return () => {
-      window.removeEventListener('resize', syncShellState);
-      window.removeEventListener('orientationchange', syncShellState);
+      window.removeEventListener('resize', scheduleShellSync);
+      window.removeEventListener('orientationchange', scheduleShellSync);
+      window.removeEventListener('pageshow', scheduleShellSync);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      viewport?.removeEventListener('resize', scheduleShellSync);
+      viewport?.removeEventListener('scroll', scheduleShellSync);
+      if (syncFrame !== null) window.cancelAnimationFrame(syncFrame);
+      if (settleTimer !== null) window.clearTimeout(settleTimer);
       delete root.dataset.shellMode;
       delete root.dataset.orientation;
       delete body.dataset.shellMode;
       delete body.dataset.orientation;
+      root.style.removeProperty('--ipad-shell-scale');
+      root.style.removeProperty('--ipad-shell-viewport-top');
     };
   }, []);
 
@@ -270,9 +343,27 @@ export default function App({ syncRevision = 0 }: { syncRevision?: number }) {
       return;
     }
 
-    const nextTask = buildDailyTask(payload.words, nextRecords, nextSetting, new Date(), nextSelection);
+    const studyDate = task ? createDateTimeForDateKey(task.dateKey) : new Date();
+    const nextTask = buildDailyTask(payload.words, nextRecords, nextSetting, studyDate, nextSelection);
     await saveDailyTask(nextTask);
     setTask(nextTask);
+    await refreshRecentTasks();
+  }
+
+  async function expandCurrentTaskPlan(nextSetting: ParentSetting) {
+    if (!payload || !task) return;
+    const nextTask = expandDailyTaskPlan(
+      task,
+      payload.words,
+      recordsById,
+      nextSetting,
+      createDateTimeForDateKey(task.dateKey),
+      selectionById,
+    );
+    if (nextTask === task) return;
+    await saveDailyTask(nextTask);
+    setTask(nextTask);
+    setSessionResult(null);
     await refreshRecentTasks();
   }
 
@@ -420,13 +511,29 @@ export default function App({ syncRevision = 0 }: { syncRevision?: number }) {
     navigateToMainRoute('home');
   }
 
-  async function handleUpdateSetting(nextSetting: ParentSetting) {
+  async function handleUpdateSetting(nextSetting: ParentSetting): Promise<'synced' | 'pending'> {
+    const loadSettingChanged = !parentSetting
+      || nextSetting.dailyNewWordCount !== parentSetting.dailyNewWordCount
+      || nextSetting.dailyReviewLimit !== parentSetting.dailyReviewLimit;
+    const loadSettingIncreased = !parentSetting
+      || nextSetting.dailyNewWordCount > parentSetting.dailyNewWordCount
+      || nextSetting.dailyReviewLimit > parentSetting.dailyReviewLimit;
     await saveParentSetting(nextSetting);
     setParentSetting(nextSetting);
 
-    if (task && !task.completedAt && task.totalAnswered === 0) {
-      await rebuildTodayTask(recordsById, nextSetting, selectionById);
+    if (task && loadSettingChanged) {
+      if (!task.completedAt && task.totalAnswered === 0) {
+        await rebuildTodayTask(recordsById, nextSetting, selectionById);
+      } else if (loadSettingIncreased) {
+        await expandCurrentTaskPlan(nextSetting);
+      }
     }
+
+    if (!onRequestSync) {
+      return 'pending';
+    }
+    const syncResult = await onRequestSync();
+    return syncResult.kind === 'synced' ? 'synced' : 'pending';
   }
 
   async function handleSelectProfile(profileId: ProfileId) {
@@ -710,5 +817,5 @@ export default function App({ syncRevision = 0 }: { syncRevision?: number }) {
     );
   }
 
-  return renderCurrentRoute();
+  return <div className="ipad-stage-shell">{renderCurrentRoute()}</div>;
 }

@@ -60,7 +60,7 @@ describe('ReviewPage', () => {
     expect(markup).not.toContain('review-day-forward-button');
   });
 
-  it('shows the dog-only next-day control, real heatmap data, and quarter-minute estimate', () => {
+  it('shows the dog-only next-day control, real heatmap data, and rounded-minute estimate', () => {
     const task = {
       dateKey: '2026-06-30',
       newWordIds: Array.from({ length: 15 }, (_, index) => `new-${index}`),
@@ -110,10 +110,50 @@ describe('ReviewPage', () => {
 
     expect(markup).toContain('class="review-day-forward-button"');
     expect(markup).toContain('aria-label="前往下一天，2026-07-01"');
-    expect(markup).toContain('5.25 分钟');
+    expect(markup).toContain('5 分钟');
     expect(markup).toContain('data-date-key="2026-06-29"');
     expect(markup).toContain('data-answered="2"');
     expect(markup).toContain('data-date-key="2026-06-30"');
     expect(markup).toContain('data-answered="1"');
+  });
+
+  it('does not offer another review round while planned words remain unanswered', () => {
+    const markup = renderToStaticMarkup(
+      <ReviewPage
+        payload={{
+          generatedAt: '',
+          sourceFile: '',
+          categoryCount: 1,
+          wordCount: 1,
+          categories: [previewWord.category],
+          words: [previewWord],
+        }}
+        task={{
+          dateKey: '2026-07-21',
+          newWordIds: [previewWord.id],
+          reviewWordIds: ['review-a'],
+          completedAt: '2026-07-21T08:00:00.000Z',
+          correctCount: 1,
+          wrongCount: 0,
+          totalAnswered: 1,
+          answeredWordIds: [previewWord.id],
+        }}
+        setting={defaultParentSetting}
+        recordsById={{}}
+        selectionById={{}}
+        answerEvents={[]}
+        masteredCount={0}
+        recentTasks={[]}
+        previewWords={[previewWord]}
+        localLifePhotosById={{}}
+        onStart={() => undefined}
+        onAdvanceDay={async () => undefined}
+        onSelectProfile={async () => undefined}
+        onSaveSelectionStates={async () => undefined}
+      />,
+    );
+
+    expect(markup).toContain('继续学习');
+    expect(markup).not.toContain('再复习一轮');
   });
 });
