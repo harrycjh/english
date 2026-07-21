@@ -124,6 +124,39 @@ function rebuildTaskCounts(tasks, events, generation) {
   });
 }
 
+function normalizeTaskPlans(tasks, parentSetting) {
+  const newWordLimit = Math.max(1, Number(parentSetting?.dailyNewWordCount) || 6);
+  const reviewLimit = Math.max(1, Number(parentSetting?.dailyReviewLimit) || 8);
+  const uniqueIds = (value) => [...new Set(Array.isArray(value) ? value : [])];
+  const keepAnsweredFirst = (ids, answeredWordIds, target) => {
+    const answeredIds = ids.filter((wordId) => answeredWordIds.has(wordId));
+    const unansweredIds = ids.filter((wordId) => !answeredWordIds.has(wordId));
+    return [...answeredIds, ...unansweredIds].slice(0, Math.max(target, answeredIds.length));
+  };
+
+  return tasks.map((task) => {
+    const answeredWordIds = new Set(uniqueIds(task.answeredWordIds));
+    const mergedReviewWordIds = uniqueIds(task.reviewWordIds);
+    const reviewCount = Math.min(mergedReviewWordIds.length, reviewLimit + newWordLimit);
+    const reviewOverflow = Math.max(0, reviewCount - reviewLimit);
+    const reviewWordIds = keepAnsweredFirst(mergedReviewWordIds, answeredWordIds, reviewCount);
+    const reviewWordIdSet = new Set(reviewWordIds);
+    const mergedNewWordIds = uniqueIds(task.newWordIds)
+      .filter((wordId) => !reviewWordIdSet.has(wordId));
+    const newCount = Math.max(0, newWordLimit - reviewOverflow);
+    const newWordIds = keepAnsweredFirst(mergedNewWordIds, answeredWordIds, newCount);
+    const plannedWordIds = [...reviewWordIds, ...newWordIds];
+    const isFullyAnswered = plannedWordIds.every((wordId) => answeredWordIds.has(wordId));
+
+    return {
+      ...task,
+      reviewWordIds,
+      newWordIds,
+      completedAt: task.completedAt && isFullyAnswered ? task.completedAt : null,
+    };
+  });
+}
+
 function emptyLearningRecord(wordId) {
   return {
     wordId,
@@ -204,14 +237,16 @@ export function mergeSnapshots(local, remote) {
   if (remote.generation < local.generation) return structuredClone(local);
   const events = mergeEvents(local.events, remote.events);
   const generation = local.generation;
+  const parentSetting = mergeParentSetting(local.parentSetting, remote.parentSetting);
+  const mergedTasks = rebuildTaskCounts(mergeTasks(local.dailyTasks, remote.dailyTasks), events, generation);
   return {
     schemaVersion: SYNC_SCHEMA_VERSION,
     generation,
     events,
     checkpoint: mergeCheckpoint(local.checkpoint, remote.checkpoint, events, generation),
-    dailyTasks: rebuildTaskCounts(mergeTasks(local.dailyTasks, remote.dailyTasks), events, generation),
+    dailyTasks: normalizeTaskPlans(mergedTasks, parentSetting.value),
     wordSelectionStates: mergeSelections(local.wordSelectionStates, remote.wordSelectionStates),
-    parentSetting: mergeParentSetting(local.parentSetting, remote.parentSetting),
+    parentSetting,
   };
 }
 

@@ -26,6 +26,7 @@ import {
   createDateTimeForDateKey,
   expandDailyTaskPlan,
   getTaskStudyQueue,
+  normalizeDailyTaskPlan,
   reconcileTaskCompletion,
   recordTaskAnswer,
 } from '../services/task-service';
@@ -162,17 +163,18 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           todayTask = buildDailyTask(payloadValue.words, savedRecords, savedSetting, new Date(), nextSelectionById);
           await saveDailyTask(todayTask);
         } else {
-          const expandedTask = expandDailyTaskPlan(
+          const normalizedTask = normalizeDailyTaskPlan(
             todayTask,
             payloadValue.words,
             savedRecords,
             savedSetting,
             new Date(),
             nextSelectionById,
+            getAuthoritativeTaskAnswerIds(todayTask, savedAnswerEvents),
           );
           const reconciledTask = reconcileTaskCompletion(
-            expandedTask,
-            getAuthoritativeTaskAnswerIds(expandedTask, savedAnswerEvents),
+            normalizedTask,
+            getAuthoritativeTaskAnswerIds(normalizedTask, savedAnswerEvents),
           );
           if (reconciledTask !== todayTask) {
             todayTask = reconciledTask;
@@ -352,13 +354,14 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
 
   async function expandCurrentTaskPlan(nextSetting: ParentSetting) {
     if (!payload || !task) return;
-    const nextTask = expandDailyTaskPlan(
+    const nextTask = normalizeDailyTaskPlan(
       task,
       payload.words,
       recordsById,
       nextSetting,
       createDateTimeForDateKey(task.dateKey),
       selectionById,
+      getAuthoritativeTaskAnswerIds(task, answerEvents),
     );
     if (nextTask === task) return;
     await saveDailyTask(nextTask);

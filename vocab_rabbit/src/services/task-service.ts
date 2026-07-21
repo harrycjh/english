@@ -170,6 +170,89 @@ export function expandDailyTaskPlan(
   };
 }
 
+export function normalizeDailyTaskPlan(
+  task: DailyTaskSummary,
+  words: WordRecord[],
+  recordsById: Record<string, LearningRecord>,
+  setting: ParentSetting = defaultParentSetting,
+  date: Date = new Date(),
+  selectionById: Record<string, WordSelectionState> = {},
+  authoritativeAnsweredWordIds: string[] = task.answeredWordIds,
+): DailyTaskSummary {
+  const studyWords = getActiveStudyWords(words, selectionById);
+  const activeWordIds = new Set(studyWords.map((word) => word.id));
+  const answeredWordIds = [...new Set(authoritativeAnsweredWordIds)];
+  const answeredWordIdSet = new Set(answeredWordIds);
+  const uniqueIds = (ids: string[]) => [...new Set(ids)];
+
+  const answeredReviewWordIds = uniqueIds(task.reviewWordIds)
+    .filter((wordId) => answeredWordIdSet.has(wordId));
+  const dueReviewWordIds = getOrderedDueReviewWords(studyWords, recordsById, date)
+    .map((word) => word.id);
+  const dueReviewWordIdSet = new Set(dueReviewWordIds);
+  const reviewCandidates = uniqueIds([
+    ...answeredReviewWordIds,
+    ...task.reviewWordIds.filter((wordId) => (
+      activeWordIds.has(wordId) && dueReviewWordIdSet.has(wordId)
+    )),
+    ...dueReviewWordIds,
+  ]);
+  const limits = getReviewFirstPlanLimits(reviewCandidates.length, setting);
+  const reviewTarget = Math.max(answeredReviewWordIds.length, limits.reviewCount);
+  const reviewWordIds = uniqueIds([
+    ...answeredReviewWordIds,
+    ...reviewCandidates.filter((wordId) => !answeredWordIdSet.has(wordId)),
+  ]).slice(0, reviewTarget);
+  const reviewWordIdSet = new Set(reviewWordIds);
+
+  const answeredNewWordIds = uniqueIds(task.newWordIds)
+    .filter((wordId) => answeredWordIdSet.has(wordId) && !reviewWordIdSet.has(wordId));
+  const newWordTarget = Math.max(answeredNewWordIds.length, limits.newWordCount);
+  const existingUnansweredNewWordIds = uniqueIds(task.newWordIds)
+    .filter((wordId) => (
+      !answeredWordIdSet.has(wordId)
+      && !reviewWordIdSet.has(wordId)
+      && activeWordIds.has(wordId)
+      && !recordsById[wordId]
+    ));
+  const reservedWordIds = new Set([
+    ...reviewWordIds,
+    ...answeredNewWordIds,
+    ...existingUnansweredNewWordIds,
+  ]);
+  const freshNewWordIds = pickBalancedNewWords(
+    studyWords.filter((word) => !recordsById[word.id] && !reservedWordIds.has(word.id)),
+    Math.max(0, newWordTarget - answeredNewWordIds.length - existingUnansweredNewWordIds.length),
+  );
+  const newWordIds = uniqueIds([
+    ...answeredNewWordIds,
+    ...existingUnansweredNewWordIds,
+    ...freshNewWordIds,
+  ]).slice(0, newWordTarget);
+
+  const plannedWordIds = new Set([...reviewWordIds, ...newWordIds]);
+  const isFullyAnswered = [...plannedWordIds].every((wordId) => answeredWordIdSet.has(wordId));
+  const completedAt = task.completedAt && isFullyAnswered ? task.completedAt : null;
+  const planUnchanged = reviewWordIds.length === task.reviewWordIds.length
+    && reviewWordIds.every((wordId, index) => wordId === task.reviewWordIds[index])
+    && newWordIds.length === task.newWordIds.length
+    && newWordIds.every((wordId, index) => wordId === task.newWordIds[index]);
+  const answersUnchanged = answeredWordIds.length === task.answeredWordIds.length
+    && answeredWordIds.every((wordId, index) => wordId === task.answeredWordIds[index]);
+
+  if (planUnchanged && answersUnchanged && completedAt === task.completedAt) {
+    return task;
+  }
+
+  return {
+    ...task,
+    reviewWordIds,
+    newWordIds,
+    answeredWordIds,
+    completedAt,
+  };
+}
+
 export function getTaskPlannedWordIds(task: DailyTaskSummary): string[] {
   return [...new Set([...task.reviewWordIds, ...task.newWordIds])];
 }

@@ -306,6 +306,41 @@ describe('vocab sync Function Compute handler', () => {
     });
   });
 
+  it('caps divergent device plans while retaining every answered new word', () => {
+    const local = emptySnapshot();
+    const remote = emptySnapshot();
+    local.parentSetting.value.dailyNewWordCount = 3;
+    remote.parentSetting.value.dailyNewWordCount = 3;
+    const baseTask = {
+      dateKey: '2026-07-20',
+      reviewWordIds: ['review-a', 'review-b'],
+      completedAt: '2026-07-20T09:00:00.000Z',
+      correctCount: 0,
+      wrongCount: 0,
+      totalAnswered: 0,
+      answeredWordIds: [],
+    };
+    local.dailyTasks = [{ ...baseTask, newWordIds: ['new-a', 'new-b', 'new-c'] }];
+    remote.dailyTasks = [{ ...baseTask, newWordIds: ['new-d', 'new-e', 'new-f'] }];
+    remote.events = ['new-b', 'new-d', 'new-e'].map((wordId, index) => ({
+      id: `event-${index}`,
+      wordId,
+      dateKey: '2026-07-20',
+      answeredAt: `2026-07-20T0${index + 7}:00:00.000Z`,
+      isCorrect: true,
+      generation: 0,
+    }));
+
+    const merged = mergeSnapshots(local, remote);
+
+    expect(merged.dailyTasks[0]).toMatchObject({
+      newWordIds: ['new-b', 'new-d', 'new-e'],
+      reviewWordIds: ['review-a', 'review-b'],
+      answeredWordIds: ['new-b', 'new-d', 'new-e'],
+      completedAt: null,
+    });
+  });
+
   it('unions legacy checkpoints from two previously offline devices', async () => {
     const repository = createMemoryRepository();
     const first = emptySnapshot();

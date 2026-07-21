@@ -9,6 +9,7 @@ import {
   createDateTimeForDateKey,
   expandDailyTaskPlan,
   getTaskStudyQueue,
+  normalizeDailyTaskPlan,
   reconcileTaskCompletion,
   recordTaskAnswer,
 } from './task-service';
@@ -118,6 +119,41 @@ describe('daily task queue', () => {
 });
 
 describe('review-first daily planning', () => {
+  it('trims merged unanswered new words to the current allowance without losing answers', () => {
+    const newWords = Array.from({ length: 27 }, (_, index) => makeWord(`new-${index}`));
+    const reviewWords = Array.from({ length: 19 }, (_, index) => makeWord(`review-${index}`));
+    const answeredNewWordIds = newWords.slice(0, 12).map((word) => word.id);
+    const records = Object.fromEntries([
+      ...answeredNewWordIds.map((wordId) => [wordId, makeDueRecord(wordId, '2026-07-25T08:00:00.000Z')]),
+      ...reviewWords.map((word) => [word.id, makeDueRecord(word.id)]),
+    ]);
+    const task: DailyTaskSummary = {
+      ...makeTask(),
+      dateKey: '2026-07-20',
+      newWordIds: newWords.map((word) => word.id),
+      reviewWordIds: reviewWords.map((word) => word.id),
+      answeredWordIds: answeredNewWordIds,
+      totalAnswered: 12,
+      correctCount: 12,
+      completedAt: '2026-07-20T09:00:00.000Z',
+    };
+
+    const normalized = normalizeDailyTaskPlan(
+      task,
+      [...newWords, ...reviewWords],
+      records,
+      { ...defaultParentSetting, dailyNewWordCount: 12, dailyReviewLimit: 50 },
+      new Date('2026-07-20T10:00:00.000Z'),
+      {},
+      answeredNewWordIds,
+    );
+
+    expect(normalized.newWordIds).toEqual(answeredNewWordIds);
+    expect(normalized.reviewWordIds).toHaveLength(19);
+    expect(normalized.answeredWordIds).toEqual(answeredNewWordIds);
+    expect(normalized.completedAt).toBeNull();
+  });
+
   it('uses new-word capacity for overdue reviews before adding new words', () => {
     const reviewWords = Array.from({ length: 4 }, (_, index) => makeWord(`review-${index}`));
     const newWords = Array.from({ length: 4 }, (_, index) => makeWord(`new-${index}`));
