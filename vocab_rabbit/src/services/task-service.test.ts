@@ -119,6 +119,24 @@ describe('daily task queue', () => {
 });
 
 describe('review-first daily planning', () => {
+  it('includes reviews due later in the same study day before the next 4am refresh', () => {
+    const dueLaterToday = makeWord('due-later-today');
+    const dueAfterRefresh = makeWord('due-after-refresh');
+    const records = {
+      [dueLaterToday.id]: makeDueRecord(dueLaterToday.id, '2026-07-21T08:48:00.000Z'),
+      [dueAfterRefresh.id]: makeDueRecord(dueAfterRefresh.id, '2026-07-21T20:00:00.000Z'),
+    };
+
+    const task = buildDailyTask(
+      [dueLaterToday, dueAfterRefresh],
+      records,
+      { ...defaultParentSetting, dailyReviewLimit: 5, dailyNewWordCount: 3 },
+      new Date('2026-07-21T07:41:00.000Z'),
+    );
+
+    expect(task.reviewWordIds).toEqual(['due-later-today']);
+  });
+
   it('trims merged unanswered new words to the current allowance without losing answers', () => {
     const newWords = Array.from({ length: 27 }, (_, index) => makeWord(`new-${index}`));
     const reviewWords = Array.from({ length: 19 }, (_, index) => makeWord(`review-${index}`));

@@ -7,6 +7,7 @@ import type { WordRecord } from '../models/word';
 import { isWordEnabledForStudy } from './selection-service';
 import { getInitialReviewDelayDays } from './spaced-repetition';
 import { getReviewFirstPlanLimits } from './task-service';
+import { createStudyDateKey } from './study-day';
 
 const LEARNING_TIMELINE_RANGE_DAYS = 90;
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -166,7 +167,7 @@ export function buildLearningStatistics({
   setting,
   now = new Date(),
 }: LearningStatisticsInput): LearningStatistics {
-  const todayKey = dateKey(now);
+  const todayKey = createStudyDateKey(now);
   const taskMap = new Map(tasks.map((task) => [task.dateKey, task]));
   taskMap.set(currentTask.dateKey, currentTask);
 

@@ -1,4 +1,5 @@
 import type { DailyTaskSummary } from '../models/daily-task';
+import { createStudyDateKey } from '../services/study-day';
 
 interface HeatmapCalendarProps {
   tasks: DailyTaskSummary[];
@@ -53,7 +54,7 @@ export function buildHeatmapDays(
   });
 }
 
-export function HeatmapCalendar({ tasks, endDateKey = new Date().toISOString().slice(0, 10) }: HeatmapCalendarProps) {
+export function HeatmapCalendar({ tasks, endDateKey = createStudyDateKey() }: HeatmapCalendarProps) {
   const days = buildHeatmapDays(tasks, endDateKey);
 
   return (

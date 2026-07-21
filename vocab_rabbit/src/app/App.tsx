@@ -64,6 +64,7 @@ import {
 } from '../services/local-media-service';
 import { loadWordPayload } from '../services/word-service';
 import { APP_VERSION } from '../config/app-meta';
+import { getMillisecondsUntilNextStudyDay } from '../services/study-day';
 import { BottomDock } from '../components/BottomDock';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { calculateIpadStageScale, getConservativeViewportLength } from './ipad-viewport';
@@ -129,6 +130,13 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
   const [sessionResult, setSessionResult] = useState<SessionResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const refreshTimer = window.setTimeout(() => {
+      window.location.reload();
+    }, getMillisecondsUntilNextStudyDay() + 1_000);
+    return () => window.clearTimeout(refreshTimer);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;

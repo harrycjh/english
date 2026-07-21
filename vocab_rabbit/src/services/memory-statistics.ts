@@ -1,5 +1,6 @@
 import type { AnswerEvent } from '../models/answer-event';
 import type { LearningRecord } from '../models/learning-record';
+import { createStudyDateKey } from './study-day';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const TARGET_RETENTION_AT_DUE = 0.75;
@@ -289,7 +290,7 @@ export function buildDurabilityTimeline(
   now: Date = new Date(),
   historyDays = 90,
 ): DurabilityTimelinePoint[] {
-  const todayKey = createDateKey(now);
+  const todayKey = createStudyDateKey(now);
   const startKey = addDays(todayKey, -Math.max(0, historyDays));
   const snapshots = answerEvents
     .filter((event): event is AnswerEvent & { learningStateAfter: LearningRecord } => Boolean(event.learningStateAfter))

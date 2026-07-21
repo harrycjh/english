@@ -4,44 +4,30 @@ import { defaultParentSetting, type ParentSetting } from '../models/parent-setti
 import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordRecord } from '../models/word';
 import { getActiveStudyWords } from './selection-service';
+import {
+  addDaysToStudyDateKey,
+  createDateTimeForStudyDateKey,
+  createStudyDateKey,
+  getStudyDayReviewCutoff,
+} from './study-day';
 
 export function createDateKey(date: Date = new Date()): string {
-  return date.toISOString().slice(0, 10);
-}
-
-function parseDateKey(dateKey: string): [number, number, number] {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateKey);
-  if (!match) {
-    throw new Error(`Invalid date key: ${dateKey}`);
-  }
-  return [Number(match[1]), Number(match[2]), Number(match[3])];
+  return createStudyDateKey(date);
 }
 
 export function addDaysToDateKey(dateKey: string, days: number): string {
-  const [year, month, day] = parseDateKey(dateKey);
-  const date = new Date(Date.UTC(year, month - 1, day, 12));
-  date.setUTCDate(date.getUTCDate() + days);
-  return createDateKey(date);
+  return addDaysToStudyDateKey(dateKey, days);
 }
 
 export function createDateTimeForDateKey(dateKey: string, clock: Date = new Date()): Date {
-  const [year, month, day] = parseDateKey(dateKey);
-  return new Date(Date.UTC(
-    year,
-    month - 1,
-    day,
-    clock.getUTCHours(),
-    clock.getUTCMinutes(),
-    clock.getUTCSeconds(),
-    clock.getUTCMilliseconds(),
-  ));
+  return createDateTimeForStudyDateKey(dateKey, clock);
 }
 
-function isDue(record: LearningRecord, date: Date): boolean {
+function isDue(record: LearningRecord, cutoff: Date): boolean {
   if (!record.nextDueAt) {
     return true;
   }
-  return new Date(record.nextDueAt) <= date;
+  return new Date(record.nextDueAt) < cutoff;
 }
 
 function pickBalancedNewWords(words: WordRecord[], limit: number): string[] {
@@ -76,10 +62,11 @@ function getOrderedDueReviewWords(
   recordsById: Record<string, LearningRecord>,
   date: Date,
 ): WordRecord[] {
+  const cutoff = getStudyDayReviewCutoff(date);
   return studyWords
     .filter((word) => {
       const record = recordsById[word.id];
-      return record && isDue(record, date);
+      return record && isDue(record, cutoff);
     })
     .sort((left, right) => {
       const leftRecord = recordsById[left.id];
