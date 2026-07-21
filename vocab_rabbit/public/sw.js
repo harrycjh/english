@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vocab-rabbit-shell-v5';
+const CACHE_NAME = 'vocab-rabbit-shell-v6';
 const SCOPE_URL = new URL(self.registration.scope);
 const APP_ROOT_URL = new URL('./', SCOPE_URL).toString();
 const INDEX_URL = new URL('index.html', SCOPE_URL).toString();
