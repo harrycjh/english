@@ -276,7 +276,7 @@ export function getTaskStudyQueue(task: DailyTaskSummary): string[] {
 }
 
 export function recordTaskAnswer(task: DailyTaskSummary, isCorrect: boolean, wordId?: string): DailyTaskSummary {
-  const answeredWordIds = wordId && !task.answeredWordIds.includes(wordId)
+  const answeredWordIds = isCorrect && wordId && !task.answeredWordIds.includes(wordId)
     ? [...task.answeredWordIds, wordId]
     : task.answeredWordIds;
 

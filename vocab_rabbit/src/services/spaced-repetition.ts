@@ -1,14 +1,17 @@
 import type { LearningRecord } from '../models/learning-record';
+import type { LearningAction } from '../models/answer-event';
+import { getReviewDueAt } from './study-day';
 
-const REVIEW_INTERVAL_HOURS = [0, 24, 96, 168, 336, 720, 1440];
+export const MAX_MASTERY_LEVEL = 9;
+export const REVIEW_INTERVAL_DAYS = [0, 1, 2, 3, 5, 8, 13, 21, 30] as const;
 
-export function getInitialReviewDelayDays(wordId: string, answeredAt: Date): number {
-  const seed = `${wordId}|${answeredAt.toISOString().slice(0, 10)}`;
+export function getMasteredReviewDelayDays(wordId: string, answeredAt: Date): number {
+  const seed = `${wordId}|${answeredAt.toISOString().slice(0, 10)}|mastered`;
   let hash = 2166136261;
   for (let index = 0; index < seed.length; index += 1) {
     hash = Math.imul(hash ^ seed.charCodeAt(index), 16777619);
   }
-  return 1 + ((hash >>> 0) % 3);
+  return 60 + ((hash >>> 0) % 31);
 }
 
 export function createEmptyRecord(wordId: string): LearningRecord {
@@ -26,25 +29,28 @@ export function createEmptyRecord(wordId: string): LearningRecord {
 export function evaluateAnswer(
   currentRecord: LearningRecord,
   isCorrect: boolean,
-  now: Date = new Date()
+  now: Date = new Date(),
+  learningAction: LearningAction = 'answer',
 ): LearningRecord {
-  const stage = isCorrect
-    ? Math.min(currentRecord.reviewStage + 1, REVIEW_INTERVAL_HOURS.length - 1)
-    : Math.max(currentRecord.reviewStage - 1, 0);
+  const currentLevel = Math.min(Math.max(currentRecord.masteryLevel, 0), MAX_MASTERY_LEVEL);
+  let masteryLevel = currentLevel;
+  if (currentLevel === 0 && learningAction === 'recognized') {
+    masteryLevel = 2;
+  } else if (isCorrect) {
+    masteryLevel = Math.min(currentLevel + 1, MAX_MASTERY_LEVEL);
+  }
 
-  const masteryLevel = isCorrect
-    ? Math.min(currentRecord.masteryLevel + 1, 6)
-    : Math.max(currentRecord.masteryLevel - 1, 0);
-
-  const intervalHours = isCorrect && currentRecord.reviewStage === 0 && stage === 1
-    ? getInitialReviewDelayDays(currentRecord.wordId, now) * 24
-    : REVIEW_INTERVAL_HOURS[stage];
-  const nextDueAt = new Date(now.getTime() + intervalHours * 60 * 60 * 1000);
+  const delayDays = !isCorrect
+    ? 0
+    : masteryLevel >= MAX_MASTERY_LEVEL
+      ? getMasteredReviewDelayDays(currentRecord.wordId, now)
+      : REVIEW_INTERVAL_DAYS[masteryLevel];
+  const nextDueAt = getReviewDueAt(now, delayDays);
 
   return {
     ...currentRecord,
     masteryLevel,
-    reviewStage: stage,
+    reviewStage: masteryLevel,
     correctStreak: isCorrect ? currentRecord.correctStreak + 1 : 0,
     wrongCount: isCorrect ? currentRecord.wrongCount : currentRecord.wrongCount + 1,
     lastStudiedAt: now.toISOString(),
@@ -53,5 +59,5 @@ export function evaluateAnswer(
 }
 
 export function isMastered(record: LearningRecord | undefined): boolean {
-  return Boolean(record && record.masteryLevel >= 4);
+  return Boolean(record && record.masteryLevel >= MAX_MASTERY_LEVEL);
 }

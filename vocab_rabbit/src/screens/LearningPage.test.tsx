@@ -38,6 +38,7 @@ function renderLearningPage(profileId: 'cute-junjun' | 'stinky-dog') {
       recordsById={{}}
       setting={{ ...defaultParentSetting, profileId }}
       studyDateKey="2026-07-20"
+      localLifePhotosById={{}}
       onAnswer={async () => undefined}
       onComplete={async () => undefined}
       onExit={() => undefined}
@@ -47,7 +48,11 @@ function renderLearningPage(profileId: 'cute-junjun' | 'stinky-dog') {
 
 describe('LearningPage profile actions', () => {
   it('shows the direct-correct action only for the dog profile', () => {
-    expect(renderLearningPage('stinky-dog')).toContain('直接答对');
+    const dogMarkup = renderLearningPage('stinky-dog');
+    expect(dogMarkup).toContain('直接答对');
+    expect(dogMarkup).toContain('全部答对');
+    expect(dogMarkup.indexOf('直接答对')).toBeLessThan(dogMarkup.indexOf('全部答对'));
     expect(renderLearningPage('cute-junjun')).not.toContain('直接答对');
+    expect(renderLearningPage('cute-junjun')).not.toContain('全部答对');
   });
 });

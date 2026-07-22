@@ -43,6 +43,11 @@ export function getStudyDayReviewCutoff(date: Date = new Date()): Date {
   return new Date(`${nextDateKey}T04:00:00.000+08:00`);
 }
 
+export function getReviewDueAt(answeredAt: Date, delayDays: number): Date {
+  const dueDateKey = addDaysToStudyDateKey(createStudyDateKey(answeredAt), delayDays);
+  return new Date(`${dueDateKey}T04:00:00.000+08:00`);
+}
+
 export function getMillisecondsUntilNextStudyDay(date: Date = new Date()): number {
   return Math.max(0, getStudyDayReviewCutoff(date).getTime() - date.getTime());
 }

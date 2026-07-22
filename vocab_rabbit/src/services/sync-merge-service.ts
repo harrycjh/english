@@ -47,7 +47,12 @@ export function replayLearningRecords(
       continue;
     }
     const current = records[event.wordId] ?? createEmptyRecord(event.wordId);
-    records[event.wordId] = evaluateAnswer(current, event.isCorrect, new Date(event.answeredAt));
+    records[event.wordId] = evaluateAnswer(
+      current,
+      event.isCorrect,
+      new Date(event.answeredAt),
+      event.learningAction,
+    );
   }
 
   return records;
@@ -134,7 +139,7 @@ export function mergeDailyTasks(
   for (const [dateKey, task] of byDate) {
     const dateEvents = (eventsByDate.get(dateKey) ?? []).sort(compareEvents);
     const answeredWordIds = dateEvents.length > 0
-      ? [...new Set(dateEvents.map((event) => event.wordId))]
+      ? [...new Set(dateEvents.filter((event) => event.isCorrect).map((event) => event.wordId))]
       : task.answeredWordIds;
     const answeredWordIdSet = new Set(answeredWordIds);
     const plannedWordIds = new Set([...task.reviewWordIds, ...task.newWordIds]);

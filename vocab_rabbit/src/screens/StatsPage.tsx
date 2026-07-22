@@ -327,7 +327,7 @@ function LearningLoadChart({ points, todayKey, scale }: {
   }, [points.length, scrollRef, todayKey]);
 
   return (
-    <div className="learning-load-chart" role="group" aria-label="每日实际与预测学习负荷堆叠柱状图">
+      <div className="learning-load-chart" role="group" aria-label="每日实际与预测学习负荷堆叠柱状图">
       <div className="learning-load-chart__axis" aria-hidden="true">
         <div className="learning-load-chart__scale">
           {ticks.map((tick) => <span key={tick}>{tick}</span>)}
@@ -611,7 +611,7 @@ export function StatsPage({
                     <h2>{learningTimeScale === 'day' ? '每日' : learningTimeScale === 'week' ? '每周' : '每月'}学习负荷</h2>
                     <p>
                       历史显示真实完成量；未来按每日新词 {learning.forecastModel.dailyNewTarget}、
-                      历史正确率 {Math.round(learning.forecastModel.expectedAccuracy * 100)}% 与当前记忆阶段预测
+                      完成率 {Math.round(learning.forecastModel.completionRate * 100)}%、分阶段题型正确率与当前记忆等级预测，新增词会滚入后续复习
                     </p>
                   </div>
                   <div className="memory-panel__chart-tools">

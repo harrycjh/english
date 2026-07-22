@@ -2,11 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import type { AnswerEvent } from '../models/answer-event';
 import type { SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
+import type { LocalLifePhotoView } from '../models/local-media';
 import type { ParentSetting } from '../models/parent-setting';
 import type { WordPayload } from '../models/word';
 import { ProgressRing } from '../components/ProgressRing';
 import { QuestionFillBlank } from '../components/QuestionFillBlank';
 import { QuestionImage } from '../components/QuestionImage';
+import { QuestionImageAnswer } from '../components/QuestionImageAnswer';
+import { QuestionRecognition } from '../components/QuestionRecognition';
 import { QuestionText } from '../components/QuestionText';
 import { buildQuestion, getCorrectAnswer, isCorrectAnswer, type Question } from '../services/question-service';
 import { createAnswerEventId } from '../services/answer-event-service';
@@ -21,6 +24,7 @@ interface LearningPageProps {
   recordsById: Record<string, LearningRecord>;
   setting: ParentSetting;
   studyDateKey: string;
+  localLifePhotosById: Record<string, LocalLifePhotoView>;
   onAnswer: (event: AnswerEvent) => Promise<void>;
   onComplete: (result: SessionResult) => Promise<void>;
   onExit: () => void;
@@ -32,6 +36,7 @@ export function LearningPage({
   recordsById,
   setting,
   studyDateKey,
+  localLifePhotosById,
   onAnswer,
   onComplete,
   onExit,
@@ -80,6 +85,9 @@ export function LearningPage({
 
     const correct = isCorrectAnswer(currentQuestion, answer);
     const correctAnswer = getCorrectAnswer(currentQuestion);
+    const learningAction = currentQuestion.kind === 'recognition'
+      ? answer === '认识' ? 'recognized' : 'unknown'
+      : 'answer';
     const answeredAt = createDateTimeForDateKey(studyDateKey);
     const answeredAtText = answeredAt.toISOString();
     const answerEvent: AnswerEvent = {
@@ -92,15 +100,23 @@ export function LearningPage({
       correctAnswer,
       isCorrect: correct,
       responseTimeMs: Math.max(0, Date.now() - questionStartedAt),
+      learningAction,
+      isSessionRetry: (repeatCounts[currentWordId] ?? 0) > 0,
     };
     const currentRepeatCount = repeatCounts[currentWordId] ?? 0;
-    const shouldRepeat = !correct && currentRepeatCount < 2;
+    const shouldRepeat = !correct;
     const nextQueueLength = queue.length + (shouldRepeat ? 1 : 0);
     const nextIndex = currentIndex + 1;
 
     setIsLocked(true);
     setSelectedAnswer(answer);
-    setFeedbackText(correct ? '答对了，继续前进。' : `正确答案：${correctAnswer}`);
+    setFeedbackText(
+      correct
+        ? '答对了，继续前进。'
+        : currentQuestion.kind === 'recognition'
+          ? '没关系，稍后再练一次。'
+          : `正确答案：${correctAnswer}`,
+    );
     setSessionResult((previous) => ({
       totalAnswered: previous.totalAnswered + 1,
       correctCount: previous.correctCount + (correct ? 1 : 0),
@@ -136,6 +152,59 @@ export function LearningPage({
     }, 700);
   }
 
+  async function handleAllCorrect() {
+    if (!currentWordId || !currentQuestion || isLocked) return;
+
+    const remainingWordIds = [...new Set(queue.slice(currentIndex))];
+    const startedAt = Date.now();
+    setIsLocked(true);
+    setFeedbackText(`正在将剩余 ${remainingWordIds.length} 个单词记为答对…`);
+
+    try {
+      for (const [index, wordId] of remainingWordIds.entries()) {
+        const word = wordsById.get(wordId);
+        if (!word) continue;
+        const question = wordId === currentWordId
+          ? currentQuestion
+          : buildQuestion(
+            word,
+            payload.words,
+            recordsById[wordId] ?? createEmptyRecord(wordId),
+            setting,
+          );
+        const correctAnswer = getCorrectAnswer(question);
+        const answeredAt = createDateTimeForDateKey(
+          studyDateKey,
+          new Date(startedAt + index * 1_000),
+        );
+        const answeredAtText = answeredAt.toISOString();
+        await onAnswer({
+          id: createAnswerEventId(wordId, answeredAtText),
+          wordId,
+          dateKey: studyDateKey,
+          answeredAt: answeredAtText,
+          questionKind: question.kind,
+          selectedAnswer: correctAnswer,
+          correctAnswer,
+          isCorrect: true,
+          responseTimeMs: index === 0 ? Math.max(0, Date.now() - questionStartedAt) : 0,
+          learningAction: question.kind === 'recognition' ? 'recognized' : 'answer',
+          isSessionRetry: (repeatCounts[wordId] ?? 0) > 0,
+        });
+      }
+
+      const finalResult = {
+        totalAnswered: sessionResult.totalAnswered + remainingWordIds.length,
+        correctCount: sessionResult.correctCount + remainingWordIds.length,
+        wrongCount: sessionResult.wrongCount,
+      };
+      setSessionResult(finalResult);
+      await onComplete(finalResult);
+    } finally {
+      setIsLocked(false);
+    }
+  }
+
   if (!currentWord || !currentQuestion) {
     return (
       <main className="page page--learn">
@@ -162,14 +231,24 @@ export function LearningPage({
           <div className="learning-header__meta">
             <span>{currentWord.category}</span>
             {setting.profileId === 'stinky-dog' ? (
-              <button
-                className="learning-direct-correct"
-                type="button"
-                disabled={isLocked}
-                onClick={() => void handleAnswer(getCorrectAnswer(currentQuestion))}
-              >
-                直接答对
-              </button>
+              <div className="learning-header__actions">
+                <button
+                  className="learning-direct-correct"
+                  type="button"
+                  disabled={isLocked}
+                  onClick={() => void handleAnswer(getCorrectAnswer(currentQuestion))}
+                >
+                  直接答对
+                </button>
+                <button
+                  className="learning-direct-correct learning-direct-correct--all"
+                  type="button"
+                  disabled={isLocked}
+                  onClick={() => void handleAllCorrect()}
+                >
+                  全部答对
+                </button>
+              </div>
             ) : null}
           </div>
         </header>
@@ -180,6 +259,29 @@ export function LearningPage({
             disabled={isLocked}
             enableAudio={setting.enableAudio}
             selectedAnswer={selectedAnswer}
+            localLifePhoto={localLifePhotosById[currentWord.id]}
+            onSubmit={handleAnswer}
+          />
+        ) : null}
+
+        {currentQuestion.kind === 'recognition' ? (
+          <QuestionRecognition
+            question={currentQuestion}
+            disabled={isLocked}
+            enableAudio={setting.enableAudio}
+            selectedAnswer={selectedAnswer}
+            localLifePhoto={localLifePhotosById[currentWord.id]}
+            onSubmit={handleAnswer}
+          />
+        ) : null}
+
+        {currentQuestion.kind === 'image-answer-choice' ? (
+          <QuestionImageAnswer
+            question={currentQuestion}
+            disabled={isLocked}
+            enableAudio={setting.enableAudio}
+            selectedAnswer={selectedAnswer}
+            localLifePhotosById={localLifePhotosById}
             onSubmit={handleAnswer}
           />
         ) : null}

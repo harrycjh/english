@@ -4,21 +4,32 @@ import type { LearningRecord } from '../models/learning-record';
 import type { ParentSetting } from '../models/parent-setting';
 import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordRecord } from '../models/word';
+import type { QuestionKind } from './question-service';
 import { isWordEnabledForStudy } from './selection-service';
-import { getInitialReviewDelayDays } from './spaced-repetition';
+import {
+  getMasteredReviewDelayDays,
+  MAX_MASTERY_LEVEL,
+  REVIEW_INTERVAL_DAYS,
+} from './spaced-repetition';
 import { getReviewFirstPlanLimits } from './task-service';
-import { createStudyDateKey } from './study-day';
+import {
+  addDaysToStudyDateKey,
+  createStudyDateKey,
+  getReviewDueAt,
+} from './study-day';
 
 const LEARNING_TIMELINE_RANGE_DAYS = 90;
-const DAY_MS = 24 * 60 * 60 * 1000;
-const REVIEW_INTERVAL_DAYS = [0, 1, 4, 7, 14, 30, 60];
 const DEFAULT_FORECAST_ACCURACY = 0.85;
 const ACCURACY_PRIOR_SAMPLE_COUNT = 10;
+const QUESTION_KIND_PRIOR_SAMPLE_COUNT = 8;
+const STAGE_KIND_PRIOR_SAMPLE_COUNT = 5;
+const MAX_RETRY_LOAD_PER_WORD = 4;
 
 export interface HistoricalLearningPoint {
   dateKey: string;
   newCount: number;
   reviewCount: number;
+  retryCount: number;
   learnedWordCount: number;
   answerCount: number;
   correctCount: number;
@@ -30,6 +41,7 @@ export interface FutureLearningPoint {
   dateKey: string;
   newCount: number;
   reviewCount: number;
+  retryCount: number;
   deferredReviewCount: number;
   totalCount: number;
 }
@@ -38,6 +50,7 @@ export interface LearningLoadPoint {
   dateKey: string;
   newCount: number;
   reviewCount: number;
+  retryCount: number;
   totalCount: number;
   deferredReviewCount: number;
   kind: 'history' | 'today' | 'forecast';
@@ -48,6 +61,7 @@ export interface LearningForecastModel {
   dailyReviewBaseline: number;
   expectedAccuracy: number;
   historicalAnswerSamples: number;
+  completionRate: number;
 }
 
 export interface LearningStatistics {
@@ -102,59 +116,121 @@ function countTaskWords(task: DailyTaskSummary | undefined): number {
 
 interface ProjectedWordState {
   wordId: string;
-  reviewStage: number;
+  masteryLevel: number;
   nextDueAt: number;
-}
-
-function hashFraction(value: string): number {
-  let hash = 2166136261;
-  for (let index = 0; index < value.length; index += 1) {
-    hash = Math.imul(hash ^ value.charCodeAt(index), 16777619);
-  }
-  return (hash >>> 0) / 0xffffffff;
-}
-
-function predictCorrect(
-  state: ProjectedWordState,
-  forecastDateKey: string,
-  expectedAccuracy: number,
-): boolean {
-  return hashFraction(`${state.wordId}|${forecastDateKey}|${state.reviewStage}`) < expectedAccuracy;
 }
 
 function advanceProjectedState(
   state: ProjectedWordState,
   forecastDate: Date,
-  expectedAccuracy: number,
 ): ProjectedWordState {
-  const forecastDateKey = dateKey(forecastDate);
-  const correct = predictCorrect(state, forecastDateKey, expectedAccuracy);
-  const nextStage = correct
-    ? Math.min(state.reviewStage + 1, REVIEW_INTERVAL_DAYS.length - 1)
-    : Math.max(state.reviewStage - 1, 0);
-  const delayDays = correct && state.reviewStage === 0 && nextStage === 1
-    ? getInitialReviewDelayDays(state.wordId, forecastDate)
-    : REVIEW_INTERVAL_DAYS[nextStage];
+  const nextLevel = state.masteryLevel === 0
+    ? 2
+    : Math.min(state.masteryLevel + 1, MAX_MASTERY_LEVEL);
+  const delayDays = nextLevel >= MAX_MASTERY_LEVEL
+    ? getMasteredReviewDelayDays(state.wordId, forecastDate)
+    : REVIEW_INTERVAL_DAYS[nextLevel];
   return {
     ...state,
-    reviewStage: nextStage,
-    nextDueAt: forecastDate.getTime() + Math.max(1, delayDays) * DAY_MS,
+    masteryLevel: nextLevel,
+    nextDueAt: getReviewDueAt(forecastDate, delayDays).getTime(),
   };
 }
 
-function estimateForecastAccuracy(answerEvents: AnswerEvent[], todayKey: string) {
+function getProjectedQuestionKind(masteryLevel: number): QuestionKind {
+  if (masteryLevel <= 0) return 'recognition';
+  if (masteryLevel <= 2) return 'image-choice';
+  if (masteryLevel === 3) return 'image-answer-choice';
+  if (masteryLevel === 4) return 'text-choice';
+  return 'fill-blank';
+}
+
+interface ForecastAccuracyProfile {
+  expectedAccuracy: number;
+  historicalAnswerSamples: number;
+  byQuestionKind: Map<QuestionKind, number>;
+  byStageAndKind: Map<string, number>;
+}
+
+function stageKindKey(masteryLevel: number, questionKind: QuestionKind): string {
+  return `${masteryLevel}|${questionKind}`;
+}
+
+function estimateForecastAccuracy(answerEvents: AnswerEvent[], todayKey: string): ForecastAccuracyProfile {
   const historicalEvents = answerEvents
     .filter((event) => event.dateKey <= todayKey)
     .sort((left, right) => left.answeredAt.localeCompare(right.answeredAt))
-    .slice(-200);
+    .slice(-500);
   const historicalCorrect = historicalEvents.filter((event) => event.isCorrect).length;
   const expectedAccuracy = (
     historicalCorrect + DEFAULT_FORECAST_ACCURACY * ACCURACY_PRIOR_SAMPLE_COUNT
   ) / (historicalEvents.length + ACCURACY_PRIOR_SAMPLE_COUNT);
+
+  const byQuestionKind = new Map<QuestionKind, number>();
+  for (const questionKind of ['recognition', 'image-choice', 'image-answer-choice', 'text-choice', 'fill-blank'] as QuestionKind[]) {
+    const events = historicalEvents.filter((event) => event.questionKind === questionKind);
+    const correct = events.filter((event) => event.isCorrect).length;
+    byQuestionKind.set(
+      questionKind,
+      (correct + expectedAccuracy * QUESTION_KIND_PRIOR_SAMPLE_COUNT)
+        / (events.length + QUESTION_KIND_PRIOR_SAMPLE_COUNT),
+    );
+  }
+
+  const byStageAndKind = new Map<string, number>();
+  const stageGroups = new Map<string, AnswerEvent[]>();
+  for (const event of historicalEvents) {
+    const masteryLevel = event.learningStateBefore?.masteryLevel;
+    if (masteryLevel === undefined) continue;
+    const key = stageKindKey(masteryLevel, event.questionKind);
+    const events = stageGroups.get(key) ?? [];
+    events.push(event);
+    stageGroups.set(key, events);
+  }
+  for (const [key, events] of stageGroups) {
+    const questionKind = events[0].questionKind;
+    const questionKindAccuracy = byQuestionKind.get(questionKind) ?? expectedAccuracy;
+    const correct = events.filter((event) => event.isCorrect).length;
+    byStageAndKind.set(
+      key,
+      (correct + questionKindAccuracy * STAGE_KIND_PRIOR_SAMPLE_COUNT)
+        / (events.length + STAGE_KIND_PRIOR_SAMPLE_COUNT),
+    );
+  }
+
   return {
     expectedAccuracy,
     historicalAnswerSamples: historicalEvents.length,
+    byQuestionKind,
+    byStageAndKind,
   };
+}
+
+function getProjectedAccuracy(state: ProjectedWordState, profile: ForecastAccuracyProfile): number {
+  const questionKind = getProjectedQuestionKind(state.masteryLevel);
+  return Math.min(0.98, Math.max(
+    0.2,
+    profile.byStageAndKind.get(stageKindKey(state.masteryLevel, questionKind))
+      ?? profile.byQuestionKind.get(questionKind)
+      ?? profile.expectedAccuracy,
+  ));
+}
+
+function estimateRetryCount(states: ProjectedWordState[], profile: ForecastAccuracyProfile): number {
+  const expectedRetries = states.reduce((sum, state) => {
+    const accuracy = getProjectedAccuracy(state, profile);
+    return sum + Math.min(MAX_RETRY_LOAD_PER_WORD, (1 - accuracy) / accuracy);
+  }, 0);
+  return Math.round(expectedRetries);
+}
+
+function getStudyDate(dateKeyValue: string): Date {
+  return new Date(`${dateKeyValue}T04:00:00.000+08:00`);
+}
+
+function getStudyDayCutoff(dateKeyValue: string): number {
+  const nextDateKey = addDaysToStudyDateKey(dateKeyValue, 1);
+  return getStudyDate(nextDateKey).getTime();
 }
 
 export function buildLearningStatistics({
@@ -219,10 +295,12 @@ export function buildLearningStatistics({
     const correctCount = events.length > 0
       ? events.filter((event) => event.isCorrect).length
       : task?.correctCount || 0;
+    const retryCount = Math.max(0, answerCount - learnedWordCount);
     return {
       dateKey: historyDateKey,
       newCount,
       reviewCount,
+      retryCount,
       learnedWordCount,
       answerCount,
       correctCount,
@@ -234,75 +312,99 @@ export function buildLearningStatistics({
   const activeWordIds = new Set(words
     .filter((word) => isWordEnabledForStudy(word.id, selectionById))
     .map((word) => word.id));
-  const { expectedAccuracy, historicalAnswerSamples } = estimateForecastAccuracy(answerEvents, todayKey);
+  const accuracyProfile = estimateForecastAccuracy(answerEvents, todayKey);
+  const { expectedAccuracy, historicalAnswerSamples } = accuracyProfile;
+  const completionRate = 1;
   const projectedStates = new Map<string, ProjectedWordState>();
   for (const record of Object.values(recordsById)) {
     if (!activeWordIds.has(record.wordId)) continue;
     projectedStates.set(record.wordId, {
       wordId: record.wordId,
-      reviewStage: record.reviewStage,
+      masteryLevel: record.masteryLevel,
       nextDueAt: record.nextDueAt
         ? new Date(record.nextDueAt).getTime()
-        : new Date(`${todayKey}T12:00:00.000Z`).getTime(),
+        : getStudyDate(todayKey).getTime(),
     });
   }
 
-  const todayDate = new Date(`${todayKey}T12:00:00.000Z`);
+  const todayDate = getStudyDate(todayKey);
   const answeredTodayIds = new Set(currentTask.answeredWordIds);
-  for (const wordId of currentTask.reviewWordIds) {
-    const state = projectedStates.get(wordId);
-    const studiedToday = recordsById[wordId]?.lastStudiedAt?.slice(0, 10) === todayKey;
-    if (!state || answeredTodayIds.has(wordId) || studiedToday) continue;
-    projectedStates.set(wordId, advanceProjectedState(state, todayDate, expectedAccuracy));
+  const studiedTodayIds = new Set(Object.values(recordsById)
+    .filter((record) => record.lastStudiedAt && createStudyDateKey(new Date(record.lastStudiedAt)) === todayKey)
+    .map((record) => record.wordId));
+  const completedTodayIds = new Set([...answeredTodayIds, ...studiedTodayIds]);
+  const plannedTodayIds = new Set([...currentTask.reviewWordIds, ...currentTask.newWordIds]);
+  const expectedCompletedToday = currentTask.completedAt
+    ? plannedTodayIds.size
+    : Math.max(completedTodayIds.size, Math.round(plannedTodayIds.size * completionRate));
+  let remainingTodayCapacity = Math.max(0, expectedCompletedToday - completedTodayIds.size);
+
+  const pendingTodayReviews = currentTask.reviewWordIds.filter((wordId) => (
+    !completedTodayIds.has(wordId) && projectedStates.has(wordId)
+  ));
+  for (const wordId of pendingTodayReviews.slice(0, remainingTodayCapacity)) {
+    const state = projectedStates.get(wordId)!;
+    projectedStates.set(wordId, advanceProjectedState(state, todayDate));
   }
-  for (const wordId of currentTask.newWordIds) {
-    if (projectedStates.has(wordId)) continue;
-    projectedStates.set(wordId, advanceProjectedState({
-      wordId,
-      reviewStage: 0,
-      nextDueAt: todayDate.getTime(),
-    }, todayDate, expectedAccuracy));
+  remainingTodayCapacity = Math.max(0, remainingTodayCapacity - pendingTodayReviews.length);
+
+  const pendingTodayNewWords = currentTask.newWordIds.filter((wordId) => (
+    !completedTodayIds.has(wordId) && !projectedStates.has(wordId)
+  ));
+  for (const wordId of pendingTodayNewWords.slice(0, remainingTodayCapacity)) {
+    const state = { wordId, masteryLevel: 0, nextDueAt: todayDate.getTime() };
+    projectedStates.set(wordId, advanceProjectedState(state, todayDate));
   }
 
   const unseenWordIds = words
     .filter((word) => (
       activeWordIds.has(word.id)
       && !projectedStates.has(word.id)
-      && !currentTask.newWordIds.includes(word.id)
     ))
     .map((word) => word.id);
-  let unseenCursor = 0;
+  const unseenQueue = [...unseenWordIds];
 
   const forecast = Array.from({ length: LEARNING_TIMELINE_RANGE_DAYS }, (_, index): FutureLearningPoint => {
     const offset = index + 1;
-    const forecastDate = addDays(new Date(`${todayKey}T12:00:00.000Z`), offset);
-    const forecastDateKey = dateKey(forecastDate);
-    const endOfDay = addDays(forecastDate, 1).getTime() - 1;
+    const forecastDateKey = addDaysToStudyDateKey(todayKey, offset);
+    const forecastDate = getStudyDate(forecastDateKey);
+    const cutoff = getStudyDayCutoff(forecastDateKey);
     const dueReviews = [...projectedStates.values()]
-      .filter((state) => state.nextDueAt <= endOfDay)
+      .filter((state) => state.nextDueAt < cutoff)
       .sort((left, right) => left.nextDueAt - right.nextDueAt || left.wordId.localeCompare(right.wordId));
     const limits = getReviewFirstPlanLimits(dueReviews.length, setting);
-    const scheduledReviews = dueReviews.slice(0, limits.reviewCount);
-    for (const state of scheduledReviews) {
-      projectedStates.set(state.wordId, advanceProjectedState(state, forecastDate, expectedAccuracy));
+    const plannedReviews = dueReviews.slice(0, limits.reviewCount);
+    const plannedNewCount = Math.min(limits.newWordCount, unseenQueue.length);
+    const expectedCompletedCount = Math.round((plannedReviews.length + plannedNewCount) * completionRate);
+    const completedReviews = plannedReviews.slice(0, expectedCompletedCount);
+    const completedNewCount = Math.min(
+      plannedNewCount,
+      Math.max(0, expectedCompletedCount - completedReviews.length),
+    );
+    const completedNewWordIds = unseenQueue.splice(0, completedNewCount);
+    const attemptedStates = [...completedReviews];
+
+    for (const state of completedReviews) {
+      projectedStates.set(state.wordId, advanceProjectedState(state, forecastDate));
     }
 
-    const newCount = Math.min(limits.newWordCount, unseenWordIds.length - unseenCursor);
-    const newWordIds = unseenWordIds.slice(unseenCursor, unseenCursor + newCount);
-    unseenCursor += newCount;
-    for (const wordId of newWordIds) {
-      projectedStates.set(wordId, advanceProjectedState({
+    for (const wordId of completedNewWordIds) {
+      const state = {
         wordId,
-        reviewStage: 0,
+        masteryLevel: 0,
         nextDueAt: forecastDate.getTime(),
-      }, forecastDate, expectedAccuracy));
+      };
+      attemptedStates.push(state);
+      projectedStates.set(wordId, advanceProjectedState(state, forecastDate));
     }
+    const retryCount = estimateRetryCount(attemptedStates, accuracyProfile);
     return {
       dateKey: forecastDateKey,
-      newCount,
-      reviewCount: scheduledReviews.length,
-      deferredReviewCount: dueReviews.length - scheduledReviews.length,
-      totalCount: newCount + scheduledReviews.length,
+      newCount: completedNewWordIds.length,
+      reviewCount: completedReviews.length,
+      retryCount,
+      deferredReviewCount: dueReviews.length - completedReviews.length,
+      totalCount: completedNewWordIds.length + completedReviews.length,
     };
   });
 
@@ -323,10 +425,12 @@ export function buildLearningStatistics({
     const futurePoint = forecastByDate.get(timelineDateKey);
     const newCount = futurePoint?.newCount ?? historicalPoint?.newCount ?? 0;
     const reviewCount = futurePoint?.reviewCount ?? historicalPoint?.reviewCount ?? 0;
+    const retryCount = futurePoint?.retryCount ?? historicalPoint?.retryCount ?? 0;
     return {
       dateKey: timelineDateKey,
       newCount,
       reviewCount,
+      retryCount,
       totalCount: newCount + reviewCount,
       deferredReviewCount: futurePoint?.deferredReviewCount ?? 0,
       kind: offset < 0 ? 'history' : offset === 0 ? 'today' : 'forecast',
@@ -348,6 +452,7 @@ export function buildLearningStatistics({
       dailyReviewBaseline: setting.dailyReviewLimit,
       expectedAccuracy,
       historicalAnswerSamples,
+      completionRate,
     },
   };
 }

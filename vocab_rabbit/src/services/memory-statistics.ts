@@ -4,7 +4,7 @@ import { createStudyDateKey } from './study-day';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const TARGET_RETENTION_AT_DUE = 0.75;
-const FALLBACK_INTERVAL_DAYS = [0.25, 2, 4, 7, 14, 30, 60];
+const FALLBACK_INTERVAL_DAYS = [0.25, 1, 2, 3, 5, 8, 13, 21, 30, 75];
 const CURVE_INTERVAL_DAYS = [
   0,
   1,

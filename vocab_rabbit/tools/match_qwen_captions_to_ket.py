@@ -19,6 +19,7 @@ DEFAULT_CAPTIONS = Path(
 DEFAULT_OUTPUT = Path(
     "design-output/photo-word-linking/captions/qwen-captions-3000-ket-matches.json"
 )
+DEFAULT_CLUSTERS = Path("design-output/photo-word-linking/clustering/photo-clusters.json")
 WORD_RE = re.compile(r"[a-z]+(?:'[a-z]+)?")
 GENERIC_WORDS = {"be", "have", "do", "thing", "something", "anything", "nothing"}
 SENSE_LABELS = {
@@ -193,6 +194,58 @@ def ngrams(text: str, max_size: int = 6) -> set[str]:
     }
 
 
+def load_latest_successful_captions(path: Path) -> tuple[list[dict], dict[str, int]]:
+    """Load append-only caption state, with the latest row winning per photo."""
+    latest: dict[str, dict] = {}
+    total_rows = 0
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        total_rows += 1
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError as error:
+            raise ValueError(f"invalid JSON on line {line_number} of {path}: {error}") from error
+        photo_id = row.get("photoId")
+        if photo_id:
+            latest[photo_id] = row
+
+    successful = [row for row in latest.values() if row.get("status") == "ok" and row.get("caption")]
+    successful.sort(key=lambda row: row["photoId"])
+    return successful, {
+        "captionRows": total_rows,
+        "latestCaptionStates": len(latest),
+        "latestSuccessfulCaptions": len(successful),
+        "latestSkippedOrFailedCaptions": len(latest) - len(successful),
+    }
+
+
+def expand_duplicate_captions(captions: list[dict], clusters: dict) -> tuple[list[dict], int]:
+    """Share a representative caption with conservative near-duplicate members."""
+    by_photo_id = {row["photoId"]: row for row in captions}
+    expanded = list(captions)
+    propagated = 0
+    for assignment in clusters.get("photoAssignments", []):
+        photo_id = assignment.get("id")
+        representative_id = assignment.get("representativeId")
+        if not photo_id or photo_id in by_photo_id or not representative_id:
+            continue
+        representative = by_photo_id.get(representative_id)
+        if representative is None or not assignment.get("skipCaptionGeneration"):
+            continue
+        expanded.append(
+            {
+                **representative,
+                "photoId": photo_id,
+                "captionSourcePhotoId": representative_id,
+                "captionPropagatedFromDuplicate": True,
+            }
+        )
+        propagated += 1
+    expanded.sort(key=lambda row: row["photoId"])
+    return expanded, propagated
+
+
 def build_indexes(captions: list[dict]) -> dict[str, dict[str, set[str]]]:
     indexes: dict[str, dict[str, set[str]]] = {
         key: defaultdict(set) for key in ("n", "v", "adj", "adv", "caption")
@@ -255,18 +308,33 @@ def main() -> None:
     parser.add_argument("--root", default=str(DEFAULT_ROOT))
     parser.add_argument("--captions", default=str(DEFAULT_CAPTIONS))
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
+    parser.add_argument("--clusters", default=str(DEFAULT_CLUSTERS))
+    parser.add_argument(
+        "--no-expand-duplicates",
+        action="store_true",
+        help="match only photos with their own successful caption",
+    )
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
     captions_path = Path(args.captions)
     output_path = Path(args.output)
+    clusters_path = Path(args.clusters)
     if not captions_path.is_absolute():
         captions_path = root / captions_path
     if not output_path.is_absolute():
         output_path = root / output_path
+    if not clusters_path.is_absolute():
+        clusters_path = root / clusters_path
 
     words = json.loads((root / "public/content/words/ket_vocabulary.json").read_text())["words"]
-    captions = [json.loads(line) for line in captions_path.read_text().splitlines() if line.strip()]
+    captions, caption_stats = load_latest_successful_captions(captions_path)
+    propagated_captions = 0
+    if not args.no_expand_duplicates and clusters_path.exists():
+        captions, propagated_captions = expand_duplicate_captions(
+            captions,
+            json.loads(clusters_path.read_text(encoding="utf-8")),
+        )
     matches = match_words(words, captions)
     matched_ids = {match["wordId"] for match in matches}
     structured_ids = {match["wordId"] for match in matches if match["structuredPhotoIds"]}
@@ -284,11 +352,15 @@ def main() -> None:
             "version": 1,
             "generatedAt": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
             "sourceCaptions": str(captions_path),
+            "sourceClusters": str(clusters_path) if clusters_path.exists() else None,
             "method": "field-aware lexical matching with conservative inflections",
             "semanticMatchingIncluded": False,
+            "duplicateCaptionPropagationIncluded": propagated_captions > 0,
         },
         "stats": {
+            **caption_stats,
             "captionPhotos": len(captions),
+            "duplicatePhotosUsingRepresentativeCaption": propagated_captions,
             "vocabularyWords": len(words),
             "structuredMatchedWords": len(structured_ids),
             "highConfidenceMatchedWords": len(matched_ids),

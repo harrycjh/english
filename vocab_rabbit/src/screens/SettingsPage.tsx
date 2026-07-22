@@ -1,8 +1,6 @@
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 import type { DailyTaskSummary } from '../models/daily-task';
 import {
-  MAX_NEW_WORD_COUNT,
-  MAX_REVIEW_LIMIT,
   MIN_NEW_WORD_COUNT,
   MIN_REVIEW_LIMIT,
   type ParentSetting,
@@ -35,7 +33,7 @@ interface SettingsNumberControlProps {
   description: string;
   value: number;
   min: number;
-  max: number;
+  max?: number;
   suffix: string;
   hint: string;
   onChange: (nextValue: number) => void;
@@ -92,7 +90,11 @@ function SettingsNumberControl({
             −
           </button>
           <strong>{value}<small>{suffix}</small></strong>
-          <button type="button" onClick={() => onChange(Math.min(max, value + 1))} disabled={value >= max}>
+          <button
+            type="button"
+            onClick={() => onChange(max === undefined ? value + 1 : Math.min(max, value + 1))}
+            disabled={max !== undefined && value >= max}
+          >
             +
           </button>
         </div>
@@ -349,9 +351,8 @@ export function SettingsPage({
                 description=""
                 value={loadDraft.dailyNewWordCount}
                 min={MIN_NEW_WORD_COUNT}
-                max={MAX_NEW_WORD_COUNT}
                 suffix=" 个"
-                hint={`建议 ${MIN_NEW_WORD_COUNT}-${MAX_NEW_WORD_COUNT} 个`}
+                hint={`最少 ${MIN_NEW_WORD_COUNT} 个`}
                 onChange={(dailyNewWordCount) => setLoadDraft((current) => ({ ...current, dailyNewWordCount }))}
               />
               <SettingsNumberControl
@@ -360,9 +361,8 @@ export function SettingsPage({
                 description=""
                 value={loadDraft.dailyReviewLimit}
                 min={MIN_REVIEW_LIMIT}
-                max={MAX_REVIEW_LIMIT}
                 suffix=" 个"
-                hint={`建议 ${MIN_REVIEW_LIMIT}-${MAX_REVIEW_LIMIT} 个`}
+                hint={`最少 ${MIN_REVIEW_LIMIT} 个`}
                 onChange={(dailyReviewLimit) => setLoadDraft((current) => ({ ...current, dailyReviewLimit }))}
               />
             </div>

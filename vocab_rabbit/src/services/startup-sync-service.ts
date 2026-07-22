@@ -18,8 +18,15 @@ export type DeviceConnectionResult =
 
 async function syncWithToken(deviceToken: string, fetchImpl: typeof fetch): Promise<StartupSyncResult> {
   try {
-    const request = await buildLocalSyncRequest();
-    const response = await synchronizeDevice(deviceToken, request, fetchImpl);
+    let request = await buildLocalSyncRequest();
+    let response;
+    try {
+      response = await synchronizeDevice(deviceToken, request, fetchImpl);
+    } catch (error) {
+      if (!(error instanceof CloudSyncError) || error.kind !== 'full-snapshot-required') throw error;
+      request = await buildLocalSyncRequest({ forceFull: true });
+      response = await synchronizeDevice(deviceToken, request, fetchImpl);
+    }
     await applySyncResponse(response, request);
     return { kind: 'synced', serverTime: response.serverTime };
   } catch (error) {

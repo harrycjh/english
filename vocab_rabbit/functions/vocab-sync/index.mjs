@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import { evaluateLearningRecord } from './learning-schedule.mjs';
 
 const SYNC_SCHEMA_VERSION = 1;
 
@@ -119,7 +120,9 @@ function rebuildTaskCounts(tasks, events, generation) {
       correctCount: dateEvents.filter((event) => event.isCorrect).length,
       wrongCount: dateEvents.filter((event) => !event.isCorrect).length,
       totalAnswered: dateEvents.length,
-      answeredWordIds: [...new Set(dateEvents.map((event) => event.wordId))],
+      answeredWordIds: [...new Set(
+        dateEvents.filter((event) => event.isCorrect).map((event) => event.wordId),
+      )],
     };
   });
 }
@@ -166,27 +169,6 @@ function emptyLearningRecord(wordId) {
     wrongCount: 0,
     lastStudiedAt: null,
     nextDueAt: null,
-  };
-}
-
-function evaluateLearningRecord(current, event) {
-  const intervals = [0, 12, 36, 72, 168, 336, 720];
-  const reviewStage = event.isCorrect
-    ? Math.min(current.reviewStage + 1, intervals.length - 1)
-    : Math.max(current.reviewStage - 1, 0);
-  const masteryLevel = event.isCorrect
-    ? Math.min(current.masteryLevel + 1, 6)
-    : Math.max(current.masteryLevel - 1, 0);
-  return {
-    ...current,
-    masteryLevel,
-    reviewStage,
-    correctStreak: event.isCorrect ? current.correctStreak + 1 : 0,
-    wrongCount: event.isCorrect ? current.wrongCount : current.wrongCount + 1,
-    lastStudiedAt: event.answeredAt,
-    nextDueAt: new Date(
-      new Date(event.answeredAt).getTime() + intervals[reviewStage] * 60 * 60 * 1000,
-    ).toISOString(),
   };
 }
 
@@ -250,6 +232,28 @@ export function mergeSnapshots(local, remote) {
   };
 }
 
+export function applyDeltaToSnapshot(current, delta, { rebuildCounts = true } = {}) {
+  if (!current) return null;
+  if (delta.generation !== current.generation) return null;
+  const events = mergeEvents(current.events, delta.events);
+  const parentSetting = delta.parentSetting
+    ? mergeParentSetting(current.parentSetting, delta.parentSetting)
+    : current.parentSetting;
+  const mergedTasks = mergeTasks(current.dailyTasks, delta.dailyTasks);
+  return {
+    schemaVersion: SYNC_SCHEMA_VERSION,
+    generation: current.generation,
+    events,
+    checkpoint: current.checkpoint,
+    dailyTasks: normalizeTaskPlans(
+      rebuildCounts ? rebuildTaskCounts(mergedTasks, events, current.generation) : mergedTasks,
+      parentSetting.value,
+    ),
+    wordSelectionStates: mergeSelections(current.wordSelectionStates, delta.wordSelectionStates),
+    parentSetting,
+  };
+}
+
 export function createMemoryRepository() {
   let snapshot = null;
   let cursor = 0;
@@ -279,6 +283,19 @@ export function createMemoryRepository() {
       cursor += 1;
       mergeCount += 1;
       return { snapshot: structuredClone(snapshot), cursor: String(cursor) };
+    },
+    async mergeDelta(_userId, incoming, clientCursor) {
+      if (!snapshot || !clientCursor) return { cursor: null, snapshot: null };
+      const wasCurrent = clientCursor === String(cursor);
+      const merged = applyDeltaToSnapshot(snapshot, incoming);
+      if (!merged) return { cursor: null, snapshot: null };
+      snapshot = merged;
+      cursor += 1;
+      mergeCount += 1;
+      return {
+        snapshot: wasCurrent ? null : structuredClone(snapshot),
+        cursor: String(cursor),
+      };
     },
     getEventCount() {
       return snapshot?.events.length ?? 0;
@@ -365,7 +382,9 @@ export function createHandler(repository, env) {
       if (request.path === '/api/sync') {
         if (request.body.schemaVersion !== SYNC_SCHEMA_VERSION
           || (request.body.snapshot
-            && request.body.snapshot.schemaVersion !== SYNC_SCHEMA_VERSION)) {
+            && request.body.snapshot.schemaVersion !== SYNC_SCHEMA_VERSION)
+          || (request.body.delta
+            && request.body.delta.schemaVersion !== SYNC_SCHEMA_VERSION)) {
           return response(409, { code: 'SCHEMA_MISMATCH' }, env.ALLOWED_ORIGIN);
         }
         if (request.body.deviceId !== tokenPayload.deviceId) {
@@ -386,6 +405,27 @@ export function createHandler(repository, env) {
             serverTime: new Date().toISOString(),
             upToDate: current.isCurrent,
             snapshot: current.snapshot,
+          }, env.ALLOWED_ORIGIN);
+        }
+
+        if (request.body.delta) {
+          if (!request.body.cursor) {
+            return response(409, { code: 'FULL_SNAPSHOT_REQUIRED' }, env.ALLOWED_ORIGIN);
+          }
+          const merged = await repository.mergeDelta(
+            env.FIXED_USER_ID,
+            request.body.delta,
+            request.body.cursor,
+          );
+          if (!merged.cursor) {
+            return response(409, { code: 'FULL_SNAPSHOT_REQUIRED' }, env.ALLOWED_ORIGIN);
+          }
+          return response(200, {
+            schemaVersion: SYNC_SCHEMA_VERSION,
+            cursor: merged.cursor,
+            serverTime: new Date().toISOString(),
+            upToDate: merged.snapshot ? false : true,
+            snapshot: merged.snapshot,
           }, env.ALLOWED_ORIGIN);
         }
 

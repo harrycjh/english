@@ -11,6 +11,7 @@ import { getExampleSentences } from '../services/example-service';
 import { getWordAnswerStats } from '../services/answer-event-service';
 import { getWordAtlasStyle } from '../services/word-atlas-service';
 import { getAssetUrl, getStudyText, getWordImageUrl } from '../services/word-service';
+import { MAX_MASTERY_LEVEL } from '../services/spaced-repetition';
 
 export type WordDetailDrawerContext = 'review' | 'selection';
 
@@ -41,6 +42,18 @@ function formatDateTime(dateText: string | null): string {
   });
 }
 
+function formatReviewDate(dateText: string | null): string {
+  if (!dateText) {
+    return '暂无';
+  }
+
+  return new Date(dateText).toLocaleDateString('zh-CN', {
+    timeZone: 'Asia/Shanghai',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 function getSelectionLabel(selectionState: WordSelectionState | undefined): string {
   if (!selectionState || (selectionState.isEnabled && !selectionState.isPaused)) {
     return '当前已启用';
@@ -58,7 +71,7 @@ function getLearningLabel(record: LearningRecord | undefined): string {
     return '尚未开始';
   }
 
-  if (record.masteryLevel >= 4) {
+  if (record.masteryLevel >= MAX_MASTERY_LEVEL) {
     return '已掌握';
   }
 
@@ -66,7 +79,9 @@ function getLearningLabel(record: LearningRecord | undefined): string {
 }
 
 function getQuestionKindLabel(questionKind: AnswerEvent['questionKind']): string {
+  if (questionKind === 'recognition') return '认识判断';
   if (questionKind === 'image-choice') return '图片选择';
+  if (questionKind === 'image-answer-choice') return '图片作答';
   if (questionKind === 'text-choice') return '文字选择';
   if (questionKind === 'fill-blank') return '拼写填空';
   return questionKind;
@@ -243,7 +258,7 @@ export function WordDetailDrawer({
             </article>
             <article>
               <span>下次复习</span>
-              <strong>{formatDateTime(record?.nextDueAt ?? null)}</strong>
+              <strong>{formatReviewDate(record?.nextDueAt ?? null)}</strong>
             </article>
           </div>
         </section>

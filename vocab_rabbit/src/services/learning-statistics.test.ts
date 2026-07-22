@@ -19,7 +19,13 @@ function task(overrides: Partial<DailyTaskSummary>): DailyTaskSummary {
   };
 }
 
-function event(id: string, wordId: string, dateKey: string, isCorrect: boolean): AnswerEvent {
+function event(
+  id: string,
+  wordId: string,
+  dateKey: string,
+  isCorrect: boolean,
+  overrides: Partial<AnswerEvent> = {},
+): AnswerEvent {
   return {
     id,
     wordId,
@@ -30,6 +36,7 @@ function event(id: string, wordId: string, dateKey: string, isCorrect: boolean):
     correctAnswer: '',
     isCorrect,
     responseTimeMs: 500,
+    ...overrides,
   };
 }
 
@@ -101,8 +108,21 @@ describe('learning statistics', () => {
       now: new Date('2026-07-15T12:00:00.000Z'),
     });
 
-    expect(statistics.forecast[0]).toMatchObject({ newCount: 2, reviewCount: 0 });
-    expect(statistics.forecast.slice(1, 4).some((point) => point.reviewCount > 0)).toBe(true);
+    expect(statistics.forecast[0]).toMatchObject({
+      dateKey: '2026-07-16',
+      newCount: 2,
+      reviewCount: 0,
+    });
+    expect(statistics.forecast[2]).toMatchObject({
+      dateKey: '2026-07-18',
+      newCount: 2,
+      reviewCount: 2,
+    });
+    expect(statistics.forecast[3]).toMatchObject({
+      dateKey: '2026-07-19',
+      newCount: 2,
+      reviewCount: 2,
+    });
     expect(statistics.forecastModel).toMatchObject({
       dailyNewTarget: 2,
       dailyReviewBaseline: 5,
@@ -167,8 +187,176 @@ describe('learning statistics', () => {
     expect(statistics.forecast[0]).toMatchObject({
       reviewCount: 4,
       newCount: 0,
+      retryCount: 1,
       deferredReviewCount: 2,
       totalCount: 4,
     });
+  });
+
+  it('does not pull a review across the 4am study-day boundary', () => {
+    const wordId = 'boundary-word';
+    const recordsById: Record<string, LearningRecord> = {
+      [wordId]: {
+        wordId,
+        masteryLevel: 2,
+        reviewStage: 2,
+        correctStreak: 1,
+        wrongCount: 0,
+        lastStudiedAt: '2026-07-14T08:00:00.000Z',
+        nextDueAt: '2026-07-16T20:00:00.000Z',
+      },
+    };
+    const statistics = buildLearningStatistics({
+      currentTask: task({ dateKey: '2026-07-15' }),
+      tasks: [],
+      answerEvents: [],
+      words: [{ id: wordId }],
+      recordsById,
+      selectionById: {},
+      setting: { ...defaultParentSetting, dailyNewWordCount: 3, dailyReviewLimit: 5 },
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    });
+
+    expect(statistics.forecast[0]).toMatchObject({ dateKey: '2026-07-16', reviewCount: 0 });
+    expect(statistics.forecast[1]).toMatchObject({ dateKey: '2026-07-17', reviewCount: 1 });
+  });
+
+  it('uses question-kind and mastery-level accuracy to estimate same-day retries', () => {
+    const answerEvents = [
+      ...Array.from({ length: 40 }, (_, index) => event(
+        `image-${index}`,
+        `image-history-${index}`,
+        '2026-07-14',
+        true,
+        {
+          questionKind: 'image-choice',
+          learningStateBefore: {
+            wordId: `image-history-${index}`,
+            masteryLevel: 2,
+            reviewStage: 2,
+            correctStreak: 0,
+            wrongCount: 0,
+            lastStudiedAt: null,
+            nextDueAt: null,
+          },
+        },
+      )),
+      ...Array.from({ length: 40 }, (_, index) => event(
+        `spell-${index}`,
+        `spell-history-${index}`,
+        '2026-07-14',
+        false,
+        {
+          questionKind: 'fill-blank',
+          learningStateBefore: {
+            wordId: `spell-history-${index}`,
+            masteryLevel: 5,
+            reviewStage: 5,
+            correctStreak: 0,
+            wrongCount: 0,
+            lastStudiedAt: null,
+            nextDueAt: null,
+          },
+        },
+      )),
+    ];
+    const record = (wordId: string, masteryLevel: number): LearningRecord => ({
+      wordId,
+      masteryLevel,
+      reviewStage: masteryLevel,
+      correctStreak: 1,
+      wrongCount: 0,
+      lastStudiedAt: '2026-07-14T08:00:00.000Z',
+      nextDueAt: '2026-07-15T20:00:00.000Z',
+    });
+    const input = {
+      currentTask: task({ dateKey: '2026-07-15' }),
+      tasks: [],
+      answerEvents,
+      selectionById: {},
+      setting: { ...defaultParentSetting, dailyNewWordCount: 3, dailyReviewLimit: 5 },
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    };
+    const imageForecast = buildLearningStatistics({
+      ...input,
+      words: [{ id: 'image-word' }],
+      recordsById: { 'image-word': record('image-word', 2) },
+    });
+    const spellingForecast = buildLearningStatistics({
+      ...input,
+      words: [{ id: 'spell-word' }],
+      recordsById: { 'spell-word': record('spell-word', 5) },
+    });
+
+    expect(spellingForecast.forecast[0].retryCount).toBeGreaterThan(imageForecast.forecast[0].retryCount);
+    expect(spellingForecast.forecast[1].reviewCount).toBe(0);
+  });
+
+  it('uses the current non-default load setting and predicts 100% completion', () => {
+    const historicalTasks = Array.from({ length: 30 }, (_, index) => {
+      const day = String(index + 1).padStart(2, '0');
+      const plannedIds = Array.from({ length: 10 }, (__, wordIndex) => `day-${index}-word-${wordIndex}`);
+      return task({
+        dateKey: `2026-06-${day}`,
+        newWordIds: plannedIds,
+        answeredWordIds: plannedIds.slice(0, 2),
+        totalAnswered: 2,
+        correctCount: 2,
+      });
+    });
+    const statistics = buildLearningStatistics({
+      currentTask: task({ dateKey: '2026-07-15' }),
+      tasks: historicalTasks,
+      answerEvents: [],
+      words: Array.from({ length: 100 }, (_, index) => ({ id: `future-${index}` })),
+      recordsById: {},
+      selectionById: {},
+      setting: { ...defaultParentSetting, dailyNewWordCount: 15, dailyReviewLimit: 20 },
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    });
+
+    expect(statistics.forecastModel.dailyNewTarget).toBe(15);
+    expect(statistics.forecastModel.completionRate).toBe(1);
+    expect(statistics.forecast[0].newCount).toBe(15);
+  });
+
+  it('spreads mastered-word reviews across the real deterministic 60-90 day range', () => {
+    const recordsById = Object.fromEntries(Array.from({ length: 30 }, (_, index) => {
+      const wordId = `mastered-${index}`;
+      return [wordId, {
+        wordId,
+        masteryLevel: 9,
+        reviewStage: 9,
+        correctStreak: 8,
+        wrongCount: 0,
+        lastStudiedAt: '2026-07-14T08:00:00.000Z',
+        nextDueAt: '2026-07-15T20:00:00.000Z',
+      } satisfies LearningRecord];
+    }));
+    const completedHistory = Array.from({ length: 30 }, (_, index) => task({
+      dateKey: `2026-06-${String(index + 1).padStart(2, '0')}`,
+      newWordIds: [`history-${index}`],
+      answeredWordIds: [`history-${index}`],
+      completedAt: `2026-06-${String(index + 1).padStart(2, '0')}T10:00:00.000Z`,
+      totalAnswered: 1,
+      correctCount: 1,
+    }));
+    const statistics = buildLearningStatistics({
+      currentTask: task({ dateKey: '2026-07-15' }),
+      tasks: completedHistory,
+      answerEvents: [],
+      words: Object.keys(recordsById).map((id) => ({ id })),
+      recordsById,
+      selectionById: {},
+      setting: { ...defaultParentSetting, dailyNewWordCount: 3, dailyReviewLimit: 50 },
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    });
+    const laterReviewDates = statistics.forecast
+      .slice(60)
+      .filter((point) => point.reviewCount > 0)
+      .map((point) => point.dateKey);
+
+    expect(laterReviewDates.length).toBeGreaterThan(5);
+    expect(new Set(laterReviewDates).size).toBeGreaterThan(5);
   });
 });

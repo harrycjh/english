@@ -12,6 +12,7 @@ import {
 import type { WordPayload } from '../models/word';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
+import { MasteryLevelIcon } from '../components/MasteryLevelIcon';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
@@ -183,6 +184,7 @@ interface ReviewSummaryPillProps {
 
 interface ReviewPreviewCardProps {
   word: ReviewPreviewWord;
+  masteryLevel: number;
   index: number;
   layout: ReviewPreviewLayout;
   onOpenDetails: () => void;
@@ -273,7 +275,7 @@ function ReviewSummaryPill({ tone, label, value, layout }: ReviewSummaryPillProp
   );
 }
 
-function ReviewPreviewCard({ word, index, layout, onOpenDetails }: ReviewPreviewCardProps) {
+function ReviewPreviewCard({ word, masteryLevel, index, layout, onOpenDetails }: ReviewPreviewCardProps) {
   const oxfordLabel = getPrimaryOxfordRefLabel(word);
   const artVariant = ['family', 'hello', 'body', 'spark'][index % 4];
 
@@ -304,9 +306,16 @@ function ReviewPreviewCard({ word, index, layout, onOpenDetails }: ReviewPreview
           {index + 1}
         </span>
       </div>
-      <span
+      <MasteryLevelIcon
+        level={masteryLevel}
         className="review-preview-card__favorite"
-        style={{ ...getRelativeBoundsStyle(layout.favoriteIcon, layout), zIndex: reviewLayerZIndex.interactiveBadges }}
+        style={{
+          ...getRelativeBoundsStyle(layout.favoriteIcon, layout),
+          width: '54px',
+          height: '22px',
+          transform: 'translateX(-32px)',
+          zIndex: reviewLayerZIndex.interactiveBadges,
+        }}
       />
       <div className="review-preview-card__body" style={getRelativeBoundsStyle(layout.textSafe, layout)}>
         <strong className="review-preview-card__headline" style={getRelativeTextStyle(layout.textBlocks.headline, layout.textSafe)}>
@@ -670,6 +679,7 @@ export function ReviewPage({
                   <ReviewPreviewCard
                     key={word.id}
                     word={word}
+                    masteryLevel={recordsById[word.id]?.masteryLevel ?? 0}
                     index={index}
                     layout={reviewPreviewLayouts[['family', 'hello', 'body', 'spark'][index] as 'family' | 'hello' | 'body' | 'spark']}
                     onOpenDetails={() => setSelectedWordId(word.id)}

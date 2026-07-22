@@ -12,9 +12,7 @@ export interface ParentSetting {
 }
 
 export const MIN_NEW_WORD_COUNT = 3;
-export const MAX_NEW_WORD_COUNT = 20;
 export const MIN_REVIEW_LIMIT = 5;
-export const MAX_REVIEW_LIMIT = 50;
 
 export const defaultParentSetting: ParentSetting = {
   profileId: 'cute-junjun',
@@ -27,8 +25,9 @@ export const defaultParentSetting: ParentSetting = {
   preferLandscape: true,
 };
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, value));
+function normalizeCount(value: number | undefined, fallback: number, min: number): number {
+  const finiteValue = value !== undefined && Number.isFinite(value) ? value : fallback;
+  return Math.max(min, Math.floor(finiteValue));
 }
 
 export function normalizeParentSetting(setting: Partial<ParentSetting> | ParentSetting): ParentSetting {
@@ -38,15 +37,15 @@ export function normalizeParentSetting(setting: Partial<ParentSetting> | ParentS
   return {
     profileId,
     enableAudio: setting.enableAudio ?? defaultParentSetting.enableAudio,
-    dailyNewWordCount: clamp(
-      setting.dailyNewWordCount ?? defaultParentSetting.dailyNewWordCount,
-      MIN_NEW_WORD_COUNT,
-      MAX_NEW_WORD_COUNT
+    dailyNewWordCount: normalizeCount(
+      setting.dailyNewWordCount,
+      defaultParentSetting.dailyNewWordCount,
+      MIN_NEW_WORD_COUNT
     ),
-    dailyReviewLimit: clamp(
-      setting.dailyReviewLimit ?? defaultParentSetting.dailyReviewLimit,
-      MIN_REVIEW_LIMIT,
-      MAX_REVIEW_LIMIT
+    dailyReviewLimit: normalizeCount(
+      setting.dailyReviewLimit,
+      defaultParentSetting.dailyReviewLimit,
+      MIN_REVIEW_LIMIT
     ),
     showImages: setting.showImages ?? defaultParentSetting.showImages,
     showExamples: setting.showExamples ?? defaultParentSetting.showExamples,

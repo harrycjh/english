@@ -12,7 +12,9 @@ import {
   listAnswerEvents,
   listLearningRecords,
   saveAnswerAndLearningRecord,
+  saveDailyTask,
   saveParentSetting,
+  saveWordSelectionState,
 } from './storage-service';
 
 function makeEvent(): AnswerEvent {
@@ -155,6 +157,107 @@ describe('cloud merge persistence', () => {
       hasLocalChanges: false,
       snapshot: null,
     });
+  });
+
+  it('sends only locally changed rows after the initial full synchronization', async () => {
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-initial',
+      serverTime: '2026-07-14T10:00:00.000Z',
+      upToDate: false,
+      snapshot: {
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        generation: 0,
+        events: [],
+        checkpoint: null,
+        dailyTasks: [],
+        wordSelectionStates: [],
+        parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+      },
+    });
+    await saveAnswerAndLearningRecord(makeEvent(), makeRecord());
+    await saveDailyTask({
+      dateKey: '2026-07-14',
+      newWordIds: ['word-a'],
+      reviewWordIds: [],
+      completedAt: null,
+      correctCount: 1,
+      wrongCount: 0,
+      totalAnswered: 1,
+      answeredWordIds: ['word-a'],
+    });
+    await saveWordSelectionState({
+      wordId: 'word-a',
+      isEnabled: true,
+      isPaused: true,
+      updatedAt: '2026-07-14T10:01:00.000Z',
+    });
+    await saveParentSetting({ ...defaultParentSetting, dailyNewWordCount: 25 });
+
+    const request = await buildLocalSyncRequest();
+
+    expect(request).toMatchObject({
+      cursor: 'cursor-initial',
+      hasLocalChanges: true,
+      snapshot: null,
+    });
+    expect(request.delta?.events.map((event) => event.id)).toEqual(['event-a']);
+    expect(request.delta?.dailyTasks.map((task) => task.dateKey)).toEqual(['2026-07-14']);
+    expect(request.delta?.wordSelectionStates.map((state) => state.wordId)).toEqual(['word-a']);
+    expect(request.delta?.parentSetting?.value.dailyNewWordCount).toBe(25);
+
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-after-delta',
+      serverTime: '2026-07-14T10:02:00.000Z',
+      upToDate: true,
+      snapshot: null,
+    }, request);
+    expect(await buildLocalSyncRequest()).toMatchObject({
+      cursor: 'cursor-after-delta',
+      hasLocalChanges: false,
+      snapshot: null,
+      delta: null,
+    });
+  });
+
+  it('keeps changes created while an incremental request is in flight', async () => {
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-initial',
+      serverTime: '2026-07-14T10:00:00.000Z',
+      upToDate: false,
+      snapshot: {
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        generation: 0,
+        events: [],
+        checkpoint: null,
+        dailyTasks: [],
+        wordSelectionStates: [],
+        parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+      },
+    });
+    await saveAnswerAndLearningRecord(makeEvent(), makeRecord());
+    const request = await buildLocalSyncRequest();
+    const lateEvent = {
+      ...makeEvent(),
+      id: 'event-late',
+      wordId: 'word-late',
+      answeredAt: '2026-07-14T10:01:00.000Z',
+    };
+    await saveAnswerAndLearningRecord(lateEvent, { ...makeRecord(), wordId: 'word-late' });
+
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-after-delta',
+      serverTime: '2026-07-14T10:02:00.000Z',
+      upToDate: true,
+      snapshot: null,
+    }, request);
+
+    const nextRequest = await buildLocalSyncRequest();
+    expect(nextRequest.hasLocalChanges).toBe(true);
+    expect(nextRequest.delta?.events.map((event) => event.id)).toContain('event-late');
   });
 
   it('acknowledges an unchanged cursor without replacing local learning data', async () => {

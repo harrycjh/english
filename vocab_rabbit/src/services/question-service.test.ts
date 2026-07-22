@@ -19,49 +19,74 @@ function makeWord(overrides: Partial<WordRecord>): WordRecord {
   };
 }
 
+const target = makeWord({ id: 'ket_rabbit_n', english: 'rabbit', chinese: '兔子' });
+const allWords = [
+  target,
+  makeWord({ id: 'ket_cat_n', english: 'cat', chinese: '猫' }),
+  makeWord({ id: 'ket_dog_n', english: 'dog', chinese: '狗' }),
+  makeWord({ id: 'ket_bird_n', english: 'bird', chinese: '鸟' }),
+];
+
+function questionAt(level: number) {
+  return buildQuestion(
+    target,
+    allWords,
+    { ...createEmptyRecord(target.id), masteryLevel: level, reviewStage: level },
+    defaultParentSetting,
+  );
+}
+
+function missingPositions(maskedCharacters: string[]): number[] {
+  return maskedCharacters.flatMap((character, index) => character === '_' ? [index] : []);
+}
+
 describe('buildQuestion', () => {
-  it('falls back to text choice when image questions are enabled but the word image is not approved', () => {
-    const target = makeWord({ id: 'ket_target_n', chinese: '目标', imageApproved: false });
-    const allWords = [
-      target,
-      makeWord({ id: 'ket_a_n', chinese: '甲' }),
-      makeWord({ id: 'ket_b_n', chinese: '乙' }),
-      makeWord({ id: 'ket_c_n', chinese: '丙' }),
-    ];
-
-    const question = buildQuestion(
-      target,
-      allWords,
-      createEmptyRecord(target.id),
-      { ...defaultParentSetting, showImages: true }
-    );
-
-    expect(question.kind).toBe('text-choice');
+  it('starts at level 0 with the recognition screen and the Comfy image', () => {
+    const question = questionAt(0);
+    expect(question).toMatchObject({
+      kind: 'recognition',
+      options: ['认识', '不认识'],
+      imageStrategy: 'comfy',
+    });
   });
 
-  it('uses partial fill blank for mastery level 5', () => {
-    const target = makeWord({ id: 'ket_rabbit_n', english: 'rabbit', chinese: '兔子' });
-    const record = { ...createEmptyRecord(target.id), masteryLevel: 5, reviewStage: 5 };
+  it('uses Comfy at level 1 and prioritized related media at level 2', () => {
+    expect(questionAt(1)).toMatchObject({ kind: 'image-choice', imageStrategy: 'comfy' });
+    expect(questionAt(2)).toMatchObject({ kind: 'image-choice', imageStrategy: 'related-priority' });
+  });
 
-    const question = buildQuestion(target, [target], record, defaultParentSetting);
-
-    expect(question.kind).toBe('fill-blank');
-    if (question.kind === 'fill-blank') {
-      expect(question.missingLetters.length).toBeGreaterThan(0);
-      expect(question.missingLetters.length).toBeLessThan(target.english.length);
+  it('uses four image answers at level 3 and Chinese answers at level 4', () => {
+    const imageQuestion = questionAt(3);
+    expect(imageQuestion.kind).toBe('image-answer-choice');
+    if (imageQuestion.kind === 'image-answer-choice') {
+      expect(imageQuestion.options).toHaveLength(4);
+      expect(imageQuestion.correctAnswer).toBe(target.id);
     }
+    expect(questionAt(4).kind).toBe('text-choice');
   });
 
-  it('uses full-word fill blank for mastery level 6', () => {
-    const target = makeWord({ id: 'ket_rabbit_n', english: 'rabbit', chinese: '兔子' });
-    const record = { ...createEmptyRecord(target.id), masteryLevel: 6, reviewStage: 6 };
-
-    const question = buildQuestion(target, [target], record, defaultParentSetting);
-
+  it.each([
+    [5, 1, 2],
+    [6, 3, 4],
+    [7, 5, 10],
+  ])('masks one continuous run at level %i', (level, minimum, maximum) => {
+    const question = questionAt(level);
     expect(question.kind).toBe('fill-blank');
-    if (question.kind === 'fill-blank') {
-      expect(question.maskedCharacters).toEqual(['_', '_', '_', '_', '_', '_']);
-      expect(question.missingLetters).toEqual(['r', 'a', 'b', 'b', 'i', 't']);
+    if (question.kind !== 'fill-blank') return;
+    const positions = missingPositions(question.maskedCharacters);
+    expect(positions.length).toBeGreaterThanOrEqual(minimum);
+    expect(positions.length).toBeLessThanOrEqual(Math.min(maximum, target.english.length));
+    expect(positions.every((position, index) => index === 0 || position === positions[index - 1] + 1)).toBe(true);
+  });
+
+  it('uses full-word spelling from level 8 onward', () => {
+    for (const level of [8, 9]) {
+      const question = questionAt(level);
+      expect(question.kind).toBe('fill-blank');
+      if (question.kind === 'fill-blank') {
+        expect(question.maskedCharacters).toEqual(['_', '_', '_', '_', '_', '_']);
+        expect(question.missingLetters).toEqual(['r', 'a', 'b', 'b', 'i', 't']);
+      }
     }
   });
 });

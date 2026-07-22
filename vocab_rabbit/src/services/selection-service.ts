@@ -5,6 +5,7 @@ import {
   type WordSelectionState,
 } from '../models/word-selection-state';
 import type { WordRecord } from '../models/word';
+import { MAX_MASTERY_LEVEL } from './spaced-repetition';
 
 export type LearningBucket = 'new' | 'learning' | 'mastered' | 'paused' | 'disabled';
 
@@ -90,7 +91,7 @@ export function getWordLearningBucket(
     return 'new';
   }
 
-  if (record.masteryLevel >= 4) {
+  if (record.masteryLevel >= MAX_MASTERY_LEVEL) {
     return 'mastered';
   }
 

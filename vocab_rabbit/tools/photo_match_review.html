@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>生活照片匹配审核</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #fffaf0;
+      --panel: #fffefb;
+      --ink: #3f2d22;
+      --muted: #8b7768;
+      --line: #ead8bd;
+      --accent: #ff941f;
+      --accent-soft: #fff0d2;
+      --green: #31865a;
+      --shadow: 0 16px 50px rgba(92, 65, 40, .11);
+    }
+
+    * { box-sizing: border-box; }
+    html { height: 100%; overflow: hidden; }
+    body {
+      margin: 0;
+      min-width: 960px;
+      height: 100vh;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(255, 255, 255, .45) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .45) 1px, transparent 1px),
+        #f7eddb;
+      background-size: 28px 28px;
+      color: var(--ink);
+      font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", sans-serif;
+    }
+
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+
+    .app {
+      width: min(1440px, calc(100vw - 36px));
+      height: calc(100vh - 36px);
+      margin: 18px auto;
+      overflow: hidden;
+      border: 1px solid rgba(124, 90, 53, .28);
+      background: rgba(255, 250, 240, .96);
+      box-shadow: var(--shadow);
+    }
+
+    .topbar {
+      height: 76px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+      padding: 0 26px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 254, 251, .88);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(16px);
+    }
+
+    .brand { display: flex; align-items: baseline; gap: 12px; }
+    .brand strong { font-family: Georgia, "Songti SC", serif; font-size: 24px; }
+    .brand span, .progress-copy { color: var(--muted); font-size: 13px; }
+    .progress-copy { text-align: center; min-width: 210px; }
+    .progress-copy strong { color: var(--ink); font-size: 17px; }
+    .progress-track {
+      width: 210px;
+      height: 5px;
+      margin-top: 7px;
+      overflow: hidden;
+      background: #eadfce;
+    }
+    .progress-track i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
+
+    .filters { display: flex; justify-content: flex-end; gap: 9px; }
+    .control {
+      height: 38px;
+      border: 1px solid var(--line);
+      background: white;
+      padding: 0 12px;
+      outline: none;
+    }
+    input.control { width: 210px; }
+    .control:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 265px minmax(0, 1fr);
+      height: calc(100% - 76px);
+      min-height: 0;
+    }
+
+    .word-panel {
+      padding: 34px 28px;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 247, 231, .72);
+      display: flex;
+      flex-direction: column;
+    }
+    .eyebrow { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: .08em; }
+    .word-panel h1 {
+      margin: 13px 0 5px;
+      font-family: Georgia, "Songti SC", serif;
+      font-size: 40px;
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+    }
+    .word-panel .chinese { margin: 8px 0 18px; font-size: 23px; }
+    .word-panel dl { margin: 0; font-size: 13px; }
+    .word-panel dt { color: var(--muted); margin-top: 13px; }
+    .word-panel dd { margin: 3px 0 0; }
+    .candidate-total {
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .shortcuts { margin-top: auto; padding-top: 25px; color: var(--muted); font-size: 12px; line-height: 1.8; }
+    kbd { border: 1px solid #d9c8ae; background: white; padding: 1px 6px; box-shadow: 0 1px 0 #d9c8ae; }
+
+    .review-panel { min-width: 0; min-height: 0; padding: 20px 30px 18px; display: flex; flex-direction: column; }
+    .review-heading { display: flex; align-items: center; justify-content: space-between; min-height: 34px; margin-bottom: 16px; }
+    .review-heading h2 { margin: 0; font-family: Georgia, "Songti SC", serif; font-size: 22px; }
+    .review-tools { display: flex; align-items: center; gap: 12px; }
+    .photo-pager { display: flex; align-items: center; gap: 6px; }
+    .photo-page-button {
+      width: 34px;
+      height: 32px;
+      border: 1px solid var(--line);
+      background: white;
+      cursor: pointer;
+      font-size: 19px;
+      line-height: 1;
+    }
+    .photo-page-button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .photo-page-button:disabled { opacity: .35; cursor: default; }
+    .photo-page-label { min-width: 62px; color: var(--muted); text-align: center; font-size: 12px; }
+    .auto-next { color: var(--muted); font-size: 13px; display: flex; align-items: center; gap: 7px; }
+    .auto-next input { accent-color: var(--accent); }
+
+    .photo-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      min-height: 0;
+    }
+    .photo-card {
+      position: relative;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      min-width: 0;
+      overflow: hidden;
+      padding: 0;
+      border: 2px solid transparent;
+      background: #f1e8d8;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .photo-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(85, 57, 29, .14); }
+    .photo-card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .photo-card img { width: 100%; height: 100%; min-height: 0; object-fit: contain; background: #eee5d6; }
+    .photo-meta { min-height: 67px; padding: 9px 12px 10px; background: var(--panel); border-top: 1px solid var(--line); }
+    .photo-line { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .rank {
+      flex: 0 0 25px;
+      height: 25px;
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: white;
+      font-weight: 800;
+      font-size: 12px;
+    }
+    .evidence { font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .match-kind { margin-left: auto; color: var(--green); font-size: 11px; white-space: nowrap; }
+    .caption { margin: 6px 0 0 32px; color: var(--muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .check {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 31px;
+      height: 31px;
+      display: none;
+      place-items: center;
+      background: var(--accent);
+      color: white;
+      border: 2px solid white;
+      border-radius: 50%;
+      font-weight: 900;
+    }
+    .selected .check { display: grid; }
+
+    .empty {
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+      display: grid;
+      place-items: center;
+      border: 1px dashed #d7c3a5;
+      background: rgba(255,255,255,.48);
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .actions {
+      height: 64px;
+      margin-top: 17px;
+      display: grid;
+      grid-template-columns: 1fr auto auto auto 1fr;
+      align-items: center;
+      gap: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+    .actions .right { justify-self: end; }
+    .button {
+      height: 42px;
+      border: 1px solid var(--line);
+      background: white;
+      padding: 0 18px;
+      cursor: pointer;
+    }
+    .button:hover { border-color: var(--accent); }
+    .button.primary { background: var(--accent); border-color: var(--accent); color: white; font-weight: 700; }
+    .button.danger { color: #9b4d3f; }
+    .position { color: var(--muted); min-width: 95px; text-align: center; font-size: 13px; }
+
+    .toast {
+      position: fixed;
+      right: 30px;
+      bottom: 28px;
+      padding: 11px 16px;
+      background: var(--ink);
+      color: white;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: .2s ease;
+      z-index: 10;
+    }
+    .toast.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand"><strong>照片匹配审核</strong><span>VocaRabbit 本机工具</span></div>
+      <div class="progress-copy">
+        <strong id="progressText">正在读取...</strong>
+        <div class="progress-track"><i id="progressBar"></i></div>
+      </div>
+      <div class="filters">
+        <input class="control" id="search" type="search" placeholder="搜索英文或中文">
+        <select class="control" id="statusFilter">
+          <option value="pendingCandidates">有候选待选择</option>
+          <option value="pending">全部未选择</option>
+          <option value="all">全部单词</option>
+          <option value="selected">已选择</option>
+          <option value="skipped">候选已用尽</option>
+          <option value="empty">当前无候选图</option>
+        </select>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <aside class="word-panel">
+        <span class="eyebrow" id="category">加载中</span>
+        <h1 id="english">...</h1>
+        <div class="chinese" id="chinese">...</div>
+        <dl>
+          <dt>词性</dt><dd id="partOfSpeech">...</dd>
+          <dt>单词编号</dt><dd id="wordId">...</dd>
+        </dl>
+        <div class="candidate-total" id="candidateTotal"></div>
+        <div class="shortcuts">
+          <div><kbd>1</kbd>–<kbd>4</kbd> 选择照片</div>
+          <div><kbd>0</kbd> 暂无合适图片</div>
+          <div><kbd>←</kbd> <kbd>→</kbd> 上一组 / 下一组照片</div>
+          <div><kbd>Enter</kbd> 进入下一个单词</div>
+        </div>
+      </aside>
+
+      <section class="review-panel">
+        <div class="review-heading">
+          <h2>选择最适合这个单词的照片</h2>
+          <div class="review-tools">
+            <div class="photo-pager">
+              <button class="photo-page-button" id="photoPrevious" title="上一组照片" aria-label="上一组照片">‹</button>
+              <span class="photo-page-label" id="photoPage">1 / 1</span>
+              <button class="photo-page-button" id="photoNext" title="下一组照片" aria-label="下一组照片">›</button>
+            </div>
+            <label class="auto-next"><input id="autoNext" type="checkbox" checked> 选择后自动进入下一个</label>
+          </div>
+        </div>
+        <div class="photo-grid" id="photoGrid"></div>
+        <footer class="actions">
+          <button class="button" id="previous">上一个</button>
+          <button class="button danger" id="clear">撤销选择</button>
+          <span class="position" id="position">0 / 0</span>
+          <button class="button" id="skip">暂无合适图片</button>
+          <button class="button primary right" id="next">下一个</button>
+        </footer>
+      </section>
+    </section>
+  </main>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const state = {
+      words: [],
+      filtered: [],
+      selections: {},
+      rejectedCandidates: {},
+      index: 0,
+      photoPage: 0,
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    })[char]);
+
+    function showToast(message) {
+      $('toast').textContent = message;
+      $('toast').classList.add('visible');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => $('toast').classList.remove('visible'), 1200);
+    }
+
+    function updateProgress() {
+      const total = state.words.length;
+      const reviewed = Object.keys(state.selections).length;
+      const percent = total ? reviewed / total * 100 : 0;
+      $('progressText').textContent = `已审核 ${reviewed} / ${total}`;
+      $('progressBar').style.width = `${percent}%`;
+    }
+
+    function applyFilter(keepWordId) {
+      const query = $('search').value.trim().toLowerCase();
+      const filter = $('statusFilter').value;
+      state.filtered = state.words.filter(word => {
+        const selection = state.selections[word.wordId];
+        const matchesQuery = !query || word.english.toLowerCase().includes(query) || word.chinese.includes(query);
+        if (!matchesQuery) return false;
+        if (filter === 'pendingCandidates') return !selection && availableCandidates(word).length > 0;
+        if (filter === 'pending') return !selection;
+        if (filter === 'selected') return selection?.status === 'selected';
+        if (filter === 'skipped') return selection?.status === 'exhausted';
+        if (filter === 'empty') return availableCandidates(word).length === 0;
+        return true;
+      });
+      const retained = keepWordId ? state.filtered.findIndex(word => word.wordId === keepWordId) : -1;
+      state.index = retained >= 0 ? retained : Math.min(state.index, Math.max(0, state.filtered.length - 1));
+      state.photoPage = 0;
+      render();
+    }
+
+    function currentWord() { return state.filtered[state.index]; }
+
+    function selectedByOtherWords(wordId) {
+      return new Set(Object.entries(state.selections)
+        .filter(([selectedWordId, selection]) => selectedWordId !== wordId && selection.status === 'selected' && selection.photoId)
+        .map(([, selection]) => selection.photoId));
+    }
+
+    function availableCandidates(word) {
+      const occupied = selectedByOtherWords(word.wordId);
+      const rejected = new Set(state.rejectedCandidates[word.wordId]?.photoIds || []);
+      return word.candidates
+        .filter(candidate => !occupied.has(candidate.photoId) && !rejected.has(candidate.photoId))
+        .slice(0, 20);
+    }
+
+    function render() {
+      updateProgress();
+      const word = currentWord();
+      if (!word) {
+        $('category').textContent = '当前筛选';
+        $('english').textContent = '完成';
+        $('chinese').textContent = '没有更多单词';
+        $('partOfSpeech').textContent = '-';
+        $('wordId').textContent = '-';
+        $('candidateTotal').textContent = '可以切换右上角筛选条件查看其他项目。';
+        $('photoGrid').innerHTML = '<div class="empty">当前筛选条件下没有待处理单词。</div>';
+        $('position').textContent = '0 / 0';
+        $('photoPage').textContent = '0 / 0';
+        $('photoPrevious').disabled = true;
+        $('photoNext').disabled = true;
+        return;
+      }
+
+      $('category').textContent = word.category;
+      $('english').textContent = word.english;
+      $('chinese').textContent = word.chinese;
+      $('partOfSpeech').textContent = word.partOfSpeech;
+      $('wordId').textContent = word.wordId;
+      const candidates = availableCandidates(word);
+      const rejectedCount = state.rejectedCandidates[word.wordId]?.photoIds?.length || 0;
+      $('candidateTotal').innerHTML = `模型共找到 <strong>${word.candidateCount}</strong> 张候选照片。本轮显示 ${candidates.length} 张，已淘汰 ${rejectedCount} 张；其他单词已经选中的照片会自动移除。`;
+      $('position').textContent = `${state.index + 1} / ${state.filtered.length}`;
+
+      const selectedId = state.selections[word.wordId]?.photoId;
+      if (!candidates.length) {
+        $('photoGrid').innerHTML = '<div class="empty"><div><strong>暂时没有可靠候选图</strong><br>可以选择“暂无合适图片”，以后再补充。</div></div>';
+        $('photoPage').textContent = '0 / 0';
+        $('photoPrevious').disabled = true;
+        $('photoNext').disabled = true;
+        return;
+      }
+
+      const pageCount = Math.ceil(candidates.length / 4);
+      state.photoPage = Math.min(state.photoPage, pageCount - 1);
+      $('photoPage').textContent = `${state.photoPage + 1} / ${pageCount}`;
+      $('photoPrevious').disabled = state.photoPage === 0;
+      $('photoNext').disabled = state.photoPage >= pageCount - 1;
+      const pageStart = state.photoPage * 4;
+      const visibleCandidates = candidates.slice(pageStart, pageStart + 4);
+      $('photoGrid').innerHTML = visibleCandidates.map((candidate, visibleIndex) => {
+        const index = pageStart + visibleIndex;
+        const evidence = candidate.evidence.map(item => item.term).join('、') || '英文描述命中';
+        const kind = candidate.matchType === 'structured' ? '结构化命中' : '描述弱命中';
+        const cardClasses = [
+          'photo-card',
+          selectedId === candidate.photoId ? 'selected' : '',
+        ].filter(Boolean).join(' ');
+        return `<button class="${cardClasses}" data-photo-id="${candidate.photoId}" data-index="${index}" tabindex="-1">
+          <img src="/photo/${candidate.photoId}" alt="${escapeHtml(word.chinese)}候选照片 ${index + 1}">
+          <span class="check">✓</span>
+          <span class="photo-meta">
+            <span class="photo-line"><span class="rank">${index + 1}</span><span class="evidence">${escapeHtml(evidence)}</span><span class="match-kind">${kind}</span></span>
+            <span class="caption" title="${escapeHtml(candidate.captionZh)}">${escapeHtml(candidate.captionZh)}</span>
+          </span>
+        </button>`;
+      }).join('');
+      document.querySelectorAll('.photo-card').forEach(button => {
+        button.addEventListener('click', () => selectPhoto(button.dataset.photoId));
+      });
+    }
+
+    async function persist(payload) {
+      const response = await fetch('/api/select', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || '保存失败');
+      return result;
+    }
+
+    async function selectPhoto(photoId, shouldAdvance = $('autoNext').checked) {
+      const word = currentWord();
+      if (!word) return;
+      try {
+        const result = await persist({wordId: word.wordId, photoId});
+        state.selections[word.wordId] = result.selection;
+        showToast('已保存');
+        if (shouldAdvance) {
+          if (['pending', 'pendingCandidates'].includes($('statusFilter').value)) applyFilter();
+          else move(1);
+        } else render();
+      } catch (error) { showToast(error.message); }
+    }
+
+    async function skipWord() {
+      const word = currentWord();
+      if (!word) return;
+      try {
+        const rejectedPhotoIds = availableCandidates(word).map(candidate => candidate.photoId);
+        const result = await persist({
+          wordId: word.wordId,
+          photoId: null,
+          candidatePhotoIds: rejectedPhotoIds,
+        });
+        state.rejectedCandidates[word.wordId] = result.rejectedCandidates;
+        if (result.selection) state.selections[word.wordId] = result.selection;
+        else delete state.selections[word.wordId];
+        state.photoPage = 0;
+        if (result.selection?.status === 'exhausted') {
+          showToast('候选照片已用尽');
+          applyFilter();
+        } else {
+          showToast('已生成下一批候选照片');
+          applyFilter(word.wordId);
+        }
+      } catch (error) { showToast(error.message); }
+    }
+
+    async function clearSelection() {
+      const word = currentWord();
+      if (!word || !state.selections[word.wordId]) return;
+      try {
+        await persist({wordId: word.wordId, clear: true});
+        delete state.selections[word.wordId];
+        showToast('已撤销');
+        applyFilter(word.wordId);
+      } catch (error) { showToast(error.message); }
+    }
+
+    function move(delta) {
+      if (!state.filtered.length) return;
+      state.index = Math.max(0, Math.min(state.filtered.length - 1, state.index + delta));
+      state.photoPage = 0;
+      render();
+    }
+
+    function movePhotoPage(delta) {
+      const word = currentWord();
+      const pageCount = Math.ceil((word ? availableCandidates(word).length : 0) / 4);
+      state.photoPage = Math.max(0, Math.min(Math.max(0, pageCount - 1), state.photoPage + delta));
+      render();
+    }
+
+    async function initialize() {
+      const response = await fetch('/api/data');
+      const data = await response.json();
+      state.words = data.manifest.words;
+      state.selections = data.selectionState.selections || {};
+      state.rejectedCandidates = data.selectionState.rejectedCandidates || {};
+      applyFilter();
+    }
+
+    $('search').addEventListener('input', () => applyFilter());
+    $('statusFilter').addEventListener('change', () => { state.index = 0; applyFilter(); });
+    $('previous').addEventListener('click', () => move(-1));
+    $('next').addEventListener('click', () => move(1));
+    $('photoPrevious').addEventListener('click', () => movePhotoPage(-1));
+    $('photoNext').addEventListener('click', () => movePhotoPage(1));
+    $('skip').addEventListener('click', skipWord);
+    $('clear').addEventListener('click', clearSelection);
+    document.addEventListener('keydown', event => {
+      if (event.target.matches('input, select')) return;
+      if (event.repeat && ['ArrowLeft', 'ArrowRight', 'Enter'].includes(event.key)) {
+        event.preventDefault();
+        return;
+      }
+      if (event.key >= '1' && event.key <= '4') {
+        const candidateIndex = state.photoPage * 4 + Number(event.key) - 1;
+        const word = currentWord();
+        const candidate = word ? availableCandidates(word)[candidateIndex] : null;
+        if (candidate) selectPhoto(candidate.photoId);
+      } else if (event.key === '0') skipWord();
+      else if (event.key === 'ArrowLeft') { event.preventDefault(); movePhotoPage(-1); }
+      else if (event.key === 'ArrowRight') { event.preventDefault(); movePhotoPage(1); }
+      else if (event.key === 'Enter') { event.preventDefault(); move(1); }
+    });
+
+    initialize().catch(error => {
+      $('photoGrid').innerHTML = `<div class="empty">读取失败：${escapeHtml(error.message)}</div>`;
+    });
+  </script>
+</body>
+</html>

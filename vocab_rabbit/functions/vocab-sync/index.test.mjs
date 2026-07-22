@@ -55,6 +55,34 @@ function emptySnapshot() {
   };
 }
 
+function emptyDelta() {
+  return {
+    schemaVersion: 1,
+    generation: 0,
+    events: [],
+    dailyTasks: [],
+    wordSelectionStates: [],
+    parentSetting: null,
+  };
+}
+
+function answerEvent(id, wordId, deviceId, answeredAt) {
+  return {
+    id,
+    wordId,
+    dateKey: answeredAt.slice(0, 10),
+    answeredAt,
+    questionKind: 'text-choice',
+    selectedAnswer: '家庭',
+    correctAnswer: '家庭',
+    isCorrect: true,
+    responseTimeMs: 700,
+    deviceId,
+    schemaVersion: 1,
+    generation: 0,
+  };
+}
+
 describe('vocab sync Function Compute handler', () => {
   it('rejects an incorrect family code', async () => {
     const handler = createHandler(createMemoryRepository(), env);
@@ -164,6 +192,78 @@ describe('vocab sync Function Compute handler', () => {
     expect(repository.getMergeCount()).toBe(1);
   });
 
+  it('acknowledges an incremental update without returning the full snapshot', async () => {
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env);
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+    const initial = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: null,
+      snapshot: emptySnapshot(),
+    }, connect.json.deviceToken)));
+    const delta = emptyDelta();
+    delta.events = [answerEvent('event-delta', 'word-delta', 'device-a', '2026-07-14T09:00:00.000Z')];
+
+    const response = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: initial.json.cursor,
+      hasLocalChanges: true,
+      snapshot: null,
+      delta,
+    }, connect.json.deviceToken)));
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json).toMatchObject({ upToDate: true, snapshot: null });
+    expect(repository.getEventCount()).toBe(1);
+  });
+
+  it('falls back to a full merged snapshot when another device changed the cursor', async () => {
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env);
+    async function connect(deviceId) {
+      const result = await handler(event('/api/device/connect', { familyCode: '2468', deviceId }));
+      return parseResponse(result).json.deviceToken;
+    }
+    const tokenA = await connect('device-a');
+    const tokenB = await connect('device-b');
+    const initial = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: null,
+      snapshot: emptySnapshot(),
+    }, tokenA)));
+    const deltaA = emptyDelta();
+    deltaA.events = [answerEvent('event-a', 'word-a', 'device-a', '2026-07-14T09:00:00.000Z')];
+    await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: initial.json.cursor,
+      hasLocalChanges: true,
+      snapshot: null,
+      delta: deltaA,
+    }, tokenA));
+    const deltaB = emptyDelta();
+    deltaB.events = [answerEvent('event-b', 'word-b', 'device-b', '2026-07-14T09:01:00.000Z')];
+
+    const response = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-b',
+      cursor: initial.json.cursor,
+      hasLocalChanges: true,
+      snapshot: null,
+      delta: deltaB,
+    }, tokenB)));
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json.upToDate).toBe(false);
+    expect(response.json.snapshot.events.map((item) => item.id)).toEqual(['event-a', 'event-b']);
+  });
+
   it('stores daily learning limits in the cloud snapshot', async () => {
     const repository = createMemoryRepository();
     const handler = createHandler(repository, env);
@@ -271,7 +371,7 @@ describe('vocab sync Function Compute handler', () => {
       correctCount: 1,
       wrongCount: 1,
       totalAnswered: 2,
-      answeredWordIds: ['word-a', 'word-b'],
+      answeredWordIds: ['word-a'],
     });
   });
 

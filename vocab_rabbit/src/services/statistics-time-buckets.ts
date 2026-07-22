@@ -31,6 +31,7 @@ export function aggregateLearningLoadTimeline(
   return [...buckets.entries()].map(([dateKey, bucket]) => {
     const newCount = bucket.reduce((sum, point) => sum + point.newCount, 0);
     const reviewCount = bucket.reduce((sum, point) => sum + point.reviewCount, 0);
+    const retryCount = bucket.reduce((sum, point) => sum + point.retryCount, 0);
     const deferredReviewCount = bucket.reduce((sum, point) => sum + point.deferredReviewCount, 0);
     const kind = bucket.some((point) => point.kind === 'today')
       ? 'today'
@@ -41,6 +42,7 @@ export function aggregateLearningLoadTimeline(
       dateKey,
       newCount,
       reviewCount,
+      retryCount,
       deferredReviewCount,
       totalCount: newCount + reviewCount,
       kind,

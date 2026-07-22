@@ -3,6 +3,7 @@ import {
   createDateTimeForStudyDateKey,
   createStudyDateKey,
   getMillisecondsUntilNextStudyDay,
+  getReviewDueAt,
   getStudyDayReviewCutoff,
 } from './study-day';
 
@@ -22,5 +23,15 @@ describe('4am study-day boundary', () => {
     const beforeRefresh = new Date('2026-07-20T18:30:15.125Z');
     expect(createDateTimeForStudyDateKey('2026-07-20', beforeRefresh).toISOString())
       .toBe('2026-07-20T18:30:15.125Z');
+  });
+
+  it('schedules a review at 4am on the target study day', () => {
+    expect(getReviewDueAt(new Date('2026-07-21T08:00:00.000Z'), 2).toISOString())
+      .toBe('2026-07-22T20:00:00.000Z');
+  });
+
+  it('uses the previous study date when an answer is submitted before 4am', () => {
+    expect(getReviewDueAt(new Date('2026-07-21T18:30:00.000Z'), 1).toISOString())
+      .toBe('2026-07-21T20:00:00.000Z');
   });
 });

@@ -10,10 +10,12 @@ import {
   type WordSelectionState,
 } from '../models/word-selection-state';
 import type { WordPayload, WordRecord } from '../models/word';
+import { MAX_MASTERY_LEVEL } from '../services/spaced-repetition';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
 import { getStudyText } from '../services/word-service';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
+import { MasteryLevelIcon } from '../components/MasteryLevelIcon';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 
@@ -40,8 +42,7 @@ interface SelectionPageProps {
 
 interface SelectionWordCardProps {
   word: WordRecord;
-  statusLabel: string;
-  statusTone: 'active' | 'paused' | 'disabled';
+  masteryLevel: number;
   onOpenDetails: () => void;
   onToggleEnabled: () => void;
   onTogglePaused: () => void;
@@ -137,8 +138,7 @@ const REFERENCE_SELECTION_CARD_OVERRIDES: Record<string, SelectionCardVisualOver
 
 function SelectionWordCard({
   word,
-  statusLabel,
-  statusTone,
+  masteryLevel,
   onOpenDetails,
   onToggleEnabled,
   onTogglePaused,
@@ -158,7 +158,7 @@ function SelectionWordCard({
       <button className="selection-word-card__body" type="button" onClick={onOpenDetails}>
         <div className="word-card__header">
           <span className={`word-card__category word-card__category--c${colorSlot}`}>{categoryLabel.length > 5 ? categoryLabel.slice(0, 5) : categoryLabel}</span>
-          <span className={`selection-status-chip selection-status-chip--${statusTone}`}>{statusLabel}</span>
+          <MasteryLevelIcon level={masteryLevel} className="selection-word-card__level" />
         </div>
         <div className="selection-word-card__content">
           <div className="selection-word-card__art">
@@ -320,7 +320,7 @@ export function SelectionPage({
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
 
   const masteredCount = useMemo(
-    () => Object.values(recordsById).filter((record) => record.masteryLevel >= 4).length,
+    () => Object.values(recordsById).filter((record) => record.masteryLevel >= MAX_MASTERY_LEVEL).length,
     [recordsById]
   );
 
@@ -578,16 +578,12 @@ export function SelectionPage({
               <div className="selection-card-grid">
                 {visibleWords.map((word) => {
                   const ss = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
-                  const bucket = getWordLearningBucket(word.id, recordsById[word.id], ss);
-                  const sl = bucket === 'paused' ? '已暂停' : bucket === 'disabled' ? '未启用' : bucket === 'mastered' ? '已掌握' : bucket === 'learning' ? '学习中' : '未学';
-                  const st = bucket === 'paused' ? 'paused' : bucket === 'disabled' ? 'disabled' : 'active';
                   const vo = isReferenceGridState ? REFERENCE_SELECTION_CARD_OVERRIDES[word.id] : undefined;
                   return (
                     <SelectionWordCard
                       key={word.id}
                       word={word}
-                      statusLabel={sl}
-                      statusTone={st}
+                      masteryLevel={recordsById[word.id]?.masteryLevel ?? 0}
                       visualOverride={vo}
                       onOpenDetails={() => setSelectedWordId(word.id)}
                       isEnabled={ss.isEnabled}

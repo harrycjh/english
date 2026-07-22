@@ -26,6 +26,10 @@ DEFAULT_OUTPUT = Path("design-output/photo-word-linking/captions/qwen-pilot-300.
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
+class ResponseTruncatedError(ValueError):
+    """The model stopped before returning a complete JSON response."""
+
+
 SYSTEM_PROMPT = """You describe private family photos for an English vocabulary learning app.
 Report only facts clearly visible in the image. Do not infer names, relationships, exact locations,
 nationality, occupations, motives, events outside the frame, or hidden emotions. Do not identify
@@ -96,7 +100,25 @@ def parse_json_content(content: str) -> dict:
         text = text.removeprefix("```json").removeprefix("```")
         if text.endswith("```"):
             text = text[:-3]
-    return json.loads(text.strip())
+    text = text.strip()
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as error:
+        if is_truncation_error(error):
+            raise ResponseTruncatedError(str(error)) from error
+        raise
+
+
+def is_truncation_error(error: BaseException | str) -> bool:
+    if isinstance(error, ResponseTruncatedError):
+        return True
+    message = str(error).lower()
+    if "finish_reason=length" in message or "unterminated string" in message:
+        return True
+    if isinstance(error, json.JSONDecodeError):
+        document = error.doc.rstrip()
+        return bool(document) and error.pos >= len(document) - 1
+    return False
 
 
 def validate_caption(payload: dict) -> list[str]:
@@ -146,28 +168,44 @@ def request_caption(endpoint: str, source_path: Path, timeout: int) -> tuple[dic
     with urllib.request.urlopen(request, timeout=timeout) as response:
         response_payload = json.loads(response.read())
     elapsed = time.monotonic() - started
-    message = response_payload["choices"][0]["message"]
+    choice = response_payload["choices"][0]
+    message = choice["message"]
     content = message.get("content")
     if isinstance(content, list):
         content = "".join(item.get("text", "") for item in content if isinstance(item, dict))
+    if choice.get("finish_reason") == "length":
+        raise ResponseTruncatedError("model output truncated (finish_reason=length)")
     caption = parse_json_content(content or "")
     return caption, {
         "durationSeconds": round(elapsed, 3),
         "usage": response_payload.get("usage"),
-        "finishReason": response_payload["choices"][0].get("finish_reason"),
+        "finishReason": choice.get("finish_reason"),
     }
 
 
-def load_completed(path: Path) -> dict[str, dict]:
+def load_caption_state(
+    path: Path,
+    legacy_truncation_attempts: int = 1,
+) -> tuple[dict[str, dict], dict[str, int]]:
     if not path.exists():
-        return {}
+        return {}, {}
     completed = {}
+    truncation_counts: dict[str, int] = defaultdict(int)
     with path.open(encoding="utf-8") as handle:
         for line in handle:
             if line.strip():
                 item = json.loads(line)
-                completed[item["photoId"]] = item
-    return completed
+                photo_id = item["photoId"]
+                completed[photo_id] = item
+                if item.get("status") == "error" and is_truncation_error(item.get("error", "")):
+                    truncation_counts[photo_id] += int(
+                        item.get("truncationAttempts", legacy_truncation_attempts)
+                    )
+                elif item.get("status") == "skipped" and item.get("reason") == "repeated_truncation":
+                    truncation_counts[photo_id] = max(
+                        truncation_counts[photo_id], int(item.get("truncationCount", 0))
+                    )
+    return completed, dict(truncation_counts)
 
 
 def choose_diverse_entries(
@@ -221,6 +259,12 @@ def main() -> None:
     parser.add_argument("--limit", type=int, default=300)
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--retries", type=int, default=2)
+    parser.add_argument(
+        "--max-truncations",
+        type=int,
+        default=3,
+        help="permanently skip a photo after this many truncated model responses",
+    )
     parser.add_argument("--max-new", type=int, help="stop after this many new successful captions")
     parser.add_argument("--pause-every", type=int, default=0)
     parser.add_argument("--pause-seconds", type=float, default=0)
@@ -230,6 +274,8 @@ def main() -> None:
         help="include readable entries skipped by the earlier manual word-labeling pass",
     )
     args = parser.parse_args()
+    if args.max_truncations < 1:
+        parser.error("--max-truncations must be at least 1")
 
     root = Path(args.root).resolve()
     output = Path(args.output)
@@ -242,18 +288,47 @@ def main() -> None:
     selected = choose_diverse_entries(
         master["entries"], assignments, args.limit, include_skipped=args.include_skipped
     )
-    completed = load_completed(output)
+    completed, truncation_counts = load_caption_state(
+        output,
+        legacy_truncation_attempts=args.retries + 1,
+    )
     new_successes = 0
 
     for index, entry in enumerate(selected, 1):
         if args.max_new is not None and new_successes >= args.max_new:
             break
         photo_id = entry["id"]
-        if photo_id in completed and completed[photo_id].get("status") == "ok":
-            print(f"caption {index}/{len(selected)}: {photo_id} cached", flush=True)
+        previous = completed.get(photo_id)
+        if previous and previous.get("status") in {"ok", "skipped"}:
+            print(
+                f"caption {index}/{len(selected)}: {photo_id} cached {previous['status']}",
+                flush=True,
+            )
+            continue
+        truncation_count = truncation_counts.get(photo_id, 0)
+        if truncation_count >= args.max_truncations:
+            result = {
+                "photoId": photo_id,
+                "status": "skipped",
+                "reason": "repeated_truncation",
+                "truncationCount": truncation_count,
+                "model": MODEL,
+                "promptVersion": PROMPT_VERSION,
+                "generatedAt": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
+                "sourcePath": entry["absolutePath"],
+            }
+            append_jsonl(output, result)
+            completed[photo_id] = result
+            print(
+                f"caption {index}/{len(selected)}: {photo_id} skipped after "
+                f"{truncation_count} truncated responses",
+                flush=True,
+            )
             continue
         source_path = resolve_path(entry["absolutePath"], mappings)
         last_error = None
+        attempt_errors = []
+        finalized = False
         for attempt in range(1, args.retries + 2):
             try:
                 caption, meta = request_caption(args.endpoint, source_path, args.timeout)
@@ -274,6 +349,7 @@ def main() -> None:
                 }
                 append_jsonl(output, result)
                 new_successes += 1
+                finalized = True
                 print(
                     f"caption {index}/{len(selected)}: {photo_id} ok {meta['durationSeconds']}s "
                     f"zh={len(caption['captionZh'])}",
@@ -293,10 +369,37 @@ def main() -> None:
                 break
             except (OSError, ValueError, KeyError, json.JSONDecodeError, urllib.error.URLError) as error:
                 last_error = str(error)
+                truncated = is_truncation_error(error)
+                if truncated:
+                    truncation_count += 1
+                attempt_errors.append(
+                    {"attempt": attempt, "error": last_error, "truncated": truncated}
+                )
                 print(f"caption {index}/{len(selected)}: {photo_id} attempt {attempt} failed: {error}", flush=True)
+                if truncation_count >= args.max_truncations:
+                    result = {
+                        "photoId": photo_id,
+                        "status": "skipped",
+                        "reason": "repeated_truncation",
+                        "truncationCount": truncation_count,
+                        "attemptErrors": attempt_errors,
+                        "model": MODEL,
+                        "promptVersion": PROMPT_VERSION,
+                        "generatedAt": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
+                        "sourcePath": entry["absolutePath"],
+                    }
+                    append_jsonl(output, result)
+                    completed[photo_id] = result
+                    finalized = True
+                    print(
+                        f"caption {index}/{len(selected)}: {photo_id} permanently skipped "
+                        f"after {truncation_count} truncated responses",
+                        flush=True,
+                    )
+                    break
                 if attempt <= args.retries:
                     time.sleep(min(8, attempt * 2))
-        else:
+        if not finalized:
             append_jsonl(
                 output,
                 {
@@ -307,6 +410,11 @@ def main() -> None:
                     "generatedAt": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
                     "sourcePath": entry["absolutePath"],
                     "error": last_error,
+                    "attemptErrors": attempt_errors,
+                    "truncationAttempts": sum(
+                        1 for attempt_error in attempt_errors if attempt_error["truncated"]
+                    ),
+                    "truncationCount": truncation_count,
                 },
             )
 

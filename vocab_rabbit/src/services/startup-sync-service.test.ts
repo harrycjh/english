@@ -2,10 +2,13 @@ import 'fake-indexeddb/auto';
 import { afterEach, describe, expect, it } from 'vitest';
 import { SYNC_SCHEMA_VERSION, type SyncRequest } from '../models/sync';
 import {
+  applySyncResponse,
   clearLocalDeviceData,
   getOrCreateSyncMetadata,
+  saveAnswerAndLearningRecord,
   saveDeviceToken,
 } from './storage-service';
+import { defaultParentSetting } from '../models/parent-setting';
 import {
   connectAndSynchronize,
   connectDeviceForBackgroundSync,
@@ -49,6 +52,64 @@ describe('performStartupSync', () => {
     });
 
     expect(result).toMatchObject({ kind: 'unavailable' });
+  });
+
+  it('falls back to a full snapshot when the server does not accept a delta yet', async () => {
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-old',
+      serverTime: '2026-07-14T08:00:00.000Z',
+      upToDate: false,
+      snapshot: {
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        generation: 0,
+        events: [],
+        checkpoint: null,
+        dailyTasks: [],
+        wordSelectionStates: [],
+        parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+      },
+    });
+    await saveDeviceToken('token-a');
+    await saveAnswerAndLearningRecord({
+      id: 'event-a',
+      wordId: 'word-a',
+      dateKey: '2026-07-14',
+      answeredAt: '2026-07-14T09:00:00.000Z',
+      questionKind: 'text-choice',
+      selectedAnswer: '家庭',
+      correctAnswer: '家庭',
+      isCorrect: true,
+      responseTimeMs: 500,
+    }, {
+      wordId: 'word-a',
+      masteryLevel: 2,
+      reviewStage: 2,
+      correctStreak: 1,
+      wrongCount: 0,
+      lastStudiedAt: '2026-07-14T09:00:00.000Z',
+      nextDueAt: '2026-07-16T20:00:00.000Z',
+    });
+    const requests: SyncRequest[] = [];
+    const result = await performStartupSync(async (_input, init) => {
+      const request = JSON.parse(String(init?.body)) as SyncRequest;
+      requests.push(request);
+      if (request.delta) return jsonResponse({ code: 'SNAPSHOT_REQUIRED' }, 400);
+      return jsonResponse({
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        cursor: 'cursor-new',
+        serverTime: '2026-07-14T10:00:00.000Z',
+        upToDate: false,
+        snapshot: request.snapshot,
+      });
+    });
+
+    expect(result.kind).toBe('synced');
+    expect(requests).toHaveLength(2);
+    expect(requests[0].delta?.events).toHaveLength(1);
+    expect(requests[0].snapshot).toBeNull();
+    expect(requests[1].delta).toBeNull();
+    expect(requests[1].snapshot?.events).toHaveLength(1);
   });
 });
 

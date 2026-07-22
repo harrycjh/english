@@ -1,5 +1,6 @@
 import TableStore from 'tablestore';
-import { mergeSnapshots } from './index.mjs';
+import { applyDeltaToSnapshot, mergeSnapshots } from './index.mjs';
+import { evaluateLearningRecord } from './learning-schedule.mjs';
 
 const DEFAULT_TABLES = {
   events: 'vocab_learning_events',
@@ -81,26 +82,6 @@ async function readAllEvents(client, tableName, userId) {
   return events;
 }
 
-function evaluateRecord(current, event) {
-  const intervals = [0, 12, 36, 72, 168, 336, 720];
-  const reviewStage = event.isCorrect
-    ? Math.min(current.reviewStage + 1, intervals.length - 1)
-    : Math.max(current.reviewStage - 1, 0);
-  const masteryLevel = event.isCorrect
-    ? Math.min(current.masteryLevel + 1, 6)
-    : Math.max(current.masteryLevel - 1, 0);
-  const answeredAt = new Date(event.answeredAt);
-  return {
-    ...current,
-    masteryLevel,
-    reviewStage,
-    correctStreak: event.isCorrect ? current.correctStreak + 1 : 0,
-    wrongCount: event.isCorrect ? current.wrongCount : current.wrongCount + 1,
-    lastStudiedAt: event.answeredAt,
-    nextDueAt: new Date(answeredAt.getTime() + intervals[reviewStage] * 60 * 60 * 1000).toISOString(),
-  };
-}
-
 function deriveWordStates(snapshot) {
   const records = new Map((snapshot.checkpoint?.records ?? []).map((record) => [record.wordId, record]));
   const checkpointAt = snapshot.checkpoint?.capturedAt ?? '';
@@ -115,9 +96,25 @@ function deriveWordStates(snapshot) {
       lastStudiedAt: null,
       nextDueAt: null,
     };
-    records.set(event.wordId, evaluateRecord(current, event));
+    records.set(event.wordId, evaluateLearningRecord(current, event));
   }
   return [...records.values()];
+}
+
+function deriveChangedWordStates(events, generation) {
+  const latestByWordId = new Map();
+  for (const event of events) {
+    if ((event.generation ?? 0) !== generation || !event.learningStateAfter) continue;
+    const current = latestByWordId.get(event.wordId);
+    if (!current || event.answeredAt.localeCompare(current.answeredAt) > 0
+      || (event.answeredAt === current.answeredAt && event.id.localeCompare(current.id) > 0)) {
+      latestByWordId.set(event.wordId, event);
+    }
+  }
+  return [...latestByWordId.values()].map((event) => ({
+    ...event.learningStateAfter,
+    wordId: event.wordId,
+  }));
 }
 
 export function createTablestoreRepository(client, tables = DEFAULT_TABLES) {
@@ -154,6 +151,59 @@ export function createTablestoreRepository(client, tables = DEFAULT_TABLES) {
     };
   }
 
+  async function writeEvents(userId, events, checkpointDeviceId = 'legacy') {
+    const rows = events.map((event) => ({
+      type: 'PUT',
+      condition: condition(),
+      primaryKey: [
+        { user_id: userId },
+        { event_time: event.answeredAt },
+        { event_id: event.id },
+      ],
+      attributeColumns: [
+        { payload_json: JSON.stringify(event) },
+        { word_id: event.wordId },
+        { device_id: event.deviceId ?? checkpointDeviceId },
+        { server_received_at: new Date().toISOString() },
+      ],
+    }));
+    await writeRows(client, tables.events, rows);
+  }
+
+  async function writeWordStates(userId, records, generation) {
+    const rows = records.map((record) => ({
+      type: 'PUT',
+      condition: condition(),
+      primaryKey: [{ user_id: userId }, { word_id: record.wordId }],
+      attributeColumns: [
+        { state_json: JSON.stringify(record) },
+        { generation: TableStore.Long.fromNumber(generation) },
+        { updated_at: record.lastStudiedAt ?? new Date().toISOString() },
+      ],
+    }));
+    await writeRows(client, tables.words, rows);
+  }
+
+  async function writeAppState(userId, snapshot) {
+    const { events: _events, ...snapshotWithoutEvents } = snapshot;
+    const cursor = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    await client.putRow({
+      tableName: tables.app,
+      condition: condition(),
+      primaryKey: [
+        { user_id: userId },
+        { state_type: 'sync_snapshot' },
+        { state_id: 'current' },
+      ],
+      attributeColumns: [
+        { payload_json: JSON.stringify(snapshotWithoutEvents) },
+        { cursor },
+        { updated_at: new Date().toISOString() },
+      ],
+    });
+    return cursor;
+  }
+
   return {
     async registerDevice(userId, deviceId) {
       await client.putRow({
@@ -187,52 +237,36 @@ export function createTablestoreRepository(client, tables = DEFAULT_TABLES) {
     async mergeSnapshot(userId, incoming) {
       const current = (await getSyncState(userId, null)).snapshot;
       const merged = mergeSnapshots(current, incoming);
-      const eventRows = incoming.events.map((event) => ({
-        type: 'PUT',
-        condition: condition(),
-        primaryKey: [
-          { user_id: userId },
-          { event_time: event.answeredAt },
-          { event_id: event.id },
-        ],
-        attributeColumns: [
-          { payload_json: JSON.stringify(event) },
-          { word_id: event.wordId },
-          { device_id: event.deviceId ?? incoming.checkpoint?.deviceId ?? 'legacy' },
-          { server_received_at: new Date().toISOString() },
-        ],
-      }));
-      await writeRows(client, tables.events, eventRows);
-
-      const wordRows = deriveWordStates(merged).map((record) => ({
-        type: 'PUT',
-        condition: condition(),
-        primaryKey: [{ user_id: userId }, { word_id: record.wordId }],
-        attributeColumns: [
-          { state_json: JSON.stringify(record) },
-          { generation: TableStore.Long.fromNumber(merged.generation) },
-          { updated_at: record.lastStudiedAt ?? new Date().toISOString() },
-        ],
-      }));
-      await writeRows(client, tables.words, wordRows);
-
-      const { events: _events, ...snapshotWithoutEvents } = merged;
-      const cursor = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-      await client.putRow({
-        tableName: tables.app,
-        condition: condition(),
-        primaryKey: [
-          { user_id: userId },
-          { state_type: 'sync_snapshot' },
-          { state_id: 'current' },
-        ],
-        attributeColumns: [
-          { payload_json: JSON.stringify(snapshotWithoutEvents) },
-          { cursor },
-          { updated_at: new Date().toISOString() },
-        ],
-      });
+      await writeEvents(userId, incoming.events, incoming.checkpoint?.deviceId);
+      await writeWordStates(userId, deriveWordStates(merged), merged.generation);
+      const cursor = await writeAppState(userId, merged);
       return { snapshot: merged, cursor };
+    },
+    async mergeDelta(userId, incoming, clientCursor) {
+      const appState = await readAppState(userId);
+      if (!appState || !clientCursor) return { cursor: null, snapshot: null };
+
+      if (clientCursor === appState.cursor) {
+        const current = { ...appState.snapshotWithoutEvents, events: [] };
+        const merged = applyDeltaToSnapshot(current, incoming, { rebuildCounts: false });
+        if (!merged) return { cursor: null, snapshot: null };
+        await writeEvents(userId, incoming.events);
+        await writeWordStates(
+          userId,
+          deriveChangedWordStates(incoming.events, merged.generation),
+          merged.generation,
+        );
+        const cursor = await writeAppState(userId, merged);
+        return { cursor, snapshot: null };
+      }
+
+      const current = (await getSyncState(userId, null)).snapshot;
+      const merged = applyDeltaToSnapshot(current, incoming);
+      if (!merged) return { cursor: null, snapshot: null };
+      await writeEvents(userId, incoming.events);
+      await writeWordStates(userId, deriveWordStates(merged), merged.generation);
+      const cursor = await writeAppState(userId, merged);
+      return { cursor, snapshot: merged };
     },
   };
 }

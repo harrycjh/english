@@ -103,7 +103,9 @@ function getPreviewWords(payload: WordPayload | null, task: DailyTaskSummary | n
 
 function getAuthoritativeTaskAnswerIds(task: DailyTaskSummary, events: AnswerEvent[]): string[] {
   const eventWordIds = [...new Set(
-    events.filter((event) => event.dateKey === task.dateKey).map((event) => event.wordId),
+    events
+      .filter((event) => event.dateKey === task.dateKey && event.isCorrect)
+      .map((event) => event.wordId),
   )];
   return eventWordIds.length > 0 ? eventWordIds : task.answeredWordIds;
 }
@@ -380,16 +382,23 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
 
   async function handleAnswer(event: AnswerEvent) {
     const currentRecord = recordsById[event.wordId] ?? createEmptyRecord(event.wordId);
-    const nextRecord = evaluateAnswer(currentRecord, event.isCorrect, new Date(event.answeredAt));
-    await saveAnswerAndLearningRecord({
+    const nextRecord = evaluateAnswer(
+      currentRecord,
+      event.isCorrect,
+      new Date(event.answeredAt),
+      event.learningAction,
+    );
+    const enrichedEvent = {
       ...event,
       learningStateBefore: currentRecord,
       learningStateAfter: nextRecord,
-    }, nextRecord);
-    setAnswerEvents((previous) => [...previous.slice(-499), event]);
+    };
+    await saveAnswerAndLearningRecord(enrichedEvent, nextRecord);
+    setAnswerEvents((previous) => [...previous.slice(-499), enrichedEvent]);
 
     if (!practiceWordIds && task && !task.completedAt) {
-      const nextTask = recordTaskAnswer(task, event.isCorrect, event.wordId);
+      const latestTask = await getDailyTask(task.dateKey) ?? task;
+      const nextTask = recordTaskAnswer(latestTask, event.isCorrect, event.wordId);
       await saveDailyTask(nextTask);
       setTask(nextTask);
       await refreshRecentTasks();
@@ -780,6 +789,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           recordsById={recordsById}
           setting={parentSetting}
           studyDateKey={task.dateKey}
+          localLifePhotosById={localLifePhotosById}
           onAnswer={handleAnswer}
           onComplete={handleComplete}
           onExit={handleBackHome}

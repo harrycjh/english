@@ -39,6 +39,15 @@ export interface SyncSnapshot {
   parentSetting: VersionedParentSetting;
 }
 
+export interface SyncDelta {
+  schemaVersion: typeof SYNC_SCHEMA_VERSION;
+  generation: number;
+  events: AnswerEvent[];
+  dailyTasks: DailyTaskSummary[];
+  wordSelectionStates: VersionedWordSelectionState[];
+  parentSetting: VersionedParentSetting | null;
+}
+
 export interface SyncMetadata {
   id: 'sync';
   deviceId: string;
@@ -48,6 +57,11 @@ export interface SyncMetadata {
   lastSyncedAt: string | null;
   pendingSince: string | null;
   checkpoint: LearningCheckpoint | null;
+  pendingEventIds: string[];
+  pendingTaskDateKeys: string[];
+  pendingSelectionWordIds: string[];
+  pendingParentSetting: boolean;
+  forceFullSync: boolean;
 }
 
 export interface SyncRequest {
@@ -56,6 +70,7 @@ export interface SyncRequest {
   cursor: string | null;
   hasLocalChanges?: boolean;
   snapshot: SyncSnapshot | null;
+  delta?: SyncDelta | null;
 }
 
 export interface SyncResponse {

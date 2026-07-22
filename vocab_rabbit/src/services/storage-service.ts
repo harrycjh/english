@@ -11,6 +11,7 @@ import {
 import { type WordSelectionState } from '../models/word-selection-state';
 import {
   SYNC_SCHEMA_VERSION,
+  type SyncDelta,
   type SyncMetadata,
   type SyncRequest,
   type SyncResponse,
@@ -111,24 +112,62 @@ function createSyncMetadata(): SyncMetadata {
     lastSyncedAt: null,
     pendingSince: null,
     checkpoint: null,
+    pendingEventIds: [],
+    pendingTaskDateKeys: [],
+    pendingSelectionWordIds: [],
+    pendingParentSetting: false,
+    forceFullSync: false,
   };
 }
 
 async function ensureSyncMetadata(): Promise<SyncMetadata> {
   const existing = await database.syncMetadata.get(SYNC_METADATA_ID);
   if (existing) {
-    return { ...existing, checkpoint: existing.checkpoint ?? null };
+    const hasChangeTracking = Array.isArray(existing.pendingEventIds)
+      || Array.isArray(existing.pendingTaskDateKeys)
+      || Array.isArray(existing.pendingSelectionWordIds)
+      || typeof existing.pendingParentSetting === 'boolean'
+      || typeof existing.forceFullSync === 'boolean';
+    return {
+      ...existing,
+      checkpoint: existing.checkpoint ?? null,
+      pendingEventIds: existing.pendingEventIds ?? [],
+      pendingTaskDateKeys: existing.pendingTaskDateKeys ?? [],
+      pendingSelectionWordIds: existing.pendingSelectionWordIds ?? [],
+      pendingParentSetting: existing.pendingParentSetting ?? false,
+      forceFullSync: existing.forceFullSync ?? (existing.pendingSince !== null && !hasChangeTracking),
+    };
   }
   const metadata = createSyncMetadata();
   await database.syncMetadata.put(metadata);
   return metadata;
 }
 
-async function markPending(metadata?: SyncMetadata): Promise<SyncMetadata> {
+interface PendingSyncChanges {
+  eventIds?: string[];
+  taskDateKeys?: string[];
+  selectionWordIds?: string[];
+  parentSetting?: boolean;
+  forceFullSync?: boolean;
+}
+
+function unionStrings(current: string[], additions: string[] = []): string[] {
+  return [...new Set([...current, ...additions])];
+}
+
+async function markPending(
+  metadata?: SyncMetadata,
+  changes: PendingSyncChanges = { forceFullSync: true },
+): Promise<SyncMetadata> {
   const current = metadata ?? await ensureSyncMetadata();
   const next = {
     ...current,
     pendingSince: current.pendingSince ?? new Date().toISOString(),
+    pendingEventIds: unionStrings(current.pendingEventIds, changes.eventIds),
+    pendingTaskDateKeys: unionStrings(current.pendingTaskDateKeys, changes.taskDateKeys),
+    pendingSelectionWordIds: unionStrings(current.pendingSelectionWordIds, changes.selectionWordIds),
+    pendingParentSetting: current.pendingParentSetting || Boolean(changes.parentSetting),
+    forceFullSync: current.forceFullSync || Boolean(changes.forceFullSync),
   };
   await database.syncMetadata.put(next);
   return next;
@@ -145,7 +184,7 @@ export async function saveDeviceToken(deviceToken: string | null): Promise<SyncM
   return next;
 }
 
-export async function buildLocalSyncRequest(): Promise<SyncRequest> {
+export async function buildLocalSyncRequest(options: { forceFull?: boolean } = {}): Promise<SyncRequest> {
   const metadata = await ensureSyncMetadata();
   if (metadata.serverCursor && !metadata.pendingSince) {
     return {
@@ -154,6 +193,42 @@ export async function buildLocalSyncRequest(): Promise<SyncRequest> {
       cursor: metadata.serverCursor,
       hasLocalChanges: false,
       snapshot: null,
+      delta: null,
+    };
+  }
+
+  if (metadata.serverCursor && !metadata.forceFullSync && !options.forceFull) {
+    const [events, dailyTasks, selectionStates, storedSetting, storedVersionedSetting] = await Promise.all([
+      database.answerEvents.bulkGet(metadata.pendingEventIds),
+      database.dailyTasks.bulkGet(metadata.pendingTaskDateKeys),
+      database.wordSelectionStates.bulkGet(metadata.pendingSelectionWordIds),
+      metadata.pendingParentSetting ? database.parentSettings.get(PARENT_SETTING_ID) : undefined,
+      metadata.pendingParentSetting ? database.parentSettingSync.get(PARENT_SETTING_ID) : undefined,
+    ]);
+    const parentSetting = storedSetting ? normalizeParentSetting(storedSetting) : null;
+    const versionedParentSetting = storedVersionedSetting
+      ? { value: storedVersionedSetting.value, fieldRevisions: storedVersionedSetting.fieldRevisions }
+      : parentSetting ? {
+        value: parentSetting,
+        fieldRevisions: {},
+      } : null;
+    const delta: SyncDelta = {
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      generation: metadata.generation,
+      events: events.filter((event): event is AnswerEvent => Boolean(event)),
+      dailyTasks: dailyTasks.filter((task): task is DailyTaskSummary => Boolean(task)).map(normalizeDailyTask),
+      wordSelectionStates: selectionStates.filter(
+        (state): state is VersionedWordSelectionState => Boolean(state),
+      ),
+      parentSetting: versionedParentSetting,
+    };
+    return {
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      deviceId: metadata.deviceId,
+      cursor: metadata.serverCursor,
+      hasLocalChanges: true,
+      snapshot: null,
+      delta,
     };
   }
 
@@ -209,6 +284,7 @@ export async function buildLocalSyncRequest(): Promise<SyncRequest> {
     deviceId: metadata.deviceId,
     cursor: metadata.serverCursor,
     hasLocalChanges: true,
+    delta: null,
     snapshot: {
       schemaVersion: SYNC_SCHEMA_VERSION,
       generation: metadata.generation,
@@ -237,7 +313,7 @@ export async function listLearningRecords(): Promise<Record<string, LearningReco
 export async function saveLearningRecord(record: LearningRecord): Promise<void> {
   await database.transaction('rw', database.learningRecords, database.syncMetadata, async () => {
     await database.learningRecords.put(record);
-    await markPending();
+    await markPending(undefined, { forceFullSync: true });
   });
 }
 
@@ -249,7 +325,7 @@ export async function getDailyTask(dateKey: string): Promise<DailyTaskSummary | 
 export async function saveDailyTask(task: DailyTaskSummary): Promise<void> {
   await database.transaction('rw', database.dailyTasks, database.syncMetadata, async () => {
     await database.dailyTasks.put(task);
-    await markPending();
+    await markPending(undefined, { taskDateKeys: [task.dateKey] });
   });
 }
 
@@ -292,7 +368,7 @@ export async function saveParentSetting(setting: ParentSetting): Promise<void> {
       value: normalized,
       fieldRevisions,
     });
-    await markPending(metadata);
+    await markPending(metadata, { parentSetting: true });
   });
 }
 
@@ -316,7 +392,7 @@ export async function saveWordSelectionStates(states: WordSelectionState[]): Pro
       ...state,
       updatedByDeviceId: (state as VersionedWordSelectionState).updatedByDeviceId ?? metadata.deviceId,
     })));
-    await markPending(metadata);
+    await markPending(metadata, { selectionWordIds: states.map((state) => state.wordId) });
   });
 }
 
@@ -329,7 +405,7 @@ export async function saveAnswerEvent(event: AnswerEvent): Promise<void> {
       schemaVersion: event.schemaVersion ?? SYNC_SCHEMA_VERSION,
       generation: event.generation ?? metadata.generation,
     });
-    await markPending(metadata);
+    await markPending(metadata, { eventIds: [event.id] });
   });
 }
 
@@ -352,7 +428,7 @@ export async function saveAnswerAndLearningRecord(
         learningStateAfter: event.learningStateAfter ?? record,
       });
       await database.learningRecords.put(record);
-      await markPending(metadata);
+      await markPending(metadata, { eventIds: [event.id] });
     },
   );
 }
@@ -426,7 +502,7 @@ export async function replaceStudyData(backup: StudyDataExport): Promise<void> {
           updatedByDeviceId: metadata.deviceId,
         }))),
         database.answerEvents.bulkPut(backup.tables.answerEvents),
-        markPending(),
+        markPending(undefined, { forceFullSync: true }),
       ]);
     },
   );
@@ -437,7 +513,7 @@ export async function clearStudyData(): Promise<void> {
     await database.learningRecords.clear();
     await database.dailyTasks.clear();
     await database.answerEvents.clear();
-    await markPending();
+    await markPending(undefined, { forceFullSync: true });
   });
 }
 
@@ -454,16 +530,56 @@ function hasChangesAfterRequest(
   parentSetting: VersionedParentSetting | null,
 ): boolean {
   if (!request) return false;
-  if (!request.snapshot) return metadata.pendingSince !== null;
-
   const sortEvents = (items: AnswerEvent[]) => [...items].sort((left, right) => left.id.localeCompare(right.id));
   const sortTasks = (items: DailyTaskSummary[]) => [...items].sort((left, right) => left.dateKey.localeCompare(right.dateKey));
   const sortSelection = (items: VersionedWordSelectionState[]) => [...items].sort((left, right) => left.wordId.localeCompare(right.wordId));
+
+  if (request.delta) {
+    const eventById = new Map(events.map((event) => [event.id, event]));
+    const taskByDate = new Map(dailyTasks.map((task) => [task.dateKey, task]));
+    const selectionById = new Map(wordSelectionStates.map((state) => [state.wordId, state]));
+    const sentEventIds = new Set(request.delta.events.map((event) => event.id));
+    const sentTaskDateKeys = new Set(request.delta.dailyTasks.map((task) => task.dateKey));
+    const sentSelectionWordIds = new Set(request.delta.wordSelectionStates.map((state) => state.wordId));
+    return metadata.forceFullSync
+      || metadata.pendingEventIds.some((id) => !sentEventIds.has(id))
+      || metadata.pendingTaskDateKeys.some((dateKey) => !sentTaskDateKeys.has(dateKey))
+      || metadata.pendingSelectionWordIds.some((wordId) => !sentSelectionWordIds.has(wordId))
+      || (metadata.pendingParentSetting && request.delta.parentSetting === null)
+      || request.delta.events.some((event) => canonicalJson(eventById.get(event.id)) !== canonicalJson(event))
+      || request.delta.dailyTasks.some((task) => canonicalJson(taskByDate.get(task.dateKey)) !== canonicalJson(task))
+      || request.delta.wordSelectionStates.some(
+        (state) => canonicalJson(selectionById.get(state.wordId)) !== canonicalJson(state),
+      )
+      || (request.delta.parentSetting !== null
+        && canonicalJson(parentSetting) !== canonicalJson(request.delta.parentSetting));
+  }
+
+  if (!request.snapshot) return metadata.pendingSince !== null;
+
   return canonicalJson(sortEvents(events)) !== canonicalJson(sortEvents(request.snapshot.events))
     || canonicalJson(sortTasks(dailyTasks)) !== canonicalJson(sortTasks(request.snapshot.dailyTasks))
     || canonicalJson(sortSelection(wordSelectionStates)) !== canonicalJson(sortSelection(request.snapshot.wordSelectionStates))
     || canonicalJson(parentSetting) !== canonicalJson(request.snapshot.parentSetting)
     || canonicalJson(metadata.checkpoint) !== canonicalJson(request.snapshot.checkpoint);
+}
+
+function syncMetadataAfterResponse(
+  metadata: SyncMetadata,
+  response: SyncResponse,
+  hasLateLocalChanges: boolean,
+): SyncMetadata {
+  return {
+    ...metadata,
+    serverCursor: response.cursor,
+    lastSyncedAt: response.serverTime,
+    pendingSince: hasLateLocalChanges ? metadata.pendingSince ?? new Date().toISOString() : null,
+    pendingEventIds: hasLateLocalChanges ? metadata.pendingEventIds : [],
+    pendingTaskDateKeys: hasLateLocalChanges ? metadata.pendingTaskDateKeys : [],
+    pendingSelectionWordIds: hasLateLocalChanges ? metadata.pendingSelectionWordIds : [],
+    pendingParentSetting: hasLateLocalChanges ? metadata.pendingParentSetting : false,
+    forceFullSync: hasLateLocalChanges ? metadata.forceFullSync : false,
+  };
 }
 
 export async function applySyncResponse(response: SyncResponse, request?: SyncRequest): Promise<void> {
@@ -474,16 +590,37 @@ export async function applySyncResponse(response: SyncResponse, request?: SyncRe
   }
 
   if (!response.snapshot) {
-    await database.transaction('rw', database.syncMetadata, async () => {
+    await database.transaction(
+      'rw',
+      [
+        database.answerEvents,
+        database.dailyTasks,
+        database.parentSettingSync,
+        database.wordSelectionStates,
+        database.syncMetadata,
+      ],
+      async () => {
       const metadata = await ensureSyncMetadata();
-      const hasLateLocalChanges = Boolean(request && !request.snapshot && metadata.pendingSince);
-      await database.syncMetadata.put({
-        ...metadata,
-        serverCursor: response.cursor,
-        lastSyncedAt: response.serverTime,
-        pendingSince: hasLateLocalChanges ? metadata.pendingSince : null,
-      });
-    });
+      const [events, dailyTasks, storedParentSetting, wordSelectionStates] = await Promise.all([
+        database.answerEvents.orderBy('answeredAt').toArray(),
+        database.dailyTasks.orderBy('dateKey').toArray(),
+        database.parentSettingSync.get(PARENT_SETTING_ID),
+        database.wordSelectionStates.toArray(),
+      ]);
+      const parentSetting = storedParentSetting
+        ? { value: storedParentSetting.value, fieldRevisions: storedParentSetting.fieldRevisions }
+        : null;
+      const hasLateLocalChanges = hasChangesAfterRequest(
+        request,
+        metadata,
+        events,
+        dailyTasks,
+        wordSelectionStates,
+        parentSetting,
+      );
+      await database.syncMetadata.put(syncMetadataAfterResponse(metadata, response, hasLateLocalChanges));
+      },
+    );
     return;
   }
 
@@ -524,7 +661,8 @@ export async function applySyncResponse(response: SyncResponse, request?: SyncRe
       const parentSetting = storedParentSetting
         ? mergeParentSetting(snapshot.parentSetting, storedParentSetting)
         : snapshot.parentSetting;
-      const checkpoint = request && canonicalJson(metadata.checkpoint) !== canonicalJson(request.snapshot?.checkpoint)
+      const checkpoint = request?.snapshot
+        && canonicalJson(metadata.checkpoint) !== canonicalJson(request.snapshot.checkpoint)
         ? metadata.checkpoint
         : snapshot.checkpoint;
       const records = Object.values(replayLearningRecords(events, checkpoint));
@@ -547,11 +685,8 @@ export async function applySyncResponse(response: SyncResponse, request?: SyncRe
         database.parentSettingSync.put({ id: PARENT_SETTING_ID, ...parentSetting }),
         database.wordSelectionStates.bulkPut(wordSelectionStates),
         database.syncMetadata.put({
-          ...metadata,
-          serverCursor: response.cursor,
+          ...syncMetadataAfterResponse(metadata, response, hasLateLocalChanges),
           generation: snapshot.generation,
-          lastSyncedAt: response.serverTime,
-          pendingSince: hasLateLocalChanges ? metadata.pendingSince ?? new Date().toISOString() : null,
           checkpoint,
         }),
       ]);

@@ -1,6 +1,6 @@
 import type { SyncRequest, SyncResponse } from '../models/sync';
 
-export type CloudSyncErrorKind = 'unavailable' | 'unauthorized' | 'invalid-code' | 'schema' | 'invalid-response';
+export type CloudSyncErrorKind = 'unavailable' | 'unauthorized' | 'invalid-code' | 'schema' | 'full-snapshot-required' | 'invalid-response';
 
 export class CloudSyncError extends Error {
   constructor(
@@ -81,6 +81,12 @@ async function postJson<T>(
   }
   if (response.status === 403) {
     throw new CloudSyncError('invalid-code', '家庭验证码不正确。', response.status);
+  }
+  if (response.status === 400 || response.status === 409) {
+    const payload = await response.clone().json().catch(() => null) as { code?: string } | null;
+    if (payload?.code === 'FULL_SNAPSHOT_REQUIRED' || payload?.code === 'SNAPSHOT_REQUIRED') {
+      throw new CloudSyncError('full-snapshot-required', '同步服务器要求重新发送完整数据。', response.status);
+    }
   }
   if (response.status === 409 || response.status === 426) {
     throw new CloudSyncError('schema', '云端数据版本不兼容，请先升级应用。', response.status);

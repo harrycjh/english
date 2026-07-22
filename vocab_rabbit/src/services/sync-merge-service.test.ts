@@ -169,7 +169,7 @@ describe('mergeDailyTasks', () => {
       correctCount: 1,
       wrongCount: 1,
       totalAnswered: 2,
-      answeredWordIds: ['word-a', 'word-b'],
+      answeredWordIds: ['word-a'],
     });
   });
 

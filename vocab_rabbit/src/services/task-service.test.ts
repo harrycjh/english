@@ -73,6 +73,13 @@ describe('recordTaskAnswer', () => {
     expect(nextTask.totalAnswered).toBe(2);
     expect(nextTask.answeredWordIds).toEqual(['ket_a_n']);
   });
+
+  it('does not mark a wrong-only word as completed for the day', () => {
+    const nextTask = recordTaskAnswer(makeTask(), false, 'ket_a_n');
+
+    expect(nextTask.answeredWordIds).toEqual([]);
+    expect(getTaskStudyQueue(nextTask)).toContain('ket_a_n');
+  });
 });
 
 describe('daily task queue', () => {
@@ -135,6 +142,19 @@ describe('review-first daily planning', () => {
     );
 
     expect(task.reviewWordIds).toEqual(['due-later-today']);
+  });
+
+  it('includes a word as soon as its target study day refreshes at 4am', () => {
+    const word = makeWord('due-at-refresh');
+    const task = buildDailyTask(
+      [word],
+      { [word.id]: makeDueRecord(word.id, '2026-07-21T20:00:00.000Z') },
+      { ...defaultParentSetting, dailyReviewLimit: 5, dailyNewWordCount: 3 },
+      new Date('2026-07-21T20:00:00.000Z'),
+    );
+
+    expect(task.dateKey).toBe('2026-07-22');
+    expect(task.reviewWordIds).toEqual([word.id]);
   });
 
   it('trims merged unanswered new words to the current allowance without losing answers', () => {
