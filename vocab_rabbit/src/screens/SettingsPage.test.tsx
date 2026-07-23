@@ -40,10 +40,13 @@ describe('SettingsPage local data controls', () => {
         })}
         localLifePhotoCount={0}
         localLifePhotoImportedAt={null}
+        words={[]}
       />,
     );
 
     expect(markup).toContain('清空本地学习数据');
+    expect(markup).toContain('下载全部图片');
+    expect(markup).toContain('下载图片');
     expect(markup).toContain('class="primary-button settings-volume-confirm"');
     expect(markup).toContain('>确定</button>');
     expect(markup).not.toContain('重置进度');

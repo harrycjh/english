@@ -3,6 +3,8 @@ import { APP_VERSION, CONTENT_VERSION } from '../config/app-meta';
 import type { WordPayload } from '../models/word';
 import {
   getLifePhotoCoverageUrl,
+  getStudyChinese,
+  getStudyPartOfSpeech,
   getWordImageAtlasUrl,
   getWordImageUrl,
   getWordPayloadUrl,
@@ -10,6 +12,28 @@ import {
   mergeLifePhotoCoverage,
   mergeRelatedMedia,
 } from './word-service';
+
+describe('study sense helpers', () => {
+  const word = {
+    chinese: '能；会；罐；罐头',
+    partOfSpeech: 'n & mv',
+    studySense: {
+      chinese: '能；会',
+      partOfSpeech: 'mv',
+      examples: ['The boy can ride a bike.'],
+    },
+  };
+
+  it('uses the study sense when a word has several meanings', () => {
+    expect(getStudyChinese(word)).toBe('能；会');
+    expect(getStudyPartOfSpeech(word)).toBe('mv');
+  });
+
+  it('falls back to the original fields for ordinary words', () => {
+    expect(getStudyChinese({ chinese: '猫' })).toBe('猫');
+    expect(getStudyPartOfSpeech({ partOfSpeech: 'n' })).toBe('n');
+  });
+});
 
 describe('getWordPayloadUrl', () => {
   it('adds the app version to avoid stale cached vocabulary payloads', () => {

@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "runId": "comfy-sample-20260723-133534",
+    "workflowTemplate": "/Users/chujianhe/English/vocab_rabbit/tools/workflows/z-image-turbo.api-prompt.json",
+    "comfyUrl": "http://127.0.0.1:8188",
+    "width": 512,
+    "height": 512
+  },
+  "records": [
+    {
+      "wordId": "ket_hard_adj_adv",
+      "english": "hard",
+      "chinese": "难的",
+      "category": "感受和性格",
+      "seed": 784784934917,
+      "prompt": "Create a standalone storybook illustration: a school-age child concentrating on a difficult three-dimensional puzzle, trying several pieces while a nearly completed complex model sits in front of them. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "comfyOutputPath": "/Users/chujianhe/ComfyUI-Shared/output/vocab_rabbit_samples/ket_hard_adj_adv_00002_.png",
+      "samplePath": "tmp/sense-fix-generation/comfy-sample-20260723-133534/samples/ket_hard_adj_adv.png"
+    },
+    {
+      "wordId": "ket_brush_n_v",
+      "english": "brush",
+      "chinese": "刷子",
+      "category": "常用动作动词",
+      "seed": 784784974143,
+      "prompt": "Create a standalone storybook illustration: a school-age child actively brushing their teeth with a toothbrush at a bathroom sink, with clean foam around the teeth and no writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "comfyOutputPath": "/Users/chujianhe/ComfyUI-Shared/output/vocab_rabbit_samples/ket_brush_n_v_00002_.png",
+      "samplePath": "tmp/sense-fix-generation/comfy-sample-20260723-133534/samples/ket_brush_n_v.png"
+    },
+    {
+      "wordId": "ket_cross_n_v",
+      "english": "cross",
+      "chinese": "叉",
+      "category": "常用动作动词",
+      "seed": 784784983178,
+      "prompt": "Create a standalone storybook illustration: a child safely crossing a road from one side to the other on a plain zebra crossing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "comfyOutputPath": "/Users/chujianhe/ComfyUI-Shared/output/vocab_rabbit_samples/ket_cross_n_v_00002_.png",
+      "samplePath": "tmp/sense-fix-generation/comfy-sample-20260723-133534/samples/ket_cross_n_v.png"
+    },
+    {
+      "wordId": "ket_tidy_adj_v",
+      "english": "tidy",
+      "chinese": "整齐的",
+      "category": "常用动作动词",
+      "seed": 784784990707,
+      "prompt": "Create a standalone storybook illustration: a school-age child actively tidying a bedroom by putting scattered toys into a storage box, with some toys still on the floor and a neat shelf nearby. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "comfyOutputPath": "/Users/chujianhe/ComfyUI-Shared/output/vocab_rabbit_samples/ket_tidy_adj_v_00002_.png",
+      "samplePath": "tmp/sense-fix-generation/comfy-sample-20260723-133534/samples/ket_tidy_adj_v.png"
+    }
+  ]
+}

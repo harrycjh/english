@@ -10,6 +10,13 @@ import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import type { LifePhotoImportResult } from '../services/local-media-service';
 import type { StudyDataImportResult } from '../services/study-data-import';
+import type { WordRecord } from '../models/word';
+import {
+  collectOfflineImageUrls,
+  downloadOfflineImages,
+  getOfflineImageCacheStatus,
+  requestPersistentImageStorage,
+} from '../services/offline-image-cache-service';
 
 interface SettingsPageProps {
   settings: ParentSetting;
@@ -25,6 +32,7 @@ interface SettingsPageProps {
   onImportLifePhotoPackage: (file: File) => Promise<LifePhotoImportResult>;
   localLifePhotoCount: number;
   localLifePhotoImportedAt: string | null;
+  words: WordRecord[];
 }
 
 interface SettingsNumberControlProps {
@@ -139,6 +147,7 @@ export function SettingsPage({
   onImportLifePhotoPackage,
   localLifePhotoCount,
   localLifePhotoImportedAt,
+  words,
 }: SettingsPageProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [loadDraft, setLoadDraft] = useState(() => ({
@@ -153,8 +162,16 @@ export function SettingsPage({
   const [lifePhotoImportError, setLifePhotoImportError] = useState<string | null>(null);
   const [studyDataImportSummary, setStudyDataImportSummary] = useState<string | null>(null);
   const [studyDataImportError, setStudyDataImportError] = useState<string | null>(null);
+  const [offlineImageState, setOfflineImageState] = useState<{
+    phase: 'checking' | 'idle' | 'downloading' | 'complete' | 'error' | 'unsupported';
+    completed: number;
+    total: number;
+    failed: number;
+  }>({ phase: 'checking', completed: 0, total: 0, failed: 0 });
   const lifePhotoInputRef = useRef<HTMLInputElement>(null);
   const studyDataInputRef = useRef<HTMLInputElement>(null);
+  const imageDownloadAbortRef = useRef<AbortController | null>(null);
+  const offlineImageUrls = useMemo(() => collectOfflineImageUrls(words), [words]);
 
   useEffect(() => {
     setLoadDraft({
@@ -162,6 +179,35 @@ export function SettingsPage({
       dailyReviewLimit: settings.dailyReviewLimit,
     });
   }, [settings.dailyNewWordCount, settings.dailyReviewLimit]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (typeof caches === 'undefined') {
+      setOfflineImageState({ phase: 'unsupported', completed: 0, total: offlineImageUrls.length, failed: 0 });
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    setOfflineImageState((current) => ({ ...current, phase: 'checking', total: offlineImageUrls.length }));
+    void getOfflineImageCacheStatus(offlineImageUrls).then(({ cached, total }) => {
+      if (cancelled) return;
+      setOfflineImageState({
+        phase: cached === total && total > 0 ? 'complete' : 'idle',
+        completed: cached,
+        total,
+        failed: 0,
+      });
+    }).catch(() => {
+      if (!cancelled) {
+        setOfflineImageState({ phase: 'error', completed: 0, total: offlineImageUrls.length, failed: 0 });
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [offlineImageUrls]);
 
   const runtimeInfo = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -224,6 +270,52 @@ export function SettingsPage({
   async function handleExportDataClick() {
     await onExportStudyData();
     setLastSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
+  }
+
+  async function handleOfflineImageDownload() {
+    if (offlineImageState.phase === 'downloading') {
+      imageDownloadAbortRef.current?.abort();
+      return;
+    }
+    if (typeof caches === 'undefined') {
+      setOfflineImageState({ phase: 'unsupported', completed: 0, total: offlineImageUrls.length, failed: 0 });
+      return;
+    }
+
+    const abortController = new AbortController();
+    imageDownloadAbortRef.current = abortController;
+    setOfflineImageState((current) => ({ ...current, phase: 'downloading', failed: 0 }));
+    void requestPersistentImageStorage();
+
+    try {
+      const result = await downloadOfflineImages(offlineImageUrls, {
+        signal: abortController.signal,
+        onProgress: ({ completed, total, failed }) => {
+          setOfflineImageState({ phase: 'downloading', completed, total, failed });
+        },
+      });
+      setOfflineImageState({
+        phase: result.failed > 0 ? 'error' : 'complete',
+        completed: result.cached + result.downloaded,
+        total: result.total,
+        failed: result.failed,
+      });
+    } catch (caughtError) {
+      const status = await getOfflineImageCacheStatus(offlineImageUrls).catch(() => ({
+        cached: offlineImageState.completed,
+        total: offlineImageUrls.length,
+      }));
+      setOfflineImageState({
+        phase: abortController.signal.aborted ? 'idle' : 'error',
+        completed: status.cached,
+        total: status.total,
+        failed: abortController.signal.aborted ? 0 : 1,
+      });
+    } finally {
+      if (imageDownloadAbortRef.current === abortController) {
+        imageDownloadAbortRef.current = null;
+      }
+    }
   }
 
   async function handleLifePhotoPackageChange(event: ChangeEvent<HTMLInputElement>) {
@@ -294,6 +386,29 @@ export function SettingsPage({
     ?? (localLifePhotoCount > 0
       ? `已导入 ${localLifePhotoCount} 张${savedLifePhotoTime ? ` · 导入时间 ${savedLifePhotoTime}` : ''}，只保存在这台设备。`
       : '尚未导入生活照片，只会保存在当前设备。');
+  const offlineImagePercent = offlineImageState.total > 0
+    ? Math.round((offlineImageState.completed / offlineImageState.total) * 100)
+    : 0;
+  const offlineImageStatusText = offlineImageState.phase === 'checking'
+    ? '正在检查本机图片…'
+    : offlineImageState.phase === 'unsupported'
+      ? '当前浏览器不支持离线图片缓存。'
+      : offlineImageState.phase === 'downloading'
+        ? `正在下载 ${offlineImageState.completed}/${offlineImageState.total}（${offlineImagePercent}%）`
+        : offlineImageState.phase === 'complete'
+          ? `已下载全部 ${offlineImageState.total} 个图片资源，可离线快速显示。`
+          : offlineImageState.phase === 'error'
+            ? `已保存 ${offlineImageState.completed}/${offlineImageState.total}，${offlineImageState.failed} 个下载失败，可继续下载。`
+            : offlineImageState.completed > 0
+              ? `已保存 ${offlineImageState.completed}/${offlineImageState.total}，点击继续下载。`
+              : `共 ${offlineImageState.total} 个图片资源，生活照片无需重复下载。`;
+  const offlineImageButtonText = offlineImageState.phase === 'downloading'
+    ? '停止下载'
+    : offlineImageState.phase === 'complete'
+      ? '检查更新'
+      : offlineImageState.completed > 0
+        ? '继续下载'
+        : '下载图片';
 
   return (
     <main className="page page--home page--settings" data-profile={settings.profileId}>
@@ -513,6 +628,26 @@ export function SettingsPage({
                   onClick={() => lifePhotoInputRef.current?.click()}
                 >
                   {isImportingPhotos ? '导入中…' : '选择照片包'}
+                </button>
+              </article>
+              <article className="settings-data-item settings-data-item--images">
+                <span className="settings-data-item__icon">☁️</span>
+                <div aria-live="polite">
+                  <strong>下载全部图片到本地</strong>
+                  <p>{offlineImageStatusText}</p>
+                  {(offlineImageState.phase === 'downloading' || offlineImageState.completed > 0) && (
+                    <span className="settings-image-download-progress" aria-hidden="true">
+                      <span style={{ width: `${offlineImagePercent}%` }} />
+                    </span>
+                  )}
+                </div>
+                <button
+                  className="secondary-button"
+                  type="button"
+                  disabled={offlineImageState.phase === 'checking' || offlineImageState.phase === 'unsupported'}
+                  onClick={() => void handleOfflineImageDownload()}
+                >
+                  {offlineImageButtonText}
                 </button>
               </article>
               <article className="settings-data-item settings-data-item--danger">

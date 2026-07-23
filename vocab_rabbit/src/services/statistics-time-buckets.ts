@@ -1,5 +1,5 @@
 import type { LearningLoadPoint } from './learning-statistics';
-import type { DurabilityTimelinePoint } from './memory-statistics';
+import type { MasteryLevelTimelinePoint } from './memory-statistics';
 
 export type StatisticsTimeScale = 'day' | 'week' | 'month';
 
@@ -50,12 +50,12 @@ export function aggregateLearningLoadTimeline(
   });
 }
 
-export function aggregateDurabilityTimeline(
-  points: DurabilityTimelinePoint[],
+export function aggregateMasteryLevelTimeline(
+  points: MasteryLevelTimelinePoint[],
   scale: StatisticsTimeScale,
-): DurabilityTimelinePoint[] {
+): MasteryLevelTimelinePoint[] {
   if (scale === 'day') return points;
-  const buckets = new Map<string, DurabilityTimelinePoint[]>();
+  const buckets = new Map<string, MasteryLevelTimelinePoint[]>();
   for (const point of points) {
     const key = getStatisticsBucketKey(point.dateKey, scale);
     const bucket = buckets.get(key) ?? [];

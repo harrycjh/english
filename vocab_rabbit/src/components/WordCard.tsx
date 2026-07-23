@@ -1,5 +1,10 @@
 import type { WordRecord } from '../models/word';
-import { getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
+import {
+  getPrimaryOxfordRefLabel,
+  getStudyChinese,
+  getStudyPartOfSpeech,
+  getStudyText,
+} from '../services/word-service';
 
 interface WordCardProps {
   word: WordRecord;
@@ -15,9 +20,9 @@ export function WordCard({ word, onOpenDetails }: WordCardProps) {
         <span className="word-card__difficulty">Lv.{word.difficulty}</span>
       </div>
       <h3>{getStudyText(word)}</h3>
-      <p>{word.chinese}</p>
+      <p>{getStudyChinese(word)}</p>
       <footer>
-        <span>{word.partOfSpeech}</span>
+        <span>{getStudyPartOfSpeech(word)}</span>
         <span>{oxfordLabel ?? '暂未回填牛津树位置'}</span>
       </footer>
     </>

@@ -115,6 +115,18 @@ export function getStudyText(word: Pick<WordRecord, 'english'>): string {
     .trim();
 }
 
+export function getStudyChinese(
+  word: Pick<WordRecord, 'chinese' | 'studySense'>,
+): string {
+  return word.studySense?.chinese ?? word.chinese;
+}
+
+export function getStudyPartOfSpeech(
+  word: Pick<WordRecord, 'partOfSpeech' | 'studySense'>,
+): string {
+  return word.studySense?.partOfSpeech ?? word.partOfSpeech;
+}
+
 export function getAssetUrl(assetPath: string): string {
   return `${import.meta.env.BASE_URL}${assetPath.replace(/^\//, '')}`;
 }

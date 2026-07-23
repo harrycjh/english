@@ -33,6 +33,30 @@ export function createAnswerEventId(wordId: string, answeredAt: string): string 
   return `${answeredAt}-${wordId}-${randomPart}`;
 }
 
+export function applyConsecutiveWrongPolicy(
+  previousEvents: AnswerEvent[],
+  event: AnswerEvent,
+): AnswerEvent {
+  if (event.isCorrect) {
+    return { ...event, levelDowngrade: false };
+  }
+
+  const wordEvents = previousEvents
+    .filter((item) => item.wordId === event.wordId && item.dateKey === event.dateKey)
+    .sort((left, right) => right.answeredAt.localeCompare(left.answeredAt) || right.id.localeCompare(left.id));
+  const alreadyDowngradedToday = wordEvents.some((item) => item.levelDowngrade);
+  let previousWrongStreak = 0;
+  for (const item of wordEvents) {
+    if (item.isCorrect) break;
+    previousWrongStreak += 1;
+  }
+
+  return {
+    ...event,
+    levelDowngrade: !alreadyDowngradedToday && previousWrongStreak + 1 >= 3,
+  };
+}
+
 export function summarizeAnswerEvents(events: AnswerEvent[]): AnswerEventSummary {
   const byWord = new Map<string, { wrongCount: number; totalCount: number }>();
   const byQuestionKind = new Map<QuestionKind, { correctCount: number; totalCount: number }>();

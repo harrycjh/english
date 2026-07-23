@@ -14,12 +14,12 @@ import {
 } from '../services/learning-statistics';
 import {
   buildMemoryStatistics,
-  type DurabilityTimelinePoint,
-  type DurabilityThresholdPoint,
+  type MasteryLevelPoint,
+  type MasteryLevelTimelinePoint,
   type RetentionPoint,
 } from '../services/memory-statistics';
 import {
-  aggregateDurabilityTimeline,
+  aggregateMasteryLevelTimeline,
   aggregateLearningLoadTimeline,
   getStatisticsBucketKey,
   type StatisticsTimeScale,
@@ -376,9 +376,9 @@ function LearningLoadChart({ points, todayKey, scale }: {
   );
 }
 
-function DurabilityLineChart({ timeline, thresholds, todayKey, scale }: {
-  timeline: DurabilityTimelinePoint[];
-  thresholds: DurabilityThresholdPoint[];
+function MasteryLevelLineChart({ timeline, levels, todayKey, scale }: {
+  timeline: MasteryLevelTimelinePoint[];
+  levels: MasteryLevelPoint[];
   todayKey: string;
   scale: StatisticsTimeScale;
 }) {
@@ -390,7 +390,7 @@ function DurabilityLineChart({ timeline, thresholds, todayKey, scale }: {
   const bottom = 46;
   const plotHeight = height - top - bottom;
   const rawMaximum = Math.max(
-    ...timeline.flatMap((point) => thresholds.map((threshold) => point.counts[threshold.thresholdDays] ?? 0)),
+    ...timeline.flatMap((point) => levels.map((level) => point.counts[level.level] ?? 0)),
     1,
   );
   const tickStep = Math.max(1, Math.ceil(rawMaximum / 4));
@@ -398,9 +398,9 @@ function DurabilityLineChart({ timeline, thresholds, todayKey, scale }: {
   const ticks = [maximum, maximum - tickStep, maximum - (tickStep * 2), tickStep, 0];
   const xForIndex = (index: number) => index * dayWidth + dayWidth / 2;
   const yForCount = (count: number) => top + (1 - count / maximum) * plotHeight;
-  const pathForThreshold = (thresholdDays: number) => timeline.map((point, index) => {
+  const pathForLevel = (level: number) => timeline.map((point, index) => {
     const prefix = index === 0 ? 'M' : 'L';
-    return `${prefix} ${xForIndex(index).toFixed(1)} ${yForCount(point.counts[thresholdDays] ?? 0).toFixed(1)}`;
+    return `${prefix} ${xForIndex(index).toFixed(1)} ${yForCount(point.counts[level] ?? 0).toFixed(1)}`;
   }).join(' ');
   const currentBucketKey = getStatisticsBucketKey(todayKey, scale);
 
@@ -414,7 +414,7 @@ function DurabilityLineChart({ timeline, thresholds, todayKey, scale }: {
   }, [scrollRef, timeline.length, todayKey]);
 
   return (
-    <div className="durability-timeline-chart" role="group" aria-label="每日记忆持久度四曲线图">
+    <div className="durability-timeline-chart" role="group" aria-label="每日各学习等级单词数量曲线图">
       <div className="durability-timeline-chart__axis" aria-hidden="true">
         <div className="durability-timeline-chart__scale">
           {ticks.map((tick) => <span key={tick}>{tick}</span>)}
@@ -438,7 +438,7 @@ function DurabilityLineChart({ timeline, thresholds, todayKey, scale }: {
             viewBox={`0 0 ${width} ${height}`}
             preserveAspectRatio="none"
             role="img"
-            aria-label="过去九十天每天达到不同记忆持久度的单词数量"
+            aria-label="过去九十天每天各学习等级的单词数量"
           >
             {ticks.map((tick) => (
               <line key={tick} x1={0} y1={yForCount(tick)} x2={width} y2={yForCount(tick)} className="memory-chart-grid" />
@@ -450,24 +450,25 @@ function DurabilityLineChart({ timeline, thresholds, todayKey, scale }: {
               height={plotHeight}
               className="memory-durability-today"
             />
-            {thresholds.map((threshold) => (
+            {levels.map((level) => (
               <path
-                key={threshold.thresholdDays}
-                d={pathForThreshold(threshold.thresholdDays)}
+                key={level.level}
+                d={pathForLevel(level.level)}
                 className="memory-durability-line"
-                style={{ stroke: threshold.color }}
+                style={{ stroke: level.color }}
               />
             ))}
-            {thresholds.map((threshold) => {
-              const currentCount = timeline.at(-1)?.counts[threshold.thresholdDays] ?? 0;
+            {levels.map((level) => {
+              const currentCount = timeline.at(-1)?.counts[level.level] ?? 0;
+              if (currentCount === 0) return null;
               return (
                 <circle
-                  key={threshold.thresholdDays}
+                  key={level.level}
                   cx={xForIndex(timeline.length - 1)}
                   cy={yForCount(currentCount)}
                   r="5"
                   className="memory-durability-node"
-                  style={{ fill: threshold.color }}
+                  style={{ fill: level.color }}
                 />
               );
             })}
@@ -480,7 +481,7 @@ function DurabilityLineChart({ timeline, thresholds, todayKey, scale }: {
               <span
                 key={point.dateKey}
                 className={point.dateKey === currentBucketKey ? 'is-today' : ''}
-                title={`${formatDate(point.dateKey)}：${thresholds.map((threshold) => `≥${threshold.thresholdDays}天 ${point.counts[threshold.thresholdDays] ?? 0}词`).join('，')}`}
+                title={`${formatDate(point.dateKey)}：${levels.map((level) => `Lv.${level.level} ${point.counts[level.level] ?? 0}词`).join('，')}`}
               >
                 {formatTimelineLabel(point.dateKey, todayKey, scale)}
               </span>
@@ -519,9 +520,9 @@ export function StatsPage({
     () => aggregateLearningLoadTimeline(learning.timeline, learningTimeScale),
     [learning.timeline, learningTimeScale],
   );
-  const durabilityTimeline = useMemo(
-    () => aggregateDurabilityTimeline(memory.durabilityTimeline, durabilityTimeScale),
-    [durabilityTimeScale, memory.durabilityTimeline],
+  const masteryLevelTimeline = useMemo(
+    () => aggregateMasteryLevelTimeline(memory.masteryLevelTimeline, durabilityTimeScale),
+    [durabilityTimeScale, memory.masteryLevelTimeline],
   );
   const tabs: Array<{ id: StatsTab; label: string; icon: typeof Activity }> = [
     { id: 'forgetting', label: '遗忘曲线', icon: Activity },
@@ -642,7 +643,7 @@ export function StatsPage({
                 <div className="memory-panel__header">
                   <div>
                     <h2>{durabilityTimeScale === 'day' ? '每日' : durabilityTimeScale === 'week' ? '每周' : '每月'}记忆持久度</h2>
-                    <p>横轴为时间，纵轴为周期末达到不同记忆持久度的单词数量；左右拖动可查看历史</p>
+                    <p>横轴为时间，纵轴为周期末各学习等级的单词数量；左右拖动可查看历史</p>
                   </div>
                   <div className="memory-panel__chart-tools">
                     <TimeScaleSwitch
@@ -651,18 +652,18 @@ export function StatsPage({
                       label="记忆持久度统计周期"
                     />
                     <div className="memory-chart-legend memory-chart-legend--durability">
-                      {memory.durabilityThresholds.map((point) => (
-                        <span key={point.thresholdDays}>
+                      {memory.masteryLevels.map((point) => (
+                        <span key={point.level}>
                           <i style={{ background: point.color }} />
-                          ≥{point.thresholdDays} 天 · {point.count}
+                          Lv.{point.level} · {point.count}
                         </span>
                       ))}
                     </div>
                   </div>
                 </div>
-                <DurabilityLineChart
-                  timeline={durabilityTimeline}
-                  thresholds={memory.durabilityThresholds}
+                <MasteryLevelLineChart
+                  timeline={masteryLevelTimeline}
+                  levels={memory.masteryLevels}
                   todayKey={task.dateKey}
                   scale={durabilityTimeScale}
                 />

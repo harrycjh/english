@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { AnswerEvent } from '../models/answer-event';
-import { getWordAnswerStats, getWrongPracticeWordIds, summarizeAnswerEvents } from './answer-event-service';
+import {
+  applyConsecutiveWrongPolicy,
+  getWordAnswerStats,
+  getWrongPracticeWordIds,
+  summarizeAnswerEvents,
+} from './answer-event-service';
 
 function event(overrides: Partial<AnswerEvent>): AnswerEvent {
   return {
@@ -31,6 +36,43 @@ describe('summarizeAnswerEvents', () => {
       { questionKind: 'fill-blank', totalCount: 2, correctCount: 0, wrongCount: 2, accuracy: 0 },
       { questionKind: 'image-choice', totalCount: 2, correctCount: 1, wrongCount: 1, accuracy: 50 },
     ]);
+  });
+});
+
+describe('applyConsecutiveWrongPolicy', () => {
+  it('marks the third consecutive wrong answer on the same study day for downgrade', () => {
+    const first = event({ id: '1', answeredAt: '2026-06-26T10:00:00.000Z' });
+    const second = event({ id: '2', answeredAt: '2026-06-26T10:01:00.000Z' });
+    const third = event({ id: '3', answeredAt: '2026-06-26T10:02:00.000Z' });
+
+    expect(applyConsecutiveWrongPolicy([], first).levelDowngrade).toBe(false);
+    expect(applyConsecutiveWrongPolicy([first], second).levelDowngrade).toBe(false);
+    expect(applyConsecutiveWrongPolicy([first, second], third).levelDowngrade).toBe(true);
+  });
+
+  it('allows at most one downgrade for the same word each day', () => {
+    const previous = [
+      event({ id: '1', answeredAt: '2026-06-26T10:00:00.000Z' }),
+      event({ id: '2', answeredAt: '2026-06-26T10:01:00.000Z' }),
+      event({ id: '3', answeredAt: '2026-06-26T10:02:00.000Z', levelDowngrade: true }),
+      event({ id: '4', answeredAt: '2026-06-26T10:03:00.000Z' }),
+      event({ id: '5', answeredAt: '2026-06-26T10:04:00.000Z' }),
+    ];
+
+    expect(applyConsecutiveWrongPolicy(previous, event({ id: '6' })).levelDowngrade).toBe(false);
+  });
+
+  it('resets the streak after a correct answer and ignores other words and days', () => {
+    const previous = [
+      event({ id: 'old-day', dateKey: '2026-06-25', answeredAt: '2026-06-25T10:00:00.000Z' }),
+      event({ id: 'other-word', wordId: 'ket_other_n', answeredAt: '2026-06-26T10:00:00.000Z' }),
+      event({ id: 'wrong-before-correct', answeredAt: '2026-06-26T10:01:00.000Z' }),
+      event({ id: 'correct', answeredAt: '2026-06-26T10:02:00.000Z', isCorrect: true }),
+      event({ id: 'wrong-after-correct', answeredAt: '2026-06-26T10:03:00.000Z' }),
+    ];
+
+    expect(applyConsecutiveWrongPolicy(previous, event({ id: 'next' })).levelDowngrade).toBe(false);
+    expect(applyConsecutiveWrongPolicy(previous, event({ id: 'right', isCorrect: true })).levelDowngrade).toBe(false);
   });
 });
 

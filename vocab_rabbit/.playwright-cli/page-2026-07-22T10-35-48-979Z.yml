@@ -1,0 +1,152 @@
+- generic [ref=e1]:
+  - generic [ref=e277]:
+    - banner:
+      - generic [ref=e278]:
+        - generic [ref=e280]: VocaRabbit
+        - generic [ref=e281]: v0.1.6
+      - generic [ref=e282]:
+        - button "可爱的小珺珺" [ref=e283]:
+          - generic [ref=e284]: 👧
+        - text: ✓
+    - main [ref=e453]:
+      - generic [ref=e454]:
+        - generic [ref=e455]:
+          - generic [ref=e470]:
+            - paragraph [ref=e471]: 个人记忆模型
+            - heading "学习统计" [level=1] [ref=e472]
+          - tablist "统计类别" [ref=e473]:
+            - tab "遗忘曲线" [ref=e474] [cursor=pointer]
+            - tab "学习情况" [ref=e478] [cursor=pointer]
+            - tab "记忆持久度" [active] [selected] [ref=e482] [cursor=pointer]
+        - tabpanel [ref=e1382]:
+          - generic [ref=e1383]:
+            - generic [ref=e1384]:
+              - generic [ref=e1385]:
+                - heading "每日记忆持久度" [level=2] [ref=e1386]
+                - paragraph [ref=e1387]: 横轴为时间，纵轴为周期末各学习等级的单词数量；左右拖动可查看历史
+              - generic [ref=e1388]:
+                - group "记忆持久度统计周期" [ref=e1389]:
+                  - button "日" [pressed] [ref=e1390] [cursor=pointer]
+                  - button "周" [ref=e1391] [cursor=pointer]
+                  - button "月" [ref=e1392] [cursor=pointer]
+                - generic [ref=e1393]:
+                  - generic [ref=e1394]: Lv.0 · 0
+                  - generic [ref=e1396]: Lv.1 · 0
+                  - generic [ref=e1398]: Lv.2 · 0
+                  - generic [ref=e1400]: Lv.3 · 0
+                  - generic [ref=e1402]: Lv.4 · 0
+                  - generic [ref=e1404]: Lv.5 · 0
+                  - generic [ref=e1406]: Lv.6 · 0
+                  - generic [ref=e1408]: Lv.7 · 0
+                  - generic [ref=e1410]: Lv.8 · 0
+                  - generic [ref=e1412]: Lv.9 · 0
+            - group "每日各学习等级单词数量曲线图" [ref=e1414]:
+              - generic [ref=e1415]:
+                - generic [ref=e1416]:
+                  - generic [ref=e1417]: "4"
+                  - generic [ref=e1418]: "3"
+                  - generic [ref=e1419]: "2"
+                  - generic [ref=e1420]: "1"
+                  - generic [ref=e1421]: "0"
+                - generic [ref=e1422]: 词数
+              - generic [ref=e1424]:
+                - img "过去九十天每天各学习等级的单词数量" [ref=e1425]
+                - generic:
+                  - generic "4/23：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 90天前
+                  - generic "4/24：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 89天前
+                  - generic "4/25：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 88天前
+                  - generic "4/26：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 87天前
+                  - generic "4/27：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 86天前
+                  - generic "4/28：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 85天前
+                  - generic "4/29：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 84天前
+                  - generic "4/30：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 83天前
+                  - generic "5/1：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 82天前
+                  - generic "5/2：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 81天前
+                  - generic "5/3：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 80天前
+                  - generic "5/4：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 79天前
+                  - generic "5/5：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 78天前
+                  - generic "5/6：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 77天前
+                  - generic "5/7：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 76天前
+                  - generic "5/8：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 75天前
+                  - generic "5/9：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 74天前
+                  - generic "5/10：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 73天前
+                  - generic "5/11：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 72天前
+                  - generic "5/12：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 71天前
+                  - generic "5/13：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 70天前
+                  - generic "5/14：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 69天前
+                  - generic "5/15：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 68天前
+                  - generic "5/16：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 67天前
+                  - generic "5/17：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 66天前
+                  - generic "5/18：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 65天前
+                  - generic "5/19：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 64天前
+                  - generic "5/20：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 63天前
+                  - generic "5/21：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 62天前
+                  - generic "5/22：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 61天前
+                  - generic "5/23：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 60天前
+                  - generic "5/24：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 59天前
+                  - generic "5/25：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 58天前
+                  - generic "5/26：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 57天前
+                  - generic "5/27：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 56天前
+                  - generic "5/28：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 55天前
+                  - generic "5/29：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 54天前
+                  - generic "5/30：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 53天前
+                  - generic "5/31：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 52天前
+                  - generic "6/1：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 51天前
+                  - generic "6/2：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 50天前
+                  - generic "6/3：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 49天前
+                  - generic "6/4：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 48天前
+                  - generic "6/5：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 47天前
+                  - generic "6/6：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 46天前
+                  - generic "6/7：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 45天前
+                  - generic "6/8：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 44天前
+                  - generic "6/9：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 43天前
+                  - generic "6/10：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 42天前
+                  - generic "6/11：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 41天前
+                  - generic "6/12：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 40天前
+                  - generic "6/13：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 39天前
+                  - generic "6/14：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 38天前
+                  - generic "6/15：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 37天前
+                  - generic "6/16：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 36天前
+                  - generic "6/17：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 35天前
+                  - generic "6/18：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 34天前
+                  - generic "6/19：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 33天前
+                  - generic "6/20：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 32天前
+                  - generic "6/21：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 31天前
+                  - generic "6/22：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 30天前
+                  - generic "6/23：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 29天前
+                  - generic "6/24：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 28天前
+                  - generic "6/25：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 27天前
+                  - generic "6/26：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 26天前
+                  - generic "6/27：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 25天前
+                  - generic "6/28：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 24天前
+                  - generic "6/29：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 23天前
+                  - generic "6/30：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 22天前
+                  - generic "7/1：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 21天前
+                  - generic "7/2：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 20天前
+                  - generic "7/3：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 19天前
+                  - generic "7/4：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 18天前
+                  - generic "7/5：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 17天前
+                  - generic "7/6：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 16天前
+                  - generic "7/7：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 15天前
+                  - generic "7/8：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 14天前
+                  - generic "7/9：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 13天前
+                  - generic "7/10：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 12天前
+                  - generic "7/11：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 11天前
+                  - generic "7/12：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 10天前
+                  - generic "7/13：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 9天前
+                  - generic "7/14：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 8天前
+                  - generic "7/15：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 7天前
+                  - generic "7/16：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 6天前
+                  - generic "7/17：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 5天前
+                  - generic "7/18：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 4天前
+                  - generic "7/19：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 3天前
+                  - generic "7/20：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 前天
+                  - generic "7/21：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 昨天
+                  - generic "7/22：Lv.0 0词，Lv.1 0词，Lv.2 0词，Lv.3 0词，Lv.4 0词，Lv.5 0词，Lv.6 0词，Lv.7 0词，Lv.8 0词，Lv.9 0词": 今天
+    - navigation "主页面导航" [ref=e430]:
+      - button "复习" [ref=e431] [cursor=pointer]
+      - button "选词" [ref=e435] [cursor=pointer]
+      - button "统计" [ref=e442]
+      - button "设置" [ref=e447] [cursor=pointer]
+  - link "⌂" [ref=e9] [cursor=pointer]:
+    - /url: https://www.cw2017.com

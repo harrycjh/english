@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { LearningLoadPoint } from './learning-statistics';
-import type { DurabilityTimelinePoint } from './memory-statistics';
+import type { MasteryLevelTimelinePoint } from './memory-statistics';
 import {
-  aggregateDurabilityTimeline,
+  aggregateMasteryLevelTimeline,
   aggregateLearningLoadTimeline,
   getStatisticsBucketKey,
 } from './statistics-time-buckets';
@@ -30,14 +30,14 @@ describe('statistics time buckets', () => {
     }]);
   });
 
-  it('uses the final durability state in a month instead of adding states', () => {
-    const points: DurabilityTimelinePoint[] = [
-      { dateKey: '2026-07-01', counts: { 10: 2, 30: 1 } },
-      { dateKey: '2026-07-31', counts: { 10: 9, 30: 4 } },
+  it('uses the final mastery-level state in a month instead of adding states', () => {
+    const points: MasteryLevelTimelinePoint[] = [
+      { dateKey: '2026-07-01', counts: { 1: 2, 2: 1 } },
+      { dateKey: '2026-07-31', counts: { 1: 9, 2: 4 } },
     ];
-    expect(aggregateDurabilityTimeline(points, 'month')).toEqual([{
+    expect(aggregateMasteryLevelTimeline(points, 'month')).toEqual([{
       dateKey: '2026-07-01',
-      counts: { 10: 9, 30: 4 },
+      counts: { 1: 9, 2: 4 },
     }]);
   });
 });

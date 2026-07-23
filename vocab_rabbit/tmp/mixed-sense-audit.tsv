@@ -1,0 +1,182 @@
+001	ket_love_n_v	love	n & v	爱	家人和朋友	I love playing with my dog.	
+002	ket_rest_n_v	rest	n & v	休息；其余部分	身体、健康和锻炼	Let's rest for a while.	a tired child resting peacefully in a hammock beneath a tree.
+003	ket_back_n_adv_adj	back	n, adv & adj	后退	身体、健康和锻炼	I walked back home from the park.	a person viewed clearly from behind with the whole back visible.
+004	ket_swim_v_n	swim	v & n	游泳	身体、健康和锻炼	We can swim in the pool.	a child actively swimming freestyle through clear pool water.
+005	ket_exercise_n_v	exercise	n & v	锻炼	身体、健康和锻炼	Exercise was part of the plan.	a child exercising with jumping jacks on a safe gym mat.
+006	ket_break_n_v	break	n & v	休息；打破	身体、健康和锻炼	I need to take a break from my work.	a child with one arm safely supported in a cast after a simple bone break, no injury detail.
+007	ket_fall_n_v	fall	n & v	落下	身体、健康和锻炼	The cat fell from the tree.	a child safely falling backward onto a thick gym mat while practicing balance.
+008	ket_clean_adj_v	clean	adj & v	干净的	身体、健康和锻炼	I need to clean my hands before eating.	a child washing both hands with soap until they are visibly clean.
+009	ket_cold_adj_n	cold	adj & n	冷的；感冒	身体、健康和锻炼	I have a cold and need to rest at home.	a child with a cold resting under a blanket while sneezing into a tissue.
+010	ket_walk_v_n	walk	v & n	走	身体、健康和锻炼	I like to walk in the park every day.	a child walking naturally along a park path with one foot stepping forward.
+011	ket_well_adv_adj	well	adv & adj	出色地	身体、健康和锻炼	I feel well today and can go to school.	a recovered healthy child smiling and giving a thumbs-up after resting.
+012	ket_alone_adj_adv	alone	adj & adv	独自的	感受和性格	He was all alone in the big house.	one child sitting alone on a park bench with no other people nearby.
+013	ket_fast_adj_adv	fast	adj & adv	快速地	感受和性格	The car was fast and drove to the city quickly.	one runner moving far ahead of several others with clear motion and speed.
+014	ket_sweet_n_adj	sweet	n & adj	甜的	感受和性格	She gave me a sweet to eat.	a small bowl of colorful sweets beside a jar of honey, no labels.
+015	ket_free_adj_adv	free	adj & adv	自由的	感受和性格	I feel free when I am in nature and away from the city.	a bird flying freely into the open sky from an open cage.
+016	ket_better_adj_adv	better	adj & adv	更好的	感受和性格	She feels better today.	one blue toy car with all four wheels newly repaired and rolling smoothly while a child proudly holding the repaired car gives a strong thumbs up; one broken wheel lies discarded behind.
+017	ket_hard_adj_adv	hard	adj & adv	难的	感受和性格	The hard work paid off.	a metal hammer resting against a visibly hard solid rock beside a soft pillow for contrast.
+018	ket_right_n_adj_adv	right	n, adj & adv	右边；正确的	感受和性格	Please turn right at the next corner.	a child placing the one correctly matching shape into a puzzle while other shapes do not fit.
+019	ket_cool_adj_exclam	cool	adj & exclam	凉爽的	感受和性格	That's so cool! I want one too.	friends reacting with admiration as a child performs a safe skateboard trick.
+020	ket_kind_adj_n	kind	adj & n	友好的；种类	感受和性格	He is a kind man, so he helps others.	a kind child helping an elderly neighbor carry a bag of groceries.
+021	ket_home_n_adv	home	n & adv	家	房子和家具	They went to the dogs' home for a walk.	a family relaxing together inside their cozy home with familiar furniture, photos shown only as blank color shapes, and a pet.
+022	ket_light_n_adj	light	n & adj	灯；光；轻的；浅色的	房子和家具	The light is on the table.	one bright ceiling light switched on and clearly illuminating an otherwise dim room.
+023	ket_telephone_n_v	telephone	n & v	电话	家用电器和电子设备	I call my mother with the telephone.	
+024	ket_phone_v_n	phone	v & n	打电话；电话	家用电器和电子设备	I call my friend with the phone.	
+025	ket_ring_n_v	ring	n & v	戒指；响铃；打电话	衣服和配饰	I wear a ring on my finger.	one gold finger ring with a small jewel shown clearly on a plain hand, no box or writing.
+026	ket_watch_n_v	watch	n & v	手表；观看	衣服和配饰	I wear a watch on my wrist.	one analog wristwatch strapped around a wrist, with plain hands and no written numbers.
+027	ket_dress_n_v	dress	n & v	连衣裙；穿衣服	衣服和配饰	My sister wears a dress to the party.	a child actively putting on a colorful knee-length dress with help from a parent, safe and modest.
+028	ket_black_adj_n	black	adj & n	黑色的	颜色	The cat is black.	
+029	ket_orange_adj_n	orange	adj & n	橙色；橙子	颜色	The bus is orange.	
+030	ket_blue_adj_n	blue	adj & n	蓝色的	颜色	The sky is blue.	
+031	ket_silver_n_adj	silver	n & adj	银	颜色	The necklace is silver.	
+032	ket_brown_adj_n	brown	adj & n	棕色的	颜色	The bear is brown.	
+033	ket_cook_n_v	cook	n & v	厨师；做饭	食物和饮料	She is a cook.	a simple real-life scene that clearly represents cook, specifically in the context of food and drinks.
+034	ket_roast_v_adj	roast	v & adj	烤；烤的	食物和饮料	We roasted the chicken for dinner.	a roasted meal on a plate with steam rising, no text.
+035	ket_cream_adj_n	cream	adj & n	奶油；奶油色的	食物和饮料	The cake is covered in cream.	a small bowl of thick whipped cream with soft white peaks and a plain spoon.
+036	ket_drink_n_v	drink	n & v	喝	食物和饮料	I need a drink.	a simple real-life scene that clearly represents drink, specifically in the context of food and drinks.
+037	ket_fish_n_v	fish	n & v	鱼	食物和饮料	A fish swam in the aquarium.	a simple real-life scene that clearly represents fish, specifically in the context of food and drinks.
+038	ket_can_n_mv	can	n & mv	能；会；罐；罐头	情态动词和语气	The boy can ride a bike.	A cheerful child successfully rides a bicycle without training wheels while a nearby parent gives an encouraging thumbs-up, clearly expressing can as ability. No cans, containers, labels, captions, or text.
+039	ket_glass_n_adj	glass	n & adj	玻璃	食物和饮料	We have a glass of water.	a simple real-life scene that clearly represents glass, specifically in the context of food and drinks.
+040	ket_book_n_v	book	n & v	书；预订	学校和学习	I need to buy a new book for my class.	one open book with plain blank pages beside a closed book with no title.
+041	ket_note_n_v	note	n & v	笔记；记下	学校和学习	I took notes during the lecture.	a child placing one small blank reminder note beside a school bag before leaving.
+042	ket_email_n_v	email	n & v	电子邮件	书本、证件和文字	I sent an email to my teacher.	an envelope icon travelling from one blank laptop screen to another, no text.
+043	ket_message_n_v	message	n, v	信息；发消息	书本、证件和文字	I left a message for my mother.	one blank message bubble travelling between two plain phones with no letters.
+044	ket_text_n_v	text	n & v	短信；发短信	书本、证件和文字	I sent a text to my friend.	a page layout made of neat grey line blocks representing text without readable characters.
+045	ket_film_n_v	film	n & v	电影	娱乐和表演	She likes to watch films in the cinema.	a camera crew filming an actor performing a scene, with no clapperboard text.
+046	ket_paint_v_n	paint	v & n	画	娱乐和表演	She likes to paint pictures in her free time.	a child actively painting colorful flowers on a blank canvas with a brush and palette.
+047	ket_show_v_n	show	v & n	表演；给……看	娱乐和表演	He showed me his new car.	a stage show with a presenter revealing a magic trick to an audience.
+048	ket_fun_adj_n	fun	adj & n	乐趣	娱乐和表演	The party was fun for everyone.	children laughing and having fun together on swings and a slide.
+049	ket_play_v_n	play	v & n	玩	娱乐和表演	Children like to play games.	children actively playing a board game together and smiling.
+050	ket_dance_n_v	dance	n & v	舞蹈	娱乐和表演	She likes to dance at parties.	two children actively dancing together to music on a clear floor.
+051	ket_park_n_v	park	n & v	公园；停车	爱好和休闲	We went to the park and played.	families relaxing in a green public park while one car is parked neatly nearby.
+052	ket_call_n_v	call	n & v	打电话；叫作	通讯、网络和数码	I will call you tomorrow.	a child making a phone call with a plain smartphone held to one ear.
+053	ket_download_n_v	download	n & v	下载	通讯、网络和数码	You can download the file from the website.	a simple cloud and arrow moving toward a blank laptop screen, no letters.
+054	ket_talk_n_v	talk	n & v	讲话	通讯、网络和数码	We are talking about our plans.	two friends talking animatedly face to face with natural hand gestures.
+055	ket_online_adj_adv	online	adj & adv	在线的	通讯、网络和数码	You can shop online from the comfort of your home.	two children smiling at each other through two blank computer screens connected by glowing dots.
+056	ket_click_n_v	click	n & v	点击	通讯、网络和数码	Click on the button to submit your form.	a close hand pressing a computer mouse button beside a blank monitor.
+057	ket_race_n_v	race	n & v	种族	运动和比赛	My brother won the race yesterday.	several runners competing side by side in a race toward a plain finish ribbon, no lane numbers.
+058	ket_ride_n_v	ride	n & v	骑	运动和比赛	We rode our bikes to the park.	a helmeted child actively riding a bicycle along a safe park path.
+059	ket_shop_n_v	shop	n & v	店铺	建筑和公共地点	He went to the shop to buy some milk.	
+060	ket_underground_n_adj	underground	n & adj	地下	城镇街道和城市	The underground station was crowded.	
+061	ket_square_n_adj	square	n & adj	正方形	城镇街道和城市	They played in the square.	
+062	ket_close_adj_v	close	adj & v	近的；关闭	购物买东西	The door is closed.	a shop worker actively closing the front doors and pulling down a plain shutter.
+063	ket_cost_n_v	cost	n & v	成本	购物买东西	The cost of the book is ten dollars.	a customer counting a pile of coins needed to receive one product from a cashier.
+064	ket_open_adj_v	open	adj & v	开着的；打开	购物买东西	He opened the door with a key.	a shop worker actively opening wide front doors as customers approach.
+065	ket_cash_n_v	cash	n & v	现金	购物买东西	He paid with cash, not a card.	a small group of plain banknotes and coins arranged beside an open cash drawer, no numbers.
+066	ket_change_v_n	change	v & n	改变；零钱	购物买东西	I gave her some change for the coffee.	a cashier returning several small coins as change to a customer after a purchase.
+067	ket_star_n_v	star	n & v	星星	自然世界	The star is shining in the sky.	
+068	ket_north_n_adj_adv	north	n, adj & adv	北	自然世界	The north wind is cold.	
+069	ket_west_n_adj_adv	west	n, adj & adv	西方	自然世界	The west wind blows.	
+070	ket_east_n_adj_adv	east	n, adj & adv	东方	自然世界	The sun rises in the east.	
+071	ket_south_n_adj_adv	south	n, adj & adv	南	自然世界	The south is hot in summer.	
+072	ket_rain_n_v	rain	n & v	雨	天气	It's raining outside now.	
+073	ket_snow_n_v	snow	n & v	雪	天气	It snowed heavily last night.	
+074	ket_tonight_n_adv	tonight	n & adv	今晚	时间和日期	We are having pizza for dinner tonight.	a child setting up a telescope at dusk for stargazing later that night.
+075	ket_half_det_n_pron	half	det, n & pron	一半	时间和日期	It's half past ten.	one apple cut cleanly into two equal halves with both halves visible.
+076	ket_past_prep_n	past	prep & n	过；过去	时间和日期	He lives ten minutes' past the station.	a child looking back at an old faded family photograph beside a modern present-day scene.
+077	ket_weekly_adj_adv	weekly	adj & adv	每周的；每周	时间和日期	The newspaper is published weekly.	the same child attending one activity once across each repeated seven-day cycle, no writing.
+078	ket_second_adj_det_n	second	adj, det & n	第二	时间和日期	I waited for a second before answering.	two runners finishing a race with one child clearly arriving second behind the winner.
+079	ket_daily_adj_adv	daily	adj & adv	日常的	时间和日期	The newspaper is published daily.	the same child watering the same plant across a row of repeated sunrises.
+080	ket_today_n_adv	today	n & adv	今天	时间和日期	I am here today.	a child actively enjoying the present day beside one currently highlighted blank calendar square.
+081	ket_monthly_adj_adv	monthly	adj & adv	每月	时间和日期	The magazine is published monthly.	several calendar pages in a row, each with the same recurring day square marked, no writing.
+082	ket_tomorrow_n_adv	tomorrow	n & adv	明天	时间和日期	Tomorrow is the day after today.	exactly two side-by-side scenes: at night a child packs a backpack, then after the next sunrise the same child carries it out the door.
+083	ket_left_adj_adv_n	left	adj, adv & n	左边；左边的	出行和交通	He went to the left.	a car turning left at a clear road fork while the right branch remains empty, no signs.
+084	ket_return_n_v	return	n & v	返回	出行和交通	I need to return the book.	a traveller returning home with a suitcase while family warmly welcomes them at the door.
+085	ket_delay_n_v	delay	n & v	延迟	出行和交通	The flight was delayed.	a stationary train beside waiting passengers and a plain clock showing that departure is delayed.
+086	ket_stop_n_v	stop	n & v	停止	出行和交通	The bus stopped at the traffic light.	a moving car coming to a complete stop before a pedestrian crossing.
+087	ket_work_n_v	work	n & v	工作	工作和职业	I have to work on Saturday.	a person actively working with hand tools to repair a wooden chair in a workshop.
+088	ket_first_adv_adj	first	adv & adj	第一的	数字和顺序词	The first person to arrive was me.	
+089	ket_one_det_pron	one	det & pron	一	数字和顺序词	I have one apple in my hand.	
+090	ket_a_few_det_adj_pron	a few	det, adj & pron	几个	数量和多少	I have a few books on my desk.	a small pleasant group of exactly three red apples on a plain table.
+091	ket_all_adv_det_pron	all	adv, det & pron	全部	数量和多少	I ate all the cake.	every apple from an empty table gathered together inside one full basket.
+092	ket_another_det_pron	another	det & pron	其他	数量和多少	Can I have another cookie?	one apple on a table while a hand adds another apple beside it.
+093	ket_any_det_pron	any	det & pron	任何	数量和多少	Do you have any water?	a child free to choose any one object from a basket of many different objects.
+094	ket_both_pron_det	both	pron & det	两个都	数量和多少	It had both its ears.	two apples together with a child holding both of them, one in each hand.
+095	ket_each_det_pron	each	det & pron	每个	数量和多少	Each student has a book.	three children each holding exactly one apple of their own.
+096	ket_enough_adv_det_pron	enough	adv, det & pron	足够的	数量和多少	I have enough money for the ticket.	four children with exactly four chairs, enough for everyone and none left over.
+097	ket_few_det_adj	few	det & adj	很少	数量和多少	There are only a few people in the room.	only two apples sitting in a very large mostly empty basket.
+098	ket_less_adj_det_pron	less	adj, det & pron	较少的	数量和多少	He has less money than me.	two clear bowls side by side with one bowl containing visibly less rice.
+099	ket_many_det_pron	many	det & pron	许多	数量和多少	There are many people in the park.	many red apples spread across a large table.
+100	ket_more_adj_adv_det_pron	more	adj, adv, det & pron	更多的	数量和多少	He has more books than me.	two bowls of apples with one bowl clearly containing more than the other.
+101	ket_most_adj_adv_det_pron	most	adj, adv, det & pron	最多	数量和多少	He has the most books of all.	six apples together with five red apples and only one green apple.
+102	ket_much_adj_adv_det_pron	much	adj, adv, det & pron	很多	数量和多少	He has much money.	a large transparent tank containing a great amount of water.
+103	ket_no_adv_det_pron	no	adv, det & pron	不	数量和多少	No, thank you.	a completely empty basket with no apples anywhere nearby.
+104	ket_same_adj_pron	same	adj & pron	相同的	数量和多少	The two books are the same.	two exactly identical plain blue socks placed side by side.
+105	ket_some_det_pron	some	det & pron	一些	数量和多少	Do you have some water?	a hand selecting some apples from a larger group while several remain behind.
+106	ket_all_kinds_of_det_pron	all kinds of	det & pron	各种	人称和指代词	He likes all kinds of fruits.	a large collection containing many kinds of toys, vehicles, animals, and balls together.
+107	ket_all_sorts_of_det_pron	all sorts of	det & pron	各种各样的	人称和指代词	There are all sorts of animals in the zoo.	many assorted craft materials of different shapes, colors, and textures arranged together.
+108	ket_her_det_pron	her	det & pron	她	人称和指代词	I met her sister at the station.	one girl holding her own backpack close while standing beside it.
+109	ket_his_det_pron	his	det & pron	他的	人称和指代词	His brother plays basketball after school.	one boy holding his own backpack close while standing beside it.
+110	ket_other_det_pron	other	det & pron	其他	人称和指代词	The other children are waiting outside.	a child setting one red cup aside and choosing the other blue cup.
+111	ket_several_det_pron	several	det & pron	一些	人称和指代词	I saw several people at the park.	a small group of several apples, clearly more than two but not a large pile.
+112	ket_that_conj_pron	that	conj & pron	那	人称和指代词	That is my book, not yours.	a foreground hand pointing toward one blue ball far away across a field.
+113	ket_these_det_pron	these	det & pron	这些	人称和指代词	These are apples, not oranges.	a foreground hand pointing to several red apples very close to the viewer.
+114	ket_this_det_pron	this	det & pron	这	人称和指代词	This book is easier than the last one.	a foreground hand pointing to one red ball very close to the viewer.
+115	ket_those_det_pron	those	det & pron	那些	人称和指代词	Those are my shoes, not yours.	a foreground hand pointing toward several colorful kites far away in the sky.
+116	ket_what_det_pron	what	det & pron	什么	人称和指代词	What is that in your hand?	a puzzled child lifting a cloth to discover an unfamiliar hidden object.
+117	ket_which_det_pron	which	det & pron	哪个	人称和指代词	I know which one will win.	a child carefully choosing between two different pairs of shoes.
+118	ket_whose_det_pron	whose	det & pron	谁	人称和指代词	Whose book is this?	several children examining one unclaimed backpack and wondering who owns it.
+119	ket_last_adj_det	last	adj & det	最后的	冠词和限定词	The last book is on the table.	one child clearly last at the back of a line of runners.
+120	ket_about_adv_prep	about	adv & prep	关于	介词和方向词	I know about your new job.	two children having a lively conversation about a globe placed between them, no speech text.
+121	ket_above_adv_prep	above	adv & prep	多于	介词和方向词	The price is above my budget.	one red ball floating clearly above a blue wooden box with open space between them.
+122	ket_across_adv_prep	across	adv & prep	穿过	介词和方向词	We walked across the park.	a child walking from one side to the other across a small footbridge.
+123	ket_after_adv_prep	after	adv & prep	后	介词和方向词	He arrived after me.	two children in a clear line with the second child standing directly after the first.
+124	ket_around_adv_prep	around	adv & prep	大约	介词和方向词	The party is around the corner.	four children sitting in a complete circle around a round table.
+125	ket_as_conj_adv_prep	as	conj & adv & prep	作为	介词和方向词	I will come as soon as I can.	a child dressed and acting as a doctor while gently checking a teddy bear.
+126	ket_before_adv_conj_prep	before	adv, conj & prep	前	介词和方向词	We ate before we went to bed.	exactly two side-by-side scenes: on the left a child washes both hands, and on the right the same child eats a meal after washing.
+127	ket_behind_adv_prep	behind	adv & prep	在后面	介词和方向词	The car is behind me.	one child hiding directly behind one thick tree trunk, with only the child's head and one shoulder peeking out from behind the trunk.
+128	ket_below_adv_prep	below	adv & prep	以下	介词和方向词	The price is below my budget.	a red ball positioned clearly below a high wooden shelf.
+129	ket_down_adv_prep	down	adv & prep	向下	介词和方向词	The bird flew down from the tree.	a child carefully walking down a staircase toward the lower floor.
+130	ket_except_conj_prep	except	conj & prep	除了	介词和方向词	I like all fruits except bananas.	many green apples grouped together except one orange placed alone outside the group.
+131	ket_in_adv_prep	in	adv & prep	在	介词和方向词	The cat is in the box.	one red ball resting visibly in an open blue wooden box.
+132	ket_inside_adv_prep	inside	adv & prep	里面	介词和方向词	The cat is inside the box.	a small cat sitting completely inside an open cardboard box.
+133	ket_like_adv_prep_v	like	adv, prep & v	喜欢	介词和方向词	My sister and I like the same music.	a child and parent who look alike wearing matching plain clothes and making the same pose.
+134	ket_near_adv_prep	near	adv & prep	靠近	介词和方向词	The postbox is near the cross.	a red ball near a blue wooden box with a short visible distance between them.
+135	ket_on_prep_adv	on	prep & adv	在	介词和方向词	The cat sat on the mat.	one red ball resting securely on top of a blue wooden box.
+136	ket_outside_prep_adv	outside	prep & adv	外部	介词和方向词	The birds flew outside.	one closed cardboard box centered on the floor and one cat sitting clearly beside and fully outside the box without overlapping it.
+137	ket_over_prep_adv	over	prep & adv	超过	介词和方向词	The bird flew over the house.	a bright bird flying over the roof of a small house.
+138	ket_than_prep_conj	than	prep & conj	比	介词和方向词	She is taller than me.	two children standing side by side with one clearly taller than the other.
+139	ket_up_prep_adv	up	prep & adv	向上	介词和方向词	The bird flew up from the tree.	a child climbing up a staircase toward the upper floor.
+140	ket_so_conj_adv	so	conj & adv	所以	连词和句子连接词	It was raining, so we stayed inside.	heavy rain begins, so a child opens an umbrella as the clear result.
+141	ket_all_right_alright_adj_adv_exclam	all right/alright	adj, adv & exclam	好的；没问题	感叹词和回应语	All right, let's go.	a reassuring child helping a friend up after a tiny fall and giving a thumbs-up.
+142	ket_alright_adj_adv_exclam	alright	adj, adv & exclam	好吧	感叹词和回应语	Alright, I will help you.	a calm child smiling, nodding, and giving a clear okay thumbs-up.
+143	ket_please_v_exclam	please	v & exclam	请	感叹词和回应语	Please close the window before you leave.	a child making a polite request with gentle open hands toward a shared toy.
+144	ket_welcome_adj_exclam	welcome	adj & exclam	欢迎	感叹词和回应语	Welcome, please come in and sit down.	a friendly host opening a front door and warmly gesturing for a guest to come inside.
+145	ket_early_adj_adv	early	adj & adv	早期的	时间和频率副词	She arrived at the meeting early.	a child arriving early at an empty school entrance in the first sunrise light.
+146	ket_late_adv_adj	late	adv & adj	晚的	时间和频率副词	It was too late.	a worried child rushing toward a bus that has already begun to leave.
+147	ket_best_adj_adv	best	adj & adv	最好的	方式和程度副词	She sings best in the morning.	three handmade cakes with one beautifully finished cake wearing a plain prize ribbon.
+148	ket_bit_n_adv	bit	n & adv	少量	方式和程度副词	He ate a bit of cake.	a full bowl of rice beside one tiny spoon holding only three grains, with the tiny amount on the spoon as the focus.
+149	ket_next_adj_adv	next	adj & adv	下一个	方式和程度副词	The next day, he woke up early.	a child waiting directly behind another child as the next person in line.
+150	ket_only_adv_adj	only	adv & adj	仅有的	方式和程度副词	He is the only one who can do this.	one single red apple sitting alone on an otherwise empty table.
+151	ket_straight_adj_adv	straight	adj & adv	直的	方式和程度副词	He walked straight to the house.	a long perfectly straight road continuing directly toward the horizon.
+152	ket_answer_n_v	answer	n & v	回答	说话和思考动词	I need to find the answer.	a confident child raising a hand and answering a teacher's question, no speech text.
+153	ket_be_av_v	be	av & v	是	常用动作动词	The cat is black and white.	one solid colorful child calmly present in a real scene beside a faint empty outline where nobody is.
+154	ket_brush_n_v	brush	n & v	刷子	常用动作动词	Please brush your teeth before bed.	a simple real-life scene that clearly represents brush, specifically in the context of common physical actions.
+155	ket_colour_n_v	colour	n & v	颜色	常用动作动词	The sky has a beautiful colour.	a simple real-life scene that clearly represents colour, specifically in the context of common physical actions.
+156	ket_contact_n_v	contact	n & v	接触	常用动作动词	I need to contact my friend.	two friends contacting each other on two plain phones in a split scene, screens without text.
+157	ket_cover_v_n	cover	v &n	覆盖	常用动作动词	The children helped Fred to pull the cover off the rainbow machine.	a child gently covering a sleeping doll completely with a small blanket.
+158	ket_cross_n_v	cross	n & v	叉	常用动作动词	The road crosses the river.	a simple real-life scene that clearly represents cross, specifically in the context of common physical actions.
+159	ket_do_av_v	do	av & v	做	常用动作动词	I do my homework every day.	a child actively doing a clear household task by sweeping the floor with a broom.
+160	ket_dream_n_v	dream	n & v	梦	常用动作动词	I had a dream about the ocean.	a sleeping child dreaming of flying gently above clouds in a soft dream scene, no text.
+161	ket_dry_adj_v	dry	adj & v	干燥	常用动作动词	The clothes are dry now.	wet clothes drying on an outdoor line in warm sunshine with water drops disappearing.
+162	ket_end_v_n	end	v & n	结尾	常用动作动词	The end of the story is sad.	a runner crossing a plain finish ribbon at the clear end of a race.
+163	ket_have_av_v	have	av & v	有	常用动作动词	I have a new phone.	a smiling child holding their own red ball securely against their chest.
+164	ket_help_v_n	help	v & n	帮助	常用动作动词	I will help you with your homework.	exactly two children beside one fallen bicycle: one child looks distressed while the other child actively helps lift the bicycle.
+165	ket_kick_n_v	kick	n & v	踢	常用动作动词	He kicked the ball with his foot.	a child kicking a football forward across a grass field.
+166	ket_kiss_n_v	kiss	n & v	吻	常用动作动词	They shared a kiss on the cheek.	a parent gently kissing a child on the forehead.
+167	ket_matter_n_v	matter	n & v	事情	常用动作动词	It doesn't matter if you are late.	a child protecting a cherished teddy bear from rain under a small umbrella.
+168	ket_offer_n_v	offer	n & v	提供	常用动作动词	He offered me a cup of coffee.	a child holding out a tray with a cup for a friend to take.
+169	ket_order_n_v	order	n & v	顺序；点餐；订购	常用动作动词	I want to order a pizza.	a family at a restaurant pointing to pictures of meals while a waiter listens, no writing.
+170	ket_plan_n_v	plan	n & v	计划	常用动作动词	We need to plan our holiday.	a child arranging toy buildings and a winding route on a table before starting a project.
+171	ket_post_v_n	post	v & n	邮政	常用动作动词	Please post this letter on your way home.	a child putting a sealed blank envelope through a street mailbox slot.
+172	ket_score_n_v	score	n, v	分数	常用动作动词	The score was 2-2, but Pippa didn't care.	a football entering a goal net while the child who kicked it celebrates.
+173	ket_shampoo_n_v	shampoo	n & v	洗发水	常用动作动词	She used shampoo to wash her hair.	a person washing their hair with thick shampoo foam under a shower.
+174	ket_tidy_adj_v	tidy	adj & v	整齐的	常用动作动词	We must tidy up the room.	a perfectly tidy bedroom with a made bed, aligned books, and toys stored in boxes.
+175	ket_adult_adj_n	adult	adj & n	成人	常见形容词	The adult was very kind.	one clearly grown adult standing beside a young child in a neutral family scene.
+176	ket_gold_n_adj	gold	n & adj	金子	常见形容词	The chest was full of gold.	a shiny solid gold trophy cup and gold coin on a plain surface with no writing.
+177	ket_leather_n_adj	leather	n & adj	皮革	常见形容词	The jacket is made of leather.	a brown leather boot and matching leather bag with the natural material texture clearly visible.
+178	ket_metal_n_adj	metal	n & adj	金属	常见形容词	The spoon is made of metal.	a shiny metal spoon, metal bowl, and metal cooking pot reflecting light.
+179	ket_paper_n_adj	paper	n & adj	纸	常见形容词	The paper is thin, so it's easy to tear.	a stack of plain paper sheets beside a folded paper boat and paper bird.
+180	ket_plastic_n_adj	plastic	n & adj	塑料	常见形容词	The bottle is made of plastic.	a colorful plastic bottle, plastic bowl, and plastic toy with smooth molded surfaces.
+181	ket_total_adj_n	total	adj & n	全部的	常见形容词	The total amount of money was one hundred coins.	two empty bowls held upside down above one center basket, with apples visibly falling from both bowls into the same basket to form one combined group.
+182	ket_whole_adj_n	whole	adj & n	所有的	常见形容词	I ate the whole apple.	one complete whole apple beside another apple cut into several slices.

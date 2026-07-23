@@ -1,7 +1,7 @@
 import type { LearningRecord } from '../models/learning-record';
 import { defaultParentSetting, type ParentSetting } from '../models/parent-setting';
 import type { WordRecord } from '../models/word';
-import { getStudyText } from './word-service';
+import { getStudyChinese, getStudyText } from './word-service';
 
 export type QuestionKind =
   | 'recognition'
@@ -36,7 +36,7 @@ export interface ImageAnswerChoiceQuestion extends BaseQuestion {
   kind: 'image-answer-choice';
   options: WordRecord[];
   correctAnswer: string;
-  imageStrategy: 'related-priority';
+  imageStrategy: 'comfy';
 }
 
 export interface FillBlankQuestion extends BaseQuestion {
@@ -63,14 +63,19 @@ function canUseFillBlank(word: WordRecord): boolean {
 }
 
 function buildDistractors(word: WordRecord, allWords: WordRecord[]): WordRecord[] {
+  const studyChinese = getStudyChinese(word);
   const sameCategory = allWords.filter(
-    (candidate) => candidate.id !== word.id && candidate.category === word.category && candidate.chinese !== word.chinese
+    (candidate) => (
+      candidate.id !== word.id
+      && candidate.category === word.category
+      && getStudyChinese(candidate) !== studyChinese
+    )
   );
   const sameDifficulty = allWords.filter(
     (candidate) =>
       candidate.id !== word.id
       && Math.abs(candidate.difficulty - word.difficulty) <= 1
-      && candidate.chinese !== word.chinese
+      && getStudyChinese(candidate) !== studyChinese
   );
   const pool = shuffle([
     ...sameCategory,
@@ -79,8 +84,9 @@ function buildDistractors(word: WordRecord, allWords: WordRecord[]): WordRecord[
   ]);
   const uniqueByChinese = new Map<string, WordRecord>();
   for (const candidate of pool) {
-    if (!uniqueByChinese.has(candidate.chinese)) {
-      uniqueByChinese.set(candidate.chinese, candidate);
+    const candidateChinese = getStudyChinese(candidate);
+    if (!uniqueByChinese.has(candidateChinese)) {
+      uniqueByChinese.set(candidateChinese, candidate);
     }
   }
   return [...uniqueByChinese.values()].slice(0, 3);
@@ -104,14 +110,18 @@ function buildChoiceQuestion(
   allWords: WordRecord[],
   imageStrategy?: QuestionImageStrategy,
 ): ChoiceQuestion {
-  const options = shuffle([word.chinese, ...buildDistractors(word, allWords).map((candidate) => candidate.chinese)]);
+  const studyChinese = getStudyChinese(word);
+  const options = shuffle([
+    studyChinese,
+    ...buildDistractors(word, allWords).map(getStudyChinese),
+  ]);
   return {
     kind,
     prompt: kind === 'image-choice' ? '看看图片，选出正确中文' : '看看英文，选出正确中文',
     studyText: getStudyText(word),
     word,
     options,
-    correctAnswer: word.chinese,
+    correctAnswer: studyChinese,
     imageStrategy,
   };
 }
@@ -124,7 +134,7 @@ function buildImageAnswerChoiceQuestion(word: WordRecord, allWords: WordRecord[]
     word,
     options: shuffle([word, ...buildDistractors(word, allWords)]),
     correctAnswer: word.id,
-    imageStrategy: 'related-priority',
+    imageStrategy: 'comfy',
   };
 }
 
@@ -186,7 +196,7 @@ function buildFillBlankQuestion(
 
   return {
     kind: 'fill-blank',
-    prompt: `${word.chinese} 的英语怎么拼？`,
+    prompt: `${getStudyChinese(word)} 的英语怎么拼？`,
     studyText,
     word,
     maskedCharacters,

@@ -1,0 +1,132 @@
+import { describe, expect, it, vi } from 'vitest';
+import type { WordRecord } from '../models/word';
+import { CONTENT_VERSION } from '../config/app-meta';
+import {
+  collectOfflineImageUrls,
+  downloadOfflineImages,
+  OFFLINE_IMAGE_CACHE_NAME,
+} from './offline-image-cache-service';
+
+function createWord(overrides: Partial<WordRecord> = {}): WordRecord {
+  return {
+    id: 'ket_family_n',
+    english: 'family',
+    partOfSpeech: 'n',
+    chinese: '家庭',
+    category: 'family',
+    difficulty: 1,
+    imagePath: '/content/images/words/ket_family_n.webp',
+    imageApproved: true,
+    oxfordRefs: [],
+    ...overrides,
+  };
+}
+
+function cacheKey(input: RequestInfo | URL): string {
+  return typeof input === 'string' ? input : input.toString();
+}
+
+describe('collectOfflineImageUrls', () => {
+  it('collects displayed image resources once and prefers generated-image atlases', () => {
+    const words = [
+      createWord({
+        imageAtlas: {
+          atlasPath: '/content/images/word-atlases/family/atlas-000.webp',
+          row: 0,
+          column: 0,
+        },
+        relatedMedia: {
+          oxford: {
+            imagePath: '/content/images/oxford-tree/level-1/book-1/page-3.webp',
+            label: 'Level 1, Book 1, Page 3',
+            level: 1,
+            book: 1,
+            page: 3,
+          },
+          redRocket: {
+            atlasPath: '/content/images/red-rocket-atlases/atlas-000.webp',
+            row: 0,
+            column: 0,
+            label: 'Early Level 1, Family, Page 1',
+            level: 'Early Level 1',
+            title: 'Family',
+            page: 1,
+            matchKind: 'exact',
+            matchedTerm: 'family',
+            confidence: 1,
+          },
+        },
+      }),
+      createWord({
+        id: 'ket_friend_n',
+        imagePath: '/content/images/words/ket_friend_n.webp',
+        relatedMedia: {
+          redRocket: {
+            atlasPath: '/content/images/red-rocket-atlases/atlas-000.webp',
+            row: 0,
+            column: 1,
+            label: 'Early Level 1, Family, Page 2',
+            level: 'Early Level 1',
+            title: 'Family',
+            page: 2,
+            matchKind: 'exact',
+            matchedTerm: 'friend',
+            confidence: 1,
+          },
+        },
+      }),
+    ];
+
+    const urls = collectOfflineImageUrls(words);
+
+    expect(urls).toContain(
+      `/content/images/word-atlases/family/atlas-000.webp?v=${CONTENT_VERSION}`,
+    );
+    expect(urls).toContain(
+      `/content/images/words/ket_friend_n.webp?v=${CONTENT_VERSION}`,
+    );
+    expect(urls).not.toContain(
+      `/content/images/words/ket_family_n.webp?v=${CONTENT_VERSION}`,
+    );
+    expect(urls).toContain(
+      `/content/images/oxford-tree/level-1/book-1/page-3.webp?v=${CONTENT_VERSION}`,
+    );
+    expect(urls.filter((url) => url.includes('red-rocket-atlases/atlas-000.webp'))).toHaveLength(1);
+    expect(urls).toContain('/content/images/ui/mastery-levels/level-9.webp?v=2');
+    expect(new Set(urls).size).toBe(urls.length);
+  });
+});
+
+describe('downloadOfflineImages', () => {
+  it('skips cached images and reports progress while caching missing images', async () => {
+    const entries = new Map<string, Response>([
+      ['/cached.webp', new Response('cached', { status: 200 })],
+    ]);
+    const cache = {
+      match: vi.fn(async (input: RequestInfo | URL) => entries.get(cacheKey(input))),
+      put: vi.fn(async (input: RequestInfo | URL, response: Response) => {
+        entries.set(cacheKey(input), response);
+      }),
+      keys: vi.fn(async () => [...entries.keys()].map((url) => new Request(`https://example.com${url}`))),
+      delete: vi.fn(async () => true),
+    };
+    const cacheStorage = {
+      open: vi.fn(async () => cache),
+    };
+    const fetcher = vi.fn(async () => new Response('downloaded', { status: 200 }));
+    const progress: Array<{ completed: number; total: number; failed: number }> = [];
+
+    const result = await downloadOfflineImages(['/cached.webp', '/missing.webp'], {
+      cacheStorage: cacheStorage as unknown as CacheStorage,
+      fetcher: fetcher as unknown as typeof fetch,
+      onProgress: (nextProgress) => progress.push(nextProgress),
+    });
+
+    expect(cacheStorage.open).toHaveBeenCalledWith(OFFLINE_IMAGE_CACHE_NAME);
+    expect(fetcher).toHaveBeenCalledTimes(1);
+    expect(fetcher).toHaveBeenCalledWith('/missing.webp', expect.objectContaining({ cache: 'no-store' }));
+    expect(cache.put).toHaveBeenCalledWith('/missing.webp', expect.any(Response));
+    expect(result).toEqual({ cached: 1, downloaded: 1, failed: 0, total: 2 });
+    expect(progress.at(-1)).toEqual({ completed: 2, total: 2, failed: 0 });
+  });
+});

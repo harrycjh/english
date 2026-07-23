@@ -85,6 +85,19 @@ export async function performStartupSync(fetchImpl: typeof fetch = fetch): Promi
   return syncWithToken(metadata.deviceToken, fetchImpl);
 }
 
+export async function performStartupSyncWithRetry(
+  sync: () => Promise<StartupSyncResult> = () => performStartupSync(),
+  wait: (delayMs: number) => Promise<void> = (delayMs) => new Promise((resolve) => globalThis.setTimeout(resolve, delayMs)),
+): Promise<StartupSyncResult> {
+  let lastResult: StartupSyncResult = { kind: 'unavailable', message: '同步服务器暂时不可用。' };
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    lastResult = await sync();
+    if (lastResult.kind === 'synced') return lastResult;
+    if (attempt < 3) await wait(attempt * 1_000);
+  }
+  return lastResult;
+}
+
 export async function connectAndSynchronize(
   familyCode: string,
   fetchImpl: typeof fetch = fetch,

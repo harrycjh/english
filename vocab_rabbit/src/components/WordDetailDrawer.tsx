@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import type { AnswerEvent } from '../models/answer-event';
 import type { LearningRecord } from '../models/learning-record';
 import type { LocalLifePhotoView } from '../models/local-media';
@@ -10,7 +11,13 @@ import { WordImage } from './WordImage';
 import { getExampleSentences } from '../services/example-service';
 import { getWordAnswerStats } from '../services/answer-event-service';
 import { getWordAtlasStyle } from '../services/word-atlas-service';
-import { getAssetUrl, getStudyText, getWordImageUrl } from '../services/word-service';
+import {
+  getAssetUrl,
+  getStudyChinese,
+  getStudyPartOfSpeech,
+  getStudyText,
+  getWordImageUrl,
+} from '../services/word-service';
 import { MAX_MASTERY_LEVEL } from '../services/spaced-repetition';
 
 export type WordDetailDrawerContext = 'review' | 'selection';
@@ -91,6 +98,129 @@ function getLifePhotoMatchLabel(match: 'primary' | 'secondary'): string {
   return match === 'primary' ? '主匹配' : '辅助匹配';
 }
 
+interface LevelHistoryPoint {
+  id: string;
+  answeredAt: string;
+  level: number;
+  isCorrect: boolean | null;
+  levelDowngrade: boolean;
+}
+
+function getLevelHistory(
+  answerEvents: AnswerEvent[],
+  wordId: string,
+  record: LearningRecord | undefined,
+): LevelHistoryPoint[] {
+  const events = answerEvents
+    .filter((event) => event.wordId === wordId && event.learningStateAfter)
+    .sort((left, right) => left.answeredAt.localeCompare(right.answeredAt) || left.id.localeCompare(right.id));
+  const points: LevelHistoryPoint[] = [];
+  const firstEvent = events[0];
+  if (firstEvent?.learningStateBefore) {
+    points.push({
+      id: `${firstEvent.id}-before`,
+      answeredAt: firstEvent.answeredAt,
+      level: firstEvent.learningStateBefore.masteryLevel,
+      isCorrect: null,
+      levelDowngrade: false,
+    });
+  }
+  for (const event of events) {
+    points.push({
+      id: event.id,
+      answeredAt: event.answeredAt,
+      level: event.learningStateAfter!.masteryLevel,
+      isCorrect: event.isCorrect,
+      levelDowngrade: Boolean(event.levelDowngrade),
+    });
+  }
+  if (points.length === 0 && record) {
+    points.push({
+      id: `${wordId}-current`,
+      answeredAt: record.lastStudiedAt ?? '',
+      level: record.masteryLevel,
+      isCorrect: null,
+      levelDowngrade: false,
+    });
+  }
+  return points;
+}
+
+function formatHistoryDate(dateText: string): string {
+  if (!dateText) return '当前';
+  return new Date(dateText).toLocaleDateString('zh-CN', {
+    timeZone: 'Asia/Shanghai',
+    month: 'numeric',
+    day: 'numeric',
+  });
+}
+
+function LevelHistoryChart({ points }: { points: LevelHistoryPoint[] }) {
+  if (points.length === 0) return null;
+
+  const width = 520;
+  const height = 164;
+  const plot = { left: 34, right: 12, top: 14, bottom: 30 };
+  const plotWidth = width - plot.left - plot.right;
+  const plotHeight = height - plot.top - plot.bottom;
+  const coordinates = points.map((point, index) => ({
+    ...point,
+    x: plot.left + (points.length === 1 ? plotWidth / 2 : (index / (points.length - 1)) * plotWidth),
+    y: plot.top + ((9 - Math.min(9, Math.max(0, point.level))) / 9) * plotHeight,
+  }));
+  const pathData = coordinates
+    .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`)
+    .join(' ');
+  const labelIndexes = [...new Set([0, Math.floor((points.length - 1) / 2), points.length - 1])];
+
+  return (
+    <div className="word-detail-drawer__level-history">
+      <div className="word-detail-drawer__level-history-heading">
+        <strong>等级变化</strong>
+        <span><i />正常作答 <i className="is-downgrade" />降级</span>
+      </div>
+      <svg
+        className="word-detail-drawer__level-chart"
+        viewBox={`0 0 ${width} ${height}`}
+        role="img"
+        aria-label="该单词的学习等级变化历史"
+      >
+        {[0, 3, 6, 9].map((level) => {
+          const y = plot.top + ((9 - level) / 9) * plotHeight;
+          return (
+            <g key={level}>
+              <line x1={plot.left} x2={width - plot.right} y1={y} y2={y} className="word-detail-drawer__level-grid" />
+              <text x={plot.left - 8} y={y + 4} textAnchor="end">{level}</text>
+            </g>
+          );
+        })}
+        <path d={pathData} className="word-detail-drawer__level-line" />
+        {coordinates.map((point) => (
+          <circle
+            key={point.id}
+            cx={point.x}
+            cy={point.y}
+            r={point.levelDowngrade ? 5 : 4}
+            className={point.levelDowngrade ? 'is-downgrade' : point.isCorrect === false ? 'is-wrong' : ''}
+          >
+            <title>{`${formatHistoryDate(point.answeredAt)} · 等级 ${point.level}`}</title>
+          </circle>
+        ))}
+        {labelIndexes.map((index) => (
+          <text
+            key={`${coordinates[index].id}-date`}
+            x={coordinates[index].x}
+            y={height - 8}
+            textAnchor={index === 0 ? 'start' : index === points.length - 1 ? 'end' : 'middle'}
+          >
+            {formatHistoryDate(coordinates[index].answeredAt)}
+          </text>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
 export function WordDetailDrawer({
   isOpen,
   word,
@@ -110,6 +240,7 @@ export function WordDetailDrawer({
 
   const exampleSentences = getExampleSentences(word);
   const answerStats = getWordAnswerStats(answerEvents, word.id);
+  const levelHistory = getLevelHistory(answerEvents, word.id, record);
   const isEnabled = selectionState ? selectionState.isEnabled : true;
   const isPaused = selectionState?.isPaused ?? false;
   const relatedMedia = word.relatedMedia;
@@ -132,7 +263,7 @@ export function WordDetailDrawer({
   const primaryMedia = (
     <div className="word-detail-drawer__primary-media">
       {word.imageApproved ? (
-        <WordImage className="word-detail-drawer__image" word={word} alt={word.chinese} />
+        <WordImage className="word-detail-drawer__image" word={word} alt={getStudyChinese(word)} />
       ) : (
         <div className="word-detail-drawer__placeholder">
           <strong>{getStudyText(word)}</strong>
@@ -144,8 +275,8 @@ export function WordDetailDrawer({
   const wordSummary = (
     <div className="word-detail-drawer__summary">
       <h2>{getStudyText(word)}</h2>
-      <p className="word-detail-drawer__meaning">{word.chinese}</p>
-      <p className="word-detail-drawer__part-of-speech">{word.partOfSpeech}</p>
+      <p className="word-detail-drawer__meaning">{getStudyChinese(word)}</p>
+      <p className="word-detail-drawer__part-of-speech">{getStudyPartOfSpeech(word)}</p>
       <div className="word-detail-drawer__meta-strip">
         <span className="word-detail-chip">{word.category}</span>
         <span className="word-detail-chip">Lv.{word.difficulty}</span>
@@ -155,7 +286,7 @@ export function WordDetailDrawer({
     </div>
   );
 
-  return (
+  const drawer = (
     <div className="word-detail-drawer-backdrop is-open" onClick={onClose}>
       <aside
         className="word-detail-drawer"
@@ -283,6 +414,7 @@ export function WordDetailDrawer({
               <strong>{answerStats.correctCount}</strong>
             </article>
           </div>
+          <LevelHistoryChart points={levelHistory} />
           {answerStats.recentEvents.length > 0 ? (
             <ul className="word-detail-drawer__answer-list">
               {answerStats.recentEvents.map((event) => (
@@ -318,4 +450,8 @@ export function WordDetailDrawer({
       </aside>
     </div>
   );
+
+  if (typeof document === 'undefined') return drawer;
+  const portalHost = document.querySelector('.ipad-stage-shell');
+  return createPortal(drawer, portalHost ?? document.body);
 }

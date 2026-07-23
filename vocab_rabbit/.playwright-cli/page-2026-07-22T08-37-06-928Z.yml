@@ -1,0 +1,68 @@
+- generic [ref=f1e1]:
+  - generic [ref=f1e14]:
+    - banner:
+      - generic [ref=f1e15]:
+        - generic [ref=f1e17]: VocaRabbit
+        - generic [ref=f1e18]: v0.1.5
+      - generic [ref=f1e19]:
+        - button "可爱的小珺珺" [ref=f1e20]:
+          - generic [ref=f1e21]: 👧
+        - text: ✓
+    - main [ref=f1e399]:
+      - generic [ref=f1e400]:
+        - generic [ref=f1e401]:
+          - generic [ref=f1e416]:
+            - paragraph [ref=f1e417]: 个人记忆模型
+            - heading "学习统计" [level=1] [ref=f1e418]
+          - tablist "统计类别" [ref=f1e419]:
+            - tab "遗忘曲线" [ref=f1e420] [cursor=pointer]
+            - tab "学习情况" [selected] [ref=f1e424] [cursor=pointer]
+            - tab "记忆持久度" [ref=f1e428] [cursor=pointer]
+        - tabpanel [ref=f1e434]:
+          - generic [ref=f1e435]:
+            - generic [ref=f1e436]:
+              - generic [ref=f1e437]:
+                - heading "每月学习负荷" [level=2] [ref=f1e1416]
+                - paragraph [ref=f1e439]: 历史显示真实完成量；未来按每日新词 6、 完成率 90%、分阶段题型正确率与当前记忆等级预测
+              - generic [ref=f1e440]:
+                - group "学习情况统计周期" [ref=f1e441]:
+                  - button "日" [ref=f1e442] [cursor=pointer]
+                  - button "周" [ref=f1e443] [cursor=pointer]
+                  - button "月" [active] [pressed] [ref=f1e444] [cursor=pointer]
+                - generic [ref=f1e445]:
+                  - generic [ref=f1e446]: 复习词
+                  - generic [ref=f1e448]: 新认识词
+                  - generic [ref=f1e450]: 当天重做
+                  - generic [ref=f1e452]: 未来预测
+            - group "每日实际与预测学习负荷堆叠柱状图" [ref=f1e454]:
+              - generic [ref=f1e455]:
+                - generic [ref=f1e456]:
+                  - generic [ref=f1e1417]: "448"
+                  - generic [ref=f1e1418]: "336"
+                  - generic [ref=f1e1419]: "224"
+                  - generic [ref=f1e1420]: "112"
+                  - generic [ref=f1e461]: "0"
+                - generic [ref=f1e462]: 次数
+              - generic [ref=f1e465]:
+                - generic "4/1：复习 0，新认识 0，重做 0（实际）" [ref=f1e1421]: 3月前
+                - generic "5/1：复习 0，新认识 0，重做 0（实际）" [ref=f1e490]: 2月前
+                - generic "6/1：复习 0，新认识 0，重做 0（实际）" [ref=f1e583]: 上月
+                - generic "7/1：复习 61，新认识 39，重做 17（实际）" [ref=f1e1424]:
+                  - strong [ref=f1e1425]: "117"
+                  - generic [ref=f1e675]: 本月
+                - generic "8/1：复习 327，新认识 56，重做 62，顺延复习 49（预测）" [ref=f1e1430]:
+                  - strong [ref=f1e812]: "445"
+                  - generic [ref=f1e816]: 下月
+                - generic "9/1：复习 322，新认识 52，重做 58，顺延复习 55（预测）" [ref=f1e1432]:
+                  - strong [ref=f1e1045]: "432"
+                  - generic [ref=f1e1050]: 2月后
+                - generic "10/1：复习 224，新认识 32，重做 40，顺延复习 74（预测）" [ref=f1e1433]:
+                  - strong [ref=f1e1270]: "296"
+                  - generic [ref=f1e1275]: 3月后
+    - navigation "主页面导航" [ref=f1e167]:
+      - button "复习" [ref=f1e168] [cursor=pointer]
+      - button "选词" [ref=f1e172] [cursor=pointer]
+      - button "统计" [ref=f1e179]
+      - button "设置" [ref=f1e184] [cursor=pointer]
+  - link "⌂" [ref=f1e13] [cursor=pointer]:
+    - /url: https://www.cw2017.com

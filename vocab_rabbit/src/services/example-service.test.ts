@@ -29,4 +29,20 @@ describe('getExampleSentences', () => {
 
     expect(getExampleSentences(word)[0]).toContain('bike');
   });
+
+  it('uses examples from the selected study sense instead of a conflicting general example', () => {
+    const word = makeWord({
+      english: 'can',
+      partOfSpeech: 'n & mv',
+      chinese: '能；会；罐；罐头',
+      examples: ['She opened a can of soup.'],
+      studySense: {
+        partOfSpeech: 'mv',
+        chinese: '能；会',
+        examples: ['The boy can ride a bike.'],
+      },
+    });
+
+    expect(getExampleSentences(word)).toEqual(['The boy can ride a bike.']);
+  });
 });

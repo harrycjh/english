@@ -2329,11 +2329,11 @@
       "wordId": "ket_brush_n_v",
       "status": "accepted",
       "source": "comfy-run",
-      "runId": "comfy-sample-20260701-002039",
-      "seed": 782836545611,
-      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents brush, specifically in the context of common physical actions. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "",
-      "acceptedAt": "2026-06-30T16:25:33.912502+00:00",
+      "runId": "comfy-sample-20260723-133534",
+      "seed": 784784974143,
+      "prompt": "Create a standalone storybook illustration: a school-age child actively brushing their teeth with a toothbrush at a bathroom sink, with clean foam around the teeth and no writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Qwen VL identified brushing teeth exactly.",
+      "acceptedAt": "2026-07-23T05:40:03.854894+00:00",
       "width": 512,
       "height": 512
     },
@@ -2684,11 +2684,10 @@
     {
       "wordId": "ket_can_n_mv",
       "status": "accepted",
-      "source": "comfy-run",
-      "runId": "comfy-sample-20260701-000243",
-      "seed": 782835477170,
-      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents can, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "",
+      "source": "openai-imagegen",
+      "runId": "codex-20260723-can-modal",
+      "prompt": "A cheerful child successfully rides a bicycle without training wheels while a nearby parent gives an encouraging thumbs-up, clearly expressing can as ability. No cans, containers, labels, captions, or text.",
+      "reviewNotes": "Replaced the container sense with the modal-verb ability sense.",
       "acceptedAt": "2026-06-30T16:07:22.766493+00:00",
       "width": 512,
       "height": 512
@@ -4081,11 +4080,11 @@
       "wordId": "ket_cross_n_v",
       "status": "accepted",
       "source": "comfy-run",
-      "runId": "comfy-sample-20260701-002039",
-      "seed": 782836636111,
-      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cross, specifically in the context of common physical actions. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "",
-      "acceptedAt": "2026-06-30T16:25:33.912502+00:00",
+      "runId": "comfy-sample-20260723-133534",
+      "seed": 784784983178,
+      "prompt": "Create a standalone storybook illustration: a child safely crossing a road from one side to the other on a plain zebra crossing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Qwen VL identified crossing a road exactly.",
+      "acceptedAt": "2026-07-23T05:40:03.854894+00:00",
       "width": 512,
       "height": 512
     },
@@ -7685,11 +7684,11 @@
       "wordId": "ket_hard_adj_adv",
       "status": "accepted",
       "source": "comfy-run",
-      "runId": "comfy-sample-20260701-101538",
-      "seed": 782872138228,
-      "prompt": "Create a standalone storybook illustration: a metal hammer resting against a visibly hard solid rock beside a soft pillow for contrast. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "",
-      "acceptedAt": "2026-07-01T02:20:45.316852+00:00",
+      "runId": "comfy-sample-20260723-133901",
+      "seed": 784785141776,
+      "prompt": "Create a standalone storybook illustration: a worried school-age child struggling with a very difficult large jigsaw puzzle, many small pieces scattered across the table, only one small section completed after repeated attempts. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Qwen VL identified a child struggling with a difficult puzzle.",
+      "acceptedAt": "2026-07-23T05:40:03.978348+00:00",
       "width": 512,
       "height": 512
     },
@@ -17033,11 +17032,11 @@
       "wordId": "ket_tidy_adj_v",
       "status": "accepted",
       "source": "comfy-run",
-      "runId": "comfy-sample-20260701-004620",
-      "seed": 782838063411,
-      "prompt": "Create a standalone storybook illustration: a perfectly tidy bedroom with a made bed, aligned books, and toys stored in boxes. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "OCR false positive; no readable text is visible.",
-      "acceptedAt": "2026-06-30T16:50:18.976305+00:00",
+      "runId": "comfy-sample-20260723-133534",
+      "seed": 784784990707,
+      "prompt": "Create a standalone storybook illustration: a school-age child actively tidying a bedroom by putting scattered toys into a storage box, with some toys still on the floor and a neat shelf nearby. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Qwen VL identified the active tidying action.",
+      "acceptedAt": "2026-07-23T05:40:03.854894+00:00",
       "width": 512,
       "height": 512
     },
@@ -20569,11 +20568,11 @@
     {
       "wordId": "ket_brush_n_v",
       "status": "ACCEPT",
-      "runId": "comfy-sample-20260701-002039",
-      "seed": 782836545611,
-      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents brush, specifically in the context of common physical actions. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "",
-      "reviewedAt": "2026-06-30T16:25:33.912502+00:00"
+      "runId": "comfy-sample-20260723-133534",
+      "seed": 784784974143,
+      "prompt": "Create a standalone storybook illustration: a school-age child actively brushing their teeth with a toothbrush at a bathroom sink, with clean foam around the teeth and no writing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Qwen VL identified brushing teeth exactly.",
+      "reviewedAt": "2026-07-23T05:40:03.854894+00:00"
     },
     {
       "wordId": "ket_build_v",
@@ -20758,10 +20757,9 @@
     {
       "wordId": "ket_can_n_mv",
       "status": "ACCEPT",
-      "runId": "comfy-sample-20260701-000243",
-      "seed": 782835477170,
-      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents can, specifically in the context of food and drinks. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "",
+      "runId": "codex-20260723-can-modal",
+      "prompt": "A cheerful child successfully rides a bicycle without training wheels while a nearby parent gives an encouraging thumbs-up, clearly expressing can as ability. No cans, containers, labels, captions, or text.",
+      "reviewNotes": "Replaced the container sense with the modal-verb ability sense.",
       "reviewedAt": "2026-06-30T16:07:22.766493+00:00"
     },
     {
@@ -21532,11 +21530,11 @@
     {
       "wordId": "ket_cross_n_v",
       "status": "ACCEPT",
-      "runId": "comfy-sample-20260701-002039",
-      "seed": 782836636111,
-      "prompt": "Create a standalone storybook illustration: a simple real-life scene that clearly represents cross, specifically in the context of common physical actions. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "",
-      "reviewedAt": "2026-06-30T16:25:33.912502+00:00"
+      "runId": "comfy-sample-20260723-133534",
+      "seed": 784784983178,
+      "prompt": "Create a standalone storybook illustration: a child safely crossing a road from one side to the other on a plain zebra crossing. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Qwen VL identified crossing a road exactly.",
+      "reviewedAt": "2026-07-23T05:40:03.854894+00:00"
     },
     {
       "wordId": "ket_crowd_n",
@@ -23539,11 +23537,11 @@
     {
       "wordId": "ket_hard_adj_adv",
       "status": "ACCEPT",
-      "runId": "comfy-sample-20260701-101538",
-      "seed": 782872138228,
-      "prompt": "Create a standalone storybook illustration: a metal hammer resting against a visibly hard solid rock beside a soft pillow for contrast. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "",
-      "reviewedAt": "2026-07-01T02:20:45.316852+00:00"
+      "runId": "comfy-sample-20260723-133901",
+      "seed": 784785141776,
+      "prompt": "Create a standalone storybook illustration: a worried school-age child struggling with a very difficult large jigsaw puzzle, many small pieces scattered across the table, only one small section completed after repeated attempts. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Qwen VL identified a child struggling with a difficult puzzle.",
+      "reviewedAt": "2026-07-23T05:40:03.978348+00:00"
     },
     {
       "wordId": "ket_hate_v",
@@ -29299,11 +29297,11 @@
     {
       "wordId": "ket_tidy_adj_v",
       "status": "ACCEPT",
-      "runId": "comfy-sample-20260701-004620",
-      "seed": 782838063411,
-      "prompt": "Create a standalone storybook illustration: a perfectly tidy bedroom with a made bed, aligned books, and toys stored in boxes. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
-      "reviewNotes": "OCR false positive; no readable text is visible.",
-      "reviewedAt": "2026-06-30T16:50:18.976305+00:00"
+      "runId": "comfy-sample-20260723-133534",
+      "seed": 784784990707,
+      "prompt": "Create a standalone storybook illustration: a school-age child actively tidying a bedroom by putting scattered toys into a storage box, with some toys still on the floor and a neat shelf nearby. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "reviewNotes": "Qwen VL identified the active tidying action.",
+      "reviewedAt": "2026-07-23T05:40:03.854894+00:00"
     },
     {
       "wordId": "ket_tidy_up_v",

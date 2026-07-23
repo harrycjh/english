@@ -78,7 +78,7 @@ describe('memory statistics', () => {
       intervalBucketCount: 1,
     });
     expect(statistics.averageRetentionNow).toBeGreaterThan(0);
-    expect(statistics.durabilityThresholds.map((point) => point.thresholdDays)).toEqual([10, 30, 60, 90]);
+    expect(statistics.masteryLevels.map((point) => point.level)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   it('uses the Ebbinghaus savings formula with calibrated long-term anchors', () => {
@@ -154,26 +154,31 @@ describe('memory statistics', () => {
       .toBeGreaterThan(statistics.predictedCurve.find((point) => point.intervalDays === 3)!.retention);
   });
 
-  it('counts words that meet the 10, 30, 60, and 90 day durability thresholds', () => {
-    const records = Object.fromEntries([5, 15, 30, 45].map((intervalDays, index) => {
+  it('counts studied words at each exact mastery level', () => {
+    const records = Object.fromEntries([0, 1, 1, 9].map((masteryLevel, index) => {
       const wordId = `word-${index}`;
       return [wordId, createRecord({
         wordId,
-        nextDueAt: new Date(new Date('2026-07-14T12:00:00.000Z').getTime() + intervalDays * 86_400_000).toISOString(),
+        masteryLevel,
+        reviewStage: masteryLevel,
       })];
     }));
     const statistics = buildMemoryStatistics(records, [], now);
-    expect(statistics.durabilityThresholds.map((point) => point.count)).toEqual([4, 3, 2, 1]);
+    expect(statistics.masteryLevels.map((point) => point.count)).toEqual([1, 2, 0, 0, 0, 0, 0, 0, 0, 1]);
   });
 
-  it('rebuilds daily durability threshold counts from saved answer snapshots', () => {
+  it('rebuilds daily mastery-level counts from saved answer snapshots', () => {
     const shortMemory = createRecord({
       wordId: 'word-short',
+      masteryLevel: 2,
+      reviewStage: 2,
       lastStudiedAt: '2026-07-13T08:00:00.000Z',
       nextDueAt: '2026-07-18T08:00:00.000Z',
     });
     const longMemory = createRecord({
       wordId: 'word-long',
+      masteryLevel: 6,
+      reviewStage: 6,
       lastStudiedAt: '2026-07-14T08:00:00.000Z',
       nextDueAt: '2026-08-28T08:00:00.000Z',
     });
@@ -187,11 +192,11 @@ describe('memory statistics', () => {
       [longMemory.wordId]: longMemory,
     }, events, now);
 
-    expect(statistics.durabilityTimeline.find((point) => point.dateKey === '2026-07-12')?.counts)
-      .toMatchObject({ 10: 0, 30: 0, 60: 0, 90: 0 });
-    expect(statistics.durabilityTimeline.find((point) => point.dateKey === '2026-07-13')?.counts)
-      .toMatchObject({ 10: 1, 30: 0, 60: 0, 90: 0 });
-    expect(statistics.durabilityTimeline.find((point) => point.dateKey === '2026-07-14')?.counts)
-      .toMatchObject({ 10: 2, 30: 1, 60: 1, 90: 1 });
+    expect(statistics.masteryLevelTimeline.find((point) => point.dateKey === '2026-07-12')?.counts)
+      .toMatchObject({ 2: 0, 6: 0 });
+    expect(statistics.masteryLevelTimeline.find((point) => point.dateKey === '2026-07-13')?.counts)
+      .toMatchObject({ 2: 1, 6: 0 });
+    expect(statistics.masteryLevelTimeline.find((point) => point.dateKey === '2026-07-14')?.counts)
+      .toMatchObject({ 2: 1, 6: 1 });
   });
 });

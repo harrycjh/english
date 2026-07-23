@@ -1,0 +1,5 @@
+ordinal	wordId	english	status	notes
+1	ket_hard_adj_adv	hard	REJECT	First version looked too easy; regenerated with a visibly difficult puzzle.
+2	ket_brush_n_v	brush	ACCEPT	Qwen VL identified brushing teeth exactly.
+3	ket_cross_n_v	cross	ACCEPT	Qwen VL identified crossing a road exactly.
+4	ket_tidy_adj_v	tidy	ACCEPT	Qwen VL identified the active tidying action.

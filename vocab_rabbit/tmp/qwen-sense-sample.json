@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ket_can_n_mv",
+    "imageDescription": "一个戴着头盔的小男孩正在骑一辆蓝色的自行车，旁边有一个男人微笑着竖起大拇指，背景是绿树和花丛的街道。",
+    "imageSense": "男孩正在骑自行车，表现出他有能力做到这件事。",
+    "exampleSense": "表示能力，即‘能’或‘会’做某事。",
+    "rating": "exact",
+    "reason": "图片展示男孩骑自行车，与例句‘The boy can ride a bike’表达的‘能’或‘会’骑自行车的能力完全一致。"
+  },
+  {
+    "id": "ket_break_n_v",
+    "imageDescription": "一个男孩的卡通形象，他的左臂用白色绷带固定在胸前，穿着蓝色上衣和深色短裤，脚穿黑色鞋子。",
+    "imageSense": "手臂受伤并用绷带固定，表示手臂骨折或受伤。",
+    "exampleSense": "休息",
+    "rating": "related",
+    "reason": "图片展示的是身体受伤，与'break'作为'打破'的含义相关，但例句中的'break'指的是'休息'，属于不同义项。"
+  },
+  {
+    "id": "ket_right_n_adj_adv",
+    "imageDescription": "一个男孩正在拼图，他将一块带有海星图案的拼图块放入黄色和蓝色拼图的中间位置。",
+    "imageSense": "男孩正在将拼图块放入正确的位置，表示‘正确’的含义。",
+    "exampleSense": "例句中的'right'表示'右边'的含义。",
+    "rating": "related",
+    "reason": "图片表达的是'正确'的含义，而例句中的'right'表示'右边'，属于同一单词的不同义项。"
+  },
+  {
+    "id": "ket_sweet_n_adj",
+    "imageDescription": "一碗彩色的糖果和一瓶蜂蜜",
+    "imageSense": "甜食",
+    "exampleSense": "形容词，表示甜的",
+    "rating": "related",
+    "reason": "图片展示的是甜食，与单词'sweet'的名词和形容词用法都相关，但例句中'sweet'是形容词，而图片更偏向于名词的含义（甜食）"
+  },
+  {
+    "id": "ket_show_v_n",
+    "imageDescription": "一个穿着西装的男人站在舞台上，手持一个托盘，托盘上有一些闪光的星星，似乎在进行魔术表演。舞台前有一群观众在观看。",
+    "imageSense": "表演",
+    "exampleSense": "给……看",
+    "rating": "related",
+    "reason": "图片中的‘show’指的是‘表演’，而例句中的‘show’是‘给……看’，属于同一单词的不同义项，因此为related。"
+  },
+  {
+    "id": "ket_text_n_v",
+    "imageDescription": "一张带有多个空白横线的纸张，左下角和右下角有绿色的叶子装饰图案。",
+    "imageSense": "这张图片可能表示写信或记录信息的场景，但没有直接显示短信或发短信的元素。",
+    "exampleSense": "例句中的'text'指的是短信，即发送一条信息。",
+    "rating": "unclear",
+    "reason": "图片没有明确显示与短信或发短信相关的元素，无法确定其是否与目标词义相关。"
+  }
+]

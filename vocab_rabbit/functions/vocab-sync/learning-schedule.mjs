@@ -33,9 +33,11 @@ export function getMasteredReviewDelayDays(wordId, answeredAt) {
 export function evaluateLearningRecord(current, event) {
   const answeredAt = new Date(event.answeredAt);
   const currentLevel = Math.min(Math.max(current.masteryLevel, 0), MAX_MASTERY_LEVEL);
-  let masteryLevel = currentLevel;
-  if (currentLevel === 0 && event.learningAction === 'recognized') masteryLevel = 2;
-  else if (event.isCorrect) masteryLevel = Math.min(currentLevel + 1, MAX_MASTERY_LEVEL);
+  const masteryLevel = event.isCorrect
+    ? Math.min(currentLevel + 1, MAX_MASTERY_LEVEL)
+    : event.levelDowngrade
+      ? Math.max(currentLevel - 1, 0)
+      : currentLevel;
 
   const delayDays = !event.isCorrect
     ? 0

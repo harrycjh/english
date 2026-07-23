@@ -30,15 +30,15 @@ export function evaluateAnswer(
   currentRecord: LearningRecord,
   isCorrect: boolean,
   now: Date = new Date(),
-  learningAction: LearningAction = 'answer',
+  _learningAction: LearningAction = 'answer',
+  levelDowngrade = false,
 ): LearningRecord {
   const currentLevel = Math.min(Math.max(currentRecord.masteryLevel, 0), MAX_MASTERY_LEVEL);
-  let masteryLevel = currentLevel;
-  if (currentLevel === 0 && learningAction === 'recognized') {
-    masteryLevel = 2;
-  } else if (isCorrect) {
-    masteryLevel = Math.min(currentLevel + 1, MAX_MASTERY_LEVEL);
-  }
+  const masteryLevel = isCorrect
+    ? Math.min(currentLevel + 1, MAX_MASTERY_LEVEL)
+    : levelDowngrade
+      ? Math.max(currentLevel - 1, 0)
+      : currentLevel;
 
   const delayDays = !isCorrect
     ? 0

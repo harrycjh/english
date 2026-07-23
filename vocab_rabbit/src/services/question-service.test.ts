@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { WordRecord } from '../models/word';
 import { defaultParentSetting } from '../models/parent-setting';
-import { createEmptyRecord } from './spaced-repetition';
+import { createEmptyRecord, evaluateAnswer } from './spaced-repetition';
 import { buildQuestion } from './question-service';
 
 function makeWord(overrides: Partial<WordRecord>): WordRecord {
@@ -59,6 +59,7 @@ describe('buildQuestion', () => {
     const imageQuestion = questionAt(3);
     expect(imageQuestion.kind).toBe('image-answer-choice');
     if (imageQuestion.kind === 'image-answer-choice') {
+      expect(imageQuestion.imageStrategy).toBe('comfy');
       expect(imageQuestion.options).toHaveLength(4);
       expect(imageQuestion.correctAnswer).toBe(target.id);
     }
@@ -88,5 +89,60 @@ describe('buildQuestion', () => {
         expect(question.missingLetters).toEqual(['r', 'a', 'b', 'b', 'i', 't']);
       }
     }
+  });
+
+  it('uses the selected study sense for Chinese choices and spelling prompts', () => {
+    const polysemousWord = makeWord({
+      id: 'ket_can_n_mv',
+      english: 'can',
+      partOfSpeech: 'n & mv',
+      chinese: '能；会；罐；罐头',
+      studySense: {
+        partOfSpeech: 'mv',
+        chinese: '能；会',
+        examples: ['The boy can ride a bike.'],
+      },
+    });
+    const vocabulary = [polysemousWord, ...allWords];
+    const choiceQuestion = buildQuestion(
+      polysemousWord,
+      vocabulary,
+      { ...createEmptyRecord(polysemousWord.id), masteryLevel: 1, reviewStage: 1 },
+      defaultParentSetting,
+    );
+    expect(choiceQuestion).toMatchObject({
+      kind: 'image-choice',
+      correctAnswer: '能；会',
+    });
+    if (choiceQuestion.kind === 'image-choice') {
+      expect(choiceQuestion.options).toContain('能；会');
+      expect(choiceQuestion.options).not.toContain('能；会；罐；罐头');
+    }
+
+    const spellingQuestion = buildQuestion(
+      polysemousWord,
+      vocabulary,
+      { ...createEmptyRecord(polysemousWord.id), masteryLevel: 8, reviewStage: 8 },
+      defaultParentSetting,
+    );
+    expect(spellingQuestion.prompt).toBe('能；会 的英语怎么拼？');
+  });
+
+  it('uses the downgraded level question when verifying after three wrong answers', () => {
+    const levelFiveRecord = {
+      ...createEmptyRecord(target.id),
+      masteryLevel: 5,
+      reviewStage: 5,
+    };
+    const downgradedRecord = evaluateAnswer(
+      levelFiveRecord,
+      false,
+      new Date('2026-07-21T08:00:00.000Z'),
+      'answer',
+      true,
+    );
+
+    expect(downgradedRecord.masteryLevel).toBe(4);
+    expect(buildQuestion(target, allWords, downgradedRecord, defaultParentSetting).kind).toBe('text-choice');
   });
 });

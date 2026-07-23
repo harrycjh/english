@@ -14,6 +14,7 @@ import {
   connectDeviceForBackgroundSync,
   hasConnectedDevice,
   performStartupSync,
+  performStartupSyncWithRetry,
 } from './startup-sync-service';
 
 function jsonResponse(body: unknown, status = 200): Response {
@@ -110,6 +111,40 @@ describe('performStartupSync', () => {
     expect(requests[0].snapshot).toBeNull();
     expect(requests[1].delta).toBeNull();
     expect(requests[1].snapshot?.events).toHaveLength(1);
+  });
+});
+
+describe('performStartupSyncWithRetry', () => {
+  it('retries silently until the third attempt succeeds', async () => {
+    let attempts = 0;
+    const delays: number[] = [];
+    const result = await performStartupSyncWithRetry(
+      async () => {
+        attempts += 1;
+        return attempts < 3
+          ? { kind: 'unavailable', message: 'temporary failure' }
+          : { kind: 'synced', serverTime: '2026-07-22T10:00:00.000Z' };
+      },
+      async (delayMs) => { delays.push(delayMs); },
+    );
+
+    expect(result.kind).toBe('synced');
+    expect(attempts).toBe(3);
+    expect(delays).toEqual([1_000, 2_000]);
+  });
+
+  it('returns the third failure after exhausting automatic retries', async () => {
+    let attempts = 0;
+    const result = await performStartupSyncWithRetry(
+      async () => {
+        attempts += 1;
+        return { kind: 'unavailable', message: `failure ${attempts}` };
+      },
+      async () => undefined,
+    );
+
+    expect(result).toEqual({ kind: 'unavailable', message: 'failure 3' });
+    expect(attempts).toBe(3);
   });
 });
 

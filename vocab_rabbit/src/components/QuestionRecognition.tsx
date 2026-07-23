@@ -1,6 +1,7 @@
 import type { LocalLifePhotoView } from '../models/local-media';
 import type { RecognitionQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
+import { getStudyChinese } from '../services/word-service';
 import { AudioIconButton } from './AudioIconButton';
 import { QuestionMedia } from './QuestionMedia';
 
@@ -36,7 +37,7 @@ export function QuestionRecognition({
         {enableAudio ? <AudioIconButton onClick={() => speakWord(question.word)} /> : null}
         <span className="question-word__label">第一次见面</span>
         <strong>{question.studyText}</strong>
-        <p>{question.word.chinese}</p>
+        <p>{getStudyChinese(question.word)}</p>
         <small>{question.prompt}</small>
         <div className="recognition-actions">
           {question.options.map((option) => (

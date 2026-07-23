@@ -34,6 +34,7 @@ const MANUAL_EXAMPLES = {
   ket_all_the_time_det: 'My little brother asks questions all the time.',
   ket_an_det: 'She found an orange in her lunchbox.',
   ket_by_the_way_prep_phr: 'By the way, did you call Tom?',
+  ket_can_n_mv: 'The boy can ride a bike.',
   ket_brush_n_v: 'Please brush your teeth before bed.',
   ket_but_conj: 'I called Ben, but he was busy.',
   ket_centimetre_centimeter_cm_n: 'This ruler is thirty centimetres long.',
@@ -215,15 +216,18 @@ export function findOxfordCandidate(word, books) {
 }
 
 function buildPrompt(items) {
-  return JSON.stringify(items.map(({ word, candidate, correction }) => ({
-    id: word.id,
-    headword: getHeadword(word.english),
-    partOfSpeech: word.partOfSpeech,
-    chineseMeaning: word.chinese,
-    topic: word.category,
-    readingCandidate: candidate,
-    correctionRequired: correction ?? null,
-  })), null, 2);
+  return JSON.stringify(items.map(({ word, candidate, correction }) => {
+    const studySense = word.studySense ?? word;
+    return {
+      id: word.id,
+      headword: getHeadword(word.english),
+      partOfSpeech: studySense.partOfSpeech,
+      chineseMeaning: studySense.chinese,
+      topic: word.category,
+      readingCandidate: candidate,
+      correctionRequired: correction ?? null,
+    };
+  }), null, 2);
 }
 
 async function requestExamples(items) {
@@ -350,7 +354,7 @@ async function generateValidatedBatch(words, books, reservedExamples, useCandida
   let unresolved = [];
 
   for (const word of words) {
-    const manualExample = MANUAL_EXAMPLES[word.id];
+    const manualExample = word.studySense?.examples?.[0] ?? MANUAL_EXAMPLES[word.id];
     if (!manualExample) {
       unresolved.push({ word, candidate: useCandidates ? findOxfordCandidate(word, books) : null, correction: null });
       continue;

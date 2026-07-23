@@ -23,8 +23,8 @@ function event(overrides = {}) {
 describe('cloud learning schedule', () => {
   it('handles the two first-exposure choices', () => {
     expect(evaluateLearningRecord(emptyRecord, event({ learningAction: 'recognized' }))).toMatchObject({
-      masteryLevel: 2,
-      nextDueAt: '2026-07-22T20:00:00.000Z',
+      masteryLevel: 1,
+      nextDueAt: '2026-07-21T20:00:00.000Z',
     });
     expect(evaluateLearningRecord(emptyRecord, event({ isCorrect: false, learningAction: 'unknown' }))).toMatchObject({
       masteryLevel: 0,
@@ -37,6 +37,15 @@ describe('cloud learning schedule', () => {
     expect(evaluateLearningRecord(current, event({ isCorrect: false }))).toMatchObject({
       masteryLevel: 5,
       reviewStage: 5,
+      nextDueAt: '2026-07-20T20:00:00.000Z',
+    });
+  });
+
+  it('downgrades one level when the client marks the third consecutive wrong answer', () => {
+    const current = { ...emptyRecord, masteryLevel: 5, reviewStage: 5 };
+    expect(evaluateLearningRecord(current, event({ isCorrect: false, levelDowngrade: true }))).toMatchObject({
+      masteryLevel: 4,
+      reviewStage: 4,
       nextDueAt: '2026-07-20T20:00:00.000Z',
     });
   });

@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "version": 1,
+    "generatedAt": "2026-07-20T18:03:38+08:00",
+    "sourceIndex": "/Users/chujianhe/English/vocab_rabbit/design-output/photo-word-linking/master-index/photo-linking-master-index.json",
+    "sourcePhotosModified": false,
+    "masterIndexModified": false,
+    "nearDuplicatePolicy": "pHash<=4 or pHash<=8+dHash<=10+histogram>=0.96",
+    "sceneCandidatePolicy": "pHash<=16+dHash<=20+histogram>=0.90 plus time/label agreement"
+  },
+  "stats": {
+    "indexedPhotos": 100,
+    "readablePhotos": 100,
+    "unreadablePhotos": 0,
+    "candidatePairs": 14,
+    "duplicateClusters": 4,
+    "photosInDuplicateClusters": 8,
+    "autoSkipCaptionPhotos": 4,
+    "captionPhotosAfterAutoSkip": 96,
+    "sceneCandidateClusters": 5,
+    "photosInSceneCandidateClusters": 10
+  }
+}

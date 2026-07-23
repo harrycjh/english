@@ -50,4 +50,18 @@ describe('StartupSyncPanel', () => {
     expect(markup).toContain('重试');
     expect(markup).not.toContain('离线进入');
   });
+
+  it('does not render syncing progress or success notices', () => {
+    const markup = renderToStaticMarkup(
+      <BackgroundSyncNotice
+        state={{ kind: 'synced', serverTime: '2026-07-22T10:00:00.000Z' }}
+        onRetry={() => undefined}
+        onReconnect={() => undefined}
+      />,
+    );
+
+    expect(markup).toBe('');
+    expect(markup).not.toContain('正在后台同步学习进度');
+    expect(markup).not.toContain('学习进度已合并');
+  });
 });

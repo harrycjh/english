@@ -1,0 +1,261 @@
+- generic [ref=e1]:
+  - generic [ref=e16]:
+    - banner:
+      - generic [ref=e17]:
+        - generic [ref=e19]: VocaRabbit
+        - generic [ref=e20]: v0.1.5
+      - generic [ref=e21]:
+        - button "可爱的小珺珺" [ref=e22]:
+          - generic [ref=e23]: 👧
+        - text: ✓
+    - main [ref=e192]:
+      - generic [ref=e194]:
+        - complementary [ref=e195]:
+          - heading "筛选条件" [level=2] [ref=e197]
+          - generic [ref=e198]:
+            - generic [ref=e199]: 搜索
+            - searchbox "搜索" [ref=e200]
+          - generic [ref=e201]:
+            - generic [ref=e202]: 词类分类
+            - combobox "词类分类" [ref=e203]:
+              - option "全部词类" [selected]
+              - option "家人和朋友"
+              - option "人物身份和称呼"
+              - option "身体、健康和锻炼"
+              - option "感受和性格"
+              - option "房子和家具"
+              - option "家用电器和电子设备"
+              - option "衣服和配饰"
+              - option "颜色"
+              - option "食物和饮料"
+              - option "学校和学习"
+              - option "书本、证件和文字"
+              - option "娱乐和表演"
+              - option "爱好和休闲"
+              - option "通讯、网络和数码"
+              - option "运动和比赛"
+              - option "建筑和公共地点"
+              - option "城镇街道和城市"
+              - option "乡村和自然地点"
+              - option "购物买东西"
+              - option "动物和昆虫"
+              - option "自然世界"
+              - option "天气"
+              - option "月份和星期"
+              - option "时间和日期"
+              - option "出行和交通"
+              - option "工作和职业"
+              - option "情态动词和语气"
+              - option "抽象概念和想法"
+              - option "玩具、礼物和小物件"
+              - option "数字和顺序词"
+              - option "数量和多少"
+              - option "人称和指代词"
+              - option "冠词和限定词"
+              - option "介词和方向词"
+              - option "连词和句子连接词"
+              - option "感叹词和回应语"
+              - option "时间和频率副词"
+              - option "方式和程度副词"
+              - option "常用短语动词"
+              - option "说话和思考动词"
+              - option "常用动作动词"
+              - option "常见形容词"
+              - option "其他常用词"
+          - generic [ref=e204]:
+            - generic [ref=e205]: 词语来源
+            - combobox "词语来源" [ref=e206]:
+              - option "全部来源" [selected]
+              - option "Oxford"
+              - option "Red Rocket"
+              - option "生活图片"
+          - generic [ref=e207]:
+            - generic [ref=e208]: 难度
+            - combobox "难度" [ref=e209]:
+              - option "全部难度" [selected]
+              - option "Lv.1"
+              - option "Lv.2"
+              - option "Lv.3"
+              - option "Lv.4"
+              - option "Lv.5"
+          - generic [ref=e210]:
+            - generic [ref=e211]: 学习状态
+            - combobox "学习状态" [ref=e212]:
+              - option "全部状态" [selected]
+              - option "未学"
+              - option "学习中"
+              - option "已掌握"
+              - option "已暂停"
+              - option "未启用"
+          - generic [ref=e213]:
+            - generic [ref=e214]: 仅图片题
+            - checkbox "仅图片题"
+          - button "重置筛选" [ref=e217]
+        - generic [ref=e218]:
+          - generic [ref=e219]:
+            - heading "词库管理" [level=1] [ref=e220]
+            - paragraph [ref=e221]: 在这里整理孩子的学习词库，灵活安排复习与预习。
+          - generic [ref=e222]:
+            - generic [ref=e223]:
+              - button "卡片视图" [ref=e224]
+              - button "列表视图" [ref=e225]
+            - generic [ref=e227]:
+              - generic [ref=e228]: 按字母排序
+              - combobox "按字母排序" [ref=e229]:
+                - option "按 Level"
+                - option "按难度"
+                - option "按最近变更"
+                - option "按字母" [selected]
+          - generic [ref=e230]:
+            - button "保存返回" [ref=e231]
+            - button "启用筛选结果" [ref=e232]
+            - button "暂停筛选结果" [ref=e233]
+            - button "移出筛选结果" [ref=e234]
+            - button "仅保留筛选结果" [ref=e235]
+          - generic [ref=e236]:
+            - article [ref=e237]:
+              - button "主题人物 尚未学习 家庭 family 家庭 n. 名词" [ref=e238] [cursor=pointer]:
+                - generic [ref=e239]:
+                  - generic [ref=e240]: 主题人物
+                  - img "尚未学习" [ref=e241]:
+                    - generic [ref=e242]: 新
+                - generic [ref=e243]:
+                  - img "家庭" [ref=e245]
+                  - generic [ref=e246]:
+                    - heading "family" [level=3] [ref=e247]
+                    - paragraph [ref=e248]: 家庭
+                    - generic [ref=e249]: n. 名词
+              - generic [ref=e250]:
+                - button "移出" [ref=e251] [cursor=pointer]
+                - button "暂停" [ref=e252] [cursor=pointer]
+            - article [ref=e253]:
+              - button "主题人物 尚未学习 朋友 friend 朋友 n. 名词" [ref=e254] [cursor=pointer]:
+                - generic [ref=e255]:
+                  - generic [ref=e256]: 主题人物
+                  - img "尚未学习" [ref=e257]:
+                    - generic [ref=e258]: 新
+                - generic [ref=e259]:
+                  - img "朋友" [ref=e261]
+                  - generic [ref=e262]:
+                    - heading "friend" [level=3] [ref=e263]
+                    - paragraph [ref=e264]: 朋友
+                    - generic [ref=e265]: n. 名词
+              - generic [ref=e266]:
+                - button "移出" [ref=e267] [cursor=pointer]
+                - button "暂停" [ref=e268] [cursor=pointer]
+            - article [ref=e269]:
+              - button "身体部位 尚未学习 手臂 arm 手臂 n. 名词" [ref=e270] [cursor=pointer]:
+                - generic [ref=e271]:
+                  - generic [ref=e272]: 身体部位
+                  - img "尚未学习" [ref=e273]:
+                    - generic [ref=e274]: 新
+                - generic [ref=e275]:
+                  - img "手臂" [ref=e277]
+                  - generic [ref=e278]:
+                    - heading "arm" [level=3] [ref=e279]
+                    - paragraph [ref=e280]: 手臂
+                    - generic [ref=e281]: n. 名词
+              - generic [ref=e282]:
+                - button "移出" [ref=e283] [cursor=pointer]
+                - button "暂停" [ref=e284] [cursor=pointer]
+            - article [ref=e285]:
+              - button "品质与状态 尚未学习 更好 better 更好 adj. 形容词" [ref=e286] [cursor=pointer]:
+                - generic [ref=e287]:
+                  - generic [ref=e288]: 品质与状态
+                  - img "尚未学习" [ref=e289]:
+                    - generic [ref=e290]: 新
+                - generic [ref=e291]:
+                  - img "更好" [ref=e293]
+                  - generic [ref=e294]:
+                    - heading "better" [level=3] [ref=e295]
+                    - paragraph [ref=e296]: 更好
+                    - generic [ref=e297]: adj. 形容词
+              - generic [ref=e298]:
+                - button "移出" [ref=e299] [cursor=pointer]
+                - button "暂停" [ref=e300] [cursor=pointer]
+            - article [ref=e301]:
+              - button "时间与顺序 尚未学习 在……之后 after 在……之后 prep. 介词" [ref=e302] [cursor=pointer]:
+                - generic [ref=e303]:
+                  - generic [ref=e304]: 时间与顺序
+                  - img "尚未学习" [ref=e305]:
+                    - generic [ref=e306]: 新
+                - generic [ref=e307]:
+                  - img "在……之后" [ref=e309]
+                  - generic [ref=e310]:
+                    - heading "after" [level=3] [ref=e311]
+                    - paragraph [ref=e312]: 在……之后
+                    - generic [ref=e313]: prep. 介词
+              - generic [ref=e314]:
+                - button "移出" [ref=e315] [cursor=pointer]
+                - button "暂停" [ref=e316] [cursor=pointer]
+            - article [ref=e317]:
+              - button "频率与次数 尚未学习 再一次 again 再一次 adv. 副词" [ref=e318] [cursor=pointer]:
+                - generic [ref=e319]:
+                  - generic [ref=e320]: 频率与次数
+                  - img "尚未学习" [ref=e321]:
+                    - generic [ref=e322]: 新
+                - generic [ref=e323]:
+                  - img "再一次" [ref=e325]
+                  - generic [ref=e326]:
+                    - heading "again" [level=3] [ref=e327]
+                    - paragraph [ref=e328]: 再一次
+                    - generic [ref=e329]: adv. 副词
+              - generic [ref=e330]:
+                - button "移出" [ref=e331] [cursor=pointer]
+                - button "暂停" [ref=e332] [cursor=pointer]
+          - generic [ref=e333]:
+            - generic [ref=e334]: 共 1693 个单词
+            - generic [ref=e335]:
+              - button "1" [ref=e336] [cursor=pointer]
+              - button "2" [ref=e337] [cursor=pointer]
+              - generic [ref=e338]: …
+              - button "283" [ref=e339] [cursor=pointer]
+        - complementary [ref=e340]:
+          - article [ref=e341]:
+            - generic [ref=e342]:
+              - heading "计划摘要" [level=2] [ref=e343]
+              - generic [ref=e344]: i
+            - generic [ref=e346]:
+              - article [ref=e347]:
+                - generic [ref=e349]: 已启用单词
+                - strong [ref=e350]: "1693"
+              - article [ref=e351]:
+                - generic [ref=e353]: 已暂停单词
+                - strong [ref=e354]: "0"
+              - article [ref=e355]:
+                - generic [ref=e357]: 明日待复习
+                - strong [ref=e358]: "0"
+              - article [ref=e359]:
+                - generic [ref=e361]: 3 天内待复习
+                - strong [ref=e362]: "0"
+              - article [ref=e363]:
+                - generic [ref=e365]: 当前压力
+                - strong [ref=e366]: 轻松
+          - generic [ref=e367]:
+            - heading "词类分布" [level=3] [ref=e368]
+            - list [ref=e369]:
+              - listitem [ref=e370]:
+                - generic [ref=e371]: 常用动作动词
+                - strong [ref=e374]: "143"
+              - listitem [ref=e375]:
+                - generic [ref=e376]: 常见形容词
+                - strong [ref=e379]: "112"
+              - listitem [ref=e380]:
+                - generic [ref=e381]: 食物和饮料
+                - strong [ref=e384]: "101"
+              - listitem [ref=e385]:
+                - generic [ref=e386]: 房子和家具
+                - strong [ref=e389]: "77"
+              - listitem [ref=e390]:
+                - generic [ref=e391]: 感受和性格
+                - strong [ref=e394]: "70"
+              - listitem [ref=e395]:
+                - generic [ref=e396]: 身体、健康和锻炼
+                - strong [ref=e399]: "66"
+    - navigation "主页面导航" [ref=e169]:
+      - button "复习" [ref=e170] [cursor=pointer]
+      - button "选词" [active] [ref=e174]
+      - button "统计" [ref=e181] [cursor=pointer]
+      - button "设置" [ref=e186] [cursor=pointer]
+  - link "⌂" [ref=e9] [cursor=pointer]:
+    - /url: https://www.cw2017.com

@@ -1,0 +1,7 @@
+[     154ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:4173/node_modules/.vite/deps/react-dom_client.js?v=2c852628:20102
+[     182ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4173/favicon.ico:0
+[  703197ms] [ERROR] [vite] SyntaxError: The requested module '/src/services/statistics-time-buckets.ts?t=1784716371147' does not provide an export named 'aggregateDurabilityTimeline' @ http://127.0.0.1:4173/@vite/client:808
+[  703198ms] [ERROR] [vite] Failed to reload /src/screens/StatsPage.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:4173/@vite/client:808
+[  703204ms] [ERROR] [vite] SyntaxError: The requested module '/src/services/statistics-time-buckets.ts?t=1784716371147' does not provide an export named 'aggregateDurabilityTimeline' @ http://127.0.0.1:4173/@vite/client:808
+[  703204ms] [ERROR] [vite] Failed to reload /src/screens/StatsPage.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:4173/@vite/client:808
+[34733271ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:4173/node_modules/.vite/deps/react-dom_client.js?v=2c852628:20102

@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "runId": "comfy-sample-20260723-133901",
+    "workflowTemplate": "/Users/chujianhe/English/vocab_rabbit/tools/workflows/z-image-turbo.api-prompt.json",
+    "comfyUrl": "http://127.0.0.1:8188",
+    "width": 512,
+    "height": 512
+  },
+  "records": [
+    {
+      "wordId": "ket_hard_adj_adv",
+      "english": "hard",
+      "chinese": "难的",
+      "category": "感受和性格",
+      "seed": 784785141776,
+      "prompt": "Create a standalone storybook illustration: a worried school-age child struggling with a very difficult large jigsaw puzzle, many small pieces scattered across the table, only one small section completed after repeated attempts. Use a centered subject, simple clean background, bright natural colors, soft friendly style, safe for children. Scene only, full image illustration. Never display the concept name as a heading, label, or caption. Use plain blank surfaces. Avoid any object that could contain writing.",
+      "comfyOutputPath": "/Users/chujianhe/ComfyUI-Shared/output/vocab_rabbit_samples/ket_hard_adj_adv_00003_.png",
+      "samplePath": "tmp/sense-fix-generation/comfy-sample-20260723-133901/samples/ket_hard_adj_adv.png"
+    }
+  ]
+}

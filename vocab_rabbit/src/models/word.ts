@@ -112,11 +112,18 @@ export interface LifePhotoCoverageManifest {
   wordIds: string[];
 }
 
+export interface WordStudySense {
+  partOfSpeech: string;
+  chinese: string;
+  examples: string[];
+}
+
 export interface WordRecord {
   id: string;
   english: string;
   partOfSpeech: string;
   chinese: string;
+  studySense?: WordStudySense;
   category: string;
   difficulty: number;
   imagePath: string;

@@ -489,7 +489,14 @@
       ],
       "examples": [
         "I love playing with my dog."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "喜爱；热爱",
+        "examples": [
+          "I love playing with my dog."
+        ]
+      }
     },
     {
       "id": "ket_sister_n",
@@ -1774,8 +1781,15 @@
         }
       ],
       "examples": [
-        "I walked back home from the park."
-      ]
+        "My back hurts after exercise."
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "背部",
+        "examples": [
+          "My back hurts after exercise."
+        ]
+      }
     },
     {
       "id": "ket_doctor_n",
@@ -2163,8 +2177,15 @@
         }
       ],
       "examples": [
-        "I need to take a break from my work."
-      ]
+        "He broke his arm when he fell."
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "骨折；弄断",
+        "examples": [
+          "He broke his arm when he fell."
+        ]
+      }
     },
     {
       "id": "ket_eye_n",
@@ -2363,8 +2384,15 @@
         }
       ],
       "examples": [
-        "The cat fell from the tree."
-      ]
+        "The child fell onto the soft mat."
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "摔倒；落下",
+        "examples": [
+          "The child fell onto the soft mat."
+        ]
+      }
     },
     {
       "id": "ket_medicine_n",
@@ -2429,7 +2457,14 @@
       ],
       "examples": [
         "I need to clean my hands before eating."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "清洁；洗净",
+        "examples": [
+          "I need to clean my hands before eating."
+        ]
+      }
     },
     {
       "id": "ket_feel_v",
@@ -2524,7 +2559,14 @@
       ],
       "examples": [
         "I have a cold and need to rest at home."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "感冒",
+        "examples": [
+          "I have a cold and need to rest at home."
+        ]
+      }
     },
     {
       "id": "ket_finger_n",
@@ -2694,7 +2736,14 @@
       ],
       "examples": [
         "I feel well today and can go to school."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "adj",
+        "chinese": "身体好的；健康的",
+        "examples": [
+          "I feel well today and can go to school."
+        ]
+      }
     },
     {
       "id": "ket_cut_v",
@@ -3344,7 +3393,14 @@
       ],
       "examples": [
         "She gave me a sweet to eat."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "糖果",
+        "examples": [
+          "She gave me a sweet to eat."
+        ]
+      }
     },
     {
       "id": "ket_bad_adj",
@@ -4007,8 +4063,15 @@
         }
       ],
       "examples": [
-        "The hard work paid off."
-      ]
+        "This puzzle is hard, but I will keep trying."
+      ],
+      "studySense": {
+        "partOfSpeech": "adj",
+        "chinese": "困难的",
+        "examples": [
+          "This puzzle is hard, but I will keep trying."
+        ]
+      }
     },
     {
       "id": "ket_ready_adj",
@@ -4307,8 +4370,15 @@
         }
       ],
       "examples": [
-        "Please turn right at the next corner."
-      ]
+        "Your answer is right."
+      ],
+      "studySense": {
+        "partOfSpeech": "adj",
+        "chinese": "正确的",
+        "examples": [
+          "Your answer is right."
+        ]
+      }
     },
     {
       "id": "ket_clever_adj",
@@ -4408,7 +4478,14 @@
       ],
       "examples": [
         "That's so cool! I want one too."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "exclam",
+        "chinese": "酷；太棒了",
+        "examples": [
+          "That's so cool! I want one too."
+        ]
+      }
     },
     {
       "id": "ket_interested_adj",
@@ -4583,7 +4660,14 @@
       ],
       "examples": [
         "He is a kind man, so he helps others."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "adj",
+        "chinese": "善良的；友好的",
+        "examples": [
+          "He is a kind man, so he helps others."
+        ]
+      }
     },
     {
       "id": "ket_sorry_adj",
@@ -5333,8 +5417,15 @@
         }
       ],
       "examples": [
-        "They went to the dogs' home for a walk."
-      ]
+        "This is our family home."
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "家；住所",
+        "examples": [
+          "This is our family home."
+        ]
+      }
     },
     {
       "id": "ket_shelf_n",
@@ -5811,8 +5902,15 @@
         }
       ],
       "examples": [
-        "The light is on the table."
-      ]
+        "The room is full of warm light."
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "灯光；光线",
+        "examples": [
+          "The room is full of warm light."
+        ]
+      }
     },
     {
       "id": "ket_stay_v",
@@ -7072,7 +7170,14 @@
       ],
       "examples": [
         "I wear a ring on my finger."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "戒指",
+        "examples": [
+          "I wear a ring on my finger."
+        ]
+      }
     },
     {
       "id": "ket_tights_n_pl",
@@ -7965,7 +8070,14 @@
       ],
       "examples": [
         "The bus is orange."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "adj",
+        "chinese": "橙色的",
+        "examples": [
+          "The bus is orange."
+        ]
+      }
     },
     {
       "id": "ket_red_adj",
@@ -8544,7 +8656,14 @@
       ],
       "examples": [
         "She is a cook."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "厨师",
+        "examples": [
+          "She is a cook."
+        ]
+      }
     },
     {
       "id": "ket_jam_n",
@@ -9266,7 +9385,14 @@
       ],
       "examples": [
         "I need a drink."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "饮料",
+        "examples": [
+          "I need a drink."
+        ]
+      }
     },
     {
       "id": "ket_melon_n",
@@ -9643,8 +9769,15 @@
       "id": "ket_can_n_mv",
       "english": "can",
       "partOfSpeech": "n & mv",
-      "chinese": "能",
-      "category": "食物和饮料",
+      "chinese": "能；会；罐；罐头",
+      "studySense": {
+        "partOfSpeech": "mv",
+        "chinese": "能；会",
+        "examples": [
+          "The boy can ride a bike."
+        ]
+      },
+      "category": "情态动词和语气",
       "difficulty": 1,
       "imagePath": "/content/images/words/ket_can_n_mv.webp",
       "imageApproved": true,
@@ -9661,7 +9794,7 @@
         }
       ],
       "examples": [
-        "Can you open the can of beans?"
+        "The boy can ride a bike."
       ]
     },
     {
@@ -10050,7 +10183,14 @@
       ],
       "examples": [
         "We have a glass of water."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "玻璃杯",
+        "examples": [
+          "We have a glass of water."
+        ]
+      }
     },
     {
       "id": "ket_pear_n",
@@ -10798,7 +10938,14 @@
       ],
       "examples": [
         "I need to buy a new book for my class."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "书",
+        "examples": [
+          "I need to buy a new book for my class."
+        ]
+      }
     },
     {
       "id": "ket_examination_exam_n",
@@ -12019,7 +12166,14 @@
       ],
       "examples": [
         "I left a message for my mother."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "消息；信息",
+        "examples": [
+          "I left a message for my mother."
+        ]
+      }
     },
     {
       "id": "ket_form_n",
@@ -12093,8 +12247,15 @@
         }
       ],
       "examples": [
-        "I sent a text to my friend."
-      ]
+        "The text is easy to read."
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "文字；文本",
+        "examples": [
+          "The text is easy to read."
+        ]
+      }
     },
     {
       "id": "ket_card_n",
@@ -13145,8 +13306,15 @@
         }
       ],
       "examples": [
-        "She likes to watch films in the cinema."
-      ]
+        "They filmed a scene in the park."
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "拍摄",
+        "examples": [
+          "They filmed a scene in the park."
+        ]
+      }
     },
     {
       "id": "ket_paint_v_n",
@@ -13195,8 +13363,15 @@
         }
       ],
       "examples": [
-        "He showed me his new car."
-      ]
+        "We watched a magic show at school."
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "表演",
+        "examples": [
+          "We watched a magic show at school."
+        ]
+      }
     },
     {
       "id": "ket_fun_adj_n",
@@ -13221,7 +13396,14 @@
       ],
       "examples": [
         "The party was fun for everyone."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "adj",
+        "chinese": "有趣的；令人愉快的",
+        "examples": [
+          "The party was fun for everyone."
+        ]
+      }
     },
     {
       "id": "ket_painter_n",
@@ -13775,7 +13957,14 @@
       ],
       "examples": [
         "She likes to dance at parties."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "跳舞",
+        "examples": [
+          "She likes to dance at parties."
+        ]
+      }
     },
     {
       "id": "ket_listen_to_v",
@@ -14271,7 +14460,14 @@
       ],
       "examples": [
         "We went to the park and played."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "公园",
+        "examples": [
+          "We went to the park and played."
+        ]
+      }
     },
     {
       "id": "ket_cycling_n",
@@ -16496,7 +16692,14 @@
       ],
       "examples": [
         "My brother won the race yesterday."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "赛跑；比赛",
+        "examples": [
+          "My brother won the race yesterday."
+        ]
+      }
     },
     {
       "id": "ket_surf_v",
@@ -17536,7 +17739,14 @@
       ],
       "examples": [
         "The underground station was crowded."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "地铁",
+        "examples": [
+          "The underground station was crowded."
+        ]
+      }
     },
     {
       "id": "ket_square_n_adj",
@@ -17561,7 +17771,14 @@
       ],
       "examples": [
         "They played in the square."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "广场",
+        "examples": [
+          "They played in the square."
+        ]
+      }
     },
     {
       "id": "ket_zoo_n",
@@ -18622,7 +18839,14 @@
       ],
       "examples": [
         "I gave her some change for the coffee."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "零钱",
+        "examples": [
+          "I gave her some change for the coffee."
+        ]
+      }
     },
     {
       "id": "ket_dollar_n",
@@ -21054,8 +21278,15 @@
         }
       ],
       "examples": [
-        "It snowed heavily last night."
-      ]
+        "Snow covered the ground."
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "雪",
+        "examples": [
+          "Snow covered the ground."
+        ]
+      }
     },
     {
       "id": "ket_warm_adj",
@@ -21760,7 +21991,7 @@
       "english": "half",
       "partOfSpeech": "det, n & pron",
       "chinese": "一半",
-      "category": "时间和日期",
+      "category": "数量和多少",
       "difficulty": 2,
       "imagePath": "/content/images/words/ket_half_det_n_pron.webp",
       "imageApproved": true,
@@ -21777,8 +22008,15 @@
         }
       ],
       "examples": [
-        "It's half past ten."
-      ]
+        "She ate half of the apple."
+      ],
+      "studySense": {
+        "partOfSpeech": "det",
+        "chinese": "一半",
+        "examples": [
+          "She ate half of the apple."
+        ]
+      }
     },
     {
       "id": "ket_night_n",
@@ -22122,7 +22360,7 @@
       "english": "second",
       "partOfSpeech": "adj, det & n",
       "chinese": "第二",
-      "category": "时间和日期",
+      "category": "数字和顺序词",
       "difficulty": 2,
       "imagePath": "/content/images/words/ket_second_adj_det_n.webp",
       "imageApproved": true,
@@ -22139,8 +22377,15 @@
         }
       ],
       "examples": [
-        "I waited for a second before answering."
-      ]
+        "She finished the race in second place."
+      ],
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "第二名",
+        "examples": [
+          "She finished the race in second place."
+        ]
+      }
     },
     {
       "id": "ket_working_hours_n",
@@ -22224,7 +22469,14 @@
       ],
       "examples": [
         "The newspaper is published daily."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "adv",
+        "chinese": "每天",
+        "examples": [
+          "The newspaper is published daily."
+        ]
+      }
     },
     {
       "id": "ket_moment_n",
@@ -23206,8 +23458,15 @@
         }
       ],
       "examples": [
-        "I need to return the book."
-      ]
+        "We returned home after school."
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "返回",
+        "examples": [
+          "We returned home after school."
+        ]
+      }
     },
     {
       "id": "ket_traffic_light_n",
@@ -25931,7 +26190,14 @@
       ],
       "examples": [
         "Can I have another cookie?"
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "det",
+        "chinese": "另一个",
+        "examples": [
+          "Can I have another cookie?"
+        ]
+      }
     },
     {
       "id": "ket_any_det_pron",
@@ -27501,7 +27767,14 @@
       ],
       "examples": [
         "Whose book is this?"
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "det",
+        "chinese": "谁的",
+        "examples": [
+          "Whose book is this?"
+        ]
+      }
     },
     {
       "id": "ket_you_pron",
@@ -27900,8 +28173,15 @@
         }
       ],
       "examples": [
-        "The price is above my budget."
-      ]
+        "The ball is above the box."
+      ],
+      "studySense": {
+        "partOfSpeech": "prep",
+        "chinese": "在……上方",
+        "examples": [
+          "The ball is above the box."
+        ]
+      }
     },
     {
       "id": "ket_across_adv_prep",
@@ -28050,8 +28330,15 @@
         }
       ],
       "examples": [
-        "The party is around the corner."
-      ]
+        "The children sat around the table."
+      ],
+      "studySense": {
+        "partOfSpeech": "prep",
+        "chinese": "围绕；在……周围",
+        "examples": [
+          "The children sat around the table."
+        ]
+      }
     },
     {
       "id": "ket_as_conj_adv_prep",
@@ -28075,8 +28362,15 @@
         }
       ],
       "examples": [
-        "I will come as soon as I can."
-      ]
+        "She works as a doctor."
+      ],
+      "studySense": {
+        "partOfSpeech": "prep",
+        "chinese": "作为",
+        "examples": [
+          "She works as a doctor."
+        ]
+      }
     },
     {
       "id": "ket_as_well_as_prep",
@@ -30078,7 +30372,14 @@
       ],
       "examples": [
         "She arrived at the meeting early."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "adv",
+        "chinese": "早；提前",
+        "examples": [
+          "She arrived at the meeting early."
+        ]
+      }
     },
     {
       "id": "ket_ever_adv",
@@ -31633,7 +31934,7 @@
       "english": "straight",
       "partOfSpeech": "adj & adv",
       "chinese": "直的",
-      "category": "方式和程度副词",
+      "category": "常见形容词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_straight_adj_adv.webp",
       "imageApproved": true,
@@ -31650,8 +31951,15 @@
         }
       ],
       "examples": [
-        "He walked straight to the house."
-      ]
+        "This road is straight."
+      ],
+      "studySense": {
+        "partOfSpeech": "adj",
+        "chinese": "直的",
+        "examples": [
+          "This road is straight."
+        ]
+      }
     },
     {
       "id": "ket_suddenly_adv",
@@ -32356,8 +32664,15 @@
         }
       ],
       "examples": [
-        "I need to find the answer."
-      ]
+        "She answered the teacher's question."
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "回答",
+        "examples": [
+          "She answered the teacher's question."
+        ]
+      }
     },
     {
       "id": "ket_ask_v",
@@ -33002,7 +33317,14 @@
       ],
       "examples": [
         "Please brush your teeth before bed."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "刷",
+        "examples": [
+          "Please brush your teeth before bed."
+        ]
+      }
     },
     {
       "id": "ket_build_v",
@@ -33197,7 +33519,14 @@
       ],
       "examples": [
         "I need to contact my friend."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "联系",
+        "examples": [
+          "I need to contact my friend."
+        ]
+      }
     },
     {
       "id": "ket_continue_v",
@@ -33271,8 +33600,15 @@
         }
       ],
       "examples": [
-        "The children helped Fred to pull the cover off the rainbow machine."
-      ]
+        "She covered the child with a blanket."
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "覆盖；盖住",
+        "examples": [
+          "She covered the child with a blanket."
+        ]
+      }
     },
     {
       "id": "ket_cross_n_v",
@@ -33296,8 +33632,15 @@
         }
       ],
       "examples": [
-        "The road crosses the river."
-      ]
+        "We crossed the road at the crossing."
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "穿过；横过",
+        "examples": [
+          "We crossed the road at the crossing."
+        ]
+      }
     },
     {
       "id": "ket_cry_v",
@@ -34652,8 +34995,15 @@
         }
       ],
       "examples": [
-        "It doesn't matter if you are late."
-      ]
+        "Your feelings matter to me."
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "重要；要紧",
+        "examples": [
+          "Your feelings matter to me."
+        ]
+      }
     },
     {
       "id": "ket_meet_v",
@@ -34803,7 +35153,14 @@
       ],
       "examples": [
         "I want to order a pizza."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "点餐；订购",
+        "examples": [
+          "I want to order a pizza."
+        ]
+      }
     },
     {
       "id": "ket_pack_v",
@@ -34953,7 +35310,14 @@
       ],
       "examples": [
         "Please post this letter on your way home."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "邮寄",
+        "examples": [
+          "Please post this letter on your way home."
+        ]
+      }
     },
     {
       "id": "ket_prefer_would_prefer_v",
@@ -35837,7 +36201,14 @@
       ],
       "examples": [
         "We must tidy up the room."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "整理；收拾",
+        "examples": [
+          "We must tidy up the room."
+        ]
+      }
     },
     {
       "id": "ket_tidy_up_v",
@@ -38362,8 +38733,15 @@
         }
       ],
       "examples": [
-        "The total amount of money was one hundred coins."
-      ]
+        "The total amount was one hundred coins."
+      ],
+      "studySense": {
+        "partOfSpeech": "adj",
+        "chinese": "总的",
+        "examples": [
+          "The total amount was one hundred coins."
+        ]
+      }
     },
     {
       "id": "ket_true_adj",
@@ -38552,7 +38930,14 @@
       ],
       "examples": [
         "I ate the whole apple."
-      ]
+      ],
+      "studySense": {
+        "partOfSpeech": "adj",
+        "chinese": "整个的",
+        "examples": [
+          "I ate the whole apple."
+        ]
+      }
     },
     {
       "id": "ket_wide_adj",

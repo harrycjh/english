@@ -17,7 +17,12 @@ import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
 import { addDaysToDateKey, isTaskFullyAnswered } from '../services/task-service';
-import { getPrimaryOxfordRefLabel, getStudyText } from '../services/word-service';
+import {
+  getPrimaryOxfordRefLabel,
+  getStudyChinese,
+  getStudyPartOfSpeech,
+  getStudyText,
+} from '../services/word-service';
 import reviewLayoutData from '../../design-output/ui-concepts/review-page-layout.json';
 import reviewSlicesManifestData from '../../design-output/ui-concepts/review-page-slices-manifest.json';
 
@@ -322,7 +327,7 @@ function ReviewPreviewCard({ word, masteryLevel, index, layout, onOpenDetails }:
           {getStudyText(word)}
         </strong>
         <p className="review-preview-card__subtitle" style={getRelativeTextStyle(layout.textBlocks.subtitle, layout.textSafe)}>
-          {word.chinese}
+          {getStudyChinese(word)}
         </p>
       </div>
       <span
@@ -334,7 +339,7 @@ function ReviewPreviewCard({ word, masteryLevel, index, layout, onOpenDetails }:
           width: `${layout.textBlocks.meta.width}px`,
         }}
       >
-        {formatPreviewPartOfSpeech(word.partOfSpeech)}
+        {formatPreviewPartOfSpeech(getStudyPartOfSpeech(word))}
       </span>
       <span
         className="review-preview-card__source"

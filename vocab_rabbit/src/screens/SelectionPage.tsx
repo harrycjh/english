@@ -12,7 +12,11 @@ import {
 import type { WordPayload, WordRecord } from '../models/word';
 import { MAX_MASTERY_LEVEL } from '../services/spaced-repetition';
 import { estimateReviewLoad, getWordLearningBucket } from '../services/selection-service';
-import { getStudyText } from '../services/word-service';
+import {
+  getStudyChinese,
+  getStudyPartOfSpeech,
+  getStudyText,
+} from '../services/word-service';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
 import { MasteryLevelIcon } from '../components/MasteryLevelIcon';
@@ -149,8 +153,9 @@ function SelectionWordCard({
   const displayWord = getStudyText(word);
   const [hasArt, setHasArt] = useState(true);
   const categoryLabel = visualOverride?.categoryLabel ?? word.category;
-  const chineseLabel = visualOverride?.chineseLabel ?? word.chinese;
-  const partOfSpeechLabel = visualOverride?.partOfSpeechLabel ?? formatPartOfSpeech(word.partOfSpeech);
+  const chineseLabel = visualOverride?.chineseLabel ?? getStudyChinese(word);
+  const partOfSpeechLabel = visualOverride?.partOfSpeechLabel
+    ?? formatPartOfSpeech(getStudyPartOfSpeech(word));
   const colorSlot = getCategoryColorSlot(categoryLabel);
 
   return (
@@ -208,9 +213,9 @@ function SelectionWordRow({
     <article className="selection-word-row">
       <button className="selection-word-row__main" type="button" onClick={onOpenDetails}>
         <strong lang="en">{getStudyText(word)}</strong>
-        <span>{word.chinese}</span>
+        <span>{getStudyChinese(word)}</span>
         <span>{word.category}</span>
-        <span>{word.partOfSpeech}</span>
+        <span>{getStudyPartOfSpeech(word)}</span>
       </button>
       <span className={`selection-status-chip selection-status-chip--${statusTone}`}>{statusLabel}</span>
       <span className="selection-word-row__updated">{updatedAtLabel}</span>
@@ -349,6 +354,7 @@ export function SelectionPage({
       const matchesSearch = !normalizedSearch ||
         word.english.toLowerCase().includes(normalizedSearch) ||
         word.chinese.includes(searchText.trim()) ||
+        getStudyChinese(word).includes(searchText.trim()) ||
         word.category.includes(searchText.trim());
       const matchesCategory = selectedCategory === 'all' || word.category === selectedCategory;
       const matchesDifficulty = selectedDifficulty === 'all' || word.difficulty === Number(selectedDifficulty);

@@ -52,6 +52,7 @@ export function replayLearningRecords(
       event.isCorrect,
       new Date(event.answeredAt),
       event.learningAction,
+      event.levelDowngrade,
     );
   }
 

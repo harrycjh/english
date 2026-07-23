@@ -89,6 +89,33 @@ describe('replayLearningRecords', () => {
       wrongCount: 1,
     });
   });
+
+  it('preserves a recorded downgrade when rebuilding local state', () => {
+    const downgradeEvent = {
+      ...makeEvent('third-wrong', 'word-a', '2026-07-14T09:00:00.000Z', false),
+      levelDowngrade: true,
+    };
+    const checkpoint: LearningCheckpoint = {
+      capturedAt: '2026-07-14T08:00:00.000Z',
+      deviceId: 'legacy-device',
+      generation: 0,
+      records: [{
+        wordId: 'word-a',
+        masteryLevel: 5,
+        reviewStage: 5,
+        correctStreak: 2,
+        wrongCount: 2,
+        lastStudiedAt: '2026-07-14T07:00:00.000Z',
+        nextDueAt: '2026-07-20T20:00:00.000Z',
+      }],
+    };
+
+    expect(replayLearningRecords([downgradeEvent], checkpoint)['word-a']).toMatchObject({
+      masteryLevel: 4,
+      reviewStage: 4,
+      wrongCount: 3,
+    });
+  });
 });
 
 describe('mergeWordSelectionStates', () => {

@@ -1,5 +1,5 @@
 import type { WordRecord } from '../models/word';
-import { getStudyText } from './word-service';
+import { getStudyPartOfSpeech, getStudyText } from './word-service';
 
 function normalizeExample(example: string | undefined): string | null {
   const trimmed = example?.trim();
@@ -7,21 +7,24 @@ function normalizeExample(example: string | undefined): string | null {
 }
 
 export function getExampleSentences(word: WordRecord): string[] {
-  const curated = [
-    ...(word.examples ?? []),
-    word.example,
-  ].map(normalizeExample).filter(Boolean) as string[];
+  const senseExamples = word.studySense?.examples;
+  const curated = (
+    senseExamples
+      ? senseExamples
+      : [...(word.examples ?? []), word.example]
+  ).map(normalizeExample).filter(Boolean) as string[];
 
   if (curated.length > 0) {
     return curated.slice(0, 2);
   }
 
   const studyText = getStudyText(word);
-  if (word.partOfSpeech.includes('adj')) {
+  const partOfSpeech = getStudyPartOfSpeech(word);
+  if (partOfSpeech.includes('adj')) {
     return [`This is ${studyText}.`];
   }
 
-  if (word.partOfSpeech.includes('v')) {
+  if (partOfSpeech.includes('v')) {
     return [`I can ${studyText}.`];
   }
 

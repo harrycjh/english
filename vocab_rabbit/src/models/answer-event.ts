@@ -15,6 +15,7 @@ export interface AnswerEvent {
   responseTimeMs: number;
   learningAction?: LearningAction;
   isSessionRetry?: boolean;
+  levelDowngrade?: boolean;
   deviceId?: string;
   schemaVersion?: number;
   generation?: number;

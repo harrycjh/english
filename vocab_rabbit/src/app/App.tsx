@@ -30,7 +30,7 @@ import {
   reconcileTaskCompletion,
   recordTaskAnswer,
 } from '../services/task-service';
-import { getWrongPracticeWordIds } from '../services/answer-event-service';
+import { applyConsecutiveWrongPolicy, getWrongPracticeWordIds } from '../services/answer-event-service';
 import { ensureSelectionStateMap } from '../services/selection-service';
 import { createEmptyRecord, evaluateAnswer, isMastered } from '../services/spaced-repetition';
 import {
@@ -381,15 +381,17 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
   }
 
   async function handleAnswer(event: AnswerEvent) {
+    const policyEvent = applyConsecutiveWrongPolicy(answerEvents, event);
     const currentRecord = recordsById[event.wordId] ?? createEmptyRecord(event.wordId);
     const nextRecord = evaluateAnswer(
       currentRecord,
-      event.isCorrect,
-      new Date(event.answeredAt),
-      event.learningAction,
+      policyEvent.isCorrect,
+      new Date(policyEvent.answeredAt),
+      policyEvent.learningAction,
+      policyEvent.levelDowngrade,
     );
     const enrichedEvent = {
-      ...event,
+      ...policyEvent,
       learningStateBefore: currentRecord,
       learningStateAfter: nextRecord,
     };
@@ -697,6 +699,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           onImportLifePhotoPackage={handleImportLifePhotoPackage}
           localLifePhotoCount={Object.keys(localLifePhotosById).length}
           localLifePhotoImportedAt={localLifePhotoImportedAt}
+          words={payload.words}
         />
       );
     }

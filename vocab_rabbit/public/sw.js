@@ -1,4 +1,7 @@
-const CACHE_NAME = 'vocab-rabbit-shell-v9';
+const CACHE_NAME = 'vocab-rabbit-shell-v11';
+const OFFLINE_IMAGE_CACHE_PREFIX = 'vocab-rabbit-images-';
+const OFFLINE_IMAGE_CACHE_NAME = 'vocab-rabbit-images-v2';
+const OFFLINE_DOWNLOAD_HEADER = 'X-VocaRabbit-Offline-Download';
 const SCOPE_URL = new URL(self.registration.scope);
 const APP_ROOT_URL = new URL('./', SCOPE_URL).toString();
 const INDEX_URL = new URL('index.html', SCOPE_URL).toString();
@@ -34,6 +37,9 @@ async function handleStaticAsset(request) {
 
   try {
     const response = await fetch(request);
+    if (request.headers.get(OFFLINE_DOWNLOAD_HEADER) === '1') {
+      return response;
+    }
     return putInCache(request, response);
   } catch {
     return Response.error();
@@ -58,7 +64,18 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
+      Promise.all(
+        keys
+          .filter(
+            (key) =>
+              key !== CACHE_NAME
+              && (
+                !key.startsWith(OFFLINE_IMAGE_CACHE_PREFIX)
+                || key !== OFFLINE_IMAGE_CACHE_NAME
+              )
+          )
+          .map((key) => caches.delete(key))
+      )
     ).then(() => self.clients.claim())
   );
 });

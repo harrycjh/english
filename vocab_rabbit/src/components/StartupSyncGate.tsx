@@ -2,7 +2,7 @@ import { type FormEvent, type ReactNode, useEffect, useRef, useState } from 'rea
 import {
   connectDeviceForBackgroundSync,
   hasConnectedDevice,
-  performStartupSync,
+  performStartupSyncWithRetry,
   type StartupSyncResult,
 } from '../services/startup-sync-service';
 
@@ -98,7 +98,7 @@ export function StartupSyncPanel({
   );
 }
 
-export type BackgroundSyncState = StartupSyncResult | { kind: 'syncing' };
+export type BackgroundSyncState = StartupSyncResult;
 
 export function BackgroundSyncNotice({
   state,
@@ -109,22 +109,8 @@ export function BackgroundSyncNotice({
   onRetry: () => void;
   onReconnect: () => void;
 }) {
-  if (state.kind === 'syncing') {
-    return (
-      <aside className="background-sync-notice" role="status" aria-live="polite">
-        <span className="background-sync-notice__spinner" aria-hidden="true" />
-        <span>正在后台同步学习进度…</span>
-      </aside>
-    );
-  }
-
   if (state.kind === 'synced') {
-    return (
-      <aside className="background-sync-notice background-sync-notice--success" role="status" aria-live="polite">
-        <span aria-hidden="true">✓</span>
-        <span>学习进度已合并</span>
-      </aside>
-    );
+    return null;
   }
 
   if (state.kind === 'needs-code') {
@@ -157,25 +143,25 @@ export function StartupSyncGate({ children }: StartupSyncGateProps) {
   const [isReady, setIsReady] = useState(false);
   const [backgroundState, setBackgroundState] = useState<BackgroundSyncState | null>(null);
   const [syncRevision, setSyncRevision] = useState(0);
-  const hideNoticeTimer = useRef<number | null>(null);
-
-  function clearNoticeTimer() {
-    if (hideNoticeTimer.current !== null) {
-      window.clearTimeout(hideNoticeTimer.current);
-      hideNoticeTimer.current = null;
-    }
-  }
+  const activeSync = useRef<Promise<StartupSyncResult> | null>(null);
 
   async function runBackgroundSync(): Promise<StartupSyncResult> {
-    clearNoticeTimer();
-    setBackgroundState({ kind: 'syncing' });
-    const result = await performStartupSync();
-    setBackgroundState(result);
-    if (result.kind === 'synced') {
-      setSyncRevision((revision) => revision + 1);
-      hideNoticeTimer.current = window.setTimeout(() => setBackgroundState(null), 2_500);
+    if (activeSync.current) return activeSync.current;
+
+    setBackgroundState(null);
+    const syncTask = performStartupSyncWithRetry();
+    activeSync.current = syncTask;
+    try {
+      const result = await syncTask;
+      if (result.kind === 'synced') {
+        setSyncRevision((revision) => revision + 1);
+      } else {
+        setBackgroundState(result);
+      }
+      return result;
+    } finally {
+      activeSync.current = null;
     }
-    return result;
   }
 
   async function checkConnection() {
@@ -190,7 +176,6 @@ export function StartupSyncGate({ children }: StartupSyncGateProps) {
 
   useEffect(() => {
     void checkConnection();
-    return clearNoticeTimer;
   }, []);
 
   async function handleConnect() {
@@ -215,7 +200,6 @@ export function StartupSyncGate({ children }: StartupSyncGateProps) {
             state={backgroundState}
             onRetry={() => void runBackgroundSync()}
             onReconnect={() => {
-              clearNoticeTimer();
               setBackgroundState(null);
               setState({ kind: 'needs-code', message: '请重新输入家庭验证码。' });
               setIsReady(false);

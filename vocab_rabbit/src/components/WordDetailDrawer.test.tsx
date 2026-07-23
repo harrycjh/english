@@ -1,5 +1,7 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import type { AnswerEvent } from '../models/answer-event';
+import type { LearningRecord } from '../models/learning-record';
 import { defaultParentSetting } from '../models/parent-setting';
 import type { WordRecord } from '../models/word';
 import { WordDetailDrawer } from './WordDetailDrawer';
@@ -37,6 +39,46 @@ const word: WordRecord = {
     },
   },
 };
+
+const levelFourRecord: LearningRecord = {
+  wordId: word.id,
+  masteryLevel: 4,
+  reviewStage: 4,
+  correctStreak: 0,
+  wrongCount: 3,
+  lastStudiedAt: '2026-07-22T08:02:00.000Z',
+  nextDueAt: '2026-07-21T20:00:00.000Z',
+};
+
+const levelHistoryEvents: AnswerEvent[] = [
+  {
+    id: 'correct-level-five',
+    wordId: word.id,
+    dateKey: '2026-07-21',
+    answeredAt: '2026-07-21T08:00:00.000Z',
+    questionKind: 'text-choice',
+    selectedAnswer: '手',
+    correctAnswer: '手',
+    isCorrect: true,
+    responseTimeMs: 900,
+    learningStateBefore: { ...levelFourRecord, masteryLevel: 4, reviewStage: 4 },
+    learningStateAfter: { ...levelFourRecord, masteryLevel: 5, reviewStage: 5 },
+  },
+  {
+    id: 'downgrade-level-four',
+    wordId: word.id,
+    dateKey: '2026-07-22',
+    answeredAt: '2026-07-22T08:02:00.000Z',
+    questionKind: 'fill-blank',
+    selectedAnswer: 'hend',
+    correctAnswer: 'hand',
+    isCorrect: false,
+    responseTimeMs: 1200,
+    levelDowngrade: true,
+    learningStateBefore: { ...levelFourRecord, masteryLevel: 5, reviewStage: 5 },
+    learningStateAfter: levelFourRecord,
+  },
+];
 
 describe('WordDetailDrawer', () => {
   it('uses the existing compact layout in review context', () => {
@@ -98,5 +140,26 @@ describe('WordDetailDrawer', () => {
     expect(markup).toContain('background-size:300% 300%');
     expect(markup).toContain('background-position:100% 50%');
     expect(markup).toContain('red-rocket-atlases/atlas-001.webp');
+  });
+
+  it('renders the word mastery-level history and marks downgrade points', () => {
+    const markup = renderToStaticMarkup(
+      <WordDetailDrawer
+        isOpen
+        word={word}
+        record={levelFourRecord}
+        selectionState={undefined}
+        answerEvents={levelHistoryEvents}
+        setting={{ ...defaultParentSetting, enableAudio: false }}
+        context="review"
+        onClose={() => undefined}
+      />,
+    );
+
+    expect(markup).toContain('等级变化');
+    expect(markup).toContain('该单词的学习等级变化历史');
+    expect(markup).toContain('word-detail-drawer__level-line');
+    expect(markup).toContain('is-downgrade');
+    expect(markup).toContain('等级 4');
   });
 });

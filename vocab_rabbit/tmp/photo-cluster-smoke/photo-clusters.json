@@ -1,0 +1,811 @@
+{
+  "meta": {
+    "version": 1,
+    "generatedAt": "2026-07-20T18:03:38+08:00",
+    "sourceIndex": "/Users/chujianhe/English/vocab_rabbit/design-output/photo-word-linking/master-index/photo-linking-master-index.json",
+    "sourcePhotosModified": false,
+    "masterIndexModified": false,
+    "nearDuplicatePolicy": "pHash<=4 or pHash<=8+dHash<=10+histogram>=0.96",
+    "sceneCandidatePolicy": "pHash<=16+dHash<=20+histogram>=0.90 plus time/label agreement"
+  },
+  "stats": {
+    "indexedPhotos": 100,
+    "readablePhotos": 100,
+    "unreadablePhotos": 0,
+    "candidatePairs": 14,
+    "duplicateClusters": 4,
+    "photosInDuplicateClusters": 8,
+    "autoSkipCaptionPhotos": 4,
+    "captionPhotosAfterAutoSkip": 96,
+    "sceneCandidateClusters": 5,
+    "photosInSceneCandidateClusters": 10
+  },
+  "duplicateClusters": [
+    {
+      "id": "duplicate-00001",
+      "representativeId": "photo-00003",
+      "memberIds": [
+        "photo-00003",
+        "photo-00015"
+      ],
+      "memberCount": 2
+    },
+    {
+      "id": "duplicate-00002",
+      "representativeId": "photo-00017",
+      "memberIds": [
+        "photo-00017",
+        "photo-00025"
+      ],
+      "memberCount": 2
+    },
+    {
+      "id": "duplicate-00003",
+      "representativeId": "photo-00031",
+      "memberIds": [
+        "photo-00031",
+        "photo-00035"
+      ],
+      "memberCount": 2
+    },
+    {
+      "id": "duplicate-00004",
+      "representativeId": "photo-00040",
+      "memberIds": [
+        "photo-00040",
+        "photo-00078"
+      ],
+      "memberCount": 2
+    }
+  ],
+  "sceneCandidateClusters": [
+    {
+      "id": "scene-00001",
+      "representativeId": "photo-00003",
+      "memberIds": [
+        "photo-00003",
+        "photo-00015"
+      ],
+      "memberCount": 2
+    },
+    {
+      "id": "scene-00002",
+      "representativeId": "photo-00017",
+      "memberIds": [
+        "photo-00017",
+        "photo-00025"
+      ],
+      "memberCount": 2
+    },
+    {
+      "id": "scene-00003",
+      "representativeId": "photo-00018",
+      "memberIds": [
+        "photo-00018",
+        "photo-00022"
+      ],
+      "memberCount": 2
+    },
+    {
+      "id": "scene-00004",
+      "representativeId": "photo-00031",
+      "memberIds": [
+        "photo-00031",
+        "photo-00035"
+      ],
+      "memberCount": 2
+    },
+    {
+      "id": "scene-00005",
+      "representativeId": "photo-00040",
+      "memberIds": [
+        "photo-00040",
+        "photo-00078"
+      ],
+      "memberCount": 2
+    }
+  ],
+  "photoAssignments": [
+    {
+      "id": "photo-00001",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00001",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00002",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00002",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00003",
+      "duplicateClusterId": "duplicate-00001",
+      "sceneClusterId": "scene-00001",
+      "representativeId": "photo-00003",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00004",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00004",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00005",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00005",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00006",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00006",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00007",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00007",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00008",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00008",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00009",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00009",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00010",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00010",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00011",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00011",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00012",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00012",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00013",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00013",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00014",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00014",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00015",
+      "duplicateClusterId": "duplicate-00001",
+      "sceneClusterId": "scene-00001",
+      "representativeId": "photo-00003",
+      "skipCaptionGeneration": true
+    },
+    {
+      "id": "photo-00016",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00016",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00017",
+      "duplicateClusterId": "duplicate-00002",
+      "sceneClusterId": "scene-00002",
+      "representativeId": "photo-00017",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00018",
+      "duplicateClusterId": null,
+      "sceneClusterId": "scene-00003",
+      "representativeId": "photo-00018",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00019",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00019",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00020",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00020",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00021",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00021",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00022",
+      "duplicateClusterId": null,
+      "sceneClusterId": "scene-00003",
+      "representativeId": "photo-00022",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00023",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00023",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00024",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00024",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00025",
+      "duplicateClusterId": "duplicate-00002",
+      "sceneClusterId": "scene-00002",
+      "representativeId": "photo-00017",
+      "skipCaptionGeneration": true
+    },
+    {
+      "id": "photo-00026",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00026",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00027",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00027",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00028",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00028",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00029",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00029",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00030",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00030",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00031",
+      "duplicateClusterId": "duplicate-00003",
+      "sceneClusterId": "scene-00004",
+      "representativeId": "photo-00031",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00032",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00032",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00033",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00033",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00034",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00034",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00035",
+      "duplicateClusterId": "duplicate-00003",
+      "sceneClusterId": "scene-00004",
+      "representativeId": "photo-00031",
+      "skipCaptionGeneration": true
+    },
+    {
+      "id": "photo-00036",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00036",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00037",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00037",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00038",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00038",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00039",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00039",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00040",
+      "duplicateClusterId": "duplicate-00004",
+      "sceneClusterId": "scene-00005",
+      "representativeId": "photo-00040",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00041",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00041",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00042",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00042",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00043",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00043",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00044",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00044",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00045",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00045",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00046",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00046",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00047",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00047",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00048",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00048",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00049",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00049",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00050",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00050",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00051",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00051",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00052",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00052",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00053",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00053",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00054",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00054",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00055",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00055",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00056",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00056",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00057",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00057",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00058",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00058",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00059",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00059",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00060",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00060",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00061",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00061",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00062",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00062",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00063",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00063",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00064",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00064",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00065",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00065",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00066",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00066",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00067",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00067",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00068",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00068",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00069",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00069",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00070",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00070",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00071",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00071",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00072",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00072",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00073",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00073",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00074",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00074",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00075",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00075",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00076",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00076",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00077",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00077",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00078",
+      "duplicateClusterId": "duplicate-00004",
+      "sceneClusterId": "scene-00005",
+      "representativeId": "photo-00040",
+      "skipCaptionGeneration": true
+    },
+    {
+      "id": "photo-00079",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00079",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00080",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00080",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00081",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00081",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00082",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00082",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00083",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00083",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00084",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00084",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00085",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00085",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00086",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00086",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00087",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00087",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00088",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00088",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00089",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00089",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00090",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00090",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00091",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00091",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00092",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00092",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00093",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00093",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00094",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00094",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00095",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00095",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00096",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00096",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00097",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00097",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00098",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00098",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00099",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00099",
+      "skipCaptionGeneration": false
+    },
+    {
+      "id": "photo-00100",
+      "duplicateClusterId": null,
+      "sceneClusterId": null,
+      "representativeId": "photo-00100",
+      "skipCaptionGeneration": false
+    }
+  ],
+  "unreadable": []
+}

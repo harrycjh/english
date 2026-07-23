@@ -23,7 +23,10 @@ const CURVE_INTERVAL_DAYS = [
   365,
 ];
 const OBSERVED_INTERVAL_LIMITS = [0.25, 0.5, 1, 2, 3, 7, 14, 21, 30, 60, 90, 180, 365];
-const DURABILITY_THRESHOLDS = [10, 30, 60, 90];
+const MASTERY_LEVEL_COLORS = [
+  '#b8ad9b', '#e2bf55', '#72b86b', '#51a8d8', '#617bd2',
+  '#7659b7', '#b35b9a', '#d75c5c', '#49454a', '#ff9b22',
+] as const;
 const MIN_PERSONAL_MODEL_SAMPLES = 6;
 const MIN_PERSONAL_MODEL_BUCKETS = 2;
 const EBBINGHAUS_LONG_TERM_ANCHORS = [
@@ -50,13 +53,13 @@ export interface RetentionPoint {
   sampleCount?: number;
 }
 
-export interface DurabilityThresholdPoint {
-  thresholdDays: number;
+export interface MasteryLevelPoint {
+  level: number;
   count: number;
   color: string;
 }
 
-export interface DurabilityTimelinePoint {
+export interface MasteryLevelTimelinePoint {
   dateKey: string;
   counts: Record<number, number>;
 }
@@ -76,8 +79,8 @@ export interface MemoryStatistics {
   ebbinghausCurve: RetentionPoint[];
   observedRecallPoints: RetentionPoint[];
   personalCurveModel: PersonalCurveModel;
-  durabilityThresholds: DurabilityThresholdPoint[];
-  durabilityTimeline: DurabilityTimelinePoint[];
+  masteryLevels: MasteryLevelPoint[];
+  masteryLevelTimeline: MasteryLevelTimelinePoint[];
   averageHalfLifeDays: number;
   medianHalfLifeDays: number;
   averageRetentionNow: number;
@@ -245,12 +248,11 @@ function fitPersonalCurve(points: RetentionPoint[]): PersonalCurveModel {
   };
 }
 
-function createDurabilityThresholds(estimates: WordMemoryEstimate[]): DurabilityThresholdPoint[] {
-  const colors = ['#f0a23f', '#65b991', '#569ee4', '#8a78d4'];
-  return DURABILITY_THRESHOLDS.map((thresholdDays, index) => ({
-    thresholdDays,
-    color: colors[index],
-    count: estimates.filter((estimate) => estimate.halfLifeDays >= thresholdDays).length,
+function createMasteryLevels(estimates: WordMemoryEstimate[]): MasteryLevelPoint[] {
+  return MASTERY_LEVEL_COLORS.map((color, level) => ({
+    level,
+    color,
+    count: estimates.filter((estimate) => estimate.masteryLevel === level).length,
   }));
 }
 
@@ -268,35 +270,28 @@ function addDays(dateKey: string, days: number): string {
 }
 
 function createTimelineCounts(records: Iterable<LearningRecord>): Record<number, number> {
-  const estimates = [...records]
-    .filter((record): record is LearningRecord & { lastStudiedAt: string } => Boolean(record.lastStudiedAt))
-    .map((record) => ({
-      wordId: record.wordId,
-      halfLifeDays: estimateHalfLifeDays(record),
-      retentionNow: 0,
-      lastStudiedAt: record.lastStudiedAt,
-      nextDueAt: record.nextDueAt,
-      masteryLevel: record.masteryLevel,
-      reviewStage: record.reviewStage,
-    }));
-  return Object.fromEntries(
-    createDurabilityThresholds(estimates).map((point) => [point.thresholdDays, point.count]),
-  );
+  const counts = Object.fromEntries(MASTERY_LEVEL_COLORS.map((_, level) => [level, 0]));
+  for (const record of records) {
+    if (!record.lastStudiedAt) continue;
+    const level = clamp(Math.round(record.masteryLevel), 0, 9);
+    counts[level] += 1;
+  }
+  return counts;
 }
 
-export function buildDurabilityTimeline(
+export function buildMasteryLevelTimeline(
   recordsById: Record<string, LearningRecord>,
   answerEvents: AnswerEvent[],
   now: Date = new Date(),
   historyDays = 90,
-): DurabilityTimelinePoint[] {
+): MasteryLevelTimelinePoint[] {
   const todayKey = createStudyDateKey(now);
   const startKey = addDays(todayKey, -Math.max(0, historyDays));
   const snapshots = answerEvents
     .filter((event): event is AnswerEvent & { learningStateAfter: LearningRecord } => Boolean(event.learningStateAfter))
     .sort((left, right) => left.answeredAt.localeCompare(right.answeredAt));
   const stateByWord = new Map<string, LearningRecord>();
-  const timeline: DurabilityTimelinePoint[] = [];
+  const timeline: MasteryLevelTimelinePoint[] = [];
   let snapshotIndex = 0;
 
   for (let dateKey = startKey; dateKey <= todayKey; dateKey = addDays(dateKey, 1)) {
@@ -368,8 +363,8 @@ export function buildMemoryStatistics(
     ebbinghausCurve,
     observedRecallPoints,
     personalCurveModel,
-    durabilityThresholds: createDurabilityThresholds(estimates),
-    durabilityTimeline: buildDurabilityTimeline(recordsById, answerEvents, now),
+    masteryLevels: createMasteryLevels(estimates),
+    masteryLevelTimeline: buildMasteryLevelTimeline(recordsById, answerEvents, now),
     averageHalfLifeDays: estimates.length > 0
       ? estimates.reduce((sum, estimate) => sum + estimate.halfLifeDays, 0) / estimates.length
       : 0,

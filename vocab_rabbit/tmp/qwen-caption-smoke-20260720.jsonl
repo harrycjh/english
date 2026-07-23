@@ -1,0 +1,1 @@
+{"photoId": "photo-12401", "status": "error", "model": "qwen/qwen3-vl-30b", "promptVersion": "life-photo-factual-v1", "generatedAt": "2026-07-20T18:22:26+08:00", "sourcePath": "/Volumes/ExternalSSD/Photo/Camera/IMG_3001.JPG", "error": "Expecting value: line 1 column 2203 (char 2202)"}

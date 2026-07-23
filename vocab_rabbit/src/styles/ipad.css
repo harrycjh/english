@@ -2027,7 +2027,7 @@ button {
 .word-detail-drawer-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: 200;
   display: flex;
   justify-content: flex-end;
   background: rgba(17, 27, 41, 0.28);
@@ -2306,6 +2306,81 @@ button {
   margin: 14px 0 0;
   padding: 0;
   list-style: none;
+}
+
+.word-detail-drawer__level-history {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(112, 131, 154, 0.14);
+}
+
+.word-detail-drawer__level-history-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #163857;
+  font-size: 13px;
+}
+
+.word-detail-drawer__level-history-heading > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #718397;
+  font-size: 10px;
+}
+
+.word-detail-drawer__level-history-heading i {
+  width: 8px;
+  height: 8px;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: #5ea976;
+}
+
+.word-detail-drawer__level-history-heading i.is-downgrade {
+  background: #d76555;
+}
+
+.word-detail-drawer__level-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 6px;
+  overflow: visible;
+}
+
+.word-detail-drawer__level-chart text {
+  fill: #7a8b9b;
+  font-size: 10px;
+}
+
+.word-detail-drawer__level-grid {
+  stroke: rgba(112, 131, 154, 0.18);
+  stroke-width: 1;
+}
+
+.word-detail-drawer__level-line {
+  fill: none;
+  stroke: #e39a39;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.word-detail-drawer__level-chart circle {
+  fill: #5ea976;
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+
+.word-detail-drawer__level-chart circle.is-wrong {
+  fill: #e3a349;
+}
+
+.word-detail-drawer__level-chart circle.is-downgrade {
+  fill: #d76555;
 }
 
 .word-detail-drawer__answer-list li {
@@ -8139,6 +8214,24 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-mockup-frame {
   font-weight: 700;
 }
 
+.page--settings .settings-image-download-progress {
+  display: block;
+  width: 100%;
+  height: 4px;
+  margin-top: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.14);
+}
+
+.page--settings .settings-image-download-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #4f9cf9;
+  transition: width 180ms ease;
+}
+
 .page--settings .settings-data-item--danger strong {
   color: #c62828;
 }
@@ -9770,10 +9863,10 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   padding: 13px 13px 9px;
 }
 
-.page--stats .memory-chart-legend--durability {
+.page--stats .memory-chart-legend.memory-chart-legend--durability {
   display: grid;
-  grid-template-columns: repeat(2, max-content);
-  gap: 5px 13px;
+  grid-template-columns: repeat(5, max-content);
+  gap: 4px 9px;
 }
 
 .page--stats .durability-timeline-chart {
@@ -10359,7 +10452,7 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 3;
+  stroke-width: 2;
 }
 
 .page--stats .memory-durability-node {
