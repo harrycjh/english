@@ -145,7 +145,10 @@ function devLifePhotosPlugin(): Plugin {
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const syncProxyTarget = env.VITE_SYNC_PROXY_TARGET || 'https://english.cw2017.com';
+  const syncProxyTarget = env.VITE_SYNC_PROXY_TARGET
+    || env.VITE_SYNC_API_BASE_URL
+    || 'https://vocab-sync-oxqobvibha.cn-shanghai.fcapp.run';
+  const syncProxyOrigin = env.VITE_SYNC_PROXY_ORIGIN || 'https://english.cw2017.com';
 
   return {
     base: command === 'build' ? env.VITE_BASE_PATH || '/english/' : '/',
@@ -161,7 +164,7 @@ export default defineConfig(({ command, mode }) => {
           secure: true,
           configure(proxy) {
             proxy.on('proxyReq', (proxyRequest) => {
-              proxyRequest.setHeader('Origin', syncProxyTarget);
+              proxyRequest.setHeader('Origin', syncProxyOrigin);
             });
           },
         },
