@@ -25,8 +25,8 @@ describe('spaced repetition', () => {
     expectDueOnStudyDay(record, answeredAt, 0);
   });
 
-  it('advances exactly one level at each correct answer through level 8', () => {
-    const expectedDelays = [1, 2, 3, 5, 8, 13, 21, 30];
+  it('advances exactly one level at each correct answer through level 9', () => {
+    const expectedDelays = [1, 2, 3, 5, 8, 13, 21, 30, 60];
     let record = createEmptyRecord('word-a');
     let answeredAt = new Date('2026-07-21T08:00:00.000Z');
 
@@ -38,7 +38,7 @@ describe('spaced repetition', () => {
       answeredAt = new Date(record.nextDueAt!);
     }
 
-    expect(record.masteryLevel).toBe(8);
+    expect(record.masteryLevel).toBe(9);
   });
 
   it('only lowers the level when the wrong-answer policy triggers and leaves it immediately due', () => {
@@ -59,17 +59,17 @@ describe('spaced repetition', () => {
     expect(record).toMatchObject({ masteryLevel: 0, reviewStage: 0, wrongCount: 1 });
   });
 
-  it('keeps mastered words at level 9 and schedules deterministic 60-90 day reviews', () => {
+  it('moves level 9 words to level 10 mastered and schedules deterministic 60-90 day reviews', () => {
     const answeredAt = new Date('2026-07-21T08:00:00.000Z');
-    const current = { ...createEmptyRecord('word-a'), masteryLevel: 8, reviewStage: 8 };
+    const current = { ...createEmptyRecord('word-a'), masteryLevel: 9, reviewStage: 9 };
     const record = evaluateAnswer(current, true, answeredAt);
     const delay = getMasteredReviewDelayDays('word-a', answeredAt);
 
-    expect(record).toMatchObject({ masteryLevel: 9, reviewStage: 9 });
+    expect(record).toMatchObject({ masteryLevel: 10, reviewStage: 10 });
     expect(delay).toBeGreaterThanOrEqual(60);
     expect(delay).toBeLessThanOrEqual(90);
     expect(delay).toBe(getMasteredReviewDelayDays('word-a', answeredAt));
     expectDueOnStudyDay(record, answeredAt, delay);
-    expect(evaluateAnswer(record, true, answeredAt).masteryLevel).toBe(9);
+    expect(evaluateAnswer(record, true, answeredAt).masteryLevel).toBe(10);
   });
 });

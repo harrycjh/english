@@ -78,7 +78,7 @@ describe('memory statistics', () => {
       intervalBucketCount: 1,
     });
     expect(statistics.averageRetentionNow).toBeGreaterThan(0);
-    expect(statistics.masteryLevels.map((point) => point.level)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(statistics.masteryLevels.map((point) => point.level)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   });
 
   it('uses the Ebbinghaus savings formula with calibrated long-term anchors', () => {
@@ -155,7 +155,7 @@ describe('memory statistics', () => {
   });
 
   it('counts studied words at each exact mastery level', () => {
-    const records = Object.fromEntries([0, 1, 1, 9].map((masteryLevel, index) => {
+    const records = Object.fromEntries([0, 1, 1, 10].map((masteryLevel, index) => {
       const wordId = `word-${index}`;
       return [wordId, createRecord({
         wordId,
@@ -164,7 +164,7 @@ describe('memory statistics', () => {
       })];
     }));
     const statistics = buildMemoryStatistics(records, [], now);
-    expect(statistics.masteryLevels.map((point) => point.count)).toEqual([1, 2, 0, 0, 0, 0, 0, 0, 0, 1]);
+    expect(statistics.masteryLevels.map((point) => point.count)).toEqual([1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
   });
 
   it('rebuilds daily mastery-level counts from saved answer snapshots', () => {

@@ -4,7 +4,7 @@ import { createStudyDateKey } from './study-day';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const TARGET_RETENTION_AT_DUE = 0.75;
-const FALLBACK_INTERVAL_DAYS = [0.25, 1, 2, 3, 5, 8, 13, 21, 30, 75];
+const FALLBACK_INTERVAL_DAYS = [0.25, 1, 2, 3, 5, 8, 13, 21, 30, 60, 75];
 const CURVE_INTERVAL_DAYS = [
   0,
   1,
@@ -26,6 +26,7 @@ const OBSERVED_INTERVAL_LIMITS = [0.25, 0.5, 1, 2, 3, 7, 14, 21, 30, 60, 90, 180
 const MASTERY_LEVEL_COLORS = [
   '#b8ad9b', '#e2bf55', '#72b86b', '#51a8d8', '#617bd2',
   '#7659b7', '#b35b9a', '#d75c5c', '#49454a', '#ff9b22',
+  '#2f8f46',
 ] as const;
 const MIN_PERSONAL_MODEL_SAMPLES = 6;
 const MIN_PERSONAL_MODEL_BUCKETS = 2;
@@ -273,7 +274,7 @@ function createTimelineCounts(records: Iterable<LearningRecord>): Record<number,
   const counts = Object.fromEntries(MASTERY_LEVEL_COLORS.map((_, level) => [level, 0]));
   for (const record of records) {
     if (!record.lastStudiedAt) continue;
-    const level = clamp(Math.round(record.masteryLevel), 0, 9);
+    const level = clamp(Math.round(record.masteryLevel), 0, MASTERY_LEVEL_COLORS.length - 1);
     counts[level] += 1;
   }
   return counts;

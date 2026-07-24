@@ -167,7 +167,7 @@ function chooseContiguousIndices(letters: string[], minimum: number, maximum: nu
 
 function buildFillBlankQuestion(
   word: WordRecord,
-  mode: 'one-two' | 'three-four' | 'five-ten' | 'full',
+  mode: 'one-two' | 'two-four' | 'full',
 ): FillBlankQuestion {
   const studyText = getStudyText(word);
   const letters = [...studyText];
@@ -179,20 +179,19 @@ function buildFillBlankQuestion(
     ? alphaIndices
     : mode === 'one-two'
       ? chooseContiguousIndices(letters, 1, 2)
-      : mode === 'three-four'
-        ? chooseContiguousIndices(letters, 3, 4)
-        : chooseContiguousIndices(letters, 5, 10);
+      : chooseContiguousIndices(letters, 2, 4);
   const chosenIndexSet = new Set(chosenIndices);
   const maskedCharacters = letters.map((character, index) => chosenIndexSet.has(index) ? '_' : character);
   const missingLetters = chosenIndices.map((index) => letters[index].toLowerCase());
   const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+  const keyboardSize = mode === 'one-two' ? 4 : Math.max(6, missingLetters.length + 4);
   const keyboardLetters = shuffle([
     ...missingLetters,
     ...alphabet
       .split('')
       .filter((letter) => !missingLetters.includes(letter))
-      .slice(0, Math.max(4, 8 - missingLetters.length)),
-  ]).slice(0, Math.max(6, missingLetters.length + 4));
+      .slice(0, keyboardSize - missingLetters.length),
+  ]).slice(0, keyboardSize);
 
   return {
     kind: 'fill-blank',
@@ -227,8 +226,7 @@ export function buildQuestion(
   if (masteryLevel === 3) return buildImageAnswerChoiceQuestion(word, allWords);
   if (masteryLevel === 4 || !canUseFillBlank(word)) return buildChoiceQuestion('text-choice', word, allWords);
   if (masteryLevel === 5) return buildFillBlankQuestion(word, 'one-two');
-  if (masteryLevel === 6) return buildFillBlankQuestion(word, 'three-four');
-  if (masteryLevel === 7) return buildFillBlankQuestion(word, 'five-ten');
+  if (masteryLevel === 6) return buildFillBlankQuestion(word, 'two-four');
   return buildFillBlankQuestion(word, 'full');
 }
 

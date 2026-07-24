@@ -124,9 +124,7 @@ function advanceProjectedState(
   state: ProjectedWordState,
   forecastDate: Date,
 ): ProjectedWordState {
-  const nextLevel = state.masteryLevel === 0
-    ? 2
-    : Math.min(state.masteryLevel + 1, MAX_MASTERY_LEVEL);
+  const nextLevel = Math.min(state.masteryLevel + 1, MAX_MASTERY_LEVEL);
   const delayDays = nextLevel >= MAX_MASTERY_LEVEL
     ? getMasteredReviewDelayDays(state.wordId, forecastDate)
     : REVIEW_INTERVAL_DAYS[nextLevel];

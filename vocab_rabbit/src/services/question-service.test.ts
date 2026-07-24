@@ -68,8 +68,7 @@ describe('buildQuestion', () => {
 
   it.each([
     [5, 1, 2],
-    [6, 3, 4],
-    [7, 5, 10],
+    [6, 2, 4],
   ])('masks one continuous run at level %i', (level, minimum, maximum) => {
     const question = questionAt(level);
     expect(question.kind).toBe('fill-blank');
@@ -80,8 +79,16 @@ describe('buildQuestion', () => {
     expect(positions.every((position, index) => index === 0 || position === positions[index - 1] + 1)).toBe(true);
   });
 
-  it('uses full-word spelling from level 8 onward', () => {
-    for (const level of [8, 9]) {
+  it('uses four keyboard choices for the level 5 spelling prompt', () => {
+    const question = questionAt(5);
+    expect(question.kind).toBe('fill-blank');
+    if (question.kind === 'fill-blank') {
+      expect(question.keyboardLetters).toHaveLength(4);
+    }
+  });
+
+  it('uses full-word spelling from level 7 onward', () => {
+    for (const level of [7, 8, 9, 10]) {
       const question = questionAt(level);
       expect(question.kind).toBe('fill-blank');
       if (question.kind === 'fill-blank') {

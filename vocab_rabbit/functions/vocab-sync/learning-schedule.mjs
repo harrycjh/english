@@ -1,5 +1,5 @@
-export const MAX_MASTERY_LEVEL = 9;
-export const REVIEW_INTERVAL_DAYS = [0, 1, 2, 3, 5, 8, 13, 21, 30];
+export const MAX_MASTERY_LEVEL = 10;
+export const REVIEW_INTERVAL_DAYS = [0, 1, 2, 3, 5, 8, 13, 21, 30, 60];
 const HOUR_MS = 60 * 60 * 1000;
 const STUDY_TIME_ZONE_OFFSET_HOURS = 8;
 const STUDY_DAY_REFRESH_HOUR = 4;

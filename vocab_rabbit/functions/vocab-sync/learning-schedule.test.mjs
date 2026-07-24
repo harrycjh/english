@@ -50,13 +50,13 @@ describe('cloud learning schedule', () => {
     });
   });
 
-  it('keeps mastered reviews between 60 and 90 days', () => {
-    const current = { ...emptyRecord, masteryLevel: 8, reviewStage: 8 };
+  it('moves level 9 words to level 10 mastered and keeps long-term reviews between 60 and 90 days', () => {
+    const current = { ...emptyRecord, masteryLevel: 9, reviewStage: 9 };
     const next = evaluateLearningRecord(current, event());
     const days = Math.round(
       (new Date(next.nextDueAt).getTime() - new Date(event().answeredAt).getTime()) / 86_400_000,
     );
-    expect(next.masteryLevel).toBe(9);
+    expect(next.masteryLevel).toBe(10);
     expect(days).toBeGreaterThanOrEqual(60);
     expect(days).toBeLessThanOrEqual(90);
   });

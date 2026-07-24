@@ -166,7 +166,7 @@ function LevelHistoryChart({ points }: { points: LevelHistoryPoint[] }) {
   const coordinates = points.map((point, index) => ({
     ...point,
     x: plot.left + (points.length === 1 ? plotWidth / 2 : (index / (points.length - 1)) * plotWidth),
-    y: plot.top + ((9 - Math.min(9, Math.max(0, point.level))) / 9) * plotHeight,
+    y: plot.top + ((MAX_MASTERY_LEVEL - Math.min(MAX_MASTERY_LEVEL, Math.max(0, point.level))) / MAX_MASTERY_LEVEL) * plotHeight,
   }));
   const pathData = coordinates
     .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`)
@@ -185,8 +185,8 @@ function LevelHistoryChart({ points }: { points: LevelHistoryPoint[] }) {
         role="img"
         aria-label="该单词的学习等级变化历史"
       >
-        {[0, 3, 6, 9].map((level) => {
-          const y = plot.top + ((9 - level) / 9) * plotHeight;
+        {[0, 3, 6, 9, MAX_MASTERY_LEVEL].map((level) => {
+          const y = plot.top + ((MAX_MASTERY_LEVEL - level) / MAX_MASTERY_LEVEL) * plotHeight;
           return (
             <g key={level}>
               <line x1={plot.left} x2={width - plot.right} y1={y} y2={y} className="word-detail-drawer__level-grid" />

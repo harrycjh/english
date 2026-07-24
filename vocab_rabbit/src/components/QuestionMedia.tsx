@@ -21,9 +21,6 @@ export function QuestionMedia({ word, strategy, localLifePhoto, className, alt }
     if (word.relatedMedia?.lifePhoto) {
       return <img className={className} src={getAssetUrl(word.relatedMedia.lifePhoto.imagePath)} alt={alt} />;
     }
-    if (word.relatedMedia?.oxford) {
-      return <img className={className} src={getAssetUrl(word.relatedMedia.oxford.imagePath)} alt={alt} />;
-    }
     if (word.relatedMedia?.redRocket) {
       return (
         <span
@@ -36,6 +33,9 @@ export function QuestionMedia({ word, strategy, localLifePhoto, className, alt }
           }}
         />
       );
+    }
+    if (word.relatedMedia?.oxford) {
+      return <img className={className} src={getAssetUrl(word.relatedMedia.oxford.imagePath)} alt={alt} />;
     }
   }
 

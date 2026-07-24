@@ -19,4 +19,12 @@ describe('MasteryLevelIcon', () => {
     expect(markup).toContain('aria-label="尚未学习"');
     expect(markup).toContain('>未学</span>');
   });
+
+  it('labels level 10 as mastered while reusing the final level art', () => {
+    const markup = renderToStaticMarkup(<MasteryLevelIcon level={10} />);
+    expect(markup).toContain('mastery-level-icon--level-10');
+    expect(markup).toContain('aria-label="学习等级 10"');
+    expect(markup).toContain('/mastery-levels/level-9.webp?v=2');
+    expect(markup).toContain('>Lv.10</span>');
+  });
 });

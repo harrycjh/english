@@ -2,8 +2,8 @@ import type { LearningRecord } from '../models/learning-record';
 import type { LearningAction } from '../models/answer-event';
 import { getReviewDueAt } from './study-day';
 
-export const MAX_MASTERY_LEVEL = 9;
-export const REVIEW_INTERVAL_DAYS = [0, 1, 2, 3, 5, 8, 13, 21, 30] as const;
+export const MAX_MASTERY_LEVEL = 10;
+export const REVIEW_INTERVAL_DAYS = [0, 1, 2, 3, 5, 8, 13, 21, 30, 60] as const;
 
 export function getMasteredReviewDelayDays(wordId: string, answeredAt: Date): number {
   const seed = `${wordId}|${answeredAt.toISOString().slice(0, 10)}|mastered`;
