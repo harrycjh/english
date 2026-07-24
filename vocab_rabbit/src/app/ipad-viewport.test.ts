@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { calculateIpadStageScale, getConservativeViewportLength } from './ipad-viewport';
+import {
+  calculateIpadStageScale,
+  getConservativeViewportLength,
+  getStableViewportLength,
+  isStandaloneIpad,
+} from './ipad-viewport';
 
 describe('getConservativeViewportLength', () => {
   it('uses the smallest valid measurement when WebKit viewport APIs disagree', () => {
@@ -11,6 +16,34 @@ describe('getConservativeViewportLength', () => {
   });
 });
 
+describe('getStableViewportLength', () => {
+  it('keeps the full device measurement when a restored WebKit viewport is temporarily shorter', () => {
+    expect(getStableViewportLength(1194, 1122, 1194)).toBe(1194);
+  });
+});
+
+describe('isStandaloneIpad', () => {
+  it('recognizes an installed iPad app even when iPadOS reports MacIntel', () => {
+    expect(isStandaloneIpad({
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit',
+      platform: 'MacIntel',
+      maxTouchPoints: 5,
+      standalone: true,
+      displayModeInstalled: false,
+    })).toBe(true);
+  });
+
+  it('does not use the installed-iPad sizing path for a desktop browser', () => {
+    expect(isStandaloneIpad({
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit',
+      platform: 'MacIntel',
+      maxTouchPoints: 0,
+      standalone: false,
+      displayModeInstalled: false,
+    })).toBe(false);
+  });
+});
+
 describe('calculateIpadStageScale', () => {
   it('keeps the fixed iPad stage at full size when it fits', () => {
     expect(calculateIpadStageScale(1194, 834)).toBe(1);
@@ -19,6 +52,10 @@ describe('calculateIpadStageScale', () => {
 
   it('shrinks the whole stage when an iPad resume leaves less visible height', () => {
     expect(calculateIpadStageScale(1194, 784)).toBeCloseTo(784 / 834);
+  });
+
+  it('keeps an installed iPad stage edge-to-edge when only the restored height is short', () => {
+    expect(calculateIpadStageScale(1194, 784, 'landscape-width')).toBe(1);
   });
 
   it('also keeps the stage inside a narrower viewport', () => {

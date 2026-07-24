@@ -16,6 +16,37 @@ export type DeviceConnectionResult =
   | { kind: 'connected'; deviceToken: string }
   | Exclude<StartupSyncResult, { kind: 'synced'; serverTime: string }>;
 
+interface SyncEventTarget {
+  addEventListener(type: string, listener: EventListenerOrEventListenerObject): void;
+  removeEventListener(type: string, listener: EventListenerOrEventListenerObject): void;
+}
+
+interface SyncVisibilityTarget extends SyncEventTarget {
+  visibilityState: DocumentVisibilityState;
+}
+
+export function installResumeSyncListeners(
+  runSync: () => void | Promise<unknown>,
+  windowTarget: SyncEventTarget = window,
+  documentTarget: SyncVisibilityTarget = document,
+): () => void {
+  const syncWhenVisible: EventListener = () => {
+    if (documentTarget.visibilityState === 'visible') {
+      void runSync();
+    }
+  };
+
+  windowTarget.addEventListener('pageshow', syncWhenVisible);
+  windowTarget.addEventListener('online', syncWhenVisible);
+  documentTarget.addEventListener('visibilitychange', syncWhenVisible);
+
+  return () => {
+    windowTarget.removeEventListener('pageshow', syncWhenVisible);
+    windowTarget.removeEventListener('online', syncWhenVisible);
+    documentTarget.removeEventListener('visibilitychange', syncWhenVisible);
+  };
+}
+
 async function syncWithToken(deviceToken: string, fetchImpl: typeof fetch): Promise<StartupSyncResult> {
   try {
     let request = await buildLocalSyncRequest();

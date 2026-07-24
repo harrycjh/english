@@ -5,6 +5,7 @@ import {
   applySyncResponse,
   clearLocalDeviceData,
   getOrCreateSyncMetadata,
+  listAnswerEvents,
   saveAnswerAndLearningRecord,
   saveDeviceToken,
 } from './storage-service';
@@ -13,6 +14,7 @@ import {
   connectAndSynchronize,
   connectDeviceForBackgroundSync,
   hasConnectedDevice,
+  installResumeSyncListeners,
   performStartupSync,
   performStartupSyncWithRetry,
 } from './startup-sync-service';
@@ -112,6 +114,66 @@ describe('performStartupSync', () => {
     expect(requests[1].delta).toBeNull();
     expect(requests[1].snapshot?.events).toHaveLength(1);
   });
+
+  it('applies a newer cloud snapshot when this device resumes with an older cursor', async () => {
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-old',
+      serverTime: '2026-07-14T08:00:00.000Z',
+      upToDate: false,
+      snapshot: {
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        generation: 0,
+        events: [],
+        checkpoint: null,
+        dailyTasks: [],
+        wordSelectionStates: [],
+        parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+      },
+    });
+    await saveDeviceToken('token-a');
+
+    const result = await performStartupSync(async (_input, init) => {
+      const request = JSON.parse(String(init?.body)) as SyncRequest;
+      expect(request).toMatchObject({
+        cursor: 'cursor-old',
+        hasLocalChanges: false,
+        snapshot: null,
+      });
+      return jsonResponse({
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        cursor: 'cursor-new',
+        serverTime: '2026-07-15T10:00:00.000Z',
+        upToDate: false,
+        snapshot: {
+          schemaVersion: SYNC_SCHEMA_VERSION,
+          generation: 0,
+          events: [{
+            id: 'event-from-cloud',
+            wordId: 'word-cloud',
+            dateKey: '2026-07-15',
+            answeredAt: '2026-07-15T09:00:00.000Z',
+            questionKind: 'recognition',
+            selectedAnswer: '认识',
+            correctAnswer: '认识',
+            isCorrect: true,
+            responseTimeMs: 400,
+            deviceId: 'ipad-cloud',
+            schemaVersion: 1,
+            generation: 0,
+          }],
+          checkpoint: null,
+          dailyTasks: [],
+          wordSelectionStates: [],
+          parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+        },
+      });
+    });
+
+    expect(result.kind).toBe('synced');
+    expect((await getOrCreateSyncMetadata()).serverCursor).toBe('cursor-new');
+    expect((await listAnswerEvents()).map((event) => event.id)).toContain('event-from-cloud');
+  });
 });
 
 describe('performStartupSyncWithRetry', () => {
@@ -145,6 +207,45 @@ describe('performStartupSyncWithRetry', () => {
 
     expect(result).toEqual({ kind: 'unavailable', message: 'failure 3' });
     expect(attempts).toBe(3);
+  });
+});
+
+describe('installResumeSyncListeners', () => {
+  it('pulls cloud progress again when an installed app resumes or reconnects', () => {
+    const windowTarget = new EventTarget();
+    const documentTarget = new EventTarget() as EventTarget & { visibilityState: DocumentVisibilityState };
+    documentTarget.visibilityState = 'visible';
+    let syncCount = 0;
+    const cleanup = installResumeSyncListeners(
+      () => { syncCount += 1; },
+      windowTarget,
+      documentTarget,
+    );
+
+    windowTarget.dispatchEvent(new Event('pageshow'));
+    documentTarget.dispatchEvent(new Event('visibilitychange'));
+    windowTarget.dispatchEvent(new Event('online'));
+
+    expect(syncCount).toBe(3);
+    cleanup();
+    windowTarget.dispatchEvent(new Event('pageshow'));
+    expect(syncCount).toBe(3);
+  });
+
+  it('does not sync while the app is still hidden', () => {
+    const windowTarget = new EventTarget();
+    const documentTarget = new EventTarget() as EventTarget & { visibilityState: DocumentVisibilityState };
+    documentTarget.visibilityState = 'hidden';
+    let syncCount = 0;
+    const cleanup = installResumeSyncListeners(
+      () => { syncCount += 1; },
+      windowTarget,
+      documentTarget,
+    );
+
+    documentTarget.dispatchEvent(new Event('visibilitychange'));
+    expect(syncCount).toBe(0);
+    cleanup();
   });
 });
 

@@ -67,7 +67,12 @@ import { APP_VERSION } from '../config/app-meta';
 import { getMillisecondsUntilNextStudyDay } from '../services/study-day';
 import { BottomDock } from '../components/BottomDock';
 import { ProfileSelector } from '../components/ProfileSelector';
-import { calculateIpadStageScale, getConservativeViewportLength } from './ipad-viewport';
+import {
+  calculateIpadStageScale,
+  getConservativeViewportLength,
+  getStableViewportLength,
+  isStandaloneIpad,
+} from './ipad-viewport';
 
 interface MainShellChromeProps {
   profileId: ProfileId;
@@ -241,22 +246,34 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
 
     function syncShellState() {
       const shouldLockIpadShell = true;
-      // Standalone WebKit can briefly disagree about viewport dimensions after
-      // resume. The smallest current measurement keeps the fixed stage visible.
-      const viewportWidth = getConservativeViewportLength(
-        viewport?.width,
-        window.innerWidth,
-        root.clientWidth,
-      );
-      const viewportHeight = getConservativeViewportLength(
-        viewport?.height,
-        window.innerHeight,
-        root.clientHeight,
-      );
+      const navigatorWithStandalone = window.navigator as Navigator & { standalone?: boolean };
+      const installedIpad = isStandaloneIpad({
+        userAgent: navigatorWithStandalone.userAgent,
+        platform: navigatorWithStandalone.platform,
+        maxTouchPoints: navigatorWithStandalone.maxTouchPoints,
+        standalone: navigatorWithStandalone.standalone === true,
+        displayModeInstalled: window.matchMedia('(display-mode: fullscreen)').matches
+          || window.matchMedia('(display-mode: standalone)').matches,
+      });
+      const screenLongEdge = Math.max(window.screen.width, window.screen.height);
+      const screenShortEdge = Math.min(window.screen.width, window.screen.height);
+      // Installed iPad apps can briefly report a visual viewport about 50px
+      // shorter after resume. Keep the physical screen measurement so the
+      // 1194 x 834 stage remains edge-to-edge instead of shrinking all around.
+      const viewportWidth = installedIpad
+        ? getStableViewportLength(viewport?.width, window.innerWidth, root.clientWidth, screenLongEdge)
+        : getConservativeViewportLength(viewport?.width, window.innerWidth, root.clientWidth);
+      const viewportHeight = installedIpad
+        ? getStableViewportLength(viewport?.height, window.innerHeight, root.clientHeight, screenShortEdge)
+        : getConservativeViewportLength(viewport?.height, window.innerHeight, root.clientHeight);
       const orientation = viewportWidth >= viewportHeight ? 'landscape' : 'portrait';
       const shellMode = shouldLockIpadShell ? 'ipad-fixed' : 'fluid';
-      const stageScale = calculateIpadStageScale(viewportWidth, viewportHeight);
-      const viewportTop = Math.max(0, viewport?.offsetTop ?? 0);
+      const stageScale = calculateIpadStageScale(
+        viewportWidth,
+        viewportHeight,
+        installedIpad ? 'landscape-width' : 'contain',
+      );
+      const viewportTop = installedIpad ? 0 : Math.max(0, viewport?.offsetTop ?? 0);
 
       root.dataset.shellMode = shellMode;
       root.dataset.orientation = orientation;

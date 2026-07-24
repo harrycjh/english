@@ -2,6 +2,7 @@ import { type FormEvent, type ReactNode, useEffect, useRef, useState } from 'rea
 import {
   connectDeviceForBackgroundSync,
   hasConnectedDevice,
+  installResumeSyncListeners,
   performStartupSyncWithRetry,
   type StartupSyncResult,
 } from '../services/startup-sync-service';
@@ -177,6 +178,11 @@ export function StartupSyncGate({ children }: StartupSyncGateProps) {
   useEffect(() => {
     void checkConnection();
   }, []);
+
+  useEffect(() => {
+    if (!isReady) return undefined;
+    return installResumeSyncListeners(() => runBackgroundSync());
+  }, [isReady]);
 
   async function handleConnect() {
     if (!code.trim()) return;
