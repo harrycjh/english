@@ -31,6 +31,8 @@ function makeRequest(): SyncRequest {
         value: {
           profileId: 'cute-junjun',
           enableAudio: true,
+          englishVoiceURI: '',
+          chineseVoiceURI: '',
           dailyNewWordCount: 6,
           dailyReviewLimit: 8,
           showImages: true,

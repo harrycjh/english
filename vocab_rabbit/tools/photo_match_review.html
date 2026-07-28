@@ -124,10 +124,29 @@
     .shortcuts { margin-top: auto; padding-top: 25px; color: var(--muted); font-size: 12px; line-height: 1.8; }
     kbd { border: 1px solid #d9c8ae; background: white; padding: 1px 6px; box-shadow: 0 1px 0 #d9c8ae; }
 
-    .review-panel { min-width: 0; min-height: 0; padding: 20px 30px 18px; display: flex; flex-direction: column; }
-    .review-heading { display: flex; align-items: center; justify-content: space-between; min-height: 34px; margin-bottom: 16px; }
+    .review-panel { min-width: 0; min-height: 0; padding: 16px 30px 18px; display: flex; flex-direction: column; }
+    .review-heading { display: flex; align-items: center; justify-content: space-between; min-height: 34px; margin-bottom: 10px; }
     .review-heading h2 { margin: 0; font-family: Georgia, "Songti SC", serif; font-size: 22px; }
     .review-tools { display: flex; align-items: center; gap: 12px; }
+    .description-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      margin-bottom: 12px;
+    }
+    .description-search input {
+      flex: 1;
+      min-width: 0;
+      height: 42px;
+      border: 1px solid var(--line);
+      background: white;
+      padding: 0 13px;
+      outline: none;
+    }
+    .description-search input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .description-search .button { flex: 0 0 auto; }
+    .description-status { min-width: 88px; color: var(--muted); font-size: 12px; text-align: right; }
     .photo-pager { display: flex; align-items: center; gap: 6px; }
     .photo-page-button {
       width: 34px;
@@ -261,12 +280,12 @@
       <div class="filters">
         <input class="control" id="search" type="search" placeholder="搜索英文或中文">
         <select class="control" id="statusFilter">
-          <option value="pendingCandidates">有候选待选择</option>
+          <option value="retry">需要重新匹配</option>
+          <option value="pendingCandidates">现有候选待选择</option>
           <option value="pending">全部未选择</option>
           <option value="all">全部单词</option>
           <option value="selected">已选择</option>
-          <option value="skipped">候选已用尽</option>
-          <option value="empty">当前无候选图</option>
+          <option value="empty">原候选不可用</option>
         </select>
       </div>
     </header>
@@ -301,6 +320,12 @@
             <label class="auto-next"><input id="autoNext" type="checkbox" checked> 选择后自动进入下一个</label>
           </div>
         </div>
+        <form class="description-search" id="descriptionForm">
+          <input id="descriptionSearch" type="search" placeholder="输入你想找的照片描述，例如：小女孩在海边捡贝壳" autocomplete="off">
+          <span class="description-status" id="descriptionStatus"></span>
+          <button class="button" id="resetDescription" type="button">恢复原候选</button>
+          <button class="button primary" id="matchDescription" type="submit">匹配照片</button>
+        </form>
         <div class="photo-grid" id="photoGrid"></div>
         <footer class="actions">
           <button class="button" id="previous">上一个</button>
@@ -320,11 +345,15 @@
       filtered: [],
       selections: {},
       rejectedCandidates: {},
+      searchCandidates: {},
+      searchQueries: {},
       index: 0,
       photoPage: 0,
+      searching: false,
     };
 
     const $ = (id) => document.getElementById(id);
+    const hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
     const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, char => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
     })[char]);
@@ -338,9 +367,9 @@
 
     function updateProgress() {
       const total = state.words.length;
-      const reviewed = Object.keys(state.selections).length;
-      const percent = total ? reviewed / total * 100 : 0;
-      $('progressText').textContent = `已审核 ${reviewed} / ${total}`;
+      const selected = Object.values(state.selections).filter(selection => selection.status === 'selected').length;
+      const percent = total ? selected / total * 100 : 0;
+      $('progressText').textContent = `已选照片 ${selected} / ${total}`;
       $('progressBar').style.width = `${percent}%`;
     }
 
@@ -351,11 +380,11 @@
         const selection = state.selections[word.wordId];
         const matchesQuery = !query || word.english.toLowerCase().includes(query) || word.chinese.includes(query);
         if (!matchesQuery) return false;
+        if (filter === 'retry') return !selection && availableOriginalCandidates(word).length === 0;
         if (filter === 'pendingCandidates') return !selection && availableCandidates(word).length > 0;
         if (filter === 'pending') return !selection;
         if (filter === 'selected') return selection?.status === 'selected';
-        if (filter === 'skipped') return selection?.status === 'exhausted';
-        if (filter === 'empty') return availableCandidates(word).length === 0;
+        if (filter === 'empty') return availableOriginalCandidates(word).length === 0;
         return true;
       });
       const retained = keepWordId ? state.filtered.findIndex(word => word.wordId === keepWordId) : -1;
@@ -372,17 +401,46 @@
         .map(([, selection]) => selection.photoId));
     }
 
-    function availableCandidates(word) {
+    function filterAvailableCandidates(word, candidates) {
       const occupied = selectedByOtherWords(word.wordId);
       const rejected = new Set(state.rejectedCandidates[word.wordId]?.photoIds || []);
-      return word.candidates
-        .filter(candidate => !occupied.has(candidate.photoId) && !rejected.has(candidate.photoId))
-        .slice(0, 20);
+      return candidates.filter(candidate => !occupied.has(candidate.photoId) && !rejected.has(candidate.photoId));
+    }
+
+    function availableOriginalCandidates(word) {
+      return filterAvailableCandidates(word, word.candidates).slice(0, 20);
+    }
+
+    function availableCandidates(word) {
+      const candidates = hasOwn(state.searchCandidates, word.wordId)
+        ? state.searchCandidates[word.wordId]
+        : word.candidates;
+      return filterAvailableCandidates(word, candidates).slice(0, 20);
+    }
+
+    function syncDescriptionInput(word) {
+      const input = $('descriptionSearch');
+      if (!word) {
+        input.value = '';
+        input.dataset.wordId = '';
+        input.disabled = true;
+        $('matchDescription').disabled = true;
+        $('resetDescription').disabled = true;
+        return;
+      }
+      if (input.dataset.wordId !== word.wordId) {
+        input.dataset.wordId = word.wordId;
+        input.value = state.searchQueries[word.wordId] || '';
+      }
+      input.disabled = state.searching;
+      $('matchDescription').disabled = state.searching;
+      $('resetDescription').disabled = state.searching || !hasOwn(state.searchCandidates, word.wordId);
     }
 
     function render() {
       updateProgress();
       const word = currentWord();
+      syncDescriptionInput(word);
       if (!word) {
         $('category').textContent = '当前筛选';
         $('english').textContent = '完成';
@@ -395,6 +453,7 @@
         $('photoPage').textContent = '0 / 0';
         $('photoPrevious').disabled = true;
         $('photoNext').disabled = true;
+        $('descriptionStatus').textContent = '';
         return;
       }
 
@@ -405,12 +464,19 @@
       $('wordId').textContent = word.wordId;
       const candidates = availableCandidates(word);
       const rejectedCount = state.rejectedCandidates[word.wordId]?.photoIds?.length || 0;
-      $('candidateTotal').innerHTML = `模型共找到 <strong>${word.candidateCount}</strong> 张候选照片。本轮显示 ${candidates.length} 张，已淘汰 ${rejectedCount} 张；其他单词已经选中的照片会自动移除。`;
+      const usingDescription = hasOwn(state.searchCandidates, word.wordId);
+      const sourceCount = usingDescription ? state.searchCandidates[word.wordId].length : word.candidateCount;
+      $('candidateTotal').innerHTML = `${usingDescription ? '描述搜索' : '模型'}共找到 <strong>${sourceCount}</strong> 张候选照片。本轮显示 ${candidates.length} 张，已淘汰 ${rejectedCount} 张；已被其他单词使用的照片会自动移除。`;
+      $('descriptionStatus').textContent = state.searching
+        ? '正在匹配...'
+        : usingDescription
+          ? `搜索到 ${sourceCount} 张`
+          : '';
       $('position').textContent = `${state.index + 1} / ${state.filtered.length}`;
 
       const selectedId = state.selections[word.wordId]?.photoId;
       if (!candidates.length) {
-        $('photoGrid').innerHTML = '<div class="empty"><div><strong>暂时没有可靠候选图</strong><br>可以选择“暂无合适图片”，以后再补充。</div></div>';
+        $('photoGrid').innerHTML = '<div class="empty"><div><strong>暂时没有可用候选图</strong><br>请在上方输入你希望照片包含的内容，再点击“匹配照片”。</div></div>';
         $('photoPage').textContent = '0 / 0';
         $('photoPrevious').disabled = true;
         $('photoNext').disabled = true;
@@ -427,7 +493,11 @@
       $('photoGrid').innerHTML = visibleCandidates.map((candidate, visibleIndex) => {
         const index = pageStart + visibleIndex;
         const evidence = candidate.evidence.map(item => item.term).join('、') || '英文描述命中';
-        const kind = candidate.matchType === 'structured' ? '结构化命中' : '描述弱命中';
+        const kind = candidate.matchType === 'descriptionSearch'
+          ? '自定义描述'
+          : candidate.matchType === 'structured'
+            ? '结构化命中'
+            : '描述弱命中';
         const cardClasses = [
           'photo-card',
           selectedId === candidate.photoId ? 'selected' : '',
@@ -461,11 +531,18 @@
       const word = currentWord();
       if (!word) return;
       try {
-        const result = await persist({wordId: word.wordId, photoId});
+        const candidate = availableCandidates(word).find(item => item.photoId === photoId);
+        const isDescriptionSearch = candidate?.matchType === 'descriptionSearch';
+        const result = await persist({
+          wordId: word.wordId,
+          photoId,
+          source: isDescriptionSearch ? 'descriptionSearch' : 'originalCandidates',
+          searchQuery: isDescriptionSearch ? state.searchQueries[word.wordId] : undefined,
+        });
         state.selections[word.wordId] = result.selection;
         showToast('已保存');
         if (shouldAdvance) {
-          if (['pending', 'pendingCandidates'].includes($('statusFilter').value)) applyFilter();
+          if (['retry', 'pending', 'pendingCandidates'].includes($('statusFilter').value)) applyFilter();
           else move(1);
         } else render();
       } catch (error) { showToast(error.message); }
@@ -476,6 +553,11 @@
       if (!word) return;
       try {
         const rejectedPhotoIds = availableCandidates(word).map(candidate => candidate.photoId);
+        if (!rejectedPhotoIds.length) {
+          showToast('请先输入描述并匹配照片');
+          $('descriptionSearch').focus();
+          return;
+        }
         const result = await persist({
           wordId: word.wordId,
           photoId: null,
@@ -485,13 +567,8 @@
         if (result.selection) state.selections[word.wordId] = result.selection;
         else delete state.selections[word.wordId];
         state.photoPage = 0;
-        if (result.selection?.status === 'exhausted') {
-          showToast('候选照片已用尽');
-          applyFilter();
-        } else {
-          showToast('已生成下一批候选照片');
-          applyFilter(word.wordId);
-        }
+        showToast('这一批已淘汰，可以继续搜索');
+        render();
       } catch (error) { showToast(error.message); }
     }
 
@@ -509,6 +586,48 @@
     function move(delta) {
       if (!state.filtered.length) return;
       state.index = Math.max(0, Math.min(state.filtered.length - 1, state.index + delta));
+      state.photoPage = 0;
+      render();
+    }
+
+    async function searchByDescription(event) {
+      event?.preventDefault();
+      const word = currentWord();
+      const query = $('descriptionSearch').value.trim();
+      if (!word) return;
+      if (!query) {
+        showToast('请先输入照片描述');
+        $('descriptionSearch').focus();
+        return;
+      }
+      state.searching = true;
+      render();
+      try {
+        const response = await fetch('/api/search', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({wordId: word.wordId, query}),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || '匹配失败');
+        state.searchCandidates[word.wordId] = result.candidates || [];
+        state.searchQueries[word.wordId] = result.query || query;
+        state.photoPage = 0;
+        showToast(result.candidates.length ? `找到 ${result.candidates.length} 张照片` : '没有匹配结果，请换个描述');
+      } catch (error) {
+        showToast(error.message);
+      } finally {
+        state.searching = false;
+        render();
+      }
+    }
+
+    function resetDescriptionSearch() {
+      const word = currentWord();
+      if (!word) return;
+      delete state.searchCandidates[word.wordId];
+      delete state.searchQueries[word.wordId];
+      $('descriptionSearch').value = '';
       state.photoPage = 0;
       render();
     }
@@ -537,6 +656,8 @@
     $('photoNext').addEventListener('click', () => movePhotoPage(1));
     $('skip').addEventListener('click', skipWord);
     $('clear').addEventListener('click', clearSelection);
+    $('descriptionForm').addEventListener('submit', searchByDescription);
+    $('resetDescription').addEventListener('click', resetDescriptionSearch);
     document.addEventListener('keydown', event => {
       if (event.target.matches('input, select')) return;
       if (event.repeat && ['ArrowLeft', 'ArrowRight', 'Enter'].includes(event.key)) {

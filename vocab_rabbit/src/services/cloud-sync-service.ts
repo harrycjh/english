@@ -19,6 +19,23 @@ interface ConnectResponse {
 
 interface VerifyResponse {
   valid: boolean;
+  deviceToken?: string;
+}
+
+export interface SignedPrivateLifePhoto {
+  wordId: string;
+  objectKey: string;
+  url: string;
+  caption: string;
+  photoId: string;
+  match: 'primary' | 'secondary';
+  confidence: number;
+}
+
+interface SignedPrivateLifePhotoResponse {
+  expiresAt: string;
+  photos: SignedPrivateLifePhoto[];
+  deviceToken?: string;
 }
 
 const RETRY_DELAYS_MS = [0, 250, 750];
@@ -137,4 +154,12 @@ export async function synchronizeDevice(
     throw new CloudSyncError('invalid-response', '同步服务器返回的数据不完整。');
   }
   return result;
+}
+
+export function signPrivateLifePhotos(
+  wordIds: string[],
+  deviceToken: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<SignedPrivateLifePhotoResponse> {
+  return postJson('/api/media/sign', { wordIds }, deviceToken, fetchImpl);
 }

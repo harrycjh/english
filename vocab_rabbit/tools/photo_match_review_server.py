@@ -37,9 +37,13 @@ CLUSTERS_PATH = ROOT / "design-output/photo-word-linking/clustering/photo-cluste
 FEATURES_PATH = ROOT / "design-output/photo-word-linking/clustering/photo-features.v1.jsonl"
 MANIFEST_PATH = ROOT / "design-output/photo-word-linking/review/photo-match-review-candidates.json"
 SELECTIONS_PATH = ROOT / "design-output/photo-word-linking/review/photo-match-review-selections.json"
+DURABLE_SELECTIONS_PATH = ROOT / "review-data/photo-match-review-selections.json"
 THUMBNAIL_ROOT = ROOT / "design-output/photo-word-linking/review/thumbnails"
 HTML_PATH = Path(__file__).with_name("photo_match_review.html")
 PHOTO_ID_RE = re.compile(r"photo-\d+")
+HAN_RUN_RE = re.compile(r"[\u3400-\u9fff]+")
+ENGLISH_SEARCH_TOKEN_RE = re.compile(r"[a-z0-9]+(?:'[a-z0-9]+)?")
+CHINESE_STOP_CHARACTERS = set("的一是在了和与及有把被让给着过地得而或并就都也很")
 FIELD_WEIGHTS = {
     "people": 110,
     "objects": 105,
@@ -50,6 +54,7 @@ FIELD_WEIGHTS = {
 }
 REVIEW_POOL_SIZE = 100
 REVIEW_BATCH_SIZE = 20
+SELECTION_SCHEMA_VERSION = 3
 
 
 def load_json(path: Path) -> dict:
@@ -64,6 +69,150 @@ def write_json_atomic(path: Path, payload: dict) -> None:
         handle.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
         temporary_path = Path(handle.name)
     temporary_path.replace(path)
+
+
+def write_selection_state(
+    payload: dict,
+    runtime_path: Path | None = None,
+    durable_path: Path | None = None,
+) -> None:
+    write_json_atomic(runtime_path or SELECTIONS_PATH, payload)
+    write_json_atomic(durable_path or DURABLE_SELECTIONS_PATH, payload)
+
+
+def migrate_selection_payload(payload: dict) -> tuple[dict, bool]:
+    payload = dict(payload)
+    payload["selections"] = dict(payload.get("selections") or {})
+    payload["rejectedCandidates"] = dict(payload.get("rejectedCandidates") or {})
+    changed = payload.get("schemaVersion") != SELECTION_SCHEMA_VERSION
+
+    # Schema 2 treated an exhausted model-generated pool as a completed review.
+    # Schema 3 keeps those words open so a parent can search the full caption set.
+    for word_id, selection in list(payload["selections"].items()):
+        if selection.get("status") == "exhausted":
+            payload["selections"].pop(word_id)
+            changed = True
+
+    payload["schemaVersion"] = SELECTION_SCHEMA_VERSION
+    return payload, changed
+
+
+def selection_payload_sort_key(payload: dict) -> str:
+    return str(payload.get("updatedAt") or "")
+
+
+def load_selection_state(
+    runtime_path: Path | None = None,
+    durable_path: Path | None = None,
+) -> tuple[dict, bool]:
+    paths = (runtime_path or SELECTIONS_PATH, durable_path or DURABLE_SELECTIONS_PATH)
+    payloads = [load_json(path) for path in paths if path.exists()]
+    if not payloads:
+        payloads = [
+            {
+                "schemaVersion": SELECTION_SCHEMA_VERSION,
+                "updatedAt": None,
+                "selections": {},
+                "rejectedCandidates": {},
+            }
+        ]
+    payload, changed = migrate_selection_payload(max(payloads, key=selection_payload_sort_key))
+    return payload, changed
+
+
+def chinese_ngrams(text: str, sizes: tuple[int, ...] = (2, 3)) -> set[str]:
+    result = set()
+    for run in HAN_RUN_RE.findall(text):
+        for size in sizes:
+            for index in range(len(run) - size + 1):
+                value = run[index : index + size]
+                if any(character not in CHINESE_STOP_CHARACTERS for character in value):
+                    result.add(value)
+    return result
+
+
+def searchable_caption_text(caption: dict) -> tuple[str, str]:
+    chinese = str(caption.get("captionZh") or "")
+    english_parts = [str(caption.get("captionEn") or "")]
+    for field in ("people", "objects", "actions", "attributes", "scene", "visibleText"):
+        english_parts.extend(str(value) for value in caption.get(field, []) if value)
+    return chinese, " ".join(english_parts).lower()
+
+
+def description_candidate_score(query: str, caption: dict) -> tuple[float, list[str]]:
+    query = query.strip()
+    if not query:
+        return 0.0, []
+
+    caption_chinese, caption_english = searchable_caption_text(caption)
+    query_english_tokens = ENGLISH_SEARCH_TOKEN_RE.findall(query.lower())
+    query_chinese_runs = HAN_RUN_RE.findall(query)
+    query_chinese_grams = chinese_ngrams(query)
+    caption_chinese_grams = chinese_ngrams(caption_chinese)
+    evidence: list[str] = []
+    score = 0.0
+
+    for phrase in query_chinese_runs:
+        if len(phrase) >= 2 and phrase in caption_chinese:
+            score += 90 + min(40, len(phrase) * 5)
+            evidence.append(phrase)
+
+    matched_grams = query_chinese_grams & caption_chinese_grams
+    if matched_grams:
+        coverage = len(matched_grams) / max(1, len(query_chinese_grams))
+        score += len(matched_grams) * 12 + coverage * 42
+        evidence.extend(sorted(matched_grams, key=lambda value: (-len(value), value))[:3])
+
+    query_characters = {
+        character
+        for phrase in query_chinese_runs
+        for character in phrase
+        if character not in CHINESE_STOP_CHARACTERS
+    }
+    caption_characters = set("".join(HAN_RUN_RE.findall(caption_chinese)))
+    matched_characters = query_characters & caption_characters
+    if matched_characters:
+        score += len(matched_characters) * 2
+
+    if query_english_tokens:
+        english_phrase = " ".join(query_english_tokens)
+        if len(english_phrase) >= 3 and english_phrase in caption_english:
+            score += 75
+            evidence.append(english_phrase)
+        matched_tokens = {
+            token for token in query_english_tokens if len(token) >= 2 and token in caption_english
+        }
+        if matched_tokens:
+            score += len(matched_tokens) * 22
+            score += len(matched_tokens) / len(query_english_tokens) * 38
+            evidence.extend(sorted(matched_tokens))
+
+    unique_evidence = list(dict.fromkeys(evidence))
+    return score, unique_evidence[:4]
+
+
+def rank_description_candidate(
+    query: str,
+    photo_id: str,
+    caption_row: dict,
+    feature: dict | None,
+    scene_cluster_id: str | None,
+) -> dict | None:
+    lexical_score, evidence_terms = description_candidate_score(query, caption_row["caption"])
+    if lexical_score <= 0:
+        return None
+    caption = caption_row["caption"]
+    return {
+        "photoId": photo_id,
+        "score": round(lexical_score + quality_bonus(feature), 2),
+        "matchType": "descriptionSearch",
+        "evidence": [{"field": "descriptionQuery", "term": term} for term in evidence_terms],
+        "captionZh": caption.get("captionZh", ""),
+        "sceneClusterId": scene_cluster_id,
+        "perceptualHash": (feature or {}).get("pHash"),
+        "differenceHash": (feature or {}).get("dHash"),
+        "wasPreviouslyMatched": False,
+    }
 
 
 def load_features(path: Path) -> dict[str, dict]:
@@ -278,19 +427,16 @@ class ReviewApplication:
         self.words_by_id = {word["wordId"]: word for word in self.manifest["words"]}
         self.master_entries = {entry["id"]: entry for entry in load_json(MASTER_PATH)["entries"]}
         self.path_mappings = load_path_mappings(ROOT)
+        self.search_results: dict[str, set[str]] = {}
+        self.search_queries: dict[str, str] = {}
+        self.search_captions: list[dict] | None = None
+        self.search_features: dict[str, dict] | None = None
+        self.search_assignments: dict[str, dict] | None = None
         self.selections = self.load_selections()
-        self.mark_exhausted_rejections()
 
     def load_selections(self) -> dict:
-        if SELECTIONS_PATH.exists():
-            payload = load_json(SELECTIONS_PATH)
-        else:
-            payload = {"schemaVersion": 2, "updatedAt": None, "selections": {}}
-
-        payload["schemaVersion"] = 2
-        payload.setdefault("rejectedCandidates", {})
-        migrated = False
-        for word_id, selection in list(payload.get("selections", {}).items()):
+        payload, migrated = load_selection_state()
+        for word_id, selection in list(payload["selections"].items()):
             if selection.get("status") != "skipped":
                 continue
             word = self.words_by_id.get(word_id)
@@ -306,7 +452,7 @@ class ReviewApplication:
             migrated = True
         if migrated:
             payload["updatedAt"] = dt.datetime.now().astimezone().isoformat(timespec="seconds")
-            write_json_atomic(SELECTIONS_PATH, payload)
+            write_selection_state(payload)
         return payload
 
     def selected_photo_ids(self, excluding_word_id: str | None = None) -> set[str]:
@@ -317,24 +463,6 @@ class ReviewApplication:
             and selection.get("status") == "selected"
             and selection.get("photoId")
         }
-
-    def mark_exhausted_rejections(self) -> None:
-        changed = False
-        now = dt.datetime.now().astimezone().isoformat(timespec="seconds")
-        for word_id in self.selections.get("rejectedCandidates", {}):
-            if word_id in self.selections["selections"]:
-                continue
-            if self.available_candidate_ids(word_id):
-                continue
-            self.selections["selections"][word_id] = {
-                "status": "exhausted",
-                "photoId": None,
-                "selectedAt": now,
-            }
-            changed = True
-        if changed:
-            self.selections["updatedAt"] = now
-            write_json_atomic(SELECTIONS_PATH, self.selections)
 
     def available_candidate_ids(self, word_id: str) -> list[str]:
         word = self.words_by_id[word_id]
@@ -348,11 +476,19 @@ class ReviewApplication:
             if candidate["photoId"] not in globally_selected and candidate["photoId"] not in rejected
         ]
 
-    def save_selection(self, word_id: str, photo_id: str | None) -> dict:
+    def save_selection(
+        self,
+        word_id: str,
+        photo_id: str | None,
+        source: str | None = None,
+        search_query: str | None = None,
+    ) -> dict:
         word = self.words_by_id.get(word_id)
         if not word:
             raise ValueError("unknown wordId")
         allowed = {candidate["photoId"] for candidate in word["candidates"]}
+        if source == "descriptionSearch":
+            allowed.update(self.search_results.get(word_id, set()))
         if photo_id is not None and photo_id not in allowed:
             raise ValueError("photoId is not a candidate for this word")
         if photo_id in self.selected_photo_ids(excluding_word_id=word_id):
@@ -364,7 +500,14 @@ class ReviewApplication:
             "photoId": photo_id,
             "selectedAt": now,
         }
-        write_json_atomic(SELECTIONS_PATH, self.selections)
+        if source == "descriptionSearch":
+            self.selections["selections"][word_id].update(
+                {
+                    "source": "descriptionSearch",
+                    "searchQuery": (search_query or self.search_queries.get(word_id) or "").strip(),
+                }
+            )
+        write_selection_state(self.selections)
         return self.selections["selections"][word_id]
 
     def reject_candidates(self, word_id: str, photo_ids: list[str]) -> dict:
@@ -382,14 +525,8 @@ class ReviewApplication:
         rejected["photoIds"] = list(dict.fromkeys(rejected.get("photoIds", []) + rejected_ids))
         rejected["rejectedAt"] = now
         self.selections["selections"].pop(word_id, None)
-        if not self.available_candidate_ids(word_id):
-            self.selections["selections"][word_id] = {
-                "status": "exhausted",
-                "photoId": None,
-                "selectedAt": now,
-            }
         self.selections["updatedAt"] = now
-        write_json_atomic(SELECTIONS_PATH, self.selections)
+        write_selection_state(self.selections)
         return {
             "selection": self.selections["selections"].get(word_id),
             "rejectedCandidates": rejected,
@@ -398,7 +535,63 @@ class ReviewApplication:
     def remove_selection(self, word_id: str) -> None:
         self.selections["selections"].pop(word_id, None)
         self.selections["updatedAt"] = dt.datetime.now().astimezone().isoformat(timespec="seconds")
-        write_json_atomic(SELECTIONS_PATH, self.selections)
+        write_selection_state(self.selections)
+
+    def ensure_search_data(self) -> None:
+        if self.search_captions is not None:
+            return
+        self.search_captions, _ = load_latest_successful_captions(CAPTIONS_PATH)
+        self.search_features = load_features(FEATURES_PATH)
+        self.search_assignments = {
+            item["id"]: item for item in load_json(CLUSTERS_PATH).get("photoAssignments", [])
+        }
+
+    def search_photos(self, word_id: str, query: str, limit: int = REVIEW_POOL_SIZE) -> list[dict]:
+        if word_id not in self.words_by_id:
+            raise ValueError("unknown wordId")
+        query = query.strip()
+        if not query:
+            raise ValueError("请输入照片描述")
+        self.ensure_search_data()
+        assert self.search_captions is not None
+        assert self.search_features is not None
+        assert self.search_assignments is not None
+
+        globally_selected = self.selected_photo_ids(excluding_word_id=word_id)
+        rejected = set(
+            (self.selections.get("rejectedCandidates", {}).get(word_id) or {}).get("photoIds", [])
+        )
+        candidates = []
+        for caption_row in self.search_captions:
+            photo_id = caption_row["photoId"]
+            if (
+                photo_id in globally_selected
+                or photo_id in rejected
+                or photo_id not in self.master_entries
+            ):
+                continue
+            candidate = rank_description_candidate(
+                query,
+                photo_id,
+                caption_row,
+                self.search_features.get(photo_id),
+                (self.search_assignments.get(photo_id) or {}).get("sceneClusterId"),
+            )
+            if candidate:
+                candidates.append(candidate)
+
+        selected = select_diverse_candidates(candidates, limit=limit)
+        result = [
+            {
+                key: value
+                for key, value in candidate.items()
+                if key not in {"perceptualHash", "differenceHash", "sceneClusterId"}
+            }
+            for candidate in selected
+        ]
+        self.search_results[word_id] = {candidate["photoId"] for candidate in result}
+        self.search_queries[word_id] = query
+        return result
 
     def thumbnail(self, photo_id: str) -> Path:
         if not PHOTO_ID_RE.fullmatch(photo_id):
@@ -452,13 +645,24 @@ def make_handler(application: ReviewApplication):
             self.send_error(HTTPStatus.NOT_FOUND)
 
         def do_POST(self) -> None:  # noqa: N802
-            if urlparse(self.path).path != "/api/select":
+            request_path = urlparse(self.path).path
+            if request_path not in {"/api/select", "/api/search"}:
                 self.send_error(HTTPStatus.NOT_FOUND)
                 return
             try:
                 length = min(int(self.headers.get("Content-Length", "0")), 65536)
                 payload = json.loads(self.rfile.read(length))
                 word_id = payload.get("wordId")
+                if request_path == "/api/search":
+                    candidates = application.search_photos(word_id, payload.get("query") or "")
+                    self.send_json(
+                        {
+                            "ok": True,
+                            "query": application.search_queries[word_id],
+                            "candidates": candidates,
+                        }
+                    )
+                    return
                 if payload.get("clear"):
                     application.remove_selection(word_id)
                     self.send_json({"ok": True, "selection": None})
@@ -468,7 +672,12 @@ def make_handler(application: ReviewApplication):
                     )
                     self.send_json({"ok": True, **result})
                 else:
-                    selection = application.save_selection(word_id, payload.get("photoId"))
+                    selection = application.save_selection(
+                        word_id,
+                        payload.get("photoId"),
+                        payload.get("source"),
+                        payload.get("searchQuery"),
+                    )
                     self.send_json({"ok": True, "selection": selection})
             except (ValueError, TypeError, json.JSONDecodeError) as error:
                 self.send_json({"ok": False, "error": str(error)}, HTTPStatus.BAD_REQUEST)

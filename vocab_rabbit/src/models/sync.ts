@@ -77,6 +77,7 @@ export interface SyncResponse {
   schemaVersion: typeof SYNC_SCHEMA_VERSION;
   cursor: string;
   serverTime: string;
+  deviceToken?: string;
   upToDate?: boolean;
   snapshot: SyncSnapshot | null;
 }

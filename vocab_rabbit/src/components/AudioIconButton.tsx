@@ -1,17 +1,22 @@
 interface AudioIconButtonProps {
   onClick: () => void;
   className?: string;
+  label?: string;
 }
 
-export function AudioIconButton({ onClick, className }: AudioIconButtonProps) {
+export function AudioIconButton({
+  onClick,
+  className,
+  label = '播放英文发音',
+}: AudioIconButtonProps) {
   const buttonClassName = className ? `audio-icon-button ${className}` : 'audio-icon-button';
 
   return (
     <button
       className={buttonClassName}
       type="button"
-      aria-label="播放英文发音"
-      title="播放英文发音"
+      aria-label={label}
+      title={label}
       onClick={onClick}
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">

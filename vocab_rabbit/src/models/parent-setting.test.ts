@@ -23,4 +23,13 @@ describe('parent setting normalization', () => {
       dailyReviewLimit: 7,
     });
   });
+
+  it('adds default voice selections to settings saved before voice selection existed', () => {
+    expect(normalizeParentSetting({
+      enableAudio: true,
+    })).toMatchObject({
+      englishVoiceURI: '',
+      chineseVoiceURI: '',
+    });
+  });
 });

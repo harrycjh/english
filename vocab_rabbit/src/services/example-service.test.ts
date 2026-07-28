@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { WordRecord } from '../models/word';
-import { getExampleSentences } from './example-service';
+import {
+  getExampleSentences,
+  getExampleTranslationFocus,
+  getExampleTranslations,
+} from './example-service';
 
 function makeWord(overrides: Partial<WordRecord>): WordRecord {
   return {
@@ -24,10 +28,10 @@ describe('getExampleSentences', () => {
     expect(getExampleSentences(word)).toEqual(['The cat is sleeping.']);
   });
 
-  it('generates a fallback sentence when the word has no curated examples', () => {
+  it('does not invent a generic fallback when the word has no curated examples', () => {
     const word = makeWord({ english: 'bike' });
 
-    expect(getExampleSentences(word)[0]).toContain('bike');
+    expect(getExampleSentences(word)).toEqual([]);
   });
 
   it('uses examples from the selected study sense instead of a conflicting general example', () => {
@@ -44,5 +48,29 @@ describe('getExampleSentences', () => {
     });
 
     expect(getExampleSentences(word)).toEqual(['The boy can ride a bike.']);
+  });
+});
+
+describe('getExampleTranslations', () => {
+  it('returns trimmed curated translations', () => {
+    expect(getExampleTranslations(makeWord({
+      exampleTranslations: ['  这只猫正在睡觉。  '],
+    }))).toEqual(['这只猫正在睡觉。']);
+  });
+
+  it('returns no translation when none is stored', () => {
+    expect(getExampleTranslations(makeWord({}))).toEqual([]);
+  });
+});
+
+describe('getExampleTranslationFocus', () => {
+  it('returns the exact translated phrase to emphasize', () => {
+    expect(getExampleTranslationFocus(makeWord({
+      exampleTranslationFocus: ['  家人  '],
+    }))).toEqual(['家人']);
+  });
+
+  it('returns no phrase when none is stored', () => {
+    expect(getExampleTranslationFocus(makeWord({}))).toEqual([]);
   });
 });

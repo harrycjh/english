@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { AnswerEvent } from '../models/answer-event';
 import type { LearningRecord } from '../models/learning-record';
 import {
+  buildMasteryLevelAccuracy,
   buildMemoryStatistics,
   estimateEbbinghausSavings,
   estimateHalfLifeDays,
@@ -198,5 +199,40 @@ describe('memory statistics', () => {
       .toMatchObject({ 2: 1, 6: 0 });
     expect(statistics.masteryLevelTimeline.find((point) => point.dateKey === '2026-07-14')?.counts)
       .toMatchObject({ 2: 1, 6: 1 });
+  });
+
+  it('calculates formal answer accuracy from the level before each answer', () => {
+    const levelRecord = (masteryLevel: number): LearningRecord => createRecord({
+      masteryLevel,
+      reviewStage: masteryLevel,
+    });
+    const events = [
+      { ...createEvent('level-0-correct', '2026-07-12T08:00:00.000Z', true), learningStateBefore: levelRecord(0) },
+      { ...createEvent('level-0-wrong', '2026-07-12T08:05:00.000Z', false), learningStateBefore: levelRecord(0) },
+      { ...createEvent('level-3-correct', '2026-07-13T08:00:00.000Z', true), learningStateBefore: levelRecord(3) },
+      createEvent('legacy-without-level', '2026-07-14T08:00:00.000Z', false),
+    ];
+
+    const accuracy = buildMasteryLevelAccuracy(events);
+
+    expect(accuracy).toHaveLength(11);
+    expect(accuracy[0]).toMatchObject({
+      level: 0,
+      correctCount: 1,
+      answerCount: 2,
+      accuracy: 50,
+    });
+    expect(accuracy[3]).toMatchObject({
+      level: 3,
+      correctCount: 1,
+      answerCount: 1,
+      accuracy: 100,
+    });
+    expect(accuracy[10]).toMatchObject({
+      level: 10,
+      correctCount: 0,
+      answerCount: 0,
+      accuracy: null,
+    });
   });
 });

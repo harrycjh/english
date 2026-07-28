@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { defaultParentSetting } from '../models/parent-setting';
 import type { WordPayload, WordRecord } from '../models/word';
-import { LearningPage } from './LearningPage';
+import { getAnswerFeedbackText, LearningPage } from './LearningPage';
 
 const words: WordRecord[] = [
   ['dog', '狗'],
@@ -54,5 +54,24 @@ describe('LearningPage profile actions', () => {
     expect(dogMarkup.indexOf('直接答对')).toBeLessThan(dogMarkup.indexOf('全部答对'));
     expect(renderLearningPage('cute-junjun')).not.toContain('直接答对');
     expect(renderLearningPage('cute-junjun')).not.toContain('全部答对');
+  });
+
+  it('does not expose the full answer after a level 7 to 9 spelling mistake', () => {
+    const fillQuestion = {
+      kind: 'fill-blank' as const,
+      prompt: '',
+      studyText: 'headteacher',
+      word: words[0],
+      maskedCharacters: [...'headteacher'].map(() => '_'),
+      missingLetters: [...'headteacher'],
+      inputMode: 'full' as const,
+    };
+
+    for (const level of [7, 8, 9]) {
+      expect(getAnswerFeedbackText(fillQuestion, level, false, 'headteacher'))
+        .toBe('没关系，稍后再练一次。');
+    }
+    expect(getAnswerFeedbackText(fillQuestion, 6, false, 'headteacher'))
+      .toBe('正确答案：headteacher');
   });
 });

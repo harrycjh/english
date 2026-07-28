@@ -142,6 +142,33 @@ describe('WordDetailDrawer', () => {
     expect(markup).toContain('red-rocket-atlases/atlas-001.webp');
   });
 
+  it('renders a visually corrected standalone Red Rocket page instead of the old atlas cell', () => {
+    const correctedWord = {
+      ...word,
+      relatedMedia: {
+        ...word.relatedMedia,
+        redRocket: {
+          ...word.relatedMedia!.redRocket!,
+          imagePath: '/content/images/red-rocket-pages/corrected.webp',
+        },
+      },
+    };
+    const markup = renderToStaticMarkup(
+      <WordDetailDrawer
+        isOpen
+        word={correctedWord}
+        record={undefined}
+        selectionState={undefined}
+        setting={{ ...defaultParentSetting, enableAudio: false }}
+        context="review"
+        onClose={() => undefined}
+      />,
+    );
+
+    expect(markup).toContain('red-rocket-pages/corrected.webp');
+    expect(markup).not.toContain('red-rocket-atlases/atlas-001.webp');
+  });
+
   it('renders the word mastery-level history and marks downgrade points', () => {
     const markup = renderToStaticMarkup(
       <WordDetailDrawer

@@ -1,0 +1,46 @@
+[
+  {
+    "groupKey": "oxford:11:12:12",
+    "id": "oxford:ket_metal_n_adj",
+    "status": "match",
+    "selectedOffset": 0,
+    "sentence": "At the end of one of the valleys, Zé came across a metal gate.",
+    "matchedForm": "metal",
+    "reason": "Manual visual review confirmed the complete sentence on the current page."
+  },
+  {
+    "groupKey": "oxford:13:2:10",
+    "id": "oxford:ket_gallery_n",
+    "status": "match",
+    "selectedOffset": 0,
+    "sentence": "\"This is the main gallery,\" she said, proudly.",
+    "matchedForm": "gallery",
+    "reason": "Manual visual review confirmed the complete sentence on the current page."
+  },
+  {
+    "groupKey": "oxford:15:1:27",
+    "id": "oxford:ket_quarter_n",
+    "status": "match",
+    "selectedOffset": 0,
+    "sentence": "This is where you go up the quarter pipe [a curved, sloped ramp] and stall [balance] on one hand (see picture above).",
+    "matchedForm": "quarter",
+    "reason": "Manual visual review separated the preceding short sentence and confirmed the complete target sentence on the current page."
+  },
+  {
+    "groupKey": "redRocket:early level 3:learning to swim:15",
+    "id": "redRocket:ket_swimming_n",
+    "status": "match",
+    "selectedOffset": 0,
+    "sentence": "Then you will swim a little way.",
+    "matchedForm": "swim",
+    "reason": "Manual visual review confirmed the normal inflection on the current page."
+  },
+  {
+    "groupKey": "redRocket:early level 3:who wins the race:18",
+    "id": "redRocket:ket_finish_v",
+    "status": "no_match",
+    "sentence": "",
+    "matchedForm": "finish",
+    "reason": "Manual visual review confirmed the picture association, but finish appears only on the illustrated sign and no complete sentence contains it on the current page or the neighboring two pages."
+  }
+]

@@ -14,6 +14,7 @@ import {
 } from '../services/learning-statistics';
 import {
   buildMemoryStatistics,
+  type MasteryLevelAccuracyPoint,
   type MasteryLevelPoint,
   type MasteryLevelTimelinePoint,
   type RetentionPoint,
@@ -40,6 +41,7 @@ interface StatsPageProps {
 }
 
 type StatsTab = 'forgetting' | 'learning' | 'durability';
+type DurabilityView = StatisticsTimeScale | 'level';
 
 function formatDayCount(days: number): string {
   if (days <= 0) return '--';
@@ -185,6 +187,34 @@ function TimeScaleSwitch({ value, onChange, label }: {
   ];
   return (
     <div className="stats-time-scale-switch" role="group" aria-label={label}>
+      {options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          aria-pressed={value === option.value}
+          className={value === option.value ? 'is-active' : ''}
+          onClick={() => onChange(option.value)}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function DurabilityViewSwitch({ value, onChange }: {
+  value: DurabilityView;
+  onChange: (value: DurabilityView) => void;
+}) {
+  const options: Array<{ value: DurabilityView; label: string }> = [
+    { value: 'day', label: '日' },
+    { value: 'week', label: '周' },
+    { value: 'month', label: '月' },
+    { value: 'level', label: 'Lv' },
+  ];
+
+  return (
+    <div className="stats-time-scale-switch stats-time-scale-switch--durability" role="group" aria-label="记忆持久度统计维度">
       {options.map((option) => (
         <button
           key={option.value}
@@ -493,6 +523,93 @@ function MasteryLevelLineChart({ timeline, levels, todayKey, scale }: {
   );
 }
 
+function MasteryLevelAccuracyChart({ points }: {
+  points: MasteryLevelAccuracyPoint[];
+}) {
+  const width = 1120;
+  const height = 430;
+  const left = 58;
+  const right = 24;
+  const top = 30;
+  const bottom = 58;
+  const plotWidth = width - left - right;
+  const plotHeight = height - top - bottom;
+  const yTicks = [100, 75, 50, 25, 0];
+  const xForLevel = (level: number) => left + (level / 10) * plotWidth;
+  const yForAccuracy = (accuracy: number) => top + ((100 - accuracy) / 100) * plotHeight;
+  const availablePoints = points.filter(
+    (point): point is MasteryLevelAccuracyPoint & { accuracy: number } => point.accuracy !== null,
+  );
+  const linePath = availablePoints.map((point, index) => (
+    `${index === 0 ? 'M' : 'L'} ${xForLevel(point.level).toFixed(1)} ${yForAccuracy(point.accuracy).toFixed(1)}`
+  )).join(' ');
+
+  return (
+    <div className="mastery-accuracy-chart">
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        role="img"
+        aria-label="Lv0到Lv10平均回答正确率折线图"
+      >
+        {yTicks.map((tick) => (
+          <g key={tick}>
+            <line
+              x1={left}
+              y1={yForAccuracy(tick)}
+              x2={width - right}
+              y2={yForAccuracy(tick)}
+              className="memory-chart-grid"
+            />
+            <text
+              x={left - 12}
+              y={yForAccuracy(tick) + 4}
+              textAnchor="end"
+              className="memory-chart-label"
+            >
+              {tick}%
+            </text>
+          </g>
+        ))}
+        {linePath ? <path d={linePath} className="mastery-accuracy-chart__line" /> : null}
+        {points.map((point) => (
+          <g key={point.level}>
+            {point.accuracy !== null ? (
+              <>
+                <circle
+                  cx={xForLevel(point.level)}
+                  cy={yForAccuracy(point.accuracy)}
+                  r="7"
+                  className="mastery-accuracy-chart__node"
+                  style={{ fill: point.color }}
+                />
+                <text
+                  x={xForLevel(point.level)}
+                  y={yForAccuracy(point.accuracy) - 15}
+                  textAnchor="middle"
+                  className="mastery-accuracy-chart__value"
+                >
+                  {Math.round(point.accuracy)}%
+                </text>
+              </>
+            ) : null}
+            <text
+              x={xForLevel(point.level)}
+              y={height - 18}
+              textAnchor="middle"
+              className="memory-chart-label"
+            >
+              Lv{point.level}
+            </text>
+          </g>
+        ))}
+      </svg>
+      {availablePoints.length === 0 ? (
+        <p className="mastery-accuracy-chart__empty">完成正式答题后，这里会显示各等级的平均正确率。</p>
+      ) : null}
+    </div>
+  );
+}
+
 export function StatsPage({
   payload,
   task,
@@ -505,7 +622,8 @@ export function StatsPage({
 }: StatsPageProps) {
   const [activeTab, setActiveTab] = useState<StatsTab>('learning');
   const [learningTimeScale, setLearningTimeScale] = useState<StatisticsTimeScale>('day');
-  const [durabilityTimeScale, setDurabilityTimeScale] = useState<StatisticsTimeScale>('day');
+  const [durabilityView, setDurabilityView] = useState<DurabilityView>('day');
+  const durabilityTimeScale: StatisticsTimeScale = durabilityView === 'level' ? 'day' : durabilityView;
   const memory = useMemo(() => buildMemoryStatistics(recordsById, answerEvents), [recordsById, answerEvents]);
   const learning = useMemo(() => buildLearningStatistics({
     currentTask: task,
@@ -642,31 +760,48 @@ export function StatsPage({
               <section className="memory-panel memory-panel--durability-timeline">
                 <div className="memory-panel__header">
                   <div>
-                    <h2>{durabilityTimeScale === 'day' ? '每日' : durabilityTimeScale === 'week' ? '每周' : '每月'}记忆持久度</h2>
-                    <p>横轴为时间，纵轴为周期末各学习等级的单词数量；左右拖动可查看历史</p>
+                    <h2>
+                      {durabilityView === 'level'
+                        ? '各等级平均回答正确率'
+                        : `${durabilityTimeScale === 'day' ? '每日' : durabilityTimeScale === 'week' ? '每周' : '每月'}记忆持久度`}
+                    </h2>
+                    <p>
+                      {durabilityView === 'level'
+                        ? '横轴为答题前等级，纵轴为该等级全部正式答题的平均正确率'
+                        : '横轴为时间，纵轴为周期末各学习等级的单词数量；左右拖动可查看历史'}
+                    </p>
                   </div>
                   <div className="memory-panel__chart-tools">
-                    <TimeScaleSwitch
-                      value={durabilityTimeScale}
-                      onChange={setDurabilityTimeScale}
-                      label="记忆持久度统计周期"
+                    <DurabilityViewSwitch
+                      value={durabilityView}
+                      onChange={setDurabilityView}
                     />
-                    <div className="memory-chart-legend memory-chart-legend--durability">
-                      {memory.masteryLevels.map((point) => (
-                        <span key={point.level}>
-                          <i style={{ background: point.color }} />
-                          Lv.{point.level} · {point.count}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 </div>
-                <MasteryLevelLineChart
-                  timeline={masteryLevelTimeline}
-                  levels={memory.masteryLevels}
-                  todayKey={task.dateKey}
-                  scale={durabilityTimeScale}
-                />
+                {durabilityView === 'level' ? (
+                  <MasteryLevelAccuracyChart points={memory.masteryLevelAccuracy} />
+                ) : (
+                  <MasteryLevelLineChart
+                    timeline={masteryLevelTimeline}
+                    levels={memory.masteryLevels}
+                    todayKey={task.dateKey}
+                    scale={durabilityTimeScale}
+                  />
+                )}
+                <div className={`memory-chart-legend memory-chart-legend--durability${durabilityView === 'level' ? ' is-accuracy' : ''}`}>
+                  {memory.masteryLevels.map((point) => {
+                    const accuracy = memory.masteryLevelAccuracy[point.level];
+                    return (
+                      <span key={point.level}>
+                        <i style={{ background: point.color }} />
+                        Lv.{point.level} · {point.count}
+                        {durabilityView === 'level'
+                          ? ` · ${accuracy.answerCount > 0 ? `${Math.round(accuracy.accuracy!)}% / ${accuracy.answerCount}题` : '暂无答题'}`
+                          : ''}
+                      </span>
+                    );
+                  })}
+                </div>
               </section>
             </div>
           )}

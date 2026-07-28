@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { WordRecord } from '../models/word';
 import { defaultParentSetting } from '../models/parent-setting';
 import { createEmptyRecord, evaluateAnswer } from './spaced-repetition';
-import { buildQuestion } from './question-service';
+import { buildQuestion, buildSimilarLetterOptions } from './question-service';
 
 function makeWord(overrides: Partial<WordRecord>): WordRecord {
   return {
@@ -19,7 +19,14 @@ function makeWord(overrides: Partial<WordRecord>): WordRecord {
   };
 }
 
-const target = makeWord({ id: 'ket_rabbit_n', english: 'rabbit', chinese: '兔子' });
+const target = makeWord({
+  id: 'ket_rabbit_n',
+  english: 'rabbit',
+  chinese: '兔子',
+  examples: ['The rabbit eats a fresh carrot.'],
+  exampleTranslations: ['这只兔子吃了一根新鲜的胡萝卜。'],
+  exampleTranslationFocus: ['兔子'],
+});
 const allWords = [
   target,
   makeWord({ id: 'ket_cat_n', english: 'cat', chinese: '猫' }),
@@ -50,9 +57,17 @@ describe('buildQuestion', () => {
     });
   });
 
-  it('uses Comfy at level 1 and prioritized related media at level 2', () => {
+  it('uses Comfy image questions with Chinese answers at level 1 and English answers at level 2', () => {
     expect(questionAt(1)).toMatchObject({ kind: 'image-choice', imageStrategy: 'comfy' });
-    expect(questionAt(2)).toMatchObject({ kind: 'image-choice', imageStrategy: 'related-priority' });
+    const englishQuestion = questionAt(2);
+    expect(englishQuestion).toMatchObject({
+      kind: 'image-english-choice',
+      imageStrategy: 'comfy',
+      correctAnswer: 'rabbit',
+    });
+    if (englishQuestion.kind === 'image-english-choice') {
+      expect(englishQuestion.options).toHaveLength(4);
+    }
   });
 
   it('uses four image answers at level 3 and Chinese answers at level 4', () => {
@@ -66,36 +81,139 @@ describe('buildQuestion', () => {
     expect(questionAt(4).kind).toBe('text-choice');
   });
 
-  it.each([
-    [5, 1, 2],
-    [6, 2, 4],
-  ])('masks one continuous run at level %i', (level, minimum, maximum) => {
-    const question = questionAt(level);
+  it('uses a validated sentence cloze with four word choices at level 5', () => {
+    const question = questionAt(5);
+    expect(question.kind).toBe('sentence-choice');
+    if (question.kind !== 'sentence-choice') return;
+    expect(question.maskedSentence).toContain('_____');
+    expect(question.sentence).toBe('The rabbit eats a fresh carrot.');
+    expect(question.sentenceTranslation).toBe('这只兔子吃了一根新鲜的胡萝卜。');
+    expect(question.sentenceTranslationFocus).toBe('兔子');
+    expect(question.options).toHaveLength(4);
+    expect(question.correctAnswer).toBe('rabbit');
+  });
+
+  it('uses the sentence tense for every regular-verb option at level 5', () => {
+    const discovered = makeWord({
+      id: 'ket_discover_v',
+      english: 'discover',
+      partOfSpeech: 'v',
+      chinese: '发现',
+      category: '动作',
+      examples: ['I discovered a new toy.'],
+      exampleTranslations: ['我发现了一个新玩具。'],
+      exampleTranslationFocus: ['发现'],
+    });
+    const verbOptions = [
+      discovered,
+      makeWord({ id: 'ket_answer_v', english: 'answer', partOfSpeech: 'v', category: '动作' }),
+      makeWord({ id: 'ket_study_v', english: 'study', partOfSpeech: 'v', category: '动作' }),
+      makeWord({ id: 'ket_stop_v', english: 'stop', partOfSpeech: 'v', category: '动作' }),
+    ];
+    const question = buildQuestion(
+      discovered,
+      verbOptions,
+      { ...createEmptyRecord(discovered.id), masteryLevel: 5, reviewStage: 5 },
+      defaultParentSetting,
+    );
+
+    expect(question.kind).toBe('sentence-choice');
+    if (question.kind !== 'sentence-choice') return;
+    expect(question.correctAnswer).toBe('discovered');
+    expect(new Set(question.options)).toEqual(new Set(['discovered', 'answered', 'studied', 'stopped']));
+  });
+
+  it('uses matching irregular past forms for every option at level 5', () => {
+    const went = makeWord({
+      id: 'ket_go_v',
+      english: 'go',
+      partOfSpeech: 'v',
+      chinese: '去',
+      category: '动作',
+      examples: ['We went to the park yesterday.'],
+      exampleTranslations: ['我们昨天去了公园。'],
+      exampleTranslationFocus: ['去'],
+    });
+    const verbOptions = [
+      went,
+      makeWord({ id: 'ket_eat_v', english: 'eat', partOfSpeech: 'v', category: '动作' }),
+      makeWord({ id: 'ket_see_v', english: 'see', partOfSpeech: 'v', category: '动作' }),
+      makeWord({ id: 'ket_take_v', english: 'take', partOfSpeech: 'v', category: '动作' }),
+    ];
+    const question = buildQuestion(
+      went,
+      verbOptions,
+      { ...createEmptyRecord(went.id), masteryLevel: 5, reviewStage: 5 },
+      defaultParentSetting,
+    );
+
+    expect(question.kind).toBe('sentence-choice');
+    if (question.kind !== 'sentence-choice') return;
+    expect(question.correctAnswer).toBe('went');
+    expect(new Set(question.options)).toEqual(new Set(['went', 'ate', 'saw', 'took']));
+  });
+
+  it('masks one or two continuous letters with four choices at level 6', () => {
+    const question = questionAt(6);
+    expect(question.kind).toBe('letter-choice');
+    if (question.kind !== 'letter-choice') return;
+    const positions = missingPositions(question.maskedCharacters);
+    expect(positions.length).toBeGreaterThanOrEqual(1);
+    expect(positions.length).toBeLessThanOrEqual(2);
+    expect(positions.every((position, index) => index === 0 || position === positions[index - 1] + 1)).toBe(true);
+    expect(question.options).toHaveLength(4);
+  });
+
+  it('builds same-length, case-preserving letter distractors from nearby or similar keys', () => {
+    const lowercaseOptions = buildSimilarLetterOptions('ac');
+    const uppercaseOptions = buildSimilarLetterOptions('M');
+
+    expect(lowercaseOptions).toHaveLength(4);
+    expect(new Set(lowercaseOptions).size).toBe(4);
+    expect(lowercaseOptions).toContain('ac');
+    expect(lowercaseOptions.every((option) => option.length === 2)).toBe(true);
+    expect(uppercaseOptions).toContain('M');
+    expect(uppercaseOptions.every((option) => option === option.toUpperCase())).toBe(true);
+  });
+
+  it('uses a two-to-four-letter text entry at level 7', () => {
+    const question = questionAt(7);
     expect(question.kind).toBe('fill-blank');
     if (question.kind !== 'fill-blank') return;
     const positions = missingPositions(question.maskedCharacters);
-    expect(positions.length).toBeGreaterThanOrEqual(minimum);
-    expect(positions.length).toBeLessThanOrEqual(Math.min(maximum, target.english.length));
-    expect(positions.every((position, index) => index === 0 || position === positions[index - 1] + 1)).toBe(true);
+    expect(positions.length).toBeGreaterThanOrEqual(2);
+    expect(positions.length).toBeLessThanOrEqual(4);
+    expect(question.inputMode).toBe('partial');
   });
 
-  it('uses four keyboard choices for the level 5 spelling prompt', () => {
-    const question = questionAt(5);
-    expect(question.kind).toBe('fill-blank');
-    if (question.kind === 'fill-blank') {
-      expect(question.keyboardLetters).toHaveLength(4);
-    }
-  });
-
-  it('uses full-word spelling from level 7 onward', () => {
-    for (const level of [7, 8, 9, 10]) {
+  it('uses full-word spelling from level 8 onward', () => {
+    for (const level of [8, 9, 10]) {
       const question = questionAt(level);
       expect(question.kind).toBe('fill-blank');
       if (question.kind === 'fill-blank') {
         expect(question.maskedCharacters).toEqual(['_', '_', '_', '_', '_', '_']);
         expect(question.missingLetters).toEqual(['r', 'a', 'b', 'b', 'i', 't']);
+        expect(question.inputMode).toBe('full');
       }
     }
+  });
+
+  it('preserves the original letter case when revealing an uppercase spelling answer', () => {
+    const uppercaseWord = makeWord({
+      id: 'ket_dvd_n',
+      english: 'DVD',
+      chinese: 'DVD',
+    });
+    const question = buildQuestion(
+      uppercaseWord,
+      [uppercaseWord, ...allWords],
+      { ...createEmptyRecord(uppercaseWord.id), masteryLevel: 8, reviewStage: 8 },
+      defaultParentSetting,
+    );
+
+    expect(question.kind).toBe('fill-blank');
+    if (question.kind !== 'fill-blank') return;
+    expect(question.missingLetters).toEqual(['D', 'V', 'D']);
   });
 
   it('uses the selected study sense for Chinese choices and spelling prompts', () => {
@@ -132,7 +250,31 @@ describe('buildQuestion', () => {
       { ...createEmptyRecord(polysemousWord.id), masteryLevel: 8, reviewStage: 8 },
       defaultParentSetting,
     );
-    expect(spellingQuestion.prompt).toBe('能；会 的英语怎么拼？');
+    expect(spellingQuestion.prompt).toBe('');
+  });
+
+  it('keeps the selected shopping sense of change in the visible choices', () => {
+    const change = makeWord({
+      id: 'ket_change_v_n',
+      english: 'change',
+      partOfSpeech: 'v & n',
+      chinese: '改变；零钱',
+      category: '购物买东西',
+      studySense: {
+        partOfSpeech: 'n',
+        chinese: '零钱',
+        examples: ['I gave her some change for the coffee.'],
+      },
+    });
+    const question = buildQuestion(
+      change,
+      [change, ...allWords],
+      { ...createEmptyRecord(change.id), masteryLevel: 4, reviewStage: 4 },
+      defaultParentSetting,
+    );
+
+    expect(question).toMatchObject({ kind: 'text-choice', correctAnswer: '零钱' });
+    if (question.kind === 'text-choice') expect(question.options).toContain('零钱');
   });
 
   it('uses the downgraded level question when verifying after three wrong answers', () => {

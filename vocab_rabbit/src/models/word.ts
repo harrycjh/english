@@ -10,6 +10,8 @@ export interface RelatedOxfordImage {
   level: number;
   book: number;
   page: number;
+  sentence?: string;
+  sentenceTranslation?: string;
 }
 
 export interface RelatedLifePhoto {
@@ -21,6 +23,7 @@ export interface RelatedLifePhoto {
 }
 
 export interface RelatedRedRocketImage extends WordImageAtlasEntry {
+  imagePath?: string;
   label: string;
   level: string;
   title: string;
@@ -28,6 +31,8 @@ export interface RelatedRedRocketImage extends WordImageAtlasEntry {
   matchKind: 'exact' | 'inflection' | 'title';
   matchedTerm: string;
   confidence: number;
+  sentence?: string;
+  sentenceTranslation?: string;
 }
 
 export interface WordRelatedMedia {
@@ -42,10 +47,14 @@ export interface WordRelatedMediaManifestStats {
   withOxford: number;
   withLifePhoto: number;
   uniqueOxfordImages: number;
+  withOxfordSentence?: number;
+  withOxfordSentenceTranslation?: number;
   lifePhotoPackageImages: number;
   withRedRocket?: number;
   uniqueRedRocketImages?: number;
   redRocketAtlases?: number;
+  withRedRocketSentence?: number;
+  withRedRocketSentenceTranslation?: number;
 }
 
 export interface WordRelatedMediaManifestEntry {
@@ -121,6 +130,7 @@ export interface WordStudySense {
 export interface WordRecord {
   id: string;
   english: string;
+  phonetic?: string;
   partOfSpeech: string;
   chinese: string;
   studySense?: WordStudySense;
@@ -134,6 +144,8 @@ export interface WordRecord {
   relatedMedia?: WordRelatedMedia;
   example?: string;
   examples?: string[];
+  exampleTranslations?: string[];
+  exampleTranslationFocus?: string[];
 }
 
 export interface WordPayload {

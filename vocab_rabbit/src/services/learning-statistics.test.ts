@@ -229,7 +229,7 @@ describe('learning statistics', () => {
         '2026-07-14',
         true,
         {
-          questionKind: 'image-choice',
+          questionKind: 'image-english-choice',
           learningStateBefore: {
             wordId: `image-history-${index}`,
             masteryLevel: 2,
@@ -247,7 +247,7 @@ describe('learning statistics', () => {
         '2026-07-14',
         false,
         {
-          questionKind: 'fill-blank',
+          questionKind: 'sentence-choice',
           learningStateBefore: {
             wordId: `spell-history-${index}`,
             masteryLevel: 5,
@@ -320,7 +320,7 @@ describe('learning statistics', () => {
     expect(statistics.forecast[0].newCount).toBe(15);
   });
 
-  it('spreads mastered-word reviews across the real deterministic 60-90 day range', () => {
+  it('does not forecast more daily reviews after words reach level 10', () => {
     const recordsById = Object.fromEntries(Array.from({ length: 30 }, (_, index) => {
       const wordId = `mastered-${index}`;
       return [wordId, {
@@ -330,7 +330,7 @@ describe('learning statistics', () => {
         correctStreak: 8,
         wrongCount: 0,
         lastStudiedAt: '2026-07-14T08:00:00.000Z',
-        nextDueAt: '2026-07-15T20:00:00.000Z',
+        nextDueAt: null,
       } satisfies LearningRecord];
     }));
     const completedHistory = Array.from({ length: 30 }, (_, index) => task({
@@ -351,12 +351,6 @@ describe('learning statistics', () => {
       setting: { ...defaultParentSetting, dailyNewWordCount: 3, dailyReviewLimit: 50 },
       now: new Date('2026-07-15T12:00:00.000Z'),
     });
-    const laterReviewDates = statistics.forecast
-      .slice(60)
-      .filter((point) => point.reviewCount > 0)
-      .map((point) => point.dateKey);
-
-    expect(laterReviewDates.length).toBeGreaterThan(5);
-    expect(new Set(laterReviewDates).size).toBeGreaterThan(5);
+    expect(statistics.forecast.every((point) => point.reviewCount === 0)).toBe(true);
   });
 });

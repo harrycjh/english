@@ -48,6 +48,7 @@ describe('ReviewPage', () => {
         previewWords={[previewWord]}
         localLifePhotosById={{}}
         onStart={() => undefined}
+        onStartDebug={() => undefined}
         onAdvanceDay={async () => undefined}
         onSelectProfile={async () => undefined}
         onSaveSelectionStates={async () => undefined}
@@ -102,6 +103,7 @@ describe('ReviewPage', () => {
         previewWords={[previewWord]}
         localLifePhotosById={{}}
         onStart={() => undefined}
+        onStartDebug={() => undefined}
         onAdvanceDay={async () => undefined}
         onSelectProfile={async () => undefined}
         onSaveSelectionStates={async () => undefined}
@@ -109,12 +111,56 @@ describe('ReviewPage', () => {
     );
 
     expect(markup).toContain('class="review-day-forward-button"');
+    expect(markup).toContain('调试模式');
     expect(markup).toContain('aria-label="前往下一天，2026-07-01"');
     expect(markup).toContain('5 分钟');
     expect(markup).toContain('data-date-key="2026-06-29"');
     expect(markup).toContain('data-answered="2"');
     expect(markup).toContain('data-date-key="2026-06-30"');
     expect(markup).toContain('data-answered="1"');
+  });
+
+  it('offers debug levels zero through nine without level ten', () => {
+    const markup = renderToStaticMarkup(
+      <ReviewPage
+        payload={{
+          generatedAt: '',
+          sourceFile: '',
+          categoryCount: 1,
+          wordCount: 1,
+          categories: [previewWord.category],
+          words: [previewWord],
+        }}
+        task={{
+          dateKey: '2026-06-30',
+          newWordIds: [previewWord.id],
+          reviewWordIds: [],
+          completedAt: null,
+          correctCount: 0,
+          wrongCount: 0,
+          totalAnswered: 0,
+          answeredWordIds: [],
+        }}
+        setting={{ ...defaultParentSetting, profileId: 'stinky-dog' }}
+        recordsById={{}}
+        selectionById={{}}
+        answerEvents={[]}
+        masteredCount={0}
+        recentTasks={[]}
+        previewWords={[previewWord]}
+        localLifePhotosById={{}}
+        debugPickerOpen
+        onStart={() => undefined}
+        onStartDebug={() => undefined}
+        onAdvanceDay={async () => undefined}
+        onSelectProfile={async () => undefined}
+        onSaveSelectionStates={async () => undefined}
+      />,
+    );
+
+    expect(markup).toContain('<strong>Lv0</strong>');
+    expect(markup).toContain('<strong>Lv9</strong>');
+    expect(markup).not.toContain('<strong>Lv10</strong>');
   });
 
   it('does not offer another review round while planned words remain unanswered', () => {
@@ -147,6 +193,7 @@ describe('ReviewPage', () => {
         previewWords={[previewWord]}
         localLifePhotosById={{}}
         onStart={() => undefined}
+        onStartDebug={() => undefined}
         onAdvanceDay={async () => undefined}
         onSelectProfile={async () => undefined}
         onSaveSelectionStates={async () => undefined}

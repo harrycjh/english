@@ -7,7 +7,6 @@ import type { WordRecord } from '../models/word';
 import type { QuestionKind } from './question-service';
 import { isWordEnabledForStudy } from './selection-service';
 import {
-  getMasteredReviewDelayDays,
   MAX_MASTERY_LEVEL,
   REVIEW_INTERVAL_DAYS,
 } from './spaced-repetition';
@@ -125,21 +124,24 @@ function advanceProjectedState(
   forecastDate: Date,
 ): ProjectedWordState {
   const nextLevel = Math.min(state.masteryLevel + 1, MAX_MASTERY_LEVEL);
-  const delayDays = nextLevel >= MAX_MASTERY_LEVEL
-    ? getMasteredReviewDelayDays(state.wordId, forecastDate)
-    : REVIEW_INTERVAL_DAYS[nextLevel];
+  const delayDays = REVIEW_INTERVAL_DAYS[nextLevel];
   return {
     ...state,
     masteryLevel: nextLevel,
-    nextDueAt: getReviewDueAt(forecastDate, delayDays).getTime(),
+    nextDueAt: nextLevel >= MAX_MASTERY_LEVEL
+      ? Number.POSITIVE_INFINITY
+      : getReviewDueAt(forecastDate, delayDays).getTime(),
   };
 }
 
 function getProjectedQuestionKind(masteryLevel: number): QuestionKind {
   if (masteryLevel <= 0) return 'recognition';
-  if (masteryLevel <= 2) return 'image-choice';
+  if (masteryLevel === 1) return 'image-choice';
+  if (masteryLevel === 2) return 'image-english-choice';
   if (masteryLevel === 3) return 'image-answer-choice';
   if (masteryLevel === 4) return 'text-choice';
+  if (masteryLevel === 5) return 'sentence-choice';
+  if (masteryLevel === 6) return 'letter-choice';
   return 'fill-blank';
 }
 
@@ -165,7 +167,16 @@ function estimateForecastAccuracy(answerEvents: AnswerEvent[], todayKey: string)
   ) / (historicalEvents.length + ACCURACY_PRIOR_SAMPLE_COUNT);
 
   const byQuestionKind = new Map<QuestionKind, number>();
-  for (const questionKind of ['recognition', 'image-choice', 'image-answer-choice', 'text-choice', 'fill-blank'] as QuestionKind[]) {
+  for (const questionKind of [
+    'recognition',
+    'image-choice',
+    'image-english-choice',
+    'image-answer-choice',
+    'text-choice',
+    'sentence-choice',
+    'letter-choice',
+    'fill-blank',
+  ] as QuestionKind[]) {
     const events = historicalEvents.filter((event) => event.questionKind === questionKind);
     const correct = events.filter((event) => event.isCorrect).length;
     byQuestionKind.set(
@@ -319,7 +330,9 @@ export function buildLearningStatistics({
     projectedStates.set(record.wordId, {
       wordId: record.wordId,
       masteryLevel: record.masteryLevel,
-      nextDueAt: record.nextDueAt
+      nextDueAt: record.masteryLevel >= MAX_MASTERY_LEVEL
+        ? Number.POSITIVE_INFINITY
+        : record.nextDueAt
         ? new Date(record.nextDueAt).getTime()
         : getStudyDate(todayKey).getTime(),
     });

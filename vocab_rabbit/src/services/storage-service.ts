@@ -571,6 +571,7 @@ function syncMetadataAfterResponse(
 ): SyncMetadata {
   return {
     ...metadata,
+    deviceToken: response.deviceToken ?? metadata.deviceToken,
     serverCursor: response.cursor,
     lastSyncedAt: response.serverTime,
     pendingSince: hasLateLocalChanges ? metadata.pendingSince ?? new Date().toISOString() : null,

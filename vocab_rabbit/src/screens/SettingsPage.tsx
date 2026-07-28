@@ -8,7 +8,10 @@ import {
 } from '../models/parent-setting';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
-import type { LifePhotoImportResult } from '../services/local-media-service';
+import type {
+  PrivateLifePhotoDownloadOptions,
+  PrivateLifePhotoDownloadResult,
+} from '../services/private-life-photo-service';
 import type { StudyDataImportResult } from '../services/study-data-import';
 import type { WordRecord } from '../models/word';
 import {
@@ -17,6 +20,12 @@ import {
   getOfflineImageCacheStatus,
   requestPersistentImageStorage,
 } from '../services/offline-image-cache-service';
+import {
+  getAvailableSpeechVoices,
+  speakSequence,
+  subscribeSpeechVoices,
+  type SpeechVoiceOption,
+} from '../services/audio-service';
 
 interface SettingsPageProps {
   settings: ParentSetting;
@@ -29,9 +38,10 @@ interface SettingsPageProps {
   onExportStudyData: () => Promise<void>;
   onImportStudyData: (file: File) => Promise<StudyDataImportResult>;
   onClearLocalData: (familyCode: string) => Promise<void>;
-  onImportLifePhotoPackage: (file: File) => Promise<LifePhotoImportResult>;
+  onDownloadPrivateLifePhotos: (
+    options: PrivateLifePhotoDownloadOptions,
+  ) => Promise<PrivateLifePhotoDownloadResult>;
   localLifePhotoCount: number;
-  localLifePhotoImportedAt: string | null;
   words: WordRecord[];
 }
 
@@ -55,22 +65,42 @@ interface SettingsToggleRowProps {
   onToggle: () => void;
 }
 
+interface SettingsVoiceSelectProps {
+  icon: string;
+  label: string;
+  language: 'en' | 'zh';
+  value: string;
+  voices: SpeechVoiceOption[];
+  disabled: boolean;
+  onChange: (voiceURI: string) => void;
+  onPreview: () => void;
+}
+
+type EditableSettings = Pick<
+  ParentSetting,
+  | 'dailyNewWordCount'
+  | 'dailyReviewLimit'
+  | 'enableAudio'
+  | 'showImages'
+  | 'showExamples'
+  | 'showHints'
+  | 'englishVoiceURI'
+  | 'chineseVoiceURI'
+>;
+
 /* ─── helpers ─── */
 
-function formatImportedAt(value: string | null): string | null {
-  if (!value) {
-    return null;
-  }
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return null;
-  }
-  return date.toLocaleString('zh-CN', {
-    month: 'numeric',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+function createSettingsDraft(settings: ParentSetting): EditableSettings {
+  return {
+    dailyNewWordCount: settings.dailyNewWordCount,
+    dailyReviewLimit: settings.dailyReviewLimit,
+    enableAudio: settings.enableAudio,
+    showImages: settings.showImages,
+    showExamples: settings.showExamples,
+    showHints: settings.showHints,
+    englishVoiceURI: settings.englishVoiceURI,
+    chineseVoiceURI: settings.chineseVoiceURI,
+  };
 }
 
 /* ─── Sub-components ─── */
@@ -131,6 +161,43 @@ function SettingsToggleRow({ icon, label, description, enabled, onToggle }: Sett
   );
 }
 
+function SettingsVoiceSelect({
+  icon,
+  label,
+  language,
+  value,
+  voices,
+  disabled,
+  onChange,
+  onPreview,
+}: SettingsVoiceSelectProps) {
+  const savedVoiceUnavailable = Boolean(value) && !voices.some((voice) => voice.voiceURI === value);
+  return (
+    <article className="settings-voice-item">
+      <div className="settings-voice-item__header">
+        <span className="settings-voice-item__icon" aria-hidden="true">{icon}</span>
+        <strong>{label}</strong>
+        <button type="button" onClick={onPreview}>试听</button>
+      </div>
+      <select
+        aria-label={`${label}音色`}
+        value={value}
+        disabled={disabled}
+        onChange={(event) => onChange(event.currentTarget.value)}
+      >
+        <option value="">系统默认</option>
+        {savedVoiceUnavailable ? <option value={value}>已保存音色（当前设备不可用）</option> : null}
+        {voices.map((voice) => (
+          <option key={voice.voiceURI} value={voice.voiceURI}>
+            {voice.name} · {voice.lang}{voice.localService ? ' · 本机' : ''}
+          </option>
+        ))}
+      </select>
+      <p>{voices.length > 0 ? `当前设备提供 ${voices.length} 种${language === 'en' ? '英文' : '中文'}音色` : '等待设备返回可用音色'}</p>
+    </article>
+  );
+}
+
 /* ─── Main Page ─── */
 
 export function SettingsPage({
@@ -144,41 +211,62 @@ export function SettingsPage({
   onExportStudyData,
   onImportStudyData,
   onClearLocalData,
-  onImportLifePhotoPackage,
+  onDownloadPrivateLifePhotos,
   localLifePhotoCount,
-  localLifePhotoImportedAt,
   words,
 }: SettingsPageProps) {
   const [isSaving, setIsSaving] = useState(false);
-  const [loadDraft, setLoadDraft] = useState(() => ({
-    dailyNewWordCount: settings.dailyNewWordCount,
-    dailyReviewLimit: settings.dailyReviewLimit,
-  }));
-  const [isImportingPhotos, setIsImportingPhotos] = useState(false);
+  const [settingsDraft, setSettingsDraft] = useState(() => createSettingsDraft(settings));
   const [isImportingStudyData, setIsImportingStudyData] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
   const [lastSaveStatus, setLastSaveStatus] = useState<'synced' | 'pending' | 'error' | null>(null);
-  const [lifePhotoImportSummary, setLifePhotoImportSummary] = useState<string | null>(null);
-  const [lifePhotoImportError, setLifePhotoImportError] = useState<string | null>(null);
   const [studyDataImportSummary, setStudyDataImportSummary] = useState<string | null>(null);
   const [studyDataImportError, setStudyDataImportError] = useState<string | null>(null);
+  const [englishVoices, setEnglishVoices] = useState<SpeechVoiceOption[]>([]);
+  const [chineseVoices, setChineseVoices] = useState<SpeechVoiceOption[]>([]);
   const [offlineImageState, setOfflineImageState] = useState<{
     phase: 'checking' | 'idle' | 'downloading' | 'complete' | 'error' | 'unsupported';
     completed: number;
     total: number;
     failed: number;
   }>({ phase: 'checking', completed: 0, total: 0, failed: 0 });
-  const lifePhotoInputRef = useRef<HTMLInputElement>(null);
+  const [privatePhotoState, setPrivatePhotoState] = useState<{
+    phase: 'idle' | 'downloading' | 'complete' | 'error';
+    completed: number;
+    total: number;
+    failed: number;
+    message: string | null;
+  }>({
+    phase: 'idle',
+    completed: localLifePhotoCount,
+    total: words.filter((word) => Boolean(word.relatedMedia?.lifePhoto)).length,
+    failed: 0,
+    message: null,
+  });
   const studyDataInputRef = useRef<HTMLInputElement>(null);
   const imageDownloadAbortRef = useRef<AbortController | null>(null);
+  const privatePhotoAbortRef = useRef<AbortController | null>(null);
   const offlineImageUrls = useMemo(() => collectOfflineImageUrls(words), [words]);
 
   useEffect(() => {
-    setLoadDraft({
-      dailyNewWordCount: settings.dailyNewWordCount,
-      dailyReviewLimit: settings.dailyReviewLimit,
+    setSettingsDraft(createSettingsDraft(settings));
+  }, [
+    settings.dailyNewWordCount,
+    settings.dailyReviewLimit,
+    settings.enableAudio,
+    settings.showImages,
+    settings.showExamples,
+    settings.showHints,
+    settings.englishVoiceURI,
+    settings.chineseVoiceURI,
+  ]);
+
+  useEffect(() => {
+    return subscribeSpeechVoices(() => {
+      setEnglishVoices(getAvailableSpeechVoices('en'));
+      setChineseVoices(getAvailableSpeechVoices('zh'));
     });
-  }, [settings.dailyNewWordCount, settings.dailyReviewLimit]);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -209,29 +297,28 @@ export function SettingsPage({
     };
   }, [offlineImageUrls]);
 
-  const runtimeInfo = useMemo(() => {
-    if (typeof window === 'undefined') {
-      return { isStandalone: false, isSafari: false };
-    }
-    return {
-      isStandalone:
-        window.matchMedia('(display-mode: standalone)').matches ||
-        (window.navigator as Navigator & { standalone?: boolean }).standalone === true,
-      isSafari: /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent),
-    };
-  }, []);
+  useEffect(() => {
+    setPrivatePhotoState((current) => ({
+      ...current,
+      completed: localLifePhotoCount,
+      total: words.filter((word) => Boolean(word.relatedMedia?.lifePhoto)).length,
+      phase: localLifePhotoCount > 0 && localLifePhotoCount >= current.total ? 'complete' : current.phase,
+    }));
+  }, [localLifePhotoCount, words]);
 
+  const hasPendingSettings = (Object.keys(settingsDraft) as (keyof EditableSettings)[])
+    .some((field) => settingsDraft[field] !== settings[field]);
   const saveText = isSaving
     ? '正在保存并同步设置…'
+    : hasPendingSettings
+      ? '有尚未保存的修改，点击右下角“确定修改”后统一同步。'
     : lastSaveStatus === 'synced' && lastSavedAt
       ? `已保存并同步到服务器 · ${lastSavedAt}`
       : lastSaveStatus === 'pending' && lastSavedAt
         ? `已保存在本机，等待服务器连接后同步 · ${lastSavedAt}`
         : lastSaveStatus === 'error'
           ? '设置保存失败，请稍后重试。'
-          : '调整学习负荷后点击确定，其他设置会即时生效。';
-  const hasPendingLoadSetting = loadDraft.dailyNewWordCount !== settings.dailyNewWordCount
-    || loadDraft.dailyReviewLimit !== settings.dailyReviewLimit;
+          : '修改学习设置后，点击“确定修改”一次保存并同步。';
   const taskStatus = task.completedAt ? '今日已完成' : task.totalAnswered > 0 ? '今日进行中' : '今日未开始';
   const taskEffectText = !task.completedAt && task.totalAnswered === 0
     ? '今日设置将影响今天的任务分配，建议在开始前完成调整。'
@@ -252,9 +339,17 @@ export function SettingsPage({
     }
   }
 
-  async function confirmLoadSetting() {
-    if (!hasPendingLoadSetting || isSaving) return;
-    await applySetting(loadDraft);
+  async function confirmSettings() {
+    if (!hasPendingSettings || isSaving) return;
+    await applySetting(settingsDraft);
+  }
+
+  function previewVoice(language: 'en' | 'zh', voiceURI: string) {
+    void speakSequence([{
+      text: language === 'en' ? 'Hello! Let us learn English together.' : '你好，我们一起来学习英语吧。',
+      lang: language === 'en' ? 'en-GB' : 'zh-CN',
+      voiceURI,
+    }]);
   }
 
   async function handleClearAllData() {
@@ -318,37 +413,53 @@ export function SettingsPage({
     }
   }
 
-  async function handleLifePhotoPackageChange(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.currentTarget.files?.[0];
-    if (!file) {
+  async function handlePrivatePhotoDownload() {
+    if (privatePhotoState.phase === 'downloading') {
+      privatePhotoAbortRef.current?.abort();
       return;
     }
+    const abortController = new AbortController();
+    privatePhotoAbortRef.current = abortController;
+    setPrivatePhotoState((current) => ({
+      ...current,
+      phase: 'downloading',
+      failed: 0,
+      message: null,
+    }));
+    void requestPersistentImageStorage();
 
-    if (
-      localLifePhotoCount > 0
-      && !window.confirm(`当前设备已有 ${localLifePhotoCount} 张生活照片。新照片包会完整替换旧照片包，继续吗？`)
-    ) {
-      event.currentTarget.value = '';
-      return;
-    }
-
-    setIsImportingPhotos(true);
-    setLifePhotoImportError(null);
     try {
-      const result = await onImportLifePhotoPackage(file);
-      const importedTime = formatImportedAt(result.importedAt);
-      setLifePhotoImportSummary(
-        `已导入 ${result.imported} 张，跳过 ${result.skipped} 张${importedTime ? ` · 导入时间 ${importedTime}` : ''}`,
-      );
-      setLastSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
+      const result = await onDownloadPrivateLifePhotos({
+        signal: abortController.signal,
+        onProgress: ({ completed, total, failed }) => {
+          setPrivatePhotoState({
+            phase: 'downloading',
+            completed,
+            total,
+            failed,
+            message: null,
+          });
+        },
+      });
+      setPrivatePhotoState({
+        phase: result.failed > 0 ? 'error' : 'complete',
+        completed: result.existing + result.downloaded,
+        total: result.total,
+        failed: result.failed,
+        message: result.failed > 0 ? '部分照片下载失败，可以继续补齐。' : null,
+      });
     } catch (caughtError) {
-      setLifePhotoImportSummary(null);
-      setLifePhotoImportError(
-        `导入失败：${caughtError instanceof Error ? caughtError.message : '无法读取生活照片包。'}`,
-      );
+      setPrivatePhotoState((current) => ({
+        ...current,
+        phase: abortController.signal.aborted ? 'idle' : 'error',
+        message: abortController.signal.aborted
+          ? null
+          : caughtError instanceof Error ? caughtError.message : '私密生活照片下载失败。',
+      }));
     } finally {
-      setIsImportingPhotos(false);
-      event.currentTarget.value = '';
+      if (privatePhotoAbortRef.current === abortController) {
+        privatePhotoAbortRef.current = null;
+      }
     }
   }
 
@@ -381,11 +492,6 @@ export function SettingsPage({
     }
   }
 
-  const savedLifePhotoTime = formatImportedAt(localLifePhotoImportedAt);
-  const lifePhotoStatus = lifePhotoImportSummary
-    ?? (localLifePhotoCount > 0
-      ? `已导入 ${localLifePhotoCount} 张${savedLifePhotoTime ? ` · 导入时间 ${savedLifePhotoTime}` : ''}，只保存在这台设备。`
-      : '尚未导入生活照片，只会保存在当前设备。');
   const offlineImagePercent = offlineImageState.total > 0
     ? Math.round((offlineImageState.completed / offlineImageState.total) * 100)
     : 0;
@@ -409,6 +515,17 @@ export function SettingsPage({
       : offlineImageState.completed > 0
         ? '继续下载'
         : '下载图片';
+  const privatePhotoPercent = privatePhotoState.total > 0
+    ? Math.round((privatePhotoState.completed / privatePhotoState.total) * 100)
+    : 0;
+  const privatePhotoStatusText = privatePhotoState.message
+    ?? (privatePhotoState.phase === 'downloading'
+      ? `正在从私有云端下载 ${privatePhotoState.completed}/${privatePhotoState.total}（${privatePhotoPercent}%）`
+      : privatePhotoState.phase === 'complete'
+        ? `已在本机保存全部 ${privatePhotoState.total} 张私密生活照片。`
+        : privatePhotoState.completed > 0
+          ? `本机已有 ${privatePhotoState.completed}/${privatePhotoState.total} 张，可继续补齐。`
+          : `验证过家庭验证码后，可下载 ${privatePhotoState.total} 张私密生活照片。`);
 
   return (
     <main className="page page--home page--settings" data-profile={settings.profileId}>
@@ -451,123 +568,120 @@ export function SettingsPage({
           </div>
         </section>
 
-        {/* ─── Four-column settings console ─── */}
+        {/* ─── Unified settings console ─── */}
         <section className="settings-panel-grid">
-          {/* Top-left: 学习负荷设置 */}
-          <section className="section-block settings-panel settings-panel--volume">
+          <section className="section-block settings-panel settings-panel--combined">
             <div className="section-block__header">
-              <h2><span className="settings-panel__icon settings-panel__icon--info">ℹ</span> 学习负荷设置</h2>
-              <p>根据孩子的学习能力与时间，合理设置学习负荷。</p>
+              <h2><span className="settings-panel__icon settings-panel__icon--info">⚙</span> 学习设置</h2>
+              <p>调整学习负荷、学习体验和音色，确认后一次保存并同步。</p>
             </div>
-            <div className="settings-control-grid">
-              <SettingsNumberControl
-                icon="🌿"
-                label="每日新词"
-                description=""
-                value={loadDraft.dailyNewWordCount}
-                min={MIN_NEW_WORD_COUNT}
-                suffix=" 个"
-                hint={`最少 ${MIN_NEW_WORD_COUNT} 个`}
-                onChange={(dailyNewWordCount) => setLoadDraft((current) => ({ ...current, dailyNewWordCount }))}
-              />
-              <SettingsNumberControl
-                icon="🕐"
-                label="每日复习上限"
-                description=""
-                value={loadDraft.dailyReviewLimit}
-                min={MIN_REVIEW_LIMIT}
-                suffix=" 个"
-                hint={`最少 ${MIN_REVIEW_LIMIT} 个`}
-                onChange={(dailyReviewLimit) => setLoadDraft((current) => ({ ...current, dailyReviewLimit }))}
-              />
+            <div className="settings-unified-grid">
+              <section className="settings-unified-group settings-unified-group--volume">
+                <div className="settings-unified-group__header">
+                  <h3>学习负荷</h3>
+                  <p>设置每日任务数量</p>
+                </div>
+                <div className="settings-control-grid">
+                  <SettingsNumberControl
+                    icon="🌿"
+                    label="每日新词"
+                    description=""
+                    value={settingsDraft.dailyNewWordCount}
+                    min={MIN_NEW_WORD_COUNT}
+                    suffix=" 个"
+                    hint={`最少 ${MIN_NEW_WORD_COUNT} 个`}
+                    onChange={(dailyNewWordCount) => setSettingsDraft((current) => ({ ...current, dailyNewWordCount }))}
+                  />
+                  <SettingsNumberControl
+                    icon="🕐"
+                    label="每日复习上限"
+                    description=""
+                    value={settingsDraft.dailyReviewLimit}
+                    min={MIN_REVIEW_LIMIT}
+                    suffix=" 个"
+                    hint={`最少 ${MIN_REVIEW_LIMIT} 个`}
+                    onChange={(dailyReviewLimit) => setSettingsDraft((current) => ({ ...current, dailyReviewLimit }))}
+                  />
+                </div>
+              </section>
+
+              <section className="settings-unified-group settings-unified-group--experience">
+                <div className="settings-unified-group__header">
+                  <h3>学习体验</h3>
+                  <p>控制题目辅助内容</p>
+                </div>
+                <div className="settings-toggle-list">
+                  <SettingsToggleRow
+                    icon="🔊"
+                    label="学习语音"
+                    description="播放英文和中文发音。"
+                    enabled={settingsDraft.enableAudio}
+                    onToggle={() => setSettingsDraft((current) => ({ ...current, enableAudio: !current.enableAudio }))}
+                  />
+                  <SettingsToggleRow
+                    icon="🖼"
+                    label="图片题"
+                    description="以图片形式呈现题目。"
+                    enabled={settingsDraft.showImages}
+                    onToggle={() => setSettingsDraft((current) => ({ ...current, showImages: !current.showImages }))}
+                  />
+                  <SettingsToggleRow
+                    icon="❝"
+                    label="例句展示"
+                    description="展示真实语境例句。"
+                    enabled={settingsDraft.showExamples}
+                    onToggle={() => setSettingsDraft((current) => ({ ...current, showExamples: !current.showExamples }))}
+                  />
+                  <SettingsToggleRow
+                    icon="✏️"
+                    label="拼写提示"
+                    description="拼写时提供字母提示。"
+                    enabled={settingsDraft.showHints}
+                    onToggle={() => setSettingsDraft((current) => ({ ...current, showHints: !current.showHints }))}
+                  />
+                </div>
+              </section>
+
+              <section className="settings-unified-group settings-unified-group--voice">
+                <div className="settings-unified-group__header">
+                  <h3>音色选择</h3>
+                  <p>分别选择英文和中文发音</p>
+                </div>
+                <div className="settings-voice-list">
+                  <SettingsVoiceSelect
+                    icon="EN"
+                    label="英文发音"
+                    language="en"
+                    value={settingsDraft.englishVoiceURI}
+                    voices={englishVoices}
+                    disabled={isSaving}
+                    onChange={(englishVoiceURI) => setSettingsDraft((current) => ({ ...current, englishVoiceURI }))}
+                    onPreview={() => previewVoice('en', settingsDraft.englishVoiceURI)}
+                  />
+                  <SettingsVoiceSelect
+                    icon="中"
+                    label="中文发音"
+                    language="zh"
+                    value={settingsDraft.chineseVoiceURI}
+                    voices={chineseVoices}
+                    disabled={isSaving}
+                    onChange={(chineseVoiceURI) => setSettingsDraft((current) => ({ ...current, chineseVoiceURI }))}
+                    onPreview={() => previewVoice('zh', settingsDraft.chineseVoiceURI)}
+                  />
+                </div>
+              </section>
             </div>
             <button
-              className="primary-button settings-volume-confirm"
+              className="primary-button settings-unified-confirm"
               type="button"
-              disabled={!hasPendingLoadSetting || isSaving}
-              onClick={() => void confirmLoadSetting()}
+              disabled={!hasPendingSettings || isSaving}
+              onClick={() => void confirmSettings()}
             >
-              {isSaving ? '保存中…' : '确定'}
+              {isSaving ? '保存并同步中…' : '确定修改'}
             </button>
           </section>
 
-          {/* Top-right: 设备与使用方式 */}
-          <section className="section-block settings-panel settings-panel--device">
-            <div className="section-block__header">
-              <h2><span className="settings-panel__icon settings-panel__icon--device">📱</span> 设备与使用方式</h2>
-              <p>推荐的设备与浏览器设置，获得更稳定的学习体验。</p>
-            </div>
-            <div className="settings-device-list">
-              <article className="settings-device-item">
-                <span className="settings-device-item__icon">📱</span>
-                <div>
-                  <strong>iPad 独立模式</strong>
-                  <p>建议在 iPad 上使用完整功能。</p>
-                </div>
-                <span className="settings-badge settings-badge--recommend">推荐</span>
-              </article>
-              <article className="settings-device-item">
-                <span className="settings-device-item__icon">🧭</span>
-                <div>
-                  <strong>Safari 环境</strong>
-                  <p>使用 Safari 浏览器访问，体验更佳。</p>
-                </div>
-                <span className={`settings-badge ${runtimeInfo.isSafari ? 'settings-badge--active' : 'settings-badge--recommend'}`}>
-                  {runtimeInfo.isSafari ? '已启用' : '推荐'}
-                </span>
-              </article>
-              <article className="settings-device-item">
-                <span className="settings-device-item__icon">🔄</span>
-                <div>
-                  <strong>横屏使用</strong>
-                  <p>推荐横屏使用，内容与操作更舒适。</p>
-                </div>
-                <span className={`settings-badge ${settings.preferLandscape ? 'settings-badge--active' : 'settings-badge--recommend'}`}>
-                  {settings.preferLandscape ? '已启用' : '推荐'}
-                </span>
-              </article>
-            </div>
-          </section>
-
-          {/* Bottom-left: 学习体验设置 */}
-          <section className="section-block settings-panel settings-panel--experience">
-            <div className="section-block__header">
-              <h2><span className="settings-panel__icon settings-panel__icon--heart">❤️</span> 学习体验设置</h2>
-              <p>个性化学习体验，让学习更顺畅、更有效。</p>
-            </div>
-            <div className="settings-toggle-list">
-              <SettingsToggleRow
-                icon="🔊"
-                label="英文音频"
-                description="播放英文发音，帮助孩子磨耳朵。"
-                enabled={settings.enableAudio}
-                onToggle={() => void applySetting({ enableAudio: !settings.enableAudio })}
-              />
-              <SettingsToggleRow
-                icon="🖼"
-                label="图片题"
-                description="以图片形式呈现题目，更直观易懂。"
-                enabled={settings.showImages}
-                onToggle={() => void applySetting({ showImages: !settings.showImages })}
-              />
-              <SettingsToggleRow
-                icon="❝"
-                label="例句展示"
-                description="展示实用例句，理解单词在真实语境中的用法。"
-                enabled={settings.showExamples}
-                onToggle={() => void applySetting({ showExamples: !settings.showExamples })}
-              />
-              <SettingsToggleRow
-                icon="✏️"
-                label="拼写提示"
-                description="拼写时提供字母提示，降低拼写难度。"
-                enabled={settings.showHints}
-                onToggle={() => void applySetting({ showHints: !settings.showHints })}
-              />
-            </div>
-          </section>
-
-          {/* Bottom-right: 本地数据管理 */}
+          {/* Right: 本地数据管理 */}
           <section className="section-block settings-panel settings-panel--danger">
             <div className="section-block__header">
               <h2><span className="settings-panel__icon settings-panel__icon--data">⚙️</span> 本地数据管理</h2>
@@ -607,27 +721,27 @@ export function SettingsPage({
                   {isImportingStudyData ? '恢复中…' : '选择备份'}
                 </button>
               </article>
-              <article className="settings-data-item">
-                <span className="settings-data-item__icon">🖼</span>
-                <div>
-                  <strong>导入生活照片包</strong>
-                  <p>{lifePhotoStatus}</p>
-                  {lifePhotoImportError && <p className="settings-data-error" role="alert">{lifePhotoImportError}</p>}
+              <article className="settings-data-item settings-data-item--images">
+                <span className="settings-data-item__icon">🔐</span>
+                <div aria-live="polite">
+                  <strong>下载私密生活照片</strong>
+                  <p>{privatePhotoStatusText}</p>
+                  {(privatePhotoState.phase === 'downloading' || privatePhotoState.completed > 0) && (
+                    <span className="settings-image-download-progress" aria-hidden="true">
+                      <span style={{ width: `${privatePhotoPercent}%` }} />
+                    </span>
+                  )}
                 </div>
-                <input
-                  ref={lifePhotoInputRef}
-                  type="file"
-                  accept=".zip,application/zip"
-                  hidden
-                  onChange={(event) => void handleLifePhotoPackageChange(event)}
-                />
                 <button
                   className="secondary-button"
                   type="button"
-                  disabled={isImportingPhotos}
-                  onClick={() => lifePhotoInputRef.current?.click()}
+                  onClick={() => void handlePrivatePhotoDownload()}
                 >
-                  {isImportingPhotos ? '导入中…' : '选择照片包'}
+                  {privatePhotoState.phase === 'downloading'
+                    ? '停止下载'
+                    : privatePhotoState.phase === 'complete'
+                      ? '已完成'
+                      : privatePhotoState.completed > 0 ? '继续下载' : '下载照片'}
                 </button>
               </article>
               <article className="settings-data-item settings-data-item--images">

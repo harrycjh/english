@@ -1,6 +1,7 @@
 import type { AnswerEvent } from '../models/answer-event';
 import type { LearningRecord } from '../models/learning-record';
 import { createStudyDateKey } from './study-day';
+import { MASTERY_LEVEL_COLORS } from './mastery-level-palette';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const TARGET_RETENTION_AT_DUE = 0.75;
@@ -23,11 +24,6 @@ const CURVE_INTERVAL_DAYS = [
   365,
 ];
 const OBSERVED_INTERVAL_LIMITS = [0.25, 0.5, 1, 2, 3, 7, 14, 21, 30, 60, 90, 180, 365];
-const MASTERY_LEVEL_COLORS = [
-  '#b8ad9b', '#e2bf55', '#72b86b', '#51a8d8', '#617bd2',
-  '#7659b7', '#b35b9a', '#d75c5c', '#49454a', '#ff9b22',
-  '#2f8f46',
-] as const;
 const MIN_PERSONAL_MODEL_SAMPLES = 6;
 const MIN_PERSONAL_MODEL_BUCKETS = 2;
 const EBBINGHAUS_LONG_TERM_ANCHORS = [
@@ -65,6 +61,14 @@ export interface MasteryLevelTimelinePoint {
   counts: Record<number, number>;
 }
 
+export interface MasteryLevelAccuracyPoint {
+  level: number;
+  correctCount: number;
+  answerCount: number;
+  accuracy: number | null;
+  color: string;
+}
+
 export interface PersonalCurveModel {
   source: 'default' | 'answer-data';
   alpha: number | null;
@@ -82,6 +86,7 @@ export interface MemoryStatistics {
   personalCurveModel: PersonalCurveModel;
   masteryLevels: MasteryLevelPoint[];
   masteryLevelTimeline: MasteryLevelTimelinePoint[];
+  masteryLevelAccuracy: MasteryLevelAccuracyPoint[];
   averageHalfLifeDays: number;
   medianHalfLifeDays: number;
   averageRetentionNow: number;
@@ -257,6 +262,30 @@ function createMasteryLevels(estimates: WordMemoryEstimate[]): MasteryLevelPoint
   }));
 }
 
+export function buildMasteryLevelAccuracy(
+  answerEvents: AnswerEvent[],
+): MasteryLevelAccuracyPoint[] {
+  const totals = MASTERY_LEVEL_COLORS.map(() => ({ correctCount: 0, answerCount: 0 }));
+
+  for (const event of answerEvents) {
+    const masteryLevel = event.learningStateBefore?.masteryLevel;
+    if (!Number.isFinite(masteryLevel)) continue;
+    const level = clamp(Math.floor(masteryLevel!), 0, MASTERY_LEVEL_COLORS.length - 1);
+    totals[level].answerCount += 1;
+    totals[level].correctCount += event.isCorrect ? 1 : 0;
+  }
+
+  return totals.map((total, level) => ({
+    level,
+    color: MASTERY_LEVEL_COLORS[level],
+    correctCount: total.correctCount,
+    answerCount: total.answerCount,
+    accuracy: total.answerCount > 0
+      ? (total.correctCount / total.answerCount) * 100
+      : null,
+  }));
+}
+
 function createDateKey(date: Date): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -366,6 +395,7 @@ export function buildMemoryStatistics(
     personalCurveModel,
     masteryLevels: createMasteryLevels(estimates),
     masteryLevelTimeline: buildMasteryLevelTimeline(recordsById, answerEvents, now),
+    masteryLevelAccuracy: buildMasteryLevelAccuracy(answerEvents),
     averageHalfLifeDays: estimates.length > 0
       ? estimates.reduce((sum, estimate) => sum + estimate.halfLifeDays, 0) / estimates.length
       : 0,

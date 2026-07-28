@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createEmptyRecord, evaluateAnswer, getMasteredReviewDelayDays } from './spaced-repetition';
+import { createEmptyRecord, evaluateAnswer } from './spaced-repetition';
 import { addDaysToStudyDateKey, createStudyDateKey } from './study-day';
 
 function expectDueOnStudyDay(record: ReturnType<typeof createEmptyRecord>, answeredAt: Date, delayDays: number) {
@@ -59,17 +59,12 @@ describe('spaced repetition', () => {
     expect(record).toMatchObject({ masteryLevel: 0, reviewStage: 0, wrongCount: 1 });
   });
 
-  it('moves level 9 words to level 10 mastered and schedules deterministic 60-90 day reviews', () => {
+  it('moves level 9 words to level 10 mastered with no further daily review', () => {
     const answeredAt = new Date('2026-07-21T08:00:00.000Z');
     const current = { ...createEmptyRecord('word-a'), masteryLevel: 9, reviewStage: 9 };
     const record = evaluateAnswer(current, true, answeredAt);
-    const delay = getMasteredReviewDelayDays('word-a', answeredAt);
 
-    expect(record).toMatchObject({ masteryLevel: 10, reviewStage: 10 });
-    expect(delay).toBeGreaterThanOrEqual(60);
-    expect(delay).toBeLessThanOrEqual(90);
-    expect(delay).toBe(getMasteredReviewDelayDays('word-a', answeredAt));
-    expectDueOnStudyDay(record, answeredAt, delay);
+    expect(record).toMatchObject({ masteryLevel: 10, reviewStage: 10, nextDueAt: null });
     expect(evaluateAnswer(record, true, answeredAt).masteryLevel).toBe(10);
   });
 });

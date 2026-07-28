@@ -1,6 +1,4 @@
 import type { WordRecord } from '../models/word';
-import { getStudyPartOfSpeech, getStudyText } from './word-service';
-
 function normalizeExample(example: string | undefined): string | null {
   const trimmed = example?.trim();
   return trimmed ? trimmed : null;
@@ -18,15 +16,33 @@ export function getExampleSentences(word: WordRecord): string[] {
     return curated.slice(0, 2);
   }
 
-  const studyText = getStudyText(word);
-  const partOfSpeech = getStudyPartOfSpeech(word);
-  if (partOfSpeech.includes('adj')) {
-    return [`This is ${studyText}.`];
-  }
+  return [];
+}
 
-  if (partOfSpeech.includes('v')) {
-    return [`I can ${studyText}.`];
-  }
+export function getExampleTranslations(word: WordRecord): string[] {
+  return (word.exampleTranslations ?? [])
+    .map(normalizeExample)
+    .filter(Boolean)
+    .slice(0, 2) as string[];
+}
 
-  return [`I can see ${studyText}.`];
+export function getExampleTranslationFocus(word: WordRecord): string[] {
+  return (word.exampleTranslationFocus ?? [])
+    .map(normalizeExample)
+    .filter(Boolean)
+    .slice(0, 2) as string[];
+}
+
+export interface ExamplePair {
+  sentence: string;
+  translation: string;
+}
+
+export function getPrimaryExamplePair(word: WordRecord): ExamplePair | null {
+  const sentence = getExampleSentences(word)[0];
+  if (!sentence) return null;
+  return {
+    sentence,
+    translation: getExampleTranslations(word)[0] ?? '',
+  };
 }

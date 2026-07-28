@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import { evaluateLearningRecord } from './learning-schedule.mjs';
 
 const SYNC_SCHEMA_VERSION = 1;
+const DEVICE_TOKEN_TTL_MS = 365 * 24 * 60 * 60 * 1000;
 
 function base64Url(value) {
   return Buffer.from(value).toString('base64url');
@@ -34,6 +35,14 @@ function verifyToken(token, secret) {
   } catch {
     return null;
   }
+}
+
+function createDeviceToken(userId, deviceId, secret) {
+  return signToken({
+    deviceId,
+    userId,
+    expiresAt: Date.now() + DEVICE_TOKEN_TTL_MS,
+  }, secret);
 }
 
 function mergeEvents(local = [], remote = []) {
@@ -339,7 +348,15 @@ function bearerToken(headers) {
   return value.startsWith('Bearer ') ? value.slice(7) : null;
 }
 
-export function createHandler(repository, env) {
+function requestedPhotoWordIds(body) {
+  if (!Array.isArray(body.wordIds) || body.wordIds.length === 0 || body.wordIds.length > 50) {
+    return null;
+  }
+  const wordIds = body.wordIds.map((wordId) => String(wordId));
+  return wordIds.every((wordId) => /^ket_[a-z0-9_]+$/.test(wordId)) ? wordIds : null;
+}
+
+export function createHandler(repository, env, dependencies = {}) {
   return async function handler(event) {
     try {
       const request = parseInvocation(event);
@@ -357,11 +374,11 @@ export function createHandler(repository, env) {
         const deviceId = String(request.body.deviceId ?? '');
         if (!deviceId) return response(400, { code: 'DEVICE_ID_REQUIRED' }, env.ALLOWED_ORIGIN);
         await repository.registerDevice(env.FIXED_USER_ID, deviceId);
-        const deviceToken = signToken({
+        const deviceToken = createDeviceToken(
+          env.FIXED_USER_ID,
           deviceId,
-          userId: env.FIXED_USER_ID,
-          expiresAt: Date.now() + 180 * 24 * 60 * 60 * 1000,
-        }, env.TOKEN_SIGNING_SECRET);
+          env.TOKEN_SIGNING_SECRET,
+        );
         return response(200, { deviceToken }, env.ALLOWED_ORIGIN);
       }
 
@@ -372,11 +389,35 @@ export function createHandler(repository, env) {
       if (!await repository.isDeviceActive(env.FIXED_USER_ID, tokenPayload.deviceId)) {
         return response(401, { code: 'DEVICE_REVOKED' }, env.ALLOWED_ORIGIN);
       }
+      const refreshedDeviceToken = createDeviceToken(
+        env.FIXED_USER_ID,
+        tokenPayload.deviceId,
+        env.TOKEN_SIGNING_SECRET,
+      );
 
       if (request.path === '/api/device/verify') {
         const actualHash = hashFamilyCode(String(request.body.familyCode ?? ''), env.FAMILY_CODE_SALT);
         const valid = safeEqual(actualHash, env.FAMILY_CODE_HASH);
-        return response(valid ? 200 : 403, valid ? { valid: true } : { code: 'INVALID_FAMILY_CODE' }, env.ALLOWED_ORIGIN);
+        return response(
+          valid ? 200 : 403,
+          valid ? { valid: true, deviceToken: refreshedDeviceToken } : { code: 'INVALID_FAMILY_CODE' },
+          env.ALLOWED_ORIGIN,
+        );
+      }
+
+      if (request.path === '/api/media/sign') {
+        const wordIds = requestedPhotoWordIds(request.body);
+        if (!wordIds) {
+          return response(400, { code: 'INVALID_PHOTO_WORD_IDS' }, env.ALLOWED_ORIGIN);
+        }
+        if (!dependencies.photoService) {
+          return response(503, { code: 'PHOTO_SERVICE_UNAVAILABLE' }, env.ALLOWED_ORIGIN);
+        }
+        const signedPhotos = await dependencies.photoService.sign(wordIds);
+        return response(200, {
+          ...signedPhotos,
+          deviceToken: refreshedDeviceToken,
+        }, env.ALLOWED_ORIGIN);
       }
 
       if (request.path === '/api/sync') {
@@ -403,6 +444,7 @@ export function createHandler(repository, env) {
             schemaVersion: SYNC_SCHEMA_VERSION,
             cursor: current.cursor,
             serverTime: new Date().toISOString(),
+            deviceToken: refreshedDeviceToken,
             upToDate: current.isCurrent,
             snapshot: current.snapshot,
           }, env.ALLOWED_ORIGIN);
@@ -424,6 +466,7 @@ export function createHandler(repository, env) {
             schemaVersion: SYNC_SCHEMA_VERSION,
             cursor: merged.cursor,
             serverTime: new Date().toISOString(),
+            deviceToken: refreshedDeviceToken,
             upToDate: merged.snapshot ? false : true,
             snapshot: merged.snapshot,
           }, env.ALLOWED_ORIGIN);
@@ -437,6 +480,7 @@ export function createHandler(repository, env) {
           schemaVersion: SYNC_SCHEMA_VERSION,
           cursor: merged.cursor,
           serverTime: new Date().toISOString(),
+          deviceToken: refreshedDeviceToken,
           upToDate: false,
           snapshot: merged.snapshot,
         }, env.ALLOWED_ORIGIN);
@@ -450,12 +494,13 @@ export function createHandler(repository, env) {
   };
 }
 
-let defaultHandler;
-
 export async function handler(event, context) {
-  if (!defaultHandler) {
-    const { createTablestoreRepositoryFromEnv } = await import('./tablestore-repository.mjs');
-    defaultHandler = createHandler(createTablestoreRepositoryFromEnv(process.env, context), process.env);
-  }
-  return defaultHandler(event, context);
+  const { createTablestoreRepositoryFromEnv } = await import('./tablestore-repository.mjs');
+  const { createOssPhotoServiceFromEnv } = await import('./oss-photo-service.mjs');
+  const invocationHandler = createHandler(
+    createTablestoreRepositoryFromEnv(process.env, context),
+    process.env,
+    { photoService: createOssPhotoServiceFromEnv(process.env, context) },
+  );
+  return invocationHandler(event, context);
 }

@@ -1,30 +1,81 @@
-import { AudioIconButton } from './AudioIconButton';
+import { useEffect, useState } from 'react';
 import type { ChoiceQuestion } from '../services/question-service';
-import { speakWord } from '../services/audio-service';
+import { speakChinese, speakWord } from '../services/audio-service';
+import { getPrimaryExamplePair } from '../services/example-service';
 import { getPrimaryOxfordRefLabel } from '../services/word-service';
 import type { LocalLifePhotoView } from '../models/local-media';
+import { AudioIconButton } from './AudioIconButton';
+import { LearningLevelControl } from './LearningLevelControl';
 import { QuestionMedia } from './QuestionMedia';
+import { QuestionExampleResult } from './QuestionExampleResult';
 
 interface QuestionImageProps {
   question: ChoiceQuestion;
   disabled: boolean;
   enableAudio: boolean;
+  questionLevel: number;
+  upgradeToLevel?: number | null;
   selectedAnswer: string | null;
   localLifePhoto?: LocalLifePhotoView;
+  revealLifePhoto?: boolean;
   onSubmit: (answer: string) => void;
 }
 
-export function QuestionImage({ question, disabled, enableAudio, selectedAnswer, localLifePhoto, onSubmit }: QuestionImageProps) {
+export function isPortraitQuestionImage(width: number, height: number): boolean {
+  return width > 0 && height > width;
+}
+
+export function QuestionImage({
+  question,
+  disabled,
+  enableAudio,
+  questionLevel,
+  upgradeToLevel,
+  selectedAnswer,
+  localLifePhoto,
+  revealLifePhoto = false,
+  onSubmit,
+}: QuestionImageProps) {
+  const [isPortraitLifePhoto, setIsPortraitLifePhoto] = useState(false);
   const oxfordLabel = getPrimaryOxfordRefLabel(question.word);
+  const imageStrategy = revealLifePhoto ? 'life-photo' : (question.imageStrategy ?? 'comfy');
+  const example = getPrimaryExamplePair(question.word);
+  const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
+  const showExample = disabled
+    && Boolean(example?.sentence)
+    && (answeredCorrectly || questionLevel === 1);
+
+  useEffect(() => {
+    setIsPortraitLifePhoto(false);
+  }, [question.word.id, revealLifePhoto]);
 
   return (
-    <section className="question-panel">
-      <div className="image-stage">
-        {enableAudio ? <AudioIconButton onClick={() => speakWord(question.word)} className="audio-icon-button--overlay" /> : null}
+    <section className={`question-panel question-panel--image-choice question-panel--level-${questionLevel}${revealLifePhoto ? ' is-life-photo-reveal' : ''}${isPortraitLifePhoto ? ' is-portrait-life-photo' : ''}`}>
+      <div
+        className="image-stage"
+        onLoadCapture={(event) => {
+          if (!revealLifePhoto) return;
+          const image = event.target as HTMLImageElement;
+          setIsPortraitLifePhoto(
+            isPortraitQuestionImage(image.naturalWidth, image.naturalHeight),
+          );
+        }}
+      >
+        <span className="question-word__label">
+          {questionLevel === 1 ? '图片识词' : '图片选词'}
+        </span>
+        <LearningLevelControl
+          level={questionLevel}
+          upgradeTo={upgradeToLevel}
+          onAudio={enableAudio && questionLevel !== 1
+            ? () => questionLevel === 2 ? speakChinese(question.word) : speakWord(question.word)
+            : undefined}
+          audioLabel={questionLevel === 2 ? '播放中文释义' : '播放英文发音'}
+        />
         {question.word.imageApproved || question.imageStrategy === 'related-priority' ? (
           <QuestionMedia
             word={question.word}
-            strategy={question.imageStrategy ?? 'comfy'}
+            strategy={imageStrategy}
             localLifePhoto={localLifePhoto}
             alt="题目图片"
             className="image-stage__image"
@@ -40,11 +91,32 @@ export function QuestionImage({ question, disabled, enableAudio, selectedAnswer,
       </div>
 
       <div className="question-panel__answer-column">
-        <div className="question-panel__meta">
-          <p>{question.prompt}</p>
-        </div>
+        {questionLevel !== 1 && questionLevel !== 2 ? (
+          <div className="question-panel__meta">
+            <p>{question.prompt}</p>
+          </div>
+        ) : null}
 
-        <div className="option-grid">
+        {questionLevel === 1 && question.word.phonetic ? (
+          <div className="question-panel__word-cue">
+            <strong>{question.studyText}</strong>
+            <div className="question-phonetic-row">
+              <span>{question.word.phonetic}</span>
+              {enableAudio ? (
+                <AudioIconButton onClick={() => speakWord(question.word)} />
+              ) : null}
+            </div>
+          </div>
+        ) : null}
+
+        <QuestionExampleResult
+          sentence={example?.sentence}
+          translation={example?.translation}
+          visible={showExample}
+          reserveSpace
+        />
+
+        <div className="option-grid question-panel__bottom-options">
           {question.options.map((option) => {
             const isSelected = selectedAnswer === option;
             const isCorrect = option === question.correctAnswer;

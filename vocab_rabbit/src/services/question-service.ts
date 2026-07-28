@@ -1,15 +1,23 @@
 import type { LearningRecord } from '../models/learning-record';
 import { defaultParentSetting, type ParentSetting } from '../models/parent-setting';
 import type { WordRecord } from '../models/word';
-import { getStudyChinese, getStudyText } from './word-service';
+import { buildExampleCloze } from './example-cloze-service';
+import {
+  detectEnglishInflection,
+  inflectEnglishOption,
+} from './english-inflection-service';
+import { getStudyChinese, getStudyPartOfSpeech, getStudyText } from './word-service';
 
 export type QuestionKind =
   | 'recognition'
   | 'image-choice'
+  | 'image-english-choice'
   | 'image-answer-choice'
   | 'text-choice'
+  | 'sentence-choice'
+  | 'letter-choice'
   | 'fill-blank';
-export type QuestionImageStrategy = 'comfy' | 'related-priority';
+export type QuestionImageStrategy = 'comfy' | 'related-priority' | 'life-photo';
 
 interface BaseQuestion {
   kind: QuestionKind;
@@ -26,7 +34,7 @@ export interface RecognitionQuestion extends BaseQuestion {
 }
 
 export interface ChoiceQuestion extends BaseQuestion {
-  kind: 'image-choice' | 'text-choice';
+  kind: 'image-choice' | 'image-english-choice' | 'text-choice';
   options: string[];
   correctAnswer: string;
   imageStrategy?: QuestionImageStrategy;
@@ -39,14 +47,37 @@ export interface ImageAnswerChoiceQuestion extends BaseQuestion {
   imageStrategy: 'comfy';
 }
 
+export interface SentenceChoiceQuestion extends BaseQuestion {
+  kind: 'sentence-choice';
+  sentence: string;
+  sentenceTranslation: string;
+  sentenceTranslationFocus: string;
+  maskedSentence: string;
+  options: string[];
+  correctAnswer: string;
+}
+
+export interface LetterChoiceQuestion extends BaseQuestion {
+  kind: 'letter-choice';
+  maskedCharacters: string[];
+  options: string[];
+  correctAnswer: string;
+}
+
 export interface FillBlankQuestion extends BaseQuestion {
   kind: 'fill-blank';
   maskedCharacters: string[];
   missingLetters: string[];
-  keyboardLetters: string[];
+  inputMode: 'partial' | 'full';
 }
 
-export type Question = RecognitionQuestion | ChoiceQuestion | ImageAnswerChoiceQuestion | FillBlankQuestion;
+export type Question =
+  | RecognitionQuestion
+  | ChoiceQuestion
+  | ImageAnswerChoiceQuestion
+  | SentenceChoiceQuestion
+  | LetterChoiceQuestion
+  | FillBlankQuestion;
 
 function shuffle<T>(items: T[]): T[] {
   const copy = [...items];
@@ -92,6 +123,34 @@ function buildDistractors(word: WordRecord, allWords: WordRecord[]): WordRecord[
   return [...uniqueByChinese.values()].slice(0, 3);
 }
 
+function buildEnglishDistractors(
+  word: WordRecord,
+  allWords: WordRecord[],
+  limit: number = 3,
+): WordRecord[] {
+  const studyText = getStudyText(word).toLowerCase();
+  const targetPartOfSpeech = getStudyPartOfSpeech(word);
+  const partOfSpeechTags = new Set(targetPartOfSpeech.match(/[a-z]+/gi) ?? []);
+  const sharesPartOfSpeech = (candidate: WordRecord) => {
+    const candidateTags = getStudyPartOfSpeech(candidate).match(/[a-z]+/gi) ?? [];
+    return candidateTags.some((tag) => partOfSpeechTags.has(tag));
+  };
+  const uniqueByEnglish = new Map<string, WordRecord>();
+  const candidates = [
+    ...buildDistractors(word, allWords).filter(sharesPartOfSpeech),
+    ...shuffle(allWords.filter((candidate) => candidate.id !== word.id && sharesPartOfSpeech(candidate))),
+    ...shuffle(allWords.filter((candidate) => candidate.id !== word.id)),
+  ];
+  for (const candidate of candidates) {
+    const candidateText = getStudyText(candidate).toLowerCase();
+    if (candidateText !== studyText && !uniqueByEnglish.has(candidateText)) {
+      uniqueByEnglish.set(candidateText, candidate);
+    }
+    if (uniqueByEnglish.size >= limit) break;
+  }
+  return [...uniqueByEnglish.values()].slice(0, limit);
+}
+
 function buildRecognitionQuestion(word: WordRecord): RecognitionQuestion {
   return {
     kind: 'recognition',
@@ -126,6 +185,19 @@ function buildChoiceQuestion(
   };
 }
 
+function buildImageEnglishChoiceQuestion(word: WordRecord, allWords: WordRecord[]): ChoiceQuestion {
+  const studyText = getStudyText(word);
+  return {
+    kind: 'image-english-choice',
+    prompt: '看看图片，选出正确英文',
+    studyText,
+    word,
+    options: shuffle([studyText, ...buildEnglishDistractors(word, allWords).map(getStudyText)]),
+    correctAnswer: studyText,
+    imageStrategy: 'comfy',
+  };
+}
+
 function buildImageAnswerChoiceQuestion(word: WordRecord, allWords: WordRecord[]): ImageAnswerChoiceQuestion {
   return {
     kind: 'image-answer-choice',
@@ -135,6 +207,43 @@ function buildImageAnswerChoiceQuestion(word: WordRecord, allWords: WordRecord[]
     options: shuffle([word, ...buildDistractors(word, allWords)]),
     correctAnswer: word.id,
     imageStrategy: 'comfy',
+  };
+}
+
+function buildSentenceChoiceQuestion(word: WordRecord, allWords: WordRecord[]): SentenceChoiceQuestion | null {
+  const cloze = buildExampleCloze(word);
+  if (!cloze) return null;
+  const studyText = getStudyText(word);
+  const inflection = detectEnglishInflection(
+    studyText,
+    cloze.matchedText,
+    getStudyPartOfSpeech(word),
+  );
+  const capitalize = /^[A-Z]/.test(cloze.matchedText);
+  const correctAnswer = cloze.matchedText;
+  const uniqueOptions = new Map<string, string>([
+    [correctAnswer.toLowerCase(), correctAnswer],
+  ]);
+  for (const candidate of buildEnglishDistractors(word, allWords, 40)) {
+    const option = inflectEnglishOption(getStudyText(candidate), inflection, capitalize);
+    const normalizedOption = option.toLowerCase();
+    if (!uniqueOptions.has(normalizedOption)) uniqueOptions.set(normalizedOption, option);
+    if (uniqueOptions.size >= 4) break;
+  }
+  const options = shuffle([
+    ...uniqueOptions.values(),
+  ]);
+  return {
+    kind: 'sentence-choice',
+    prompt: '选择最适合这个例句的单词',
+    studyText,
+    word,
+    sentence: cloze.sentence,
+    sentenceTranslation: cloze.translation,
+    sentenceTranslationFocus: cloze.translationFocus,
+    maskedSentence: cloze.maskedSentence,
+    options,
+    correctAnswer,
   };
 }
 
@@ -167,7 +276,7 @@ function chooseContiguousIndices(letters: string[], minimum: number, maximum: nu
 
 function buildFillBlankQuestion(
   word: WordRecord,
-  mode: 'one-two' | 'two-four' | 'full',
+  mode: 'two-four' | 'full',
 ): FillBlankQuestion {
   const studyText = getStudyText(word);
   const letters = [...studyText];
@@ -177,31 +286,116 @@ function buildFillBlankQuestion(
     .map(({ index }) => index);
   const chosenIndices = mode === 'full'
     ? alphaIndices
-    : mode === 'one-two'
-      ? chooseContiguousIndices(letters, 1, 2)
-      : chooseContiguousIndices(letters, 2, 4);
+    : chooseContiguousIndices(letters, 2, 4);
   const chosenIndexSet = new Set(chosenIndices);
   const maskedCharacters = letters.map((character, index) => chosenIndexSet.has(index) ? '_' : character);
-  const missingLetters = chosenIndices.map((index) => letters[index].toLowerCase());
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-  const keyboardSize = mode === 'one-two' ? 4 : Math.max(6, missingLetters.length + 4);
-  const keyboardLetters = shuffle([
-    ...missingLetters,
-    ...alphabet
-      .split('')
-      .filter((letter) => !missingLetters.includes(letter))
-      .slice(0, keyboardSize - missingLetters.length),
-  ]).slice(0, keyboardSize);
-
+  const missingLetters = chosenIndices.map((index) => letters[index]);
   return {
     kind: 'fill-blank',
-    prompt: `${getStudyChinese(word)} 的英语怎么拼？`,
+    prompt: mode === 'full' ? '' : `${getStudyChinese(word)} 的英语怎么拼？`,
     studyText,
     word,
     maskedCharacters,
     missingLetters,
-    keyboardLetters,
+    inputMode: mode === 'full' ? 'full' : 'partial',
   };
+}
+
+function buildLetterChoiceQuestion(word: WordRecord): LetterChoiceQuestion {
+  const studyText = getStudyText(word);
+  const letters = [...studyText];
+  const chosenIndices = chooseContiguousIndices(letters, 1, 2);
+  const chosenIndexSet = new Set(chosenIndices);
+  const missingLetters = chosenIndices.map((index) => letters[index]);
+  const correctAnswer = missingLetters.join('');
+
+  return {
+    kind: 'letter-choice',
+    prompt: getStudyChinese(word),
+    studyText,
+    word,
+    maskedCharacters: letters.map((character, index) => chosenIndexSet.has(index) ? '_' : character),
+    options: buildSimilarLetterOptions(correctAnswer),
+    correctAnswer,
+  };
+}
+
+const LETTER_NEIGHBORS: Record<string, string> = {
+  a: 'qwsz',
+  b: 'vghn',
+  c: 'xdfv',
+  d: 'serfcx',
+  e: 'wsdr',
+  f: 'drtgvc',
+  g: 'ftyhbv',
+  h: 'gyujnb',
+  i: 'ujko',
+  j: 'huikmn',
+  k: 'jiolm',
+  l: 'kopi',
+  m: 'njk',
+  n: 'bhjm',
+  o: 'iklp',
+  p: 'ol',
+  q: 'wa',
+  r: 'edft',
+  s: 'awedxz',
+  t: 'rfgy',
+  u: 'yhji',
+  v: 'cfgb',
+  w: 'qase',
+  x: 'zsdc',
+  y: 'tghu',
+  z: 'asx',
+};
+
+const LOOKALIKE_LETTERS: Record<string, string> = {
+  b: 'dpq',
+  c: 'o',
+  d: 'bpq',
+  g: 'q',
+  i: 'lj',
+  l: 'it',
+  m: 'nw',
+  n: 'm',
+  o: 'cq',
+  p: 'bdq',
+  q: 'bdpg',
+  u: 'v',
+  v: 'u',
+  w: 'm',
+};
+
+function preserveLetterCase(source: string, replacement: string): string {
+  return source === source.toUpperCase() ? replacement.toUpperCase() : replacement;
+}
+
+export function buildSimilarLetterOptions(correctAnswer: string): string[] {
+  const characters = [...correctAnswer];
+  const options = new Set<string>([correctAnswer]);
+  const candidatePools = characters.map((character) => {
+    const lower = character.toLowerCase();
+    return [...new Set(`${LOOKALIKE_LETTERS[lower] ?? ''}${LETTER_NEIGHBORS[lower] ?? ''}`)];
+  });
+
+  for (let attempt = 0; options.size < 4 && attempt < 80; attempt += 1) {
+    const index = attempt % Math.max(1, characters.length);
+    const pool = candidatePools[index];
+    if (!pool || pool.length === 0) continue;
+    const replacement = pool[Math.floor(attempt / Math.max(1, characters.length)) % pool.length];
+    const candidate = [...characters];
+    candidate[index] = preserveLetterCase(characters[index], replacement);
+    options.add(candidate.join(''));
+  }
+
+  const fallbackAlphabet = 'abcdefghijklmnopqrstuvwxyz';
+  for (const replacement of fallbackAlphabet) {
+    if (options.size >= 4) break;
+    const candidate = [...characters];
+    candidate[0] = preserveLetterCase(characters[0], replacement);
+    options.add(candidate.join(''));
+  }
+  return shuffle([...options]);
 }
 
 export function buildQuestion(
@@ -220,18 +414,20 @@ export function buildQuestion(
       'comfy',
     );
   }
-  if (masteryLevel === 2) {
-    return buildChoiceQuestion('image-choice', word, allWords, 'related-priority');
-  }
+  if (masteryLevel === 2) return buildImageEnglishChoiceQuestion(word, allWords);
   if (masteryLevel === 3) return buildImageAnswerChoiceQuestion(word, allWords);
   if (masteryLevel === 4 || !canUseFillBlank(word)) return buildChoiceQuestion('text-choice', word, allWords);
-  if (masteryLevel === 5) return buildFillBlankQuestion(word, 'one-two');
-  if (masteryLevel === 6) return buildFillBlankQuestion(word, 'two-four');
+  if (masteryLevel === 5) {
+    return buildSentenceChoiceQuestion(word, allWords) ?? buildChoiceQuestion('text-choice', word, allWords);
+  }
+  if (masteryLevel === 6) return buildLetterChoiceQuestion(word);
+  if (masteryLevel === 7) return buildFillBlankQuestion(word, 'two-four');
   return buildFillBlankQuestion(word, 'full');
 }
 
 export function getCorrectAnswer(question: Question): string {
   if (question.kind === 'fill-blank') return question.missingLetters.join('');
+  if (question.kind === 'letter-choice') return question.correctAnswer;
   return question.correctAnswer;
 }
 

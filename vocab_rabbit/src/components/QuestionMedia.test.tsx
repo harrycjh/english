@@ -49,7 +49,7 @@ describe('QuestionMedia related image priority', () => {
     expect(markup).not.toContain('/life.webp');
   });
 
-  it('falls through life photo, Red Rocket, Oxford, then Comfy', () => {
+  it('falls through life photo, Oxford, Red Rocket, then Comfy', () => {
     expect(render({
       ...baseWord,
       relatedMedia: {
@@ -67,14 +67,28 @@ describe('QuestionMedia related image priority', () => {
         },
         oxford: { imagePath: '/oxford.webp', label: '', level: 1, book: 1, page: 1 },
       },
+    })).toContain('/oxford.webp');
+
+    expect(render({
+      ...baseWord,
+      relatedMedia: {
+        redRocket: {
+          atlasPath: '/rocket.webp', row: 0, column: 0, label: '', level: '', title: '', page: 1,
+          matchKind: 'exact', matchedTerm: 'house', confidence: 1,
+        },
+      },
     })).toContain('/rocket.webp');
 
     expect(render({
       ...baseWord,
       relatedMedia: {
-        oxford: { imagePath: '/oxford.webp', label: '', level: 1, book: 1, page: 1 },
+        redRocket: {
+          imagePath: '/rocket-corrected.webp',
+          atlasPath: '/rocket.webp', row: 0, column: 0, label: '', level: '', title: '', page: 1,
+          matchKind: 'exact', matchedTerm: 'house', confidence: 1,
+        },
       },
-    })).toContain('/oxford.webp');
+    })).toContain('/rocket-corrected.webp');
 
     expect(render(baseWord)).toContain('ket_house_n.webp');
   });

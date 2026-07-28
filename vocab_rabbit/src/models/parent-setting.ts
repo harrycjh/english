@@ -3,6 +3,8 @@ export type ProfileId = 'cute-junjun' | 'stinky-dog' | 'fragrant-rabbit';
 export interface ParentSetting {
   profileId: ProfileId;
   enableAudio: boolean;
+  englishVoiceURI: string;
+  chineseVoiceURI: string;
   dailyNewWordCount: number;
   dailyReviewLimit: number;
   showImages: boolean;
@@ -17,6 +19,8 @@ export const MIN_REVIEW_LIMIT = 5;
 export const defaultParentSetting: ParentSetting = {
   profileId: 'cute-junjun',
   enableAudio: true,
+  englishVoiceURI: '',
+  chineseVoiceURI: '',
   dailyNewWordCount: 6,
   dailyReviewLimit: 8,
   showImages: true,
@@ -37,6 +41,12 @@ export function normalizeParentSetting(setting: Partial<ParentSetting> | ParentS
   return {
     profileId,
     enableAudio: setting.enableAudio ?? defaultParentSetting.enableAudio,
+    englishVoiceURI: typeof setting.englishVoiceURI === 'string'
+      ? setting.englishVoiceURI
+      : defaultParentSetting.englishVoiceURI,
+    chineseVoiceURI: typeof setting.chineseVoiceURI === 'string'
+      ? setting.chineseVoiceURI
+      : defaultParentSetting.chineseVoiceURI,
     dailyNewWordCount: normalizeCount(
       setting.dailyNewWordCount,
       defaultParentSetting.dailyNewWordCount,

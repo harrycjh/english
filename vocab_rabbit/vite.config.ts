@@ -127,6 +127,9 @@ function devLifePhotosPlugin(): Plugin {
               entries: entries.length,
               withOxford: entries.filter((entry) => entry.relatedMedia.oxford).length,
               withLifePhoto: entries.filter((entry) => entry.relatedMedia.lifePhoto).length,
+              lifePhotoPackageImages: local.entries?.filter(
+                (entry) => entry.relatedMedia.lifePhoto
+              ).length ?? 0,
             },
             entries,
           });

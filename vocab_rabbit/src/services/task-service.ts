@@ -24,6 +24,9 @@ export function createDateTimeForDateKey(dateKey: string, clock: Date = new Date
 }
 
 function isDue(record: LearningRecord, cutoff: Date): boolean {
+  if (record.masteryLevel >= 10) {
+    return false;
+  }
   if (!record.nextDueAt) {
     return true;
   }

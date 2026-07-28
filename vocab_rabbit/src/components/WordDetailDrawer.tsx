@@ -88,8 +88,11 @@ function getLearningLabel(record: LearningRecord | undefined): string {
 function getQuestionKindLabel(questionKind: AnswerEvent['questionKind']): string {
   if (questionKind === 'recognition') return '认识判断';
   if (questionKind === 'image-choice') return '图片选择';
+  if (questionKind === 'image-english-choice') return '图片选英文';
   if (questionKind === 'image-answer-choice') return '图片作答';
   if (questionKind === 'text-choice') return '文字选择';
+  if (questionKind === 'sentence-choice') return '例句填词';
+  if (questionKind === 'letter-choice') return '字母选择';
   if (questionKind === 'fill-blank') return '拼写填空';
   return questionKind;
 }
@@ -327,15 +330,22 @@ export function WordDetailDrawer({
 
               {relatedMedia?.redRocket ? (
                 <article className="word-detail-drawer__related-card">
-                  <span
-                    className="word-detail-drawer__red-rocket-image word-image--atlas"
-                    role="img"
-                    aria-label={`${getStudyText(word)} 的红火箭关联页`}
-                    style={{
-                      ...getWordAtlasStyle(relatedMedia.redRocket, { columns: 3, rows: 3, cellSize: 512 }),
-                      backgroundImage: `url(${getWordImageUrl(relatedMedia.redRocket.atlasPath)})`,
-                    }}
-                  />
+                  {relatedMedia.redRocket.imagePath ? (
+                    <img
+                      src={getAssetUrl(relatedMedia.redRocket.imagePath)}
+                      alt={`${getStudyText(word)} 的红火箭关联页`}
+                    />
+                  ) : (
+                    <span
+                      className="word-detail-drawer__red-rocket-image word-image--atlas"
+                      role="img"
+                      aria-label={`${getStudyText(word)} 的红火箭关联页`}
+                      style={{
+                        ...getWordAtlasStyle(relatedMedia.redRocket, { columns: 3, rows: 3, cellSize: 512 }),
+                        backgroundImage: `url(${getWordImageUrl(relatedMedia.redRocket.atlasPath)})`,
+                      }}
+                    />
+                  )}
                   <div>
                     <strong>红火箭图</strong>
                     <span>{relatedMedia.redRocket.label}</span>

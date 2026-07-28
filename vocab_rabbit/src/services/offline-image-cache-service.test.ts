@@ -62,6 +62,7 @@ describe('collectOfflineImageUrls', () => {
         imagePath: '/content/images/words/ket_friend_n.webp',
         relatedMedia: {
           redRocket: {
+            imagePath: '/content/images/red-rocket-pages/corrected.webp',
             atlasPath: '/content/images/red-rocket-atlases/atlas-000.webp',
             row: 0,
             column: 1,
@@ -92,6 +93,9 @@ describe('collectOfflineImageUrls', () => {
       `/content/images/oxford-tree/level-1/book-1/page-3.webp?v=${CONTENT_VERSION}`,
     );
     expect(urls.filter((url) => url.includes('red-rocket-atlases/atlas-000.webp'))).toHaveLength(1);
+    expect(urls).toContain(
+      `/content/images/red-rocket-pages/corrected.webp?v=${CONTENT_VERSION}`,
+    );
     expect(urls).toContain('/content/images/ui/mastery-levels/level-9.webp?v=2');
     expect(new Set(urls).size).toBe(urls.length);
   });

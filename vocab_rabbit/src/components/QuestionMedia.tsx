@@ -14,14 +14,29 @@ interface QuestionMediaProps {
 }
 
 export function QuestionMedia({ word, strategy, localLifePhoto, className, alt }: QuestionMediaProps) {
-  if (strategy === 'related-priority') {
+  if (strategy === 'related-priority' || strategy === 'life-photo') {
     if (localLifePhoto) {
       return <img className={className} src={localLifePhoto.objectUrl} alt={alt} />;
     }
     if (word.relatedMedia?.lifePhoto) {
       return <img className={className} src={getAssetUrl(word.relatedMedia.lifePhoto.imagePath)} alt={alt} />;
     }
+    if (strategy === 'life-photo') {
+      return <WordImage className={className} word={word} alt={alt} />;
+    }
+    if (word.relatedMedia?.oxford) {
+      return <img className={className} src={getAssetUrl(word.relatedMedia.oxford.imagePath)} alt={alt} />;
+    }
     if (word.relatedMedia?.redRocket) {
+      if (word.relatedMedia.redRocket.imagePath) {
+        return (
+          <img
+            className={className}
+            src={getAssetUrl(word.relatedMedia.redRocket.imagePath)}
+            alt={alt}
+          />
+        );
+      }
       return (
         <span
           className={[className, 'word-image--atlas'].filter(Boolean).join(' ')}
@@ -33,9 +48,6 @@ export function QuestionMedia({ word, strategy, localLifePhoto, className, alt }
           }}
         />
       );
-    }
-    if (word.relatedMedia?.oxford) {
-      return <img className={className} src={getAssetUrl(word.relatedMedia.oxford.imagePath)} alt={alt} />;
     }
   }
 

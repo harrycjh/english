@@ -397,7 +397,10 @@ interface ReviewPageProps {
   recentTasks: DailyTaskSummary[];
   previewWords: WordPayload['words'];
   localLifePhotosById: Record<string, LocalLifePhotoView>;
+  debugPickerOpen?: boolean;
+  onDebugPickerOpenChange?: (open: boolean) => void;
   onStart: () => void;
+  onStartDebug: (level: number) => void;
   onAdvanceDay: () => Promise<void>;
   onSelectProfile: (profileId: ProfileId) => Promise<void>;
   onSaveSelectionStates: (states: WordSelectionState[]) => Promise<void>;
@@ -414,7 +417,10 @@ export function ReviewPage({
   recentTasks,
   previewWords,
   localLifePhotosById,
+  debugPickerOpen,
+  onDebugPickerOpenChange,
   onStart,
+  onStartDebug,
   onAdvanceDay,
   onSelectProfile,
   onSaveSelectionStates,
@@ -432,7 +438,17 @@ export function ReviewPage({
   const isReviewHeavy = reviewLoad >= task.newWordIds.length;
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
   const [isAdvancingDay, setIsAdvancingDay] = useState(false);
+  const [localDebugPickerOpen, setLocalDebugPickerOpen] = useState(false);
+  const isDebugPickerOpen = debugPickerOpen ?? localDebugPickerOpen;
   const nextDateKey = addDaysToDateKey(task.dateKey, 1);
+
+  function setDebugPickerOpen(open: boolean) {
+    if (onDebugPickerOpenChange) {
+      onDebugPickerOpenChange(open);
+      return;
+    }
+    setLocalDebugPickerOpen(open);
+  }
 
   const heroBadge = isTaskComplete ? '今日完成 · 复习页' : hasStarted ? '进行中 · 复习页' : '今日任务 · 复习页';
   const primaryActionLabel = isTaskComplete ? '再复习一轮' : hasStarted ? '继续学习' : '开始学习';
@@ -626,6 +642,25 @@ export function ReviewPage({
                 >
                   {primaryActionLabel}
                 </button>
+                {setting.profileId === 'stinky-dog' ? (
+                  <button
+                    className="review-debug-mode-button"
+                    type="button"
+                    onClick={() => setDebugPickerOpen(true)}
+                    style={{
+                      position: 'absolute',
+                      left: `${reviewLayout.modules.focusCard.children.ctaButton.x
+                        - reviewLayout.modules.focusCard.x
+                        + reviewLayout.modules.focusCard.children.ctaButton.width
+                        + 8}px`,
+                      top: `${reviewLayout.modules.focusCard.children.ctaButton.y - reviewLayout.modules.focusCard.y}px`,
+                      width: '112px',
+                      height: `${reviewLayout.modules.focusCard.children.ctaButton.height}px`,
+                    }}
+                  >
+                    调试模式
+                  </button>
+                ) : null}
                 <div
                   className="review-focus-card__art"
                   aria-hidden="true"
@@ -639,6 +674,41 @@ export function ReviewPage({
               </aside>
             </div>
           </section>
+          {isDebugPickerOpen ? (
+            <div className="review-debug-dialog-backdrop" role="presentation" onClick={() => setDebugPickerOpen(false)}>
+              <section
+                className="review-debug-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="review-debug-dialog-title"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="review-debug-dialog__header">
+                  <div>
+                    <span>小狗子专属</span>
+                    <h2 id="review-debug-dialog-title">选择题目等级</h2>
+                  </div>
+                  <button type="button" aria-label="关闭调试模式" onClick={() => setDebugPickerOpen(false)}>×</button>
+                </div>
+                <p>每次最多随机抽取 10 个不重复单词，只测试题型，不修改本地或云端学习记录。</p>
+                <div className="review-debug-level-grid">
+                  {Array.from({ length: 10 }, (_, level) => (
+                    <button
+                      key={level}
+                      type="button"
+                      onClick={() => {
+                        setDebugPickerOpen(false);
+                        onStartDebug(level);
+                      }}
+                    >
+                      <strong>Lv{level}</strong>
+                      <span>第 {level + 1} 阶段</span>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            </div>
+          ) : null}
 
           <section className="review-metric-grid" id="review-summary-section" style={getAbsoluteBoundsStyle(reviewLayout.modules.metricRow)}>
             <ReviewMetricCard

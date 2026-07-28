@@ -123,4 +123,54 @@ describe('Red Rocket atlas plan', () => {
       column: 0,
     });
   });
+
+  it('preserves an enriched Red Rocket sentence when rebuilding atlas metadata', () => {
+    const matches = matchWordsToRedRocket([{ id: 'hand', english: 'hand', partOfSpeech: 'n' }], books);
+    const plan = createRedRocketAtlasPlan(matches);
+    const merged = mergeRedRocketMediaManifest({
+      schemaVersion: 2,
+      generatedAt: '',
+      stats: {},
+      entries: [{
+        wordId: 'hand',
+        relatedMedia: {
+          redRocket: {
+            sentence: 'My hands are good for lifting.',
+            sentenceTranslation: '我的手很擅长提东西。',
+          },
+        },
+      }],
+    }, [{ id: 'hand' }], matches, plan, '2026-07-13T00:00:00.000Z');
+
+    expect(merged.entries[0].relatedMedia.redRocket.sentence).toBe('My hands are good for lifting.');
+    expect(merged.entries[0].relatedMedia.redRocket.sentenceTranslation).toBe('我的手很擅长提东西。');
+  });
+
+  it('preserves a visually corrected standalone page when rebuilding atlas metadata', () => {
+    const matches = matchWordsToRedRocket([{ id: 'hand', english: 'hand', partOfSpeech: 'n' }], books);
+    const plan = createRedRocketAtlasPlan(matches);
+    const merged = mergeRedRocketMediaManifest({
+      schemaVersion: 2,
+      generatedAt: '',
+      stats: {},
+      entries: [{
+        wordId: 'hand',
+        relatedMedia: {
+          redRocket: {
+            imagePath: '/content/images/red-rocket-pages/corrected.webp',
+            label: 'Early Level 1, My Hands, Page 5',
+            level: 'Early Level 1',
+            title: 'My Hands',
+            page: 5,
+          },
+        },
+      }],
+    }, [{ id: 'hand' }], matches, plan, '2026-07-13T00:00:00.000Z');
+
+    expect(merged.entries[0].relatedMedia.redRocket).toMatchObject({
+      imagePath: '/content/images/red-rocket-pages/corrected.webp',
+      label: 'Early Level 1, My Hands, Page 5',
+      page: 5,
+    });
+  });
 });

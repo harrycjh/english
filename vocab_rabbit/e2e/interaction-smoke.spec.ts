@@ -97,15 +97,11 @@ test.describe('main app interactions', () => {
   });
 
   test('home, learning, completion, and stats buttons are actionable', async ({ page }) => {
+    await page.getByRole('button', { name: '可爱的小珺珺' }).click();
+    await page.getByRole('menuitemradio', { name: '臭臭的小狗子' }).click();
     await page.getByRole('button', { name: /开始|继续/ }).click();
     await expect(page.getByRole('button', { name: '返回首页' })).toBeVisible();
-
-    for (let index = 0; index < 12 && await page.locator('.celebration-card').count() === 0; index += 1) {
-      const choice = page.locator('.choice-button:not([disabled])').first();
-      await expect(choice).toBeVisible();
-      await choice.click();
-      await page.waitForTimeout(760);
-    }
+    await page.getByRole('button', { name: '全部答对' }).click();
 
     await expect(page.locator('.celebration-card')).toBeVisible();
     await page.getByRole('button', { name: '回到首页' }).click();
@@ -118,6 +114,149 @@ test.describe('main app interactions', () => {
     await expect(page.getByRole('tab', { name: '记忆持久度' })).toBeVisible();
     await page.getByRole('button', { name: '选词' }).last().click();
     await expect(page.getByRole('heading', { name: '词库管理' })).toBeVisible();
+  });
+
+  test('dog debug mode previews a selected level without changing study progress', async ({ page }) => {
+    await page.getByRole('button', { name: '可爱的小珺珺' }).click();
+    await page.getByRole('menuitemradio', { name: '臭臭的小狗子' }).click();
+    await expect(page.getByRole('button', { name: '调试模式' })).toBeVisible();
+
+    await page.getByRole('button', { name: '调试模式' }).click();
+    const debugDialog = page.getByRole('dialog', { name: '选择题目等级' });
+    const closeDebugButton = page.getByRole('button', { name: '关闭调试模式' });
+    await expect(debugDialog).toBeVisible();
+    await expect(page.locator('.review-debug-level-grid button')).toHaveCount(11);
+    const [dialogBox, closeButtonBox] = await Promise.all([
+      debugDialog.boundingBox(),
+      closeDebugButton.boundingBox(),
+    ]);
+    expect(dialogBox).not.toBeNull();
+    expect(closeButtonBox).not.toBeNull();
+    expect(closeButtonBox!.x).toBeGreaterThan(dialogBox!.x + dialogBox!.width * 0.8);
+    expect(closeButtonBox!.y).toBeLessThan(dialogBox!.y + dialogBox!.height * 0.2);
+    await page.getByRole('button', { name: 'Lv5 第 6 阶段' }).click();
+
+    await expect(page.getByText('例句填词')).toBeVisible();
+    await expect(page.locator('.sentence-cloze-card strong')).toContainText('_____');
+    await expect(page.getByLabel('例句')).toHaveCount(0);
+    await expect(page.locator('.progress-ring__label')).toContainText('1/ 10');
+    await page.getByRole('button', { name: '返回首页' }).click();
+    await expect(debugDialog).toBeVisible();
+    await page.getByRole('button', { name: 'Lv5 第 6 阶段' }).click();
+    await expect(page.getByText('例句填词')).toBeVisible();
+    await page.getByRole('button', { name: '全部答对' }).click();
+    await expect(debugDialog).toBeVisible();
+    await closeDebugButton.click();
+    await expect(page.getByRole('heading', { name: '今日学习计划' })).toBeVisible();
+
+    const learningRecordCount = await page.evaluate(async (name) => {
+      return await new Promise<number>((resolve, reject) => {
+        const request = indexedDB.open(name);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+          const database = request.result;
+          const transaction = database.transaction('learningRecords', 'readonly');
+          const countRequest = transaction.objectStore('learningRecords').count();
+          countRequest.onerror = () => reject(countRequest.error);
+          countRequest.onsuccess = () => resolve(countRequest.result);
+        };
+      });
+    }, dbName);
+    expect(learningRecordCount).toBe(0);
+  });
+
+  test('debug levels keep the requested iPad layout and labels', async ({ page }) => {
+    await page.getByRole('button', { name: '可爱的小珺珺' }).click();
+    await page.getByRole('menuitemradio', { name: '臭臭的小狗子' }).click();
+    await page.getByRole('button', { name: '调试模式' }).click();
+
+    const openLevel = async (level: number) => {
+      await page.getByRole('button', { name: `Lv${level} 第 ${level + 1} 阶段` }).click();
+      await expect(page.locator('.question-panel')).toBeVisible();
+    };
+    const returnToPicker = async () => {
+      await page.getByRole('button', { name: '返回首页' }).click();
+      await expect(page.getByRole('dialog', { name: '选择题目等级' })).toBeVisible();
+    };
+
+    await openLevel(0);
+    await expect(page.getByText('初次见面')).toBeVisible();
+    const levelZeroOffset = await page.locator('.recognition-card').evaluate((card) => {
+      const cardBox = card.getBoundingClientRect();
+      const wordBox = card.querySelector(':scope > strong')!.getBoundingClientRect();
+      const option = card.querySelector('.choice-button')!;
+      return {
+        wordTop: wordBox.top - cardBox.top,
+        optionBorderWidth: Number.parseFloat(getComputedStyle(option).borderTopWidth),
+      };
+    });
+    expect(levelZeroOffset.wordTop).toBeGreaterThanOrEqual(190);
+    expect(levelZeroOffset.optionBorderWidth).toBe(2);
+    await returnToPicker();
+
+    await openLevel(1);
+    const levelOneOffset = await page.locator('.question-panel__answer-column').evaluate((column) => {
+      const columnBox = column.getBoundingClientRect();
+      const cueBox = column.querySelector('.question-panel__word-cue')!.getBoundingClientRect();
+      const option = column.querySelector('.choice-button')!;
+      return {
+        cueTop: cueBox.top - columnBox.top,
+        optionBorderWidth: Number.parseFloat(getComputedStyle(option).borderTopWidth),
+      };
+    });
+    expect(levelOneOffset.cueTop).toBeGreaterThanOrEqual(190);
+    expect(levelOneOffset.optionBorderWidth).toBe(2);
+    await returnToPicker();
+
+    await openLevel(2);
+    const levelTwoExampleTop = await page.locator('.question-panel__answer-column').evaluate((column) => {
+      const columnBox = column.getBoundingClientRect();
+      const exampleBox = column.querySelector('.question-example-result')!.getBoundingClientRect();
+      return exampleBox.top - columnBox.top;
+    });
+    expect(levelTwoExampleTop).toBeGreaterThanOrEqual(190);
+    await returnToPicker();
+
+    await openLevel(4);
+    await expect(page.getByText('看看英文，选出正确中文')).toHaveCount(0);
+    await returnToPicker();
+
+    await openLevel(5);
+    const levelFiveLayout = await page.locator('.question-panel--sentence').evaluate((panel) => {
+      const panelBox = panel.getBoundingClientRect();
+      const cardBox = panel.querySelector('.sentence-cloze-card')!.getBoundingClientRect();
+      const columnBox = panel.querySelector('.sentence-answer-column')!.getBoundingClientRect();
+      const optionsBox = panel.querySelector('.sentence-option-grid')!.getBoundingClientRect();
+      return {
+        cardHeightRatio: cardBox.height / panelBox.height,
+        optionBottomGap: columnBox.bottom - optionsBox.bottom,
+      };
+    });
+    expect(levelFiveLayout.cardHeightRatio).toBeGreaterThan(0.95);
+    expect(levelFiveLayout.optionBottomGap).toBeLessThanOrEqual(2);
+    await returnToPicker();
+
+    await openLevel(6);
+    const levelSixLayout = await page.locator('.letter-choice-answer-column').evaluate((column) => {
+      const example = column.querySelector('.question-example-result')!;
+      return {
+        display: getComputedStyle(column).display,
+        exampleGridRow: getComputedStyle(example).gridRowStart,
+      };
+    });
+    expect(levelSixLayout).toEqual({ display: 'grid', exampleGridRow: '2' });
+    await returnToPicker();
+
+    for (const level of [7, 8]) {
+      await openLevel(level);
+      await expect(page.getByText(/还缺 \d+ 个字母/)).toHaveCount(0);
+      await expect(page.getByText(/已填写 \d+\/\d+/)).toHaveCount(0);
+      await returnToPicker();
+    }
+
+    await openLevel(10);
+    await expect(page.getByLabel('直接拼写单词')).toBeVisible();
+    await expect(page.locator('.learning-level-control')).toHaveAttribute('data-level', '10');
   });
 
   test('selection page filters, bulk buttons, detail drawer, and dock navigation work', async ({ page }) => {
@@ -137,11 +276,11 @@ test.describe('main app interactions', () => {
 
     await page.getByRole('button', { name: '卡片视图' }).click();
     await page.getByRole('button', { name: '暂停筛选结果' }).click();
-    await expect(page.locator('.selection-word-card__body').filter({ hasText: '已暂停' }).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: '恢复', exact: true }).first()).toBeVisible();
     await page.getByRole('button', { name: '启用筛选结果' }).click();
-    await expect(page.locator('.selection-word-card__body').filter({ hasText: '未学' }).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: '暂停', exact: true }).first()).toBeVisible();
     await page.getByRole('button', { name: '移出筛选结果' }).click();
-    await expect(page.locator('.selection-word-card__body').filter({ hasText: '未启用' }).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: '启用', exact: true }).first()).toBeVisible();
     await page.getByRole('button', { name: '重置筛选' }).click();
     await expect(page.getByText(/共 \d+ 个单词/)).toBeVisible();
 
@@ -149,32 +288,64 @@ test.describe('main app interactions', () => {
     await expect(page.getByRole('heading', { name: '今日学习计划' })).toBeVisible();
   });
 
-  test('settings controls, export, reset confirmation, and local photo import work', async ({ page }) => {
+  test('settings controls, export, and local photo import work', async ({ page }) => {
     await page.getByRole('button', { name: '设置' }).last().click();
     await expect(page.getByRole('heading', { name: /把学习节奏/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /音色选择/ })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: '英文发音音色' })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: '中文发音音色' })).toBeVisible();
+    await expect(page.getByRole('button', { name: '试听' })).toHaveCount(2);
+    const englishVoiceSelect = page.getByRole('combobox', { name: '英文发音音色' });
+    const englishVoiceValues = await englishVoiceSelect.locator('option').evaluateAll(
+      (options) => options.map((option) => (option as HTMLOptionElement).value).filter(Boolean),
+    );
+    if (englishVoiceValues.length > 0) {
+      await englishVoiceSelect.selectOption(englishVoiceValues[0]);
+    }
+    await expect(page.getByRole('button', { name: '试听' }).first()).toBeEnabled();
+    await page.getByRole('button', { name: '试听' }).first().click();
 
     await page.getByLabel('每日新词调节').getByRole('button', { name: '+' }).click();
-    await expect(page.getByText(/已自动保存于/)).toBeVisible();
     const imageToggle = page.locator('.settings-toggle-row').filter({ hasText: '图片题' }).getByRole('button');
     await imageToggle.click();
     await expect(imageToggle).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.getByRole('button', { name: '确定修改' })).toBeEnabled();
+
+    const settingsBeforeConfirm = await page.evaluate(async (name) => {
+      return await new Promise<{ dailyNewWordCount: number; showImages: boolean } | undefined>((resolve, reject) => {
+        const request = indexedDB.open(name);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+          const transaction = request.result.transaction('parentSettings', 'readonly');
+          const settingRequest = transaction.objectStore('parentSettings').get('default');
+          settingRequest.onerror = () => reject(settingRequest.error);
+          settingRequest.onsuccess = () => resolve(settingRequest.result);
+        };
+      });
+    }, dbName);
+    expect(settingsBeforeConfirm).toBeUndefined();
+
+    await page.getByRole('button', { name: '确定修改' }).click();
+    await expect(page.getByText(/已保存/)).toBeVisible();
+    const settingsAfterConfirm = await page.evaluate(async (name) => {
+      return await new Promise<{ dailyNewWordCount: number; showImages: boolean }>((resolve, reject) => {
+        const request = indexedDB.open(name);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+          const transaction = request.result.transaction('parentSettings', 'readonly');
+          const settingRequest = transaction.objectStore('parentSettings').get('default');
+          settingRequest.onerror = () => reject(settingRequest.error);
+          settingRequest.onsuccess = () => resolve(settingRequest.result);
+        };
+      });
+    }, dbName);
+    expect(settingsAfterConfirm.dailyNewWordCount).toBe(7);
+    expect(settingsAfterConfirm.showImages).toBe(false);
 
     const downloadPromise = page.waitForEvent('download');
     await page.getByRole('button', { name: '导出数据' }).click();
     const download = await downloadPromise;
     expect(download.suggestedFilename()).toContain('vocab-rabbit-study-data');
-
-    page.once('dialog', async (dialog) => {
-      expect(dialog.message()).toContain('重新生成今天的任务');
-      await dialog.dismiss();
-    });
-    await page.getByRole('button', { name: '重置进度' }).click();
-
-    page.once('dialog', async (dialog) => {
-      expect(dialog.message()).toContain('永久删除所有本地学习数据');
-      await dialog.dismiss();
-    });
-    await page.getByRole('button', { name: '清空并确认' }).click();
 
     const packageBuffer = await createTinyLifePhotoPackage();
     await page.locator('input[accept*="application/zip"]').setInputFiles({

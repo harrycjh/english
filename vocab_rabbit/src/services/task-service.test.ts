@@ -126,6 +126,26 @@ describe('daily task queue', () => {
 });
 
 describe('review-first daily planning', () => {
+  it('never places a level 10 mastered word back into the daily review queue', () => {
+    const word = makeWord('mastered');
+    const record = {
+      ...makeDueRecord(word.id),
+      masteryLevel: 10,
+      reviewStage: 10,
+      nextDueAt: null,
+    };
+
+    const task = buildDailyTask(
+      [word],
+      { [word.id]: record },
+      defaultParentSetting,
+      new Date('2026-07-21T08:00:00.000Z'),
+    );
+
+    expect(task.reviewWordIds).toEqual([]);
+    expect(task.newWordIds).toEqual([]);
+  });
+
   it('includes reviews due later in the same study day before the next 4am refresh', () => {
     const dueLaterToday = makeWord('due-later-today');
     const dueAfterRefresh = makeWord('due-after-refresh');

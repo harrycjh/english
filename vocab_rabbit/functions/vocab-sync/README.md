@@ -7,8 +7,9 @@ This directory is deployed as an Alibaba Cloud Function Compute Node.js 20 funct
 - The frontend never receives Tablestore credentials.
 - Prefer a Function Compute RAM role with Tablestore read/write access.
 - `FAMILY_CODE_HASH` stores only a salted SHA-256 hash, not the family code.
-- Device tokens are HMAC-signed and expire after 180 days.
+- Device tokens are HMAC-signed, expire after 365 days, and roll forward after authenticated requests.
 - Device tokens are checked against `vocab_app_states` on every protected request. Delete the device row or set `active` to `false` to revoke it manually.
+- Life photos stay in a private OSS bucket. The function returns short-lived V4 GET URLs only to active devices.
 - The app has no cloud reset or cloud delete endpoint.
 
 ## Prepare
@@ -46,6 +47,7 @@ Required environment variables:
 ```text
 TABLESTORE_ENDPOINT
 TABLESTORE_INSTANCE_NAME
+OSS_BUCKET
 FAMILY_CODE_SALT
 FAMILY_CODE_HASH
 TOKEN_SIGNING_SECRET
@@ -59,6 +61,9 @@ Optional table overrides:
 TABLESTORE_EVENTS_TABLE
 TABLESTORE_WORDS_TABLE
 TABLESTORE_APP_TABLE
+OSS_REGION
+OSS_PUBLIC_ENDPOINT
+OSS_SIGNED_URL_TTL_SECONDS
 ```
 
 ## ESA Routes
@@ -69,6 +74,7 @@ Proxy these same-origin paths to the Function Compute HTTP trigger without cachi
 /api/device/connect
 /api/device/verify
 /api/sync
+/api/media/sign
 ```
 
 Keep the original path and `Authorization` header. Set the API cache policy to bypass/no-store. The frontend remains configured with relative `/api` URLs, so no cloud URL or secret is embedded in the build.

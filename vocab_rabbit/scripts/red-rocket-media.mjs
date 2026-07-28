@@ -323,6 +323,31 @@ export function mergeRedRocketMediaManifest(manifest, words, matches, atlasPlan,
     ...entry,
     relatedMedia: { ...(entry.relatedMedia ?? {}) },
   }]));
+  const existingSentencesByWordId = new Map(
+    [...entriesByWordId.entries()]
+      .filter(([, entry]) => entry.relatedMedia.redRocket?.sentence)
+      .map(([wordId, entry]) => {
+        const redRocket = entry.relatedMedia.redRocket;
+        return [wordId, {
+          sentence: redRocket.sentence,
+          sentenceTranslation: redRocket.sentenceTranslation,
+        }];
+      }),
+  );
+  const existingPageOverridesByWordId = new Map(
+    [...entriesByWordId.entries()]
+      .filter(([, entry]) => entry.relatedMedia.redRocket?.imagePath)
+      .map(([wordId, entry]) => {
+        const redRocket = entry.relatedMedia.redRocket;
+        return [wordId, {
+          imagePath: redRocket.imagePath,
+          label: redRocket.label,
+          level: redRocket.level,
+          title: redRocket.title,
+          page: redRocket.page,
+        }];
+      }),
+  );
   for (const entry of entriesByWordId.values()) {
     delete entry.relatedMedia.redRocket;
   }
@@ -342,6 +367,10 @@ export function mergeRedRocketMediaManifest(manifest, words, matches, atlasPlan,
       matchKind: match.matchKind,
       matchedTerm: match.matchedTerm,
       confidence: match.confidence,
+      ...(existingSentencesByWordId.has(match.wordId)
+        ? existingSentencesByWordId.get(match.wordId)
+        : {}),
+      ...(existingPageOverridesByWordId.get(match.wordId) ?? {}),
     };
     entriesByWordId.set(match.wordId, entry);
   }

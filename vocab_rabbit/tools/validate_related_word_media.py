@@ -32,8 +32,10 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
     with_oxford = 0
     with_life_photo = 0
     with_red_rocket = 0
+    with_oxford_sentence_translation = 0
+    with_red_rocket_sentence_translation = 0
     red_rocket_atlases: set[str] = set()
-    red_rocket_cells: set[tuple[str, int, int]] = set()
+    red_rocket_images: set[tuple[str, str | int, int | None]] = set()
 
     if manifest.get("schemaVersion") not in (1, 2):
         errors.append("public manifest schemaVersion must be 1 or 2")
@@ -56,6 +58,11 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
                 errors.append(f"{word_id} oxford imagePath must stay under /content/images/oxford-tree/")
             if not public_path_exists(image_path):
                 errors.append(f"{word_id} oxford imagePath is missing: {image_path}")
+            if oxford.get("sentence"):
+                if oxford.get("sentenceTranslation"):
+                    with_oxford_sentence_translation += 1
+                else:
+                    errors.append(f"{word_id} oxford sentence is missing sentenceTranslation")
 
         if life_photo:
             with_life_photo += 1
@@ -64,16 +71,32 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
         if red_rocket:
             with_red_rocket += 1
             atlas_path = red_rocket.get("atlasPath", "")
+            image_path = red_rocket.get("imagePath", "")
             row = red_rocket.get("row")
             column = red_rocket.get("column")
             red_rocket_atlases.add(atlas_path)
-            red_rocket_cells.add((atlas_path, row, column))
+            if image_path:
+                red_rocket_images.add(("image", image_path, None))
+                if not image_path.startswith("/content/images/red-rocket-pages/"):
+                    errors.append(
+                        f"{word_id} corrected Red Rocket imagePath must stay under "
+                        "/content/images/red-rocket-pages/"
+                    )
+                if not public_path_exists(image_path):
+                    errors.append(f"{word_id} corrected Red Rocket image is missing: {image_path}")
+            else:
+                red_rocket_images.add((atlas_path, row, column))
             if not atlas_path.startswith("/content/images/red-rocket-atlases/"):
                 errors.append(f"{word_id} Red Rocket atlasPath must stay under /content/images/red-rocket-atlases/")
             if not public_path_exists(atlas_path):
                 errors.append(f"{word_id} Red Rocket atlas is missing: {atlas_path}")
             if row not in (0, 1, 2) or column not in (0, 1, 2):
                 errors.append(f"{word_id} Red Rocket atlas cell is invalid")
+            if red_rocket.get("sentence"):
+                if red_rocket.get("sentenceTranslation"):
+                    with_red_rocket_sentence_translation += 1
+                else:
+                    errors.append(f"{word_id} Red Rocket sentence is missing sentenceTranslation")
 
     stats = manifest.get("stats", {})
     if stats.get("entries") != len(entries):
@@ -84,10 +107,14 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
         errors.append("public stats.withLifePhoto does not match entry count")
     if stats.get("withRedRocket", 0) != with_red_rocket:
         errors.append("public stats.withRedRocket does not match entry count")
-    if stats.get("uniqueRedRocketImages", 0) != len(red_rocket_cells):
-        errors.append("public stats.uniqueRedRocketImages does not match unique atlas cells")
+    if stats.get("uniqueRedRocketImages", 0) != len(red_rocket_images):
+        errors.append("public stats.uniqueRedRocketImages does not match displayed page images")
     if stats.get("redRocketAtlases", 0) != len(red_rocket_atlases):
         errors.append("public stats.redRocketAtlases does not match unique atlas paths")
+    if stats.get("withOxfordSentenceTranslation", 0) != with_oxford_sentence_translation:
+        errors.append("public stats.withOxfordSentenceTranslation does not match translated sentence count")
+    if stats.get("withRedRocketSentenceTranslation", 0) != with_red_rocket_sentence_translation:
+        errors.append("public stats.withRedRocketSentenceTranslation does not match translated sentence count")
     if (PUBLIC_ROOT / "content/images/life-photos").exists():
         errors.append("public/content/images/life-photos must not exist")
 
@@ -107,9 +134,18 @@ def validate_local_life_photo_package(word_ids: set[str]) -> list[str]:
         manifest = json.loads(archive.read("word_related_media.json"))
         entries = manifest.get("entries", [])
         image_count = sum(1 for name in names if name.startswith("life-photos/") and name.endswith(".webp"))
+        package_word_ids = [entry.get("wordId") for entry in entries]
+        package_photo_ids = [
+            ((entry.get("relatedMedia") or {}).get("lifePhoto") or {}).get("photoId")
+            for entry in entries
+        ]
 
         if manifest.get("schemaVersion") != 1:
             errors.append("local package manifest schemaVersion must be 1")
+        if len(package_word_ids) != len(set(package_word_ids)):
+            errors.append("local package contains duplicate wordIds")
+        if len(package_photo_ids) != len(set(package_photo_ids)):
+            errors.append("local package contains a photo assigned to more than one word")
 
         for entry in entries:
             word_id = entry.get("wordId")
@@ -155,6 +191,14 @@ def validate_life_photo_coverage(word_ids: set[str]) -> list[str]:
     unknown_word_ids = unique_word_ids - word_ids
     if unknown_word_ids:
         errors.append(f"life photo coverage has unknown wordIds: {sorted(unknown_word_ids)}")
+    if LOCAL_PACKAGE_PATH.exists():
+        with zipfile.ZipFile(LOCAL_PACKAGE_PATH) as archive:
+            package_manifest = json.loads(archive.read("word_related_media.json"))
+        package_word_ids = {
+            entry.get("wordId") for entry in package_manifest.get("entries", []) if entry.get("wordId")
+        }
+        if unique_word_ids != package_word_ids:
+            errors.append("life photo coverage wordIds do not match the local package")
     return errors
 
 

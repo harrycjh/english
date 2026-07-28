@@ -1,8 +1,0 @@
-- generic [active] [ref=e1]:
-  - main [ref=e3]:
-    - generic [ref=e4]:
-      - generic [ref=e5]: VR
-      - heading "正在打开学习空间" [level=1] [ref=e6]
-      - paragraph [ref=e7]: 正在读取这台设备的连接状态。
-  - link "⌂" [ref=e9] [cursor=pointer]:
-    - /url: https://www.cw2017.com

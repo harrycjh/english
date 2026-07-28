@@ -34,6 +34,11 @@ LIFE_PHOTO_OUTPUT_ROOT = PROJECT_ROOT / "public/content/images/life-photos"
 LOCAL_LIFE_PHOTO_PACKAGE_PATH = (
     PROJECT_ROOT / "design-output/local-life-photo-package/vocab-rabbit-life-photos.zip"
 )
+REVIEW_SELECTIONS_PATH = PROJECT_ROOT / "review-data/photo-match-review-selections.json"
+CAPTIONS_PATH = (
+    PROJECT_ROOT / "design-output/photo-word-linking/captions/qwen-captions-all.jsonl"
+)
+DEV_LIFE_PHOTO_ROOT = PROJECT_ROOT / "dev-life-photos"
 
 
 @dataclass(frozen=True)
@@ -61,8 +66,50 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def update_public_life_photo_package_count(count: int) -> None:
+    if not MANIFEST_PATH.exists():
+        return
+    manifest = load_json(MANIFEST_PATH)
+    manifest.setdefault("stats", {})["lifePhotoPackageImages"] = count
+    write_json(MANIFEST_PATH, manifest)
+
+
 def load_words() -> list[dict[str, Any]]:
     return load_json(WORD_LIST_PATH)["words"]
+
+
+def load_latest_photo_captions() -> dict[str, str]:
+    latest: dict[str, dict[str, Any]] = {}
+    if not CAPTIONS_PATH.exists():
+        return {}
+    with CAPTIONS_PATH.open(encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, 1):
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError as error:
+                raise ValueError(f"invalid caption JSON on line {line_number}: {error}") from error
+            photo_id = row.get("photoId")
+            if photo_id:
+                latest[photo_id] = row
+    return {
+        photo_id: str((row.get("caption") or {}).get("captionZh") or "")
+        for photo_id, row in latest.items()
+        if row.get("status") == "ok" and row.get("caption")
+    }
+
+
+def selected_photos_from_review(payload: dict[str, Any]) -> dict[str, str]:
+    selected = {
+        word_id: selection["photoId"]
+        for word_id, selection in (payload.get("selections") or {}).items()
+        if selection.get("status") == "selected" and selection.get("photoId")
+    }
+    photo_ids = list(selected.values())
+    if len(photo_ids) != len(set(photo_ids)):
+        raise ValueError("review selections contain a photo assigned to more than one word")
+    return selected
 
 
 def load_path_mapping() -> dict[str, str]:
@@ -162,6 +209,39 @@ def collect_photo_candidates(word_ids: set[str]) -> dict[str, list[PhotoCandidat
     master = load_json(MASTER_INDEX_PATH)
     candidates: dict[str, list[PhotoCandidate]] = {word_id: [] for word_id in word_ids}
 
+    if REVIEW_SELECTIONS_PATH.exists():
+        selected = selected_photos_from_review(load_json(REVIEW_SELECTIONS_PATH))
+        unknown_word_ids = set(selected) - word_ids
+        if unknown_word_ids:
+            raise ValueError(f"review selections contain unknown words: {sorted(unknown_word_ids)}")
+
+        entries_by_id = {entry["id"]: entry for entry in master["entries"]}
+        captions_by_id = load_latest_photo_captions()
+        missing: list[str] = []
+        for word_id, photo_id in selected.items():
+            entry = entries_by_id.get(photo_id)
+            if entry is None or entry.get("safeForKids") is False:
+                missing.append(f"{word_id}:{photo_id}:missing-or-unsafe")
+                continue
+            source_path = localize_path(
+                entry.get("localSourcePath") or entry.get("sourcePath") or entry.get("absolutePath"),
+                mapping,
+            )
+            if source_path is None or not source_path.exists():
+                missing.append(f"{word_id}:{photo_id}:source-file-missing")
+                continue
+            reviewed_entry = {
+                **entry,
+                "scene": captions_by_id.get(photo_id) or entry.get("scene") or entry.get("colorMood"),
+                "confidence": 1.0,
+            }
+            candidates[word_id].append(PhotoCandidate(source_path, reviewed_entry, match_rank=3))
+        if missing:
+            preview = ", ".join(missing[:12])
+            suffix = "" if len(missing) <= 12 else f" ... and {len(missing) - 12} more"
+            raise ValueError(f"reviewed photos could not be exported: {preview}{suffix}")
+        return candidates
+
     for entry in master["entries"]:
         if entry.get("reviewStatus") != "labeled" or entry.get("safeForKids") is False:
             continue
@@ -192,8 +272,134 @@ def build_oxford_label(ref: dict[str, Any]) -> str:
     return f"Level {ref['level']}, Book {ref['book']}, Page {ref['page']}"
 
 
+def build_life_photo_asset(
+    word_id: str,
+    candidate: PhotoCandidate,
+    max_width: int,
+    quality: int,
+) -> tuple[dict[str, Any], tuple[str, bytes]]:
+    life_photo = {
+        "imagePath": f"/life-photos/{word_id}.webp",
+        "caption": candidate.entry.get("scene")
+        or candidate.entry.get("colorMood")
+        or "matched life photo",
+        "photoId": candidate.entry.get("id") or "",
+        "match": "primary" if candidate.match_rank >= 2 else "secondary",
+        "confidence": round(candidate.confidence, 3),
+    }
+    return (
+        {"wordId": word_id, "relatedMedia": {"lifePhoto": life_photo}},
+        (
+            f"life-photos/{word_id}.webp",
+            image_to_webp_bytes(candidate.source_path, max_width, quality),
+        ),
+    )
+
+
+def write_life_photo_package(
+    manifest: dict[str, Any],
+    files: list[tuple[str, bytes]],
+) -> None:
+    LOCAL_LIFE_PHOTO_PACKAGE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        dir=LOCAL_LIFE_PHOTO_PACKAGE_PATH.parent,
+        delete=False,
+        suffix=".zip.tmp",
+    ) as handle:
+        temporary_path = Path(handle.name)
+    try:
+        with zipfile.ZipFile(temporary_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr(
+                "word_related_media.json",
+                json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+            )
+            for image_path, image_bytes in files:
+                archive.writestr(image_path, image_bytes)
+        temporary_path.replace(LOCAL_LIFE_PHOTO_PACKAGE_PATH)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+
+
+def sync_dev_life_photos(
+    manifest: dict[str, Any],
+    files: list[tuple[str, bytes]],
+) -> None:
+    photo_root = DEV_LIFE_PHOTO_ROOT / "life-photos"
+    photo_root.mkdir(parents=True, exist_ok=True)
+    expected_names = set()
+    for image_path, image_bytes in files:
+        file_name = Path(image_path).name
+        expected_names.add(file_name)
+        (photo_root / file_name).write_bytes(image_bytes)
+    for existing_path in photo_root.glob("*.webp"):
+        if existing_path.name not in expected_names:
+            existing_path.unlink()
+    write_json(DEV_LIFE_PHOTO_ROOT / "word_related_media.json", manifest)
+
+
+def export_life_photos_only(args: argparse.Namespace) -> dict[str, Any]:
+    words = load_words()
+    photo_candidates = collect_photo_candidates({word["id"] for word in words})
+    generated_at = datetime.now(timezone.utc).isoformat()
+    package_entries: list[dict[str, Any]] = []
+    package_files: list[tuple[str, bytes]] = []
+    skipped_word_ids: list[str] = []
+
+    for word in words:
+        word_id = word["id"]
+        candidates = sorted(photo_candidates.get(word_id, []), key=PhotoCandidate.sort_key, reverse=True)
+        if not candidates:
+            skipped_word_ids.append(word_id)
+            continue
+        entry, image_file = build_life_photo_asset(
+            word_id,
+            candidates[0],
+            args.photo_max_width,
+            args.quality,
+        )
+        package_entries.append(entry)
+        package_files.append(image_file)
+
+    package_manifest = {
+        "schemaVersion": 1,
+        "generatedAt": generated_at,
+        "stats": {
+            "totalWords": len(words),
+            "withLifePhoto": len(package_entries),
+        },
+        "entries": package_entries,
+    }
+    coverage_manifest = {
+        "schemaVersion": 1,
+        "generatedAt": generated_at,
+        "count": len(package_entries),
+        "wordIds": sorted(entry["wordId"] for entry in package_entries),
+    }
+    report = {
+        "generatedAt": generated_at,
+        "reviewSelections": str(REVIEW_SELECTIONS_PATH),
+        "selectedPhotos": len(package_entries),
+        "skippedWords": len(skipped_word_ids),
+        "skippedWordIds": skipped_word_ids,
+        "package": str(LOCAL_LIFE_PHOTO_PACKAGE_PATH),
+        "devLifePhotos": str(DEV_LIFE_PHOTO_ROOT),
+    }
+    if not args.dry_run:
+        write_life_photo_package(package_manifest, package_files)
+        sync_dev_life_photos(package_manifest, package_files)
+        write_json(LIFE_PHOTO_COVERAGE_PATH, coverage_manifest)
+        update_public_life_photo_package_count(len(package_entries))
+        write_json(
+            PROJECT_ROOT
+            / "design-output/photo-word-linking/review/exported-reviewed-life-photos.json",
+            report,
+        )
+    return report
+
+
 def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
     words = load_words()
+    words_by_id = {word["id"]: word for word in words}
     oxford_root = resolve_oxford_root(args.oxford_root)
     photo_candidates = collect_photo_candidates({word["id"] for word in words})
     existing_manifest = load_json(MANIFEST_PATH) if MANIFEST_PATH.exists() else {"entries": []}
@@ -202,6 +408,31 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
         for entry in existing_manifest.get("entries", [])
         if (entry.get("relatedMedia") or {}).get("redRocket")
     }
+    existing_oxford_sentences = {
+        entry["wordId"]: {
+            "sentence": ((entry.get("relatedMedia") or {}).get("oxford") or {}).get("sentence"),
+            "sentenceTranslation": (
+                ((entry.get("relatedMedia") or {}).get("oxford") or {}).get("sentenceTranslation")
+            ),
+        }
+        for entry in existing_manifest.get("entries", [])
+        if ((entry.get("relatedMedia") or {}).get("oxford") or {}).get("sentence")
+    }
+    existing_oxford_page_overrides: dict[str, dict[str, Any]] = {}
+    for entry in existing_manifest.get("entries", []):
+        oxford = (entry.get("relatedMedia") or {}).get("oxford")
+        word = words_by_id.get(entry["wordId"], {})
+        first_ref = (word.get("oxfordRefs") or [None])[0]
+        if not oxford or not oxford.get("imagePath"):
+            continue
+        existing_page = (oxford.get("level"), oxford.get("book"), oxford.get("page"))
+        source_page = (
+            first_ref.get("level"),
+            first_ref.get("book"),
+            first_ref.get("page"),
+        ) if first_ref else None
+        if source_page is None or existing_page != source_page:
+            existing_oxford_page_overrides[entry["wordId"]] = oxford
 
     entries: list[dict[str, Any]] = []
     skipped_oxford: list[dict[str, Any]] = []
@@ -217,6 +448,17 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
             related_media["redRocket"] = existing_red_rocket[word_id]
 
         first_ref = (word.get("oxfordRefs") or [None])[0]
+        if word_id in existing_oxford_page_overrides:
+            existing_override = existing_oxford_page_overrides[word_id]
+            related_media["oxford"] = existing_override
+            exported_oxford_refs.add(
+                (
+                    int(existing_override["level"]),
+                    int(existing_override["book"]),
+                    int(existing_override["page"]),
+                )
+            )
+            first_ref = None
         if first_ref:
             level = int(first_ref["level"])
             book = int(first_ref["book"])
@@ -249,6 +491,14 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
                         "book": book,
                         "page": page,
                     }
+                    if word_id in existing_oxford_sentences:
+                        related_media["oxford"].update(
+                            {
+                                key: value
+                                for key, value in existing_oxford_sentences[word_id].items()
+                                if value
+                            }
+                        )
             else:
                 skipped_oxford.append(
                     {"wordId": word_id, "level": level, "book": book, "page": page, "reason": "pdf not found"}
@@ -257,18 +507,15 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
         candidates = sorted(photo_candidates.get(word_id, []), key=PhotoCandidate.sort_key, reverse=True)
         if candidates:
             best = candidates[0]
-            life_photo = {
-                "imagePath": f"/life-photos/{word_id}.webp",
-                "caption": best.entry.get("scene") or best.entry.get("colorMood") or "matched life photo",
-                "photoId": best.entry.get("id") or "",
-                "match": "primary" if best.match_rank == 2 else "secondary",
-                "confidence": round(best.confidence, 3),
-            }
-            life_photo_package_entries.append({"wordId": word_id, "relatedMedia": {"lifePhoto": life_photo}})
+            life_photo_entry, life_photo_file = build_life_photo_asset(
+                word_id,
+                best,
+                args.photo_max_width,
+                args.quality,
+            )
+            life_photo_package_entries.append(life_photo_entry)
             if not args.dry_run:
-                life_photo_package_files.append(
-                    (f"life-photos/{word_id}.webp", image_to_webp_bytes(best.source_path, args.photo_max_width, args.quality))
-                )
+                life_photo_package_files.append(life_photo_file)
         else:
             skipped_photos.append(word_id)
 
@@ -285,6 +532,11 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
             "withOxford": sum(1 for entry in entries if "oxford" in entry["relatedMedia"]),
             "withLifePhoto": 0,
             "uniqueOxfordImages": len(exported_oxford_refs),
+            "withOxfordSentence": sum(
+                1
+                for entry in entries
+                if ((entry.get("relatedMedia") or {}).get("oxford") or {}).get("sentence")
+            ),
             "lifePhotoPackageImages": len(life_photo_package_entries),
             "withRedRocket": with_red_rocket,
             "uniqueRedRocketImages": (existing_manifest.get("stats") or {}).get("uniqueRedRocketImages", 0),
@@ -330,14 +582,8 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
         write_json(MANIFEST_PATH, manifest)
         write_json(LIFE_PHOTO_COVERAGE_PATH, life_photo_coverage_manifest)
         write_json(REPORT_PATH, report)
-        LOCAL_LIFE_PHOTO_PACKAGE_PATH.parent.mkdir(parents=True, exist_ok=True)
-        with zipfile.ZipFile(LOCAL_LIFE_PHOTO_PACKAGE_PATH, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-            archive.writestr(
-                "word_related_media.json",
-                json.dumps(life_photo_package_manifest, ensure_ascii=False, indent=2) + "\n",
-            )
-            for image_path, image_bytes in life_photo_package_files:
-                archive.writestr(image_path, image_bytes)
+        write_life_photo_package(life_photo_package_manifest, life_photo_package_files)
+        sync_dev_life_photos(life_photo_package_manifest, life_photo_package_files)
 
     return report
 
@@ -345,11 +591,16 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export one Oxford Tree image and one life photo per word.")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--life-photos-only", action="store_true")
     parser.add_argument("--oxford-root", default=None)
     parser.add_argument("--oxford-max-width", type=int, default=900)
     parser.add_argument("--photo-max-width", type=int, default=720)
     parser.add_argument("--quality", type=int, default=82)
     args = parser.parse_args()
+
+    if args.life_photos_only:
+        print(json.dumps(export_life_photos_only(args), ensure_ascii=False, indent=2))
+        return
 
     report = export_related_media(args)
     print(json.dumps(report["stats"], ensure_ascii=False, indent=2))

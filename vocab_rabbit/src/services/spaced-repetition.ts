@@ -5,15 +5,6 @@ import { getReviewDueAt } from './study-day';
 export const MAX_MASTERY_LEVEL = 10;
 export const REVIEW_INTERVAL_DAYS = [0, 1, 2, 3, 5, 8, 13, 21, 30, 60] as const;
 
-export function getMasteredReviewDelayDays(wordId: string, answeredAt: Date): number {
-  const seed = `${wordId}|${answeredAt.toISOString().slice(0, 10)}|mastered`;
-  let hash = 2166136261;
-  for (let index = 0; index < seed.length; index += 1) {
-    hash = Math.imul(hash ^ seed.charCodeAt(index), 16777619);
-  }
-  return 60 + ((hash >>> 0) % 31);
-}
-
 export function createEmptyRecord(wordId: string): LearningRecord {
   return {
     wordId,
@@ -40,12 +31,10 @@ export function evaluateAnswer(
       ? Math.max(currentLevel - 1, 0)
       : currentLevel;
 
-  const delayDays = !isCorrect
-    ? 0
-    : masteryLevel >= MAX_MASTERY_LEVEL
-      ? getMasteredReviewDelayDays(currentRecord.wordId, now)
-      : REVIEW_INTERVAL_DAYS[masteryLevel];
-  const nextDueAt = getReviewDueAt(now, delayDays);
+  const delayDays = !isCorrect ? 0 : REVIEW_INTERVAL_DAYS[masteryLevel];
+  const nextDueAt = masteryLevel >= MAX_MASTERY_LEVEL
+    ? null
+    : getReviewDueAt(now, delayDays).toISOString();
 
   return {
     ...currentRecord,
@@ -54,7 +43,7 @@ export function evaluateAnswer(
     correctStreak: isCorrect ? currentRecord.correctStreak + 1 : 0,
     wrongCount: isCorrect ? currentRecord.wrongCount : currentRecord.wrongCount + 1,
     lastStudiedAt: now.toISOString(),
-    nextDueAt: nextDueAt.toISOString(),
+    nextDueAt,
   };
 }
 

@@ -142,6 +142,8 @@ describe('mergeParentSetting', () => {
     const base: ParentSetting = {
       profileId: 'cute-junjun',
       enableAudio: true,
+      englishVoiceURI: '',
+      chineseVoiceURI: '',
       dailyNewWordCount: 6,
       dailyReviewLimit: 8,
       showImages: true,
@@ -150,17 +152,20 @@ describe('mergeParentSetting', () => {
       preferLandscape: true,
     };
     const local: VersionedParentSetting = {
-      value: { ...base, dailyNewWordCount: 10 },
+      value: { ...base, dailyNewWordCount: 10, englishVoiceURI: 'voice-en-local' },
       fieldRevisions: {
         dailyNewWordCount: { updatedAt: '2026-07-14T10:00:00.000Z', deviceId: 'device-a' },
         showHints: { updatedAt: '2026-07-14T08:00:00.000Z', deviceId: 'device-a' },
+        englishVoiceURI: { updatedAt: '2026-07-14T12:00:00.000Z', deviceId: 'device-a' },
       },
     };
     const remote: VersionedParentSetting = {
-      value: { ...base, showHints: false },
+      value: { ...base, showHints: false, englishVoiceURI: 'voice-en-remote', chineseVoiceURI: 'voice-zh-remote' },
       fieldRevisions: {
         dailyNewWordCount: { updatedAt: '2026-07-14T09:00:00.000Z', deviceId: 'device-b' },
         showHints: { updatedAt: '2026-07-14T11:00:00.000Z', deviceId: 'device-b' },
+        englishVoiceURI: { updatedAt: '2026-07-14T11:00:00.000Z', deviceId: 'device-b' },
+        chineseVoiceURI: { updatedAt: '2026-07-14T13:00:00.000Z', deviceId: 'device-b' },
       },
     };
 
@@ -168,6 +173,8 @@ describe('mergeParentSetting', () => {
 
     expect(merged.value.dailyNewWordCount).toBe(10);
     expect(merged.value.showHints).toBe(false);
+    expect(merged.value.englishVoiceURI).toBe('voice-en-local');
+    expect(merged.value.chineseVoiceURI).toBe('voice-zh-remote');
     expect(merged.fieldRevisions.dailyNewWordCount).toEqual(local.fieldRevisions.dailyNewWordCount);
     expect(merged.fieldRevisions.showHints).toEqual(remote.fieldRevisions.showHints);
   });

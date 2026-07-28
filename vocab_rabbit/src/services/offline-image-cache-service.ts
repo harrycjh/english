@@ -74,7 +74,10 @@ export function collectOfflineImageUrls(words: WordRecord[]): string[] {
       urls.push(getWordImageUrl(oxfordPath));
     }
 
-    const redRocketPath = word.relatedMedia?.redRocket?.atlasPath;
+    const redRocketPath = (
+      word.relatedMedia?.redRocket?.imagePath
+      ?? word.relatedMedia?.redRocket?.atlasPath
+    );
     if (redRocketPath) {
       urls.push(getWordImageUrl(redRocketPath));
     }

@@ -110,6 +110,54 @@ describe('vocab sync Function Compute handler', () => {
     expect(unauthorized.statusCode).toBe(401);
   });
 
+  it('signs only requested private life photos for an active device', async () => {
+    const repository = createMemoryRepository();
+    const photoService = {
+      async sign(wordIds) {
+        return {
+          expiresAt: '2026-07-28T12:00:00.000Z',
+          photos: wordIds.map((wordId) => ({
+            wordId,
+            objectKey: `life-photos/${wordId}.webp`,
+            url: `https://private.example/${wordId}`,
+          })),
+        };
+      },
+    };
+    const handler = createHandler(repository, env, { photoService });
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+
+    const response = parseResponse(await handler(event('/api/media/sign', {
+      wordIds: ['ket_family_n'],
+    }, connect.json.deviceToken)));
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json.photos).toEqual([
+      expect.objectContaining({ wordId: 'ket_family_n' }),
+    ]);
+  });
+
+  it('rejects oversized or malformed private photo signing requests', async () => {
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env, {
+      photoService: { sign: async () => ({ photos: [] }) },
+    });
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+
+    const response = parseResponse(await handler(event('/api/media/sign', {
+      wordIds: ['../../secret'],
+    }, connect.json.deviceToken)));
+
+    expect(response.statusCode).toBe(400);
+    expect(response.json.code).toBe('INVALID_PHOTO_WORD_IDS');
+  });
+
   it('rejects a previously issued token after the device is revoked in cloud storage', async () => {
     const repository = createMemoryRepository();
     const handler = createHandler(repository, env);

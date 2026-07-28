@@ -33,14 +33,14 @@ describe('fixed iPad shell', () => {
     expect(css).toMatch(
       /\.page--selection \.selection-layout\s*\{[^}]*grid-template-columns:\s*250px minmax\(0, 1fr\) 242px;[^}]*gap:\s*18px;/s,
     );
-    expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.page::after\s*\{[^}]*inset:\s*0;[^}]*z-index:\s*70;[^}]*border:\s*3px solid rgba\(65, 43, 23, 0\.78\);[^}]*border-radius:\s*22px;/s,
+    expect(css).not.toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.page::after\s*\{/,
     );
   });
 
   it('pins every route dock to the fixed iPad canvas instead of the browser viewport', () => {
     expect(css).toMatch(
-      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*top:\s*calc\(var\(--ipad-shell-stage-height\) - 93px\);[^}]*bottom:\s*auto;[^}]*width:\s*var\(--ipad-shell-stage-width\);[^}]*height:\s*90px;/s,
+      /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock\s*\{[^}]*top:\s*calc\(var\(--ipad-shell-stage-height\) - 93px\);[^}]*bottom:\s*auto;[^}]*width:\s*var\(--ipad-shell-stage-width\);[^}]*height:\s*90px;[^}]*border-radius:\s*0;/s,
     );
     expect(css).toMatch(
       /html\[data-shell-mode='ipad-fixed'\] \.app-bottom-dock__button\s*\{[^}]*top:\s*13px;[^}]*width:\s*215px;[^}]*height:\s*64px;/s,
@@ -88,6 +88,21 @@ describe('fixed iPad shell', () => {
   it('does not cast a translucent overlay above the fixed dock', () => {
     expect(css).toMatch(
       /\.app-bottom-dock\s*\{[^}]*box-shadow:\s*inset 0 1px 0 rgba\(241, 214, 171, 0\.62\);/s,
+    );
+  });
+
+  it('keeps the level 1 answer content lifted and shrinks only portrait level 2 reveals', () => {
+    expect(css).toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.question-panel--level-1 \.question-panel__answer-column\s*\{[^}]*transform:\s*translateY\(-50px\);/s,
+    );
+    expect(css).toMatch(
+      /html\[data-shell-mode='ipad-fixed'\] \.question-panel--level-2\.is-life-photo-reveal\.is-portrait-life-photo \.image-stage__image\s*\{[^}]*inset:\s*7\.5%;[^}]*width:\s*85%;[^}]*height:\s*85%;/s,
+    );
+  });
+
+  it('keeps the Red Rocket result evenly inset inside the level 6 answer area', () => {
+    expect(css).toMatch(
+      /\.question-panel--letter-choice > \.question-red-rocket-result\s*\{[^}]*margin:\s*18px;/s,
     );
   });
 
@@ -238,15 +253,21 @@ describe('statistics reference layout', () => {
 });
 
 describe('settings reference layout', () => {
-  it('keeps the hero and all four settings groups visible above the dock', () => {
+  it('keeps the hero, unified settings panel, and data panel visible above the dock', () => {
     expect(css).toMatch(
       /\.page--settings \.settings-hero\s*\{[^}]*min-height:\s*280px;[^}]*grid-template-columns:\s*207px minmax\(0, 1fr\) 370px;[^}]*gap:\s*18px;/s,
     );
     expect(css).toMatch(
-      /\.page--settings \.settings-panel-grid\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);[^}]*grid-template-areas:\s*'volume experience device danger';[^}]*gap:\s*12px;/s,
+      /\.page--settings \.settings-panel-grid\s*\{[^}]*grid-template-columns:\s*minmax\(0, 3fr\) minmax\(0, 1fr\);[^}]*grid-template-areas:\s*'combined danger';[^}]*gap:\s*12px;/s,
     );
     expect(css).toMatch(
       /\.page--settings \.settings-panel\s*\{[^}]*height:\s*390px;[^}]*min-height:\s*390px;[^}]*max-height:\s*390px;[^}]*margin:\s*0;[^}]*padding:\s*14px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--settings \.settings-unified-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3, minmax\(0, 1fr\)\);/s,
+    );
+    expect(css).toMatch(
+      /\.page--settings \.settings-unified-confirm\s*\{[^}]*position:\s*absolute;[^}]*right:\s*14px;[^}]*bottom:\s*14px;/s,
     );
   });
 

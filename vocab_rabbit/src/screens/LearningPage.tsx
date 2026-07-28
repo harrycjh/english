@@ -9,14 +9,18 @@ import { ProgressRing } from '../components/ProgressRing';
 import { QuestionFillBlank } from '../components/QuestionFillBlank';
 import { QuestionImage } from '../components/QuestionImage';
 import { QuestionImageAnswer } from '../components/QuestionImageAnswer';
+import { QuestionLetterChoice } from '../components/QuestionLetterChoice';
 import { QuestionRecognition } from '../components/QuestionRecognition';
+import { QuestionSentenceChoice } from '../components/QuestionSentenceChoice';
 import { QuestionText } from '../components/QuestionText';
+import { speakSequence, stopSpeaking } from '../services/audio-service';
 import { buildQuestion, getCorrectAnswer, isCorrectAnswer, type Question } from '../services/question-service';
 import { createAnswerEventId } from '../services/answer-event-service';
-import { getExampleSentences } from '../services/example-service';
 import { createEmptyRecord } from '../services/spaced-repetition';
 import { createDateTimeForDateKey } from '../services/task-service';
+import { getStudyAudioPlan, splitRelatedResultAudio } from '../services/study-audio-plan';
 import { indexWordsById } from '../services/word-service';
+import { getLearningAnswerFlow, getLifePhotoRevealFlow } from './learning-answer-flow';
 
 interface LearningPageProps {
   payload: WordPayload;
@@ -28,6 +32,25 @@ interface LearningPageProps {
   onAnswer: (event: AnswerEvent) => Promise<void>;
   onComplete: (result: SessionResult) => Promise<void>;
   onExit: () => void;
+  debugLevel?: number | null;
+}
+
+function wait(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+}
+
+export function getAnswerFeedbackText(
+  question: Question,
+  questionLevel: number,
+  correct: boolean,
+  feedbackCorrectAnswer: string,
+): string {
+  if (correct) return '答对了，继续前进。';
+  if (question.kind === 'recognition') return '没关系，稍后再练一次。';
+  if (question.kind === 'fill-blank' && questionLevel >= 7) {
+    return '没关系，稍后再练一次。';
+  }
+  return `正确答案：${feedbackCorrectAnswer}`;
 }
 
 export function LearningPage({
@@ -40,6 +63,7 @@ export function LearningPage({
   onAnswer,
   onComplete,
   onExit,
+  debugLevel = null,
 }: LearningPageProps) {
   const wordsById = useMemo(() => indexWordsById(payload.words), [payload.words]);
   const [queue, setQueue] = useState(initialWordIds);
@@ -54,15 +78,31 @@ export function LearningPage({
   const [isLocked, setIsLocked] = useState(false);
   const [feedbackText, setFeedbackText] = useState<string | null>(null);
   const [questionStartedAt, setQuestionStartedAt] = useState(() => Date.now());
+  const [revealLifePhoto, setRevealLifePhoto] = useState(false);
+  const [upgradeToLevel, setUpgradeToLevel] = useState<number | null>(null);
+  const [relatedResultPhase, setRelatedResultPhase] = useState<'idle' | 'fading-out' | 'revealed'>('idle');
+  const [pendingAdvance, setPendingAdvance] = useState<{
+    nextIndex: number;
+    nextQueueLength: number;
+    finalResult: SessionResult;
+  } | null>(null);
 
   const currentWordId = queue[currentIndex];
   const currentWord = currentWordId ? wordsById.get(currentWordId) : undefined;
+  const [questionLevel, setQuestionLevel] = useState(() => {
+    if (debugLevel !== null) return debugLevel;
+    return currentWordId ? recordsById[currentWordId]?.masteryLevel ?? 0 : 0;
+  });
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(() => {
     if (!currentWordId || !currentWord) {
       return null;
     }
 
-    return buildQuestion(currentWord, payload.words, recordsById[currentWordId] ?? createEmptyRecord(currentWordId), setting);
+    const record = recordsById[currentWordId] ?? createEmptyRecord(currentWordId);
+    const effectiveRecord = debugLevel === null
+      ? record
+      : { ...record, masteryLevel: debugLevel, reviewStage: debugLevel };
+    return buildQuestion(currentWord, payload.words, effectiveRecord, setting);
   });
 
   useEffect(() => {
@@ -72,11 +112,61 @@ export function LearningPage({
     }
 
     // Freeze one generated question per queue slot so rerenders do not reshuffle options.
-    setCurrentQuestion(
-      buildQuestion(currentWord, payload.words, recordsById[currentWordId] ?? createEmptyRecord(currentWordId), setting)
-    );
+    const record = recordsById[currentWordId] ?? createEmptyRecord(currentWordId);
+    const effectiveRecord = debugLevel === null
+      ? record
+      : { ...record, masteryLevel: debugLevel, reviewStage: debugLevel };
+    setCurrentQuestion(buildQuestion(currentWord, payload.words, effectiveRecord, setting));
+    setQuestionLevel(effectiveRecord.masteryLevel);
+    setRevealLifePhoto(false);
+    setUpgradeToLevel(null);
+    setRelatedResultPhase('idle');
+    setPendingAdvance(null);
     setQuestionStartedAt(Date.now());
-  }, [currentIndex, currentWordId, currentWord, payload.words]);
+  }, [currentIndex, currentWordId, currentWord, debugLevel, payload.words]);
+
+  function resetAnswerUi() {
+    setSelectedAnswer(null);
+    setFeedbackText(null);
+    setRevealLifePhoto(false);
+    setUpgradeToLevel(null);
+    setRelatedResultPhase('idle');
+    setPendingAdvance(null);
+  }
+
+  async function advanceQuestion(
+    nextIndex: number,
+    nextQueueLength: number,
+    finalResult: SessionResult,
+  ) {
+    resetAnswerUi();
+    setIsLocked(false);
+    if (nextIndex >= nextQueueLength) {
+      await onComplete(finalResult);
+      return;
+    }
+    setCurrentIndex(nextIndex);
+  }
+
+  async function handleContinue() {
+    if (!pendingAdvance) return;
+    await advanceQuestion(
+      pendingAdvance.nextIndex,
+      pendingAdvance.nextQueueLength,
+      pendingAdvance.finalResult,
+    );
+  }
+
+  useEffect(() => {
+    if (!currentQuestion || !setting.enableAudio) return;
+    const items = getStudyAudioPlan(questionLevel, currentQuestion).beforeAnswer;
+    if (items.length === 0) return;
+    const timer = window.setTimeout(() => void speakSequence(items), 180);
+    return () => {
+      window.clearTimeout(timer);
+      stopSpeaking();
+    };
+  }, [currentIndex, currentQuestion, questionLevel, setting.enableAudio]);
 
   async function handleAnswer(answer: string) {
     if (!currentWordId || !currentQuestion || isLocked) {
@@ -85,6 +175,9 @@ export function LearningPage({
 
     const correct = isCorrectAnswer(currentQuestion, answer);
     const correctAnswer = getCorrectAnswer(currentQuestion);
+    const feedbackCorrectAnswer = currentQuestion.kind === 'fill-blank'
+      ? currentQuestion.studyText
+      : correctAnswer;
     const learningAction = currentQuestion.kind === 'recognition'
       ? answer === '认识' ? 'recognized' : 'unknown'
       : 'answer';
@@ -104,24 +197,52 @@ export function LearningPage({
       isSessionRetry: (repeatCounts[currentWordId] ?? 0) > 0,
     };
     const currentRepeatCount = repeatCounts[currentWordId] ?? 0;
-    const shouldRepeat = !correct;
+    const shouldRevealLifePhoto = correct
+      && questionLevel === 2
+      && Boolean(localLifePhotosById[currentWordId] || currentQuestion.word.relatedMedia?.lifePhoto);
+    const lifePhotoRevealFlow = getLifePhotoRevealFlow(
+      questionLevel,
+      correct,
+      shouldRevealLifePhoto,
+    );
+    const shouldRevealOxfordResult = correct
+      && questionLevel === 4
+      && Boolean(currentQuestion.word.relatedMedia?.oxford?.sentence);
+    const shouldRevealRedRocketResult = correct
+      && questionLevel === 6
+      && Boolean(currentQuestion.word.relatedMedia?.redRocket?.sentence);
+    const shouldRevealRelatedResult = shouldRevealOxfordResult || shouldRevealRedRocketResult;
+    const answerFlow = getLearningAnswerFlow(
+      questionLevel,
+      correct,
+      shouldRevealRelatedResult,
+    );
+    const shouldRepeat = (
+      debugLevel === null
+      && !correct
+      && !answerFlow.retrySameQuestion
+    );
+    const nextLevel = correct ? Math.min(10, questionLevel + 1) : questionLevel;
+    const shouldAnimateUpgrade = correct && nextLevel > questionLevel;
     const nextQueueLength = queue.length + (shouldRepeat ? 1 : 0);
     const nextIndex = currentIndex + 1;
+    const nextSessionResult = {
+      totalAnswered: sessionResult.totalAnswered + 1,
+      correctCount: sessionResult.correctCount + (correct ? 1 : 0),
+      wrongCount: sessionResult.wrongCount + (correct ? 0 : 1),
+    };
 
     setIsLocked(true);
     setSelectedAnswer(answer);
-    setFeedbackText(
-      correct
-        ? '答对了，继续前进。'
-        : currentQuestion.kind === 'recognition'
-          ? '没关系，稍后再练一次。'
-          : `正确答案：${correctAnswer}`,
-    );
-    setSessionResult((previous) => ({
-      totalAnswered: previous.totalAnswered + 1,
-      correctCount: previous.correctCount + (correct ? 1 : 0),
-      wrongCount: previous.wrongCount + (correct ? 0 : 1),
-    }));
+    setRevealLifePhoto(false);
+    setUpgradeToLevel(shouldAnimateUpgrade ? nextLevel : null);
+    setFeedbackText(getAnswerFeedbackText(
+      currentQuestion,
+      questionLevel,
+      correct,
+      feedbackCorrectAnswer,
+    ));
+    setSessionResult(nextSessionResult);
 
     if (shouldRepeat) {
       setRepeatCounts((previous) => ({
@@ -132,24 +253,48 @@ export function LearningPage({
     }
 
     await onAnswer(answerEvent);
-
-    window.setTimeout(async () => {
-      setSelectedAnswer(null);
-      setFeedbackText(null);
-      setIsLocked(false);
-
-      if (nextIndex >= nextQueueLength) {
-        const finalResult = {
-          totalAnswered: sessionResult.totalAnswered + 1,
-          correctCount: sessionResult.correctCount + (correct ? 1 : 0),
-          wrongCount: sessionResult.wrongCount + (correct ? 0 : 1),
-        };
-        await onComplete(finalResult);
+    const speechItems = setting.enableAudio
+      ? getStudyAudioPlan(questionLevel, currentQuestion, correct).afterAnswer
+      : [];
+    if (shouldRevealRelatedResult) {
+      const relatedAudio = splitRelatedResultAudio(
+        questionLevel,
+        currentQuestion,
+        speechItems,
+      );
+      if (relatedAudio.beforeReveal.length > 0) {
+        await speakSequence(relatedAudio.beforeReveal);
+      }
+      await wait(1_000);
+      setRelatedResultPhase('fading-out');
+      await wait(220);
+      setRelatedResultPhase('revealed');
+      if (relatedAudio.afterReveal.length > 0) {
+        await speakSequence(relatedAudio.afterReveal);
+      }
+      if (answerFlow.requiresManualContinue) {
+        setPendingAdvance({ nextIndex, nextQueueLength, finalResult: nextSessionResult });
         return;
       }
+      await wait(answerFlow.holdAfterFeedbackMs);
+    } else if (lifePhotoRevealFlow) {
+      if (speechItems.length > 0) await speakSequence(speechItems);
+      await wait(lifePhotoRevealFlow.revealAfterAudioMs);
+      setRevealLifePhoto(true);
+      await wait(lifePhotoRevealFlow.holdAfterRevealMs);
+    } else {
+      if (speechItems.length > 0) await speakSequence(speechItems);
+      await wait(answerFlow.holdAfterFeedbackMs);
+    }
 
-      setCurrentIndex(nextIndex);
-    }, 700);
+    if (answerFlow.retrySameQuestion) {
+      resetAnswerUi();
+      setQuestionStartedAt(Date.now());
+      setIsLocked(false);
+      return;
+    }
+
+    await advanceQuestion(nextIndex, nextQueueLength, nextSessionResult);
   }
 
   async function handleAllCorrect() {
@@ -218,8 +363,6 @@ export function LearningPage({
     );
   }
 
-  const exampleSentences = setting.showExamples ? getExampleSentences(currentWord).slice(0, 1) : [];
-
   return (
     <main className="page page--learn">
       <section className="learning-shell">
@@ -253,13 +396,16 @@ export function LearningPage({
           </div>
         </header>
 
-        {currentQuestion.kind === 'image-choice' ? (
+        {currentQuestion.kind === 'image-choice' || currentQuestion.kind === 'image-english-choice' ? (
           <QuestionImage
             question={currentQuestion}
             disabled={isLocked}
             enableAudio={setting.enableAudio}
+            questionLevel={questionLevel}
+            upgradeToLevel={upgradeToLevel}
             selectedAnswer={selectedAnswer}
             localLifePhoto={localLifePhotosById[currentWord.id]}
+            revealLifePhoto={revealLifePhoto}
             onSubmit={handleAnswer}
           />
         ) : null}
@@ -269,6 +415,8 @@ export function LearningPage({
             question={currentQuestion}
             disabled={isLocked}
             enableAudio={setting.enableAudio}
+            questionLevel={questionLevel}
+            upgradeToLevel={upgradeToLevel}
             selectedAnswer={selectedAnswer}
             localLifePhoto={localLifePhotosById[currentWord.id]}
             onSubmit={handleAnswer}
@@ -280,6 +428,8 @@ export function LearningPage({
             question={currentQuestion}
             disabled={isLocked}
             enableAudio={setting.enableAudio}
+            questionLevel={questionLevel}
+            upgradeToLevel={upgradeToLevel}
             selectedAnswer={selectedAnswer}
             localLifePhotosById={localLifePhotosById}
             onSubmit={handleAnswer}
@@ -291,7 +441,37 @@ export function LearningPage({
             question={currentQuestion}
             disabled={isLocked}
             enableAudio={setting.enableAudio}
+            questionLevel={questionLevel}
+            upgradeToLevel={upgradeToLevel}
             selectedAnswer={selectedAnswer}
+            relatedResultPhase={relatedResultPhase}
+            onContinue={() => void handleContinue()}
+            onSubmit={handleAnswer}
+          />
+        ) : null}
+
+        {currentQuestion.kind === 'sentence-choice' ? (
+          <QuestionSentenceChoice
+            question={currentQuestion}
+            disabled={isLocked}
+            enableAudio={setting.enableAudio}
+            questionLevel={questionLevel}
+            upgradeToLevel={upgradeToLevel}
+            selectedAnswer={selectedAnswer}
+            onSubmit={handleAnswer}
+          />
+        ) : null}
+
+        {currentQuestion.kind === 'letter-choice' ? (
+          <QuestionLetterChoice
+            question={currentQuestion}
+            disabled={isLocked}
+            enableAudio={setting.enableAudio}
+            questionLevel={questionLevel}
+            upgradeToLevel={upgradeToLevel}
+            selectedAnswer={selectedAnswer}
+            relatedResultPhase={relatedResultPhase}
+            onContinue={() => void handleContinue()}
             onSubmit={handleAnswer}
           />
         ) : null}
@@ -301,20 +481,17 @@ export function LearningPage({
             question={currentQuestion}
             disabled={isLocked}
             enableAudio={setting.enableAudio}
+            questionLevel={questionLevel}
+            upgradeToLevel={upgradeToLevel}
+            selectedAnswer={selectedAnswer}
+            localLifePhoto={localLifePhotosById[currentWord.id]}
             showHints={setting.showHints}
             onSubmit={handleAnswer}
           />
         ) : null}
 
-        {exampleSentences.length > 0 ? (
-          <section className="learning-example-panel" aria-label="例句">
-            <span>例句</span>
-            <p>{exampleSentences[0]}</p>
-          </section>
-        ) : null}
-
         <footer className={`feedback-strip${feedbackText ? ' is-visible' : ''}`}>
-          {feedbackText ?? '选择答案后会自动进入下一题'}
+          {pendingAdvance ? '查看完关联页面后，点击“继续”' : feedbackText ?? '选择答案后会自动进入下一题'}
         </footer>
       </section>
     </main>
