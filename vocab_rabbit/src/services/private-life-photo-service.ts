@@ -2,13 +2,14 @@ import type { LocalLifePhotoRecord } from '../models/local-media';
 import { signPrivateLifePhotos } from './cloud-sync-service';
 import {
   getOrCreateSyncMetadata,
-  listLocalLifePhotos,
+  listLocalLifePhotoIds,
   saveDeviceToken,
   saveLocalLifePhotos,
 } from './storage-service';
 
 const SIGN_BATCH_SIZE = 40;
 const DOWNLOAD_CONCURRENCY = 4;
+const PROGRESS_UPDATE_INTERVAL = 8;
 
 export interface PrivateLifePhotoDownloadProgress {
   completed: number;
@@ -38,24 +39,37 @@ export async function downloadPrivateLifePhotos(
   options: PrivateLifePhotoDownloadOptions = {},
 ): Promise<PrivateLifePhotoDownloadResult> {
   const requestedWordIds = uniqueWordIds(wordIds);
-  const [metadata, existingById] = await Promise.all([
+  const [metadata, existingIds] = await Promise.all([
     getOrCreateSyncMetadata(),
-    listLocalLifePhotos(),
+    listLocalLifePhotoIds(),
   ]);
   if (!metadata.deviceToken) {
-    throw new Error('请先使用家庭验证码连接学习进度，再下载私密生活照片。');
+    throw new Error('请先使用家庭验证码连接学习进度，再下载照片。');
   }
 
-  const missingWordIds = requestedWordIds.filter((wordId) => !existingById[wordId]);
+  const existingIdSet = new Set(existingIds);
+  const missingWordIds = requestedWordIds.filter((wordId) => !existingIdSet.has(wordId));
   const total = requestedWordIds.length;
   let downloaded = 0;
   let failed = 0;
-  const reportProgress = () => options.onProgress?.({
-    completed: total - missingWordIds.length + downloaded + failed,
-    total,
-    failed,
-  });
-  reportProgress();
+  let lastReportedCompleted = -1;
+  const reportProgress = (force = false) => {
+    const completed = total - missingWordIds.length + downloaded + failed;
+    if (
+      !force
+      && completed !== total
+      && completed - lastReportedCompleted < PROGRESS_UPDATE_INTERVAL
+    ) {
+      return;
+    }
+    lastReportedCompleted = completed;
+    options.onProgress?.({
+      completed,
+      total,
+      failed,
+    });
+  };
+  reportProgress(true);
 
   for (let offset = 0; offset < missingWordIds.length; offset += SIGN_BATCH_SIZE) {
     if (options.signal?.aborted) {
@@ -113,7 +127,7 @@ export async function downloadPrivateLifePhotos(
 
     const unsignedCount = batchWordIds.length - signed.photos.length;
     failed += unsignedCount;
-    reportProgress();
+    reportProgress(true);
   }
 
   return {

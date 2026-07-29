@@ -1,6 +1,17 @@
 import type { QuestionKind } from '../services/question-service';
 
 export const DEBUG_QUESTION_LIMIT = 10;
+export const DEBUG_PROGRESSION_LEVELS = Array.from({ length: 10 }, (_, level) => level);
+
+export function createDebugProgressionPlan(wordId: string): {
+  levels: number[];
+  wordIds: string[];
+} {
+  return {
+    levels: [...DEBUG_PROGRESSION_LEVELS],
+    wordIds: DEBUG_PROGRESSION_LEVELS.map(() => wordId),
+  };
+}
 
 export function isQuestionKindForDebugLevel(level: number, kind: QuestionKind): boolean {
   const normalizedLevel = Math.min(10, Math.max(0, Math.floor(level)));

@@ -33,11 +33,7 @@ export function LearningLevelControl({
       <div className="learning-level-control__levels">
         <MasteryLevelIcon level={currentLevel} className="learning-level-control__level learning-level-control__level--current" />
         {isUpgrading ? (
-          <span className="learning-level-control__upgrade">
-            <span className="learning-level-control__arrow" aria-hidden="true">→</span>
-            <MasteryLevelIcon level={nextLevel} className="learning-level-control__level learning-level-control__level--next" />
-            <i aria-hidden="true">升级</i>
-          </span>
+          <MasteryLevelIcon level={nextLevel} className="learning-level-control__level learning-level-control__level--next" />
         ) : null}
       </div>
       {onAudio ? <AudioIconButton onClick={onAudio} label={audioLabel} /> : null}

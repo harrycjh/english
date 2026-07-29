@@ -5,6 +5,8 @@ export const OFFLINE_IMAGE_CACHE_NAME = 'vocab-rabbit-images-v2';
 
 const OFFLINE_DOWNLOAD_HEADER = 'X-VocaRabbit-Offline-Download';
 const DOWNLOAD_CONCURRENCY = 4;
+const PROGRESS_UPDATE_INTERVAL = 8;
+const YIELD_INTERVAL = 6;
 
 const STATIC_IMAGE_URLS = [
   '/design-reference/slices/review-bunny-scene.png?v=4',
@@ -86,25 +88,25 @@ export function collectOfflineImageUrls(words: WordRecord[]): string[] {
   return uniqueUrls(urls);
 }
 
-async function findCachedResponse(
-  cacheStorage: CacheStorage,
-  cache: Cache,
-  url: string,
-): Promise<Response | undefined> {
-  const imageCacheResponse = await cache.match(url);
-  if (imageCacheResponse) {
-    return imageCacheResponse;
-  }
+function normalizeCacheUrl(input: RequestInfo | URL): string {
+  const value = typeof input === 'string'
+    ? input
+    : input instanceof URL
+      ? input.href
+      : input.url;
+  const baseUrl = typeof location === 'undefined'
+    ? 'https://vocab-rabbit.local/'
+    : location.href;
+  return new URL(value, baseUrl).href;
+}
 
-  if (typeof cacheStorage.match !== 'function') {
-    return undefined;
-  }
+async function getCachedUrlSet(cache: Cache): Promise<Set<string>> {
+  const requests = await cache.keys();
+  return new Set(requests.map((request) => normalizeCacheUrl(request)));
+}
 
-  const existingResponse = await cacheStorage.match(url);
-  if (existingResponse) {
-    await cache.put(url, existingResponse.clone());
-  }
-  return existingResponse;
+function yieldToMainThread(): Promise<void> {
+  return new Promise((resolve) => globalThis.setTimeout(resolve, 0));
 }
 
 export async function getOfflineImageCacheStatus(
@@ -113,9 +115,9 @@ export async function getOfflineImageCacheStatus(
 ): Promise<{ cached: number; total: number }> {
   const unique = uniqueUrls(urls);
   const cache = await cacheStorage.open(OFFLINE_IMAGE_CACHE_NAME);
-  const matches = await Promise.all(unique.map((url) => findCachedResponse(cacheStorage, cache, url)));
+  const cachedUrls = await getCachedUrlSet(cache);
   return {
-    cached: matches.filter(Boolean).length,
+    cached: unique.filter((url) => cachedUrls.has(normalizeCacheUrl(url))).length,
     total: unique.length,
   };
 }
@@ -139,32 +141,38 @@ export async function downloadOfflineImages(
   const fetcher = options.fetcher ?? fetch;
   const unique = uniqueUrls(urls);
   const cache = await cacheStorage.open(OFFLINE_IMAGE_CACHE_NAME);
-  const missing: string[] = [];
-  let cached = 0;
-
-  for (const url of unique) {
-    if (options.signal?.aborted) {
-      throw new DOMException('下载已停止。', 'AbortError');
-    }
-    if (await findCachedResponse(cacheStorage, cache, url)) {
-      cached += 1;
-    } else {
-      missing.push(url);
-    }
-  }
+  const cachedUrls = await getCachedUrlSet(cache);
+  const missing = unique.filter((url) => !cachedUrls.has(normalizeCacheUrl(url)));
+  const cached = unique.length - missing.length;
 
   let downloaded = 0;
   let failed = 0;
   let nextIndex = 0;
-  const reportProgress = () => options.onProgress?.({
-    completed: cached + downloaded + failed,
-    total: unique.length,
-    failed,
-  });
-  reportProgress();
+  let lastReportedCompleted = -1;
+  const reportProgress = (force = false) => {
+    const completed = cached + downloaded + failed;
+    if (
+      !force
+      && completed !== unique.length
+      && completed - lastReportedCompleted < PROGRESS_UPDATE_INTERVAL
+    ) {
+      return;
+    }
+    lastReportedCompleted = completed;
+    options.onProgress?.({
+      completed,
+      total: unique.length,
+      failed,
+    });
+  };
+  reportProgress(true);
 
   async function worker() {
+    let completedSinceYield = 0;
     while (nextIndex < missing.length) {
+      if (options.signal?.aborted) {
+        throw new DOMException('下载已停止。', 'AbortError');
+      }
       const url = missing[nextIndex];
       nextIndex += 1;
       try {
@@ -185,12 +193,18 @@ export async function downloadOfflineImages(
         failed += 1;
       }
       reportProgress();
+      completedSinceYield += 1;
+      if (completedSinceYield >= YIELD_INTERVAL) {
+        completedSinceYield = 0;
+        await yieldToMainThread();
+      }
     }
   }
 
   await Promise.all(
     Array.from({ length: Math.min(DOWNLOAD_CONCURRENCY, missing.length) }, () => worker()),
   );
+  reportProgress(true);
 
   return {
     cached,

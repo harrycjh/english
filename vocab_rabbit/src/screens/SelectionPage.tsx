@@ -20,6 +20,7 @@ import {
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
 import { MasteryLevelIcon } from '../components/MasteryLevelIcon';
+import { formatDifficultyStars } from '../components/DifficultyStars';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 
@@ -42,6 +43,7 @@ interface SelectionPageProps {
   onOpenStats: () => void;
   onSaveSelectionStates: (states: WordSelectionState[]) => Promise<void>;
   onApplySelectionPlan: () => Promise<void>;
+  onRequestLocalLifePhoto?: (wordId: string) => void;
 }
 
 interface SelectionWordCardProps {
@@ -312,6 +314,7 @@ export function SelectionPage({
   onOpenStats,
   onSaveSelectionStates,
   onApplySelectionPlan,
+  onRequestLocalLifePhoto,
 }: SelectionPageProps) {
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -323,6 +326,11 @@ export function SelectionPage({
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
+
+  function openWordDetails(wordId: string) {
+    setSelectedWordId(wordId);
+    onRequestLocalLifePhoto?.(wordId);
+  }
 
   const masteredCount = useMemo(
     () => Object.values(recordsById).filter((record) => record.masteryLevel >= MAX_MASTERY_LEVEL).length,
@@ -511,10 +519,12 @@ export function SelectionPage({
               </select>
             </label>
             <label className="selection-field">
-              <span>难度</span>
+              <span>星级</span>
               <select className="selection-select" value={selectedDifficulty} onChange={(e) => { setSelectedDifficulty(e.target.value); setCurrentPage(1); }}>
-                <option value="all">全部难度</option>
-                {[1, 2, 3, 4, 5].map((d) => <option key={d} value={d}>Lv.{d}</option>)}
+                <option value="all">全部星级</option>
+                {[1, 2, 3, 4, 5].map((d) => (
+                  <option key={d} value={d}>{formatDifficultyStars(d)} {d}星</option>
+                ))}
               </select>
             </label>
             <label className="selection-field">
@@ -557,7 +567,7 @@ export function SelectionPage({
                   <select className="selection-select" value={sortMode}
                     onChange={(e) => { setSortMode(e.target.value as SortMode); setCurrentPage(1); }}>
                     <option value="level">按 Level</option>
-                    <option value="difficulty">按难度</option>
+                    <option value="difficulty">按星级</option>
                     <option value="recent">按最近变更</option>
                     <option value="alphabetical">按字母</option>
                   </select>
@@ -591,7 +601,7 @@ export function SelectionPage({
                       word={word}
                       masteryLevel={recordsById[word.id]?.masteryLevel ?? 0}
                       visualOverride={vo}
-                      onOpenDetails={() => setSelectedWordId(word.id)}
+                      onOpenDetails={() => openWordDetails(word.id)}
                       isEnabled={ss.isEnabled}
                       isPaused={ss.isPaused}
                       onToggleEnabled={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: !ss.isEnabled, isPaused: false }])}
@@ -612,7 +622,7 @@ export function SelectionPage({
                       key={word.id} word={word} statusLabel={sl} statusTone={st}
                       updatedAtLabel={formatUpdatedAt(ss.updatedAt)}
                       isEnabled={ss.isEnabled} isPaused={ss.isPaused}
-                      onOpenDetails={() => setSelectedWordId(word.id)}
+                      onOpenDetails={() => openWordDetails(word.id)}
                       onToggleEnabled={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: !ss.isEnabled, isPaused: false }])}
                       onTogglePaused={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: true, isPaused: !ss.isPaused }])}
                     />

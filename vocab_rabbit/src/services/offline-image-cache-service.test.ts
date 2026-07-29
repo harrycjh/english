@@ -4,6 +4,7 @@ import { CONTENT_VERSION } from '../config/app-meta';
 import {
   collectOfflineImageUrls,
   downloadOfflineImages,
+  getOfflineImageCacheStatus,
   OFFLINE_IMAGE_CACHE_NAME,
 } from './offline-image-cache-service';
 
@@ -23,7 +24,12 @@ function createWord(overrides: Partial<WordRecord> = {}): WordRecord {
 }
 
 function cacheKey(input: RequestInfo | URL): string {
-  return typeof input === 'string' ? input : input.toString();
+  const value = typeof input === 'string'
+    ? input
+    : input instanceof URL
+      ? input.href
+      : input.url;
+  return new URL(value, 'https://vocab-rabbit.local/').href;
 }
 
 describe('collectOfflineImageUrls', () => {
@@ -104,14 +110,14 @@ describe('collectOfflineImageUrls', () => {
 describe('downloadOfflineImages', () => {
   it('skips cached images and reports progress while caching missing images', async () => {
     const entries = new Map<string, Response>([
-      ['/cached.webp', new Response('cached', { status: 200 })],
+      [cacheKey('/cached.webp'), new Response('cached', { status: 200 })],
     ]);
     const cache = {
       match: vi.fn(async (input: RequestInfo | URL) => entries.get(cacheKey(input))),
       put: vi.fn(async (input: RequestInfo | URL, response: Response) => {
         entries.set(cacheKey(input), response);
       }),
-      keys: vi.fn(async () => [...entries.keys()].map((url) => new Request(`https://example.com${url}`))),
+      keys: vi.fn(async () => [...entries.keys()].map((url) => new Request(url))),
       delete: vi.fn(async () => true),
     };
     const cacheStorage = {
@@ -132,5 +138,25 @@ describe('downloadOfflineImages', () => {
     expect(cache.put).toHaveBeenCalledWith('/missing.webp', expect.any(Response));
     expect(result).toEqual({ cached: 1, downloaded: 1, failed: 0, total: 2 });
     expect(progress.at(-1)).toEqual({ completed: 2, total: 2, failed: 0 });
+  });
+
+  it('checks cache status from cache keys without matching every image', async () => {
+    const cache = {
+      keys: vi.fn(async () => [
+        new Request('https://vocab-rabbit.local/cached.webp'),
+      ]),
+      match: vi.fn(),
+    };
+    const cacheStorage = {
+      open: vi.fn(async () => cache),
+    };
+
+    const result = await getOfflineImageCacheStatus(
+      ['/cached.webp', '/missing.webp'],
+      cacheStorage as unknown as CacheStorage,
+    );
+
+    expect(result).toEqual({ cached: 1, total: 2 });
+    expect(cache.match).not.toHaveBeenCalled();
   });
 });

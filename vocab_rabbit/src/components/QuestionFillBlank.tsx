@@ -5,18 +5,13 @@ import {
   useState,
   type ChangeEvent,
   type CSSProperties,
-  type FormEvent,
+  type SyntheticEvent,
 } from 'react';
-import { Keyboard, PenLine } from 'lucide-react';
+import { Delete } from 'lucide-react';
 import type { LocalLifePhotoView } from '../models/local-media';
 import type { FillBlankQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
-import { getPrimaryExamplePair } from '../services/example-service';
-import {
-  loadSpellingInputMethod,
-  saveSpellingInputMethod,
-  type SpellingInputMethod,
-} from '../services/spelling-input-preference';
+import { getExamplePairForLevel } from '../services/example-service';
 import { getStudyChinese } from '../services/word-service';
 import { AudioIconButton } from './AudioIconButton';
 import { LearningLevelControl } from './LearningLevelControl';
@@ -32,6 +27,7 @@ interface QuestionFillBlankProps {
   selectedAnswer: string | null;
   localLifePhoto?: LocalLifePhotoView;
   showHints: boolean;
+  showDifficultSpellingSkip?: boolean;
   onSubmit: (answer: string) => void;
 }
 
@@ -51,6 +47,30 @@ function isLiteralSpace(character: string) {
   return character === ' ';
 }
 
+export function isPortraitSpellingLifePhoto(width: number, height: number): boolean {
+  return width > 0 && height > width;
+}
+
+const KEYBOARD_ROWS = [
+  [...'QWERTYUIOP'],
+  [...'ASDFGHJKL'],
+  [...'ZXCVBNM'],
+];
+
+export function applySpellingKey(
+  currentGuess: string,
+  key: string,
+  maximumLength: number,
+): string {
+  if (key === 'Backspace') {
+    return currentGuess.slice(0, -1);
+  }
+  if (!/^[A-Za-z]$/.test(key) || currentGuess.length >= maximumLength) {
+    return currentGuess;
+  }
+  return `${currentGuess}${key.toLowerCase()}`;
+}
+
 export function QuestionFillBlank({
   question,
   disabled,
@@ -60,10 +80,11 @@ export function QuestionFillBlank({
   selectedAnswer,
   localLifePhoto,
   showHints,
+  showDifficultSpellingSkip = false,
   onSubmit,
 }: QuestionFillBlankProps) {
   const [guess, setGuess] = useState('');
-  const [inputMethod, setInputMethod] = useState<SpellingInputMethod>(loadSpellingInputMethod);
+  const [isPortraitLifePhoto, setIsPortraitLifePhoto] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const hasSubmittedRef = useRef(false);
 
@@ -73,12 +94,16 @@ export function QuestionFillBlank({
   }, [question.word.id, question.maskedCharacters, question.missingLetters]);
 
   useEffect(() => {
+    setIsPortraitLifePhoto(false);
+  }, [question.word.id, localLifePhoto?.objectUrl, localLifePhoto?.photoId]);
+
+  useEffect(() => {
     if (disabled) return;
     const frame = window.requestAnimationFrame(() => {
       inputRef.current?.focus({ preventScroll: true });
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [question.word.id, disabled, inputMethod]);
+  }, [question.word.id, disabled]);
 
   const answerLetters = useMemo(
     () => disabled ? question.missingLetters : [...guess],
@@ -93,9 +118,10 @@ export function QuestionFillBlank({
     '--spelling-character-count': question.maskedCharacters.length,
   } as CSSProperties;
   const useSpellingCardLayout = questionLevel >= 7;
+  const useTopForgotAction = questionLevel >= 8 && questionLevel <= 9;
   const answeredCorrectly = disabled
     && selectedAnswer?.toLowerCase() === question.missingLetters.join('').toLowerCase();
-  const example = getPrimaryExamplePair(question.word);
+  const example = getExamplePairForLevel(question.word, questionLevel);
   const showExample = questionLevel === 7 || questionLevel === 9
     ? disabled
     : questionLevel === 8
@@ -112,15 +138,8 @@ export function QuestionFillBlank({
     return -1;
   }, [disabled, guess.length, question.maskedCharacters, useSpellingCardLayout]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (disabled || hasSubmittedRef.current || guess.length !== question.missingLetters.length) return;
-    hasSubmittedRef.current = true;
-    onSubmit(guess);
-  }
-
-  function handleGuessChange(event: ChangeEvent<HTMLInputElement>) {
-    const nextGuess = event.target.value
+  function updateGuess(nextValue: string) {
+    const nextGuess = nextValue
       .replace(/[^A-Za-z]/g, '')
       .toLowerCase()
       .slice(0, question.missingLetters.length);
@@ -136,28 +155,85 @@ export function QuestionFillBlank({
     }
   }
 
+  function handleGuessChange(event: ChangeEvent<HTMLInputElement>) {
+    updateGuess(event.target.value);
+  }
+
+  function handleScreenKey(key: string) {
+    if (disabled || hasSubmittedRef.current) return;
+    updateGuess(applySpellingKey(guess, key, question.missingLetters.length));
+    inputRef.current?.focus({ preventScroll: true });
+  }
+
   function handleForgot() {
     if (disabled || hasSubmittedRef.current) return;
     hasSubmittedRef.current = true;
     onSubmit('');
   }
 
-  function handleInputMethodChange(nextMethod: SpellingInputMethod) {
-    setInputMethod(nextMethod);
-    saveSpellingInputMethod(nextMethod);
+  function handleDifficultSpellingSkip() {
+    if (disabled || hasSubmittedRef.current) return;
+    hasSubmittedRef.current = true;
+    onSubmit(question.missingLetters.join(''));
+  }
 
-    if (disabled) return;
-    const input = inputRef.current;
-    if (!input) return;
-    input.blur();
-    input.setAttribute('inputmode', nextMethod === 'keyboard' ? 'text' : 'none');
-    input.focus({ preventScroll: true });
+  const screenKeyboard = (
+    <div className="spelling-screen-keyboard keyboard-grid" aria-label="屏幕英文键盘">
+      {KEYBOARD_ROWS.map((row, rowIndex) => (
+        <div
+          key={row.join('')}
+          className={`spelling-screen-keyboard__row spelling-screen-keyboard__row--${rowIndex + 1}`}
+        >
+          {row.map((letter) => (
+            <button
+              key={letter}
+              className="spelling-screen-keyboard__key keyboard-button"
+              type="button"
+              aria-label={`字母 ${letter}`}
+              disabled={disabled}
+              onClick={() => handleScreenKey(letter)}
+            >
+              {letter}
+            </button>
+          ))}
+          {rowIndex === KEYBOARD_ROWS.length - 1 ? (
+            <button
+              className="spelling-screen-keyboard__key spelling-screen-keyboard__key--delete keyboard-button"
+              type="button"
+              aria-label="删除上一个字母"
+              title="删除"
+              disabled={disabled || guess.length === 0}
+              onClick={() => handleScreenKey('Backspace')}
+            >
+              <Delete aria-hidden="true" />
+              <span>删除</span>
+            </button>
+          ) : null}
+        </div>
+      ))}
+    </div>
+  );
+
+  const useFinalSpellingLayout = questionLevel >= 8 && questionLevel <= 9;
+  const imageStrategy = questionLevel >= 9 ? 'life-photo' : 'comfy';
+  const showsLifePhotoImage = useFinalSpellingLayout
+    && imageStrategy === 'life-photo'
+    && Boolean(localLifePhoto || question.word.relatedMedia?.lifePhoto);
+  const usePortraitLifePhotoLayout = showsLifePhotoImage && isPortraitLifePhoto;
+
+  function handleMediaLoadCapture(event: SyntheticEvent<HTMLDivElement>) {
+    if (!showsLifePhotoImage) return;
+    const image = event.target as HTMLImageElement;
+    if (image.tagName !== 'IMG') return;
+    setIsPortraitLifePhoto(
+      isPortraitSpellingLifePhoto(image.naturalWidth, image.naturalHeight),
+    );
   }
 
   return (
-    <section className={`question-panel question-panel--fill${useSpellingCardLayout ? ' question-panel--full-spelling' : ''}`}>
+    <section className={`question-panel question-panel--fill${useSpellingCardLayout ? ' question-panel--full-spelling' : ''}${useFinalSpellingLayout ? ' question-panel--full-spelling-final' : ''}${showsLifePhotoImage ? ' is-full-spelling-life-photo' : ''}${usePortraitLifePhotoLayout ? ' is-portrait-full-spelling-life-photo' : ''}`}>
       {useSpellingCardLayout ? (
-        <div className="full-spelling-card">
+        <div className="full-spelling-card" onLoadCapture={handleMediaLoadCapture}>
           <LearningLevelControl
             level={questionLevel}
             upgradeTo={upgradeToLevel}
@@ -166,32 +242,20 @@ export function QuestionFillBlank({
             <span className="question-word__label">
               {question.inputMode === 'full' ? '完整拼写' : '部分拼写'}
             </span>
-            <div className="spelling-input-method-toggle" role="group" aria-label="拼写输入方式">
+            {useTopForgotAction ? (
               <button
                 type="button"
-                className={inputMethod === 'keyboard' ? 'is-selected' : undefined}
-                aria-pressed={inputMethod === 'keyboard'}
+                className="full-spelling-forgot-button full-spelling-forgot-button--inline"
                 disabled={disabled}
-                onClick={() => handleInputMethodChange('keyboard')}
+                onClick={handleForgot}
               >
-                <Keyboard aria-hidden="true" />
-                键盘
+                我忘记了
               </button>
-              <button
-                type="button"
-                className={inputMethod === 'handwriting' ? 'is-selected' : undefined}
-                aria-pressed={inputMethod === 'handwriting'}
-                disabled={disabled}
-                onClick={() => handleInputMethodChange('handwriting')}
-              >
-                <PenLine aria-hidden="true" />
-                手写
-              </button>
-            </div>
+            ) : null}
           </div>
           <QuestionMedia
             word={question.word}
-            strategy={questionLevel >= 9 ? 'life-photo' : 'comfy'}
+            strategy={imageStrategy}
             localLifePhoto={localLifePhoto}
             className="full-spelling-card__image"
             alt={`${getStudyChinese(question.word)} 的提示图片`}
@@ -212,25 +276,6 @@ export function QuestionFillBlank({
                   </span>
                 ))}
               </div>
-              <input
-                ref={inputRef}
-                className="full-spelling-card__inline-input"
-                type="text"
-                inputMode={inputMethod === 'keyboard' ? 'text' : 'none'}
-                lang="en-US"
-                enterKeyHint="done"
-                autoFocus
-                autoCapitalize="none"
-                autoCorrect="off"
-                autoComplete="off"
-                spellCheck={false}
-                aria-label="直接拼写单词"
-                aria-disabled={disabled}
-                maxLength={question.missingLetters.length}
-                readOnly={disabled}
-                value={guess}
-                onChange={handleGuessChange}
-              />
             </div>
             {questionLevel !== 9 && question.word.phonetic ? (
               <div className="question-phonetic-row full-spelling-card__phonetic">
@@ -280,53 +325,62 @@ export function QuestionFillBlank({
             <strong>还缺 {question.missingLetters.length} 个字母</strong>
           ) : null}
           <p>
-            当前使用{inputMethod === 'keyboard' ? '英文键盘' : '手写'}输入。
+            使用右侧英文键盘输入。
             {questionLevel < 7 ? `已填写 ${guess.length}/${question.missingLetters.length}。` : null}
           </p>
         </div>
       ) : null}
 
       {useSpellingCardLayout ? (
-        <div className="full-spelling-actions">
-          <button
-            type="button"
-            className="full-spelling-forgot-button"
-            disabled={disabled}
-            onClick={handleForgot}
-          >
-            我忘记了
-          </button>
+        <div className="full-spelling-keyboard-shell">
+          {screenKeyboard}
         </div>
-      ) : (
-        <form className="spelling-entry" onSubmit={handleSubmit}>
-          <input
-            ref={inputRef}
-            type="text"
-            inputMode={inputMethod === 'keyboard' ? 'text' : 'none'}
-            lang="en-US"
-            enterKeyHint="done"
-            autoFocus
-            autoCapitalize="none"
-            autoCorrect="off"
-            autoComplete="off"
-            spellCheck={false}
-            aria-label="输入缺失字母"
-            aria-disabled={disabled}
-            placeholder={`输入 ${question.missingLetters.length} 个字母`}
-            maxLength={question.missingLetters.length}
-            readOnly={disabled}
-            value={guess}
-            onChange={handleGuessChange}
-          />
-          <button
-            type="submit"
-            className="primary-button spelling-entry__submit"
-            disabled={disabled || guess.length !== question.missingLetters.length}
-          >
-            确定
-          </button>
-        </form>
-      )}
+      ) : null}
+
+      {useSpellingCardLayout && (!useTopForgotAction || showDifficultSpellingSkip) ? (
+        <div className="full-spelling-actions">
+          {!useTopForgotAction ? (
+            <button
+              type="button"
+              className="full-spelling-forgot-button"
+              disabled={disabled}
+              onClick={handleForgot}
+            >
+              我忘记了
+            </button>
+          ) : null}
+          {showDifficultSpellingSkip ? (
+            <button
+              type="button"
+              className="full-spelling-skip-button"
+              disabled={disabled}
+              onClick={handleDifficultSpellingSkip}
+            >
+              我是小狗子（不是小兔子）所以默不出来，爸爸帮我跳过这个单词吧！
+            </button>
+          ) : null}
+        </div>
+      ) : !useSpellingCardLayout ? (
+        screenKeyboard
+      ) : null}
+      <input
+        ref={inputRef}
+        className="spelling-hardware-input"
+        type="text"
+        inputMode="none"
+        lang="en-US"
+        autoFocus
+        autoCapitalize="none"
+        autoCorrect="off"
+        autoComplete="off"
+        spellCheck={false}
+        aria-label="使用实体键盘输入字母"
+        aria-disabled={disabled}
+        maxLength={question.missingLetters.length}
+        readOnly={disabled}
+        value={guess}
+        onChange={handleGuessChange}
+      />
     </section>
   );
 }

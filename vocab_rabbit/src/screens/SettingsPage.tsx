@@ -454,7 +454,7 @@ export function SettingsPage({
         phase: abortController.signal.aborted ? 'idle' : 'error',
         message: abortController.signal.aborted
           ? null
-          : caughtError instanceof Error ? caughtError.message : '私密生活照片下载失败。',
+          : caughtError instanceof Error ? caughtError.message : '照片下载失败。',
       }));
     } finally {
       if (privatePhotoAbortRef.current === abortController) {
@@ -520,12 +520,12 @@ export function SettingsPage({
     : 0;
   const privatePhotoStatusText = privatePhotoState.message
     ?? (privatePhotoState.phase === 'downloading'
-      ? `正在从私有云端下载 ${privatePhotoState.completed}/${privatePhotoState.total}（${privatePhotoPercent}%）`
+      ? `正在下载照片 ${privatePhotoState.completed}/${privatePhotoState.total}（${privatePhotoPercent}%）`
       : privatePhotoState.phase === 'complete'
-        ? `已在本机保存全部 ${privatePhotoState.total} 张私密生活照片。`
+        ? `已在本机保存全部 ${privatePhotoState.total} 张生活照片。`
         : privatePhotoState.completed > 0
           ? `本机已有 ${privatePhotoState.completed}/${privatePhotoState.total} 张，可继续补齐。`
-          : `验证过家庭验证码后，可下载 ${privatePhotoState.total} 张私密生活照片。`);
+          : `验证过家庭验证码后，可下载 ${privatePhotoState.total} 张生活照片。`);
 
   return (
     <main className="page page--home page--settings" data-profile={settings.profileId}>
@@ -724,7 +724,7 @@ export function SettingsPage({
               <article className="settings-data-item settings-data-item--images">
                 <span className="settings-data-item__icon">🔐</span>
                 <div aria-live="polite">
-                  <strong>下载私密生活照片</strong>
+                  <strong>下载照片</strong>
                   <p>{privatePhotoStatusText}</p>
                   {(privatePhotoState.phase === 'downloading' || privatePhotoState.completed > 0) && (
                     <span className="settings-image-download-progress" aria-hidden="true">

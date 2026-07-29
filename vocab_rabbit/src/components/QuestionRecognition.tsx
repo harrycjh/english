@@ -1,7 +1,7 @@
 import type { LocalLifePhotoView } from '../models/local-media';
 import type { RecognitionQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
-import { getPrimaryExamplePair } from '../services/example-service';
+import { getExamplePairForLevel } from '../services/example-service';
 import { getStudyChinese } from '../services/word-service';
 import { AudioIconButton } from './AudioIconButton';
 import { LearningLevelControl } from './LearningLevelControl';
@@ -29,7 +29,7 @@ export function QuestionRecognition({
   localLifePhoto,
   onSubmit,
 }: QuestionRecognitionProps) {
-  const example = getPrimaryExamplePair(question.word);
+  const example = getExamplePairForLevel(question.word, questionLevel);
   const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
   return (
     <section className="question-panel question-panel--recognition question-panel--level-0">

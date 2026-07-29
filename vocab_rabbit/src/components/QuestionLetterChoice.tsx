@@ -1,7 +1,7 @@
 import type { LetterChoiceQuestion } from '../services/question-service';
 import { getWordAtlasStyle } from '../services/word-atlas-service';
 import { getAssetUrl, getStudyChinese, getWordImageUrl } from '../services/word-service';
-import { getPrimaryExamplePair } from '../services/example-service';
+import { getExamplePairForLevel } from '../services/example-service';
 import { speakWord } from '../services/audio-service';
 import { AudioIconButton } from './AudioIconButton';
 import { QuestionExampleResult } from './QuestionExampleResult';
@@ -32,7 +32,7 @@ export function QuestionLetterChoice({
 }: QuestionLetterChoiceProps) {
   const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
   const redRocket = question.word.relatedMedia?.redRocket;
-  const example = getPrimaryExamplePair(question.word);
+  const example = getExamplePairForLevel(question.word, questionLevel);
   const showRedRocketResult = (
     questionLevel === 6
     && answeredCorrectly

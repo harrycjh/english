@@ -120,7 +120,7 @@ describe('ReviewPage', () => {
     expect(markup).toContain('data-answered="1"');
   });
 
-  it('offers debug levels zero through nine without level ten', () => {
+  it('offers fixed debug levels zero through nine plus the full progression', () => {
     const markup = renderToStaticMarkup(
       <ReviewPage
         payload={{
@@ -161,6 +161,8 @@ describe('ReviewPage', () => {
     expect(markup).toContain('<strong>Lv0</strong>');
     expect(markup).toContain('<strong>Lv9</strong>');
     expect(markup).not.toContain('<strong>Lv10</strong>');
+    expect(markup).toContain('<strong>Lv0 到 Lv10</strong>');
+    expect(markup).toContain('完整升级流程');
   });
 
   it('does not offer another review round while planned words remain unanswered', () => {

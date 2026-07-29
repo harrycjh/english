@@ -1,10 +1,14 @@
 import type { LocalLifePhotoView } from '../models/local-media';
-import { listLocalLifePhotos } from './storage-service';
+import { getLocalLifePhotos, listLocalLifePhotos } from './storage-service';
 
-export async function loadLocalLifePhotoViews(): Promise<Record<string, LocalLifePhotoView>> {
-  const recordsById = await listLocalLifePhotos();
+export async function loadLocalLifePhotoViews(
+  wordIds?: string[],
+): Promise<Record<string, LocalLifePhotoView>> {
+  const records = wordIds
+    ? await getLocalLifePhotos([...new Set(wordIds)])
+    : Object.values(await listLocalLifePhotos());
   return Object.fromEntries(
-    Object.values(recordsById).map((record) => [
+    records.map((record) => [
       record.wordId,
       {
         wordId: record.wordId,

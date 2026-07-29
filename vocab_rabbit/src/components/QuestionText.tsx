@@ -1,6 +1,6 @@
 import type { ChoiceQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
-import { getExampleSentences, getPrimaryExamplePair } from '../services/example-service';
+import { getExamplePairForLevel, getExampleSentences } from '../services/example-service';
 import { getStudyChinese, getStudyPartOfSpeech, getWordImageUrl } from '../services/word-service';
 import { LearningLevelControl } from './LearningLevelControl';
 import { AudioIconButton } from './AudioIconButton';
@@ -39,7 +39,7 @@ export function QuestionText({
     && Boolean(oxford?.sentence)
   );
   const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
-  const example = getPrimaryExamplePair(question.word);
+  const example = getExamplePairForLevel(question.word, questionLevel);
 
   return (
     <section className="question-panel question-panel--text">

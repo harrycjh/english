@@ -7,6 +7,7 @@ import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordRecord } from '../models/word';
 import { speakWord } from '../services/audio-service';
 import { AudioIconButton } from './AudioIconButton';
+import { DifficultyStars } from './DifficultyStars';
 import { WordImage } from './WordImage';
 import { getExampleSentences } from '../services/example-service';
 import { getWordAnswerStats } from '../services/answer-event-service';
@@ -282,7 +283,7 @@ export function WordDetailDrawer({
       <p className="word-detail-drawer__part-of-speech">{getStudyPartOfSpeech(word)}</p>
       <div className="word-detail-drawer__meta-strip">
         <span className="word-detail-chip">{word.category}</span>
-        <span className="word-detail-chip">Lv.{word.difficulty}</span>
+        <DifficultyStars difficulty={word.difficulty} className="word-detail-chip word-detail-chip--stars" />
         <span className="word-detail-chip">{getLearningLabel(record)}</span>
         <span className="word-detail-chip">{getSelectionLabel(selectionState)}</span>
       </div>

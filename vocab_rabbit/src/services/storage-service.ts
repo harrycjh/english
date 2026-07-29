@@ -447,6 +447,22 @@ export async function listLocalLifePhotos(): Promise<Record<string, LocalLifePho
   return Object.fromEntries(photos.map((photo) => [photo.wordId, photo]));
 }
 
+export async function listLocalLifePhotoIds(): Promise<string[]> {
+  return database.localLifePhotos.toCollection().primaryKeys();
+}
+
+export async function countLocalLifePhotos(): Promise<number> {
+  return database.localLifePhotos.count();
+}
+
+export async function getLocalLifePhotos(wordIds: string[]): Promise<LocalLifePhotoRecord[]> {
+  if (wordIds.length === 0) {
+    return [];
+  }
+  const photos = await database.localLifePhotos.bulkGet(wordIds);
+  return photos.filter((photo): photo is LocalLifePhotoRecord => Boolean(photo));
+}
+
 export async function saveLocalLifePhotos(photos: LocalLifePhotoRecord[]): Promise<void> {
   if (photos.length === 0) {
     return;

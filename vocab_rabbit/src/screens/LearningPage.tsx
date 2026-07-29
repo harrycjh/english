@@ -13,19 +13,26 @@ import { QuestionLetterChoice } from '../components/QuestionLetterChoice';
 import { QuestionRecognition } from '../components/QuestionRecognition';
 import { QuestionSentenceChoice } from '../components/QuestionSentenceChoice';
 import { QuestionText } from '../components/QuestionText';
-import { speakSequence, stopSpeaking } from '../services/audio-service';
+import { playLevelUpSound, speakSequence, stopSpeaking } from '../services/audio-service';
 import { buildQuestion, getCorrectAnswer, isCorrectAnswer, type Question } from '../services/question-service';
 import { createAnswerEventId } from '../services/answer-event-service';
 import { createEmptyRecord } from '../services/spaced-repetition';
 import { createDateTimeForDateKey } from '../services/task-service';
 import { getStudyAudioPlan, splitRelatedResultAudio } from '../services/study-audio-plan';
 import { indexWordsById } from '../services/word-service';
-import { getLearningAnswerFlow, getLifePhotoRevealFlow } from './learning-answer-flow';
+import {
+  AFTER_LEVEL_UP_ADVANCE_DELAY_MS,
+  getLearningAnswerFlow,
+  getLifePhotoRevealFlow,
+  getUpgradeWaitSegments,
+  LEVEL_UP_ANIMATION_MS,
+} from './learning-answer-flow';
 
 interface LearningPageProps {
   payload: WordPayload;
   initialWordIds: string[];
   recordsById: Record<string, LearningRecord>;
+  answerEvents?: AnswerEvent[];
   setting: ParentSetting;
   studyDateKey: string;
   localLifePhotosById: Record<string, LocalLifePhotoView>;
@@ -33,6 +40,7 @@ interface LearningPageProps {
   onComplete: (result: SessionResult) => Promise<void>;
   onExit: () => void;
   debugLevel?: number | null;
+  debugLevelSequence?: number[] | null;
 }
 
 function wait(milliseconds: number): Promise<void> {
@@ -40,23 +48,38 @@ function wait(milliseconds: number): Promise<void> {
 }
 
 export function getAnswerFeedbackText(
-  question: Question,
+  _question: Question,
+  _questionLevel: number,
+  _correct: boolean,
+  _feedbackCorrectAnswer: string,
+): string | null {
+  return null;
+}
+
+export function hasTodayWrongDifficultSpellingAttempt(
+  answerEvents: AnswerEvent[],
+  wordId: string,
+  studyDateKey: string,
   questionLevel: number,
-  correct: boolean,
-  feedbackCorrectAnswer: string,
-): string {
-  if (correct) return '答对了，继续前进。';
-  if (question.kind === 'recognition') return '没关系，稍后再练一次。';
-  if (question.kind === 'fill-blank' && questionLevel >= 7) {
-    return '没关系，稍后再练一次。';
-  }
-  return `正确答案：${feedbackCorrectAnswer}`;
+): boolean {
+  return answerEvents.some((event) => {
+    const eventLevel = event.learningStateBefore?.masteryLevel ?? questionLevel;
+    return (
+      event.wordId === wordId
+      && event.dateKey === studyDateKey
+      && event.questionKind === 'fill-blank'
+      && !event.isCorrect
+      && eventLevel >= 8
+      && eventLevel <= 9
+    );
+  });
 }
 
 export function LearningPage({
   payload,
   initialWordIds,
   recordsById,
+  answerEvents = [],
   setting,
   studyDateKey,
   localLifePhotosById,
@@ -64,6 +87,7 @@ export function LearningPage({
   onComplete,
   onExit,
   debugLevel = null,
+  debugLevelSequence = null,
 }: LearningPageProps) {
   const wordsById = useMemo(() => indexWordsById(payload.words), [payload.words]);
   const [queue, setQueue] = useState(initialWordIds);
@@ -89,8 +113,12 @@ export function LearningPage({
 
   const currentWordId = queue[currentIndex];
   const currentWord = currentWordId ? wordsById.get(currentWordId) : undefined;
+  const currentRepeatCount = currentWordId ? repeatCounts[currentWordId] ?? 0 : 0;
+  const activeDebugLevel = debugLevelSequence?.[currentIndex] ?? debugLevel;
+  const isDebugSession = activeDebugLevel !== null;
+  const isDebugProgression = debugLevelSequence !== null;
   const [questionLevel, setQuestionLevel] = useState(() => {
-    if (debugLevel !== null) return debugLevel;
+    if (activeDebugLevel !== null) return activeDebugLevel;
     return currentWordId ? recordsById[currentWordId]?.masteryLevel ?? 0 : 0;
   });
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(() => {
@@ -99,9 +127,9 @@ export function LearningPage({
     }
 
     const record = recordsById[currentWordId] ?? createEmptyRecord(currentWordId);
-    const effectiveRecord = debugLevel === null
+    const effectiveRecord = activeDebugLevel === null
       ? record
-      : { ...record, masteryLevel: debugLevel, reviewStage: debugLevel };
+      : { ...record, masteryLevel: activeDebugLevel, reviewStage: activeDebugLevel };
     return buildQuestion(currentWord, payload.words, effectiveRecord, setting);
   });
 
@@ -113,9 +141,9 @@ export function LearningPage({
 
     // Freeze one generated question per queue slot so rerenders do not reshuffle options.
     const record = recordsById[currentWordId] ?? createEmptyRecord(currentWordId);
-    const effectiveRecord = debugLevel === null
+    const effectiveRecord = activeDebugLevel === null
       ? record
-      : { ...record, masteryLevel: debugLevel, reviewStage: debugLevel };
+      : { ...record, masteryLevel: activeDebugLevel, reviewStage: activeDebugLevel };
     setCurrentQuestion(buildQuestion(currentWord, payload.words, effectiveRecord, setting));
     setQuestionLevel(effectiveRecord.masteryLevel);
     setRevealLifePhoto(false);
@@ -123,7 +151,7 @@ export function LearningPage({
     setRelatedResultPhase('idle');
     setPendingAdvance(null);
     setQuestionStartedAt(Date.now());
-  }, [currentIndex, currentWordId, currentWord, debugLevel, payload.words]);
+  }, [currentIndex, currentWordId, currentWord, activeDebugLevel, payload.words]);
 
   function resetAnswerUi() {
     setSelectedAnswer(null);
@@ -148,12 +176,32 @@ export function LearningPage({
     setCurrentIndex(nextIndex);
   }
 
+  async function playUpgradeCue(upgradeLevel: number | null, durationMs: number) {
+    if (upgradeLevel === null || durationMs <= 0) return;
+    setUpgradeToLevel(upgradeLevel);
+    if (setting.enableAudio) playLevelUpSound();
+    await wait(durationMs);
+  }
+
+  async function waitAfterUpgrade(upgradeLevel: number | null) {
+    if (upgradeLevel !== null) await wait(AFTER_LEVEL_UP_ADVANCE_DELAY_MS);
+  }
+
+  async function waitWithFinalUpgrade(totalWaitMs: number, upgradeLevel: number | null) {
+    const segments = getUpgradeWaitSegments(totalWaitMs, upgradeLevel !== null);
+    if (segments.beforeUpgradeMs > 0) await wait(segments.beforeUpgradeMs);
+    await playUpgradeCue(upgradeLevel, segments.upgradeMs);
+    await waitAfterUpgrade(upgradeLevel);
+  }
+
   async function handleContinue() {
     if (!pendingAdvance) return;
+    const nextAdvance = pendingAdvance;
+    setPendingAdvance(null);
     await advanceQuestion(
-      pendingAdvance.nextIndex,
-      pendingAdvance.nextQueueLength,
-      pendingAdvance.finalResult,
+      nextAdvance.nextIndex,
+      nextAdvance.nextQueueLength,
+      nextAdvance.finalResult,
     );
   }
 
@@ -183,6 +231,16 @@ export function LearningPage({
       : 'answer';
     const answeredAt = createDateTimeForDateKey(studyDateKey);
     const answeredAtText = answeredAt.toISOString();
+    const isSameDayRetry = currentRepeatCount > 0
+      || (
+        currentQuestion.kind === 'fill-blank'
+        && hasTodayWrongDifficultSpellingAttempt(
+          answerEvents,
+          currentWordId,
+          studyDateKey,
+          questionLevel,
+        )
+      );
     const answerEvent: AnswerEvent = {
       id: createAnswerEventId(currentWordId, answeredAtText),
       wordId: currentWordId,
@@ -194,9 +252,8 @@ export function LearningPage({
       isCorrect: correct,
       responseTimeMs: Math.max(0, Date.now() - questionStartedAt),
       learningAction,
-      isSessionRetry: (repeatCounts[currentWordId] ?? 0) > 0,
+      isSessionRetry: isSameDayRetry,
     };
-    const currentRepeatCount = repeatCounts[currentWordId] ?? 0;
     const shouldRevealLifePhoto = correct
       && questionLevel === 2
       && Boolean(localLifePhotosById[currentWordId] || currentQuestion.word.relatedMedia?.lifePhoto);
@@ -218,7 +275,7 @@ export function LearningPage({
       shouldRevealRelatedResult,
     );
     const shouldRepeat = (
-      debugLevel === null
+      !isDebugSession
       && !correct
       && !answerFlow.retrySameQuestion
     );
@@ -235,7 +292,7 @@ export function LearningPage({
     setIsLocked(true);
     setSelectedAnswer(answer);
     setRevealLifePhoto(false);
-    setUpgradeToLevel(shouldAnimateUpgrade ? nextLevel : null);
+    setUpgradeToLevel(null);
     setFeedbackText(getAnswerFeedbackText(
       currentQuestion,
       questionLevel,
@@ -272,22 +329,39 @@ export function LearningPage({
       if (relatedAudio.afterReveal.length > 0) {
         await speakSequence(relatedAudio.afterReveal);
       }
+      await playUpgradeCue(
+        shouldAnimateUpgrade ? nextLevel : null,
+        LEVEL_UP_ANIMATION_MS,
+      );
       if (answerFlow.requiresManualContinue) {
-        setPendingAdvance({ nextIndex, nextQueueLength, finalResult: nextSessionResult });
+        setPendingAdvance({
+          nextIndex,
+          nextQueueLength,
+          finalResult: nextSessionResult,
+        });
         return;
       }
-      await wait(answerFlow.holdAfterFeedbackMs);
+      await waitWithFinalUpgrade(
+        answerFlow.holdAfterFeedbackMs,
+        shouldAnimateUpgrade ? nextLevel : null,
+      );
     } else if (lifePhotoRevealFlow) {
       if (speechItems.length > 0) await speakSequence(speechItems);
       await wait(lifePhotoRevealFlow.revealAfterAudioMs);
       setRevealLifePhoto(true);
-      await wait(lifePhotoRevealFlow.holdAfterRevealMs);
+      await waitWithFinalUpgrade(
+        lifePhotoRevealFlow.holdAfterRevealMs,
+        shouldAnimateUpgrade ? nextLevel : null,
+      );
     } else {
       if (speechItems.length > 0) await speakSequence(speechItems);
-      await wait(answerFlow.holdAfterFeedbackMs);
+      await waitWithFinalUpgrade(
+        answerFlow.holdAfterFeedbackMs,
+        shouldAnimateUpgrade ? nextLevel : null,
+      );
     }
 
-    if (answerFlow.retrySameQuestion) {
+    if (answerFlow.retrySameQuestion || (isDebugProgression && !correct)) {
       resetAnswerUi();
       setQuestionStartedAt(Date.now());
       setIsLocked(false);
@@ -363,6 +437,26 @@ export function LearningPage({
     );
   }
 
+  const shouldShowDifficultSpellingSkip = (
+    !isLocked
+    && currentQuestion.kind === 'fill-blank'
+    && currentWord.difficulty >= 4
+    && questionLevel >= 8
+    && questionLevel <= 9
+    && (
+      currentRepeatCount > 0
+      || hasTodayWrongDifficultSpellingAttempt(
+        answerEvents,
+        currentWord.id,
+        studyDateKey,
+        questionLevel,
+      )
+    )
+  );
+  const feedbackStripText = pendingAdvance
+    ? '查看完关联页面后，点击“继续”'
+    : feedbackText;
+
   return (
     <main className="page page--learn">
       <section className="learning-shell">
@@ -383,14 +477,16 @@ export function LearningPage({
                 >
                   直接答对
                 </button>
-                <button
-                  className="learning-direct-correct learning-direct-correct--all"
-                  type="button"
-                  disabled={isLocked}
-                  onClick={() => void handleAllCorrect()}
-                >
-                  全部答对
-                </button>
+                {!isDebugProgression ? (
+                  <button
+                    className="learning-direct-correct learning-direct-correct--all"
+                    type="button"
+                    disabled={isLocked}
+                    onClick={() => void handleAllCorrect()}
+                  >
+                    全部答对
+                  </button>
+                ) : null}
               </div>
             ) : null}
           </div>
@@ -486,13 +582,18 @@ export function LearningPage({
             selectedAnswer={selectedAnswer}
             localLifePhoto={localLifePhotosById[currentWord.id]}
             showHints={setting.showHints}
+            showDifficultSpellingSkip={
+              shouldShowDifficultSpellingSkip
+            }
             onSubmit={handleAnswer}
           />
         ) : null}
 
-        <footer className={`feedback-strip${feedbackText ? ' is-visible' : ''}`}>
-          {pendingAdvance ? '查看完关联页面后，点击“继续”' : feedbackText ?? '选择答案后会自动进入下一题'}
-        </footer>
+        {feedbackStripText ? (
+          <footer className="feedback-strip is-visible">
+            {feedbackStripText}
+          </footer>
+        ) : null}
       </section>
     </main>
   );

@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { getLearningAnswerFlow, getLifePhotoRevealFlow } from './learning-answer-flow';
+import {
+  AFTER_LEVEL_UP_ADVANCE_DELAY_MS,
+  getLearningAnswerFlow,
+  getLifePhotoRevealFlow,
+  getUpgradeWaitSegments,
+  LEVEL_UP_ANIMATION_MS,
+} from './learning-answer-flow';
 
 describe('getLearningAnswerFlow', () => {
   it('moves a wrong level 5 question to the queue tail instead of reopening it immediately', () => {
@@ -31,5 +37,25 @@ describe('getLearningAnswerFlow', () => {
     });
     expect(getLifePhotoRevealFlow(2, false, true)).toBeNull();
     expect(getLifePhotoRevealFlow(1, true, true)).toBeNull();
+  });
+
+  it('keeps the level-up cue in the final part of the wait', () => {
+    expect(getUpgradeWaitSegments(2_000, true)).toEqual({
+      beforeUpgradeMs: 1_100,
+      upgradeMs: 900,
+    });
+    expect(getUpgradeWaitSegments(3_000, true)).toEqual({
+      beforeUpgradeMs: 2_100,
+      upgradeMs: 900,
+    });
+    expect(getUpgradeWaitSegments(2_000, false)).toEqual({
+      beforeUpgradeMs: 2_000,
+      upgradeMs: 0,
+    });
+  });
+
+  it('keeps a two-second pause after the level-up animation before advancing', () => {
+    expect(LEVEL_UP_ANIMATION_MS).toBe(900);
+    expect(AFTER_LEVEL_UP_ADVANCE_DELAY_MS).toBe(2_000);
   });
 });

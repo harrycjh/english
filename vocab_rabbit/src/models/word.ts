@@ -144,6 +144,7 @@ export interface WordRecord {
   relatedMedia?: WordRelatedMedia;
   example?: string;
   examples?: string[];
+  exampleCollocations?: string[];
   exampleTranslations?: string[];
   exampleTranslationFocus?: string[];
 }

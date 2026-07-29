@@ -100,9 +100,9 @@ describe('fixed iPad shell', () => {
     );
   });
 
-  it('keeps the Red Rocket result evenly inset inside the level 6 answer area', () => {
+  it('stretches the Red Rocket result to match the level 6 word card height', () => {
     expect(css).toMatch(
-      /\.question-panel--letter-choice > \.question-red-rocket-result\s*\{[^}]*margin:\s*18px;/s,
+      /\.question-panel--letter-choice > \.question-red-rocket-result\s*\{[^}]*align-self:\s*stretch;[^}]*height:\s*100%;[^}]*margin:\s*0;/s,
     );
   });
 

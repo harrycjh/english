@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isSelectableEnglishVoice } from './audio-service';
+import { isSelectableEnglishVoice, playLevelUpSound } from './audio-service';
 
 describe('isSelectableEnglishVoice', () => {
   it.each([
@@ -20,5 +20,9 @@ describe('isSelectableEnglishVoice', () => {
     ['Ting-Ting', 'zh-CN'],
   ])('filters out the unapproved voice %s (%s)', (name, lang) => {
     expect(isSelectableEnglishVoice({ name, lang })).toBe(false);
+  });
+
+  it('silently skips the level-up cue when WebAudio is unavailable', () => {
+    expect(() => playLevelUpSound()).not.toThrow();
   });
 });

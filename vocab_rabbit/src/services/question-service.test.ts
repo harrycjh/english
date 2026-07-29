@@ -23,9 +23,17 @@ const target = makeWord({
   id: 'ket_rabbit_n',
   english: 'rabbit',
   chinese: '兔子',
-  examples: ['The rabbit eats a fresh carrot.'],
-  exampleTranslations: ['这只兔子吃了一根新鲜的胡萝卜。'],
-  exampleTranslationFocus: ['兔子'],
+  examples: [
+    'The rabbit eats a fresh carrot.',
+    'The rabbit sleeps under the table.',
+    'The rabbit hops across the garden.',
+  ],
+  exampleTranslations: [
+    '这只兔子吃了一根新鲜的胡萝卜。',
+    '这只兔子睡在桌子下面。',
+    '这只兔子跳过花园。',
+  ],
+  exampleTranslationFocus: ['兔子', '兔子', '兔子'],
 });
 const allWords = [
   target,
@@ -86,8 +94,8 @@ describe('buildQuestion', () => {
     expect(question.kind).toBe('sentence-choice');
     if (question.kind !== 'sentence-choice') return;
     expect(question.maskedSentence).toContain('_____');
-    expect(question.sentence).toBe('The rabbit eats a fresh carrot.');
-    expect(question.sentenceTranslation).toBe('这只兔子吃了一根新鲜的胡萝卜。');
+    expect(question.sentence).toBe('The rabbit sleeps under the table.');
+    expect(question.sentenceTranslation).toBe('这只兔子睡在桌子下面。');
     expect(question.sentenceTranslationFocus).toBe('兔子');
     expect(question.options).toHaveLength(4);
     expect(question.correctAnswer).toBe('rabbit');
