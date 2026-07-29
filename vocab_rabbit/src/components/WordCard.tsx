@@ -5,6 +5,7 @@ import {
   getStudyPartOfSpeech,
   getStudyText,
 } from '../services/word-service';
+import { DifficultyStars } from './DifficultyStars';
 
 interface WordCardProps {
   word: WordRecord;
@@ -17,7 +18,7 @@ export function WordCard({ word, onOpenDetails }: WordCardProps) {
     <>
       <div className="word-card__header">
         <span className="word-card__category">{word.category}</span>
-        <span className="word-card__difficulty">Lv.{word.difficulty}</span>
+        <DifficultyStars difficulty={word.difficulty} className="word-card__difficulty" />
       </div>
       <h3>{getStudyText(word)}</h3>
       <p>{getStudyChinese(word)}</p>

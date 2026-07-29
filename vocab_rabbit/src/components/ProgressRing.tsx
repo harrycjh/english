@@ -5,24 +5,21 @@ interface ProgressRingProps {
 
 export function ProgressRing({ value, total }: ProgressRingProps) {
   const safeTotal = Math.max(total, 1);
-  const radius = 42;
-  const circumference = 2 * Math.PI * radius;
-  const progress = Math.min(value / safeTotal, 1);
-  const strokeDashoffset = circumference * (1 - progress);
+  const progress = Math.min(Math.max(value / safeTotal, 0), 1);
+  const currentValue = Math.min(Math.max(value, 0), safeTotal);
 
   return (
-    <div className="progress-ring">
-      <svg viewBox="0 0 100 100" aria-hidden="true">
-        <circle className="progress-ring__track" cx="50" cy="50" r={radius} />
-        <circle
-          className="progress-ring__fill"
-          cx="50"
-          cy="50"
-          r={radius}
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-        />
-      </svg>
+    <div
+      className="progress-ring"
+      role="progressbar"
+      aria-label="学习进度"
+      aria-valuemin={0}
+      aria-valuemax={safeTotal}
+      aria-valuenow={currentValue}
+    >
+      <div className="progress-ring__bar" aria-hidden="true">
+        <span className="progress-ring__fill" style={{ width: `${progress * 100}%` }} />
+      </div>
       <div className="progress-ring__label">
         <strong>{value}</strong>
         <span>/ {total}</span>

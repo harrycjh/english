@@ -1,8 +1,7 @@
 import type { LocalLifePhotoView } from '../models/local-media';
 import type { ImageAnswerChoiceQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
-import { getExampleSentences } from '../services/example-service';
-import { getExampleTranslations } from '../services/example-service';
+import { getExamplePairForLevel } from '../services/example-service';
 import { LearningLevelControl } from './LearningLevelControl';
 import { AudioIconButton } from './AudioIconButton';
 import { QuestionMedia } from './QuestionMedia';
@@ -28,8 +27,7 @@ export function QuestionImageAnswer({
   localLifePhotosById,
   onSubmit,
 }: QuestionImageAnswerProps) {
-  const exampleSentence = getExampleSentences(question.word)[0];
-  const exampleTranslation = getExampleTranslations(question.word)[0];
+  const example = getExamplePairForLevel(question.word, questionLevel);
   const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
   const answered = disabled && selectedAnswer !== null;
 
@@ -53,11 +51,11 @@ export function QuestionImageAnswer({
             {question.word.studySense?.chinese ?? question.word.chinese}
           </p>
         ) : null}
-        {exampleSentence ? (
-          <p className="question-word__example">{exampleSentence}</p>
+        {example?.sentence ? (
+          <p className="question-word__example">{example.sentence}</p>
         ) : null}
-        {answered && exampleTranslation ? (
-          <p className="question-word__example-translation">{exampleTranslation}</p>
+        {answered && example?.translation ? (
+          <p className="question-word__example-translation">{example.translation}</p>
         ) : null}
       </div>
       <div className="image-option-grid">

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
+  createDebugProgressionPlan,
   DEBUG_QUESTION_LIMIT,
+  DEBUG_PROGRESSION_LEVELS,
   isQuestionKindForDebugLevel,
   sampleDebugWordIds,
 } from './debug-session';
@@ -36,5 +38,13 @@ describe('debug session sampling', () => {
       expect(isQuestionKindForDebugLevel(level, 'fill-blank')).toBe(true);
     }
     expect(isQuestionKindForDebugLevel(5, 'text-choice')).toBe(false);
+  });
+
+  it('defines the complete progression as questions from level zero through nine', () => {
+    expect(DEBUG_PROGRESSION_LEVELS).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(createDebugProgressionPlan('word-a')).toEqual({
+      levels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      wordIds: Array.from({ length: 10 }, () => 'word-a'),
+    });
   });
 });

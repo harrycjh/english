@@ -2,7 +2,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type { LocalLifePhotoView } from '../models/local-media';
 import type { FillBlankQuestion } from '../services/question-service';
-import { QuestionFillBlank } from './QuestionFillBlank';
+import {
+  applySpellingKey,
+  isPortraitSpellingLifePhoto,
+  QuestionFillBlank,
+} from './QuestionFillBlank';
 
 const word = {
   id: 'ket_chemistry_n',
@@ -31,6 +35,7 @@ function renderQuestion(
   question: FillBlankQuestion,
   questionLevel: number,
   photo?: LocalLifePhotoView,
+  showDifficultSpellingSkip = false,
 ) {
   return renderToStaticMarkup(
     <QuestionFillBlank
@@ -41,12 +46,19 @@ function renderQuestion(
       selectedAnswer={null}
       localLifePhoto={photo}
       showHints={true}
+      showDifficultSpellingSkip={showDifficultSpellingSkip}
       onSubmit={() => undefined}
     />,
   );
 }
 
 describe('QuestionFillBlank', () => {
+  it('detects only vertical life photos for the level 8 and 9 spelling image adjustment', () => {
+    expect(isPortraitSpellingLifePhoto(800, 1200)).toBe(true);
+    expect(isPortraitSpellingLifePhoto(1200, 800)).toBe(false);
+    expect(isPortraitSpellingLifePhoto(900, 900)).toBe(false);
+  });
+
   it('uses the streamlined word, phonetic, and Chinese stack for full spelling', () => {
     const markup = renderQuestion({
       kind: 'fill-blank',
@@ -59,27 +71,44 @@ describe('QuestionFillBlank', () => {
     }, 8);
 
     expect(markup).toContain('question-panel--full-spelling');
+    expect(markup).toContain('question-panel--full-spelling-final');
     expect(markup).not.toContain('化学 的英语怎么拼');
     expect(markup.indexOf('full-spelling-card__word')).toBeLessThan(markup.indexOf('/ˈkɛmɪstɹi/'));
     expect(markup.indexOf('/ˈkɛmɪstɹi/')).toBeLessThan(markup.indexOf('>化学</strong>'));
     expect(markup).toContain('/ˈkɛmɪstɹi/</span><button class="audio-icon-button"');
     expect(markup).toContain('autofocus=""');
-    expect(markup).toContain('inputMode="text"');
+    expect(markup).toContain('inputMode="none"');
     expect(markup).toContain('lang="en-US"');
-    expect(markup).toContain('enterKeyHint="done"');
-    expect(markup).toContain('full-spelling-card__inline-input');
+    expect(markup).toContain('spelling-hardware-input');
     expect(markup).toContain('fill-blank-display__cell is-empty is-active');
-    expect(markup).toContain('aria-label="拼写输入方式"');
-    expect(markup).toContain('aria-pressed="true"');
-    expect(markup).toContain('>键盘</button>');
-    expect(markup).toContain('>手写</button>');
-    expect(markup).toContain(
-      'class="full-spelling-card__title-row"><span class="question-word__label">完整拼写</span><div class="spelling-input-method-toggle"',
-    );
-    expect(markup).toContain('class="full-spelling-actions"><button');
+    expect(markup).toContain('full-spelling-keyboard-shell');
+    expect(markup).toContain('aria-label="屏幕英文键盘"');
+    expect(markup.match(/aria-label="屏幕英文键盘"/g)).toHaveLength(1);
+    expect(markup).toContain('aria-label="字母 Q"');
+    expect(markup).toContain('aria-label="删除上一个字母"');
+    expect(markup).not.toContain('手写');
+    expect(markup).toContain('<span class="question-word__label">完整拼写</span><button');
+    expect(markup).toContain('full-spelling-forgot-button--inline');
     expect(markup).toContain('>我忘记了</button>');
+    expect(markup).not.toContain('class="full-spelling-actions"');
+    expect(markup).not.toContain('爸爸帮我跳过这个单词吧');
     expect(markup).not.toContain('class="spelling-entry"');
     expect(markup).not.toContain('>确定</button>');
+  });
+
+  it('offers the dog skip action for repeated four-star level 8 or 9 spelling words', () => {
+    const markup = renderQuestion({
+      kind: 'fill-blank',
+      prompt: '',
+      studyText: 'chemistry',
+      word: { ...word, difficulty: 4 },
+      maskedCharacters: Array.from({ length: 9 }, () => '_'),
+      missingLetters: [...'chemistry'],
+      inputMode: 'full',
+    }, 8, undefined, true);
+
+    expect(markup).toContain('full-spelling-skip-button');
+    expect(markup).toContain('我是小狗子（不是小兔子）所以默不出来，爸爸帮我跳过这个单词吧！');
   });
 
   it('uses compact single-line letter cells for words longer than nine characters', () => {
@@ -120,6 +149,7 @@ describe('QuestionFillBlank', () => {
 
     expect(markup).toContain('/chemistry.webp');
     expect(markup).not.toContain('blob:chemistry-life-photo');
+    expect(markup).not.toContain('is-full-spelling-life-photo');
   });
 
   it('uses a life photo at level 9 and falls back to Comfy when none exists', () => {
@@ -133,8 +163,13 @@ describe('QuestionFillBlank', () => {
       inputMode: 'full',
     };
 
-    expect(renderQuestion(question, 9, localLifePhoto)).toContain('blob:chemistry-life-photo');
-    expect(renderQuestion(question, 9)).toContain('/chemistry.webp');
+    const lifePhotoMarkup = renderQuestion(question, 9, localLifePhoto);
+    const fallbackMarkup = renderQuestion(question, 9);
+
+    expect(lifePhotoMarkup).toContain('blob:chemistry-life-photo');
+    expect(lifePhotoMarkup).toContain('is-full-spelling-life-photo');
+    expect(fallbackMarkup).toContain('/chemistry.webp');
+    expect(fallbackMarkup).not.toContain('is-full-spelling-life-photo');
   });
 
   it('uses the level 8 card layout for level 7 partial spelling', () => {
@@ -149,9 +184,12 @@ describe('QuestionFillBlank', () => {
     }, 7);
 
     expect(markup).toContain('question-panel--full-spelling');
+    expect(markup).not.toContain('question-panel--full-spelling-final');
     expect(markup).toContain('>部分拼写</span>');
-    expect(markup).toContain('full-spelling-card__inline-input');
+    expect(markup).toContain('spelling-screen-keyboard');
+    expect(markup).toContain('class="full-spelling-actions"><button');
     expect(markup).toContain('>我忘记了</button>');
+    expect(markup).not.toContain('full-spelling-forgot-button--inline');
     expect(markup).not.toContain('化学 的英语怎么拼？');
     expect(markup).not.toContain('还缺 3 个字母');
     expect(markup).not.toContain('已填写 0/3');
@@ -429,5 +467,13 @@ describe('QuestionFillBlank', () => {
 
     expect(markup).not.toContain('/ˈkɛmɪstɹi/');
     expect(markup).not.toContain('audio-icon-button');
+  });
+
+  it('applies screen keyboard letters and backspace without exceeding the answer length', () => {
+    expect(applySpellingKey('', 'C', 3)).toBe('c');
+    expect(applySpellingKey('ca', 'T', 3)).toBe('cat');
+    expect(applySpellingKey('cat', 'S', 3)).toBe('cat');
+    expect(applySpellingKey('cat', 'Backspace', 3)).toBe('ca');
+    expect(applySpellingKey('ca', '1', 3)).toBe('ca');
   });
 });

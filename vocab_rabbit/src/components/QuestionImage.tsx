@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { ChoiceQuestion } from '../services/question-service';
 import { speakChinese, speakWord } from '../services/audio-service';
-import { getPrimaryExamplePair } from '../services/example-service';
+import { getExamplePairForLevel } from '../services/example-service';
 import { getPrimaryOxfordRefLabel } from '../services/word-service';
 import type { LocalLifePhotoView } from '../models/local-media';
 import { AudioIconButton } from './AudioIconButton';
@@ -39,7 +39,7 @@ export function QuestionImage({
   const [isPortraitLifePhoto, setIsPortraitLifePhoto] = useState(false);
   const oxfordLabel = getPrimaryOxfordRefLabel(question.word);
   const imageStrategy = revealLifePhoto ? 'life-photo' : (question.imageStrategy ?? 'comfy');
-  const example = getPrimaryExamplePair(question.word);
+  const example = getExamplePairForLevel(question.word, questionLevel);
   const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
   const showExample = disabled
     && Boolean(example?.sentence)

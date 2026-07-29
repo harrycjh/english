@@ -6,6 +6,7 @@ import {
   detectEnglishInflection,
   inflectEnglishOption,
 } from './english-inflection-service';
+import { getExampleSlotForLevel } from './example-service';
 import { getStudyChinese, getStudyPartOfSpeech, getStudyText } from './word-service';
 
 export type QuestionKind =
@@ -210,8 +211,12 @@ function buildImageAnswerChoiceQuestion(word: WordRecord, allWords: WordRecord[]
   };
 }
 
-function buildSentenceChoiceQuestion(word: WordRecord, allWords: WordRecord[]): SentenceChoiceQuestion | null {
-  const cloze = buildExampleCloze(word);
+function buildSentenceChoiceQuestion(
+  word: WordRecord,
+  allWords: WordRecord[],
+  level: number,
+): SentenceChoiceQuestion | null {
+  const cloze = buildExampleCloze(word, getExampleSlotForLevel(level));
   if (!cloze) return null;
   const studyText = getStudyText(word);
   const inflection = detectEnglishInflection(
@@ -418,7 +423,7 @@ export function buildQuestion(
   if (masteryLevel === 3) return buildImageAnswerChoiceQuestion(word, allWords);
   if (masteryLevel === 4 || !canUseFillBlank(word)) return buildChoiceQuestion('text-choice', word, allWords);
   if (masteryLevel === 5) {
-    return buildSentenceChoiceQuestion(word, allWords) ?? buildChoiceQuestion('text-choice', word, allWords);
+    return buildSentenceChoiceQuestion(word, allWords, masteryLevel) ?? buildChoiceQuestion('text-choice', word, allWords);
   }
   if (masteryLevel === 6) return buildLetterChoiceQuestion(word);
   if (masteryLevel === 7) return buildFillBlankQuestion(word, 'two-four');

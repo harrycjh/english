@@ -45,7 +45,8 @@ describe('SettingsPage local data controls', () => {
 
     expect(markup).toContain('清空本地学习数据');
     expect(markup).toContain('下载全部图片');
-    expect(markup).toContain('下载私密生活照片');
+    expect(markup).toContain('下载照片');
+    expect(markup).not.toContain('下载私密生活照片');
     expect(markup).not.toContain('导入生活照片包');
     expect(markup).not.toContain('选择照片包');
     expect(markup).toContain('下载图片');

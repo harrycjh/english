@@ -13,7 +13,7 @@ export function getExampleSentences(word: WordRecord): string[] {
   ).map(normalizeExample).filter(Boolean) as string[];
 
   if (curated.length > 0) {
-    return curated.slice(0, 2);
+    return curated.slice(0, 3);
   }
 
   return [];
@@ -23,14 +23,14 @@ export function getExampleTranslations(word: WordRecord): string[] {
   return (word.exampleTranslations ?? [])
     .map(normalizeExample)
     .filter(Boolean)
-    .slice(0, 2) as string[];
+    .slice(0, 3) as string[];
 }
 
 export function getExampleTranslationFocus(word: WordRecord): string[] {
   return (word.exampleTranslationFocus ?? [])
     .map(normalizeExample)
     .filter(Boolean)
-    .slice(0, 2) as string[];
+    .slice(0, 3) as string[];
 }
 
 export interface ExamplePair {
@@ -39,10 +39,27 @@ export interface ExamplePair {
 }
 
 export function getPrimaryExamplePair(word: WordRecord): ExamplePair | null {
-  const sentence = getExampleSentences(word)[0];
+  return getExamplePairAt(word, 0);
+}
+
+export function getExampleSlotForLevel(level: number): number {
+  if ([2, 5, 8].includes(level)) return 1;
+  if ([3, 6, 9].includes(level)) return 2;
+  return 0;
+}
+
+export function getExamplePairAt(word: WordRecord, preferredIndex: number): ExamplePair | null {
+  const sentences = getExampleSentences(word);
+  if (sentences.length === 0) return null;
+  const index = Math.max(0, Math.min(preferredIndex, sentences.length - 1));
+  const sentence = sentences[index];
   if (!sentence) return null;
   return {
     sentence,
-    translation: getExampleTranslations(word)[0] ?? '',
+    translation: getExampleTranslations(word)[index] ?? '',
   };
+}
+
+export function getExamplePairForLevel(word: WordRecord, level: number): ExamplePair | null {
+  return getExamplePairAt(word, getExampleSlotForLevel(level));
 }

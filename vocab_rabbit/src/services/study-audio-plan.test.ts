@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { WordRecord } from '../models/word';
 import type { Question } from './question-service';
-import { getStudyAudioPlan, splitRelatedResultAudio } from './study-audio-plan';
+import {
+  getStudyAudioPlan,
+  splitRelatedResultAudio,
+  WORD_TO_SENTENCE_PAUSE_MS,
+} from './study-audio-plan';
 
 const word: WordRecord = {
   id: 'ket_rabbit_n',
@@ -13,8 +17,16 @@ const word: WordRecord = {
   imagePath: '/rabbit.webp',
   imageApproved: true,
   oxfordRefs: [],
-  examples: ['The rabbit eats a carrot.'],
-  exampleTranslations: ['兔子吃了一根胡萝卜。'],
+  examples: [
+    'The rabbit eats a carrot.',
+    'The rabbit sleeps under the table.',
+    'The rabbit hops across the garden.',
+  ],
+  exampleTranslations: [
+    '兔子吃了一根胡萝卜。',
+    '兔子睡在桌子下面。',
+    '兔子跳过花园。',
+  ],
   relatedMedia: {
     oxford: {
       imagePath: '/content/images/oxford-tree/level-1/book-1/page-4.webp',
@@ -91,9 +103,9 @@ describe('study audio plan', () => {
     expect(getStudyAudioPlan(2, question())).toEqual({
       beforeAnswer: [{ text: '兔子', lang: 'zh-CN' }],
       afterAnswer: [
-        { text: 'rabbit', lang: 'en-GB' },
-        { text: 'The rabbit eats a carrot.', lang: 'en-GB', rate: 0.86 },
-        { text: '兔子吃了一根胡萝卜。', lang: 'zh-CN' },
+        { text: 'rabbit', lang: 'en-GB', pauseAfterMs: WORD_TO_SENTENCE_PAUSE_MS },
+        { text: 'The rabbit sleeps under the table.', lang: 'en-GB', rate: 0.86 },
+        { text: '兔子睡在桌子下面。', lang: 'zh-CN' },
       ],
     });
   });
@@ -102,8 +114,8 @@ describe('study audio plan', () => {
     expect(getStudyAudioPlan(3, question(), true)).toEqual({
       beforeAnswer: [{ text: 'rabbit', lang: 'en-GB' }],
       afterAnswer: [
-        { text: 'The rabbit eats a carrot.', lang: 'en-GB', rate: 0.86 },
-        { text: '兔子吃了一根胡萝卜。', lang: 'zh-CN' },
+        { text: 'The rabbit hops across the garden.', lang: 'en-GB', rate: 0.86 },
+        { text: '兔子跳过花园。', lang: 'zh-CN' },
       ],
     });
   });
@@ -112,9 +124,9 @@ describe('study audio plan', () => {
     expect(getStudyAudioPlan(3, question(), false)).toEqual({
       beforeAnswer: [{ text: 'rabbit', lang: 'en-GB' }],
       afterAnswer: [
-        { text: 'rabbit', lang: 'en-GB' },
-        { text: 'The rabbit eats a carrot.', lang: 'en-GB', rate: 0.86 },
-        { text: '兔子吃了一根胡萝卜。', lang: 'zh-CN' },
+        { text: 'rabbit', lang: 'en-GB', pauseAfterMs: WORD_TO_SENTENCE_PAUSE_MS },
+        { text: 'The rabbit hops across the garden.', lang: 'en-GB', rate: 0.86 },
+        { text: '兔子跳过花园。', lang: 'zh-CN' },
       ],
     });
   });
@@ -166,9 +178,9 @@ describe('study audio plan', () => {
     expect(getStudyAudioPlan(6, question(), true)).toEqual({
       beforeAnswer: [{ text: '兔子', lang: 'zh-CN' }],
       afterAnswer: [
-        { text: 'rabbit', lang: 'en-GB' },
-        { text: 'The rabbit eats a carrot.', lang: 'en-GB', rate: 0.86 },
-        { text: '兔子吃了一根胡萝卜。', lang: 'zh-CN' },
+        { text: 'rabbit', lang: 'en-GB', pauseAfterMs: WORD_TO_SENTENCE_PAUSE_MS },
+        { text: 'The rabbit hops across the garden.', lang: 'en-GB', rate: 0.86 },
+        { text: '兔子跳过花园。', lang: 'zh-CN' },
         { text: 'The rabbit hops across the grass.', lang: 'en-GB', rate: 0.86 },
         { text: '兔子跳过草地。', lang: 'zh-CN' },
       ],
@@ -208,9 +220,9 @@ describe('study audio plan', () => {
     expect(getStudyAudioPlan(8, question(), true)).toEqual({
       beforeAnswer: [{ text: '兔子', lang: 'zh-CN' }],
       afterAnswer: [
-        { text: 'rabbit', lang: 'en-GB' },
-        { text: 'The rabbit eats a carrot.', lang: 'en-GB', rate: 0.86 },
-        { text: '兔子吃了一根胡萝卜。', lang: 'zh-CN' },
+        { text: 'rabbit', lang: 'en-GB', pauseAfterMs: WORD_TO_SENTENCE_PAUSE_MS },
+        { text: 'The rabbit sleeps under the table.', lang: 'en-GB', rate: 0.86 },
+        { text: '兔子睡在桌子下面。', lang: 'zh-CN' },
       ],
     });
   });
@@ -226,9 +238,9 @@ describe('study audio plan', () => {
     expect(getStudyAudioPlan(9, question(), true)).toEqual({
       beforeAnswer: [],
       afterAnswer: [
-        { text: 'rabbit', lang: 'en-GB' },
-        { text: 'The rabbit eats a carrot.', lang: 'en-GB', rate: 0.86 },
-        { text: '兔子吃了一根胡萝卜。', lang: 'zh-CN' },
+        { text: 'rabbit', lang: 'en-GB', pauseAfterMs: WORD_TO_SENTENCE_PAUSE_MS },
+        { text: 'The rabbit hops across the garden.', lang: 'en-GB', rate: 0.86 },
+        { text: '兔子跳过花园。', lang: 'zh-CN' },
       ],
     });
   });
@@ -239,8 +251,8 @@ describe('study audio plan', () => {
       afterAnswer: [
         { text: 'rabbit', lang: 'en-GB' },
         { text: '兔子', lang: 'zh-CN' },
-        { text: 'The rabbit eats a carrot.', lang: 'en-GB', rate: 0.86 },
-        { text: '兔子吃了一根胡萝卜。', lang: 'zh-CN' },
+        { text: 'The rabbit hops across the garden.', lang: 'en-GB', rate: 0.86 },
+        { text: '兔子跳过花园。', lang: 'zh-CN' },
       ],
     });
   });
@@ -250,9 +262,9 @@ describe('study audio plan', () => {
     const items = getStudyAudioPlan(6, currentQuestion, true).afterAnswer;
     expect(splitRelatedResultAudio(6, currentQuestion, items)).toEqual({
       beforeReveal: [
-        { text: 'rabbit', lang: 'en-GB' },
-        { text: 'The rabbit eats a carrot.', lang: 'en-GB', rate: 0.86 },
-        { text: '兔子吃了一根胡萝卜。', lang: 'zh-CN' },
+        { text: 'rabbit', lang: 'en-GB', pauseAfterMs: WORD_TO_SENTENCE_PAUSE_MS },
+        { text: 'The rabbit hops across the garden.', lang: 'en-GB', rate: 0.86 },
+        { text: '兔子跳过花园。', lang: 'zh-CN' },
       ],
       afterReveal: [
         { text: 'The rabbit hops across the grass.', lang: 'en-GB', rate: 0.86 },

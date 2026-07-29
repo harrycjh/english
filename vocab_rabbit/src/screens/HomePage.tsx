@@ -400,10 +400,11 @@ interface ReviewPageProps {
   debugPickerOpen?: boolean;
   onDebugPickerOpenChange?: (open: boolean) => void;
   onStart: () => void;
-  onStartDebug: (level: number) => void;
+  onStartDebug: (level: number | 'progression') => void;
   onAdvanceDay: () => Promise<void>;
   onSelectProfile: (profileId: ProfileId) => Promise<void>;
   onSaveSelectionStates: (states: WordSelectionState[]) => Promise<void>;
+  onRequestLocalLifePhoto?: (wordId: string) => void;
 }
 
 export function ReviewPage({
@@ -424,6 +425,7 @@ export function ReviewPage({
   onAdvanceDay,
   onSelectProfile,
   onSaveSelectionStates,
+  onRequestLocalLifePhoto,
 }: ReviewPageProps) {
   const plannedCount = task.newWordIds.length + task.reviewWordIds.length;
   const heatmapTasks = [...recentTasks.filter((recentTask) => recentTask.dateKey !== task.dateKey), task];
@@ -448,6 +450,11 @@ export function ReviewPage({
       return;
     }
     setLocalDebugPickerOpen(open);
+  }
+
+  function openWordDetails(wordId: string) {
+    setSelectedWordId(wordId);
+    onRequestLocalLifePhoto?.(wordId);
   }
 
   const heroBadge = isTaskComplete ? '今日完成 · 复习页' : hasStarted ? '进行中 · 复习页' : '今日任务 · 复习页';
@@ -692,6 +699,17 @@ export function ReviewPage({
                 </div>
                 <p>每次最多随机抽取 10 个不重复单词，只测试题型，不修改本地或云端学习记录。</p>
                 <div className="review-debug-level-grid">
+                  <button
+                    className="review-debug-level-grid__progression"
+                    type="button"
+                    onClick={() => {
+                      setDebugPickerOpen(false);
+                      onStartDebug('progression');
+                    }}
+                  >
+                    <strong>Lv0 到 Lv10</strong>
+                    <span>完整升级流程</span>
+                  </button>
                   {Array.from({ length: 10 }, (_, level) => (
                     <button
                       key={level}
@@ -757,7 +775,7 @@ export function ReviewPage({
                     masteryLevel={recordsById[word.id]?.masteryLevel ?? 0}
                     index={index}
                     layout={reviewPreviewLayouts[['family', 'hello', 'body', 'spark'][index] as 'family' | 'hello' | 'body' | 'spark']}
-                    onOpenDetails={() => setSelectedWordId(word.id)}
+                    onOpenDetails={() => openWordDetails(word.id)}
                   />
                 ))}
               </div>

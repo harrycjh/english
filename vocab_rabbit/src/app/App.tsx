@@ -35,6 +35,7 @@ import { ensureSelectionStateMap, getActiveStudyWords } from '../services/select
 import { createEmptyRecord, evaluateAnswer, isMastered } from '../services/spaced-repetition';
 import {
   clearLocalDeviceData,
+  countLocalLifePhotos,
   getDailyTask,
   getOrCreateSyncMetadata,
   getParentSetting,
@@ -78,7 +79,26 @@ import {
   getStableViewportLength,
   isStandaloneIpad,
 } from './ipad-viewport';
-import { isQuestionKindForDebugLevel, sampleDebugWordIds } from './debug-session';
+import {
+  createDebugProgressionPlan,
+  DEBUG_PROGRESSION_LEVELS,
+  isQuestionKindForDebugLevel,
+  sampleDebugWordIds,
+} from './debug-session';
+
+interface FixedDebugSession {
+  mode: 'fixed';
+  level: number;
+  wordIds: string[];
+}
+
+interface ProgressionDebugSession {
+  mode: 'progression';
+  levels: number[];
+  wordIds: string[];
+}
+
+type DebugSession = FixedDebugSession | ProgressionDebugSession;
 
 interface MainShellChromeProps {
   profileId: ProfileId;
@@ -121,6 +141,20 @@ function getAuthoritativeTaskAnswerIds(task: DailyTaskSummary, events: AnswerEve
   return eventWordIds.length > 0 ? eventWordIds : task.answeredWordIds;
 }
 
+function addLocalLifePhotoViews(
+  current: Record<string, LocalLifePhotoView>,
+  next: Record<string, LocalLifePhotoView>,
+): Record<string, LocalLifePhotoView> {
+  const additions = Object.fromEntries(
+    Object.entries(next).filter(([wordId]) => !current[wordId]),
+  );
+  const duplicates = Object.fromEntries(
+    Object.entries(next).filter(([wordId]) => Boolean(current[wordId])),
+  );
+  revokeLocalLifePhotoViews(duplicates);
+  return Object.keys(additions).length > 0 ? { ...current, ...additions } : current;
+}
+
 interface AppProps {
   syncRevision?: number;
   onRequestSync?: () => Promise<StartupSyncResult>;
@@ -136,10 +170,12 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
   const [answerEvents, setAnswerEvents] = useState<AnswerEvent[]>([]);
   const [selectionById, setSelectionById] = useState<Record<string, WordSelectionState>>({});
   const [localLifePhotosById, setLocalLifePhotosById] = useState<Record<string, LocalLifePhotoView>>({});
+  const [localLifePhotoCount, setLocalLifePhotoCount] = useState(0);
+  const localLifePhotoViewsRef = useRef(localLifePhotosById);
   const [parentSetting, setParentSetting] = useState<ParentSetting | null>(null);
   const [task, setTask] = useState<DailyTaskSummary | null>(null);
   const [practiceWordIds, setPracticeWordIds] = useState<string[] | null>(null);
-  const [debugSession, setDebugSession] = useState<{ level: number; wordIds: string[] } | null>(null);
+  const [debugSession, setDebugSession] = useState<DebugSession | null>(null);
   const [isDebugPickerOpen, setIsDebugPickerOpen] = useState(false);
   const [recentTasks, setRecentTasks] = useState<DailyTaskSummary[]>([]);
   const [sessionResult, setSessionResult] = useState<SessionResult | null>(null);
@@ -173,14 +209,12 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           savedSetting,
           savedSelection,
           savedAnswerEvents,
-          savedLocalLifePhotos,
         ] = await Promise.all([
           loadWordPayload(),
           listLearningRecords(),
           getParentSetting(),
           listWordSelectionStates(),
           listAnswerEvents(),
-          loadLocalLifePhotoViews(),
         ]);
         const todayKey = createDateKey();
         const { nextSelectionById, missingStates } = ensureSelectionStateMap(payloadValue.words, savedSelection);
@@ -213,14 +247,23 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           }
         }
 
-        const history = await listRecentTasks(90);
+        const activePhotoWordIds = [...new Set([
+          ...todayTask.reviewWordIds,
+          ...todayTask.newWordIds,
+        ])].filter((wordId) => !localLifePhotoViewsRef.current[wordId]);
+        const [history, savedLocalLifePhotos, savedLocalLifePhotoCount] = await Promise.all([
+          listRecentTasks(90),
+          loadLocalLifePhotoViews(activePhotoWordIds),
+          countLocalLifePhotos(),
+        ]);
 
         if (!cancelled) {
           setPayload(payloadValue);
           setRecordsById(savedRecords);
           setAnswerEvents(savedAnswerEvents);
           setSelectionById(nextSelectionById);
-          setLocalLifePhotosById(savedLocalLifePhotos);
+          setLocalLifePhotosById((current) => addLocalLifePhotoViews(current, savedLocalLifePhotos));
+          setLocalLifePhotoCount(savedLocalLifePhotoCount);
           setParentSetting(savedSetting);
           setTask(todayTask);
           setRecentTasks(history);
@@ -244,10 +287,25 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
   }, [syncRevision]);
 
   useEffect(() => {
-    return () => {
-      revokeLocalLifePhotoViews(localLifePhotosById);
-    };
+    localLifePhotoViewsRef.current = localLifePhotosById;
   }, [localLifePhotosById]);
+  useEffect(() => () => {
+    revokeLocalLifePhotoViews(localLifePhotoViewsRef.current);
+  }, []);
+
+  async function ensureLocalLifePhoto(wordId: string) {
+    if (localLifePhotoViewsRef.current[wordId]) {
+      return;
+    }
+    try {
+      const nextViews = await loadLocalLifePhotoViews([wordId]);
+      if (nextViews[wordId]) {
+        setLocalLifePhotosById((current) => addLocalLifePhotoViews(current, nextViews));
+      }
+    } catch {
+      // Keep the bundled image fallback if IndexedDB is unavailable.
+    }
+  }
 
   useEffect(() => {
     if (!payload || !task) return;
@@ -261,8 +319,12 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     void downloadPrivateLifePhotos(wordIds).then(async (result) => {
       privatePhotoPrefetchKey.current = prefetchKey;
       if (cancelled || result.downloaded === 0) return;
-      const nextLocalLifePhotos = await loadLocalLifePhotoViews();
-      if (!cancelled) setLocalLifePhotosById(nextLocalLifePhotos);
+      const unloadedWordIds = wordIds.filter((wordId) => !localLifePhotoViewsRef.current[wordId]);
+      const nextLocalLifePhotos = await loadLocalLifePhotoViews(unloadedWordIds);
+      if (!cancelled) {
+        setLocalLifePhotosById((current) => addLocalLifePhotoViews(current, nextLocalLifePhotos));
+        setLocalLifePhotoCount(await countLocalLifePhotos());
+      }
     }).catch(() => {
       // A device without a cloud token keeps the existing Comfy image fallback.
     });
@@ -497,27 +559,42 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     startTransition(() => setRoute('learning'));
   }
 
-  function handleStartDebug(level: number) {
+  function handleStartDebug(level: number | 'progression') {
     if (!payload || !parentSetting || parentSetting.profileId !== 'stinky-dog') return;
-    const normalizedLevel = Math.min(10, Math.max(0, level));
     const debugSetting = { ...parentSetting, showImages: true };
+    const debugLevels = level === 'progression'
+      ? DEBUG_PROGRESSION_LEVELS
+      : [Math.min(10, Math.max(0, level))];
     const candidates = getActiveStudyWords(payload.words, selectionById)
       .filter((word) => {
-        const record = {
-          ...createEmptyRecord(word.id),
-          masteryLevel: normalizedLevel,
-          reviewStage: normalizedLevel,
-        };
-        return isQuestionKindForDebugLevel(
-          normalizedLevel,
-          buildQuestion(word, payload.words, record, debugSetting).kind,
-        );
+        return debugLevels.every((debugLevel) => {
+          const record = {
+            ...createEmptyRecord(word.id),
+            masteryLevel: debugLevel,
+            reviewStage: debugLevel,
+          };
+          return isQuestionKindForDebugLevel(
+            debugLevel,
+            buildQuestion(word, payload.words, record, debugSetting).kind,
+          );
+        });
       });
     if (candidates.length === 0) return;
-    const wordIds = sampleDebugWordIds(candidates.map((word) => word.id));
     setIsDebugPickerOpen(false);
     setPracticeWordIds(null);
-    setDebugSession({ level: normalizedLevel, wordIds });
+    if (level === 'progression') {
+      const [wordId] = sampleDebugWordIds(candidates.map((word) => word.id), 1);
+      setDebugSession({
+        mode: 'progression',
+        ...createDebugProgressionPlan(wordId),
+      });
+    } else {
+      setDebugSession({
+        mode: 'fixed',
+        level: debugLevels[0],
+        wordIds: sampleDebugWordIds(candidates.map((word) => word.id)),
+      });
+    }
     startTransition(() => setRoute('learning'));
   }
 
@@ -716,9 +793,16 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       .filter((word) => Boolean(word.relatedMedia?.lifePhoto))
       .map((word) => word.id);
     const result = await downloadPrivateLifePhotos(wordIds, options);
+    setLocalLifePhotoCount(await countLocalLifePhotos());
     if (result.downloaded > 0) {
-      const nextLocalLifePhotos = await loadLocalLifePhotoViews();
-      setLocalLifePhotosById(nextLocalLifePhotos);
+      const activeWordIds = task
+        ? [...new Set([...task.reviewWordIds, ...task.newWordIds])]
+        : [];
+      const unloadedWordIds = activeWordIds.filter(
+        (wordId) => !localLifePhotoViewsRef.current[wordId],
+      );
+      const nextLocalLifePhotos = await loadLocalLifePhotoViews(unloadedWordIds);
+      setLocalLifePhotosById((current) => addLocalLifePhotoViews(current, nextLocalLifePhotos));
     }
     return result;
   }
@@ -790,7 +874,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           onImportStudyData={handleImportStudyData}
           onClearLocalData={handleClearLocalData}
           onDownloadPrivateLifePhotos={handleDownloadPrivateLifePhotos}
-          localLifePhotoCount={Object.keys(localLifePhotosById).length}
+          localLifePhotoCount={localLifePhotoCount}
           words={payload.words}
         />
       );
@@ -829,6 +913,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           onOpenStats={handleOpenStats}
           onSaveSelectionStates={handleSaveSelectionStates}
           onApplySelectionPlan={handleApplySelectionPlan}
+          onRequestLocalLifePhoto={(wordId) => void ensureLocalLifePhoto(wordId)}
         />
       );
     }
@@ -852,6 +937,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
         onAdvanceDay={handleAdvanceDay}
         onSelectProfile={handleSelectProfile}
         onSaveSelectionStates={handleSaveSelectionStates}
+        onRequestLocalLifePhoto={(wordId) => void ensureLocalLifePhoto(wordId)}
       />
     );
   }
@@ -880,15 +966,18 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     }
 
     if (route === 'learning') {
+      const debugBaseLevel = debugSession?.mode === 'fixed'
+        ? debugSession.level
+        : debugSession?.levels[0] ?? 0;
       const debugRecords = debugSession
         ? {
             ...recordsById,
-            ...Object.fromEntries(debugSession.wordIds.map((wordId) => [
+            ...Object.fromEntries([...new Set(debugSession.wordIds)].map((wordId) => [
               wordId,
               {
                 ...(recordsById[wordId] ?? createEmptyRecord(wordId)),
-                masteryLevel: debugSession.level,
-                reviewStage: debugSession.level,
+                masteryLevel: debugBaseLevel,
+                reviewStage: debugBaseLevel,
               },
             ])),
           }
@@ -901,6 +990,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           payload={payload}
           initialWordIds={debugSession ? debugSession.wordIds : practiceWordIds ?? getTaskStudyQueue(task)}
           recordsById={debugRecords}
+          answerEvents={answerEvents}
           setting={learningSetting}
           studyDateKey={task.dateKey}
           localLifePhotosById={localLifePhotosById}
@@ -909,7 +999,8 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
             ? async () => handleBackToDebugPicker()
             : handleComplete}
           onExit={debugSession ? handleBackToDebugPicker : handleBackHome}
-          debugLevel={debugSession?.level ?? null}
+          debugLevel={debugSession?.mode === 'fixed' ? debugSession.level : null}
+          debugLevelSequence={debugSession?.mode === 'progression' ? debugSession.levels : null}
         />
       );
     }

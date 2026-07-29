@@ -61,11 +61,13 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-export function buildExampleCloze(word: WordRecord): ExampleCloze | null {
-  const sentence = getExampleSentences(word)[0];
+export function buildExampleCloze(word: WordRecord, preferredIndex = 0): ExampleCloze | null {
+  const sentences = getExampleSentences(word);
+  const index = Math.max(0, Math.min(preferredIndex, sentences.length - 1));
+  const sentence = sentences[index];
   if (!sentence) return null;
-  const translation = getExampleTranslations(word)[0] ?? '';
-  const translationFocus = getExampleTranslationFocus(word)[0] ?? '';
+  const translation = getExampleTranslations(word)[index] ?? '';
+  const translationFocus = getExampleTranslationFocus(word)[index] ?? '';
 
   for (const form of getPhraseForms(word.english)) {
     const pattern = escapeRegExp(form).replace(/(?:\\ |\\-)+/g, '[\\s-]+');

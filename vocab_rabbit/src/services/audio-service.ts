@@ -6,6 +6,7 @@ export interface SpeechItem {
   lang: 'en-GB' | 'zh-CN';
   rate?: number;
   voiceURI?: string;
+  pauseAfterMs?: number;
 }
 
 export interface SpeechVoiceOption {
@@ -119,6 +120,42 @@ export async function speakSequence(items: SpeechItem[]): Promise<void> {
   window.speechSynthesis.cancel();
   for (const item of items) {
     await speakItem(item);
+    if (item.pauseAfterMs && item.pauseAfterMs > 0) {
+      await new Promise((resolve) => window.setTimeout(resolve, item.pauseAfterMs));
+    }
+  }
+}
+
+export function playLevelUpSound(): void {
+  if (typeof window === 'undefined') return;
+  const AudioContextConstructor = window.AudioContext
+    ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!AudioContextConstructor) return;
+
+  try {
+    const context = new AudioContextConstructor();
+    const startedAt = context.currentTime;
+    const gain = context.createGain();
+    gain.gain.setValueAtTime(0.0001, startedAt);
+    gain.gain.exponentialRampToValueAtTime(0.08, startedAt + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startedAt + 0.72);
+    gain.connect(context.destination);
+
+    [523.25, 659.25, 783.99].forEach((frequency, index) => {
+      const oscillator = context.createOscillator();
+      const noteStartedAt = startedAt + index * 0.11;
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(frequency, noteStartedAt);
+      oscillator.connect(gain);
+      oscillator.start(noteStartedAt);
+      oscillator.stop(noteStartedAt + 0.32);
+    });
+
+    window.setTimeout(() => {
+      void context.close().catch(() => undefined);
+    }, 900);
+  } catch {
+    // Browsers may block AudioContext creation until they see enough user intent.
   }
 }
 

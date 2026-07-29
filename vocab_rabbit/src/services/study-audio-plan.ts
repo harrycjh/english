@@ -1,7 +1,9 @@
 import type { Question } from './question-service';
 import type { SpeechItem } from './audio-service';
-import { getPrimaryExamplePair } from './example-service';
+import { getExamplePairForLevel } from './example-service';
 import { getStudyChinese, getStudyText } from './word-service';
+
+export const WORD_TO_SENTENCE_PAUSE_MS = 1_000;
 
 export interface StudyAudioPlan {
   beforeAnswer: SpeechItem[];
@@ -11,6 +13,27 @@ export interface StudyAudioPlan {
 export interface RelatedResultAudioPlan {
   beforeReveal: SpeechItem[];
   afterReveal: SpeechItem[];
+}
+
+function isEnglishSentence(item: SpeechItem | undefined): boolean {
+  return Boolean(
+    item
+      && item.lang === 'en-GB'
+      && /\s/.test(item.text.trim()),
+  );
+}
+
+function applyWordToSentencePause(items: SpeechItem[], wordText: string): SpeechItem[] {
+  return items.map((item, index) => {
+    if (
+      item.lang === 'en-GB'
+      && item.text.trim().toLowerCase() === wordText.trim().toLowerCase()
+      && isEnglishSentence(items[index + 1])
+    ) {
+      return { ...item, pauseAfterMs: WORD_TO_SENTENCE_PAUSE_MS };
+    }
+    return item;
+  });
 }
 
 export function splitRelatedResultAudio(
@@ -44,7 +67,7 @@ export function getStudyAudioPlan(
 ): StudyAudioPlan {
   const beforeAnswer: SpeechItem[] = [];
   const afterAnswer: SpeechItem[] = [];
-  const example = getPrimaryExamplePair(question.word);
+  const example = getExamplePairForLevel(question.word, level);
   const pushExample = () => {
     if (example?.sentence) {
       afterAnswer.push({ text: example.sentence, lang: 'en-GB', rate: 0.86 });
@@ -119,5 +142,8 @@ export function getStudyAudioPlan(
     }
   }
 
-  return { beforeAnswer, afterAnswer };
+  return {
+    beforeAnswer,
+    afterAnswer: applyWordToSentencePause(afterAnswer, getStudyText(question.word)),
+  };
 }
