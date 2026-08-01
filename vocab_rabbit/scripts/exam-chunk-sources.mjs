@@ -78,6 +78,33 @@ const REJECTED_LABELS = [
   'vulgar',
 ];
 
+const REJECTED_KAIKKI_CATEGORIES = [
+  'english phrasebook',
+  'english sentences',
+  'english terms with quotations',
+];
+
+const HIGH_VALUE_KAIKKI_CATEGORY_PATTERNS = [
+  /collocations?/,
+  /idioms?/,
+  /light verb constructions?/,
+  /phrasal verbs?/,
+  /predicates?/,
+  /prepositional phrases?/,
+  /proverbs?/,
+];
+
+const HIGH_VALUE_KAIKKI_POS = new Set([
+  'adj',
+  'adv',
+  'conj',
+  'interj',
+  'phrase',
+  'prep',
+  'proverb',
+  'verb',
+]);
+
 const HEADWORD_OVERRIDES = {
   'at / @': ['at'],
   'barbecue/barbeque': ['barbecue', 'barbeque'],
@@ -239,13 +266,41 @@ function findMatchingWordIds(phrase, variantIndex) {
   return [...wordIds];
 }
 
-function hasRejectedLabels(entry) {
-  const labels = [
+function categoryNames(categories) {
+  return (categories ?? []).map((category) => (
+    typeof category === 'string' ? category : category?.name
+  )).filter(Boolean);
+}
+
+function entryLabels(entry) {
+  return [
     ...(entry.tags ?? []),
-    ...(entry.categories ?? []),
-    ...(entry.senses ?? []).flatMap((sense) => [...(sense.tags ?? []), ...(sense.categories ?? [])]),
+    ...categoryNames(entry.categories),
+    ...(entry.senses ?? []).flatMap((sense) => [
+      ...(sense.tags ?? []),
+      ...categoryNames(sense.categories),
+    ]),
   ].join(' ').toLowerCase();
+}
+
+function hasRejectedLabels(entry) {
+  const labels = entryLabels(entry);
   return REJECTED_LABELS.some((label) => labels.includes(label));
+}
+
+function isHighValueKaikkiEntry(entry) {
+  const labels = entryLabels(entry);
+  if (REJECTED_KAIKKI_CATEGORIES.some((label) => labels.includes(label))) return false;
+  if ((entry.senses ?? []).some((sense) => (sense.tags ?? []).includes('form-of') || sense.form_of?.length)) {
+    return false;
+  }
+  if (/[A-Z]/.test(entry.word.replace(/\bI\b/g, ''))) return false;
+  if (entry.word.includes('-') && !entry.word.includes(' ')) {
+    return HIGH_VALUE_KAIKKI_CATEGORY_PATTERNS.some((pattern) => pattern.test(labels));
+  }
+  return HIGH_VALUE_KAIKKI_POS.has(entry.pos)
+    || HIGH_VALUE_KAIKKI_CATEGORY_PATTERNS.some((pattern) => pattern.test(labels))
+    || (entry.senses ?? []).some((sense) => (sense.tags ?? []).includes('idiomatic'));
 }
 
 function isPhraseCandidate(phrase) {
@@ -377,7 +432,12 @@ async function collectKaikkiCandidates(gzipPath, entriesByWordId, variantIndex) 
     } catch {
       continue;
     }
-    if (entry.lang_code !== 'en' || !isPhraseCandidate(entry.word) || hasRejectedLabels(entry)) continue;
+    if (
+      entry.lang_code !== 'en'
+      || !isPhraseCandidate(entry.word)
+      || hasRejectedLabels(entry)
+      || !isHighValueKaikkiEntry(entry)
+    ) continue;
     phraseCount += 1;
     for (const wordId of findMatchingWordIds(entry.word, variantIndex)) {
       addCandidate(entriesByWordId, wordId, {

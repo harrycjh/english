@@ -39,7 +39,7 @@ export function QuestionImage({
   const [isPortraitLifePhoto, setIsPortraitLifePhoto] = useState(false);
   const oxfordLabel = getPrimaryOxfordRefLabel(question.word);
   const imageStrategy = revealLifePhoto ? 'life-photo' : (question.imageStrategy ?? 'comfy');
-  const example = getExamplePairForLevel(question.word, questionLevel);
+  const example = getExamplePairForLevel(question.word, questionLevel, question.exampleIndex);
   const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
   const showExample = disabled
     && Boolean(example?.sentence)

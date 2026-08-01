@@ -56,7 +56,8 @@ describe('polysemous vocabulary content', () => {
         chinese,
         examples: [example],
       });
-      expect(word?.examples, wordId).toEqual([example]);
+      expect(word?.examples?.[0], wordId).toBe(example);
+      expect(word?.exampleCollocations?.[0], wordId).toBe('');
     }
   });
 

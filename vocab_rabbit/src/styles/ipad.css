@@ -3404,6 +3404,70 @@ button {
   font-size: 20px;
 }
 
+.word-detail-drawer__panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.word-detail-drawer__panel-heading > span {
+  flex: 0 0 auto;
+  color: #8090a0;
+  font-size: 12px;
+}
+
+.word-detail-drawer__chunks {
+  padding-bottom: 12px;
+}
+
+.word-detail-drawer__chunk-list {
+  display: grid;
+  gap: 0;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: teaching-chunk;
+}
+
+.word-detail-drawer__chunk-list li {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.9fr) minmax(0, 1.1fr);
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(112, 131, 154, 0.12);
+  counter-increment: teaching-chunk;
+}
+
+.word-detail-drawer__chunk-list li:last-child {
+  border-bottom: 0;
+}
+
+.word-detail-drawer__chunk-list strong {
+  min-width: 0;
+  color: #173c5e;
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.word-detail-drawer__chunk-list strong::before {
+  content: counter(teaching-chunk) ".";
+  margin-right: 7px;
+  color: #e59a34;
+  font-size: 11px;
+}
+
+.word-detail-drawer__chunk-list li > span {
+  min-width: 0;
+  color: #526b82;
+  font-size: 13px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
 .word-detail-drawer__image,
 .word-detail-drawer__placeholder {
   width: 150px;

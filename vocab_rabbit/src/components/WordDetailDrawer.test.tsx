@@ -17,6 +17,34 @@ const word: WordRecord = {
   imageApproved: true,
   oxfordRefs: [],
   examples: ['This is my hand.'],
+  teachingChunks: [
+    {
+      phrase: 'give someone a hand',
+      chinese: '帮助某人;搭把手',
+      sense: 'help someone',
+      type: 'fixed_expression',
+      cefr: 'A2',
+      sources: ['phrase-list'],
+      usageFrequency: {
+        zipf: 4.8,
+        selectionScore: 6.1,
+        source: 'wordfreq-estimate',
+      },
+    },
+    {
+      phrase: 'by hand',
+      chinese: '用手;手工',
+      sense: 'made or done manually',
+      type: 'fixed_expression',
+      cefr: 'A2',
+      sources: ['oewn-2025'],
+      usageFrequency: {
+        zipf: 4.5,
+        selectionScore: 4.5,
+        source: 'wordfreq-estimate',
+      },
+    },
+  ],
   relatedMedia: {
     oxford: {
       imagePath: '/content/images/oxford-tree/level-1/book-1/page-4.webp',
@@ -120,6 +148,44 @@ describe('WordDetailDrawer', () => {
     expect(markup).toContain('红火箭图');
     expect(markup).toContain('This is my hand.');
     expect(markup.indexOf('牛津树图')).toBeLessThan(markup.indexOf('例句'));
+  });
+
+  it('renders translated teaching chunks before related media', () => {
+    const markup = renderToStaticMarkup(
+      <WordDetailDrawer
+        isOpen
+        word={word}
+        record={undefined}
+        selectionState={undefined}
+        setting={{ ...defaultParentSetting, enableAudio: false }}
+        context="review"
+        onClose={() => undefined}
+      />,
+    );
+
+    expect(markup).toContain('高频固定搭配');
+    expect(markup).toContain('2 条');
+    expect(markup).toContain('give someone a hand');
+    expect(markup).toContain('帮助某人；搭把手');
+    expect(markup).toContain('by hand');
+    expect(markup).toContain('用手；手工');
+    expect(markup.indexOf('高频固定搭配')).toBeLessThan(markup.indexOf('关联图片'));
+  });
+
+  it('does not render an empty teaching-chunk panel', () => {
+    const markup = renderToStaticMarkup(
+      <WordDetailDrawer
+        isOpen
+        word={{ ...word, teachingChunks: [] }}
+        record={undefined}
+        selectionState={undefined}
+        setting={{ ...defaultParentSetting, enableAudio: false }}
+        context="review"
+        onClose={() => undefined}
+      />,
+    );
+
+    expect(markup).not.toContain('高频固定搭配');
   });
 
   it('renders the Red Rocket atlas cell and source location', () => {

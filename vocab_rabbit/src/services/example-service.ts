@@ -1,4 +1,13 @@
 import type { WordRecord } from '../models/word';
+
+interface ExampleRotation {
+  count: number;
+  remaining: number[];
+  lastIndex: number | null;
+}
+
+const exampleRotations = new Map<string, ExampleRotation>();
+
 function normalizeExample(example: string | undefined): string | null {
   const trimmed = example?.trim();
   return trimmed ? trimmed : null;
@@ -13,7 +22,7 @@ export function getExampleSentences(word: WordRecord): string[] {
   ).map(normalizeExample).filter(Boolean) as string[];
 
   if (curated.length > 0) {
-    return curated.slice(0, 3);
+    return curated;
   }
 
   return [];
@@ -22,15 +31,13 @@ export function getExampleSentences(word: WordRecord): string[] {
 export function getExampleTranslations(word: WordRecord): string[] {
   return (word.exampleTranslations ?? [])
     .map(normalizeExample)
-    .filter(Boolean)
-    .slice(0, 3) as string[];
+    .map((translation) => translation ?? '');
 }
 
 export function getExampleTranslationFocus(word: WordRecord): string[] {
   return (word.exampleTranslationFocus ?? [])
     .map(normalizeExample)
-    .filter(Boolean)
-    .slice(0, 3) as string[];
+    .map((focus) => focus ?? '');
 }
 
 export interface ExamplePair {
@@ -48,6 +55,37 @@ export function getExampleSlotForLevel(level: number): number {
   return 0;
 }
 
+function shuffleIndexes(count: number, random: () => number): number[] {
+  const indexes = Array.from({ length: count }, (_, index) => index);
+  for (let index = indexes.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1));
+    [indexes[index], indexes[swapIndex]] = [indexes[swapIndex], indexes[index]];
+  }
+  return indexes;
+}
+
+export function getNextExampleIndex(word: WordRecord, random: () => number = Math.random): number {
+  const count = getExampleSentences(word).length;
+  if (count <= 1) return 0;
+  let rotation = exampleRotations.get(word.id);
+  if (!rotation || rotation.count !== count || rotation.remaining.length === 0) {
+    const lastIndex = rotation?.count === count ? rotation.lastIndex : null;
+    const remaining = shuffleIndexes(count, random);
+    if (lastIndex !== null && remaining[0] === lastIndex) {
+      [remaining[0], remaining[1]] = [remaining[1], remaining[0]];
+    }
+    rotation = { count, remaining, lastIndex };
+    exampleRotations.set(word.id, rotation);
+  }
+  const index = rotation.remaining.shift() ?? 0;
+  rotation.lastIndex = index;
+  return index;
+}
+
+export function resetExampleRotations(): void {
+  exampleRotations.clear();
+}
+
 export function getExamplePairAt(word: WordRecord, preferredIndex: number): ExamplePair | null {
   const sentences = getExampleSentences(word);
   if (sentences.length === 0) return null;
@@ -60,6 +98,10 @@ export function getExamplePairAt(word: WordRecord, preferredIndex: number): Exam
   };
 }
 
-export function getExamplePairForLevel(word: WordRecord, level: number): ExamplePair | null {
-  return getExamplePairAt(word, getExampleSlotForLevel(level));
+export function getExamplePairForLevel(
+  word: WordRecord,
+  level: number,
+  preferredIndex?: number,
+): ExamplePair | null {
+  return getExamplePairAt(word, preferredIndex ?? getExampleSlotForLevel(level));
 }

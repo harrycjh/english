@@ -6,7 +6,7 @@ import {
   detectEnglishInflection,
   inflectEnglishOption,
 } from './english-inflection-service';
-import { getExampleSlotForLevel } from './example-service';
+import { getNextExampleIndex } from './example-service';
 import { getStudyChinese, getStudyPartOfSpeech, getStudyText } from './word-service';
 
 export type QuestionKind =
@@ -25,6 +25,7 @@ interface BaseQuestion {
   prompt: string;
   studyText: string;
   word: WordRecord;
+  exampleIndex?: number;
 }
 
 export interface RecognitionQuestion extends BaseQuestion {
@@ -214,9 +215,9 @@ function buildImageAnswerChoiceQuestion(word: WordRecord, allWords: WordRecord[]
 function buildSentenceChoiceQuestion(
   word: WordRecord,
   allWords: WordRecord[],
-  level: number,
+  exampleIndex: number,
 ): SentenceChoiceQuestion | null {
-  const cloze = buildExampleCloze(word, getExampleSlotForLevel(level));
+  const cloze = buildExampleCloze(word, exampleIndex);
   if (!cloze) return null;
   const studyText = getStudyText(word);
   const inflection = detectEnglishInflection(
@@ -410,24 +411,34 @@ export function buildQuestion(
   setting: ParentSetting = defaultParentSetting,
 ): Question {
   const masteryLevel = record?.masteryLevel ?? 0;
-  if (masteryLevel <= 0) return buildRecognitionQuestion(word);
+  const exampleIndex = getNextExampleIndex(word);
+  const withExampleIndex = <T extends Question>(question: T): T => ({
+    ...question,
+    exampleIndex,
+  });
+  if (masteryLevel <= 0) return withExampleIndex(buildRecognitionQuestion(word));
   if (masteryLevel === 1) {
-    return buildChoiceQuestion(
+    return withExampleIndex(buildChoiceQuestion(
       setting.showImages && word.imageApproved ? 'image-choice' : 'text-choice',
       word,
       allWords,
       'comfy',
+    ));
+  }
+  if (masteryLevel === 2) return withExampleIndex(buildImageEnglishChoiceQuestion(word, allWords));
+  if (masteryLevel === 3) return withExampleIndex(buildImageAnswerChoiceQuestion(word, allWords));
+  if (masteryLevel === 4 || !canUseFillBlank(word)) {
+    return withExampleIndex(buildChoiceQuestion('text-choice', word, allWords));
+  }
+  if (masteryLevel === 5) {
+    return withExampleIndex(
+      buildSentenceChoiceQuestion(word, allWords, exampleIndex)
+        ?? buildChoiceQuestion('text-choice', word, allWords),
     );
   }
-  if (masteryLevel === 2) return buildImageEnglishChoiceQuestion(word, allWords);
-  if (masteryLevel === 3) return buildImageAnswerChoiceQuestion(word, allWords);
-  if (masteryLevel === 4 || !canUseFillBlank(word)) return buildChoiceQuestion('text-choice', word, allWords);
-  if (masteryLevel === 5) {
-    return buildSentenceChoiceQuestion(word, allWords, masteryLevel) ?? buildChoiceQuestion('text-choice', word, allWords);
-  }
-  if (masteryLevel === 6) return buildLetterChoiceQuestion(word);
-  if (masteryLevel === 7) return buildFillBlankQuestion(word, 'two-four');
-  return buildFillBlankQuestion(word, 'full');
+  if (masteryLevel === 6) return withExampleIndex(buildLetterChoiceQuestion(word));
+  if (masteryLevel === 7) return withExampleIndex(buildFillBlankQuestion(word, 'two-four'));
+  return withExampleIndex(buildFillBlankQuestion(word, 'full'));
 }
 
 export function getCorrectAnswer(question: Question): string {

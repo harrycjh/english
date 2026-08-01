@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import type { WordRecord } from '../models/word';
 import {
   getExamplePairForLevel,
@@ -6,6 +6,8 @@ import {
   getExampleSlotForLevel,
   getExampleTranslationFocus,
   getExampleTranslations,
+  getNextExampleIndex,
+  resetExampleRotations,
 } from './example-service';
 
 function makeWord(overrides: Partial<WordRecord>): WordRecord {
@@ -24,13 +26,14 @@ function makeWord(overrides: Partial<WordRecord>): WordRecord {
 }
 
 describe('getExampleSentences', () => {
+  beforeEach(() => resetExampleRotations());
   it('returns curated examples before generated fallback examples', () => {
     const word = makeWord({ examples: ['The cat is sleeping.'] });
 
     expect(getExampleSentences(word)).toEqual(['The cat is sleeping.']);
   });
 
-  it('keeps up to three curated examples for staged learning', () => {
+  it('keeps every curated example available for random rotation', () => {
     const word = makeWord({
       examples: [
         'The cat is sleeping.',
@@ -44,7 +47,19 @@ describe('getExampleSentences', () => {
       'The cat is sleeping.',
       'The cat climbed a tree.',
       'The cat sat by the window.',
+      'The cat found a toy.',
     ]);
+  });
+
+  it('uses every example once before repeating and avoids a boundary repeat', () => {
+    const word = makeWord({
+      examples: ['One.', 'Two.', 'Three.', 'Four.'],
+    });
+    const firstCycle = Array.from({ length: 4 }, () => getNextExampleIndex(word, () => 0));
+    const nextIndex = getNextExampleIndex(word, () => 0);
+
+    expect(new Set(firstCycle)).toEqual(new Set([0, 1, 2, 3]));
+    expect(nextIndex).not.toBe(firstCycle.at(-1));
   });
 
   it('does not invent a generic fallback when the word has no curated examples', () => {

@@ -10,18 +10,7 @@ const defaultInputPath = path.join(root, 'tmp/exam-chunks/source-candidates.json
 const defaultOutputPath = path.join(root, 'tmp/exam-chunks/generated-candidates.json');
 const endpoint = process.env.LM_STUDIO_URL ?? 'http://127.0.0.1:1234/v1/chat/completions';
 const model = process.env.EXAM_CHUNK_MODEL ?? process.env.LM_STUDIO_MODEL ?? 'qwen/qwen3.6-35b-a3b';
-
-const CHUNK_TYPES = [
-  'phrasal_verb',
-  'fixed_expression',
-  'preposition_pattern',
-  'idiom',
-  'lexical_collocation',
-  'sentence_frame',
-  'conventional_compound',
-];
-
-const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2'];
+const maxOutputTokens = Number(process.env.EXAM_CHUNK_MAX_TOKENS ?? 16000);
 
 function parseArguments(argv) {
   const options = {
@@ -126,36 +115,29 @@ export function packTasks(tasks, options) {
 
 function validateChunk(task, chunk) {
   const phrase = normalizePhrase(chunk?.phrase).toLowerCase();
-  const chinese = normalizePhrase(chunk?.chinese);
-  const sense = normalizePhrase(chunk?.sense);
-  const type = chunk?.type;
-  const cefr = chunk?.cefr;
   const wordCount = normalizeForMatch(phrase).split(' ').filter(Boolean).length;
   const errors = [];
   if (wordCount < 2 || wordCount > 10) errors.push('word-count');
   if (!containsVariant(phrase, task.headwordVariants)) errors.push('missing-headword');
-  if (!/[\u3400-\u9fff]/u.test(chinese)) errors.push('missing-chinese');
-  if (!sense) errors.push('missing-sense');
-  if (!CHUNK_TYPES.includes(type)) errors.push('invalid-type');
-  if (!CEFR_LEVELS.includes(cefr)) errors.push('invalid-cefr');
   if (/[.!?]$/u.test(phrase)) errors.push('sentence-like');
   return {
     valid: errors.length === 0,
     errors,
-    chunk: { phrase, chinese, sense, type, cefr },
+    chunk: { phrase },
   };
 }
 
-export function validateTaskResult(task, result) {
-  const errors = [];
-  if (result?.taskId !== task.taskId) errors.push('task-id');
-  if (!Array.isArray(result?.chunks)) errors.push('chunks-not-array');
+export function validateTaskResult(task, result, acceptFiltered = false) {
+  const structuralErrors = [];
+  const chunkErrors = [];
+  if (result?.taskId !== task.taskId) structuralErrors.push('task-id');
+  if (!Array.isArray(result?.chunks)) structuralErrors.push('chunks-not-array');
   const chunks = [];
   const seen = new Set();
   for (const rawChunk of result?.chunks ?? []) {
     const validation = validateChunk(task, rawChunk);
     if (!validation.valid) {
-      errors.push(`${normalizePhrase(rawChunk?.phrase) || 'unknown'}:${validation.errors.join('|')}`);
+      chunkErrors.push(`${normalizePhrase(rawChunk?.phrase) || 'unknown'}:${validation.errors.join('|')}`);
       continue;
     }
     const key = candidateKey(validation.chunk.phrase);
@@ -163,7 +145,29 @@ export function validateTaskResult(task, result) {
     seen.add(key);
     chunks.push(validation.chunk);
   }
-  return { valid: errors.length === 0, errors, chunks };
+  const errors = [...structuralErrors, ...chunkErrors];
+  return {
+    valid: structuralErrors.length === 0 && (chunkErrors.length === 0 || acceptFiltered),
+    errors,
+    chunks,
+  };
+}
+
+export function indexResponseEntries(pending, entries) {
+  const byTaskId = new Map(entries.map((entry) => [entry.taskId, entry]));
+  if (pending.length === 1 && entries.length === 0) {
+    byTaskId.set(pending[0].taskId, {
+      taskId: pending[0].taskId,
+      chunks: [],
+    });
+  }
+  if (pending.length === 1 && entries.length === 1 && !byTaskId.has(pending[0].taskId)) {
+    byTaskId.set(pending[0].taskId, {
+      ...entries[0],
+      taskId: pending[0].taskId,
+    });
+  }
+  return byTaskId;
 }
 
 const responseSchema = {
@@ -181,12 +185,8 @@ const responseSchema = {
               type: 'object',
               properties: {
                 phrase: { type: 'string' },
-                chinese: { type: 'string' },
-                sense: { type: 'string' },
-                type: { type: 'string', enum: CHUNK_TYPES },
-                cefr: { type: 'string', enum: CEFR_LEVELS },
               },
-              required: ['phrase', 'chinese', 'sense', 'type', 'cefr'],
+              required: ['phrase'],
               additionalProperties: false,
             },
           },
@@ -217,7 +217,7 @@ async function requestJson(tasks, correction = null) {
     body: JSON.stringify({
       model,
       temperature: 0.1,
-      max_tokens: 7000,
+      max_tokens: maxOutputTokens,
       reasoning_effort: 'none',
       messages: [
         {
@@ -230,10 +230,9 @@ async function requestJson(tasks, correction = null) {
             'Reject arbitrary free combinations such as can swim, can help, good book, young aunt, or a child runs.',
             'Reject full sentences, names, technical jargon, rare, archaic, dialectal, offensive, literary-only, and above-B2 expressions.',
             'Do not force a quota. Return every useful chunk you can justify, or an empty array when the word has none.',
-            'When allowAdditional is true, add important common chunks missing from sourceCandidates. When false, only judge the supplied candidates.',
+            'When allowAdditional is true, add no more than 20 important high-frequency chunks missing from sourceCandidates; this cap applies only to model additions, not to source candidates. When false, only judge the supplied candidates.',
             'Use a normalized dictionary phrase, lowercase except where capitalization is intrinsic. Use somebody and something for variable slots.',
-            'The Chinese field must translate the whole chunk in its intended sense, not merely repeat the headword meaning.',
-            'The sense field must be a short plain-English explanation that distinguishes this chunk from other senses.',
+            'Return only the phrase text at this collection stage. A separate reviewer will add meanings, types, and CEFR levels.',
             'Return exactly one result for each taskId and no extra taskIds.',
             correction ? `Correct these previous validation problems: ${correction}` : '',
           ].filter(Boolean).join(' '),
@@ -262,12 +261,22 @@ async function generateBatch(tasks) {
   const accepted = [];
   let correction = null;
   for (let attempt = 1; attempt <= 3 && pending.length > 0; attempt += 1) {
-    const body = await requestJson(pending, correction);
-    const byTaskId = new Map((body.entries ?? []).map((entry) => [entry.taskId, entry]));
+    let body;
+    try {
+      body = await requestJson(pending, correction);
+    } catch (error) {
+      correction = `request-error:${error.message}`;
+      console.warn(`Retry ${attempt}/3: ${correction}`);
+      continue;
+    }
+    const byTaskId = indexResponseEntries(pending, body.entries ?? []);
+    if (pending.length === 1 && !byTaskId.has(pending[0].taskId)) {
+      console.warn(`Unexpected single-task response: ${JSON.stringify(body).slice(0, 800)}`);
+    }
     const retry = [];
     const retryErrors = [];
     for (const task of pending) {
-      const validation = validateTaskResult(task, byTaskId.get(task.taskId));
+      const validation = validateTaskResult(task, byTaskId.get(task.taskId), true);
       if (validation.valid) {
         accepted.push({ taskId: task.taskId, wordId: task.wordId, chunks: validation.chunks });
       } else {
@@ -308,7 +317,7 @@ async function saveCheckpoint(outputPath, tasksById) {
   }, null, 2)}\n`);
 }
 
-function attachEvidence(words, sourceEntriesById, tasksById) {
+export function attachEvidence(words, sourceEntriesById, tasksById) {
   return words.map((word) => {
     const sourceCandidates = sourceEntriesById.get(word.id)?.candidates ?? [];
     const sourceByPhrase = new Map(sourceCandidates.map((candidate) => [candidateKey(candidate.phrase), candidate]));
@@ -327,6 +336,19 @@ function attachEvidence(words, sourceEntriesById, tasksById) {
           continue;
         }
         chunksByPhrase.set(key, { ...chunk, sources: [...new Set(sources)].sort() });
+      }
+    }
+    for (const source of sourceCandidates) {
+      const sourceNames = source.evidence.map((evidence) => evidence.source);
+      const key = candidateKey(source.phrase);
+      const existing = chunksByPhrase.get(key);
+      if (existing) {
+        existing.sources = [...new Set([...existing.sources, ...sourceNames])].sort();
+      } else {
+        chunksByPhrase.set(key, {
+          phrase: normalizePhrase(source.phrase).toLowerCase(),
+          sources: [...new Set(sourceNames)].sort(),
+        });
       }
     }
     return {

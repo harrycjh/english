@@ -94,8 +94,9 @@ describe('buildQuestion', () => {
     expect(question.kind).toBe('sentence-choice');
     if (question.kind !== 'sentence-choice') return;
     expect(question.maskedSentence).toContain('_____');
-    expect(question.sentence).toBe('The rabbit sleeps under the table.');
-    expect(question.sentenceTranslation).toBe('这只兔子睡在桌子下面。');
+    const sentenceIndex = target.examples?.indexOf(question.sentence) ?? -1;
+    expect(sentenceIndex).toBeGreaterThanOrEqual(0);
+    expect(question.sentenceTranslation).toBe(target.exampleTranslations?.[sentenceIndex]);
     expect(question.sentenceTranslationFocus).toBe('兔子');
     expect(question.options).toHaveLength(4);
     expect(question.correctAnswer).toBe('rabbit');

@@ -29,7 +29,7 @@ export function QuestionRecognition({
   localLifePhoto,
   onSubmit,
 }: QuestionRecognitionProps) {
-  const example = getExamplePairForLevel(question.word, questionLevel);
+  const example = getExamplePairForLevel(question.word, questionLevel, question.exampleIndex);
   const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
   return (
     <section className="question-panel question-panel--recognition question-panel--level-0">

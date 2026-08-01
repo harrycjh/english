@@ -39,7 +39,7 @@ export function QuestionText({
     && Boolean(oxford?.sentence)
   );
   const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
-  const example = getExamplePairForLevel(question.word, questionLevel);
+  const example = getExamplePairForLevel(question.word, questionLevel, question.exampleIndex);
 
   return (
     <section className="question-panel question-panel--text">
