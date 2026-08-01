@@ -32,7 +32,7 @@ export function QuestionLetterChoice({
 }: QuestionLetterChoiceProps) {
   const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
   const redRocket = question.word.relatedMedia?.redRocket;
-  const example = getExamplePairForLevel(question.word, questionLevel);
+  const example = getExamplePairForLevel(question.word, questionLevel, question.exampleIndex);
   const showRedRocketResult = (
     questionLevel === 6
     && answeredCorrectly

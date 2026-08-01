@@ -121,7 +121,7 @@ export function QuestionFillBlank({
   const useTopForgotAction = questionLevel >= 8 && questionLevel <= 9;
   const answeredCorrectly = disabled
     && selectedAnswer?.toLowerCase() === question.missingLetters.join('').toLowerCase();
-  const example = getExamplePairForLevel(question.word, questionLevel);
+  const example = getExamplePairForLevel(question.word, questionLevel, question.exampleIndex);
   const showExample = questionLevel === 7 || questionLevel === 9
     ? disabled
     : questionLevel === 8

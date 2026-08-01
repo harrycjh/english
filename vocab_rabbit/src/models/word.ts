@@ -127,6 +127,34 @@ export interface WordStudySense {
   examples: string[];
 }
 
+export type ExamChunkType =
+  | 'phrasal_verb'
+  | 'fixed_expression'
+  | 'preposition_pattern'
+  | 'idiom'
+  | 'lexical_collocation'
+  | 'sentence_frame'
+  | 'conventional_compound';
+
+export interface ExamChunk {
+  phrase: string;
+  chinese: string;
+  sense: string;
+  type: ExamChunkType;
+  cefr: 'A1' | 'A2' | 'B1' | 'B2';
+  sources: string[];
+}
+
+export interface TeachingChunk extends ExamChunk {
+  usageFrequency: {
+    zipf: number;
+    selectionScore: number;
+    source: 'wordfreq-estimate';
+    phraseListPer100Million?: number;
+    phaveRank?: number;
+  };
+}
+
 export interface WordRecord {
   id: string;
   english: string;
@@ -145,6 +173,8 @@ export interface WordRecord {
   example?: string;
   examples?: string[];
   exampleCollocations?: string[];
+  examChunks?: ExamChunk[];
+  teachingChunks?: TeachingChunk[];
   exampleTranslations?: string[];
   exampleTranslationFocus?: string[];
 }

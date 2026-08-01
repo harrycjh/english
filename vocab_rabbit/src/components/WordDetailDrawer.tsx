@@ -102,6 +102,12 @@ function getLifePhotoMatchLabel(match: 'primary' | 'secondary'): string {
   return match === 'primary' ? '主匹配' : '辅助匹配';
 }
 
+function formatChunkTranslation(value: string): string {
+  return value
+    .replace(/\s*;\s*/g, '；')
+    .replace(/\s*\/\s*/g, '、');
+}
+
 interface LevelHistoryPoint {
   id: string;
   answeredAt: string;
@@ -311,6 +317,23 @@ export function WordDetailDrawer({
           {primaryMedia}
           {wordSummary}
         </section>
+
+        {word.teachingChunks && word.teachingChunks.length > 0 ? (
+          <section className="word-detail-drawer__panel word-detail-drawer__chunks">
+            <div className="word-detail-drawer__panel-heading">
+              <h3>高频固定搭配</h3>
+              <span>{word.teachingChunks.length} 条</span>
+            </div>
+            <ol className="word-detail-drawer__chunk-list">
+              {word.teachingChunks.map((chunk) => (
+                <li key={chunk.phrase}>
+                  <strong>{chunk.phrase}</strong>
+                  <span>{formatChunkTranslation(chunk.chinese)}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ) : null}
 
         {hasRelatedMedia ? (
           <section className="word-detail-drawer__panel">

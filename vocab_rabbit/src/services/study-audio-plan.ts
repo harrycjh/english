@@ -67,7 +67,7 @@ export function getStudyAudioPlan(
 ): StudyAudioPlan {
   const beforeAnswer: SpeechItem[] = [];
   const afterAnswer: SpeechItem[] = [];
-  const example = getExamplePairForLevel(question.word, level);
+  const example = getExamplePairForLevel(question.word, level, question.exampleIndex);
   const pushExample = () => {
     if (example?.sentence) {
       afterAnswer.push({ text: example.sentence, lang: 'en-GB', rate: 0.86 });

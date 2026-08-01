@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { buildTasks, packTasks, validateTaskResult } from './generate-exam-chunks.mjs';
+import {
+  attachEvidence,
+  buildTasks,
+  indexResponseEntries,
+  packTasks,
+  validateTaskResult,
+} from './generate-exam-chunks.mjs';
 
 const options = {
   maxCandidatesPerTask: 2,
@@ -54,7 +60,7 @@ describe('exam chunk generation pipeline', () => {
         cefr: 'A2',
       }],
     })).toMatchObject({ valid: true });
-    expect(validateTaskResult(task, {
+    const malformed = {
       taskId: task.taskId,
       chunks: [{
         phrase: 'take care of',
@@ -63,6 +69,49 @@ describe('exam chunk generation pipeline', () => {
         type: 'fixed_expression',
         cefr: 'A2',
       }],
-    })).toMatchObject({ valid: false });
+    };
+    expect(validateTaskResult(task, malformed)).toMatchObject({ valid: false, chunks: [] });
+    expect(validateTaskResult(task, malformed, true)).toMatchObject({ valid: true, chunks: [] });
+  });
+
+  it('recovers a copied task id only when one task and one result are unambiguous', () => {
+    const task = { taskId: 'ket_can_n_mv#1' };
+    const result = { taskId: 'ket_can_n_mv#0', chunks: [] };
+    expect(indexResponseEntries([task], [result]).get(task.taskId)).toEqual({
+      taskId: task.taskId,
+      chunks: [],
+    });
+    expect(indexResponseEntries([task, { taskId: 'other#0' }], [result]).has(task.taskId)).toBe(false);
+  });
+
+  it('treats an omitted single-task result as an explicit empty result', () => {
+    const secondary = { taskId: 'ket_can_n_mv#1', allowAdditional: false };
+    expect(indexResponseEntries([secondary], []).get(secondary.taskId)).toEqual({
+      taskId: secondary.taskId,
+      chunks: [],
+    });
+    const primary = { taskId: 'ket_can_n_mv#0', allowAdditional: true };
+    expect(indexResponseEntries([primary], []).get(primary.taskId)).toEqual({
+      taskId: primary.taskId,
+      chunks: [],
+    });
+  });
+
+  it('forwards every cleaned source candidate to the recall review', () => {
+    const words = [{ id: 'ket_after_adv_prep', english: 'after' }];
+    const sources = new Map([['ket_after_adv_prep', {
+      candidates: [{
+        phrase: 'look after',
+        evidence: [{ source: 'phave' }, { source: 'wiktionary-kaikki' }],
+      }],
+    }]]);
+    expect(attachEvidence(words, sources, new Map())).toEqual([{
+      id: 'ket_after_adv_prep',
+      english: 'after',
+      chunks: [{
+        phrase: 'look after',
+        sources: ['phave', 'wiktionary-kaikki'],
+      }],
+    }]);
   });
 });

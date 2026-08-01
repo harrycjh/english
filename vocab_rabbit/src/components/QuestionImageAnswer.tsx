@@ -27,7 +27,7 @@ export function QuestionImageAnswer({
   localLifePhotosById,
   onSubmit,
 }: QuestionImageAnswerProps) {
-  const example = getExamplePairForLevel(question.word, questionLevel);
+  const example = getExamplePairForLevel(question.word, questionLevel, question.exampleIndex);
   const answeredCorrectly = disabled && selectedAnswer === question.correctAnswer;
   const answered = disabled && selectedAnswer !== null;
 
