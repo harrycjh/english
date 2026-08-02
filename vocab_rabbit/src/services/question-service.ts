@@ -6,7 +6,7 @@ import {
   detectEnglishInflection,
   inflectEnglishOption,
 } from './english-inflection-service';
-import { getNextExampleIndex } from './example-service';
+import { getExampleSourceIndex, getNextExampleIndex } from './example-service';
 import { getStudyChinese, getStudyPartOfSpeech, getStudyText } from './word-service';
 
 export type QuestionKind =
@@ -230,7 +230,15 @@ function buildSentenceChoiceQuestion(
   const uniqueOptions = new Map<string, string>([
     [correctAnswer.toLowerCase(), correctAnswer],
   ]);
-  for (const candidate of buildEnglishDistractors(word, allWords, 40)) {
+  const wordsById = new Map(allWords.map((candidate) => [candidate.id, candidate]));
+  const sourceExampleIndex = getExampleSourceIndex(word, exampleIndex);
+  const curatedDistractors = (word.exampleDistractorIds?.[sourceExampleIndex] ?? [])
+    .map((id) => wordsById.get(id))
+    .filter((candidate): candidate is WordRecord => Boolean(candidate));
+  for (const candidate of [
+    ...curatedDistractors,
+    ...buildEnglishDistractors(word, allWords, 40),
+  ]) {
     const option = inflectEnglishOption(getStudyText(candidate), inflection, capitalize);
     const normalizedOption = option.toLowerCase();
     if (!uniqueOptions.has(normalizedOption)) uniqueOptions.set(normalizedOption, option);

@@ -33,7 +33,7 @@ function isDue(record: LearningRecord, cutoff: Date): boolean {
   return new Date(record.nextDueAt) < cutoff;
 }
 
-function pickBalancedNewWords(words: WordRecord[], limit: number): string[] {
+function orderWordsAcrossCategories(words: WordRecord[]): WordRecord[] {
   const buckets = new Map<string, WordRecord[]>();
 
   for (const word of words) {
@@ -43,21 +43,72 @@ function pickBalancedNewWords(words: WordRecord[], limit: number): string[] {
   }
 
   const orderedBuckets = [...buckets.values()].map((bucket) =>
-    bucket.sort((left, right) => left.difficulty - right.difficulty || left.english.localeCompare(right.english))
+    bucket.sort((left, right) => left.english.localeCompare(right.english))
   );
 
-  const selected: string[] = [];
+  const ordered: WordRecord[] = [];
   let cursor = 0;
-  while (selected.length < limit && orderedBuckets.some((bucket) => bucket.length > 0)) {
+  while (orderedBuckets.some((bucket) => bucket.length > 0)) {
     const bucket = orderedBuckets[cursor % orderedBuckets.length];
     const nextWord = bucket.shift();
     if (nextWord) {
-      selected.push(nextWord.id);
+      ordered.push(nextWord);
     }
     cursor += 1;
   }
 
+  return ordered;
+}
+
+function pickBalancedNewWords(words: WordRecord[], limit: number): string[] {
+  const difficultyBuckets = new Map<number, WordRecord[]>();
+
+  for (const word of words) {
+    const bucket = difficultyBuckets.get(word.difficulty) ?? [];
+    bucket.push(word);
+    difficultyBuckets.set(word.difficulty, bucket);
+  }
+
+  const orderedBuckets = [...difficultyBuckets.entries()]
+    .sort(([leftDifficulty], [rightDifficulty]) => leftDifficulty - rightDifficulty)
+    .map(([, bucket]) => orderWordsAcrossCategories(bucket));
+
+  const selected: string[] = [];
+  while (selected.length < limit && orderedBuckets.some((bucket) => bucket.length > 0)) {
+    for (const bucket of orderedBuckets) {
+      const nextWord = bucket.shift();
+      if (nextWord) {
+        selected.push(nextWord.id);
+      }
+      if (selected.length >= limit) {
+        break;
+      }
+    }
+  }
+
   return selected;
+}
+
+function pickPlannedNewWords(
+  words: WordRecord[],
+  limit: number,
+  queuedWordIds: string[],
+  excludedWordIds: ReadonlySet<string> = new Set(),
+): string[] {
+  const wordsById = new Map(
+    words
+      .filter((word) => !excludedWordIds.has(word.id))
+      .map((word) => [word.id, word]),
+  );
+  const queuedIds = [...new Set(queuedWordIds)]
+    .filter((wordId) => wordsById.has(wordId))
+    .slice(0, limit);
+  const queuedIdSet = new Set(queuedIds);
+  const automaticIds = pickBalancedNewWords(
+    [...wordsById.values()].filter((word) => !queuedIdSet.has(word.id)),
+    Math.max(0, limit - queuedIds.length),
+  );
+  return [...queuedIds, ...automaticIds];
 }
 
 function getOrderedDueReviewWords(
@@ -96,7 +147,8 @@ export function buildDailyTask(
   recordsById: Record<string, LearningRecord>,
   setting: ParentSetting = defaultParentSetting,
   date: Date = new Date(),
-  selectionById: Record<string, WordSelectionState> = {}
+  selectionById: Record<string, WordSelectionState> = {},
+  excludedNewWordIds: ReadonlySet<string> = new Set(),
 ): DailyTaskSummary {
   const studyWords = getActiveStudyWords(words, selectionById);
   const orderedDueReviewWords = getOrderedDueReviewWords(studyWords, recordsById, date);
@@ -106,7 +158,12 @@ export function buildDailyTask(
     .map((word) => word.id);
 
   const unseenWords = studyWords.filter((word) => !recordsById[word.id]);
-  const newWordIds = pickBalancedNewWords(unseenWords, limits.newWordCount);
+  const newWordIds = pickPlannedNewWords(
+    unseenWords,
+    limits.newWordCount,
+    setting.newWordQueue,
+    excludedNewWordIds,
+  );
 
   return {
     dateKey: createDateKey(date),
@@ -143,9 +200,10 @@ export function expandDailyTaskPlan(
   const unplannedUnseenWords = studyWords.filter(
     (word) => !recordsById[word.id] && !plannedWordIds.has(word.id),
   );
-  const additionalNewWordIds = pickBalancedNewWords(
+  const additionalNewWordIds = pickPlannedNewWords(
     unplannedUnseenWords,
     newWordTarget - task.newWordIds.length,
+    setting.newWordQueue,
   );
 
   if (additionalReviewWordIds.length === 0 && additionalNewWordIds.length === 0) {
@@ -210,9 +268,10 @@ export function normalizeDailyTaskPlan(
     ...answeredNewWordIds,
     ...existingUnansweredNewWordIds,
   ]);
-  const freshNewWordIds = pickBalancedNewWords(
+  const freshNewWordIds = pickPlannedNewWords(
     studyWords.filter((word) => !recordsById[word.id] && !reservedWordIds.has(word.id)),
     Math.max(0, newWordTarget - answeredNewWordIds.length - existingUnansweredNewWordIds.length),
+    setting.newWordQueue,
   );
   const newWordIds = uniqueIds([
     ...answeredNewWordIds,

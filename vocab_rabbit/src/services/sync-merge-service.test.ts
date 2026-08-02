@@ -146,6 +146,7 @@ describe('mergeParentSetting', () => {
       chineseVoiceURI: '',
       dailyNewWordCount: 6,
       dailyReviewLimit: 8,
+      newWordQueue: [],
       showImages: true,
       showExamples: true,
       showHints: true,

@@ -35,6 +35,7 @@ function makeRequest(): SyncRequest {
           chineseVoiceURI: '',
           dailyNewWordCount: 6,
           dailyReviewLimit: 8,
+          newWordQueue: [],
           showImages: true,
           showExamples: true,
           showHints: true,

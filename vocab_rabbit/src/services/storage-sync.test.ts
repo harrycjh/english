@@ -57,11 +57,12 @@ describe('sync metadata storage', () => {
     expect(second.deviceToken).toBeNull();
   });
 
-  it('includes updated daily learning limits in the pending cloud snapshot', async () => {
+  it('includes updated learning limits and the new-word queue in the pending cloud snapshot', async () => {
     const nextSetting = {
       ...defaultParentSetting,
       dailyNewWordCount: 15,
       dailyReviewLimit: 30,
+      newWordQueue: ['word-b', 'word-a'],
     };
 
     await saveParentSetting(nextSetting);
@@ -71,9 +72,11 @@ describe('sync metadata storage', () => {
     expect(request.snapshot?.parentSetting.value).toMatchObject({
       dailyNewWordCount: 15,
       dailyReviewLimit: 30,
+      newWordQueue: ['word-b', 'word-a'],
     });
     expect(request.snapshot?.parentSetting.fieldRevisions.dailyNewWordCount).toBeDefined();
     expect(request.snapshot?.parentSetting.fieldRevisions.dailyReviewLimit).toBeDefined();
+    expect(request.snapshot?.parentSetting.fieldRevisions.newWordQueue).toBeDefined();
     expect((await getOrCreateSyncMetadata()).pendingSince).not.toBeNull();
   });
 });

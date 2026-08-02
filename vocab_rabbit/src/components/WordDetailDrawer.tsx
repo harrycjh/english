@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom';
+import { useState } from 'react';
 import type { AnswerEvent } from '../models/answer-event';
 import type { LearningRecord } from '../models/learning-record';
 import type { LocalLifePhotoView } from '../models/local-media';
@@ -244,6 +245,8 @@ export function WordDetailDrawer({
   onToggleEnabled,
   onTogglePaused,
 }: WordDetailDrawerProps) {
+  const [expandedChunkWordId, setExpandedChunkWordId] = useState<string | null>(null);
+
   if (!isOpen || !word) {
     return null;
   }
@@ -253,6 +256,16 @@ export function WordDetailDrawer({
   const levelHistory = getLevelHistory(answerEvents, word.id, record);
   const isEnabled = selectionState ? selectionState.isEnabled : true;
   const isPaused = selectionState?.isPaused ?? false;
+  const teachingChunks = [...(word.teachingChunks ?? [])]
+    .sort((left, right) => (
+      right.usageFrequency.selectionScore - left.usageFrequency.selectionScore
+      || right.usageFrequency.zipf - left.usageFrequency.zipf
+      || left.phrase.localeCompare(right.phrase)
+    ))
+    .slice(0, 10);
+  const chunksExpanded = expandedChunkWordId === word.id;
+  const visibleTeachingChunks = chunksExpanded ? teachingChunks : teachingChunks.slice(0, 3);
+  const hiddenChunkCount = Math.max(0, teachingChunks.length - 3);
   const relatedMedia = word.relatedMedia;
   const lifePhoto = localLifePhoto
     ? {
@@ -318,20 +331,30 @@ export function WordDetailDrawer({
           {wordSummary}
         </section>
 
-        {word.teachingChunks && word.teachingChunks.length > 0 ? (
+        {teachingChunks.length > 0 ? (
           <section className="word-detail-drawer__panel word-detail-drawer__chunks">
             <div className="word-detail-drawer__panel-heading">
               <h3>高频固定搭配</h3>
-              <span>{word.teachingChunks.length} 条</span>
+              <span>{teachingChunks.length} 条</span>
             </div>
             <ol className="word-detail-drawer__chunk-list">
-              {word.teachingChunks.map((chunk) => (
+              {visibleTeachingChunks.map((chunk) => (
                 <li key={chunk.phrase}>
                   <strong>{chunk.phrase}</strong>
                   <span>{formatChunkTranslation(chunk.chinese)}</span>
                 </li>
               ))}
             </ol>
+            {hiddenChunkCount > 0 ? (
+              <button
+                className="word-detail-drawer__chunk-toggle"
+                type="button"
+                aria-expanded={chunksExpanded}
+                onClick={() => setExpandedChunkWordId(chunksExpanded ? null : word.id)}
+              >
+                {chunksExpanded ? '收起' : `展开其余 ${hiddenChunkCount} 条`}
+              </button>
+            ) : null}
           </section>
         ) : null}
 

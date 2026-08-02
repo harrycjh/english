@@ -459,14 +459,22 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
   async function rebuildTodayTask(
     nextRecords: Record<string, LearningRecord> = recordsById,
     nextSetting: ParentSetting | null = parentSetting,
-    nextSelection: Record<string, WordSelectionState> = selectionById
+    nextSelection: Record<string, WordSelectionState> = selectionById,
+    excludedNewWordIds: ReadonlySet<string> = new Set(),
   ) {
     if (!payload || !nextSetting) {
       return;
     }
 
     const studyDate = task ? createDateTimeForDateKey(task.dateKey) : new Date();
-    const nextTask = buildDailyTask(payload.words, nextRecords, nextSetting, studyDate, nextSelection);
+    const nextTask = buildDailyTask(
+      payload.words,
+      nextRecords,
+      nextSetting,
+      studyDate,
+      nextSelection,
+      excludedNewWordIds,
+    );
     await saveDailyTask(nextTask);
     setTask(nextTask);
     await refreshRecentTasks();
@@ -736,9 +744,49 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     });
   }
 
+  async function persistNewWordQueue(
+    wordIds: string[],
+    additionallyExcludedWordIds: ReadonlySet<string> = new Set(),
+  ) {
+    if (!payload || !parentSetting) return;
+    const wordsById = new Map(payload.words.map((word) => [word.id, word]));
+    const nextQueue = [...new Set(wordIds)].filter((wordId) => (
+      wordsById.has(wordId)
+      && !recordsById[wordId]
+      && getActiveStudyWords([wordsById.get(wordId)!], selectionById).length > 0
+    ));
+    const nextQueueIdSet = new Set(nextQueue);
+    const removedWordIds = new Set([
+      ...parentSetting.newWordQueue.filter((wordId) => !nextQueueIdSet.has(wordId)),
+      ...additionallyExcludedWordIds,
+    ]);
+    const nextSetting = { ...parentSetting, newWordQueue: nextQueue };
+
+    await saveParentSetting(nextSetting);
+    setParentSetting(nextSetting);
+
+    if (task && !task.completedAt && task.totalAnswered === 0) {
+      await rebuildTodayTask(recordsById, nextSetting, selectionById, removedWordIds);
+    }
+
+    if (onRequestSync) {
+      void onRequestSync().catch(() => undefined);
+    }
+  }
+
+  async function handleRemoveTodayNewWord(wordId: string) {
+    if (!parentSetting || !task || task.totalAnswered > 0 || task.completedAt) return;
+    await persistNewWordQueue(
+      parentSetting.newWordQueue.filter((queuedWordId) => queuedWordId !== wordId),
+      new Set([wordId]),
+    );
+  }
+
   async function handleApplySelectionPlan() {
     if (task && !task.completedAt && task.totalAnswered === 0) {
-      await rebuildTodayTask(recordsById, parentSetting, selectionById);
+      if (parentSetting) {
+        await expandCurrentTaskPlan(parentSetting);
+      }
     }
 
     navigateToMainRoute('home');
@@ -913,6 +961,8 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           onOpenStats={handleOpenStats}
           onSaveSelectionStates={handleSaveSelectionStates}
           onApplySelectionPlan={handleApplySelectionPlan}
+          onChangeNewWordQueue={persistNewWordQueue}
+          onRemoveTodayNewWord={handleRemoveTodayNewWord}
           onRequestLocalLifePhoto={(wordId) => void ensureLocalLifePhoto(wordId)}
         />
       );

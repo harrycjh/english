@@ -30,6 +30,14 @@ describe('parent setting normalization', () => {
     })).toMatchObject({
       englishVoiceURI: '',
       chineseVoiceURI: '',
+      newWordQueue: [],
     });
+  });
+
+  it('normalizes the ordered new-word queue without duplicates or empty ids', () => {
+    expect(normalizeParentSetting({
+      ...defaultParentSetting,
+      newWordQueue: ['word-b', '', 'word-a', 'word-b'],
+    }).newWordQueue).toEqual(['word-b', 'word-a']);
   });
 });

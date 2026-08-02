@@ -172,6 +172,50 @@ describe('WordDetailDrawer', () => {
     expect(markup.indexOf('高频固定搭配')).toBeLessThan(markup.indexOf('关联图片'));
   });
 
+  it('shows only the three highest-frequency chunks until the player expands the list', () => {
+    const baseChunk = word.teachingChunks![0];
+    const rankedWord: WordRecord = {
+      ...word,
+      teachingChunks: [
+        ['fourth phrase', 4],
+        ['highest phrase', 10],
+        ['fifth phrase', 2],
+        ['second phrase', 8],
+        ['third phrase', 6],
+      ].map(([phrase, selectionScore]) => ({
+        ...baseChunk,
+        phrase: String(phrase),
+        chinese: `${phrase}译文`,
+        usageFrequency: {
+          ...baseChunk.usageFrequency,
+          selectionScore: Number(selectionScore),
+        },
+      })),
+    };
+    const markup = renderToStaticMarkup(
+      <WordDetailDrawer
+        isOpen
+        word={rankedWord}
+        record={undefined}
+        selectionState={undefined}
+        setting={{ ...defaultParentSetting, enableAudio: false }}
+        context="review"
+        onClose={() => undefined}
+      />,
+    );
+
+    expect(markup).toContain('5 条');
+    expect(markup).toContain('highest phrase');
+    expect(markup).toContain('second phrase');
+    expect(markup).toContain('third phrase');
+    expect(markup).not.toContain('fourth phrase');
+    expect(markup).not.toContain('fifth phrase');
+    expect(markup).toContain('展开其余 2 条');
+    expect(markup).toContain('aria-expanded="false"');
+    expect(markup.indexOf('highest phrase')).toBeLessThan(markup.indexOf('second phrase'));
+    expect(markup.indexOf('second phrase')).toBeLessThan(markup.indexOf('third phrase'));
+  });
+
   it('does not render an empty teaching-chunk panel', () => {
     const markup = renderToStaticMarkup(
       <WordDetailDrawer

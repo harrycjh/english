@@ -106,7 +106,7 @@ function normalizePhrase(value) {
   return normalizeText(value).toLowerCase().replace(/[–—]/g, '-');
 }
 
-function getTokenForms(token) {
+export function getTokenForms(token) {
   const lower = token.toLowerCase();
   const forms = new Set([lower, `${lower}s`, `${lower}es`, ...(IRREGULAR_FORMS[lower] ?? [])]);
   forms.add(`${lower}'s`);
@@ -268,6 +268,7 @@ export function applyGeneratedEntry(word, entry) {
   word.exampleCollocations = [...baseCollocations, ...generated.map((item) => item.phrase)];
   if (word.studySense?.examples?.length && baseExamples[0]) {
     word.studySense.examples = [baseExamples[0]];
+    word.studySense.exampleIndexes = [0];
   }
   return word;
 }

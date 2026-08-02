@@ -25,6 +25,7 @@ interface WordEntry {
   exampleTranslations?: string[];
   exampleTranslationFocus?: string[];
   exampleCollocations?: string[];
+  exampleDistractorIds?: string[][];
 }
 
 const payload = JSON.parse(fs.readFileSync(
@@ -114,6 +115,17 @@ describe('exam chunk vocabulary content', () => {
       expect(entry.exampleCollocations, `${entry.id} collocation count differs`).toHaveLength(expectedChunkCount + 1);
       expect(entry.exampleCollocations?.[0], `${entry.id} base example should not be tagged`).toBe('');
 
+      const translationsByText = new Map<string, string>();
+      for (let index = 0; index < (entry.examples?.length ?? 0); index += 1) {
+        const translation = entry.exampleTranslations?.[index] ?? '';
+        const priorSentence = translationsByText.get(translation);
+        expect(
+          priorSentence === undefined || priorSentence === entry.examples?.[index],
+          `${entry.id} reuses a translation for two different sentences`,
+        ).toBe(true);
+        translationsByText.set(translation, entry.examples?.[index] ?? '');
+      }
+
       for (let index = 0; index < expectedChunkCount; index += 1) {
         const arrayIndex = index + 1;
         expect(normalized(entry.exampleCollocations?.[arrayIndex] ?? '')).toBe(
@@ -124,6 +136,21 @@ describe('exam chunk vocabulary content', () => {
         expect(translation, `${entry.id}:${arrayIndex} lacks a Chinese sentence`).toMatch(/[\u3400-\u9fff].*[。！？]$/u);
         expect(focus, `${entry.id}:${arrayIndex} lacks a focus`).not.toBe('');
         expect(translation.includes(focus), `${entry.id}:${arrayIndex} focus is not in translation`).toBe(true);
+      }
+    }
+  });
+
+  it('stores three reviewed LV5 distractors for every collocation example', () => {
+    const ids = new Set(payload.words.map((entry) => entry.id));
+    for (const entry of payload.words.filter((wordEntry) => (wordEntry.teachingChunks?.length ?? 0) > 0)) {
+      expect(entry.exampleDistractorIds, `${entry.id} lacks LV5 distractors`).toHaveLength(entry.examples?.length);
+      expect(entry.exampleDistractorIds?.[0], `${entry.id} base distractors should remain dynamic`).toEqual([]);
+      for (let index = 1; index < (entry.examples?.length ?? 0); index += 1) {
+        const distractors = entry.exampleDistractorIds?.[index] ?? [];
+        expect(distractors, `${entry.id}:${index} needs three distractors`).toHaveLength(3);
+        expect(new Set(distractors).size, `${entry.id}:${index} repeats a distractor`).toBe(3);
+        expect(distractors.includes(entry.id), `${entry.id}:${index} includes itself`).toBe(false);
+        expect(distractors.every((id) => ids.has(id)), `${entry.id}:${index} has an unknown ID`).toBe(true);
       }
     }
   });

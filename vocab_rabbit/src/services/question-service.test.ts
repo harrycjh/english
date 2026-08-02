@@ -132,6 +132,38 @@ describe('buildQuestion', () => {
     expect(new Set(question.options)).toEqual(new Set(['discovered', 'answered', 'studied', 'stopped']));
   });
 
+  it('uses the reviewed distractor IDs before the dynamic LV5 fallback', () => {
+    const discovered = makeWord({
+      id: 'ket_discover_v',
+      english: 'discover',
+      partOfSpeech: 'v',
+      chinese: '发现',
+      category: '动作',
+      examples: ['I discovered a new toy.'],
+      exampleTranslations: ['我发现了一个新玩具。'],
+      exampleTranslationFocus: ['发现'],
+      exampleDistractorIds: [['ket_answer_v', 'ket_study_v', 'ket_stop_v']],
+    });
+    const verbOptions = [
+      discovered,
+      makeWord({ id: 'ket_walk_v', english: 'walk', partOfSpeech: 'v', category: '动作' }),
+      makeWord({ id: 'ket_answer_v', english: 'answer', partOfSpeech: 'v', category: '动作' }),
+      makeWord({ id: 'ket_study_v', english: 'study', partOfSpeech: 'v', category: '动作' }),
+      makeWord({ id: 'ket_stop_v', english: 'stop', partOfSpeech: 'v', category: '动作' }),
+    ];
+    const question = buildQuestion(
+      discovered,
+      verbOptions,
+      { ...createEmptyRecord(discovered.id), masteryLevel: 5, reviewStage: 5 },
+      defaultParentSetting,
+    );
+
+    expect(question.kind).toBe('sentence-choice');
+    if (question.kind !== 'sentence-choice') return;
+    expect(new Set(question.options)).toEqual(new Set(['discovered', 'answered', 'studied', 'stopped']));
+    expect(question.options).not.toContain('walked');
+  });
+
   it('uses matching irregular past forms for every option at level 5', () => {
     const went = makeWord({
       id: 'ket_go_v',

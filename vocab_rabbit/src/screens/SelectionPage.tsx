@@ -23,6 +23,7 @@ import { MasteryLevelIcon } from '../components/MasteryLevelIcon';
 import { formatDifficultyStars } from '../components/DifficultyStars';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
+import { NewWordQueueDrawer } from '../components/NewWordQueueDrawer';
 
 type StatusFilter = 'all' | 'new' | 'learning' | 'mastered' | 'paused' | 'disabled';
 type WordSourceFilter = 'all' | 'oxford' | 'redRocket' | 'lifePhoto';
@@ -43,6 +44,8 @@ interface SelectionPageProps {
   onOpenStats: () => void;
   onSaveSelectionStates: (states: WordSelectionState[]) => Promise<void>;
   onApplySelectionPlan: () => Promise<void>;
+  onChangeNewWordQueue: (wordIds: string[]) => Promise<void>;
+  onRemoveTodayNewWord: (wordId: string) => Promise<void>;
   onRequestLocalLifePhoto?: (wordId: string) => void;
 }
 
@@ -52,8 +55,11 @@ interface SelectionWordCardProps {
   onOpenDetails: () => void;
   onToggleEnabled: () => void;
   onTogglePaused: () => void;
+  onAddToQueue: () => void;
   isEnabled: boolean;
   isPaused: boolean;
+  isQueued: boolean;
+  canQueue: boolean;
   visualOverride?: SelectionCardVisualOverride;
 }
 
@@ -65,8 +71,11 @@ interface SelectionWordRowProps {
   onOpenDetails: () => void;
   onToggleEnabled: () => void;
   onTogglePaused: () => void;
+  onAddToQueue: () => void;
   isEnabled: boolean;
   isPaused: boolean;
+  isQueued: boolean;
+  canQueue: boolean;
 }
 
 interface SelectionCardVisualOverride {
@@ -148,8 +157,11 @@ function SelectionWordCard({
   onOpenDetails,
   onToggleEnabled,
   onTogglePaused,
+  onAddToQueue,
   isEnabled,
   isPaused,
+  isQueued,
+  canQueue,
   visualOverride,
 }: SelectionWordCardProps) {
   const displayWord = getStudyText(word);
@@ -195,6 +207,9 @@ function SelectionWordCard({
             {isPaused ? '恢复' : '暂停'}
           </button>
         ) : null}
+        <button className="secondary-button selection-word-card__queue" type="button" disabled={!canQueue || isQueued} onClick={onAddToQueue}>
+          {isQueued ? '已排队' : canQueue ? '加入队列' : '已学习'}
+        </button>
       </div>
     </article>
   );
@@ -208,8 +223,11 @@ function SelectionWordRow({
   onOpenDetails,
   onToggleEnabled,
   onTogglePaused,
+  onAddToQueue,
   isEnabled,
   isPaused,
+  isQueued,
+  canQueue,
 }: SelectionWordRowProps) {
   return (
     <article className="selection-word-row">
@@ -230,6 +248,9 @@ function SelectionWordRow({
             {isPaused ? '恢复' : '暂停'}
           </button>
         ) : null}
+        <button className="secondary-button" type="button" disabled={!canQueue || isQueued} onClick={onAddToQueue}>
+          {isQueued ? '已排队' : canQueue ? '加入队列' : '已学习'}
+        </button>
       </div>
     </article>
   );
@@ -314,6 +335,8 @@ export function SelectionPage({
   onOpenStats,
   onSaveSelectionStates,
   onApplySelectionPlan,
+  onChangeNewWordQueue,
+  onRemoveTodayNewWord,
   onRequestLocalLifePhoto,
 }: SelectionPageProps) {
   const [searchText, setSearchText] = useState('');
@@ -326,6 +349,15 @@ export function SelectionPage({
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
+  const [isQueueOpen, setIsQueueOpen] = useState(false);
+  const activeManualQueue = useMemo(() => setting.newWordQueue.filter((wordId) => {
+    const state = selectionById[wordId];
+    return !recordsById[wordId] && (!state || (state.isEnabled && !state.isPaused));
+  }), [recordsById, selectionById, setting.newWordQueue]);
+  const queuedWordIds = useMemo(
+    () => new Set([...activeManualQueue, ...task.newWordIds]),
+    [activeManualQueue, task.newWordIds],
+  );
 
   function openWordDetails(wordId: string) {
     setSelectedWordId(wordId);
@@ -560,6 +592,9 @@ export function SelectionPage({
                   onClick={() => { setViewMode('grid'); setCurrentPage(1); }}>卡片视图</button>
                 <button className={`selection-toolbar__chip${viewMode === 'list' ? ' is-active' : ''}`} type="button"
                   onClick={() => { setViewMode('list'); setCurrentPage(1); }}>列表视图</button>
+                <button className="selection-toolbar__chip selection-toolbar__queue" type="button" onClick={() => setIsQueueOpen(true)}>
+                  新词队列 <strong>{activeManualQueue.length}</strong>
+                </button>
               </div>
               <div className="selection-toolbar__meta">
                 <label className="selection-toolbar__sort">
@@ -595,6 +630,7 @@ export function SelectionPage({
                 {visibleWords.map((word) => {
                   const ss = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
                   const vo = isReferenceGridState ? REFERENCE_SELECTION_CARD_OVERRIDES[word.id] : undefined;
+                  const canQueue = !recordsById[word.id] && ss.isEnabled && !ss.isPaused;
                   return (
                     <SelectionWordCard
                       key={word.id}
@@ -604,6 +640,9 @@ export function SelectionPage({
                       onOpenDetails={() => openWordDetails(word.id)}
                       isEnabled={ss.isEnabled}
                       isPaused={ss.isPaused}
+                      isQueued={queuedWordIds.has(word.id)}
+                      canQueue={canQueue}
+                      onAddToQueue={() => void onChangeNewWordQueue([...setting.newWordQueue, word.id])}
                       onToggleEnabled={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: !ss.isEnabled, isPaused: false }])}
                       onTogglePaused={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: true, isPaused: !ss.isPaused }])}
                     />
@@ -617,11 +656,14 @@ export function SelectionPage({
                   const bucket = getWordLearningBucket(word.id, recordsById[word.id], ss);
                   const sl = bucket === 'paused' ? '已暂停' : bucket === 'disabled' ? '未启用' : bucket === 'mastered' ? '已掌握' : bucket === 'learning' ? '学习中' : '未学';
                   const st = bucket === 'paused' ? 'paused' : bucket === 'disabled' ? 'disabled' : 'active';
+                  const canQueue = !recordsById[word.id] && ss.isEnabled && !ss.isPaused;
                   return (
                     <SelectionWordRow
                       key={word.id} word={word} statusLabel={sl} statusTone={st}
                       updatedAtLabel={formatUpdatedAt(ss.updatedAt)}
                       isEnabled={ss.isEnabled} isPaused={ss.isPaused}
+                      isQueued={queuedWordIds.has(word.id)} canQueue={canQueue}
+                      onAddToQueue={() => void onChangeNewWordQueue([...setting.newWordQueue, word.id])}
                       onOpenDetails={() => openWordDetails(word.id)}
                       onToggleEnabled={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: !ss.isEnabled, isPaused: false }])}
                       onTogglePaused={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: true, isPaused: !ss.isPaused }])}
@@ -723,6 +765,17 @@ export function SelectionPage({
             ? () => void savePatchedSelectionStates([{ wordId: selectedWord.id, isEnabled: true, isPaused: !(selectedWordSelectionState?.isPaused ?? false) }])
             : undefined
         }
+      />
+      <NewWordQueueDrawer
+        isOpen={isQueueOpen}
+        words={payload.words}
+        recordsById={recordsById}
+        selectionById={selectionById}
+        task={task}
+        queue={setting.newWordQueue}
+        onClose={() => setIsQueueOpen(false)}
+        onChangeQueue={onChangeNewWordQueue}
+        onRemoveTodayWord={onRemoveTodayNewWord}
       />
     </main>
   );

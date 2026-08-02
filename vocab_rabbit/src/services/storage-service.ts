@@ -358,7 +358,9 @@ export async function saveParentSetting(setting: ParentSetting): Promise<void> {
     const now = new Date().toISOString();
     const fieldRevisions = { ...(previousVersioned?.fieldRevisions ?? {}) };
     for (const field of Object.keys(normalized) as (keyof ParentSetting)[]) {
-      if (!previous || previous[field] !== normalized[field] || !fieldRevisions[field]) {
+      const fieldChanged = !previous
+        || JSON.stringify(previous[field]) !== JSON.stringify(normalized[field]);
+      if (fieldChanged || !fieldRevisions[field]) {
         fieldRevisions[field] = { updatedAt: now, deviceId: metadata.deviceId };
       }
     }

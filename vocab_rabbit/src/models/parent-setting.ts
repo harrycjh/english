@@ -7,6 +7,7 @@ export interface ParentSetting {
   chineseVoiceURI: string;
   dailyNewWordCount: number;
   dailyReviewLimit: number;
+  newWordQueue: string[];
   showImages: boolean;
   showExamples: boolean;
   showHints: boolean;
@@ -23,6 +24,7 @@ export const defaultParentSetting: ParentSetting = {
   chineseVoiceURI: '',
   dailyNewWordCount: 6,
   dailyReviewLimit: 8,
+  newWordQueue: [],
   showImages: true,
   showExamples: true,
   showHints: true,
@@ -32,6 +34,11 @@ export const defaultParentSetting: ParentSetting = {
 function normalizeCount(value: number | undefined, fallback: number, min: number): number {
   const finiteValue = value !== undefined && Number.isFinite(value) ? value : fallback;
   return Math.max(min, Math.floor(finiteValue));
+}
+
+function normalizeWordQueue(value: string[] | undefined): string[] {
+  if (!Array.isArray(value)) return [];
+  return [...new Set(value.filter((wordId) => typeof wordId === 'string' && wordId.trim().length > 0))];
 }
 
 export function normalizeParentSetting(setting: Partial<ParentSetting> | ParentSetting): ParentSetting {
@@ -57,6 +64,7 @@ export function normalizeParentSetting(setting: Partial<ParentSetting> | ParentS
       defaultParentSetting.dailyReviewLimit,
       MIN_REVIEW_LIMIT
     ),
+    newWordQueue: normalizeWordQueue(setting.newWordQueue),
     showImages: setting.showImages ?? defaultParentSetting.showImages,
     showExamples: setting.showExamples ?? defaultParentSetting.showExamples,
     showHints: setting.showHints ?? defaultParentSetting.showHints,

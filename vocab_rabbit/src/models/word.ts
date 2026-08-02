@@ -125,6 +125,7 @@ export interface WordStudySense {
   partOfSpeech: string;
   chinese: string;
   examples: string[];
+  exampleIndexes?: number[];
 }
 
 export type ExamChunkType =
@@ -177,6 +178,7 @@ export interface WordRecord {
   teachingChunks?: TeachingChunk[];
   exampleTranslations?: string[];
   exampleTranslationFocus?: string[];
+  exampleDistractorIds?: string[][];
 }
 
 export interface WordPayload {

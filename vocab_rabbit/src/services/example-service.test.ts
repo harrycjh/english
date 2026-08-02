@@ -4,6 +4,7 @@ import {
   getExamplePairForLevel,
   getExampleSentences,
   getExampleSlotForLevel,
+  getExampleSourceIndex,
   getExampleTranslationFocus,
   getExampleTranslations,
   getNextExampleIndex,
@@ -82,6 +83,27 @@ describe('getExampleSentences', () => {
     });
 
     expect(getExampleSentences(word)).toEqual(['The boy can ride a bike.']);
+  });
+
+  it('keeps bilingual fields aligned for explicitly enabled study-sense examples', () => {
+    const word = makeWord({
+      examples: ['My back hurts.', 'Please come back.', 'Lie on your back.'],
+      exampleTranslations: ['我的背疼。', '请回来。', '请仰卧。'],
+      exampleTranslationFocus: ['背疼', '回来', '仰卧'],
+      studySense: {
+        partOfSpeech: 'n',
+        chinese: '背部',
+        examples: ['My back hurts.', 'Lie on your back.'],
+        exampleIndexes: [0, 2],
+      },
+    });
+
+    expect(getExampleSentences(word)).toEqual(['My back hurts.', 'Lie on your back.']);
+    expect(getExampleTranslations(word)).toEqual(['我的背疼。', '请仰卧。']);
+    expect(getExampleTranslationFocus(word)).toEqual(['背疼', '仰卧']);
+    expect(getExampleSourceIndex(word, 0)).toBe(0);
+    expect(getExampleSourceIndex(word, 1)).toBe(2);
+    expect(getExampleSourceIndex(word, 99)).toBe(2);
   });
 });
 

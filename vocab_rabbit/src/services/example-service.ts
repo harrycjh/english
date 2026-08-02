@@ -13,13 +13,46 @@ function normalizeExample(example: string | undefined): string | null {
   return trimmed ? trimmed : null;
 }
 
+function getAllExampleSentences(word: WordRecord): string[] {
+  return [...(word.examples ?? []), word.example]
+    .map(normalizeExample)
+    .filter(Boolean) as string[];
+}
+
+export function getExampleSourceIndexes(word: WordRecord): number[] {
+  const sentences = getAllExampleSentences(word);
+  if (!word.studySense) return sentences.map((_, index) => index);
+
+  const explicit = word.studySense.exampleIndexes?.filter((index) => (
+    Number.isInteger(index) && index >= 0 && index < sentences.length
+  ));
+  if (explicit?.length) return [...new Set(explicit)];
+
+  const used = new Set<number>();
+  const matched = (word.studySense.examples ?? []).flatMap((example) => {
+    const normalized = normalizeExample(example);
+    const index = sentences.findIndex((sentence, candidateIndex) => (
+      !used.has(candidateIndex) && sentence === normalized
+    ));
+    if (index < 0) return [];
+    used.add(index);
+    return [index];
+  });
+  return matched;
+}
+
+export function getExampleSourceIndex(word: WordRecord, preferredIndex: number): number {
+  const indexes = getExampleSourceIndexes(word);
+  if (indexes.length === 0) return 0;
+  return indexes[Math.max(0, Math.min(preferredIndex, indexes.length - 1))] ?? 0;
+}
+
 export function getExampleSentences(word: WordRecord): string[] {
-  const senseExamples = word.studySense?.examples;
-  const curated = (
-    senseExamples
-      ? senseExamples
-      : [...(word.examples ?? []), word.example]
-  ).map(normalizeExample).filter(Boolean) as string[];
+  const sentences = getAllExampleSentences(word);
+  const indexes = getExampleSourceIndexes(word);
+  const curated = indexes.length > 0
+    ? indexes.map((index) => sentences[index]).filter(Boolean)
+    : (word.studySense?.examples ?? []).map(normalizeExample).filter(Boolean) as string[];
 
   if (curated.length > 0) {
     return curated;
@@ -29,15 +62,19 @@ export function getExampleSentences(word: WordRecord): string[] {
 }
 
 export function getExampleTranslations(word: WordRecord): string[] {
-  return (word.exampleTranslations ?? [])
+  const translations = (word.exampleTranslations ?? [])
     .map(normalizeExample)
     .map((translation) => translation ?? '');
+  const indexes = getExampleSourceIndexes(word);
+  return indexes.length > 0 ? indexes.map((index) => translations[index] ?? '') : translations;
 }
 
 export function getExampleTranslationFocus(word: WordRecord): string[] {
-  return (word.exampleTranslationFocus ?? [])
+  const focuses = (word.exampleTranslationFocus ?? [])
     .map(normalizeExample)
     .map((focus) => focus ?? '');
+  const indexes = getExampleSourceIndexes(word);
+  return indexes.length > 0 ? indexes.map((index) => focuses[index] ?? '') : focuses;
 }
 
 export interface ExamplePair {

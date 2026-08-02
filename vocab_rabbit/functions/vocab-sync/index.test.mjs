@@ -45,6 +45,7 @@ function emptySnapshot() {
         enableAudio: true,
         dailyNewWordCount: 6,
         dailyReviewLimit: 8,
+        newWordQueue: [],
         showImages: true,
         showExamples: true,
         showHints: true,
@@ -312,7 +313,7 @@ describe('vocab sync Function Compute handler', () => {
     expect(response.json.snapshot.events.map((item) => item.id)).toEqual(['event-a', 'event-b']);
   });
 
-  it('stores daily learning limits in the cloud snapshot', async () => {
+  it('stores daily learning limits and the new-word queue in the cloud snapshot', async () => {
     const repository = createMemoryRepository();
     const handler = createHandler(repository, env);
     const connect = parseResponse(await handler(event('/api/device/connect', {
@@ -322,9 +323,11 @@ describe('vocab sync Function Compute handler', () => {
     const snapshot = emptySnapshot();
     snapshot.parentSetting.value.dailyNewWordCount = 15;
     snapshot.parentSetting.value.dailyReviewLimit = 30;
+    snapshot.parentSetting.value.newWordQueue = ['word-b', 'word-a'];
     snapshot.parentSetting.fieldRevisions = {
       dailyNewWordCount: { updatedAt: '2026-07-20T03:00:00.000Z', deviceId: 'device-a' },
       dailyReviewLimit: { updatedAt: '2026-07-20T03:00:00.000Z', deviceId: 'device-a' },
+      newWordQueue: { updatedAt: '2026-07-20T03:00:00.000Z', deviceId: 'device-a' },
     };
 
     const response = parseResponse(await handler(event('/api/sync', {
@@ -339,6 +342,7 @@ describe('vocab sync Function Compute handler', () => {
     expect(response.json.snapshot.parentSetting.value).toMatchObject({
       dailyNewWordCount: 15,
       dailyReviewLimit: 30,
+      newWordQueue: ['word-b', 'word-a'],
     });
   });
 

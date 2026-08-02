@@ -87,6 +87,8 @@ function renderSelectionPage(nextPayload: WordPayload): string {
       onOpenStats={() => undefined}
       onSaveSelectionStates={async () => undefined}
       onApplySelectionPlan={async () => undefined}
+      onChangeNewWordQueue={async () => undefined}
+      onRemoveTodayNewWord={async () => undefined}
     />,
   );
 }
@@ -115,6 +117,8 @@ describe('SelectionPage', () => {
     expect(markup).toContain('Oxford');
     expect(markup).toContain('Red Rocket');
     expect(markup).toContain('生活图片');
+    expect(markup).toContain('新词队列');
+    expect(markup).toContain('加入队列');
   });
 
   it('uses the generated word images for the six reference cards', () => {

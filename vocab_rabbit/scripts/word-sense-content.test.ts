@@ -15,11 +15,12 @@ describe('polysemous vocabulary content', () => {
 
     expect(can).toBeDefined();
     expect(can?.category).toBe('情态动词和语气');
-    expect(can?.studySense).toEqual({
+    expect(can?.studySense).toMatchObject({
       partOfSpeech: 'mv',
       chinese: '能；会',
-      examples: ['The boy can ride a bike.'],
     });
+    expect(can?.studySense?.examples[0]).toBe('The boy can ride a bike.');
+    expect(can?.studySense?.exampleIndexes?.[0]).toBe(0);
     expect(can?.examples).not.toContain('Can you open the can of beans?');
   });
 
@@ -51,13 +52,25 @@ describe('polysemous vocabulary content', () => {
       const word = payload.words.find((candidate) => candidate.id === wordId);
 
       expect(word, wordId).toBeDefined();
-      expect(word?.studySense, wordId).toEqual({
+      expect(word?.studySense, wordId).toMatchObject({
         partOfSpeech,
         chinese,
-        examples: [example],
       });
+      expect(word?.studySense?.examples[0], wordId).toBe(example);
+      expect(word?.studySense?.exampleIndexes?.[0], wordId).toBe(0);
       expect(word?.examples?.[0], wordId).toBe(example);
       expect(word?.exampleCollocations?.[0], wordId).toBe('');
+    }
+  });
+
+  it('maps every enabled study-sense example back to the same source index', () => {
+    for (const word of payload.words.filter((entry) => entry.studySense)) {
+      const indexes = word.studySense?.exampleIndexes ?? [];
+      expect(indexes.length, `${word.id} lacks source example indexes`).toBeGreaterThan(0);
+      expect(new Set(indexes).size, `${word.id} repeats a source example index`).toBe(indexes.length);
+      expect(word.studySense?.examples, `${word.id} study examples drifted`).toEqual(
+        indexes.map((index) => word.examples?.[index]),
+      );
     }
   });
 

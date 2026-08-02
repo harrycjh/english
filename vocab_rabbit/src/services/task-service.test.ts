@@ -126,6 +126,100 @@ describe('daily task queue', () => {
 });
 
 describe('review-first daily planning', () => {
+  it('balances new words across star levels and gives extra slots to lower stars', () => {
+    const newWords = Array.from({ length: 15 }, (_, index) => {
+      const difficulty = (index % 5) + 1;
+      return {
+        ...makeWord(`star-${difficulty}-${Math.floor(index / 5) + 1}`, `category-${index % 3}`),
+        difficulty,
+      };
+    });
+
+    const task = buildDailyTask(
+      newWords,
+      {},
+      { ...defaultParentSetting, dailyNewWordCount: 7 },
+      new Date('2026-07-20T08:00:00.000Z'),
+    );
+
+    expect(task.newWordIds).toEqual([
+      'star-1-1',
+      'star-2-1',
+      'star-3-1',
+      'star-4-1',
+      'star-5-1',
+      'star-1-2',
+      'star-2-2',
+    ]);
+  });
+
+  it('fills missing star-level capacity from the remaining levels', () => {
+    const newWords = [
+      { ...makeWord('star-1-1'), difficulty: 1 },
+      { ...makeWord('star-2-1'), difficulty: 2 },
+      { ...makeWord('star-2-2'), difficulty: 2 },
+      { ...makeWord('star-3-1'), difficulty: 3 },
+      { ...makeWord('star-3-2'), difficulty: 3 },
+    ];
+
+    const task = buildDailyTask(
+      newWords,
+      {},
+      { ...defaultParentSetting, dailyNewWordCount: 5 },
+      new Date('2026-07-20T08:00:00.000Z'),
+    );
+
+    expect(task.newWordIds).toEqual([
+      'star-1-1',
+      'star-2-1',
+      'star-3-1',
+      'star-2-2',
+      'star-3-2',
+    ]);
+  });
+
+  it('uses the manual queue first and fills remaining slots automatically', () => {
+    const newWords = [
+      { ...makeWord('auto-one'), difficulty: 1 },
+      { ...makeWord('auto-two'), difficulty: 2 },
+      { ...makeWord('queued-five'), difficulty: 5 },
+      { ...makeWord('queued-four'), difficulty: 4 },
+    ];
+
+    const task = buildDailyTask(
+      newWords,
+      {},
+      {
+        ...defaultParentSetting,
+        dailyNewWordCount: 4,
+        newWordQueue: ['queued-five', 'queued-four'],
+      },
+      new Date('2026-07-20T08:00:00.000Z'),
+    );
+
+    expect(task.newWordIds).toEqual([
+      'queued-five',
+      'queued-four',
+      'auto-one',
+      'auto-two',
+    ]);
+  });
+
+  it('skips a word removed from the editable plan when rebuilding today', () => {
+    const newWords = [makeWord('removed'), makeWord('replacement'), makeWord('later')];
+
+    const task = buildDailyTask(
+      newWords,
+      {},
+      { ...defaultParentSetting, dailyNewWordCount: 2 },
+      new Date('2026-07-20T08:00:00.000Z'),
+      {},
+      new Set(['removed']),
+    );
+
+    expect(task.newWordIds).toEqual(['later', 'replacement']);
+  });
+
   it('never places a level 10 mastered word back into the daily review queue', () => {
     const word = makeWord('mastered');
     const record = {
