@@ -50,6 +50,19 @@ async function writeRows(client, tableName, rows) {
   }
 }
 
+// getRange returns the resume key as [{ name, value }], but inclusiveStartPrimaryKey
+// expects [{ <columnName>: value }]. Feeding the response shape straight back makes the
+// SDK emit two primary key columns per entry, which Tablestore rejects with
+// OTSParameterInvalid "The number of primary key columns must be in range: [1, 4]".
+function toStartPrimaryKey(nextStartPrimaryKey) {
+  if (!Array.isArray(nextStartPrimaryKey) || nextStartPrimaryKey.length === 0) return null;
+  return nextStartPrimaryKey.map((column) => (
+    column && typeof column === 'object' && 'name' in column && 'value' in column
+      ? { [column.name]: column.value }
+      : column
+  ));
+}
+
 async function readAllEvents(client, tableName, userId) {
   const events = [];
   let start = [
@@ -77,7 +90,7 @@ async function readAllEvents(client, tableName, userId) {
       const event = parseJsonColumn(row, 'payload_json', null);
       if (event) events.push(event);
     }
-    start = result.nextStartPrimaryKey ?? null;
+    start = toStartPrimaryKey(result.nextStartPrimaryKey);
   }
   return events;
 }
