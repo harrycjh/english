@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 
 # Large local source/extracted datasets
+RAZ/
 red-rocket/
 red-rocket-extracted/
 red-rocket-processed/
