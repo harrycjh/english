@@ -1,9 +1,13 @@
 import type { LocalLifePhotoRecord } from '../models/local-media';
-import { signPrivateLifePhotos } from './cloud-sync-service';
+import {
+  CloudSyncError,
+  connectPrivateLifePhotos,
+  signPrivateLifePhotos,
+} from './cloud-sync-service';
 import {
   getOrCreateSyncMetadata,
   listLocalLifePhotoIds,
-  saveDeviceToken,
+  savePhotoDeviceToken,
   saveLocalLifePhotos,
 } from './storage-service';
 
@@ -28,6 +32,20 @@ export interface PrivateLifePhotoDownloadOptions {
   signal?: AbortSignal;
   onProgress?: (progress: PrivateLifePhotoDownloadProgress) => void;
   fetcher?: typeof fetch;
+  photoAccessCode?: string;
+}
+
+export class PrivateLifePhotoAccessRequiredError extends Error {
+  constructor(message = '请输入生活照片密码。') {
+    super(message);
+    this.name = 'PrivateLifePhotoAccessRequiredError';
+  }
+}
+
+export function isPrivateLifePhotoAccessRequiredError(
+  error: unknown,
+): error is PrivateLifePhotoAccessRequiredError {
+  return error instanceof PrivateLifePhotoAccessRequiredError;
 }
 
 function uniqueWordIds(wordIds: string[]): string[] {
@@ -45,6 +63,21 @@ export async function downloadPrivateLifePhotos(
   ]);
   if (!metadata.deviceToken) {
     throw new Error('请先使用家庭验证码连接学习进度，再下载照片。');
+  }
+  let photoDeviceToken = metadata.photoDeviceToken;
+  if (!photoDeviceToken) {
+    const photoAccessCode = options.photoAccessCode?.trim();
+    if (!photoAccessCode) {
+      throw new PrivateLifePhotoAccessRequiredError();
+    }
+    const connected = await connectPrivateLifePhotos(
+      photoAccessCode,
+      metadata.deviceId,
+      metadata.deviceToken,
+      options.fetcher,
+    );
+    photoDeviceToken = connected.photoDeviceToken;
+    await savePhotoDeviceToken(photoDeviceToken);
   }
 
   const existingIdSet = new Set(existingIds);
@@ -76,10 +109,21 @@ export async function downloadPrivateLifePhotos(
       throw new DOMException('下载已停止。', 'AbortError');
     }
     const batchWordIds = missingWordIds.slice(offset, offset + SIGN_BATCH_SIZE);
-    const signed = await signPrivateLifePhotos(batchWordIds, metadata.deviceToken, options.fetcher);
-    if (signed.deviceToken && signed.deviceToken !== metadata.deviceToken) {
-      metadata.deviceToken = signed.deviceToken;
-      await saveDeviceToken(signed.deviceToken);
+    let signed: Awaited<ReturnType<typeof signPrivateLifePhotos>>;
+    try {
+      signed = await signPrivateLifePhotos(batchWordIds, photoDeviceToken, options.fetcher);
+    } catch (error) {
+      if (error instanceof CloudSyncError && error.kind === 'unauthorized') {
+        await savePhotoDeviceToken(null);
+        throw new PrivateLifePhotoAccessRequiredError(
+          '生活照片访问凭证已失效，请重新输入生活照片密码。',
+        );
+      }
+      throw error;
+    }
+    if (signed.photoDeviceToken && signed.photoDeviceToken !== photoDeviceToken) {
+      photoDeviceToken = signed.photoDeviceToken;
+      await savePhotoDeviceToken(signed.photoDeviceToken);
     }
     const records: LocalLifePhotoRecord[] = [];
     let nextIndex = 0;

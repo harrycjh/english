@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
@@ -47,6 +47,8 @@ interface SelectionPageProps {
   onChangeNewWordQueue: (wordIds: string[]) => Promise<void>;
   onRemoveTodayNewWord: (wordId: string) => Promise<void>;
   onRequestLocalLifePhoto?: (wordId: string) => void;
+  openNewWordQueue?: boolean;
+  onNewWordQueueOpened?: () => void;
 }
 
 interface SelectionWordCardProps {
@@ -338,6 +340,8 @@ export function SelectionPage({
   onChangeNewWordQueue,
   onRemoveTodayNewWord,
   onRequestLocalLifePhoto,
+  openNewWordQueue = false,
+  onNewWordQueueOpened,
 }: SelectionPageProps) {
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -350,6 +354,12 @@ export function SelectionPage({
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
   const [isQueueOpen, setIsQueueOpen] = useState(false);
+
+  useEffect(() => {
+    if (!openNewWordQueue) return;
+    setIsQueueOpen(true);
+    onNewWordQueueOpened?.();
+  }, [onNewWordQueueOpened, openNewWordQueue]);
   const activeManualQueue = useMemo(() => setting.newWordQueue.filter((wordId) => {
     const state = selectionById[wordId];
     return !recordsById[wordId] && (!state || (state.isEnabled && !state.isPaused));
@@ -765,6 +775,7 @@ export function SelectionPage({
             ? () => void savePatchedSelectionStates([{ wordId: selectedWord.id, isEnabled: true, isPaused: !(selectedWordSelectionState?.isPaused ?? false) }])
             : undefined
         }
+        queueCompanion={isQueueOpen}
       />
       <NewWordQueueDrawer
         isOpen={isQueueOpen}
@@ -773,9 +784,13 @@ export function SelectionPage({
         selectionById={selectionById}
         task={task}
         queue={setting.newWordQueue}
-        onClose={() => setIsQueueOpen(false)}
+        onClose={() => {
+          setIsQueueOpen(false);
+          setSelectedWordId(null);
+        }}
         onChangeQueue={onChangeNewWordQueue}
         onRemoveTodayWord={onRemoveTodayNewWord}
+        onOpenWord={openWordDetails}
       />
     </main>
   );

@@ -52,6 +52,7 @@ export interface SyncMetadata {
   id: 'sync';
   deviceId: string;
   deviceToken: string | null;
+  photoDeviceToken: string | null;
   serverCursor: string | null;
   generation: number;
   lastSyncedAt: string | null;

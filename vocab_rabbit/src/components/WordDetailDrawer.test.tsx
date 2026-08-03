@@ -109,6 +109,23 @@ const levelHistoryEvents: AnswerEvent[] = [
 ];
 
 describe('WordDetailDrawer', () => {
+  it('uses the right-side companion layer when opened from a queue', () => {
+    const markup = renderToStaticMarkup(
+      <WordDetailDrawer
+        isOpen
+        word={word}
+        record={undefined}
+        selectionState={undefined}
+        setting={{ ...defaultParentSetting, enableAudio: false }}
+        context="review"
+        queueCompanion
+        onClose={() => undefined}
+      />,
+    );
+
+    expect(markup).toContain('word-detail-drawer-backdrop--queue-companion');
+  });
+
   it('uses the existing compact layout in review context', () => {
     const markup = renderToStaticMarkup(
       <WordDetailDrawer

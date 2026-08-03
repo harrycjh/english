@@ -20,11 +20,12 @@ interface NewWordQueueDrawerProps {
   onClose: () => void;
   onChangeQueue: (wordIds: string[]) => Promise<void>;
   onRemoveTodayWord: (wordId: string) => Promise<void>;
+  onOpenWord?: (wordId: string) => void;
 }
 
-function QueueWord({ word }: { word: WordRecord }) {
-  return (
-    <div className="new-word-queue__word">
+function QueueWord({ word, onOpen }: { word: WordRecord; onOpen?: () => void }) {
+  const content = (
+    <>
       <div className="new-word-queue__thumb">
         <WordImage word={word} alt={getStudyChinese(word)} />
       </div>
@@ -33,7 +34,20 @@ function QueueWord({ word }: { word: WordRecord }) {
         <span>{getStudyChinese(word)}</span>
       </div>
       <DifficultyStars difficulty={word.difficulty} />
-    </div>
+    </>
+  );
+
+  return onOpen ? (
+    <button
+      className="new-word-queue__word new-word-queue__word--button"
+      type="button"
+      aria-label={`查看单词 ${getStudyText(word)}`}
+      onClick={onOpen}
+    >
+      {content}
+    </button>
+  ) : (
+    <div className="new-word-queue__word">{content}</div>
   );
 }
 
@@ -47,6 +61,7 @@ export function NewWordQueueDrawer({
   onClose,
   onChangeQueue,
   onRemoveTodayWord,
+  onOpenWord,
 }: NewWordQueueDrawerProps) {
   const [searchText, setSearchText] = useState('');
   const wordsById = useMemo(() => new Map(words.map((word) => [word.id, word])), [words]);
@@ -88,6 +103,7 @@ export function NewWordQueueDrawer({
     void onChangeQueue(nextQueue);
   }
 
+  const portalHost = document.querySelector('.ipad-stage-shell');
   return createPortal(
     <div className="new-word-queue-backdrop" onClick={onClose}>
       <aside className="new-word-queue" aria-label="新词学习队列" onClick={(event) => event.stopPropagation()}>
@@ -115,7 +131,7 @@ export function NewWordQueueDrawer({
                 return (
                   <li key={wordId}>
                     <span className="new-word-queue__index">{index + 1}</span>
-                    <QueueWord word={word} />
+                    <QueueWord word={word} onOpen={() => onOpenWord?.(wordId)} />
                     <button
                       className="new-word-queue__remove"
                       type="button"
@@ -148,7 +164,7 @@ export function NewWordQueueDrawer({
                 return (
                   <li key={wordId}>
                     <span className="new-word-queue__index">{index + 1}</span>
-                    <QueueWord word={word} />
+                    <QueueWord word={word} onOpen={() => onOpenWord?.(wordId)} />
                     {todayWordIdSet.has(wordId) ? <span className="new-word-queue__today-tag">今日</span> : null}
                     <div className="new-word-queue__controls">
                       <button type="button" disabled={index === 0} aria-label={`上移 ${getStudyText(word)}`} onClick={() => moveQueueWord(wordId, -1)}>
@@ -191,6 +207,6 @@ export function NewWordQueueDrawer({
         </section>
       </aside>
     </div>,
-    document.body,
+    portalHost ?? document.body,
   );
 }

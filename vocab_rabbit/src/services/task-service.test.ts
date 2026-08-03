@@ -306,7 +306,7 @@ describe('review-first daily planning', () => {
     expect(normalized.completedAt).toBeNull();
   });
 
-  it('uses new-word capacity for overdue reviews before adding new words', () => {
+  it('keeps new-word capacity separate when overdue reviews exceed their limit', () => {
     const reviewWords = Array.from({ length: 4 }, (_, index) => makeWord(`review-${index}`));
     const newWords = Array.from({ length: 4 }, (_, index) => makeWord(`new-${index}`));
     const records = Object.fromEntries(reviewWords.map((word) => [word.id, makeDueRecord(word.id)]));
@@ -318,8 +318,8 @@ describe('review-first daily planning', () => {
       new Date('2026-07-20T08:00:00.000Z'),
     );
 
-    expect(task.reviewWordIds).toHaveLength(4);
-    expect(task.newWordIds).toHaveLength(1);
+    expect(task.reviewWordIds).toHaveLength(2);
+    expect(task.newWordIds).toHaveLength(3);
   });
 
   it('keeps the full new-word allowance when reviews do not exceed their limit', () => {
@@ -372,7 +372,7 @@ describe('review-first daily planning', () => {
     expect(expanded.completedAt).toBeNull();
   });
 
-  it('uses increased capacity to extend the review plan when reviews are backlogged', () => {
+  it('extends a started review plan only to the configured review limit', () => {
     const reviewWords = Array.from({ length: 5 }, (_, index) => makeWord(`review-${index}`));
     const records = Object.fromEntries(reviewWords.map((word) => [word.id, makeDueRecord(word.id)]));
     const task: DailyTaskSummary = {
@@ -391,13 +391,7 @@ describe('review-first daily planning', () => {
       new Date('2026-07-20T10:00:00.000Z'),
     );
 
-    expect(expanded.reviewWordIds).toEqual([
-      'review-0',
-      'review-1',
-      'review-2',
-      'review-3',
-      'review-4',
-    ]);
+    expect(expanded.reviewWordIds).toEqual(['review-0', 'review-1', 'review-2']);
     expect(expanded.newWordIds).toEqual([]);
     expect(expanded.totalAnswered).toBe(1);
   });

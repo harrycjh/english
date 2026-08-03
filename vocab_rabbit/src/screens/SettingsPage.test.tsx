@@ -39,13 +39,25 @@ describe('SettingsPage local data controls', () => {
           total: 0,
         })}
         localLifePhotoCount={0}
-        words={[]}
+        words={[{
+          id: 'ket_family_n',
+          english: 'family',
+          partOfSpeech: 'n',
+          chinese: '家庭',
+          category: '家人和朋友',
+          difficulty: 1,
+          imagePath: '/content/images/words/ket_family_n.webp',
+          imageApproved: true,
+          oxfordRefs: [],
+          hasLifePhoto: true,
+        }]}
       />,
     );
 
     expect(markup).toContain('清空本地学习数据');
     expect(markup).toContain('下载全部图片');
     expect(markup).toContain('下载照片');
+    expect(markup).toContain('可下载 1 张生活照片');
     expect(markup).not.toContain('下载私密生活照片');
     expect(markup).not.toContain('导入生活照片包');
     expect(markup).not.toContain('选择照片包');
@@ -58,6 +70,9 @@ describe('SettingsPage local data controls', () => {
     expect(markup).toContain('音色选择');
     expect(markup).toContain('aria-label="英文发音音色"');
     expect(markup).toContain('aria-label="中文发音音色"');
+    expect(markup).toContain('aria-label="每日新词增加 1"');
+    expect(markup).toContain('aria-label="每日复习上限增加 5"');
+    expect(markup).toContain('aria-label="每日复习上限减少 5"');
     expect(markup).not.toContain('设备与使用方式');
     expect(markup).not.toContain('重置进度');
     expect(markup).not.toContain('云端重置');

@@ -36,6 +36,7 @@ interface WordDetailDrawerProps {
   onClose: () => void;
   onToggleEnabled?: () => void;
   onTogglePaused?: () => void;
+  queueCompanion?: boolean;
 }
 
 function formatDateTime(dateText: string | null): string {
@@ -244,6 +245,7 @@ export function WordDetailDrawer({
   onClose,
   onToggleEnabled,
   onTogglePaused,
+  queueCompanion = false,
 }: WordDetailDrawerProps) {
   const [expandedChunkWordId, setExpandedChunkWordId] = useState<string | null>(null);
 
@@ -310,7 +312,10 @@ export function WordDetailDrawer({
   );
 
   const drawer = (
-    <div className="word-detail-drawer-backdrop is-open" onClick={onClose}>
+    <div
+      className={`word-detail-drawer-backdrop is-open${queueCompanion ? ' word-detail-drawer-backdrop--queue-companion' : ''}`}
+      onClick={onClose}
+    >
       <aside
         className="word-detail-drawer"
         aria-label="单词详情抽屉"

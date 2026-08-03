@@ -84,13 +84,13 @@ describe('learning statistics', () => {
     expect(statistics.history[0]).toMatchObject({ newCount: 1, reviewCount: 0 });
     expect(statistics.history[1]).toMatchObject({ newCount: 0, reviewCount: 1, learnedWordCount: 1, answerCount: 1, correctCount: 1 });
     expect(statistics.forecast).toHaveLength(90);
-    expect(statistics.forecast[0]).toMatchObject({ dateKey: '2026-07-16', newCount: 0, reviewCount: 2 });
+    expect(statistics.forecast[0]).toMatchObject({ dateKey: '2026-07-16', newCount: 1, reviewCount: 1 });
     expect(statistics.forecast.at(-1)?.dateKey).toBe('2026-10-13');
     expect(statistics.timeline).toHaveLength(181);
     expect(statistics.timeline[0]?.dateKey).toBe('2026-04-16');
     expect(statistics.timeline[86]?.dateKey).toBe('2026-07-11');
     expect(statistics.timeline[90]).toMatchObject({ dateKey: '2026-07-15', newCount: 0, reviewCount: 0, kind: 'today' });
-    expect(statistics.timeline[91]).toMatchObject({ dateKey: '2026-07-16', newCount: 0, reviewCount: 2, kind: 'forecast' });
+    expect(statistics.timeline[91]).toMatchObject({ dateKey: '2026-07-16', newCount: 1, reviewCount: 1, kind: 'forecast' });
     expect(statistics.timeline.at(-1)?.dateKey).toBe('2026-10-13');
     expect(statistics.totalLearnedWords).toBe(1);
     expect(statistics.totalAnswers).toBe(2);
@@ -156,7 +156,7 @@ describe('learning statistics', () => {
     expect(lowAccuracy.forecastModel.expectedAccuracy).toBeLessThan(0.4);
   });
 
-  it('shows deferred reviews when forecast demand exceeds the review-first daily capacity', () => {
+  it('shows deferred reviews without taking capacity away from future new words', () => {
     const recordsById = Object.fromEntries(Array.from({ length: 6 }, (_, index) => {
       const wordId = `review-${index}`;
       return [wordId, {
@@ -185,10 +185,10 @@ describe('learning statistics', () => {
     });
 
     expect(statistics.forecast[0]).toMatchObject({
-      reviewCount: 4,
-      newCount: 0,
+      reviewCount: 2,
+      newCount: 2,
       retryCount: 1,
-      deferredReviewCount: 2,
+      deferredReviewCount: 4,
       totalCount: 4,
     });
   });

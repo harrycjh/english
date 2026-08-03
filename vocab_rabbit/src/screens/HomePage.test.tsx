@@ -52,6 +52,8 @@ describe('ReviewPage', () => {
         onAdvanceDay={async () => undefined}
         onSelectProfile={async () => undefined}
         onSaveSelectionStates={async () => undefined}
+        onOpenStats={() => undefined}
+        onOpenSettings={() => undefined}
       />,
     );
 
@@ -59,6 +61,12 @@ describe('ReviewPage', () => {
       `src="/content/images/words/ket_dad_n.webp?v=${CONTENT_VERSION}"`,
     );
     expect(markup).not.toContain('review-day-forward-button');
+    expect(markup).toContain('review-metric-card review-metric-card--task is-actionable');
+    expect(markup).toContain('review-advice-card review-advice-card--bars is-actionable');
+    expect(markup).toContain('review-advice-card review-advice-card--bag is-actionable');
+    expect(markup).toContain('今日复习');
+    expect(markup).toContain('计划 0 · 已完成 0');
+    expect(markup).not.toContain('预览主题');
   });
 
   it('shows the dog-only next-day control, real heatmap data, and rounded-minute estimate', () => {

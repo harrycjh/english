@@ -37,10 +37,11 @@ function verifyToken(token, secret) {
   }
 }
 
-function createDeviceToken(userId, deviceId, secret) {
+function createDeviceToken(userId, deviceId, secret, scope = 'study') {
   return signToken({
     deviceId,
     userId,
+    scope,
     expiresAt: Date.now() + DEVICE_TOKEN_TTL_MS,
   }, secret);
 }
@@ -137,8 +138,8 @@ function rebuildTaskCounts(tasks, events, generation) {
 }
 
 function normalizeTaskPlans(tasks, parentSetting) {
-  const newWordLimit = Math.max(1, Number(parentSetting?.dailyNewWordCount) || 6);
-  const reviewLimit = Math.max(1, Number(parentSetting?.dailyReviewLimit) || 8);
+  const newWordLimit = Math.max(1, Number(parentSetting?.dailyNewWordCount) || 8);
+  const reviewLimit = Math.max(1, Number(parentSetting?.dailyReviewLimit) || 80);
   const uniqueIds = (value) => [...new Set(Array.isArray(value) ? value : [])];
   const keepAnsweredFirst = (ids, answeredWordIds, target) => {
     const answeredIds = ids.filter((wordId) => answeredWordIds.has(wordId));
@@ -149,14 +150,12 @@ function normalizeTaskPlans(tasks, parentSetting) {
   return tasks.map((task) => {
     const answeredWordIds = new Set(uniqueIds(task.answeredWordIds));
     const mergedReviewWordIds = uniqueIds(task.reviewWordIds);
-    const reviewCount = Math.min(mergedReviewWordIds.length, reviewLimit + newWordLimit);
-    const reviewOverflow = Math.max(0, reviewCount - reviewLimit);
+    const reviewCount = Math.min(mergedReviewWordIds.length, reviewLimit);
     const reviewWordIds = keepAnsweredFirst(mergedReviewWordIds, answeredWordIds, reviewCount);
     const reviewWordIdSet = new Set(reviewWordIds);
     const mergedNewWordIds = uniqueIds(task.newWordIds)
       .filter((wordId) => !reviewWordIdSet.has(wordId));
-    const newCount = Math.max(0, newWordLimit - reviewOverflow);
-    const newWordIds = keepAnsweredFirst(mergedNewWordIds, answeredWordIds, newCount);
+    const newWordIds = keepAnsweredFirst(mergedNewWordIds, answeredWordIds, newWordLimit);
     const plannedWordIds = [...reviewWordIds, ...newWordIds];
     const isFullyAnswered = plannedWordIds.every((wordId) => answeredWordIds.has(wordId));
 
@@ -378,13 +377,22 @@ export function createHandler(repository, env, dependencies = {}) {
           env.FIXED_USER_ID,
           deviceId,
           env.TOKEN_SIGNING_SECRET,
+          'study',
         );
         return response(200, { deviceToken }, env.ALLOWED_ORIGIN);
       }
 
-      const tokenPayload = verifyToken(bearerToken(request.headers), env.TOKEN_SIGNING_SECRET);
-      if (!tokenPayload || tokenPayload.userId !== env.FIXED_USER_ID) {
-        return response(401, { code: 'DEVICE_TOKEN_INVALID' }, env.ALLOWED_ORIGIN);
+      const isPhotoSigningRequest = request.path === '/api/media/sign';
+      const expectedScope = isPhotoSigningRequest ? 'photo' : 'study';
+      const tokenPayload = verifyToken(
+        bearerToken(request.headers),
+        isPhotoSigningRequest ? env.PHOTO_TOKEN_SIGNING_SECRET : env.TOKEN_SIGNING_SECRET,
+      );
+      const tokenScope = tokenPayload?.scope ?? 'study';
+      if (!tokenPayload || tokenPayload.userId !== env.FIXED_USER_ID || tokenScope !== expectedScope) {
+        return response(401, {
+          code: isPhotoSigningRequest ? 'PHOTO_TOKEN_INVALID' : 'DEVICE_TOKEN_INVALID',
+        }, env.ALLOWED_ORIGIN);
       }
       if (!await repository.isDeviceActive(env.FIXED_USER_ID, tokenPayload.deviceId)) {
         return response(401, { code: 'DEVICE_REVOKED' }, env.ALLOWED_ORIGIN);
@@ -392,8 +400,33 @@ export function createHandler(repository, env, dependencies = {}) {
       const refreshedDeviceToken = createDeviceToken(
         env.FIXED_USER_ID,
         tokenPayload.deviceId,
-        env.TOKEN_SIGNING_SECRET,
+        isPhotoSigningRequest ? env.PHOTO_TOKEN_SIGNING_SECRET : env.TOKEN_SIGNING_SECRET,
+        expectedScope,
       );
+
+      if (request.path === '/api/media/connect') {
+        const actualHash = hashFamilyCode(
+          String(request.body.photoAccessCode ?? ''),
+          env.PHOTO_ACCESS_CODE_SALT,
+        );
+        if (!safeEqual(actualHash, env.PHOTO_ACCESS_CODE_HASH)) {
+          return response(403, {
+            code: 'INVALID_PHOTO_ACCESS_CODE',
+            message: '生活照片密码不正确。',
+          }, env.ALLOWED_ORIGIN);
+        }
+        const requestedDeviceId = String(request.body.deviceId ?? '');
+        if (!requestedDeviceId || requestedDeviceId !== tokenPayload.deviceId) {
+          return response(401, { code: 'DEVICE_TOKEN_MISMATCH' }, env.ALLOWED_ORIGIN);
+        }
+        const photoDeviceToken = createDeviceToken(
+          env.FIXED_USER_ID,
+          tokenPayload.deviceId,
+          env.PHOTO_TOKEN_SIGNING_SECRET,
+          'photo',
+        );
+        return response(200, { photoDeviceToken }, env.ALLOWED_ORIGIN);
+      }
 
       if (request.path === '/api/device/verify') {
         const actualHash = hashFamilyCode(String(request.body.familyCode ?? ''), env.FAMILY_CODE_SALT);
@@ -416,7 +449,7 @@ export function createHandler(repository, env, dependencies = {}) {
         const signedPhotos = await dependencies.photoService.sign(wordIds);
         return response(200, {
           ...signedPhotos,
-          deviceToken: refreshedDeviceToken,
+          photoDeviceToken: refreshedDeviceToken,
         }, env.ALLOWED_ORIGIN);
       }
 

@@ -145,9 +145,19 @@ export function StartupSyncGate({ children }: StartupSyncGateProps) {
   const [backgroundState, setBackgroundState] = useState<BackgroundSyncState | null>(null);
   const [syncRevision, setSyncRevision] = useState(0);
   const activeSync = useRef<Promise<StartupSyncResult> | null>(null);
+  const queuedSync = useRef<Promise<StartupSyncResult> | null>(null);
 
   async function runBackgroundSync(): Promise<StartupSyncResult> {
-    if (activeSync.current) return activeSync.current;
+    if (activeSync.current) {
+      if (!queuedSync.current) {
+        const currentSync = activeSync.current;
+        queuedSync.current = currentSync.then(() => {
+          queuedSync.current = null;
+          return runBackgroundSync();
+        });
+      }
+      return queuedSync.current;
+    }
 
     setBackgroundState(null);
     const syncTask = performStartupSyncWithRetry();
@@ -181,7 +191,14 @@ export function StartupSyncGate({ children }: StartupSyncGateProps) {
 
   useEffect(() => {
     if (!isReady) return undefined;
-    return installResumeSyncListeners(() => runBackgroundSync());
+    const removeResumeListeners = installResumeSyncListeners(() => runBackgroundSync());
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'visible' && window.navigator.onLine) void runBackgroundSync();
+    }, 60_000);
+    return () => {
+      removeResumeListeners();
+      window.clearInterval(timer);
+    };
   }, [isReady]);
 
   async function handleConnect() {

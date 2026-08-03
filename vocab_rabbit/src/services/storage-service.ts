@@ -107,6 +107,7 @@ function createSyncMetadata(): SyncMetadata {
     id: SYNC_METADATA_ID,
     deviceId: createDeviceId(),
     deviceToken: null,
+    photoDeviceToken: null,
     serverCursor: null,
     generation: 0,
     lastSyncedAt: null,
@@ -130,6 +131,7 @@ async function ensureSyncMetadata(): Promise<SyncMetadata> {
       || typeof existing.forceFullSync === 'boolean';
     return {
       ...existing,
+      photoDeviceToken: existing.photoDeviceToken ?? null,
       checkpoint: existing.checkpoint ?? null,
       pendingEventIds: existing.pendingEventIds ?? [],
       pendingTaskDateKeys: existing.pendingTaskDateKeys ?? [],
@@ -180,6 +182,13 @@ export async function getOrCreateSyncMetadata(): Promise<SyncMetadata> {
 export async function saveDeviceToken(deviceToken: string | null): Promise<SyncMetadata> {
   const metadata = await ensureSyncMetadata();
   const next = { ...metadata, deviceToken };
+  await database.syncMetadata.put(next);
+  return next;
+}
+
+export async function savePhotoDeviceToken(photoDeviceToken: string | null): Promise<SyncMetadata> {
+  const metadata = await ensureSyncMetadata();
+  const next = { ...metadata, photoDeviceToken };
   await database.syncMetadata.put(next);
   return next;
 }

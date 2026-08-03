@@ -8,9 +8,10 @@ import {
 } from '../models/parent-setting';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
-import type {
-  PrivateLifePhotoDownloadOptions,
-  PrivateLifePhotoDownloadResult,
+import {
+  isPrivateLifePhotoAccessRequiredError,
+  type PrivateLifePhotoDownloadOptions,
+  type PrivateLifePhotoDownloadResult,
 } from '../services/private-life-photo-service';
 import type { StudyDataImportResult } from '../services/study-data-import';
 import type { WordRecord } from '../models/word';
@@ -26,6 +27,7 @@ import {
   subscribeSpeechVoices,
   type SpeechVoiceOption,
 } from '../services/audio-service';
+import { hasLifePhotoSource } from '../services/word-service';
 
 interface SettingsPageProps {
   settings: ParentSetting;
@@ -54,6 +56,7 @@ interface SettingsNumberControlProps {
   max?: number;
   suffix: string;
   hint: string;
+  step?: number;
   onChange: (nextValue: number) => void;
 }
 
@@ -114,6 +117,7 @@ function SettingsNumberControl({
   max,
   suffix,
   hint,
+  step = 1,
   onChange,
 }: SettingsNumberControlProps) {
   return (
@@ -124,13 +128,19 @@ function SettingsNumberControl({
       </div>
       <div className="settings-number-control__body">
         <div className="settings-stepper" aria-label={`${label}调节`}>
-          <button type="button" onClick={() => onChange(Math.max(min, value - 1))} disabled={value <= min}>
+          <button
+            type="button"
+            aria-label={`${label}减少 ${step}`}
+            onClick={() => onChange(Math.max(min, value - step))}
+            disabled={value <= min}
+          >
             −
           </button>
           <strong>{value}<small>{suffix}</small></strong>
           <button
             type="button"
-            onClick={() => onChange(max === undefined ? value + 1 : Math.min(max, value + 1))}
+            aria-label={`${label}增加 ${step}`}
+            onClick={() => onChange(max === undefined ? value + step : Math.min(max, value + step))}
             disabled={max !== undefined && value >= max}
           >
             +
@@ -239,7 +249,7 @@ export function SettingsPage({
   }>({
     phase: 'idle',
     completed: localLifePhotoCount,
-    total: words.filter((word) => Boolean(word.relatedMedia?.lifePhoto)).length,
+    total: words.filter(hasLifePhotoSource).length,
     failed: 0,
     message: null,
   });
@@ -301,7 +311,7 @@ export function SettingsPage({
     setPrivatePhotoState((current) => ({
       ...current,
       completed: localLifePhotoCount,
-      total: words.filter((word) => Boolean(word.relatedMedia?.lifePhoto)).length,
+      total: words.filter(hasLifePhotoSource).length,
       phase: localLifePhotoCount > 0 && localLifePhotoCount >= current.total ? 'complete' : current.phase,
     }));
   }, [localLifePhotoCount, words]);
@@ -429,7 +439,7 @@ export function SettingsPage({
     void requestPersistentImageStorage();
 
     try {
-      const result = await onDownloadPrivateLifePhotos({
+      const downloadOptions: PrivateLifePhotoDownloadOptions = {
         signal: abortController.signal,
         onProgress: ({ completed, total, failed }) => {
           setPrivatePhotoState({
@@ -440,7 +450,22 @@ export function SettingsPage({
             message: null,
           });
         },
-      });
+      };
+      let result: PrivateLifePhotoDownloadResult;
+      try {
+        result = await onDownloadPrivateLifePhotos(downloadOptions);
+      } catch (error) {
+        if (!isPrivateLifePhotoAccessRequiredError(error)) throw error;
+        const photoAccessCode = window.prompt('请输入生活照片密码：');
+        if (photoAccessCode === null || !photoAccessCode.trim()) {
+          setPrivatePhotoState((current) => ({ ...current, phase: 'idle', message: null }));
+          return;
+        }
+        result = await onDownloadPrivateLifePhotos({
+          ...downloadOptions,
+          photoAccessCode: photoAccessCode.trim(),
+        });
+      }
       setPrivatePhotoState({
         phase: result.failed > 0 ? 'error' : 'complete',
         completed: result.existing + result.downloaded,
@@ -523,9 +548,9 @@ export function SettingsPage({
       ? `正在下载照片 ${privatePhotoState.completed}/${privatePhotoState.total}（${privatePhotoPercent}%）`
       : privatePhotoState.phase === 'complete'
         ? `已在本机保存全部 ${privatePhotoState.total} 张生活照片。`
-        : privatePhotoState.completed > 0
+          : privatePhotoState.completed > 0
           ? `本机已有 ${privatePhotoState.completed}/${privatePhotoState.total} 张，可继续补齐。`
-          : `验证过家庭验证码后，可下载 ${privatePhotoState.total} 张生活照片。`);
+          : `输入独立生活照片密码后，可下载 ${privatePhotoState.total} 张生活照片。`);
 
   return (
     <main className="page page--home page--settings" data-profile={settings.profileId}>
@@ -598,6 +623,7 @@ export function SettingsPage({
                     description=""
                     value={settingsDraft.dailyReviewLimit}
                     min={MIN_REVIEW_LIMIT}
+                    step={5}
                     suffix=" 个"
                     hint={`最少 ${MIN_REVIEW_LIMIT} 个`}
                     onChange={(dailyReviewLimit) => setSettingsDraft((current) => ({ ...current, dailyReviewLimit }))}

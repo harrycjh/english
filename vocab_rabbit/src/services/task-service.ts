@@ -134,11 +134,9 @@ function getOrderedDueReviewWords(
 export function getReviewFirstPlanLimits(dueReviewCount: number, setting: ParentSetting) {
   const reviewLimit = Math.max(1, setting.dailyReviewLimit);
   const newWordLimit = Math.max(1, setting.dailyNewWordCount);
-  const reviewCount = Math.min(dueReviewCount, reviewLimit + newWordLimit);
-  const reviewOverflow = Math.max(0, reviewCount - reviewLimit);
   return {
-    reviewCount,
-    newWordCount: Math.max(0, newWordLimit - reviewOverflow),
+    reviewCount: Math.min(dueReviewCount, reviewLimit),
+    newWordCount: newWordLimit,
   };
 }
 

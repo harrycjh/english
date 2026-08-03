@@ -66,7 +66,7 @@ import {
   type PrivateLifePhotoDownloadOptions,
   type PrivateLifePhotoDownloadResult,
 } from '../services/private-life-photo-service';
-import { loadWordPayload } from '../services/word-service';
+import { hasLifePhotoSource, loadWordPayload } from '../services/word-service';
 import { APP_VERSION } from '../config/app-meta';
 import { getMillisecondsUntilNextStudyDay } from '../services/study-day';
 import { configureSpeechVoices } from '../services/audio-service';
@@ -310,7 +310,10 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
   useEffect(() => {
     if (!payload || !task) return;
     const wordIds = [...new Set([...task.reviewWordIds, ...task.newWordIds])]
-      .filter((wordId) => payload.words.find((word) => word.id === wordId)?.relatedMedia?.lifePhoto);
+      .filter((wordId) => {
+        const word = payload.words.find((candidate) => candidate.id === wordId);
+        return word ? hasLifePhotoSource(word) : false;
+      });
     if (wordIds.length === 0) return;
     const prefetchKey = `${task.dateKey}:${wordIds.join(',')}`;
     if (privatePhotoPrefetchKey.current === prefetchKey) return;
@@ -838,7 +841,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       throw new Error('词库尚未加载完成，请稍后再试。');
     }
     const wordIds = payload.words
-      .filter((word) => Boolean(word.relatedMedia?.lifePhoto))
+      .filter(hasLifePhotoSource)
       .map((word) => word.id);
     const result = await downloadPrivateLifePhotos(wordIds, options);
     setLocalLifePhotoCount(await countLocalLifePhotos());
@@ -988,6 +991,10 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
         onSelectProfile={handleSelectProfile}
         onSaveSelectionStates={handleSaveSelectionStates}
         onRequestLocalLifePhoto={(wordId) => void ensureLocalLifePhoto(wordId)}
+        onChangeNewWordQueue={persistNewWordQueue}
+        onRemoveTodayNewWord={handleRemoveTodayNewWord}
+        onOpenStats={handleOpenStats}
+        onOpenSettings={handleOpenSettings}
       />
     );
   }

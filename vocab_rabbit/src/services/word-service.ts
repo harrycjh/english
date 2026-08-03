@@ -57,6 +57,12 @@ export function mergeLifePhotoCoverage(
   };
 }
 
+export function hasLifePhotoSource(
+  word: Pick<WordRecord, 'hasLifePhoto' | 'relatedMedia'>,
+): boolean {
+  return Boolean(word.hasLifePhoto || word.relatedMedia?.lifePhoto);
+}
+
 async function loadWordRelatedMediaManifest(): Promise<WordRelatedMediaManifest | null> {
   const response = await fetch(getWordRelatedMediaUrl());
   if (response.status === 404) {

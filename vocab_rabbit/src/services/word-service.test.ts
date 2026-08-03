@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { APP_VERSION, CONTENT_VERSION } from '../config/app-meta';
 import type { WordPayload } from '../models/word';
 import {
+  hasLifePhotoSource,
   getLifePhotoCoverageUrl,
   getStudyChinese,
   getStudyPartOfSpeech,
@@ -197,5 +198,21 @@ describe('mergeLifePhotoCoverage', () => {
 
     expect(merged.words[0].hasLifePhoto).toBe(true);
     expect(merged.words[1].hasLifePhoto).toBeUndefined();
+  });
+
+  it('recognizes private coverage markers without exposing a public photo path', () => {
+    expect(hasLifePhotoSource({ hasLifePhoto: true })).toBe(true);
+    expect(hasLifePhotoSource({
+      relatedMedia: {
+        lifePhoto: {
+          imagePath: '/private/photo.webp',
+          caption: '家庭照片',
+          photoId: 'photo-1',
+          match: 'primary',
+          confidence: 1,
+        },
+      },
+    })).toBe(true);
+    expect(hasLifePhotoSource({})).toBe(false);
   });
 });

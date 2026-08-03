@@ -10,6 +10,9 @@ const env = {
   FAMILY_CODE_SALT: 'test-salt',
   FAMILY_CODE_HASH: hashFamilyCode('2468', 'test-salt'),
   TOKEN_SIGNING_SECRET: 'test-signing-secret-at-least-32-characters',
+  PHOTO_ACCESS_CODE_SALT: 'test-photo-salt',
+  PHOTO_ACCESS_CODE_HASH: hashFamilyCode('photo-code', 'test-photo-salt'),
+  PHOTO_TOKEN_SIGNING_SECRET: 'test-photo-signing-secret-at-least-32-characters',
   FIXED_USER_ID: 'xiaojunjun',
   ALLOWED_ORIGIN: 'https://www.cw2017.com',
 };
@@ -29,6 +32,13 @@ function event(path, body, token) {
 
 function parseResponse(response) {
   return { ...response, json: JSON.parse(response.body) };
+}
+
+async function connectPhotoAccess(handler, deviceToken, deviceId = 'device-a') {
+  return parseResponse(await handler(event('/api/media/connect', {
+    photoAccessCode: 'photo-code',
+    deviceId,
+  }, deviceToken)));
 }
 
 function emptySnapshot() {
@@ -130,10 +140,11 @@ describe('vocab sync Function Compute handler', () => {
       familyCode: '2468',
       deviceId: 'device-a',
     })));
+    const photoConnect = await connectPhotoAccess(handler, connect.json.deviceToken);
 
     const response = parseResponse(await handler(event('/api/media/sign', {
       wordIds: ['ket_family_n'],
-    }, connect.json.deviceToken)));
+    }, photoConnect.json.photoDeviceToken)));
 
     expect(response.statusCode).toBe(200);
     expect(response.json.photos).toEqual([
@@ -150,13 +161,46 @@ describe('vocab sync Function Compute handler', () => {
       familyCode: '2468',
       deviceId: 'device-a',
     })));
+    const photoConnect = await connectPhotoAccess(handler, connect.json.deviceToken);
 
     const response = parseResponse(await handler(event('/api/media/sign', {
       wordIds: ['../../secret'],
-    }, connect.json.deviceToken)));
+    }, photoConnect.json.photoDeviceToken)));
 
     expect(response.statusCode).toBe(400);
     expect(response.json.code).toBe('INVALID_PHOTO_WORD_IDS');
+  });
+
+  it('keeps study and private-photo credentials separate', async () => {
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env, {
+      photoService: { sign: async () => ({ photos: [] }) },
+    });
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+    const wrongPhotoCode = parseResponse(await handler(event('/api/media/connect', {
+      photoAccessCode: '000000',
+      deviceId: 'device-a',
+    }, connect.json.deviceToken)));
+    const studyTokenForPhoto = parseResponse(await handler(event('/api/media/sign', {
+      wordIds: ['ket_family_n'],
+    }, connect.json.deviceToken)));
+    const photoConnect = await connectPhotoAccess(handler, connect.json.deviceToken);
+    const photoTokenForStudy = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: null,
+      snapshot: emptySnapshot(),
+    }, photoConnect.json.photoDeviceToken)));
+
+    expect(wrongPhotoCode.statusCode).toBe(403);
+    expect(wrongPhotoCode.json.code).toBe('INVALID_PHOTO_ACCESS_CODE');
+    expect(studyTokenForPhoto.statusCode).toBe(401);
+    expect(studyTokenForPhoto.json.code).toBe('PHOTO_TOKEN_INVALID');
+    expect(photoTokenForStudy.statusCode).toBe(401);
+    expect(photoTokenForStudy.json.code).toBe('DEVICE_TOKEN_INVALID');
   });
 
   it('rejects a previously issued token after the device is revoked in cloud storage', async () => {
@@ -490,6 +534,32 @@ describe('vocab sync Function Compute handler', () => {
       reviewWordIds: ['review-a', 'review-b'],
       answeredWordIds: ['new-b', 'new-d', 'new-e'],
       completedAt: null,
+    });
+  });
+
+  it('caps review backlog without consuming the new-word allowance', () => {
+    const local = emptySnapshot();
+    const remote = emptySnapshot();
+    local.parentSetting.value.dailyNewWordCount = 3;
+    local.parentSetting.value.dailyReviewLimit = 2;
+    remote.parentSetting.value.dailyNewWordCount = 3;
+    remote.parentSetting.value.dailyReviewLimit = 2;
+    local.dailyTasks = [{
+      dateKey: '2026-07-20',
+      newWordIds: ['new-a', 'new-b', 'new-c'],
+      reviewWordIds: ['review-a', 'review-b', 'review-c', 'review-d'],
+      completedAt: null,
+      correctCount: 0,
+      wrongCount: 0,
+      totalAnswered: 0,
+      answeredWordIds: [],
+    }];
+
+    const merged = mergeSnapshots(local, remote);
+
+    expect(merged.dailyTasks[0]).toMatchObject({
+      newWordIds: ['new-a', 'new-b', 'new-c'],
+      reviewWordIds: ['review-a', 'review-b'],
     });
   });
 

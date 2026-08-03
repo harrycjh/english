@@ -3,6 +3,7 @@ import { SYNC_SCHEMA_VERSION, type SyncRequest } from '../models/sync';
 import {
   CloudSyncError,
   connectDevice,
+  connectPrivateLifePhotos,
   resolveSyncApiUrl,
   synchronizeDevice,
   verifyFamilyCode,
@@ -101,6 +102,37 @@ describe('verifyFamilyCode', () => {
     await verifyFamilyCode('2468', 'token-a', fetchImpl);
 
     expect(new Headers(capturedHeaders).get('Authorization')).toBe('Bearer token-a');
+  });
+});
+
+describe('connectPrivateLifePhotos', () => {
+  it('uses the study device token to exchange the separate photo password', async () => {
+    let capturedUrl = '';
+    let capturedInit: RequestInit | undefined;
+    const fetchImpl: typeof fetch = async (input, init) => {
+      capturedUrl = String(input);
+      capturedInit = init;
+      return jsonResponse({ photoDeviceToken: 'photo-token-a' });
+    };
+
+    const result = await connectPrivateLifePhotos('photo-code', 'device-a', 'study-token-a', fetchImpl);
+
+    expect(capturedUrl).toBe('/api/media/connect');
+    expect(new Headers(capturedInit?.headers).get('Authorization')).toBe('Bearer study-token-a');
+    expect(JSON.parse(String(capturedInit?.body))).toEqual({
+      photoAccessCode: 'photo-code',
+      deviceId: 'device-a',
+    });
+    expect(result.photoDeviceToken).toBe('photo-token-a');
+  });
+
+  it('reports an incorrect photo password distinctly', async () => {
+    const fetchImpl: typeof fetch = async () => jsonResponse({
+      code: 'INVALID_PHOTO_ACCESS_CODE',
+    }, 403);
+
+    await expect(connectPrivateLifePhotos('wrong', 'device-a', 'study-token-a', fetchImpl))
+      .rejects.toMatchObject({ kind: 'invalid-code', message: '生活照片密码不正确。' });
   });
 });
 

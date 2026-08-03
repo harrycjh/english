@@ -11,6 +11,7 @@
     "build": "npm run build:esa",
     "build:github": "tsc --noEmit && vite build --mode github-pages",
     "build:esa": "tsc --noEmit && vite build --mode esa && node scripts/build-word-atlases.mjs dist",
+    "generate:review-preview-scales": "node scripts/generate-review-preview-scales.mjs",
     "test": "vitest run --exclude e2e/**",
     "test:interactions": "playwright test",
     "preview": "npm run build:github && node scripts/preview-github-pages.mjs",

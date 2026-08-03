@@ -22,6 +22,10 @@ interface VerifyResponse {
   deviceToken?: string;
 }
 
+interface PhotoConnectResponse {
+  photoDeviceToken: string;
+}
+
 export interface SignedPrivateLifePhoto {
   wordId: string;
   objectKey: string;
@@ -35,7 +39,7 @@ export interface SignedPrivateLifePhoto {
 interface SignedPrivateLifePhotoResponse {
   expiresAt: string;
   photos: SignedPrivateLifePhoto[];
-  deviceToken?: string;
+  photoDeviceToken?: string;
 }
 
 const RETRY_DELAYS_MS = [0, 250, 750];
@@ -94,10 +98,24 @@ async function postJson<T>(
   }
 
   if (response.status === 401) {
-    throw new CloudSyncError('unauthorized', '此设备连接已失效，请重新输入家庭验证码。', response.status);
+    const payload = await response.clone().json().catch(() => null) as { code?: string } | null;
+    throw new CloudSyncError(
+      'unauthorized',
+      payload?.code === 'PHOTO_TOKEN_INVALID'
+        ? '生活照片访问凭证已失效，请重新输入生活照片密码。'
+        : '此设备连接已失效，请重新输入家庭验证码。',
+      response.status,
+    );
   }
   if (response.status === 403) {
-    throw new CloudSyncError('invalid-code', '家庭验证码不正确。', response.status);
+    const payload = await response.clone().json().catch(() => null) as { code?: string } | null;
+    throw new CloudSyncError(
+      'invalid-code',
+      payload?.code === 'INVALID_PHOTO_ACCESS_CODE'
+        ? '生活照片密码不正确。'
+        : '家庭验证码不正确。',
+      response.status,
+    );
   }
   if (response.status === 400 || response.status === 409) {
     const payload = await response.clone().json().catch(() => null) as { code?: string } | null;
@@ -162,4 +180,22 @@ export function signPrivateLifePhotos(
   fetchImpl: typeof fetch = fetch,
 ): Promise<SignedPrivateLifePhotoResponse> {
   return postJson('/api/media/sign', { wordIds }, deviceToken, fetchImpl);
+}
+
+export async function connectPrivateLifePhotos(
+  photoAccessCode: string,
+  deviceId: string,
+  deviceToken: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<PhotoConnectResponse> {
+  const result = await postJson<PhotoConnectResponse>(
+    '/api/media/connect',
+    { photoAccessCode, deviceId },
+    deviceToken,
+    fetchImpl,
+  );
+  if (!result.photoDeviceToken) {
+    throw new CloudSyncError('invalid-response', '照片服务器没有返回设备凭证。');
+  }
+  return result;
 }

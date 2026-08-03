@@ -13,6 +13,8 @@ import type { WordPayload } from '../models/word';
 import { WordDetailDrawer } from '../components/WordDetailDrawer';
 import { WordImage } from '../components/WordImage';
 import { MasteryLevelIcon } from '../components/MasteryLevelIcon';
+import { NewWordQueueDrawer } from '../components/NewWordQueueDrawer';
+import { ReviewQueueDrawer } from '../components/ReviewQueueDrawer';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
@@ -25,6 +27,7 @@ import {
 } from '../services/word-service';
 import reviewLayoutData from '../../design-output/ui-concepts/review-page-layout.json';
 import reviewSlicesManifestData from '../../design-output/ui-concepts/review-page-slices-manifest.json';
+import reviewPreviewImageScales from '../data/review-preview-image-scales.json';
 
 type ReviewPreviewWord = WordPayload['words'][number];
 type ReviewSummaryTone = 'library' | 'mastered' | 'completion';
@@ -178,6 +181,7 @@ interface ReviewMetricCardProps {
   note: string;
   layout: ReviewMetricLayout;
   children?: ReactNode;
+  onClick?: () => void;
 }
 
 interface ReviewSummaryPillProps {
@@ -201,18 +205,16 @@ interface ReviewAdviceCardProps {
   value: string;
   description: string;
   layout: ReviewGuidanceLayout;
+  onClick?: () => void;
 }
 
-function ReviewMetricCard({ tone, label, value, note, layout, children }: ReviewMetricCardProps) {
+function ReviewMetricCard({ tone, label, value, note, layout, children, onClick }: ReviewMetricCardProps) {
   const contentStyle = getRelativeTextStyle(layout.textSafe, layout);
   const iconAnchor = 'iconAnchor' in layout ? layout.iconAnchor : undefined;
   const heatmapBounds = 'heatmapBounds' in layout ? layout.heatmapBounds : undefined;
 
-  return (
-    <article
-      className={`review-metric-card review-metric-card--${tone}`}
-      style={getRelativeBoundsStyle(layout, reviewLayout.modules.metricRow)}
-    >
+  const content = (
+    <>
       {iconAnchor ? (
         <div
           className="review-metric-card__icon"
@@ -230,7 +232,15 @@ function ReviewMetricCard({ tone, label, value, note, layout, children }: Review
           {children}
         </div>
       ) : null}
-    </article>
+    </>
+  );
+
+  const className = `review-metric-card review-metric-card--${tone}${onClick ? ' is-actionable' : ''}`;
+  const style = getRelativeBoundsStyle(layout, reviewLayout.modules.metricRow);
+  return onClick ? (
+    <button className={className} style={style} type="button" onClick={onClick}>{content}</button>
+  ) : (
+    <article className={className} style={style}>{content}</article>
   );
 }
 
@@ -283,13 +293,17 @@ function ReviewSummaryPill({ tone, label, value, layout }: ReviewSummaryPillProp
 function ReviewPreviewCard({ word, masteryLevel, index, layout, onOpenDetails }: ReviewPreviewCardProps) {
   const oxfordLabel = getPrimaryOxfordRefLabel(word);
   const artVariant = ['family', 'hello', 'body', 'spark'][index % 4];
+  const imageScale = reviewPreviewImageScales[word.id as keyof typeof reviewPreviewImageScales] ?? 1;
 
   return (
     <button
       className={`review-preview-card review-preview-card--${artVariant}`}
       type="button"
       onClick={onOpenDetails}
-      style={getRelativeBoundsStyle(layout, reviewLayout.modules.previewSection)}
+      style={{
+        ...getRelativeBoundsStyle(layout, reviewLayout.modules.previewSection),
+        '--review-preview-image-scale': String(imageScale),
+      } as CSSProperties}
     >
       <div
         className="review-preview-card__art"
@@ -357,14 +371,11 @@ function ReviewPreviewCard({ word, masteryLevel, index, layout, onOpenDetails }:
   );
 }
 
-function ReviewAdviceCard({ accent, label, value, description, layout }: ReviewAdviceCardProps) {
+function ReviewAdviceCard({ accent, label, value, description, layout, onClick }: ReviewAdviceCardProps) {
   const artPlacement = reviewSlicePlacementsByFile[layout.artSlot.file];
 
-  return (
-    <article
-      className={`review-advice-card review-advice-card--${accent}`}
-      style={getRelativeBoundsStyle(layout, reviewLayout.modules.guidanceSection)}
-    >
+  const content = (
+    <>
       <div className="review-advice-card__body" style={getRelativeTextStyle(layout.textSafe, layout)}>
         <span>{label}</span>
         <strong>{value}</strong>
@@ -382,7 +393,15 @@ function ReviewAdviceCard({ accent, label, value, description, layout }: ReviewA
           backgroundSize: `${artPlacement?.assetDisplayWidth ?? layout.artSlot.width}px auto`,
         }}
       />
-    </article>
+    </>
+  );
+
+  const className = `review-advice-card review-advice-card--${accent}${onClick ? ' is-actionable' : ''}`;
+  const style = getRelativeBoundsStyle(layout, reviewLayout.modules.guidanceSection);
+  return onClick ? (
+    <button className={className} style={style} type="button" onClick={onClick}>{content}</button>
+  ) : (
+    <article className={className} style={style}>{content}</article>
   );
 }
 
@@ -405,6 +424,10 @@ interface ReviewPageProps {
   onSelectProfile: (profileId: ProfileId) => Promise<void>;
   onSaveSelectionStates: (states: WordSelectionState[]) => Promise<void>;
   onRequestLocalLifePhoto?: (wordId: string) => void;
+  onChangeNewWordQueue?: (wordIds: string[]) => Promise<void>;
+  onRemoveTodayNewWord?: (wordId: string) => Promise<void>;
+  onOpenStats?: () => void;
+  onOpenSettings?: () => void;
 }
 
 export function ReviewPage({
@@ -426,13 +449,16 @@ export function ReviewPage({
   onSelectProfile,
   onSaveSelectionStates,
   onRequestLocalLifePhoto,
+  onChangeNewWordQueue,
+  onRemoveTodayNewWord,
+  onOpenStats,
+  onOpenSettings,
 }: ReviewPageProps) {
   const plannedCount = task.newWordIds.length + task.reviewWordIds.length;
   const heatmapTasks = [...recentTasks.filter((recentTask) => recentTask.dateKey !== task.dateKey), task];
   const heatmapDays = buildHeatmapDays(heatmapTasks, task.dateKey);
   const completedDays = heatmapDays.filter((day) => day.task?.completedAt).length;
   const completionRate = Math.round((completedDays / 14) * 100);
-  const previewCategoryCount = new Set(previewWords.map((word) => word.category)).size;
   const estimatedMinutes = plannedCount === 0 ? 0 : Math.max(1, Math.round(plannedCount * 0.25));
   const isTaskComplete = Boolean(task.completedAt) && isTaskFullyAnswered(task);
   const hasStarted = task.totalAnswered > 0 && !isTaskComplete;
@@ -441,8 +467,12 @@ export function ReviewPage({
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
   const [isAdvancingDay, setIsAdvancingDay] = useState(false);
   const [localDebugPickerOpen, setLocalDebugPickerOpen] = useState(false);
+  const [isNewWordQueueOpen, setIsNewWordQueueOpen] = useState(false);
+  const [isReviewQueueOpen, setIsReviewQueueOpen] = useState(false);
   const isDebugPickerOpen = debugPickerOpen ?? localDebugPickerOpen;
   const nextDateKey = addDaysToDateKey(task.dateKey, 1);
+  const pendingReviewCount = task.reviewWordIds.filter((wordId) => !task.answeredWordIds.includes(wordId)).length;
+  const completedReviewCount = task.reviewWordIds.length - pendingReviewCount;
 
   function setDebugPickerOpen(open: boolean) {
     if (onDebugPickerOpenChange) {
@@ -491,7 +521,7 @@ export function ReviewPage({
   const focusCardText = focusWord
     ? `${getStudyText(focusWord)} 会作为代表词，先帮孩子进入今天的主题。`
     : focusDescription;
-  const selectedWord = selectedWordId ? previewWords.find((word) => word.id === selectedWordId) ?? null : null;
+  const selectedWord = selectedWordId ? payload.words.find((word) => word.id === selectedWordId) ?? null : null;
   const selectedWordRecord = selectedWord ? recordsById[selectedWord.id] : undefined;
   const selectedWordSelectionState = selectedWord ? selectionById[selectedWord.id] : undefined;
   const previewGridHeight = Math.max(
@@ -735,6 +765,11 @@ export function ReviewPage({
               value={`${plannedCount} 个`}
               note={`新词 ${task.newWordIds.length} · 复习 ${task.reviewWordIds.length}`}
               layout={reviewLayout.cards.metrics[0]}
+              onClick={() => {
+                setIsReviewQueueOpen(false);
+                setSelectedWordId(null);
+                setIsNewWordQueueOpen(true);
+              }}
             />
             <ReviewMetricCard
               tone="time"
@@ -745,10 +780,15 @@ export function ReviewPage({
             />
             <ReviewMetricCard
               tone="theme"
-              label="预览主题"
-              value={`${previewCategoryCount || payload.categoryCount} 个`}
-              note={previewCategoryCount > 0 ? '家庭、身份、身体、表达' : '开始学习后这里会更准确'}
+              label="今日复习"
+              value={`${pendingReviewCount} 个`}
+              note={`计划 ${task.reviewWordIds.length} · 已完成 ${completedReviewCount}`}
               layout={reviewLayout.cards.metrics[2]}
+              onClick={() => {
+                setIsNewWordQueueOpen(false);
+                setSelectedWordId(null);
+                setIsReviewQueueOpen(true);
+              }}
             />
             <ReviewMetricCard
               tone="heatmap"
@@ -795,13 +835,14 @@ export function ReviewPage({
             </div>
             <div className="review-advice-grid" style={{ position: 'absolute', left: '0', top: '0', width: '100%', height: `${guidanceGridHeight}px` }}>
               <ReviewAdviceCard accent="tea" label="今日建议" value={suggestionTitle} description="" layout={reviewGuidanceLayouts.tea} />
-              <ReviewAdviceCard accent="bars" label="未来压力" value={pressureLevel} description="" layout={reviewGuidanceLayouts.bars} />
+              <ReviewAdviceCard accent="bars" label="未来压力" value={pressureLevel} description="" layout={reviewGuidanceLayouts.bars} onClick={onOpenStats} />
               <ReviewAdviceCard
                 accent="bag"
                 label="当前学习设置"
                 value={`${setting.dailyNewWordCount} 新词 · ${setting.dailyReviewLimit} 复习`}
                 description=""
                 layout={reviewGuidanceLayouts.bag}
+                onClick={onOpenSettings}
               />
             </div>
           </section>
@@ -843,6 +884,33 @@ export function ReviewPage({
                 ])
             : undefined
         }
+        queueCompanion={isNewWordQueueOpen || isReviewQueueOpen}
+      />
+      <NewWordQueueDrawer
+        isOpen={isNewWordQueueOpen}
+        words={payload.words}
+        recordsById={recordsById}
+        selectionById={selectionById}
+        task={task}
+        queue={setting.newWordQueue}
+        onClose={() => {
+          setIsNewWordQueueOpen(false);
+          setSelectedWordId(null);
+        }}
+        onChangeQueue={onChangeNewWordQueue ?? (async () => undefined)}
+        onRemoveTodayWord={onRemoveTodayNewWord ?? (async () => undefined)}
+        onOpenWord={openWordDetails}
+      />
+      <ReviewQueueDrawer
+        isOpen={isReviewQueueOpen}
+        words={payload.words}
+        recordsById={recordsById}
+        task={task}
+        onClose={() => {
+          setIsReviewQueueOpen(false);
+          setSelectedWordId(null);
+        }}
+        onOpenWord={openWordDetails}
       />
     </main>
   );

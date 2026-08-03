@@ -2,6 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { defaultParentSetting, normalizeParentSetting } from './parent-setting';
 
 describe('parent setting normalization', () => {
+  it('starts a new device at eight new words and eighty reviews', () => {
+    expect(defaultParentSetting.dailyNewWordCount).toBe(8);
+    expect(defaultParentSetting.dailyReviewLimit).toBe(80);
+  });
+
   it('does not cap daily new words or the daily review limit', () => {
     expect(normalizeParentSetting({
       ...defaultParentSetting,

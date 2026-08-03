@@ -6,6 +6,8 @@ const appSource = readFileSync(new URL('../src/app/App.tsx', import.meta.url), '
 const reviewSource = readFileSync(new URL('../src/screens/HomePage.tsx', import.meta.url), 'utf8');
 const selectionSource = readFileSync(new URL('../src/screens/SelectionPage.tsx', import.meta.url), 'utf8');
 const wordDetailSource = readFileSync(new URL('../src/components/WordDetailDrawer.tsx', import.meta.url), 'utf8');
+const newWordQueueSource = readFileSync(new URL('../src/components/NewWordQueueDrawer.tsx', import.meta.url), 'utf8');
+const reviewQueueSource = readFileSync(new URL('../src/components/ReviewQueueDrawer.tsx', import.meta.url), 'utf8');
 
 function getZIndex(selector: string): number {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -282,21 +284,98 @@ describe('settings reference layout', () => {
 });
 
 describe('review preview atlas rendering', () => {
-  it('uses cover-style atlas sizing in the portrait preview slot', () => {
-    expect(css).toMatch(
-      /\.page--review \.review-preview-card__word-image\.word-image--atlas\s*\{[^}]*background-size:\s*auto 300% !important;/s,
+  it('keeps every atlas cell on the shared square image viewport', () => {
+    expect(css).not.toMatch(
+      /\.page--review \.review-preview-card__word-image\.word-image--atlas\s*\{[^}]*background-size:/s,
     );
   });
 
-  it('centers preview images at seventy percent of the art slot', () => {
+  it('centers preview images in a square viewport at seventy percent of the art slot', () => {
     expect(css).toMatch(
       /\.page--review \.review-preview-card__art\s*\{[^}]*display:\s*flex;[^}]*align-items:\s*center;[^}]*justify-content:\s*center;/s,
     );
     expect(css).toMatch(
-      /\.page--review \.review-preview-card__word-image\s*\{[^}]*width:\s*70%;[^}]*height:\s*70%;[^}]*transform:\s*translateY\(-10px\);/s,
+      /\.page--review \.review-preview-card__word-image\s*\{[^}]*width:\s*70%;[^}]*height:\s*auto;[^}]*aspect-ratio:\s*1;[^}]*object-fit:\s*contain;[^}]*transform:\s*translateY\(-10px\) scale\(var\(--review-preview-image-scale, 1\)\);/s,
     );
     expect(css).toMatch(
       /\.page--review \.review-preview-card__art\s*\{[^}]*background:\s*transparent;/s,
+    );
+  });
+});
+
+describe('review focus title sizing', () => {
+  it('reduces the focus title by two pixels from the shared title token', () => {
+    expect(css).toMatch(
+      /\.page--review \.review-focus-card strong\s*\{[^}]*font-size:\s*calc\(var\(--review-size-focus-title\) - 2px\);[^}]*letter-spacing:\s*0;[^}]*white-space:\s*nowrap;/s,
+    );
+  });
+});
+
+describe('unlearned mastery tag alignment', () => {
+  it('centers the unlearned label without the shared one-pixel offset', () => {
+    expect(css).toMatch(
+      /\.mastery-level-icon--level-0 \.mastery-level-icon__label\s*\{[^}]*align-self:\s*stretch;[^}]*display:\s*inline-flex;[^}]*align-items:\s*center;[^}]*justify-content:\s*center;[^}]*transform:\s*none;/s,
+    );
+  });
+});
+
+describe('paired queue and word detail drawers', () => {
+  it('anchors queues left and keeps the right detail interactive above them', () => {
+    expect(css).toMatch(
+      /\.new-word-queue-backdrop\s*\{[^}]*justify-content:\s*flex-start;/s,
+    );
+    expect(css).toMatch(
+      /\.word-detail-drawer-backdrop--queue-companion\s*\{[^}]*z-index:\s*250;[^}]*pointer-events:\s*none;[^}]*background:\s*transparent;/s,
+    );
+    expect(css).toMatch(
+      /\.word-detail-drawer-backdrop--queue-companion \.word-detail-drawer\s*\{[^}]*pointer-events:\s*auto;/s,
+    );
+  });
+
+  it('keeps both queue drawers sharp and the same width as the word detail drawer', () => {
+    expect(css).toMatch(/--word-side-drawer-width:\s*460px;/);
+    expect(css).toMatch(
+      /\.word-detail-drawer\s*\{[^}]*width:\s*min\(var\(--word-side-drawer-width\), 100%\);/s,
+    );
+    expect(css).toMatch(
+      /\.new-word-queue\s*\{[^}]*width:\s*min\(var\(--word-side-drawer-width\), 100%\);/s,
+    );
+    expect(css).not.toMatch(
+      /\.new-word-queue-backdrop\s*\{[^}]*backdrop-filter:/s,
+    );
+    expect(newWordQueueSource).toContain("document.querySelector('.ipad-stage-shell')");
+    expect(reviewQueueSource).toContain("document.querySelector('.ipad-stage-shell')");
+  });
+
+  it('opens the new-word queue on the review sheet and stacks level above stars in review rows', () => {
+    expect(reviewSource).toContain('setIsNewWordQueueOpen(true)');
+    expect(reviewSource).toContain('<NewWordQueueDrawer');
+    expect(appSource).not.toContain('function handleOpenNewWordQueue()');
+    expect(reviewQueueSource).toMatch(
+      /<div className="new-word-queue__progress">[\s\S]*<MasteryLevelIcon[\s\S]*<DifficultyStars/,
+    );
+    expect(css).toMatch(
+      /\.new-word-queue__progress\s*\{[^}]*display:\s*grid;[^}]*gap:\s*4px;[^}]*flex:\s*0 0 54px;/s,
+    );
+  });
+});
+
+describe('review row framing and card copy alignment', () => {
+  it('removes the large section border while keeping individual cards', () => {
+    expect(css).toMatch(
+      /\.page--review \.review-panel\s*\{[^}]*padding:\s*0;[^}]*border:\s*0;[^}]*background:\s*transparent;[^}]*box-shadow:\s*none;/s,
+    );
+  });
+
+  it('moves preview copy down five pixels without moving the mastery tag', () => {
+    expect(css).toMatch(
+      /\.page--review \.review-preview-card__body\s*\{[^}]*transform:\s*translateY\(5px\);/s,
+    );
+    expect(css).toMatch(
+      /\.page--review \.review-preview-card__pos\s*\{[^}]*transform:\s*translateY\(5px\);/s,
+    );
+    expect(css).not.toMatch(
+      /\.page--review \.review-preview-card__favorite\s*\{[^}]*translateY\(5px\)/s,
     );
   });
 });
