@@ -12,10 +12,21 @@ export function hashFamilyCode(code, salt) {
   return crypto.createHash('sha256').update(`${salt}:${code}`).digest('hex');
 }
 
+function isNonEmptyString(value) {
+  return typeof value === 'string' && value.length > 0;
+}
+
 function safeEqual(left, right) {
+  if (!isNonEmptyString(left) || !isNonEmptyString(right)) return false;
   const leftBuffer = Buffer.from(left);
   const rightBuffer = Buffer.from(right);
   return leftBuffer.length === rightBuffer.length && crypto.timingSafeEqual(leftBuffer, rightBuffer);
+}
+
+function isPhotoAccessConfigured(env) {
+  return isNonEmptyString(env.PHOTO_ACCESS_CODE_SALT)
+    && isNonEmptyString(env.PHOTO_ACCESS_CODE_HASH)
+    && isNonEmptyString(env.PHOTO_TOKEN_SIGNING_SECRET);
 }
 
 function signToken(payload, secret) {
@@ -25,6 +36,7 @@ function signToken(payload, secret) {
 }
 
 function verifyToken(token, secret) {
+  if (!isNonEmptyString(secret)) return null;
   const [encoded, signature] = String(token ?? '').split('.');
   if (!encoded || !signature) return null;
   const expected = crypto.createHmac('sha256', secret).update(encoded).digest('base64url');
@@ -383,6 +395,13 @@ export function createHandler(repository, env, dependencies = {}) {
       }
 
       const isPhotoSigningRequest = request.path === '/api/media/sign';
+      const isPhotoRequest = isPhotoSigningRequest || request.path === '/api/media/connect';
+      if (isPhotoRequest && !isPhotoAccessConfigured(env)) {
+        return response(503, {
+          code: 'PHOTO_ACCESS_NOT_CONFIGURED',
+          message: '生活照片功能尚未在服务器上启用。',
+        }, env.ALLOWED_ORIGIN);
+      }
       const expectedScope = isPhotoSigningRequest ? 'photo' : 'study';
       const tokenPayload = verifyToken(
         bearerToken(request.headers),

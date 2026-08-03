@@ -61,6 +61,10 @@ FIXED_USER_ID
 ALLOWED_ORIGIN
 ```
 
+The three `PHOTO_*` variables are only needed for private life photos. When they are
+missing, `/api/media/connect` and `/api/media/sign` answer `503
+PHOTO_ACCESS_NOT_CONFIGURED`; study sync keeps working.
+
 Optional table overrides:
 
 ```text

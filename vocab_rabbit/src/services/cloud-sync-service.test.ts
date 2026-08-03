@@ -126,6 +126,18 @@ describe('connectPrivateLifePhotos', () => {
     expect(result.photoDeviceToken).toBe('photo-token-a');
   });
 
+  it('reports an unconfigured photo backend distinctly', async () => {
+    const fetchImpl: typeof fetch = async () => jsonResponse({
+      code: 'PHOTO_ACCESS_NOT_CONFIGURED',
+    }, 503);
+
+    await expect(connectPrivateLifePhotos('photo-code', 'device-a', 'study-token-a', fetchImpl))
+      .rejects.toMatchObject({
+        kind: 'unavailable',
+        message: '生活照片功能尚未在服务器上启用，请稍后再试。',
+      });
+  });
+
   it('reports an incorrect photo password distinctly', async () => {
     const fetchImpl: typeof fetch = async () => jsonResponse({
       code: 'INVALID_PHOTO_ACCESS_CODE',

@@ -126,6 +126,16 @@ async function postJson<T>(
   if (response.status === 409 || response.status === 426) {
     throw new CloudSyncError('schema', '云端数据版本不兼容，请先升级应用。', response.status);
   }
+  if (response.status === 503) {
+    const payload = await response.clone().json().catch(() => null) as { code?: string } | null;
+    if (payload?.code === 'PHOTO_ACCESS_NOT_CONFIGURED' || payload?.code === 'PHOTO_SERVICE_UNAVAILABLE') {
+      throw new CloudSyncError(
+        'unavailable',
+        '生活照片功能尚未在服务器上启用，请稍后再试。',
+        response.status,
+      );
+    }
+  }
   if (!response.ok) {
     throw new CloudSyncError('unavailable', `同步服务器暂时不可用（${response.status}）。`, response.status);
   }

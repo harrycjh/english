@@ -171,6 +171,70 @@ describe('vocab sync Function Compute handler', () => {
     expect(response.json.code).toBe('INVALID_PHOTO_WORD_IDS');
   });
 
+  it('reports a configuration error instead of crashing when photo access env vars are missing', async () => {
+    const {
+      PHOTO_ACCESS_CODE_SALT: _salt,
+      PHOTO_ACCESS_CODE_HASH: _hash,
+      PHOTO_TOKEN_SIGNING_SECRET: _secret,
+      ...envWithoutPhoto
+    } = env;
+    const handler = createHandler(createMemoryRepository(), envWithoutPhoto, {
+      photoService: { sign: async () => ({ photos: [] }) },
+    });
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+
+    const connectPhotos = parseResponse(await handler(event('/api/media/connect', {
+      photoAccessCode: 'photo-code',
+      deviceId: 'device-a',
+    }, connect.json.deviceToken)));
+    const signPhotos = parseResponse(await handler(event('/api/media/sign', {
+      wordIds: ['ket_family_n'],
+    }, connect.json.deviceToken)));
+
+    expect(connectPhotos.statusCode).toBe(503);
+    expect(connectPhotos.json.code).toBe('PHOTO_ACCESS_NOT_CONFIGURED');
+    expect(signPhotos.statusCode).toBe(503);
+    expect(signPhotos.json.code).toBe('PHOTO_ACCESS_NOT_CONFIGURED');
+  });
+
+  it('keeps syncing when photo access env vars are missing', async () => {
+    const {
+      PHOTO_ACCESS_CODE_SALT: _salt,
+      PHOTO_ACCESS_CODE_HASH: _hash,
+      PHOTO_TOKEN_SIGNING_SECRET: _secret,
+      ...envWithoutPhoto
+    } = env;
+    const handler = createHandler(createMemoryRepository(), envWithoutPhoto);
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+    const response = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: null,
+      snapshot: emptySnapshot(),
+    }, connect.json.deviceToken)));
+
+    expect(response.statusCode).toBe(200);
+  });
+
+  it('rejects the family code without crashing when the code hash is missing', async () => {
+    const { FAMILY_CODE_HASH: _hash, ...envWithoutFamilyHash } = env;
+    const handler = createHandler(createMemoryRepository(), envWithoutFamilyHash);
+
+    const response = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+
+    expect(response.statusCode).toBe(403);
+    expect(response.json.code).toBe('INVALID_FAMILY_CODE');
+  });
+
   it('keeps study and private-photo credentials separate', async () => {
     const repository = createMemoryRepository();
     const handler = createHandler(repository, env, {
