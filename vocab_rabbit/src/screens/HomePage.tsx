@@ -1,5 +1,11 @@
 import { type CSSProperties, type ReactNode, useState } from 'react';
 import { IPAD_STAGE_HEIGHT } from '../app/ipad-viewport';
+import {
+  LAYOUT_PREVIEW_OPTIONS,
+  readLayoutPreview,
+  writeLayoutPreview,
+  type LayoutPreview,
+} from '../app/layout-preview';
 import { useStageSize } from '../app/use-stage-size';
 import {
   PREVIEW_COLUMNS,
@@ -481,6 +487,7 @@ export function ReviewPage({
   const [localDebugPickerOpen, setLocalDebugPickerOpen] = useState(false);
   const [isNewWordQueueOpen, setIsNewWordQueueOpen] = useState(false);
   const [isReviewQueueOpen, setIsReviewQueueOpen] = useState(false);
+  const [layoutPreview, setLayoutPreview] = useState<LayoutPreview>(() => readLayoutPreview());
   const isDebugPickerOpen = debugPickerOpen ?? localDebugPickerOpen;
   const nextDateKey = addDaysToDateKey(task.dateKey, 1);
   const pendingReviewCount = task.reviewWordIds.filter((wordId) => !task.answeredWordIds.includes(wordId)).length;
@@ -762,6 +769,30 @@ export function ReviewPage({
                   <button type="button" aria-label="关闭调试模式" onClick={() => setDebugPickerOpen(false)}>×</button>
                 </div>
                 <p>每次最多随机抽取 10 个不重复单词，只测试题型，不修改本地或云端学习记录。</p>
+                <div className="review-debug-layout-row">
+                  <span className="review-debug-layout-row__label">屏幕布局</span>
+                  <div className="review-debug-layout-row__options">
+                    {LAYOUT_PREVIEW_OPTIONS.map((option) => {
+                      const isActive = layoutPreview === option.id;
+                      return (
+                        <button
+                          key={option.id}
+                          type="button"
+                          aria-pressed={isActive}
+                          className={isActive ? 'is-active' : undefined}
+                          onClick={() => {
+                            const next = isActive ? 'auto' : option.id;
+                            setLayoutPreview(next);
+                            writeLayoutPreview(next);
+                          }}
+                        >
+                          <strong>{option.label}</strong>
+                          <span>{isActive ? '已启用 · 再点恢复自动' : option.note}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
                 <div className="review-debug-level-grid">
                   <button
                     className="review-debug-level-grid__progression"

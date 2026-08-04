@@ -80,6 +80,11 @@ import {
   measureShellViewport,
 } from './ipad-viewport';
 import {
+  LAYOUT_PREVIEW_EVENT,
+  applyLayoutPreview,
+  readLayoutPreview,
+} from './layout-preview';
+import {
   createDebugProgressionPlan,
   DEBUG_PROGRESSION_LEVELS,
   isQuestionKindForDebugLevel,
@@ -376,15 +381,26 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       );
       const orientation = viewportWidth >= viewportHeight ? 'landscape' : 'portrait';
       const shellMode = shouldLockIpadShell ? 'ipad-fixed' : 'fluid';
-      const { rotation, scale: stageScale, stageWidth, stageHeight } = calculateStageLayout(
+      const layoutPreview = readLayoutPreview();
+      const { rotation, scale: stageScale, stageWidth, stageHeight } = applyLayoutPreview(
+        calculateStageLayout(
+          viewportWidth,
+          viewportHeight,
+          installedIpad ? 'landscape-width' : 'contain',
+        ),
+        layoutPreview,
         viewportWidth,
         viewportHeight,
-        installedIpad ? 'landscape-width' : 'contain',
       );
       const viewportTop = installedIpad ? 0 : Math.max(0, viewport?.offsetTop ?? 0);
 
       root.dataset.shellMode = shellMode;
       root.dataset.orientation = orientation;
+      if (layoutPreview === 'auto') {
+        delete root.dataset.layoutPreview;
+      } else {
+        root.dataset.layoutPreview = layoutPreview;
+      }
       body.dataset.shellMode = shellMode;
       body.dataset.orientation = orientation;
       root.style.setProperty('--ipad-shell-stage-width', `${stageWidth}px`);
@@ -431,6 +447,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     window.addEventListener('resize', scheduleShellSync);
     window.addEventListener('orientationchange', scheduleShellSync);
     window.addEventListener('pageshow', scheduleShellSync);
+    window.addEventListener(LAYOUT_PREVIEW_EVENT, scheduleShellSync);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     viewport?.addEventListener('resize', scheduleShellSync);
     viewport?.addEventListener('scroll', scheduleShellSync);
@@ -439,6 +456,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       window.removeEventListener('resize', scheduleShellSync);
       window.removeEventListener('orientationchange', scheduleShellSync);
       window.removeEventListener('pageshow', scheduleShellSync);
+      window.removeEventListener(LAYOUT_PREVIEW_EVENT, scheduleShellSync);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       viewport?.removeEventListener('resize', scheduleShellSync);
       viewport?.removeEventListener('scroll', scheduleShellSync);
@@ -446,6 +464,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       if (settleTimer !== null) window.clearTimeout(settleTimer);
       delete root.dataset.shellMode;
       delete root.dataset.stageGrown;
+      delete root.dataset.layoutPreview;
       delete root.dataset.orientation;
       delete body.dataset.shellMode;
       delete body.dataset.orientation;

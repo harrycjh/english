@@ -3055,6 +3055,58 @@ button {
   font-size: 14px;
 }
 
+.review-debug-layout-row {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgba(231, 179, 94, 0.5);
+}
+
+.review-debug-layout-row__label {
+  color: #927a5e;
+  font-size: 12px;
+}
+
+.review-debug-layout-row__options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.review-debug-layout-row__options button {
+  display: grid;
+  gap: 5px;
+  padding: 14px 10px;
+  border: 1px solid rgba(231, 179, 94, 0.64);
+  border-radius: 16px;
+  color: #51351c;
+  cursor: pointer;
+  background: #fffdf8;
+}
+
+.review-debug-layout-row__options button:hover,
+.review-debug-layout-row__options button:focus-visible {
+  border-color: #ff9d1f;
+  background: #fff2d7;
+  outline: none;
+}
+
+.review-debug-layout-row__options button.is-active {
+  border-color: #ff9d1f;
+  background: #ffe9c2;
+  box-shadow: inset 0 0 0 1px #ff9d1f;
+}
+
+.review-debug-layout-row__options strong {
+  font-size: 16px;
+}
+
+.review-debug-layout-row__options span {
+  color: #927a5e;
+  font-size: 12px;
+}
+
 .review-debug-level-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
