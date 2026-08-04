@@ -6,6 +6,7 @@ import {
   getConservativeViewportLength,
   getStableViewportLength,
   isStandaloneIpad,
+  MAX_STAGE_GROWTH,
   measureShellViewport,
 } from './ipad-viewport';
 
@@ -91,11 +92,22 @@ describe('calculateShellRotation', () => {
 
 describe('calculateStageLayout', () => {
   it('fills an M1 iPad Pro 11 landscape screen exactly', () => {
-    expect(calculateStageLayout(1194, 834)).toEqual({ rotation: 0, scale: 1 });
+    expect(calculateStageLayout(1194, 834)).toEqual({
+      rotation: 0, scale: 1, stageWidth: 1194, stageHeight: 834,
+    });
   });
 
   it('fills an M1 iPad Pro 11 portrait screen exactly once rotated', () => {
-    expect(calculateStageLayout(834, 1194)).toEqual({ rotation: 90, scale: 1 });
+    expect(calculateStageLayout(834, 1194)).toEqual({
+      rotation: 90, scale: 1, stageWidth: 1194, stageHeight: 834,
+    });
+  });
+
+  it('leaves the authored stage alone on a screen roomier than the design', () => {
+    // Growing here would stretch the layout for no reason: it already fits.
+    expect(calculateStageLayout(1600, 900)).toEqual({
+      rotation: 0, scale: 1, stageWidth: 1194, stageHeight: 834,
+    });
   });
 
   it('fits the rotated stage against the swapped axes on an unfolded Mate X5', () => {
@@ -103,6 +115,35 @@ describe('calculateStageLayout', () => {
     const layout = calculateStageLayout(741, 832);
     expect(layout.rotation).toBe(90);
     expect(layout.scale).toBeCloseTo(832 / 1194);
+    // The 160px the old uniform fit spent on letterbox bars becomes real layout
+    // height instead: 741 / 0.697 = 1063.
+    expect(layout.stageWidth).toBe(1194);
+    expect(layout.stageHeight).toBe(1063);
+  });
+
+  it('gives an unfolded Mate X5 the same stage in landscape and portrait', () => {
+    const portrait = calculateStageLayout(741, 832);
+    const landscape = calculateStageLayout(832, 741);
+    expect(landscape.stageWidth).toBe(portrait.stageWidth);
+    expect(landscape.stageHeight).toBe(portrait.stageHeight);
+    expect(landscape.scale).toBeCloseTo(portrait.scale);
+  });
+
+  it('covers the screen exactly with the grown stage on an unfolded Mate X5', () => {
+    const { scale, stageWidth, stageHeight } = calculateStageLayout(832, 741);
+    expect(stageWidth * scale).toBeCloseTo(832, 0);
+    expect(stageHeight * scale).toBeCloseTo(741, 0);
+  });
+
+  it('never shrinks the stage below the authored design', () => {
+    const layout = calculateStageLayout(835, 360);
+    expect(layout.stageWidth).toBeGreaterThanOrEqual(1194);
+    expect(layout.stageHeight).toBeGreaterThanOrEqual(834);
+  });
+
+  it('caps how far the stage may stretch past the authored design', () => {
+    const layout = calculateStageLayout(835, 360);
+    expect(layout.stageWidth).toBe(Math.round(1194 * MAX_STAGE_GROWTH));
   });
 
   it('fits the rotated stage on a folded Mate X5 cover screen', () => {
@@ -120,7 +161,9 @@ describe('calculateStageLayout', () => {
   });
 
   it('still keeps an installed iPad edge-to-edge when only the restored height is short', () => {
-    expect(calculateStageLayout(1194, 784, 'landscape-width')).toEqual({ rotation: 0, scale: 1 });
+    expect(calculateStageLayout(1194, 784, 'landscape-width')).toEqual({
+      rotation: 0, scale: 1, stageWidth: 1194, stageHeight: 834,
+    });
   });
 });
 

@@ -1,4 +1,6 @@
 import { type CSSProperties, type ReactNode, useState } from 'react';
+import { IPAD_STAGE_HEIGHT } from '../app/ipad-viewport';
+import { useStageSize } from '../app/use-stage-size';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
@@ -75,8 +77,6 @@ const reviewManifestByFile = Object.fromEntries(
 
 const REVIEW_FRAME_WIDTH = 1158;
 const REVIEW_FRAME_HEIGHT = 808;
-const IPAD_REFERENCE_WIDTH = 1194;
-const IPAD_REFERENCE_HEIGHT = 834;
 const reviewHeroBounds = {
   x: Math.min(reviewLayout.modules.heroMascot.x, reviewLayout.modules.heroHeadline.x, reviewLayout.modules.focusCard.x),
   y: Math.min(reviewLayout.modules.heroMascot.y, reviewLayout.modules.heroHeadline.y, reviewLayout.modules.focusCard.y),
@@ -464,6 +464,7 @@ export function ReviewPage({
   const hasStarted = task.totalAnswered > 0 && !isTaskComplete;
   const reviewLoad = task.reviewWordIds.length;
   const isReviewHeavy = reviewLoad >= task.newWordIds.length;
+  const stageSize = useStageSize();
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
   const [isAdvancingDay, setIsAdvancingDay] = useState(false);
   const [localDebugPickerOpen, setLocalDebugPickerOpen] = useState(false);
@@ -533,9 +534,16 @@ export function ReviewPage({
     ...reviewLayout.cards.guidance.map((layout) => layout.y + layout.height - reviewLayout.modules.guidanceSection.y),
   );
 
-  const reviewScale = Math.min(IPAD_REFERENCE_WIDTH / REVIEW_FRAME_WIDTH, IPAD_REFERENCE_HEIGHT / REVIEW_FRAME_HEIGHT);
-  const reviewInsetLeft = Math.round((IPAD_REFERENCE_WIDTH - (REVIEW_FRAME_WIDTH * reviewScale)) / 2);
-  const reviewInsetTop = Math.round((IPAD_REFERENCE_HEIGHT - (REVIEW_FRAME_HEIGHT * reviewScale)) / 2);
+  // The shell hands taller or wider stages to pages on screens whose aspect
+  // ratio does not match the authored one, so the comp measures itself against
+  // whatever it is given instead of assuming a 1194 x 834 box.
+  const reviewScale = Math.min(stageSize.width / REVIEW_FRAME_WIDTH, stageSize.height / REVIEW_FRAME_HEIGHT);
+  const reviewInsetLeft = Math.round((stageSize.width - (REVIEW_FRAME_WIDTH * reviewScale)) / 2);
+  // Reclaimed height belongs below the comp, not above it: centring would push
+  // the headline away from the top chrome and break the authored composition.
+  const reviewInsetTop = Math.round(
+    (Math.min(stageSize.height, IPAD_STAGE_HEIGHT) - (REVIEW_FRAME_HEIGHT * reviewScale)) / 2,
+  );
 
   async function savePatchedSelectionStates(states: Array<Partial<WordSelectionState> & Pick<WordSelectionState, 'wordId'>>) {
     const nextStates = states.map((state) => {
@@ -565,10 +573,10 @@ export function ReviewPage({
       <div
         className="review-mockup-frame"
         style={{
-          width: `${IPAD_REFERENCE_WIDTH}px`,
-          minWidth: `${IPAD_REFERENCE_WIDTH}px`,
-          height: `${IPAD_REFERENCE_HEIGHT}px`,
-          minHeight: `${IPAD_REFERENCE_HEIGHT}px`,
+          width: `${stageSize.width}px`,
+          minWidth: `${stageSize.width}px`,
+          height: `${stageSize.height}px`,
+          minHeight: `${stageSize.height}px`,
         }}
       >
         <div

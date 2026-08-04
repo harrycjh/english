@@ -7964,11 +7964,26 @@ html[data-shell-mode='ipad-fixed'] .page--selection .selection-layout {
   overflow: hidden;
 }
 
+/* Those 654px/644px are measured against the authored 834px stage. When the
+   shell grows, spend the reclaimed height here instead of leaving dead space:
+   834 - 654 = 180px of surrounding chrome stays constant. */
+html[data-stage-grown='true'] .page--selection .selection-layout {
+  --selection-layout-height: calc(var(--ipad-shell-stage-height) - 180px);
+  flex: 0 0 var(--selection-layout-height);
+  height: var(--selection-layout-height);
+  max-height: var(--selection-layout-height);
+}
+
 .page--selection .selection-layout > .section-block {
   height: 644px;
   max-height: 644px;
   margin-top: 10px;
   overflow: hidden;
+}
+
+html[data-stage-grown='true'] .page--selection .selection-layout > .section-block {
+  height: calc(var(--selection-layout-height) - 10px);
+  max-height: calc(var(--selection-layout-height) - 10px);
 }
 
 .page--selection .selection-sidebar,

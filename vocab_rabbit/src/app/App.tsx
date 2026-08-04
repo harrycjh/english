@@ -75,6 +75,7 @@ import { BottomDock } from '../components/BottomDock';
 import { ProfileSelector } from '../components/ProfileSelector';
 import {
   calculateStageLayout,
+  IPAD_STAGE_HEIGHT,
   isStandaloneIpad,
   measureShellViewport,
 } from './ipad-viewport';
@@ -373,7 +374,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       );
       const orientation = viewportWidth >= viewportHeight ? 'landscape' : 'portrait';
       const shellMode = shouldLockIpadShell ? 'ipad-fixed' : 'fluid';
-      const { rotation, scale: stageScale } = calculateStageLayout(
+      const { rotation, scale: stageScale, stageWidth, stageHeight } = calculateStageLayout(
         viewportWidth,
         viewportHeight,
         installedIpad ? 'landscape-width' : 'contain',
@@ -384,6 +385,15 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       root.dataset.orientation = orientation;
       body.dataset.shellMode = shellMode;
       body.dataset.orientation = orientation;
+      root.style.setProperty('--ipad-shell-stage-width', `${stageWidth}px`);
+      root.style.setProperty('--ipad-shell-stage-height', `${stageHeight}px`);
+      // Pages that were authored against the exact 1194 x 834 box opt into using
+      // reclaimed height only when there actually is some.
+      if (stageHeight > IPAD_STAGE_HEIGHT) {
+        root.dataset.stageGrown = 'true';
+      } else {
+        delete root.dataset.stageGrown;
+      }
       root.style.setProperty('--ipad-shell-scale', String(stageScale));
       root.style.setProperty('--ipad-shell-rotation', `${rotation}deg`);
       root.style.setProperty('--ipad-shell-viewport-top', `${viewportTop}px`);
@@ -433,9 +443,12 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       if (syncFrame !== null) window.cancelAnimationFrame(syncFrame);
       if (settleTimer !== null) window.clearTimeout(settleTimer);
       delete root.dataset.shellMode;
+      delete root.dataset.stageGrown;
       delete root.dataset.orientation;
       delete body.dataset.shellMode;
       delete body.dataset.orientation;
+      root.style.removeProperty('--ipad-shell-stage-width');
+      root.style.removeProperty('--ipad-shell-stage-height');
       root.style.removeProperty('--ipad-shell-scale');
       root.style.removeProperty('--ipad-shell-rotation');
       root.style.removeProperty('--ipad-shell-viewport-top');

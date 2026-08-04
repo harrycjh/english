@@ -103,6 +103,58 @@ export function measureShellViewport(input: ShellViewportInput, installedIpad: b
 export interface ShellStageLayout {
   rotation: ShellRotation;
   scale: number;
+  stageWidth: number;
+  stageHeight: number;
+}
+
+// A stage that grew without bound would stretch the layout past anything the
+// design was drawn for, so cap how much slack it is allowed to absorb.
+export const MAX_STAGE_GROWTH = 1.5;
+
+function growStageLength(available: number, scale: number, authored: number) {
+  const grown = available / scale;
+  if (!Number.isFinite(grown) || grown <= 0) {
+    return authored;
+  }
+
+  return Math.round(Math.min(Math.max(grown, authored), authored * MAX_STAGE_GROWTH));
+}
+
+export function calculateStageLayout(
+  viewportWidth: number,
+  viewportHeight: number,
+  fitMode: 'contain' | 'landscape-width' = 'contain',
+): ShellStageLayout {
+  const rotation = calculateShellRotation(viewportWidth, viewportHeight);
+  // A rotated stage spans the viewport height horizontally and the viewport
+  // width vertically, so the axes have to be swapped before fitting it.
+  const availableWidth = rotation === 90 ? viewportHeight : viewportWidth;
+  const availableHeight = rotation === 90 ? viewportWidth : viewportHeight;
+  // The landscape-width shortcut exists for installed iPads whose restored
+  // viewport is briefly too short. A rotated stage must always stay contained,
+  // otherwise it overflows the narrow edge of a folded screen.
+  const effectiveFitMode = rotation === 90 ? 'contain' : fitMode;
+  const scale = calculateIpadStageScale(availableWidth, availableHeight, effectiveFitMode);
+
+  // At scale 1 the screen already fits the authored stage, so leave the stage
+  // exactly as drawn. Only a screen that forces the stage to shrink has slack
+  // worth reclaiming, and handing that slack to the layout as real pixels beats
+  // spending it on letterbox bars.
+  if (scale >= 1) {
+    return {
+      rotation,
+      scale,
+      stageWidth: IPAD_STAGE_WIDTH,
+      stageHeight: IPAD_STAGE_HEIGHT,
+    };
+  }
+
+  return {
+    rotation,
+    scale,
+    stageWidth: growStageLength(availableWidth, scale, IPAD_STAGE_WIDTH),
+    stageHeight: growStageLength(availableHeight, scale, IPAD_STAGE_HEIGHT),
+  };
 }
 
 // The whole app is authored as a fixed 1194 x 834 landscape stage. Rather than
@@ -123,23 +175,3 @@ export function calculateShellRotation(
   return viewportHeight > viewportWidth ? 90 : 0;
 }
 
-export function calculateStageLayout(
-  viewportWidth: number,
-  viewportHeight: number,
-  fitMode: 'contain' | 'landscape-width' = 'contain',
-): ShellStageLayout {
-  const rotation = calculateShellRotation(viewportWidth, viewportHeight);
-  // A rotated stage spans the viewport height horizontally and the viewport
-  // width vertically, so the axes have to be swapped before fitting it.
-  const availableWidth = rotation === 90 ? viewportHeight : viewportWidth;
-  const availableHeight = rotation === 90 ? viewportWidth : viewportHeight;
-  // The landscape-width shortcut exists for installed iPads whose restored
-  // viewport is briefly too short. A rotated stage must always stay contained,
-  // otherwise it overflows the narrow edge of a folded screen.
-  const effectiveFitMode = rotation === 90 ? 'contain' : fitMode;
-
-  return {
-    rotation,
-    scale: calculateIpadStageScale(availableWidth, availableHeight, effectiveFitMode),
-  };
-}
