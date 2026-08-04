@@ -1,6 +1,12 @@
 import { type CSSProperties, type ReactNode, useState } from 'react';
 import { IPAD_STAGE_HEIGHT } from '../app/ipad-viewport';
 import { useStageSize } from '../app/use-stage-size';
+import {
+  PREVIEW_COLUMNS,
+  PREVIEW_ROW_GAP,
+  calculatePreviewRows,
+  shiftLayoutY,
+} from './review-preview-density';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
@@ -68,6 +74,11 @@ const reviewGuidanceLayouts = Object.fromEntries(
 const reviewPreviewLayouts = Object.fromEntries(
   reviewLayout.cards.previews.map((layout) => [layout.id, layout]),
 ) as Record<'family' | 'hello' | 'body' | 'spark', ReviewPreviewLayout>;
+const previewColumnIds = reviewLayout.cards.previews.map((layout) => layout.id) as Array<
+  'family' | 'hello' | 'body' | 'spark'
+>;
+const previewCardHeight = Math.max(...reviewLayout.cards.previews.map((layout) => layout.height));
+const previewRowPitch = previewCardHeight + PREVIEW_ROW_GAP;
 const reviewSlicePlacementsByFile = Object.fromEntries(
   reviewLayout.slices.map((slice) => [slice.file, slice]),
 ) as Record<string, ReviewSlicePlacement>;
@@ -545,6 +556,21 @@ export function ReviewPage({
     (Math.min(stageSize.height, IPAD_STAGE_HEIGHT) - (REVIEW_FRAME_HEIGHT * reviewScale)) / 2,
   );
 
+  // Spend whatever height the comp did not need on more preview words rather
+  // than on empty background.
+  const previewRows = calculatePreviewRows({
+    availableHeight: reviewScale > 0 ? stageSize.height / reviewScale : REVIEW_FRAME_HEIGHT,
+    authoredHeight: REVIEW_FRAME_HEIGHT,
+    rowHeight: previewCardHeight,
+  });
+  const previewOverflowHeight = (previewRows - 1) * previewRowPitch;
+  const visiblePreviewWords = previewWords.slice(0, previewRows * PREVIEW_COLUMNS);
+  const previewSectionBounds = {
+    ...reviewLayout.modules.previewSection,
+    height: reviewLayout.modules.previewSection.height + previewOverflowHeight,
+  };
+  const guidanceSectionBounds = shiftLayoutY(reviewLayout.modules.guidanceSection, previewOverflowHeight);
+
   async function savePatchedSelectionStates(states: Array<Partial<WordSelectionState> & Pick<WordSelectionState, 'wordId'>>) {
     const nextStates = states.map((state) => {
       const currentState = selectionById[state.wordId] ?? createDefaultWordSelectionState(state.wordId);
@@ -808,21 +834,24 @@ export function ReviewPage({
             </ReviewMetricCard>
           </section>
 
-          <section className="review-panel" id="review-preview-section" style={getAbsoluteBoundsStyle(reviewLayout.modules.previewSection)}>
+          <section className="review-panel" id="review-preview-section" style={getAbsoluteBoundsStyle(previewSectionBounds)}>
             <div className="review-panel__header" style={{ position: 'absolute', inset: 0 }}>
               <h2 style={getRelativeTextStyle(reviewLayout.modules.previewSection.children.headerTitle, reviewLayout.modules.previewSection)}>
                 今日预览
               </h2>
             </div>
             {previewWords.length > 0 ? (
-              <div className="review-preview-grid" style={{ position: 'absolute', left: '0', top: '0', width: '100%', height: `${previewGridHeight}px` }}>
-                {previewWords.slice(0, 4).map((word, index) => (
+              <div className="review-preview-grid" style={{ position: 'absolute', left: '0', top: '0', width: '100%', height: `${previewGridHeight + previewOverflowHeight}px` }}>
+                {visiblePreviewWords.map((word, index) => (
                   <ReviewPreviewCard
                     key={word.id}
                     word={word}
                     masteryLevel={recordsById[word.id]?.masteryLevel ?? 0}
                     index={index}
-                    layout={reviewPreviewLayouts[['family', 'hello', 'body', 'spark'][index] as 'family' | 'hello' | 'body' | 'spark']}
+                    layout={shiftLayoutY(
+                      reviewPreviewLayouts[previewColumnIds[index % PREVIEW_COLUMNS]],
+                      Math.floor(index / PREVIEW_COLUMNS) * previewRowPitch,
+                    )}
                     onOpenDetails={() => openWordDetails(word.id)}
                   />
                 ))}
@@ -830,14 +859,14 @@ export function ReviewPage({
             ) : (
               <article className="review-empty-state">
                 <strong>今天还没有代表词</strong>
-                <p>开始一次学习后，这里会自动挑出今天最值得先看的 4 个词。</p>
+                <p>开始一次学习后，这里会自动挑出今天最值得先看的 {previewRows * PREVIEW_COLUMNS} 个词。</p>
               </article>
             )}
           </section>
 
-          <section className="review-panel" id="review-guidance-section" style={getAbsoluteBoundsStyle(reviewLayout.modules.guidanceSection)}>
+          <section className="review-panel" id="review-guidance-section" style={getAbsoluteBoundsStyle(guidanceSectionBounds)}>
             <div className="review-panel__header" style={{ position: 'absolute', inset: 0 }}>
-              <h2 style={getRelativeTextStyle(reviewLayout.modules.guidanceSection.children.headerTitle, reviewLayout.modules.guidanceSection)}>
+              <h2 style={getRelativeTextStyle(guidanceSectionBounds.children.headerTitle, guidanceSectionBounds)}>
                 轻量建议
               </h2>
             </div>

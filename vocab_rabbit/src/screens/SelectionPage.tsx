@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useStageSize } from '../app/use-stage-size';
+import { calculateSelectionPageSize } from './selection-density';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
@@ -444,13 +446,14 @@ export function SelectionPage({
     });
   }, [imageOnly, payload.words, recordsById, searchText, selectedCategory, selectedDifficulty, selectedStatus, selectionById, sortMode, wordSourceFilter]);
 
-  const pageSize = 6;
+  const stageSize = useStageSize();
+  const pageSize = calculateSelectionPageSize(stageSize.height);
   const totalPages = Math.max(1, Math.ceil(filteredWords.length / pageSize));
   const activePage = Math.min(currentPage, totalPages);
   const visibleWords = useMemo(() => {
     const start = (activePage - 1) * pageSize;
     return filteredWords.slice(start, start + pageSize);
-  }, [activePage, filteredWords]);
+  }, [activePage, filteredWords, pageSize]);
 
   const reviewLoad = useMemo(() => estimateReviewLoad(recordsById, selectionById, setting), [recordsById, selectionById, setting]);
 

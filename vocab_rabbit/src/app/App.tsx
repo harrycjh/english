@@ -127,7 +127,9 @@ function getPreviewWords(payload: WordPayload | null, task: DailyTaskSummary | n
     return [];
   }
 
-  const wordIds = [...task.newWordIds, ...task.reviewWordIds].slice(0, 4);
+  // The home comp shows one row of four on the authored stage; a taller stage
+  // (foldable) fills up to three rows, so hand the page enough words for that.
+  const wordIds = [...task.newWordIds, ...task.reviewWordIds].slice(0, 12);
   const wordsById = new Map(payload.words.map((word) => [word.id, word]));
   return wordIds.map((wordId) => wordsById.get(wordId)).filter(Boolean) as WordPayload['words'];
 }
