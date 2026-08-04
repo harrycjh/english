@@ -36,3 +36,31 @@ export function calculateSelectionRows(stageHeight: number): number {
 export function calculateSelectionPageSize(stageHeight: number): number {
   return calculateSelectionRows(stageHeight) * SELECTION_COLUMNS;
 }
+
+/**
+ * The summary column's category breakdown is authored as six bars. It sits in a
+ * fixed-height aside, so a taller stage leaves the card floating over empty
+ * space; measured at 1194 x 834 the list runs 402 -> 704 inside an aside that
+ * ends at 716, and at 1063 the same card still ends at 714 with 231px spare.
+ */
+export const BREAKDOWN_ROW_HEIGHT = 47;
+export const BREAKDOWN_ROW_GAP = 4;
+export const BREAKDOWN_MIN_ROWS = 6;
+export const BREAKDOWN_MAX_ROWS = 12;
+
+/**
+ * Stage height above the first bar (401) plus the aside's bottom inset (118)
+ * plus the card's bottom padding (11).
+ */
+export const BREAKDOWN_CHROME = 530;
+
+export function calculateBreakdownRows(stageHeight: number): number {
+  if (!Number.isFinite(stageHeight)) {
+    return BREAKDOWN_MIN_ROWS;
+  }
+
+  const available = stageHeight - BREAKDOWN_CHROME;
+  const pitch = BREAKDOWN_ROW_HEIGHT + BREAKDOWN_ROW_GAP;
+  const rows = Math.floor((available + BREAKDOWN_ROW_GAP) / pitch);
+  return Math.min(BREAKDOWN_MAX_ROWS, Math.max(BREAKDOWN_MIN_ROWS, rows));
+}

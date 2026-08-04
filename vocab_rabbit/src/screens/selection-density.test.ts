@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
+  BREAKDOWN_CHROME,
+  BREAKDOWN_ROW_GAP,
+  BREAKDOWN_ROW_HEIGHT,
   SELECTION_COLUMNS,
   SELECTION_GRID_CHROME,
   SELECTION_ROW_GAP,
   SELECTION_ROW_HEIGHT,
+  calculateBreakdownRows,
   calculateSelectionPageSize,
   calculateSelectionRows,
 } from './selection-density';
@@ -60,5 +64,44 @@ describe('calculateSelectionPageSize', () => {
   it('pages a full grid so no row is ever half empty', () => {
     expect(calculateSelectionPageSize(IPAD_STAGE_HEIGHT)).toBe(2 * SELECTION_COLUMNS);
     expect(calculateSelectionPageSize(MATE_X5_STAGE_HEIGHT)).toBe(3 * SELECTION_COLUMNS);
+  });
+});
+
+describe('calculateBreakdownRows', () => {
+  it('reserves exactly the chrome measured on the authored stage', () => {
+    // Measured at 1194 x 834: the first bar starts at y401, the aside ends 118px
+    // above the stage bottom and the card keeps 11px of padding under the list.
+    const LIST_TOP = 401;
+    const ASIDE_BOTTOM_INSET = 834 - 716;
+    const CARD_BOTTOM_PADDING = 11;
+
+    expect(BREAKDOWN_CHROME).toBe(LIST_TOP + ASIDE_BOTTOM_INSET + CARD_BOTTOM_PADDING);
+  });
+
+  it('keeps the authored six bars on an iPad Pro 11 stage', () => {
+    expect(calculateBreakdownRows(IPAD_STAGE_HEIGHT)).toBe(6);
+  });
+
+  it('fills the summary column on a Mate X5 unfolded stage', () => {
+    expect(calculateBreakdownRows(MATE_X5_STAGE_HEIGHT)).toBe(10);
+  });
+
+  it('only adds a bar once a whole row plus its gap fits', () => {
+    const pitch = BREAKDOWN_ROW_HEIGHT + BREAKDOWN_ROW_GAP;
+    const exactlySeven = BREAKDOWN_CHROME + (BREAKDOWN_ROW_HEIGHT * 7) + (BREAKDOWN_ROW_GAP * 6);
+
+    expect(calculateBreakdownRows(exactlySeven)).toBe(7);
+    expect(calculateBreakdownRows(exactlySeven - 1)).toBe(6);
+    expect(calculateBreakdownRows(exactlySeven + pitch)).toBe(8);
+  });
+
+  it('never drops below the authored six bars on a short stage', () => {
+    expect(calculateBreakdownRows(400)).toBe(6);
+    expect(calculateBreakdownRows(0)).toBe(6);
+    expect(calculateBreakdownRows(Number.NaN)).toBe(6);
+  });
+
+  it('caps the list so an extreme stage does not run the whole category table', () => {
+    expect(calculateBreakdownRows(100_000)).toBe(12);
   });
 });

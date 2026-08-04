@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useStageSize } from '../app/use-stage-size';
-import { calculateSelectionPageSize } from './selection-density';
+import { calculateBreakdownRows, calculateSelectionPageSize } from './selection-density';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
@@ -448,6 +448,7 @@ export function SelectionPage({
 
   const stageSize = useStageSize();
   const pageSize = calculateSelectionPageSize(stageSize.height);
+  const breakdownRows = calculateBreakdownRows(stageSize.height);
   const totalPages = Math.max(1, Math.ceil(filteredWords.length / pageSize));
   const activePage = Math.min(currentPage, totalPages);
   const visibleWords = useMemo(() => {
@@ -465,8 +466,8 @@ export function SelectionPage({
         counts.set(word.category, (counts.get(word.category) ?? 0) + 1);
       }
     }
-    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6);
-  }, [payload.words, selectionById]);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, breakdownRows);
+  }, [breakdownRows, payload.words, selectionById]);
 
   const selectedWord = selectedWordId ? payload.words.find((w) => w.id === selectedWordId) ?? null : null;
   const selectedWordRecord = selectedWord ? recordsById[selectedWord.id] : undefined;
