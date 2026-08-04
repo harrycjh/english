@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   calculateIpadStageScale,
+  calculateShellRotation,
+  calculateStageLayout,
   getConservativeViewportLength,
   getStableViewportLength,
   isStandaloneIpad,
+  measureShellViewport,
 } from './ipad-viewport';
 
 describe('getConservativeViewportLength', () => {
@@ -64,5 +67,104 @@ describe('calculateIpadStageScale', () => {
 
   it('falls back safely while the viewport is being restored', () => {
     expect(calculateIpadStageScale(0, 0)).toBe(1);
+  });
+});
+
+describe('calculateShellRotation', () => {
+  it('leaves a landscape screen upright', () => {
+    expect(calculateShellRotation(1194, 834)).toBe(0);
+    expect(calculateShellRotation(832, 741)).toBe(0);
+    expect(calculateShellRotation(835, 360)).toBe(0);
+  });
+
+  it('turns the stage a quarter turn so a portrait screen still shows landscape', () => {
+    expect(calculateShellRotation(834, 1194)).toBe(90);
+    expect(calculateShellRotation(741, 832)).toBe(90);
+    expect(calculateShellRotation(360, 835)).toBe(90);
+  });
+
+  it('stays upright while the viewport is being restored', () => {
+    expect(calculateShellRotation(0, 0)).toBe(0);
+    expect(calculateShellRotation(Number.NaN, Number.NaN)).toBe(0);
+  });
+});
+
+describe('calculateStageLayout', () => {
+  it('fills an M1 iPad Pro 11 landscape screen exactly', () => {
+    expect(calculateStageLayout(1194, 834)).toEqual({ rotation: 0, scale: 1 });
+  });
+
+  it('fills an M1 iPad Pro 11 portrait screen exactly once rotated', () => {
+    expect(calculateStageLayout(834, 1194)).toEqual({ rotation: 90, scale: 1 });
+  });
+
+  it('fits the rotated stage against the swapped axes on an unfolded Mate X5', () => {
+    // Mate X5 unfolded is 2224 x 2496 at dpr 3, i.e. 741 x 832 CSS pixels.
+    const layout = calculateStageLayout(741, 832);
+    expect(layout.rotation).toBe(90);
+    expect(layout.scale).toBeCloseTo(832 / 1194);
+  });
+
+  it('fits the rotated stage on a folded Mate X5 cover screen', () => {
+    const layout = calculateStageLayout(360, 835);
+    expect(layout.rotation).toBe(90);
+    expect(layout.scale).toBeCloseTo(360 / 834);
+  });
+
+  it('contains a rotated stage even when the installed iPad width shortcut is requested', () => {
+    // Rotated, the stage's 834 edge runs across a 810px-wide screen, so the
+    // 'landscape-width' shortcut would scale to 1 and overflow it sideways.
+    const layout = calculateStageLayout(810, 1194, 'landscape-width');
+    expect(layout.rotation).toBe(90);
+    expect(layout.scale).toBeCloseTo(810 / 834);
+  });
+
+  it('still keeps an installed iPad edge-to-edge when only the restored height is short', () => {
+    expect(calculateStageLayout(1194, 784, 'landscape-width')).toEqual({ rotation: 0, scale: 1 });
+  });
+});
+
+describe('measureShellViewport', () => {
+  const foldable = {
+    visualWidth: 741,
+    visualHeight: 832,
+    innerWidth: 741,
+    innerHeight: 832,
+    clientWidth: 741,
+    clientHeight: 832,
+    screenWidth: 741,
+    screenHeight: 832,
+  };
+
+  it('measures a regular browser conservatively', () => {
+    expect(measureShellViewport(foldable, false)).toEqual({ width: 741, height: 832 });
+  });
+
+  it('restores the full screen height of an installed iPad resuming in landscape', () => {
+    expect(measureShellViewport({
+      visualWidth: 1194,
+      visualHeight: 784,
+      innerWidth: 1194,
+      innerHeight: 834,
+      clientWidth: 1194,
+      clientHeight: 834,
+      screenWidth: 1194,
+      screenHeight: 834,
+    }, true)).toEqual({ width: 1194, height: 834 });
+  });
+
+  it('does not report an installed iPad in portrait as landscape', () => {
+    // The screen long edge must not be forced onto the width, otherwise the
+    // stage is measured as landscape and never rotates.
+    expect(measureShellViewport({
+      visualWidth: 834,
+      visualHeight: 1144,
+      innerWidth: 834,
+      innerHeight: 1194,
+      clientWidth: 834,
+      clientHeight: 1194,
+      screenWidth: 1194,
+      screenHeight: 834,
+    }, true)).toEqual({ width: 834, height: 1194 });
   });
 });

@@ -74,10 +74,9 @@ import { buildQuestion } from '../services/question-service';
 import { BottomDock } from '../components/BottomDock';
 import { ProfileSelector } from '../components/ProfileSelector';
 import {
-  calculateIpadStageScale,
-  getConservativeViewportLength,
-  getStableViewportLength,
+  calculateStageLayout,
   isStandaloneIpad,
+  measureShellViewport,
 } from './ipad-viewport';
 import {
   createDebugProgressionPlan,
@@ -359,20 +358,22 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
         displayModeInstalled: window.matchMedia('(display-mode: fullscreen)').matches
           || window.matchMedia('(display-mode: standalone)').matches,
       });
-      const screenLongEdge = Math.max(window.screen.width, window.screen.height);
-      const screenShortEdge = Math.min(window.screen.width, window.screen.height);
-      // Installed iPad apps can briefly report a visual viewport about 50px
-      // shorter after resume. Keep the physical screen measurement so the
-      // 1194 x 834 stage remains edge-to-edge instead of shrinking all around.
-      const viewportWidth = installedIpad
-        ? getStableViewportLength(viewport?.width, window.innerWidth, root.clientWidth, screenLongEdge)
-        : getConservativeViewportLength(viewport?.width, window.innerWidth, root.clientWidth);
-      const viewportHeight = installedIpad
-        ? getStableViewportLength(viewport?.height, window.innerHeight, root.clientHeight, screenShortEdge)
-        : getConservativeViewportLength(viewport?.height, window.innerHeight, root.clientHeight);
+      const { width: viewportWidth, height: viewportHeight } = measureShellViewport(
+        {
+          visualWidth: viewport?.width,
+          visualHeight: viewport?.height,
+          innerWidth: window.innerWidth,
+          innerHeight: window.innerHeight,
+          clientWidth: root.clientWidth,
+          clientHeight: root.clientHeight,
+          screenWidth: window.screen.width,
+          screenHeight: window.screen.height,
+        },
+        installedIpad,
+      );
       const orientation = viewportWidth >= viewportHeight ? 'landscape' : 'portrait';
       const shellMode = shouldLockIpadShell ? 'ipad-fixed' : 'fluid';
-      const stageScale = calculateIpadStageScale(
+      const { rotation, scale: stageScale } = calculateStageLayout(
         viewportWidth,
         viewportHeight,
         installedIpad ? 'landscape-width' : 'contain',
@@ -384,6 +385,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       body.dataset.shellMode = shellMode;
       body.dataset.orientation = orientation;
       root.style.setProperty('--ipad-shell-scale', String(stageScale));
+      root.style.setProperty('--ipad-shell-rotation', `${rotation}deg`);
       root.style.setProperty('--ipad-shell-viewport-top', `${viewportTop}px`);
     }
 
@@ -435,6 +437,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       delete body.dataset.shellMode;
       delete body.dataset.orientation;
       root.style.removeProperty('--ipad-shell-scale');
+      root.style.removeProperty('--ipad-shell-rotation');
       root.style.removeProperty('--ipad-shell-viewport-top');
     };
   }, []);

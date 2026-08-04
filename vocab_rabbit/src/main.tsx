@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import App from './app/App';
+import { installImmersiveMode } from './app/immersive-mode';
 import { StartupSyncGate } from './components/StartupSyncGate';
 import { APP_VERSION } from './config/app-meta';
 import './styles/ipad.css';
@@ -72,6 +73,7 @@ function registerServiceWorker() {
 }
 
 registerServiceWorker();
+installImmersiveMode();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StartupSyncGate>
