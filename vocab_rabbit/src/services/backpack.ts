@@ -198,6 +198,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-abudhabi.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'weihai',
+    slot: 'focus',
+    name: '威海',
+    hint: '海湾边的灯塔与栈道',
+    requiredDays: 60,
+    artFile: 'scene-weihai.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
