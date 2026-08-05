@@ -7484,6 +7484,70 @@ button {
   list-style: none;
 }
 
+/* Estimate breakdown: an arithmetic table, so the rows are shorter and the
+   numbers line up on the right rather than being read one card at a time. */
+.estimate-breakdown__list {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.estimate-breakdown__list li {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 4px 9px;
+  border: 1px solid rgba(231, 207, 170, 0.74);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.estimate-breakdown__list .mastery-level-icon {
+  width: 40px;
+  height: 30px;
+}
+
+.estimate-breakdown__formula {
+  color: #6f5a44;
+  font-size: 12px;
+}
+
+.estimate-breakdown__list li > strong {
+  color: #53341c;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.estimate-breakdown__list li.is-unmeasured {
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.estimate-breakdown__list li.is-unmeasured .estimate-breakdown__formula,
+.estimate-breakdown__list li.is-unmeasured > strong {
+  color: #a4917c;
+}
+
+.estimate-breakdown__list li.estimate-breakdown__total {
+  grid-template-columns: minmax(0, 1fr) auto;
+  border-color: rgba(213, 122, 0, 0.4);
+  background: rgba(255, 244, 227, 0.92);
+}
+
+.estimate-breakdown__list li.estimate-breakdown__total > strong {
+  color: #d57a00;
+  font-size: 15px;
+}
+
+.new-word-queue__section-heading > strong small {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.72;
+}
+
 .new-word-queue__list li {
   display: grid;
   grid-template-columns: 28px minmax(0, 1fr) auto auto;

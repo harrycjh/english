@@ -29,11 +29,12 @@ import { WordImage } from '../components/WordImage';
 import { MasteryLevelIcon } from '../components/MasteryLevelIcon';
 import { NewWordQueueDrawer } from '../components/NewWordQueueDrawer';
 import { ReviewQueueDrawer } from '../components/ReviewQueueDrawer';
+import { EstimateBreakdownDrawer } from '../components/EstimateBreakdownDrawer';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
 import { addDaysToDateKey, isTaskFullyAnswered } from '../services/task-service';
-import { estimateWordDurationMs } from '../services/study-duration';
+import { estimateSessionDuration } from '../services/study-duration';
 import {
   getPrimaryOxfordRefLabel,
   getStudyChinese,
@@ -513,19 +514,22 @@ export function ReviewPage({
 }: ReviewPageProps) {
   const plannedCount = task.newWordIds.length + task.reviewWordIds.length;
   const answeredWordIdSet = new Set(task.answeredWordIds);
-  const remainingCount = [...task.newWordIds, ...task.reviewWordIds]
-    .filter((wordId) => !answeredWordIdSet.has(wordId)).length;
+  const remainingWordIds = [...task.newWordIds, ...task.reviewWordIds]
+    .filter((wordId) => !answeredWordIdSet.has(wordId));
+  const remainingCount = remainingWordIds.length;
+  // A word that has never been seen has no record, and starts at Lv0.
+  const remainingLevels = remainingWordIds.map((wordId) => recordsById[wordId]?.masteryLevel ?? 0);
   const heatmapTasks = [...recentTasks.filter((recentTask) => recentTask.dateKey !== task.dateKey), task];
   const heatmapDays = buildHeatmapDays(heatmapTasks, task.dateKey);
   const completedDays = heatmapDays.filter((day) => day.task?.completedAt).length;
   const completionRate = Math.round((completedDays / 14) * 100);
-  // Estimate the work that is actually left, at the child's own measured
-  // per-word pace, so the card counts down as the session progresses instead of
-  // repeating the whole session's cost.
-  const wordDurationMs = estimateWordDurationMs(answerEvents);
+  // Estimate the work that is actually left, at the child's own measured pace
+  // for each mastery level, so the card counts down as the session progresses
+  // and a day of easy reviews is not priced like a day of new words.
+  const sessionEstimate = estimateSessionDuration(remainingLevels, answerEvents);
   const estimatedMinutes = remainingCount === 0
     ? 0
-    : Math.max(1, Math.round((remainingCount * wordDurationMs) / 60_000));
+    : Math.max(1, Math.round(sessionEstimate.totalDurationMs / 60_000));
   const isTaskComplete = Boolean(task.completedAt) && isTaskFullyAnswered(task);
   const hasStarted = task.totalAnswered > 0 && !isTaskComplete;
   const reviewLoad = task.reviewWordIds.length;
@@ -536,6 +540,7 @@ export function ReviewPage({
   const [localDebugPickerOpen, setLocalDebugPickerOpen] = useState(false);
   const [isNewWordQueueOpen, setIsNewWordQueueOpen] = useState(false);
   const [isReviewQueueOpen, setIsReviewQueueOpen] = useState(false);
+  const [isEstimateOpen, setIsEstimateOpen] = useState(false);
   const [layoutPreview, setLayoutPreview] = useState<LayoutPreview>(() => readLayoutPreview());
   const isDebugPickerOpen = debugPickerOpen ?? localDebugPickerOpen;
   const nextDateKey = addDaysToDateKey(task.dateKey, 1);
@@ -881,6 +886,7 @@ export function ReviewPage({
               layout={reviewLayout.cards.metrics[0]}
               onClick={() => {
                 setIsReviewQueueOpen(false);
+                setIsEstimateOpen(false);
                 setSelectedWordId(null);
                 setIsNewWordQueueOpen(true);
               }}
@@ -891,6 +897,12 @@ export function ReviewPage({
               value={`${estimatedMinutes} 分钟`}
               note={getEstimateNote(remainingCount, hasStarted)}
               layout={reviewLayout.cards.metrics[1]}
+              onClick={() => {
+                setIsNewWordQueueOpen(false);
+                setIsReviewQueueOpen(false);
+                setSelectedWordId(null);
+                setIsEstimateOpen(true);
+              }}
             />
             <ReviewMetricCard
               tone="theme"
@@ -900,6 +912,7 @@ export function ReviewPage({
               layout={reviewLayout.cards.metrics[2]}
               onClick={() => {
                 setIsNewWordQueueOpen(false);
+                setIsEstimateOpen(false);
                 setSelectedWordId(null);
                 setIsReviewQueueOpen(true);
               }}
@@ -1001,7 +1014,7 @@ export function ReviewPage({
                 ])
             : undefined
         }
-        queueCompanion={isNewWordQueueOpen || isReviewQueueOpen}
+        queueCompanion={isNewWordQueueOpen || isReviewQueueOpen || isEstimateOpen}
       />
       <NewWordQueueDrawer
         isOpen={isNewWordQueueOpen}
@@ -1028,6 +1041,12 @@ export function ReviewPage({
           setSelectedWordId(null);
         }}
         onOpenWord={openWordDetails}
+      />
+      <EstimateBreakdownDrawer
+        isOpen={isEstimateOpen}
+        wordLevels={remainingLevels}
+        answerEvents={answerEvents}
+        onClose={() => setIsEstimateOpen(false)}
       />
     </main>
   );

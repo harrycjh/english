@@ -7,6 +7,9 @@ import {
   calculateQuestionDurationMs,
   calculateStudyDurationByDate,
   estimateQuestionDurationMs,
+  LEVEL_DURATION_PRIOR_WORDS,
+  estimateSessionDuration,
+  estimateWordDurationByLevel,
   estimateWordDurationMs,
   formatStudyDuration,
   sumStudyDuration,
@@ -225,25 +228,52 @@ describe('estimateQuestionDurationMs', () => {
   });
 });
 
+/** One study day of `count` words answered `gapSeconds` apart, some repeated. */
+function studyDay(
+  dateKey: string,
+  wordIds: string[],
+  gapSeconds: number,
+  responseTimeMs = 1_000,
+  startSeconds = 0,
+): AnswerEvent[] {
+  return wordIds.map((wordId, index) => ({
+    ...event(
+      `${dateKey}-${wordId}-${index}`,
+      dateKey,
+      clockAt(startSeconds + index * gapSeconds),
+      responseTimeMs,
+    ),
+    wordId,
+  }));
+}
+
+/**
+ * One study day where every word was sitting at `level` when the day's first
+ * question about it was asked.
+ */
+function levelDay(
+  dateKey: string,
+  level: number,
+  wordIds: string[],
+  gapSeconds: number,
+  startSeconds = 0,
+): AnswerEvent[] {
+  return studyDay(dateKey, wordIds, gapSeconds, 8_000, startSeconds).map((entry) => ({
+    ...entry,
+    id: `${entry.id}-lv${level}`,
+    learningStateBefore: {
+      wordId: entry.wordId,
+      masteryLevel: level,
+      reviewStage: level,
+      correctStreak: 0,
+      wrongCount: 0,
+      lastStudiedAt: null,
+      nextDueAt: null,
+    },
+  }));
+}
+
 describe('estimateWordDurationMs', () => {
-  /** One study day of `count` words answered `gapSeconds` apart, some repeated. */
-  function studyDay(
-    dateKey: string,
-    wordIds: string[],
-    gapSeconds: number,
-    responseTimeMs = 1_000,
-    startSeconds = 0,
-  ): AnswerEvent[] {
-    return wordIds.map((wordId, index) => ({
-      ...event(
-        `${dateKey}-${wordId}-${index}`,
-        dateKey,
-        clockAt(startSeconds + index * gapSeconds),
-        responseTimeMs,
-      ),
-      wordId,
-    }));
-  }
 
   /**
    * What the debug 「全部答对」 shortcut writes: answers stamped exactly a second
@@ -427,5 +457,173 @@ describe('formatStudyDuration', () => {
     expect(formatStudyDuration(0)).toBe('0 分钟');
     expect(formatStudyDuration(-1)).toBe('0 分钟');
     expect(formatStudyDuration(Number.NaN)).toBe('0 分钟');
+  });
+});
+
+describe('estimateWordDurationByLevel', () => {
+  /**
+   * One study day, `gapSeconds` apart, where every word was sitting at
+   * `level` when the day's first question about it was asked.
+   */
+  it('quotes the overall pace for every level with no history at all', () => {
+    const byLevel = estimateWordDurationByLevel([]);
+
+    expect(byLevel.size).toBe(11);
+    expect([...byLevel.values()].every((entry) => entry.durationMs === 20_000)).toBe(true);
+    expect([...byLevel.values()].every((entry) => !entry.isMeasured)).toBe(true);
+  });
+
+  it('separates a slow level from a fast one', () => {
+    const events = [
+      // 10 new words at 40s each, then 10 nearly-mastered ones at 10s.
+      ...levelDay('2026-08-01', 0, Array.from({ length: 10 }, (_, i) => `new-${i}`), 40),
+      ...levelDay('2026-08-01', 9, Array.from({ length: 10 }, (_, i) => `old-${i}`), 10, 3_600),
+    ];
+    const byLevel = estimateWordDurationByLevel(events);
+
+    // Overall: Lv0 gives 8s + 9 x 40s = 368s, Lv9 gives 8s + 9 x 10s = 98s,
+    // so 466s over 20 words = 23.3s, blended 20/40 with the 20s prior = 21.65s.
+    expect(estimateWordDurationMs(events)).toBe(21_650);
+    // Lv0 measured 36.8s over 10 words, held 10/15 against that 21.65s.
+    expect(byLevel.get(0)).toEqual({
+      level: 0, words: 10, durationMs: 31_750, isMeasured: true,
+    });
+    // Lv9 measured 9.8s, so the same blend pulls it up instead of down.
+    expect(byLevel.get(9)).toEqual({
+      level: 9, words: 10, durationMs: 13_750, isMeasured: true,
+    });
+    // A level nobody visited has nothing of its own to say.
+    expect(byLevel.get(5)).toEqual({
+      level: 5, words: 0, durationMs: 21_650, isMeasured: false,
+    });
+  });
+
+  it('leans on the overall pace until a level has enough words of its own', () => {
+    const busy = Array.from({ length: 7 }, (_, day) => levelDay(
+      `2026-08-0${day + 1}`, 3, Array.from({ length: 10 }, (_, i) => `w-${day}-${i}`), 30,
+    )).flat();
+    const oneWordAtLevelSix = [
+      ...busy,
+      ...levelDay('2026-08-07', 6, ['rare'], 30, 7_200),
+    ];
+    const byLevel = estimateWordDurationByLevel(oneWordAtLevelSix);
+
+    // Lv3 has 70 words of its own and barely moves off its own 27.6s.
+    expect(byLevel.get(3)?.words).toBe(70);
+    expect(byLevel.get(3)?.durationMs).toBe(27_671);
+    // Lv6 has a single 8s word and is held five-sixths of the way back to the
+    // 26.4s overall pace rather than claiming a level costs 8 seconds.
+    expect(byLevel.get(6)).toEqual({
+      level: 6, words: 1, durationMs: 22_890, isMeasured: true,
+    });
+  });
+
+  it('only looks back a week, so a level follows the child', () => {
+    const eightDays = [
+      // Lv2 was studied nine days ago and not since.
+      ...levelDay('2026-07-31', 2, ['old-a', 'old-b', 'old-c'], 30),
+      ...Array.from({ length: 7 }, (_, day) => levelDay(
+        `2026-08-0${day + 1}`, 5, Array.from({ length: 5 }, (_, i) => `w-${day}-${i}`), 20,
+      )).flat(),
+    ];
+    const byLevel = estimateWordDurationByLevel(eightDays);
+
+    // Seven days of Lv5 push the Lv2 day out, so Lv2 stops claiming to know.
+    expect(byLevel.get(2)?.words).toBe(0);
+    expect(byLevel.get(2)?.isMeasured).toBe(false);
+    expect(byLevel.get(5)?.words).toBe(35);
+  });
+
+  it('files a word under the level it started the day at, not the one it reached', () => {
+    // "climber" was wrong once, so it was asked twice: at Lv1, then again at
+    // Lv2 after the downgrade. Both questions belong to the Lv1 attempt.
+    const climber = [
+      ...levelDay('2026-08-01', 1, ['climber'], 30),
+      ...levelDay('2026-08-01', 2, ['climber'], 30, 30),
+    ];
+    const byLevel = estimateWordDurationByLevel(climber);
+
+    expect(byLevel.get(1)?.words).toBe(1);
+    expect(byLevel.get(2)?.words).toBe(0);
+  });
+
+  it('ignores records saved before the app tracked levels', () => {
+    const untracked = studyDay('2026-08-01', ['a', 'b', 'c', 'd'], 30, 8_000);
+    const byLevel = estimateWordDurationByLevel(untracked);
+
+    expect([...byLevel.values()].every((entry) => entry.words === 0)).toBe(true);
+    // The overall pace still counts them, so the fallback is a real measurement.
+    expect(byLevel.get(0)?.durationMs).toBe(estimateWordDurationMs(untracked));
+  });
+
+  it('keeps every level inside the mastery range', () => {
+    const strays = [
+      ...levelDay('2026-08-01', 99, ['too-high'], 30),
+      ...levelDay('2026-08-01', -4, ['too-low'], 30, 60),
+    ];
+    const byLevel = estimateWordDurationByLevel(strays);
+
+    expect(byLevel.get(10)?.words).toBe(1);
+    expect(byLevel.get(0)?.words).toBe(1);
+    expect([...byLevel.keys()]).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  });
+});
+
+describe('estimateSessionDuration', () => {
+  const history = [
+    ...levelDay('2026-08-01', 0, Array.from({ length: 10 }, (_, i) => `new-${i}`), 40),
+    ...levelDay('2026-08-01', 9, Array.from({ length: 10 }, (_, i) => `old-${i}`), 10, 3_600),
+  ];
+
+  it('has nothing to show for an empty session', () => {
+    expect(estimateSessionDuration([], history)).toMatchObject({
+      totalDurationMs: 0,
+      rows: [],
+      overallWordDurationMs: 21_650,
+    });
+    // The pace table still comes back, so the drawer needs only the one call.
+    expect(estimateSessionDuration([], history).byLevel)
+      .toEqual(estimateWordDurationByLevel(history));
+  });
+
+  it('shows the working one level at a time, lowest first', () => {
+    const estimate = estimateSessionDuration([9, 0, 9, 0, 0], history);
+
+    expect(estimate.rows).toEqual([
+      { level: 0, words: 3, wordDurationMs: 31_750, durationMs: 95_250, isMeasured: true },
+      { level: 9, words: 2, wordDurationMs: 13_750, durationMs: 27_500, isMeasured: true },
+    ]);
+    expect(estimate.totalDurationMs).toBe(122_750);
+  });
+
+  it('charges a session of new words more than the same count of easy reviews', () => {
+    const newWords = estimateSessionDuration([0, 0, 0, 0, 0, 0], history);
+    const easyReviews = estimateSessionDuration([9, 9, 9, 9, 9, 9], history);
+
+    // Six words either way, but one average would have priced both at 130s.
+    expect(newWords.totalDurationMs).toBe(190_500);
+    expect(easyReviews.totalDurationMs).toBe(82_500);
+  });
+
+  it('marks the levels it had to guess at', () => {
+    const estimate = estimateSessionDuration([4, 4], history);
+
+    expect(estimate.rows).toEqual([
+      { level: 4, words: 2, wordDurationMs: 21_650, durationMs: 43_300, isMeasured: false },
+    ]);
+  });
+
+  it('prices a level out of range as the nearest real one', () => {
+    expect(estimateSessionDuration([42], history).rows[0].level).toBe(10);
+    expect(estimateSessionDuration([-1], history).rows[0].level).toBe(0);
+  });
+
+  it('prices a part-finished level as the level it has actually reached', () => {
+    expect(estimateSessionDuration([2.9], history).rows[0].level).toBe(2);
+    expect(estimateSessionDuration([Number.NaN], history).rows[0].level).toBe(0);
+  });
+
+  it('exposes the prior it blends sparse levels with', () => {
+    expect(LEVEL_DURATION_PRIOR_WORDS).toBe(5);
   });
 });
