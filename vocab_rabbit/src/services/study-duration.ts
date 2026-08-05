@@ -32,12 +32,13 @@ export const WORD_DURATION_PRIOR_WORDS = 20;
 export const WORD_DURATION_RECENT_DAYS = 14;
 
 /**
- * A day whose pooled pace is faster than this did not happen at a keyboard.
+ * A word that took less than this to study was not studied by a person.
  *
  * A script answering instantly and correctly still needs 8.4s per word, so no
- * child can beat that; anything under 5s came from generated records rather
- * than from someone studying. The floor sits well below the measured minimum so
- * a genuinely fast day is never thrown away.
+ * child can beat that; anything under 5s came from generated records. The floor
+ * sits well below the measured minimum so a genuinely fast word is never thrown
+ * away, and it is applied per word rather than per day because one afternoon of
+ * 「全部答对」 sits in the same day as a morning of real study.
  */
 export const MIN_PLAUSIBLE_WORD_DURATION_MS = 5_000;
 
@@ -173,9 +174,11 @@ export function estimateQuestionDurationMs(events: AnswerEvent[]): number {
  * apart and writes `responseTimeMs: 0` for every one after the first, so a
  * 51-word shortcut otherwise teaches the estimate that a word costs a second.
  * Two guards catch it: a zero think time never comes from a real answer, and
- * any day left implausibly fast is dropped whole. Day totals in
- * `calculateStudyDurationByDate` keep every record on purpose — those report
- * what the log says happened, while this reports how long a person takes.
+ * every word is then checked against a floor no person can beat. The check is
+ * per word, not per day, because the shortcut is usually reached partway
+ * through a day of genuine study. Day totals in `calculateStudyDurationByDate`
+ * keep every record on purpose — those report what the log says happened,
+ * while this reports how long a person takes.
  */
 export function estimateWordDurationMs(events: AnswerEvent[]): number {
   const byDate = groupOrderedByDate(events.filter((event) => event.responseTimeMs > 0));
@@ -185,17 +188,20 @@ export function estimateWordDurationMs(events: AnswerEvent[]): number {
   let totalWords = 0;
   for (const dateKey of recentDateKeys) {
     const ordered = byDate.get(dateKey) ?? [];
-    const words = new Set(ordered.map((event) => event.wordId)).size;
-    if (words === 0) continue;
 
-    let durationMs = 0;
+    // Retries belong to the word that caused them, so the cost of a word is
+    // every question it took, not just the one that finally went right.
+    const durationByWord = new Map<string, number>();
     for (const [index, event] of ordered.entries()) {
-      durationMs += calculateQuestionDurationMs(event, ordered[index - 1]);
+      const duration = calculateQuestionDurationMs(event, ordered[index - 1]);
+      durationByWord.set(event.wordId, (durationByWord.get(event.wordId) ?? 0) + duration);
     }
-    if (durationMs / words < MIN_PLAUSIBLE_WORD_DURATION_MS) continue;
 
-    totalDurationMs += durationMs;
-    totalWords += words;
+    for (const durationMs of durationByWord.values()) {
+      if (durationMs < MIN_PLAUSIBLE_WORD_DURATION_MS) continue;
+      totalDurationMs += durationMs;
+      totalWords += 1;
+    }
   }
 
   if (totalWords === 0) return DEFAULT_WORD_DURATION_MS;

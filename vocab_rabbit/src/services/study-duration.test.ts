@@ -232,9 +232,15 @@ describe('estimateWordDurationMs', () => {
     wordIds: string[],
     gapSeconds: number,
     responseTimeMs = 1_000,
+    startSeconds = 0,
   ): AnswerEvent[] {
     return wordIds.map((wordId, index) => ({
-      ...event(`${dateKey}-${index}`, dateKey, clockAt(index * gapSeconds), responseTimeMs),
+      ...event(
+        `${dateKey}-${wordId}-${index}`,
+        dateKey,
+        clockAt(startSeconds + index * gapSeconds),
+        responseTimeMs,
+      ),
       wordId,
     }));
   }
@@ -264,22 +270,24 @@ describe('estimateWordDurationMs', () => {
   });
 
   it('pools a day total over the words it covered rather than the questions', () => {
-    // 5 words, but "b" was wrong once so it cost 6 questions. The day runs
-    // 5 x 12s of measurable gaps = 60s plus the 1s fallback on the first
-    // answer, so 61s over 5 words = 12.2s per word. With 5 words that is
-    // 5/25 of the way from the 20s prior toward 12.2s.
+    // 5 words, but "b" was wrong once so it cost 6 questions. The day's first
+    // answer has no earlier stamp to measure against and only bills its 1s
+    // think time, so "a" falls under the floor and drops out. That leaves
+    // b at 24s and c, d, e at 12s: 60s over 4 words = 15s per word, which with
+    // 4 words is 4/24 of the way from the 20s prior toward 15s.
     const events = studyDay('2026-08-01', ['a', 'b', 'c', 'b', 'd', 'e'], 12);
 
-    expect(estimateWordDurationMs(events)).toBe(18_440);
+    expect(estimateWordDurationMs(events)).toBe(19_167);
   });
 
   it('charges retries to the word so a struggling day reads slower than a clean one', () => {
     const clean = studyDay('2026-08-01', ['a', 'b', 'c', 'd', 'e', 'f'], 10);
     const struggled = studyDay('2026-08-01', ['a', 'a', 'b', 'b', 'c', 'c'], 10);
 
-    // Same six questions and the same 51s of wall clock either way, but the
-    // clean day covered six words and the hard day only three.
-    expect(estimateWordDurationMs(clean)).toBe(17_346);
+    // Same six questions and the same 51s of wall clock either way. The clean
+    // day covers five measurable words at 10s each; the hard day covers three,
+    // and "a" keeps both of its questions, so it reads 17s a word.
+    expect(estimateWordDurationMs(clean)).toBe(18_000);
     expect(estimateWordDurationMs(struggled)).toBe(19_609);
   });
 
@@ -290,9 +298,10 @@ describe('estimateWordDurationMs', () => {
       30,
     )).flat();
 
-    // Each day: 9 x 30s + a 1s fallback = 271s over 10 words = 27.1s per word.
-    // 100 words weigh 100/120 against the 20s prior.
-    expect(estimateWordDurationMs(events)).toBe(25_917);
+    // Each day covers 10 words but only 9 are measurable: the first answer has
+    // no earlier stamp and bills 1s. 9 x 30s = 270s over 9 words, and 90 words
+    // weigh 90/110 against the 20s prior.
+    expect(estimateWordDurationMs(events)).toBe(28_182);
   });
 
   it('ignores study days older than the recent window', () => {
@@ -341,33 +350,45 @@ describe('estimateWordDurationMs', () => {
 
     // 8 real words cost 5s + 7 x 20s = 145s. The shortcut only contributes the
     // one question that really was answered, an hour later and so past the cap,
-    // billing its 3s think time: 148s over 9 words instead of 198s over 59.
+    // billing a 3s think time that the floor then rejects. The morning's study
+    // is left reading exactly as it did before the shortcut was ever pressed.
     expect(estimateWordDurationMs(real)).toBe(19_464);
-    expect(estimateWordDurationMs(polluted)).toBe(18_897);
+    expect(estimateWordDurationMs(polluted)).toBe(19_464);
   });
 
-  it('drops a day that is fast per word however long it ran in total', () => {
+  it('weighs each word on its own so half a real day survives the other half', () => {
+    const real = studyDay('2026-08-01', ['a', 'b', 'c', 'd', 'e', 'f'], 20, 8_000);
+    const generated = studyDay('2026-08-01', ['g', 'h', 'i', 'j'], 1, 1_000, 3_600);
+
+    // The generated words have a think time, so only the floor can catch them,
+    // and pooling the day would hide them: 112s over 10 words averages 11.2s
+    // and reads perfectly ordinary. Checked one word at a time all four go and
+    // the six real ones are untouched.
+    expect(estimateWordDurationMs(real)).toBe(19_538);
+    expect(estimateWordDurationMs([...real, ...generated])).toBe(19_538);
+  });
+
+  it('drops a run that is fast per word however long it ran in total', () => {
     const wordIds = Array.from({ length: 60 }, (_, index) => `word-${index}`);
     const impossible = studyDay('2026-08-01', wordIds, 2, 2_000);
     const merelyQuick = studyDay('2026-08-01', wordIds, 6, 6_000);
 
-    // Both days run for minutes on end, so a total-based check would keep them
+    // Both runs go on for minutes, so a total-based check would keep them
     // either way. 2s a word is below anything a person can do and goes; 6s a
     // word is fast but reachable and stays.
     expect(estimateWordDurationMs(impossible)).toBe(20_000);
     expect(estimateWordDurationMs(merelyQuick)).toBe(9_500);
   });
 
-  it('measures the pace against every word of the day', () => {
-    const wordIds = Array.from({ length: 6 }, (_, index) => `word-${index}`);
-    const justUnder = studyDay('2026-08-01', wordIds, 5, 2_000);
-    const justOver = studyDay('2026-08-01', wordIds, 6, 2_000);
+  it('ignores answers with no think time however far apart they are stamped', () => {
+    const generated = Array.from({ length: 20 }, (_, index) => ({
+      ...event(`gen-${index}`, '2026-08-01', clockAt(index * 30), 0),
+      wordId: `gen-${index}`,
+    }));
 
-    // 27s over 6 words is 4.5s each and goes; 32s over the same 6 words is
-    // 5.33s each and stays. Dividing by anything but the day's own word count
-    // puts both on the same side of the floor.
-    expect(estimateWordDurationMs(justUnder)).toBe(20_000);
-    expect(estimateWordDurationMs(justOver)).toBe(16_615);
+    // Spaced half a minute apart these clear the per-word floor comfortably, so
+    // only the think time gives them away. Nobody answers in zero milliseconds.
+    expect(estimateWordDurationMs(generated)).toBe(20_000);
   });
 
   it('leaves the recorded day totals alone', () => {
