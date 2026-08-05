@@ -31,6 +31,16 @@ export const WORD_DURATION_PRIOR_WORDS = 20;
 /** Only this many recent study days feed the pace, so it follows the child. */
 export const WORD_DURATION_RECENT_DAYS = 14;
 
+/**
+ * A day whose pooled pace is faster than this did not happen at a keyboard.
+ *
+ * A script answering instantly and correctly still needs 8.4s per word, so no
+ * child can beat that; anything under 5s came from generated records rather
+ * than from someone studying. The floor sits well below the measured minimum so
+ * a genuinely fast day is never thrown away.
+ */
+export const MIN_PLAUSIBLE_WORD_DURATION_MS = 5_000;
+
 export interface DailyStudyDuration {
   dateKey: string;
   durationMs: number;
@@ -157,9 +167,18 @@ export function estimateQuestionDurationMs(events: AnswerEvent[]): number {
  * The pool is a ratio of sums rather than an average of daily ratios because
  * the answer being predicted is itself a sum, and only recent days are used so
  * the estimate follows the child as they speed up.
+ *
+ * Records that nobody sat through are dropped first. The debug "全部答对"
+ * shortcut (`LearningPage.handleAllCorrect`) stamps its answers one second
+ * apart and writes `responseTimeMs: 0` for every one after the first, so a
+ * 51-word shortcut otherwise teaches the estimate that a word costs a second.
+ * Two guards catch it: a zero think time never comes from a real answer, and
+ * any day left implausibly fast is dropped whole. Day totals in
+ * `calculateStudyDurationByDate` keep every record on purpose — those report
+ * what the log says happened, while this reports how long a person takes.
  */
 export function estimateWordDurationMs(events: AnswerEvent[]): number {
-  const byDate = groupOrderedByDate(events);
+  const byDate = groupOrderedByDate(events.filter((event) => event.responseTimeMs > 0));
   const recentDateKeys = [...byDate.keys()].sort().slice(-WORD_DURATION_RECENT_DAYS);
 
   let totalDurationMs = 0;
@@ -173,7 +192,7 @@ export function estimateWordDurationMs(events: AnswerEvent[]): number {
     for (const [index, event] of ordered.entries()) {
       durationMs += calculateQuestionDurationMs(event, ordered[index - 1]);
     }
-    if (durationMs <= 0) continue;
+    if (durationMs / words < MIN_PLAUSIBLE_WORD_DURATION_MS) continue;
 
     totalDurationMs += durationMs;
     totalWords += words;

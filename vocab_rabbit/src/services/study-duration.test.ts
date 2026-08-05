@@ -231,9 +231,30 @@ describe('estimateWordDurationMs', () => {
     dateKey: string,
     wordIds: string[],
     gapSeconds: number,
+    responseTimeMs = 1_000,
   ): AnswerEvent[] {
     return wordIds.map((wordId, index) => ({
-      ...event(`${dateKey}-${index}`, dateKey, clockAt(index * gapSeconds), 1_000),
+      ...event(`${dateKey}-${index}`, dateKey, clockAt(index * gapSeconds), responseTimeMs),
+      wordId,
+    }));
+  }
+
+  /**
+   * What the debug 「全部答对」 shortcut writes: answers stamped exactly a second
+   * apart, with a real think time only on the question that was really shown.
+   */
+  function shortcutDay(
+    dateKey: string,
+    wordIds: string[],
+    startSeconds = 0,
+  ): AnswerEvent[] {
+    return wordIds.map((wordId, index) => ({
+      ...event(
+        `${dateKey}-all-${index}`,
+        dateKey,
+        clockAt(startSeconds + index),
+        index === 0 ? 3_000 : 0,
+      ),
       wordId,
     }));
   }
@@ -289,11 +310,79 @@ describe('estimateWordDurationMs', () => {
   });
 
   it('treats a break longer than the cap as a pause, not study time', () => {
-    const events = studyDay('2026-08-01', ['a', 'b'], 600);
+    const withLongBreak = studyDay('2026-08-01', ['a', 'b'], 600, 30_000);
+    const uninterrupted = studyDay('2026-08-01', ['a', 'b'], 60, 30_000);
 
-    // Both gaps exceed the 120s cap, so each answer only bills its 1s think
-    // time: 2s over 2 words, pulled almost all the way back to the prior.
-    expect(estimateWordDurationMs(events)).toBe(18_273);
+    // The 600s gap is past the 120s cap, so the second answer falls back to its
+    // 30s think time: 60s over 2 words. The 60s gap is inside the cap and bills
+    // in full, so the same two answers pool 90s over the same 2 words.
+    expect(estimateWordDurationMs(withLongBreak)).toBe(20_909);
+    expect(estimateWordDurationMs(uninterrupted)).toBe(22_273);
+  });
+
+  it('ignores the answers the 「全部答对」 shortcut writes for itself', () => {
+    const shortcut = shortcutDay(
+      '2026-08-01',
+      Array.from({ length: 51 }, (_, index) => `word-${index}`),
+    );
+
+    // Billed literally these are 51 words in 53s, which would teach the
+    // estimate that a word costs a second. Nothing here is a real answer, so
+    // the day is dropped and only the prior is left.
+    expect(estimateWordDurationMs(shortcut)).toBe(20_000);
+  });
+
+  it('keeps the real half of a day the shortcut was also used on', () => {
+    const real = studyDay('2026-08-01', ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], 20, 5_000);
+    const polluted = [
+      ...real,
+      ...shortcutDay('2026-08-01', Array.from({ length: 51 }, (_, index) => `w-${index}`), 3_600),
+    ];
+
+    // 8 real words cost 5s + 7 x 20s = 145s. The shortcut only contributes the
+    // one question that really was answered, an hour later and so past the cap,
+    // billing its 3s think time: 148s over 9 words instead of 198s over 59.
+    expect(estimateWordDurationMs(real)).toBe(19_464);
+    expect(estimateWordDurationMs(polluted)).toBe(18_897);
+  });
+
+  it('drops a day that is fast per word however long it ran in total', () => {
+    const wordIds = Array.from({ length: 60 }, (_, index) => `word-${index}`);
+    const impossible = studyDay('2026-08-01', wordIds, 2, 2_000);
+    const merelyQuick = studyDay('2026-08-01', wordIds, 6, 6_000);
+
+    // Both days run for minutes on end, so a total-based check would keep them
+    // either way. 2s a word is below anything a person can do and goes; 6s a
+    // word is fast but reachable and stays.
+    expect(estimateWordDurationMs(impossible)).toBe(20_000);
+    expect(estimateWordDurationMs(merelyQuick)).toBe(9_500);
+  });
+
+  it('measures the pace against every word of the day', () => {
+    const wordIds = Array.from({ length: 6 }, (_, index) => `word-${index}`);
+    const justUnder = studyDay('2026-08-01', wordIds, 5, 2_000);
+    const justOver = studyDay('2026-08-01', wordIds, 6, 2_000);
+
+    // 27s over 6 words is 4.5s each and goes; 32s over the same 6 words is
+    // 5.33s each and stays. Dividing by anything but the day's own word count
+    // puts both on the same side of the floor.
+    expect(estimateWordDurationMs(justUnder)).toBe(20_000);
+    expect(estimateWordDurationMs(justOver)).toBe(16_615);
+  });
+
+  it('leaves the recorded day totals alone', () => {
+    const shortcut = shortcutDay(
+      '2026-08-01',
+      Array.from({ length: 51 }, (_, index) => `word-${index}`),
+    );
+
+    // Day totals report what the log says happened rather than how fast a
+    // person can go, so they still count every answer the shortcut wrote.
+    expect(calculateStudyDurationByDate(shortcut).get('2026-08-01')).toEqual({
+      dateKey: '2026-08-01',
+      durationMs: 53_000,
+      answerCount: 51,
+    });
   });
 });
 
