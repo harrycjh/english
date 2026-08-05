@@ -207,6 +207,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-weihai.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'bangkok',
+    slot: 'focus',
+    name: '曼谷',
+    hint: '金顶大皇宫',
+    requiredDays: 64,
+    artFile: 'scene-bangkok.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
