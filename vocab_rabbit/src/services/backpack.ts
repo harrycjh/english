@@ -99,6 +99,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'settings-task-impact-doghouse-v1.webp',
     focusArtPosition: 'center 56%',
   },
+  {
+    id: 'beijing',
+    slot: 'focus',
+    name: '北京',
+    hint: '晨光里的祈年殿',
+    requiredDays: 16,
+    artFile: 'scene-beijing.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */

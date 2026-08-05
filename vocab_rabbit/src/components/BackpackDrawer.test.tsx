@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { BACKPACK_ITEMS } from '../services/backpack';
 import { BackpackDrawer } from './BackpackDrawer';
 
 function render(totalCheckInDays: number, mascotSceneId = 'default', focusSceneId = 'default'): string {
@@ -87,8 +88,14 @@ describe('BackpackDrawer', () => {
   });
 
   it('counts the collection against everything there is to collect', () => {
-    expect(render(0)).toContain('已收集 2 / 7 件');
-    expect(render(99)).toContain('已收集 7 / 7 件');
+    const total = BACKPACK_ITEMS.length;
+    const free = BACKPACK_ITEMS.filter((item) => item.requiredDays === 0).length;
+    // Derived from the catalogue so a new scene does not need this test edited,
+    // but still pinned to a shape: there has to be something left to earn.
+    expect(free).toBeGreaterThan(0);
+    expect(total).toBeGreaterThan(free);
+    expect(render(0)).toContain(`已收集 ${free} / ${total} 件`);
+    expect(render(99)).toContain(`已收集 ${total} / ${total} 件`);
   });
 
   it('previews the free companion with the art the current profile wears', () => {
