@@ -46,6 +46,20 @@ export function describeCrop(width, height) {
 }
 
 /**
+ * The centred window `describeCrop` implies, ready to hand to sharp's extract.
+ */
+export function cropRegion(width, height) {
+  const crop = describeCrop(width, height);
+  if (crop.axis === 'horizontal') {
+    return { left: crop.pixels, top: 0, width: width - crop.pixels * 2, height };
+  }
+  if (crop.axis === 'vertical') {
+    return { left: 0, top: crop.pixels, width, height: height - crop.pixels * 2 };
+  }
+  return { left: 0, top: 0, width, height };
+}
+
+/**
  * Per-column brightness and contrast from raw RGB pixels.
  */
 export function analyseColumns(rgb, width, height) {
@@ -144,7 +158,9 @@ async function main() {
 
   const sampleWidth = 120;
   const sampleHeight = 56;
+  const region = cropRegion(metadata.width, metadata.height);
   const { data } = await sharp(source)
+    .extract(region)
     .resize(sampleWidth, sampleHeight, { fit: 'fill' })
     .removeAlpha()
     .raw()
@@ -155,6 +171,7 @@ async function main() {
   if (!dryRun) {
     const file = `public/design-reference/slices/scene-${id}.webp`;
     const info = await sharp(source)
+      .extract(region)
       .resize({ width: EXPORT_WIDTH })
       .webp({ quality: EXPORT_QUALITY })
       .toFile(file);

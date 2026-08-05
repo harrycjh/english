@@ -180,6 +180,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-cairns.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'sydney',
+    slot: 'focus',
+    name: '悉尼',
+    hint: '黄昏港湾的歌剧院',
+    requiredDays: 52,
+    artFile: 'scene-sydney.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */

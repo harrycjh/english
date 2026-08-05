@@ -7,6 +7,7 @@ import {
   TEXT_ZONE_START_PCT,
   analyseColumns,
   catalogueSnippet,
+  cropRegion,
   describeCrop,
   formatReport,
   judgeTextZone,
@@ -54,6 +55,23 @@ describe('prepare-scene-art', () => {
     const tall = describeCrop(1200, 900);
     expect(tall.axis).toBe('vertical');
     expect(tall.pixels).toBe(Math.round((900 - 1200 / TARGET_RATIO) / 2));
+  });
+
+  it('hands sharp a centred window that already has the card\'s shape', () => {
+    // A 3:2 photograph is the common case from an image generator. Resizing it
+    // to 1200 wide without cutting it first ships a 1200x800 file, and then the
+    // browser decides for itself what to throw away.
+    const tall = cropRegion(1536, 1024);
+    expect(tall).toEqual({ left: 0, top: 151, width: 1536, height: 722 });
+    expect(tall.width / tall.height).toBeCloseTo(TARGET_RATIO, 2);
+
+    const wide = cropRegion(2400, 564);
+    expect(wide.top).toBe(0);
+    expect(wide.height).toBe(564);
+    expect(wide.width / wide.height).toBeCloseTo(TARGET_RATIO, 2);
+
+    // Already the right shape: hand back the whole picture, not a sliver.
+    expect(cropRegion(1200, 564)).toEqual({ left: 0, top: 0, width: 1200, height: 564 });
   });
 
   it('reads brightness and contrast per column', () => {
