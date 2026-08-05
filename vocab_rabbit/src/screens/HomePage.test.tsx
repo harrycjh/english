@@ -121,7 +121,8 @@ describe('ReviewPage', () => {
     expect(markup).toContain('class="review-day-forward-button"');
     expect(markup).toContain('调试模式');
     expect(markup).toContain('aria-label="前往下一天，2026-07-01"');
-    expect(markup).toContain('5 分钟');
+    // 20 words still to answer at the 20s prior is 6.7 minutes, rounded to 7.
+    expect(markup).toContain('7 分钟');
     expect(markup).toContain('data-date-key="2026-06-29"');
     expect(markup).toContain('data-answered="2"');
     expect(markup).toContain('data-date-key="2026-06-30"');
@@ -187,9 +188,62 @@ describe('ReviewPage', () => {
       />,
     );
 
-    // 21 words at the blended ~26.5s pace, not the 5 minutes the flat guess gives.
+    // 21 words at the blended ~26.7s pace, not the 5 minutes the flat guess gives.
     expect(markup).toContain('9 分钟');
     expect(markup).not.toContain('5 分钟');
+  });
+
+  it('counts the estimate down to the words the child has not answered yet', () => {
+    const plannedIds = Array.from({ length: 20 }, (_, index) => `new-${index}`);
+    const renderWith = (answeredWordIds: string[]) => renderToStaticMarkup(
+      <ReviewPage
+        payload={{
+          generatedAt: '',
+          sourceFile: '',
+          categoryCount: 1,
+          wordCount: 1,
+          categories: [previewWord.category],
+          words: [previewWord],
+        }}
+        task={{
+          dateKey: '2026-06-30',
+          newWordIds: plannedIds,
+          reviewWordIds: [],
+          completedAt: null,
+          correctCount: answeredWordIds.length,
+          wrongCount: 0,
+          totalAnswered: answeredWordIds.length,
+          answeredWordIds,
+        }}
+        setting={defaultParentSetting}
+        recordsById={{}}
+        selectionById={{}}
+        answerEvents={[]}
+        masteredCount={0}
+        recentTasks={[]}
+        previewWords={[previewWord]}
+        localLifePhotosById={{}}
+        onStart={() => undefined}
+        onStartDebug={() => undefined}
+        onAdvanceDay={async () => undefined}
+        onSelectProfile={async () => undefined}
+        onSaveSelectionStates={async () => undefined}
+      />,
+    );
+
+    // Untouched: all 20 words at the 20s prior is 6.7 minutes.
+    expect(renderWith([])).toContain('7 分钟');
+
+    // Twelve done: only the remaining 8 words count, which is 2.7 minutes.
+    const midway = renderWith(plannedIds.slice(0, 12));
+    expect(midway).toContain('3 分钟');
+    expect(midway).not.toContain('7 分钟');
+    expect(midway).toContain('继续就能接上刚才节奏');
+
+    // Nothing left to do, so the card must not still promise work.
+    const finished = renderWith(plannedIds);
+    expect(finished).toContain('0 分钟');
+    expect(finished).toContain('今天的任务已经完成');
   });
 
   it('offers fixed debug levels zero through nine plus the full progression', () => {

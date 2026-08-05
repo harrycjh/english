@@ -7,6 +7,7 @@ import {
   calculateQuestionDurationMs,
   calculateStudyDurationByDate,
   estimateQuestionDurationMs,
+  estimateWordDurationMs,
   formatStudyDuration,
   sumStudyDuration,
 } from './study-duration';
@@ -221,6 +222,78 @@ describe('estimateQuestionDurationMs', () => {
     // Median 10s with 20 samples: 20/32 of the way from the 15s prior toward 10s.
     expect(estimateQuestionDurationMs(steady)).toBe(11_875);
     expect(estimateQuestionDurationMs(withOutlier)).toBe(11_818);
+  });
+});
+
+describe('estimateWordDurationMs', () => {
+  /** One study day of `count` words answered `gapSeconds` apart, some repeated. */
+  function studyDay(
+    dateKey: string,
+    wordIds: string[],
+    gapSeconds: number,
+  ): AnswerEvent[] {
+    return wordIds.map((wordId, index) => ({
+      ...event(`${dateKey}-${index}`, dateKey, clockAt(index * gapSeconds), 1_000),
+      wordId,
+    }));
+  }
+
+  it('falls back to the prior with no answers at all', () => {
+    expect(estimateWordDurationMs([])).toBe(20_000);
+  });
+
+  it('pools a day total over the words it covered rather than the questions', () => {
+    // 5 words, but "b" was wrong once so it cost 6 questions. The day runs
+    // 5 x 12s of measurable gaps = 60s plus the 1s fallback on the first
+    // answer, so 61s over 5 words = 12.2s per word. With 5 words that is
+    // 5/25 of the way from the 20s prior toward 12.2s.
+    const events = studyDay('2026-08-01', ['a', 'b', 'c', 'b', 'd', 'e'], 12);
+
+    expect(estimateWordDurationMs(events)).toBe(18_440);
+  });
+
+  it('charges retries to the word so a struggling day reads slower than a clean one', () => {
+    const clean = studyDay('2026-08-01', ['a', 'b', 'c', 'd', 'e', 'f'], 10);
+    const struggled = studyDay('2026-08-01', ['a', 'a', 'b', 'b', 'c', 'c'], 10);
+
+    // Same six questions and the same 51s of wall clock either way, but the
+    // clean day covered six words and the hard day only three.
+    expect(estimateWordDurationMs(clean)).toBe(17_346);
+    expect(estimateWordDurationMs(struggled)).toBe(19_609);
+  });
+
+  it('trusts a long history far more than the prior', () => {
+    const events = Array.from({ length: 10 }, (_, day) => studyDay(
+      `2026-08-${String(day + 1).padStart(2, '0')}`,
+      Array.from({ length: 10 }, (_, index) => `word-${index}`),
+      30,
+    )).flat();
+
+    // Each day: 9 x 30s + a 1s fallback = 271s over 10 words = 27.1s per word.
+    // 100 words weigh 100/120 against the 20s prior.
+    expect(estimateWordDurationMs(events)).toBe(25_917);
+  });
+
+  it('ignores study days older than the recent window', () => {
+    const recent = Array.from({ length: 14 }, (_, day) => studyDay(
+      `2026-08-${String(day + 1).padStart(2, '0')}`,
+      Array.from({ length: 10 }, (_, index) => `word-${index}`),
+      10,
+    )).flat();
+    const withAncientSlowDay = [
+      ...studyDay('2020-01-01', ['old-a', 'old-b'], 110),
+      ...recent,
+    ];
+
+    expect(estimateWordDurationMs(withAncientSlowDay)).toBe(estimateWordDurationMs(recent));
+  });
+
+  it('treats a break longer than the cap as a pause, not study time', () => {
+    const events = studyDay('2026-08-01', ['a', 'b'], 600);
+
+    // Both gaps exceed the 120s cap, so each answer only bills its 1s think
+    // time: 2s over 2 words, pulled almost all the way back to the prior.
+    expect(estimateWordDurationMs(events)).toBe(18_273);
   });
 });
 

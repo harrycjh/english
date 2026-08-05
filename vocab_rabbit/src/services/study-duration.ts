@@ -14,6 +14,23 @@ export const DEFAULT_QUESTION_DURATION_MS = 15_000;
 /** Below this many samples the measured median is too noisy to trust alone. */
 export const QUESTION_DURATION_PRIOR_SAMPLES = 12;
 
+/**
+ * Fallback per-word cost used until real study days are recorded.
+ *
+ * Measured on the running app, a script answering instantly and correctly still
+ * spends about 8.4s on each word because of the feedback hold, the spoken
+ * example and the level-up animation. A child adds several seconds of reading
+ * and choosing, and a wrong answer costs a whole extra question, so 20s per
+ * word is the realistic starting point.
+ */
+export const DEFAULT_WORD_DURATION_MS = 20_000;
+
+/** Below this many studied words the measured pace is too noisy to trust alone. */
+export const WORD_DURATION_PRIOR_WORDS = 20;
+
+/** Only this many recent study days feed the pace, so it follows the child. */
+export const WORD_DURATION_RECENT_DAYS = 14;
+
 export interface DailyStudyDuration {
   dateKey: string;
   durationMs: number;
@@ -126,6 +143,46 @@ export function estimateQuestionDurationMs(events: AnswerEvent[]): number {
   const observed = median(samples);
   const weight = samples.length / (samples.length + QUESTION_DURATION_PRIOR_SAMPLES);
   return Math.round((observed * weight) + (DEFAULT_QUESTION_DURATION_MS * (1 - weight)));
+}
+
+/**
+ * Typical cost of studying one word, measured end to end.
+ *
+ * A word is not one question: every wrong answer puts it back at the end of the
+ * queue, so a 20-word session regularly runs 25 questions. Multiplying a word
+ * count by a per-question pace therefore always comes out short. Pooling a
+ * day's whole duration over the words it actually covered folds the extra
+ * questions, the feedback holds and the level-up animations back in.
+ *
+ * The pool is a ratio of sums rather than an average of daily ratios because
+ * the answer being predicted is itself a sum, and only recent days are used so
+ * the estimate follows the child as they speed up.
+ */
+export function estimateWordDurationMs(events: AnswerEvent[]): number {
+  const byDate = groupOrderedByDate(events);
+  const recentDateKeys = [...byDate.keys()].sort().slice(-WORD_DURATION_RECENT_DAYS);
+
+  let totalDurationMs = 0;
+  let totalWords = 0;
+  for (const dateKey of recentDateKeys) {
+    const ordered = byDate.get(dateKey) ?? [];
+    const words = new Set(ordered.map((event) => event.wordId)).size;
+    if (words === 0) continue;
+
+    let durationMs = 0;
+    for (const [index, event] of ordered.entries()) {
+      durationMs += calculateQuestionDurationMs(event, ordered[index - 1]);
+    }
+    if (durationMs <= 0) continue;
+
+    totalDurationMs += durationMs;
+    totalWords += words;
+  }
+
+  if (totalWords === 0) return DEFAULT_WORD_DURATION_MS;
+  const observed = totalDurationMs / totalWords;
+  const weight = totalWords / (totalWords + WORD_DURATION_PRIOR_WORDS);
+  return Math.round((observed * weight) + (DEFAULT_WORD_DURATION_MS * (1 - weight)));
 }
 
 /** Child-friendly duration label, e.g. `1 小时 5 分钟` / `8 分钟` / `45 秒`. */

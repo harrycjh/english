@@ -33,7 +33,7 @@ import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
 import { addDaysToDateKey, isTaskFullyAnswered } from '../services/task-service';
-import { estimateQuestionDurationMs } from '../services/study-duration';
+import { estimateWordDurationMs } from '../services/study-duration';
 import {
   getPrimaryOxfordRefLabel,
   getStudyChinese,
@@ -289,6 +289,12 @@ function ReviewTaskHeatmap({ days, currentDateKey }: { days: HeatmapDay[]; curre
   );
 }
 
+/** Wording for the estimate card, so a finished task never reads like work left. */
+function getEstimateNote(remainingCount: number, hasStarted: boolean): string {
+  if (remainingCount === 0) return '今天的任务已经完成';
+  return hasStarted ? '继续就能接上刚才节奏' : '建议一次学完更轻松';
+}
+
 function ReviewSummaryPill({ tone, label, value, layout }: ReviewSummaryPillProps) {
   return (
     <span
@@ -484,15 +490,20 @@ export function ReviewPage({
   onOpenSettings,
 }: ReviewPageProps) {
   const plannedCount = task.newWordIds.length + task.reviewWordIds.length;
+  const answeredWordIdSet = new Set(task.answeredWordIds);
+  const remainingCount = [...task.newWordIds, ...task.reviewWordIds]
+    .filter((wordId) => !answeredWordIdSet.has(wordId)).length;
   const heatmapTasks = [...recentTasks.filter((recentTask) => recentTask.dateKey !== task.dateKey), task];
   const heatmapDays = buildHeatmapDays(heatmapTasks, task.dateKey);
   const completedDays = heatmapDays.filter((day) => day.task?.completedAt).length;
   const completionRate = Math.round((completedDays / 14) * 100);
-  // Estimate from the child's own measured pace rather than a fixed guess.
-  const questionDurationMs = estimateQuestionDurationMs(answerEvents);
-  const estimatedMinutes = plannedCount === 0
+  // Estimate the work that is actually left, at the child's own measured
+  // per-word pace, so the card counts down as the session progresses instead of
+  // repeating the whole session's cost.
+  const wordDurationMs = estimateWordDurationMs(answerEvents);
+  const estimatedMinutes = remainingCount === 0
     ? 0
-    : Math.max(1, Math.round((plannedCount * questionDurationMs) / 60_000));
+    : Math.max(1, Math.round((remainingCount * wordDurationMs) / 60_000));
   const isTaskComplete = Boolean(task.completedAt) && isTaskFullyAnswered(task);
   const hasStarted = task.totalAnswered > 0 && !isTaskComplete;
   const reviewLoad = task.reviewWordIds.length;
@@ -856,7 +867,7 @@ export function ReviewPage({
               tone="time"
               label="预计时长"
               value={`${estimatedMinutes} 分钟`}
-              note={hasStarted ? '继续就能接上刚才节奏' : '建议一次学完更轻松'}
+              note={getEstimateNote(remainingCount, hasStarted)}
               layout={reviewLayout.cards.metrics[1]}
             />
             <ReviewMetricCard
