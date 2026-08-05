@@ -243,7 +243,26 @@ interface ReviewAdviceCardProps {
 function ReviewMetricCard({ tone, label, value, note, layout, children, onClick }: ReviewMetricCardProps) {
   const contentStyle = getRelativeTextStyle(layout.textSafe, layout);
   const iconAnchor = 'iconAnchor' in layout ? layout.iconAnchor : undefined;
-  const heatmapBounds = 'heatmapBounds' in layout ? layout.heatmapBounds : undefined;
+
+  // The heatmap card is the one metric card with no number to read and no icon
+  // to line a number up against — it is a picture. Anchoring its two halves to
+  // authored left edges left it shoved against one side of the card, so it is
+  // stacked and centred instead, and takes its width from the grid itself.
+  if (tone === 'heatmap') {
+    return (
+      <article
+        className="review-metric-card review-metric-card--heatmap"
+        style={getRelativeBoundsStyle(layout, reviewLayout.modules.metricRow)}
+      >
+        <div className="review-metric-card__heatmap-stack">
+          <div className="review-metric-card__content review-metric-card__content--heatmap">
+            <span>{label}</span>
+          </div>
+          {children ? <div className="review-metric-card__extra">{children}</div> : null}
+        </div>
+      </article>
+    );
+  }
 
   const content = (
     <>
@@ -254,16 +273,11 @@ function ReviewMetricCard({ tone, label, value, note, layout, children, onClick 
           style={{ ...getRelativeBoundsStyle(iconAnchor, layout), zIndex: reviewLayerZIndex.decorativeIcons }}
         />
       ) : null}
-      <div className={`review-metric-card__content${tone === 'heatmap' ? ' review-metric-card__content--heatmap' : ''}`} style={contentStyle}>
+      <div className="review-metric-card__content" style={contentStyle}>
         <span>{label}</span>
         {value ? <strong>{value}</strong> : null}
         {note ? <small>{note}</small> : null}
       </div>
-      {heatmapBounds && children ? (
-        <div className="review-metric-card__extra" style={getRelativeBoundsStyle(heatmapBounds, layout)}>
-          {children}
-        </div>
-      ) : null}
     </>
   );
 

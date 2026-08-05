@@ -6066,8 +6066,10 @@ button {
 }
 
 /* One chevron for every tappable card on the review page. Authoring it twice
-   is how the advice card's copy drifted 19px off centre. */
-.page--review .review-metric-card::after,
+   is how the advice card's copy drifted 19px off centre. The heatmap card is
+   the one metric card that opens nothing, so it must not be dressed as if it
+   did — and without the chevron its picture gets the whole card to sit in. */
+.page--review .review-metric-card.is-actionable::after,
 .page--review .review-advice-card.is-actionable::after {
   content: '';
   position: absolute;
@@ -6106,14 +6108,12 @@ button {
   align-items: stretch;
   justify-content: flex-start;
   gap: 8px;
-  width: 100%;
-  height: 100%;
 }
 
 .page--review .review-reference-heatmap__grid {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(7, 18px);
+  grid-template-rows: repeat(2, 18px);
   gap: 7px 8px;
 }
 
@@ -6152,7 +6152,7 @@ button {
 
 .page--review .review-reference-heatmap__weekdays {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(7, 18px);
   gap: 8px;
   color: #7c6548;
   font-family: var(--review-font-ui);
@@ -6179,7 +6179,25 @@ button {
 }
 
 .page--review .review-metric-card--heatmap {
-  padding: 10px 14px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+}
+
+/* The label and the grid travel together, and the stack takes its width from
+   the grid, so centring the stack centres the picture rather than centring a
+   box that was authored wider than what it holds. */
+.page--review .review-metric-card__heatmap-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.page--review .review-metric-card--heatmap .review-metric-card__content,
+.page--review .review-metric-card--heatmap .review-metric-card__extra {
+  position: static;
 }
 
 .page--review .review-metric-card__content--heatmap > span {
@@ -11976,14 +11994,6 @@ html[data-shell-mode='ipad-fixed'] .page--review .review-plan-shell__chrome .app
   filter: none;
 }
 
-.page--review[data-mascot-scene='cottage'] .review-dom-surface::before {
-  background-image: url('/design-reference/slices/selection-plan-house-background.webp?v=1');
-  background-position: center bottom;
-  background-size: cover;
-  opacity: 1;
-  filter: none;
-}
-
 .page--review[data-mascot-scene='cyber'] .review-dom-surface::before {
   background-image: url('/design-reference/slices/settings-cyber-rabbit-hero.webp?v=1');
   background-position: center 46%;
@@ -12007,6 +12017,12 @@ html[data-shell-mode='ipad-fixed'] .page--review .review-plan-shell__chrome .app
   background:
     linear-gradient(96deg, rgba(255, 251, 238, 0.95) 0 30%, rgba(255, 249, 228, 0.66) 54%, rgba(255, 247, 222, 0.14) 80%, rgba(255, 246, 220, 0.04) 100%),
     url('/design-reference/slices/settings-task-impact-doghouse-v1.webp?v=1') center 56% / cover no-repeat;
+}
+
+.page--review[data-focus-scene='cottage'] .review-focus-card {
+  background:
+    linear-gradient(96deg, rgba(255, 251, 238, 0.95) 0 30%, rgba(255, 249, 228, 0.66) 54%, rgba(255, 247, 222, 0.14) 80%, rgba(255, 246, 220, 0.04) 100%),
+    url('/design-reference/slices/selection-plan-house-background.webp?v=1') center 58% / cover no-repeat;
 }
 
 .page--review .review-day-forward-button {

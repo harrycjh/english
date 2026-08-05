@@ -41,14 +41,33 @@ describe('backpack', () => {
     expect(getNextUnlock(999)).toBeNull();
   });
 
+  it('keeps both slots earning as the days add up', () => {
+    // A slot that stops unlocking is a slot the child stops opening, so no
+    // slot may sit still for longer than the whole ladder took to get going.
+    for (const slot of ['mascot', 'focus'] as const) {
+      const prices = listSlotItems(slot).map((item) => item.requiredDays);
+
+      expect(prices).toEqual([...prices].sort((a, b) => a - b));
+      for (let index = 1; index < prices.length; index += 1) {
+        expect(prices[index] - prices[index - 1]).toBeLessThanOrEqual(5);
+      }
+    }
+  });
+
+  it('files the 山谷小屋 art as a background rather than a companion', () => {
+    // It is a house, and the mascot slot is where the rabbit lives.
+    expect(listSlotItems('focus').map((item) => item.id)).toContain('cottage');
+    expect(listSlotItems('mascot').map((item) => item.id)).not.toContain('cottage');
+  });
+
   it('wears the requested item once it is owned', () => {
-    expect(resolveEquippedItem('mascot', 'cyber', 15).id).toBe('cyber');
+    expect(resolveEquippedItem('mascot', 'cyber', 8).id).toBe('cyber');
     expect(resolveEquippedItem('focus', 'meadow', 5).id).toBe('meadow');
   });
 
   it('falls back to the free item for anything it cannot honour', () => {
     // Not earned yet, from another slot, and outright unknown.
-    expect(resolveEquippedItem('mascot', 'cyber', 14).id).toBe(DEFAULT_ITEM_ID);
+    expect(resolveEquippedItem('mascot', 'cyber', 7).id).toBe(DEFAULT_ITEM_ID);
     expect(resolveEquippedItem('mascot', 'meadow', 999).id).toBe(DEFAULT_ITEM_ID);
     expect(resolveEquippedItem('focus', 'from-a-later-version', 999).id).toBe(DEFAULT_ITEM_ID);
     expect(resolveEquippedItem('mascot', DEFAULT_ITEM_ID, 0).slot).toBe('mascot');

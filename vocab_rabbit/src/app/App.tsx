@@ -772,6 +772,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     const nextSetting = { ...parentSetting, profileId };
     await saveParentSetting(nextSetting);
     setParentSetting(nextSetting);
+    await onRequestSync?.();
   }
 
   async function handleEquipBackpackItem(slot: BackpackSlot, itemId: string) {
@@ -781,6 +782,9 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     const nextSetting = { ...parentSetting, [field]: itemId };
     await saveParentSetting(nextSetting);
     setParentSetting(nextSetting);
+    // What you are wearing should follow you to the other device, and the next
+    // sync could otherwise be hours away.
+    await onRequestSync?.();
   }
 
   async function handleSaveSelectionStates(states: WordSelectionState[]) {

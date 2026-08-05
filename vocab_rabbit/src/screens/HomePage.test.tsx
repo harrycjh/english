@@ -65,6 +65,10 @@ describe('ReviewPage', () => {
     expect(markup).toContain('review-advice-card review-advice-card--bag is-actionable');
     // Every advice card now opens something, so all three carry the chevron.
     expect(markup).toContain('review-advice-card review-advice-card--tea is-actionable');
+    // The heatmap opens nothing, so it must not advertise a tap — and without
+    // the chevron its picture gets the whole card to sit in.
+    expect(markup).toMatch(/class="review-metric-card review-metric-card--heatmap"/);
+    expect(markup).not.toMatch(/review-metric-card--heatmap[^"]*is-actionable/);
     expect(markup).toContain('今日复习');
     expect(markup).toContain('计划 0 · 已完成 0');
     expect(markup).not.toContain('预览主题');

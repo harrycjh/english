@@ -48,19 +48,11 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'stats-rabbit-reading-v1.webp',
   },
   {
-    id: 'cottage',
-    slot: 'mascot',
-    name: '山谷小屋',
-    hint: '花园尽头的小房子',
-    requiredDays: 7,
-    artFile: 'selection-plan-house-background.webp',
-  },
-  {
     id: 'cyber',
     slot: 'mascot',
     name: '星夜特工',
     hint: '霓虹城里的夜间任务',
-    requiredDays: 15,
+    requiredDays: 8,
     artFile: 'settings-cyber-rabbit-hero.webp',
   },
   {
@@ -78,6 +70,14 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     hint: '雨后的草坡和白栅栏',
     requiredDays: 5,
     artFile: 'stats-rhythm-house-v1.webp',
+  },
+  {
+    id: 'cottage',
+    slot: 'focus',
+    name: '山谷小屋',
+    hint: '花园尽头的小房子',
+    requiredDays: 7,
+    artFile: 'selection-plan-house-background.webp',
   },
   {
     id: 'kennel',

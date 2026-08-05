@@ -454,6 +454,50 @@ describe('vocab sync Function Compute handler', () => {
     });
   });
 
+  it('carries a backpack scene from the device that equipped it to the next one', async () => {
+    // The scene ids are stored on the parent setting, which the server merges
+    // by iterating whatever keys it is handed — this pins that a field the
+    // server has never been told about still makes it to the other device.
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env);
+    const connectA = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+    const connectB = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-b',
+    })));
+
+    const equipped = emptySnapshot();
+    equipped.parentSetting.value.mascotSceneId = 'cyber';
+    equipped.parentSetting.value.focusSceneId = 'cottage';
+    equipped.parentSetting.fieldRevisions = {
+      mascotSceneId: { updatedAt: '2026-08-05T03:00:00.000Z', deviceId: 'device-a' },
+      focusSceneId: { updatedAt: '2026-08-05T03:00:00.000Z', deviceId: 'device-a' },
+    };
+    await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: null,
+      hasLocalChanges: true,
+      snapshot: equipped,
+    }, connectA.json.deviceToken));
+
+    const response = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-b',
+      cursor: null,
+      snapshot: emptySnapshot(),
+    }, connectB.json.deviceToken)));
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json.snapshot.parentSetting.value).toMatchObject({
+      mascotSceneId: 'cyber',
+      focusSceneId: 'cottage',
+    });
+  });
+
   it('returns the cloud snapshot without rewriting it when a clean device has a stale cursor', async () => {
     const repository = createMemoryRepository();
     const handler = createHandler(repository, env);
