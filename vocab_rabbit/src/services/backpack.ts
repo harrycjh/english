@@ -108,6 +108,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-beijing.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'harbin',
+    slot: 'focus',
+    name: '哈尔滨',
+    hint: '雪后的索菲亚教堂',
+    requiredDays: 20,
+    artFile: 'scene-harbin.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
