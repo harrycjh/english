@@ -498,6 +498,121 @@ describe('vocab sync Function Compute handler', () => {
     });
   });
 
+  it('carries a finished day from the device that finished it to the next one', async () => {
+    // 签到 is read off dailyTasks[].completedAt. The server rebuilds task
+    // counts from the event log on the way through, so a finished day has to
+    // survive that rebuild or the calendar loses its stamps on the second
+    // device and the backpack un-prices itself.
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env);
+    const connectA = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+    const connectB = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-b',
+    })));
+
+    const finished = emptySnapshot();
+    finished.dailyTasks = [{
+      dateKey: '2026-08-03',
+      newWordIds: ['word-a'],
+      reviewWordIds: [],
+      completedAt: '2026-08-03T09:30:00.000Z',
+      correctCount: 1,
+      wrongCount: 0,
+      totalAnswered: 1,
+      answeredWordIds: ['word-a'],
+    }];
+    finished.events = [answerEvent('event-a', 'word-a', 'device-a', '2026-08-03T09:29:00.000Z')];
+    await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: null,
+      hasLocalChanges: true,
+      snapshot: finished,
+    }, connectA.json.deviceToken));
+
+    const response = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-b',
+      cursor: null,
+      hasLocalChanges: true,
+      snapshot: (() => {
+        // B opened the same day but never finished it. An unfinished copy must
+        // not erase the stamp the other device earned.
+        const open = emptySnapshot();
+        open.dailyTasks = [{
+          dateKey: '2026-08-03',
+          newWordIds: ['word-a'],
+          reviewWordIds: [],
+          completedAt: null,
+          correctCount: 0,
+          wrongCount: 0,
+          totalAnswered: 0,
+          answeredWordIds: [],
+        }];
+        return open;
+      })(),
+    }, connectB.json.deviceToken)));
+
+    expect(response.statusCode).toBe(200);
+    const day = response.json.snapshot.dailyTasks.find((task) => task.dateKey === '2026-08-03');
+    expect(day?.completedAt).toBe('2026-08-03T09:30:00.000Z');
+    expect(day?.answeredWordIds).toEqual(['word-a']);
+  });
+
+  it('keeps a finished day stamped after its answers age out of the log', async () => {
+    // Events are what the rebuild counts from, so a day whose answers are no
+    // longer in the log must keep the word list it already had rather than
+    // being rebuilt down to zero — an empty answeredWordIds is what makes the
+    // client drop completedAt, which un-stamps the calendar.
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env);
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+    const connectB = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-b',
+    })));
+
+    const finished = emptySnapshot();
+    finished.dailyTasks = [{
+      dateKey: '2026-08-03',
+      newWordIds: ['word-a'],
+      reviewWordIds: [],
+      completedAt: '2026-08-03T09:30:00.000Z',
+      correctCount: 1,
+      wrongCount: 0,
+      totalAnswered: 1,
+      answeredWordIds: ['word-a'],
+    }];
+    // No events: the day is old enough that its answers are gone.
+    await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-a',
+      cursor: null,
+      hasLocalChanges: true,
+      snapshot: finished,
+    }, connect.json.deviceToken));
+
+    // A second device pushing forces a real merge, and with it the rebuild.
+    const response = parseResponse(await handler(event('/api/sync', {
+      schemaVersion: 1,
+      deviceId: 'device-b',
+      cursor: null,
+      hasLocalChanges: true,
+      snapshot: emptySnapshot(),
+    }, connectB.json.deviceToken)));
+
+    const day = response.json.snapshot.dailyTasks.find((task) => task.dateKey === '2026-08-03');
+    expect(day?.completedAt).toBe('2026-08-03T09:30:00.000Z');
+    expect(day?.answeredWordIds).toEqual(['word-a']);
+  });
+
   it('returns the cloud snapshot without rewriting it when a clean device has a stale cursor', async () => {
     const repository = createMemoryRepository();
     const handler = createHandler(repository, env);
@@ -604,9 +719,12 @@ describe('vocab sync Function Compute handler', () => {
 
     const merged = mergeSnapshots(legacy, current);
 
+    // Neither side carries events for the day, so the merge keeps the answered
+    // list it was handed instead of rebuilding it down to nothing — and the
+    // word already answered stays at the front of the plan.
     expect(merged.dailyTasks[0]).toMatchObject({
-      newWordIds: ['word-a', 'word-b'],
-      answeredWordIds: [],
+      newWordIds: ['word-b', 'word-a'],
+      answeredWordIds: ['word-b'],
     });
   });
 

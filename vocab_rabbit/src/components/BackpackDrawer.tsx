@@ -22,8 +22,8 @@ interface BackpackDrawerProps {
 }
 
 const SLOT_SECTIONS: { slot: BackpackSlot; title: string; description: string }[] = [
-  { slot: 'mascot', title: '小屋伙伴', description: '换掉复习页左上角的那幅画' },
-  { slot: 'focus', title: '今日重点背景', description: '换掉今日重点卡片的底图' },
+  { slot: 'mascot', title: '伙伴', description: '换掉复习页左上角的那幅画' },
+  { slot: 'focus', title: '小屋背景', description: '换掉今日重点卡片的底图' },
 ];
 
 export function BackpackDrawer({

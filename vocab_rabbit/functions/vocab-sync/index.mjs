@@ -137,6 +137,11 @@ function rebuildTaskCounts(tasks, events, generation) {
   }
   return tasks.map((task) => {
     const dateEvents = eventsByDate.get(task.dateKey) ?? [];
+    // A day with nothing left in the log is a day whose answers have aged out,
+    // not a day that was never answered. Rebuilding it down to zero empties
+    // answeredWordIds, which makes normalizeTaskPlans drop completedAt — and a
+    // day that loses its completedAt loses its 签到 stamp on every device.
+    if (dateEvents.length === 0) return task;
     return {
       ...task,
       correctCount: dateEvents.filter((event) => event.isCorrect).length,
