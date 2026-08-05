@@ -3,21 +3,26 @@
 // is easy for a child to trigger. This module keeps the shell immersive.
 
 export interface ImmersiveCapabilities {
+  touchPrimary: boolean;
   standalone: boolean;
   canRequestFullscreen: boolean;
   canLockOrientation: boolean;
 }
 
-// A device that already runs the installed app is fullscreen by manifest, so
-// asking again only risks an unwanted permission-style prompt.
+// Fullscreen exists to stop mobile browser chrome from stealing stage height and
+// to keep a child from wandering out of the app. A desktop browser has neither
+// problem, and hijacking the window on the first click there is just rude.
 export function shouldRequestFullscreen(capabilities: ImmersiveCapabilities) {
-  return !capabilities.standalone && capabilities.canRequestFullscreen;
+  return capabilities.touchPrimary
+    && !capabilities.standalone
+    && capabilities.canRequestFullscreen;
 }
 
 // Native landscape lock is better than rotating the stage in CSS: the browser
-// hands us a real landscape viewport, so text is rasterised upright.
+// hands us a real landscape viewport, so text is rasterised upright. A desktop
+// window has no orientation to lock.
 export function shouldLockLandscape(capabilities: ImmersiveCapabilities) {
-  return capabilities.canLockOrientation;
+  return capabilities.touchPrimary && capabilities.canLockOrientation;
 }
 
 export function readImmersiveCapabilities(): ImmersiveCapabilities {
@@ -30,7 +35,13 @@ export function readImmersiveCapabilities(): ImmersiveCapabilities {
     | (ScreenOrientation & { lock?: (value: string) => Promise<void> })
     | undefined;
 
+  // A Mac or PC reports no touch points at all, while an iPad and a Mate X5
+  // report several even when a keyboard or trackpad is attached.
+  const touchPrimary = window.navigator.maxTouchPoints > 0
+    || window.matchMedia('(any-pointer: coarse)').matches;
+
   return {
+    touchPrimary,
     standalone,
     canRequestFullscreen: typeof document.documentElement.requestFullscreen === 'function',
     canLockOrientation: typeof orientation?.lock === 'function',
