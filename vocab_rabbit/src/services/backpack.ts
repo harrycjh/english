@@ -135,6 +135,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-xian.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'changbaishan',
+    slot: 'focus',
+    name: '长白山',
+    hint: '雪线之上的天池',
+    requiredDays: 32,
+    artFile: 'scene-changbaishan.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
