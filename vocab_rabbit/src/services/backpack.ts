@@ -144,6 +144,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-changbaishan.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'maldives',
+    slot: 'focus',
+    name: '马尔代夫',
+    hint: '海面上的水屋',
+    requiredDays: 36,
+    artFile: 'scene-maldives.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
