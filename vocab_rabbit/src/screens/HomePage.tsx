@@ -34,7 +34,11 @@ import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
 import { addDaysToDateKey, isTaskFullyAnswered } from '../services/task-service';
-import { estimateSessionDuration } from '../services/study-duration';
+import {
+  calculateStudyDurationByDate,
+  estimateSessionDuration,
+  formatStudyDuration,
+} from '../services/study-duration';
 import {
   getPrimaryOxfordRefLabel,
   getStudyChinese,
@@ -291,9 +295,24 @@ function ReviewTaskHeatmap({ days, currentDateKey }: { days: HeatmapDay[]; curre
 }
 
 /** Wording for the estimate card, so a finished task never reads like work left. */
-function getEstimateNote(remainingCount: number, hasStarted: boolean): string {
-  if (remainingCount === 0) return '今天的任务已经完成';
-  return hasStarted ? '继续就能接上刚才节奏' : '建议一次学完更轻松';
+/**
+ * Once the day is done there is nothing left to estimate, so the card stops
+ * quoting `0 分钟` — a duration that reads like a broken measurement — and
+ * reports what the day actually took instead.
+ */
+function getEstimateValue(remainingCount: number, estimatedMinutes: number): string {
+  return remainingCount === 0 ? '已完成' : `${estimatedMinutes} 分钟`;
+}
+
+function getEstimateNote(
+  remainingCount: number,
+  hasStarted: boolean,
+  todayDurationMs: number,
+): string {
+  if (remainingCount > 0) return hasStarted ? '继续就能接上刚才节奏' : '建议一次学完更轻松';
+  return todayDurationMs > 0
+    ? `今天用了 ${formatStudyDuration(todayDurationMs)}`
+    : '今天的任务已经完成';
 }
 
 function ReviewSummaryPill({ tone, label, value, layout }: ReviewSummaryPillProps) {
@@ -530,6 +549,7 @@ export function ReviewPage({
   const estimatedMinutes = remainingCount === 0
     ? 0
     : Math.max(1, Math.round(sessionEstimate.totalDurationMs / 60_000));
+  const todayDurationMs = calculateStudyDurationByDate(answerEvents).get(task.dateKey)?.durationMs ?? 0;
   const isTaskComplete = Boolean(task.completedAt) && isTaskFullyAnswered(task);
   const hasStarted = task.totalAnswered > 0 && !isTaskComplete;
   const reviewLoad = task.reviewWordIds.length;
@@ -894,8 +914,8 @@ export function ReviewPage({
             <ReviewMetricCard
               tone="time"
               label="预计时长"
-              value={`${estimatedMinutes} 分钟`}
-              note={getEstimateNote(remainingCount, hasStarted)}
+              value={getEstimateValue(remainingCount, estimatedMinutes)}
+              note={getEstimateNote(remainingCount, hasStarted, todayDurationMs)}
               layout={reviewLayout.cards.metrics[1]}
               onClick={() => {
                 setIsNewWordQueueOpen(false);
@@ -1046,6 +1066,7 @@ export function ReviewPage({
         isOpen={isEstimateOpen}
         wordLevels={remainingLevels}
         answerEvents={answerEvents}
+        todayDurationMs={todayDurationMs}
         onClose={() => setIsEstimateOpen(false)}
       />
     </main>

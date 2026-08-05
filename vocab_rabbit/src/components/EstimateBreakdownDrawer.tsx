@@ -13,6 +13,8 @@ interface EstimateBreakdownDrawerProps {
   /** Mastery level of every word still to be studied today. */
   wordLevels: number[];
   answerEvents: AnswerEvent[];
+  /** What today has actually taken so far, from the answer log. */
+  todayDurationMs: number;
   onClose: () => void;
 }
 
@@ -25,6 +27,7 @@ export function EstimateBreakdownDrawer({
   isOpen,
   wordLevels,
   answerEvents,
+  todayDurationMs,
   onClose,
 }: EstimateBreakdownDrawerProps) {
   if (!isOpen) return null;
@@ -33,6 +36,9 @@ export function EstimateBreakdownDrawer({
   const byLevel = estimate.byLevel;
   const measuredLevels = [...byLevel.values()].filter((entry) => entry.isMeasured);
   const measuredWords = measuredLevels.reduce((total, entry) => total + entry.words, 0);
+  // Nothing is left to estimate once the day is done, so the drawer switches
+  // from what today should cost to what it actually cost.
+  const isFinished = estimate.rows.length === 0;
 
   const drawer = (
     <div className="new-word-queue-backdrop" onClick={onClose}>
@@ -54,11 +60,15 @@ export function EstimateBreakdownDrawer({
         <section className="new-word-queue__section">
           <div className="new-word-queue__section-heading">
             <div>
-              <h3>今天还剩的词</h3>
-              <p>把每个等级的词数乘上这个等级的单词用时。</p>
+              <h3>{isFinished ? '今天已经完成' : '今天还剩的词'}</h3>
+              <p>
+                {isFinished
+                  ? '今天的词都答完了。这是从第一题到最后一题真正花掉的时间。'
+                  : '把每个等级的词数乘上这个等级的单词用时。'}
+              </p>
             </div>
             <strong className="estimate-breakdown__headline">
-              {formatStudyDuration(estimate.totalDurationMs)}
+              {formatStudyDuration(isFinished ? todayDurationMs : estimate.totalDurationMs)}
             </strong>
           </div>
           {estimate.rows.length > 0 ? (
@@ -82,7 +92,7 @@ export function EstimateBreakdownDrawer({
                 </li>
               ) : null}
             </ul>
-          ) : <p className="new-word-queue__empty">今天的词已经全部答完了。</p>}
+          ) : null}
         </section>
 
         <section className="new-word-queue__section">

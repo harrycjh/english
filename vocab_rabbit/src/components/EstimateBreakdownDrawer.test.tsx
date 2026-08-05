@@ -53,6 +53,7 @@ describe('EstimateBreakdownDrawer', () => {
         isOpen={false}
         wordLevels={[0, 9]}
         answerEvents={history}
+        todayDurationMs={0}
         onClose={() => undefined}
       />,
     );
@@ -66,6 +67,7 @@ describe('EstimateBreakdownDrawer', () => {
         isOpen
         wordLevels={[0, 0, 0, 9, 9]}
         answerEvents={history}
+        todayDurationMs={0}
         onClose={() => undefined}
       />,
     );
@@ -85,6 +87,7 @@ describe('EstimateBreakdownDrawer', () => {
         isOpen
         wordLevels={[0, 0, 0]}
         answerEvents={history}
+        todayDurationMs={0}
         onClose={() => undefined}
       />,
     );
@@ -99,6 +102,7 @@ describe('EstimateBreakdownDrawer', () => {
         isOpen
         wordLevels={[4]}
         answerEvents={history}
+        todayDurationMs={0}
         onClose={() => undefined}
       />,
     );
@@ -113,6 +117,7 @@ describe('EstimateBreakdownDrawer', () => {
         isOpen
         wordLevels={[0]}
         answerEvents={history}
+        todayDurationMs={0}
         onClose={() => undefined}
       />,
     );
@@ -127,6 +132,7 @@ describe('EstimateBreakdownDrawer', () => {
         isOpen
         wordLevels={[0, 3]}
         answerEvents={[]}
+        todayDurationMs={0}
         onClose={() => undefined}
       />,
     );
@@ -135,17 +141,24 @@ describe('EstimateBreakdownDrawer', () => {
     expect(markup).toContain('1 个 × 20.0 秒');
   });
 
-  it('has nothing to break down once the day is answered', () => {
+  it('reports what the day actually took once every word is answered', () => {
     const markup = renderToStaticMarkup(
       <EstimateBreakdownDrawer
         isOpen
         wordLevels={[]}
         answerEvents={history}
+        todayDurationMs={13 * 60_000}
         onClose={() => undefined}
       />,
     );
 
-    expect(markup).toContain('今天的词已经全部答完了。');
+    // Not "0 分钟": with nothing left to estimate, the real cost is the answer.
+    expect(markup).toContain('今天已经完成');
+    expect(markup).toContain('<strong class="estimate-breakdown__headline">13 分钟</strong>');
+    expect(markup).toContain('真正花掉的时间');
     expect(markup).not.toContain('合计');
+    // The pace table is why the card is still worth tapping when it says 已完成.
+    expect(markup).toContain('31.8 秒');
+    expect(markup).toContain('13.8 秒');
   });
 });

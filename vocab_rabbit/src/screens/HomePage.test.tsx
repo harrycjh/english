@@ -243,10 +243,73 @@ describe('ReviewPage', () => {
     expect(midway).not.toContain('7 分钟');
     expect(midway).toContain('继续就能接上刚才节奏');
 
-    // Nothing left to do, so the card must not still promise work.
+    // Nothing left to do, so the card must not still promise work — and must
+    // not read `0 分钟`, which looks like a broken measurement.
     const finished = renderWith(plannedIds);
-    expect(finished).toContain('0 分钟');
+    expect(finished).toContain('已完成');
+    expect(finished).not.toContain('0 分钟');
     expect(finished).toContain('今天的任务已经完成');
+  });
+
+  it('reports what the day took once it is finished, and stays tappable', () => {
+    const plannedIds = ['w-0', 'w-1', 'w-2'];
+    const answeredAt = (seconds: number) => {
+      const total = (10 * 3600) + seconds;
+      const clock = [Math.floor(total / 3600), Math.floor((total % 3600) / 60), total % 60]
+        .map((part) => String(part).padStart(2, '0')).join(':');
+      return `2026-06-30T${clock}.000Z`;
+    };
+    const markup = renderToStaticMarkup(
+      <ReviewPage
+        payload={{
+          generatedAt: '',
+          sourceFile: '',
+          categoryCount: 1,
+          wordCount: 1,
+          categories: [previewWord.category],
+          words: [previewWord],
+        }}
+        task={{
+          dateKey: '2026-06-30',
+          newWordIds: plannedIds,
+          reviewWordIds: [],
+          completedAt: '2026-06-30T10:05:00.000Z',
+          correctCount: 3,
+          wrongCount: 0,
+          totalAnswered: 3,
+          answeredWordIds: plannedIds,
+        }}
+        setting={defaultParentSetting}
+        recordsById={{}}
+        selectionById={{}}
+        answerEvents={plannedIds.map((wordId, index) => ({
+          id: `e-${index}`,
+          wordId,
+          dateKey: '2026-06-30',
+          answeredAt: answeredAt(index * 45),
+          questionKind: 'text-choice' as const,
+          selectedAnswer: '',
+          correctAnswer: '',
+          isCorrect: true,
+          responseTimeMs: 12_000,
+        }))}
+        masteredCount={0}
+        recentTasks={[]}
+        previewWords={[previewWord]}
+        localLifePhotosById={{}}
+        onStart={() => undefined}
+        onStartDebug={() => undefined}
+        onAdvanceDay={async () => undefined}
+        onSelectProfile={async () => undefined}
+        onSaveSelectionStates={async () => undefined}
+      />,
+    );
+
+    // 12s think time on the first question, then two 45s gaps: 102s, shown as 2 分钟.
+    expect(markup).toContain('已完成');
+    expect(markup).toContain('今天用了 2 分钟');
+    // Still a button, so the pace breakdown stays reachable after the last word.
+    expect(markup).toContain('review-metric-card review-metric-card--time is-actionable');
   });
 
   it('offers fixed debug levels zero through nine plus the full progression', () => {
