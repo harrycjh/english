@@ -171,6 +171,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-melbourne.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'cairns',
+    slot: 'focus',
+    name: '凯恩斯',
+    hint: '珊瑚礁边的海湾小城',
+    requiredDays: 48,
+    artFile: 'scene-cairns.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
