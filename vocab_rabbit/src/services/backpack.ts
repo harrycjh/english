@@ -153,6 +153,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-maldives.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'dubai',
+    slot: 'focus',
+    name: '迪拜',
+    hint: '海边的帆船塔',
+    requiredDays: 40,
+    artFile: 'scene-dubai.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
