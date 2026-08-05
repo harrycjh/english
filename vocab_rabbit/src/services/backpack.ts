@@ -216,6 +216,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-bangkok.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'dunhuang',
+    slot: 'focus',
+    name: '敦煌',
+    hint: '沙丘旁的莫高窟',
+    requiredDays: 68,
+    artFile: 'scene-dunhuang.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
