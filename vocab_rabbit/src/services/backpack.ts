@@ -126,6 +126,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-shanghai.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'xian',
+    slot: 'focus',
+    name: '西安',
+    hint: '城墙上的钟鼓楼',
+    requiredDays: 28,
+    artFile: 'scene-xian.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
