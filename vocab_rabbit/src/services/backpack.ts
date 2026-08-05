@@ -216,6 +216,22 @@ const PROFILE_MASCOT_ART: Record<ProfileId, string> = {
   'fragrant-rabbit': 'review-bunny-scene.png',
 };
 
+/** Enough check-in days to own everything, derived so new art is covered too. */
+export const DEBUG_UNLOCK_DAYS = BACKPACK_ITEMS
+  .reduce((most, item) => Math.max(most, item.requiredDays), 0);
+
+/**
+ * The day count the backpack should reason with.
+ *
+ * Ownership is only ever a question of how many days have been checked in, so
+ * the debug profile does not need a parallel notion of "owned" — it needs the
+ * clock wound forward. New art has to be looked at on a real page before it is
+ * worth shipping, and sixty days of check-ins is not a review loop.
+ */
+export function resolveBackpackDays(totalCheckInDays: number, unlockAll: boolean): number {
+  return unlockAll ? Math.max(totalCheckInDays, DEBUG_UNLOCK_DAYS) : totalCheckInDays;
+}
+
 export function listSlotItems(slot: BackpackSlot): BackpackItem[] {
   return BACKPACK_ITEMS.filter((item) => item.slot === slot);
 }

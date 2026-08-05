@@ -8,18 +8,26 @@ import {
   getMonthKey,
   summarizeCheckIns,
 } from '../services/check-in';
-import { getNextUnlock } from '../services/backpack';
+import { getNextUnlock, resolveBackpackDays } from '../services/backpack';
 
 interface CheckInCalendarDrawerProps {
   isOpen: boolean;
   tasks: DailyTaskSummary[];
   todayKey: string;
+  /** The debug profile already owns everything, so nothing is left to promise. */
+  unlockAll?: boolean;
   onClose: () => void;
 }
 
 const WEEKDAY_LABELS = ['日', '一', '二', '三', '四', '五', '六'] as const;
 
-export function CheckInCalendarDrawer({ isOpen, tasks, todayKey, onClose }: CheckInCalendarDrawerProps) {
+export function CheckInCalendarDrawer({
+  isOpen,
+  tasks,
+  todayKey,
+  unlockAll = false,
+  onClose,
+}: CheckInCalendarDrawerProps) {
   // An offset rather than a month key, so closing the drawer can put it back to
   // this month with one reset instead of remembering what "this month" was.
   const [monthOffset, setMonthOffset] = useState(0);
@@ -33,7 +41,7 @@ export function CheckInCalendarDrawer({ isOpen, tasks, todayKey, onClose }: Chec
   const summary = summarizeCheckIns(tasks, todayKey);
   const monthKey = addMonths(getMonthKey(todayKey), monthOffset);
   const month = buildCheckInMonth(tasks, monthKey, todayKey);
-  const nextUnlock = getNextUnlock(summary.totalDays);
+  const nextUnlock = getNextUnlock(resolveBackpackDays(summary.totalDays, unlockAll));
 
   const drawer = (
     <div className="new-word-queue-backdrop" onClick={close}>

@@ -38,8 +38,10 @@ import {
   type BackpackSlot,
   countOwnedItems,
   getFocusSceneBackground,
+  resolveBackpackDays,
   resolveEquippedItem,
 } from '../services/backpack';
+import { isDebugProfile } from '../app/debug-session';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
@@ -572,9 +574,13 @@ export function ReviewPage({
   const checkInValue = checkInSummary.isTodayCheckedIn
     ? `已连续 ${checkInSummary.streakDays} 天`
     : '今天还没签到';
-  const ownedItemCount = countOwnedItems(checkInSummary.totalDays);
-  const mascotItem = resolveEquippedItem('mascot', setting.mascotSceneId, checkInSummary.totalDays);
-  const focusItem = resolveEquippedItem('focus', setting.focusSceneId, checkInSummary.totalDays);
+  // The debug profile owns the whole catalogue, so new art can be equipped and
+  // looked at the day it lands instead of after the check-ins that price it.
+  const canUnlockEverything = isDebugProfile(setting.profileId);
+  const backpackDays = resolveBackpackDays(checkInSummary.totalDays, canUnlockEverything);
+  const ownedItemCount = countOwnedItems(backpackDays);
+  const mascotItem = resolveEquippedItem('mascot', setting.mascotSceneId, backpackDays);
+  const focusItem = resolveEquippedItem('focus', setting.focusSceneId, backpackDays);
   // Estimate the work that is actually left, at the child's own measured pace
   // for each mastery level, so the card counts down as the session progresses
   // and a day of easy reviews is not priced like a day of new words.
@@ -1117,12 +1123,13 @@ export function ReviewPage({
         isOpen={isCheckInOpen}
         tasks={heatmapTasks}
         todayKey={task.dateKey}
+        unlockAll={canUnlockEverything}
         onClose={() => setIsCheckInOpen(false)}
       />
       <BackpackDrawer
         isOpen={isBackpackOpen}
         profileId={setting.profileId}
-        totalCheckInDays={checkInSummary.totalDays}
+        totalCheckInDays={backpackDays}
         mascotSceneId={mascotItem.id}
         focusSceneId={focusItem.id}
         onEquip={(slot, itemId) => void onEquipBackpackItem?.(slot, itemId)}

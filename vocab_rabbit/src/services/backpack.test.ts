@@ -9,6 +9,7 @@ import {
   getNextUnlock,
   isItemOwned,
   listSlotItems,
+  resolveBackpackDays,
   resolveEquippedItem,
 } from './backpack';
 
@@ -125,5 +126,30 @@ describe('getFocusSceneBackground', () => {
     // The card already carries its own art, and mascot art is framed by CSS.
     expect(getFocusSceneBackground(focusItem({ id: DEFAULT_ITEM_ID }), 'cute-junjun')).toBeNull();
     expect(getFocusSceneBackground(focusItem({ slot: 'mascot' }), 'cute-junjun')).toBeNull();
+  });
+});
+
+describe('resolveBackpackDays', () => {
+  it('leaves an ordinary profile with exactly the days it has earned', () => {
+    expect(resolveBackpackDays(0, false)).toBe(0);
+    expect(resolveBackpackDays(9, false)).toBe(9);
+  });
+
+  it('hands the debug profile enough days for every item in the catalogue', () => {
+    const days = resolveBackpackDays(0, true);
+
+    expect(countOwnedItems(days)).toBe(BACKPACK_ITEMS.length);
+    expect(getNextUnlock(days)).toBeNull();
+    // Every item, not just the ones that existed when this test was written.
+    for (const item of BACKPACK_ITEMS) {
+      expect(isItemOwned(item, days)).toBe(true);
+    }
+  });
+
+  it('never walks a long-running child backwards', () => {
+    const beyondTheCatalogue = BACKPACK_ITEMS
+      .reduce((most, item) => Math.max(most, item.requiredDays), 0) + 100;
+
+    expect(resolveBackpackDays(beyondTheCatalogue, true)).toBe(beyondTheCatalogue);
   });
 });

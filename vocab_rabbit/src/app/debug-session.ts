@@ -1,4 +1,12 @@
 import type { QuestionKind } from '../services/question-service';
+import type { ProfileId } from '../models/parent-setting';
+
+/** The profile that carries the debug tools. */
+export const DEBUG_PROFILE_ID: ProfileId = 'stinky-dog';
+
+export function isDebugProfile(profileId: ProfileId): boolean {
+  return profileId === DEBUG_PROFILE_ID;
+}
 
 export const DEBUG_QUESTION_LIMIT = 10;
 export const DEBUG_PROGRESSION_LEVELS = Array.from({ length: 10 }, (_, level) => level);

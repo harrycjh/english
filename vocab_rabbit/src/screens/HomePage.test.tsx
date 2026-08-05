@@ -4,6 +4,7 @@ import { CONTENT_VERSION } from '../config/app-meta';
 import { defaultParentSetting } from '../models/parent-setting';
 import type { WordRecord } from '../models/word';
 import { ReviewPage } from './HomePage';
+import { BACKPACK_ITEMS } from '../services/backpack';
 
 const previewWord: WordRecord = {
   id: 'ket_dad_n',
@@ -398,6 +399,51 @@ describe('ReviewPage', () => {
 
     expect(markup).toContain('继续学习');
     expect(markup).not.toContain('再复习一轮');
+  });
+
+  it('gives the debug profile the whole backpack so new art can be seen the day it lands', () => {
+    const renderFor = (profileId: 'cute-junjun' | 'stinky-dog') => renderToStaticMarkup(
+      <ReviewPage
+        payload={{
+          generatedAt: '',
+          sourceFile: '',
+          categoryCount: 1,
+          wordCount: 1,
+          categories: [previewWord.category],
+          words: [previewWord],
+        }}
+        task={{
+          dateKey: '2026-07-21',
+          newWordIds: [previewWord.id],
+          reviewWordIds: [],
+          completedAt: null,
+          correctCount: 0,
+          wrongCount: 0,
+          totalAnswered: 0,
+          answeredWordIds: [],
+        }}
+        setting={{ ...defaultParentSetting, profileId }}
+        recordsById={{}}
+        selectionById={{}}
+        answerEvents={[]}
+        masteredCount={0}
+        recentTasks={[]}
+        previewWords={[previewWord]}
+        localLifePhotosById={{}}
+        onStart={() => undefined}
+        onStartDebug={() => undefined}
+        onAdvanceDay={async () => undefined}
+        onSelectProfile={async () => undefined}
+        onSaveSelectionStates={async () => undefined}
+      />,
+    );
+
+    const total = BACKPACK_ITEMS.length;
+    expect(renderFor('stinky-dog')).toContain(`${total} / ${total} 件道具`);
+    // Nobody else gets a shortcut: one day of study buys the free items only.
+    const earned = BACKPACK_ITEMS.filter((item) => item.requiredDays === 0).length;
+    expect(earned).toBeLessThan(total);
+    expect(renderFor('cute-junjun')).toContain(`${earned} / ${total} 件道具`);
   });
 
   it('spans the summary pill body across the whole pill so its text shares the icon midline', () => {
