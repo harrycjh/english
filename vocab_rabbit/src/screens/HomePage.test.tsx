@@ -277,4 +277,55 @@ describe('ReviewPage', () => {
     expect(markup).toContain('继续学习');
     expect(markup).not.toContain('再复习一轮');
   });
+
+  it('spans the summary pill body across the whole pill so its text shares the icon midline', () => {
+    const markup = renderToStaticMarkup(
+      <ReviewPage
+        payload={{
+          generatedAt: '',
+          sourceFile: '',
+          categoryCount: 1,
+          wordCount: 1,
+          categories: [previewWord.category],
+          words: [previewWord],
+        }}
+        task={{
+          dateKey: '2026-07-22',
+          newWordIds: [previewWord.id],
+          reviewWordIds: [],
+          completedAt: null,
+          correctCount: 0,
+          wrongCount: 0,
+          totalAnswered: 0,
+          answeredWordIds: [],
+        }}
+        setting={defaultParentSetting}
+        recordsById={{}}
+        selectionById={{}}
+        answerEvents={[]}
+        masteredCount={0}
+        recentTasks={[]}
+        previewWords={[previewWord]}
+        localLifePhotosById={{}}
+        onStart={() => undefined}
+        onStartDebug={() => undefined}
+        onAdvanceDay={async () => undefined}
+        onSelectProfile={async () => undefined}
+        onSaveSelectionStates={async () => undefined}
+      />,
+    );
+
+    const bodies = [...markup.matchAll(/<span class="review-summary-pill__body" style="([^"]*)"/g)].map(
+      (match) => match[1],
+    );
+
+    expect(bodies).toHaveLength(3);
+    for (const style of bodies) {
+      expect(style).toContain('top:0');
+      expect(style).toContain('height:100%');
+      // The authored 42px textSafe box must no longer drive the vertical placement.
+      expect(style).not.toContain('height:42px');
+      expect(style).not.toContain('top:12px');
+    }
+  });
 });

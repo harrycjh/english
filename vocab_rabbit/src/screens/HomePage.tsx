@@ -300,7 +300,18 @@ function ReviewSummaryPill({ tone, label, value, layout }: ReviewSummaryPillProp
         file={layout.iconAnchor.file}
         style={{ ...getRelativeBoundsStyle(layout.iconAnchor, layout), zIndex: reviewLayerZIndex.decorativeIcons }}
       />
-      <span className="review-summary-pill__body" style={getRelativeBoundsStyle(layout.textSafe, layout)}>
+      <span
+        className="review-summary-pill__body"
+        style={{
+          ...getRelativeBoundsStyle(layout.textSafe, layout),
+          // The authored textSafe box is 42px tall while the stacked value + label only
+          // fill ~40px, so honouring it verbatim left the text top-aligned and visibly
+          // higher than the vertically centred icon. Span the full pill instead and let
+          // the flex column centre itself, so both columns share one optical midline.
+          top: 0,
+          height: '100%',
+        }}
+      >
         <strong>{value}</strong>
         <small>{label}</small>
       </span>

@@ -5797,6 +5797,7 @@ button {
 .page--review .review-summary-pill__body {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 4px;
 }
 
