@@ -64,6 +64,9 @@ describe('ReviewPage', () => {
     expect(markup).toContain('review-metric-card review-metric-card--task is-actionable');
     expect(markup).toContain('review-advice-card review-advice-card--bars is-actionable');
     expect(markup).toContain('review-advice-card review-advice-card--bag is-actionable');
+    // 今日建议 navigates nowhere, so it must not be dressed with the chevron
+    // that `.is-actionable` draws.
+    expect(markup).not.toContain('review-advice-card--tea is-actionable');
     expect(markup).toContain('今日复习');
     expect(markup).toContain('计划 0 · 已完成 0');
     expect(markup).not.toContain('预览主题');
@@ -381,5 +384,75 @@ describe('ReviewPage', () => {
       expect(style).not.toContain('height:42px');
       expect(style).not.toContain('top:12px');
     }
+  });
+
+  it('anchors the advice icon and text where the layout authors them', () => {
+    const markup = renderToStaticMarkup(
+      <ReviewPage
+        payload={{
+          generatedAt: '',
+          sourceFile: '',
+          categoryCount: 1,
+          wordCount: 1,
+          categories: [previewWord.category],
+          words: [previewWord],
+        }}
+        task={{
+          dateKey: '2026-07-23',
+          newWordIds: [previewWord.id],
+          reviewWordIds: [],
+          completedAt: null,
+          correctCount: 0,
+          wrongCount: 0,
+          totalAnswered: 0,
+          answeredWordIds: [],
+        }}
+        setting={defaultParentSetting}
+        recordsById={{}}
+        selectionById={{}}
+        answerEvents={[]}
+        masteredCount={0}
+        recentTasks={[]}
+        previewWords={[previewWord]}
+        localLifePhotosById={{}}
+        onStart={() => undefined}
+        onStartDebug={() => undefined}
+        onAdvanceDay={async () => undefined}
+        onSelectProfile={async () => undefined}
+        onSaveSelectionStates={async () => undefined}
+      />,
+    );
+
+    const icons = [...markup.matchAll(/<span class="review-advice-card__icon"[^>]*style="([^"]*)"/g)]
+      .map((match) => match[1]);
+    const bodies = [...markup.matchAll(/<div class="review-advice-card__body" style="([^"]*)"/g)]
+      .map((match) => match[1]);
+
+    expect(icons).toHaveLength(3);
+    expect(bodies).toHaveLength(3);
+
+    for (const style of icons) {
+      // All three icons are authored at the same 14px card inset.
+      expect(style).toContain('left:14px');
+      expect(style).toContain('width:44px');
+      expect(style).toContain('height:44px');
+      expect(style).toContain('top:50%');
+      expect(style).toContain('translateY(-50%)');
+    }
+
+    // The text starts clear of the icon and keeps the authored right edge, so
+    // the longest headline stays on one line instead of overflowing the card.
+    expect(bodies.map((style) => /left:(\d+)px/.exec(style)?.[1])).toEqual(['72', '72', '72']);
+    expect(bodies.map((style) => /width:(\d+)px/.exec(style)?.[1])).toEqual(['182', '168', '177']);
+    for (const style of bodies) {
+      expect(style).toContain('top:50%');
+      expect(style).toContain('translateY(-50%)');
+      // The old placement came from the narrower textSafe box.
+      expect(style).not.toContain('left:54px');
+    }
+
+    // Only the two cards that navigate somewhere may show the chevron. None of
+    // the advice cards is given a handler here, so all three stay plain.
+    expect(markup).not.toMatch(/review-advice-card--\w+ is-actionable/);
   });
 });

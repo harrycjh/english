@@ -408,10 +408,32 @@ function ReviewPreviewCard({ word, masteryLevel, index, layout, onOpenDetails }:
 
 function ReviewAdviceCard({ accent, label, value, description, layout, onClick }: ReviewAdviceCardProps) {
   const artPlacement = reviewSlicePlacementsByFile[layout.artSlot.file];
+  // The authored `textSafe` box is only the gap left of the art; the text itself
+  // is authored in `textBlocks`, which starts further in and is much wider.
+  const textBlock = layout.textBlocks.headline;
 
   const content = (
     <>
-      <div className="review-advice-card__body" style={getRelativeTextStyle(layout.textSafe, layout)}>
+      <span
+        className="review-advice-card__icon"
+        aria-hidden="true"
+        style={{
+          ...getRelativeBoundsStyle(layout.iconAnchor, layout),
+          // Centre against the card rather than the authored top, which reserves
+          // room for a description line none of these cards actually use.
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: reviewLayerZIndex.decorativeIcons,
+        }}
+      />
+      <div
+        className="review-advice-card__body"
+        style={{
+          ...getRelativeTextStyle(textBlock, layout),
+          top: '50%',
+          transform: 'translateY(-50%)',
+        }}
+      >
         <span>{label}</span>
         <strong>{value}</strong>
         {description ? <p>{description}</p> : null}

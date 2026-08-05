@@ -6440,11 +6440,12 @@ button {
 }
 
 .page--review .review-advice-card__body,
+.page--review .review-advice-card__icon,
 .page--review .review-advice-card__art {
   position: absolute;
 }
 
-.page--review .review-advice-card::after {
+.page--review .review-advice-card.is-actionable::after {
   content: '';
   position: absolute;
   right: 16px;
@@ -6456,26 +6457,18 @@ button {
   transform: rotate(45deg);
 }
 
-.page--review .review-advice-card > div:first-child {
-  position: relative;
+.page--review .review-advice-card__body {
   min-width: 0;
-  padding-left: 52px;
-  padding-right: 10px;
 }
 
-.page--review .review-advice-card > div:first-child::before,
-.page--review .review-advice-card > div:first-child::after {
-  content: '';
-  position: absolute;
-}
-
-.page--review .review-advice-card > div:first-child::before {
-  left: 0;
-  top: 2px;
-  width: 38px;
-  height: 38px;
+.page--review .review-advice-card__icon {
   border-radius: 999px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.78), 0 8px 18px rgba(196, 160, 102, 0.14);
+}
+
+.page--review .review-advice-card__icon::after {
+  content: '';
+  position: absolute;
 }
 
 .page--review .review-advice-card span {
@@ -6516,47 +6509,47 @@ button {
   background-size: 57px auto;
 }
 
-.page--review .review-advice-card--tea > div:first-child::before {
+.page--review .review-advice-card--tea .review-advice-card__icon {
   background: radial-gradient(circle at 35% 35%, #f5ffe9 0, #e2f2c5 62%, #d3eab0 100%);
 }
 
-.page--review .review-advice-card--tea > div:first-child::after {
-  left: 11px;
+.page--review .review-advice-card--tea .review-advice-card__icon::after {
+  left: 12px;
   top: 10px;
-  width: 15px;
-  height: 18px;
-  border-radius: 14px 0 14px 0;
+  width: 20px;
+  height: 24px;
+  border-radius: 18px 0 18px 0;
   background: linear-gradient(180deg, #7ec557, #57a344);
   transform: rotate(-38deg);
 }
 
-.page--review .review-advice-card--bars > div:first-child::before {
+.page--review .review-advice-card--bars .review-advice-card__icon {
   background: radial-gradient(circle at 35% 35%, #fff8df 0, #ffe8a4 64%, #ffd36d 100%);
 }
 
-.page--review .review-advice-card--bars > div:first-child::after {
-  left: 10px;
-  top: 10px;
-  width: 18px;
-  height: 18px;
+.page--review .review-advice-card--bars .review-advice-card__icon::after {
+  left: 9px;
+  top: 9px;
+  width: 26px;
+  height: 26px;
   border-radius: 999px;
   background:
     radial-gradient(circle, #ffb128 0 42%, transparent 44%),
     repeating-conic-gradient(#ffcf66 0 12deg, transparent 12deg 30deg);
 }
 
-.page--review .review-advice-card--bag > div:first-child::before {
+.page--review .review-advice-card--bag .review-advice-card__icon {
   background: radial-gradient(circle at 35% 35%, #eef8ff 0, #d5ebfb 62%, #c5e2f7 100%);
 }
 
-.page--review .review-advice-card--bag > div:first-child::after {
-  left: 10px;
-  top: 10px;
-  width: 18px;
-  height: 18px;
+.page--review .review-advice-card--bag .review-advice-card__icon::after {
+  left: 9px;
+  top: 9px;
+  width: 26px;
+  height: 26px;
   border-radius: 999px;
   background:
-    radial-gradient(circle, transparent 0 3px, #6d94b1 3px 6px, transparent 6px),
+    radial-gradient(circle, transparent 0 4px, #6d94b1 4px 8px, transparent 8px),
     repeating-conic-gradient(#6d94b1 0 14deg, transparent 14deg 45deg);
 }
 

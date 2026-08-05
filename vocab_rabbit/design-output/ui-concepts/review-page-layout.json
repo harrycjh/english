@@ -765,9 +765,9 @@
         "renderMode": "dom",
         "iconAnchor": {
           "x": 43,
-          "y": 627,
-          "width": 38,
-          "height": 38,
+          "y": 632,
+          "width": 44,
+          "height": 44,
           "renderMode": "dom"
         },
         "textSafe": {
@@ -778,21 +778,21 @@
         },
         "textBlocks": {
           "eyebrow": {
-            "x": 95,
+            "x": 101,
             "y": 625,
-            "width": 96,
+            "width": 90,
             "height": 14
           },
           "headline": {
-            "x": 95,
+            "x": 101,
             "y": 643,
-            "width": 188,
+            "width": 182,
             "height": 20
           },
           "description": {
-            "x": 95,
+            "x": 101,
             "y": 667,
-            "width": 188,
+            "width": 182,
             "height": 16
           }
         },
@@ -823,9 +823,9 @@
         "renderMode": "dom",
         "iconAnchor": {
           "x": 418,
-          "y": 627,
-          "width": 38,
-          "height": 38,
+          "y": 632,
+          "width": 44,
+          "height": 44,
           "renderMode": "dom"
         },
         "textSafe": {
@@ -836,21 +836,21 @@
         },
         "textBlocks": {
           "eyebrow": {
-            "x": 470,
+            "x": 476,
             "y": 625,
-            "width": 96,
+            "width": 90,
             "height": 14
           },
           "headline": {
-            "x": 470,
+            "x": 476,
             "y": 643,
-            "width": 174,
+            "width": 168,
             "height": 20
           },
           "description": {
-            "x": 470,
+            "x": 476,
             "y": 667,
-            "width": 174,
+            "width": 168,
             "height": 16
           }
         },
@@ -881,9 +881,9 @@
         "renderMode": "dom",
         "iconAnchor": {
           "x": 784,
-          "y": 627,
-          "width": 38,
-          "height": 38,
+          "y": 632,
+          "width": 44,
+          "height": 44,
           "renderMode": "dom"
         },
         "textSafe": {
@@ -894,21 +894,21 @@
         },
         "textBlocks": {
           "eyebrow": {
-            "x": 836,
+            "x": 842,
             "y": 625,
-            "width": 110,
+            "width": 104,
             "height": 14
           },
           "headline": {
-            "x": 836,
+            "x": 842,
             "y": 643,
-            "width": 183,
+            "width": 177,
             "height": 20
           },
           "description": {
-            "x": 836,
+            "x": 842,
             "y": 667,
-            "width": 183,
+            "width": 177,
             "height": 16
           }
         },
