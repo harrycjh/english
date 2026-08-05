@@ -162,6 +162,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-dubai.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'melbourne',
+    slot: 'focus',
+    name: '墨尔本',
+    hint: '河边的城市天际线',
+    requiredDays: 44,
+    artFile: 'scene-melbourne.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
