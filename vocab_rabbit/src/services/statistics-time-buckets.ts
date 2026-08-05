@@ -33,6 +33,7 @@ export function aggregateLearningLoadTimeline(
     const reviewCount = bucket.reduce((sum, point) => sum + point.reviewCount, 0);
     const retryCount = bucket.reduce((sum, point) => sum + point.retryCount, 0);
     const deferredReviewCount = bucket.reduce((sum, point) => sum + point.deferredReviewCount, 0);
+    const durationMs = bucket.reduce((sum, point) => sum + point.durationMs, 0);
     const kind = bucket.some((point) => point.kind === 'today')
       ? 'today'
       : bucket.every((point) => point.kind === 'forecast')
@@ -45,6 +46,7 @@ export function aggregateLearningLoadTimeline(
       retryCount,
       deferredReviewCount,
       totalCount: newCount + reviewCount,
+      durationMs,
       kind,
     };
   });

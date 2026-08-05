@@ -16,8 +16,8 @@ describe('statistics time buckets', () => {
 
   it('sums learning load inside a week', () => {
     const points: LearningLoadPoint[] = [
-      { dateKey: '2026-07-20', newCount: 3, reviewCount: 2, retryCount: 1, totalCount: 6, deferredReviewCount: 0, kind: 'history' },
-      { dateKey: '2026-07-21', newCount: 4, reviewCount: 5, retryCount: 2, totalCount: 11, deferredReviewCount: 1, kind: 'today' },
+      { dateKey: '2026-07-20', newCount: 3, reviewCount: 2, retryCount: 1, totalCount: 6, deferredReviewCount: 0, durationMs: 90_000, kind: 'history' },
+      { dateKey: '2026-07-21', newCount: 4, reviewCount: 5, retryCount: 2, totalCount: 11, deferredReviewCount: 1, durationMs: 150_000, kind: 'today' },
     ];
     expect(aggregateLearningLoadTimeline(points, 'week')).toEqual([{
       dateKey: '2026-07-20',
@@ -26,6 +26,7 @@ describe('statistics time buckets', () => {
       retryCount: 3,
       totalCount: 14,
       deferredReviewCount: 1,
+      durationMs: 240_000,
       kind: 'today',
     }]);
   });

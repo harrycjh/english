@@ -128,6 +128,70 @@ describe('ReviewPage', () => {
     expect(markup).toContain('data-answered="1"');
   });
 
+  it('estimates the session from the child measured pace instead of a fixed guess', () => {
+    const task = {
+      dateKey: '2026-06-30',
+      newWordIds: Array.from({ length: 15 }, (_, index) => `new-${index}`),
+      reviewWordIds: Array.from({ length: 6 }, (_, index) => `review-${index}`),
+      completedAt: null,
+      correctCount: 0,
+      wrongCount: 0,
+      totalAnswered: 0,
+      answeredWordIds: [],
+    };
+    // 40 answers a steady 30s apart, so the measured pace is far above the prior.
+    const answerEvents = Array.from({ length: 40 }, (_, index) => {
+      const seconds = index * 30;
+      const clock = [
+        String(9 + Math.floor(seconds / 3600)).padStart(2, '0'),
+        String(Math.floor((seconds % 3600) / 60)).padStart(2, '0'),
+        String(seconds % 60).padStart(2, '0'),
+      ].join(':');
+      return {
+        id: `event-${index}`,
+        wordId: `word-${index}`,
+        dateKey: '2026-06-29',
+        answeredAt: `2026-06-29T${clock}.000Z`,
+        questionKind: 'text-choice' as const,
+        selectedAnswer: '',
+        correctAnswer: '',
+        isCorrect: true,
+        responseTimeMs: 30_000,
+      };
+    });
+
+    const markup = renderToStaticMarkup(
+      <ReviewPage
+        payload={{
+          generatedAt: '',
+          sourceFile: '',
+          categoryCount: 1,
+          wordCount: 1,
+          categories: [previewWord.category],
+          words: [previewWord],
+        }}
+        task={task}
+        setting={defaultParentSetting}
+        recordsById={{}}
+        selectionById={{}}
+        answerEvents={answerEvents}
+        masteredCount={0}
+        recentTasks={[task]}
+        previewWords={[previewWord]}
+        localLifePhotosById={{}}
+        onStart={() => undefined}
+        onStartDebug={() => undefined}
+        onAdvanceDay={async () => undefined}
+        onSelectProfile={async () => undefined}
+        onSaveSelectionStates={async () => undefined}
+      />,
+    );
+
+    // 21 words at the blended ~26.5s pace, not the 5 minutes the flat guess gives.
+    expect(markup).toContain('9 分钟');
+    expect(markup).not.toContain('5 分钟');
+  });
+
   it('offers fixed debug levels zero through nine plus the full progression', () => {
     const markup = renderToStaticMarkup(
       <ReviewPage

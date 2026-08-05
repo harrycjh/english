@@ -353,4 +353,68 @@ describe('learning statistics', () => {
     });
     expect(statistics.forecast.every((point) => point.reviewCount === 0)).toBe(true);
   });
+
+  it('reports measured study time per day and projects it forward at the same pace', () => {
+    const answerEvents = [
+      event('e1', 'word-a', '2026-07-14', true, { answeredAt: '2026-07-14T10:00:00.000Z', responseTimeMs: 8_000 }),
+      event('e2', 'word-b', '2026-07-14', true, { answeredAt: '2026-07-14T10:00:20.000Z', responseTimeMs: 9_000 }),
+      event('e3', 'word-c', '2026-07-14', false, { answeredAt: '2026-07-14T10:00:40.000Z', responseTimeMs: 7_000 }),
+      event('e4', 'word-a', '2026-07-15', true, { answeredAt: '2026-07-15T09:00:00.000Z', responseTimeMs: 12_000 }),
+    ];
+    const statistics = buildLearningStatistics({
+      currentTask: task({
+        dateKey: '2026-07-15',
+        newWordIds: ['word-d'],
+        answeredWordIds: ['word-a'],
+        totalAnswered: 1,
+        correctCount: 1,
+      }),
+      tasks: [task({
+        dateKey: '2026-07-14',
+        newWordIds: ['word-a', 'word-b', 'word-c'],
+        completedAt: '2026-07-14T10:01:00.000Z',
+        totalAnswered: 3,
+        correctCount: 2,
+        answeredWordIds: ['word-a', 'word-b', 'word-c'],
+      })],
+      answerEvents,
+      words: [{ id: 'word-a' }, { id: 'word-b' }, { id: 'word-c' }, { id: 'word-d' }],
+      recordsById: {},
+      selectionById: {},
+      setting: defaultParentSetting,
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    });
+
+    const july14 = statistics.history.find((point) => point.dateKey === '2026-07-14');
+    // 8s of think time, then two 20s gaps that also cover feedback and audio.
+    expect(july14?.durationMs).toBe(48_000);
+    expect(statistics.todayStudyDurationMs).toBe(12_000);
+    expect(statistics.totalStudyDurationMs).toBe(60_000);
+    expect(statistics.averageDailyStudyDurationMs).toBe(30_000);
+
+    // 4 samples (8s, 20s, 20s, 12s -> median 16s) blended with the 15s prior.
+    expect(statistics.averageQuestionDurationMs).toBe(15_250);
+    const tomorrow = statistics.forecast[0];
+    expect(tomorrow.durationMs).toBe(
+      (tomorrow.newCount + tomorrow.reviewCount + tomorrow.retryCount) * 15_250,
+    );
+  });
+
+  it('reports no study time when nothing has been answered', () => {
+    const statistics = buildLearningStatistics({
+      currentTask: task({ dateKey: '2026-07-15' }),
+      tasks: [],
+      answerEvents: [],
+      words: [{ id: 'word-a' }],
+      recordsById: {},
+      selectionById: {},
+      setting: defaultParentSetting,
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    });
+
+    expect(statistics.totalStudyDurationMs).toBe(0);
+    expect(statistics.todayStudyDurationMs).toBe(0);
+    expect(statistics.averageDailyStudyDurationMs).toBe(0);
+    expect(statistics.averageQuestionDurationMs).toBe(15_000);
+  });
 });

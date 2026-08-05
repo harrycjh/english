@@ -12,6 +12,11 @@ import {
 } from './spaced-repetition';
 import { getReviewFirstPlanLimits } from './task-service';
 import {
+  calculateStudyDurationByDate,
+  estimateQuestionDurationMs,
+  sumStudyDuration,
+} from './study-duration';
+import {
   addDaysToStudyDateKey,
   createStudyDateKey,
   getReviewDueAt,
@@ -33,6 +38,8 @@ export interface HistoricalLearningPoint {
   answerCount: number;
   correctCount: number;
   accuracy: number;
+  /** Measured wall-clock study time, reconstructed from the answer log. */
+  durationMs: number;
   completed: boolean;
 }
 
@@ -43,6 +50,8 @@ export interface FutureLearningPoint {
   retryCount: number;
   deferredReviewCount: number;
   totalCount: number;
+  /** Projected study time: planned questions at the child's measured pace. */
+  durationMs: number;
 }
 
 export interface LearningLoadPoint {
@@ -52,6 +61,7 @@ export interface LearningLoadPoint {
   retryCount: number;
   totalCount: number;
   deferredReviewCount: number;
+  durationMs: number;
   kind: 'history' | 'today' | 'forecast';
 }
 
@@ -73,6 +83,14 @@ export interface LearningStatistics {
   accuracy: number;
   streak: number;
   forecastTotal: number;
+  /** Every minute ever spent answering, across the whole history. */
+  totalStudyDurationMs: number;
+  /** Study time already spent today. */
+  todayStudyDurationMs: number;
+  /** Mean study time over the days the child actually studied. */
+  averageDailyStudyDurationMs: number;
+  /** Typical cost of a single question, used to project future sessions. */
+  averageQuestionDurationMs: number;
   forecastModel: LearningForecastModel;
 }
 
@@ -262,6 +280,8 @@ export function buildLearningStatistics({
     events.push(event);
     eventsByDate.set(event.dateKey, events);
   }
+  const durationByDate = calculateStudyDurationByDate(answerEvents);
+  const averageQuestionDurationMs = estimateQuestionDurationMs(answerEvents);
 
   const historicalDateKeys = [
     ...taskMap.keys(),
@@ -314,6 +334,7 @@ export function buildLearningStatistics({
       answerCount,
       correctCount,
       accuracy: answerCount > 0 ? (correctCount / answerCount) * 100 : 0,
+      durationMs: durationByDate.get(historyDateKey)?.durationMs ?? 0,
       completed: Boolean(task?.completedAt),
     };
   });
@@ -416,6 +437,8 @@ export function buildLearningStatistics({
       retryCount,
       deferredReviewCount: dueReviews.length - completedReviews.length,
       totalCount: completedNewWordIds.length + completedReviews.length,
+      durationMs: (completedNewWordIds.length + completedReviews.length + retryCount)
+        * averageQuestionDurationMs,
     };
   });
 
@@ -444,9 +467,13 @@ export function buildLearningStatistics({
       retryCount,
       totalCount: newCount + reviewCount,
       deferredReviewCount: futurePoint?.deferredReviewCount ?? 0,
+      durationMs: futurePoint?.durationMs ?? historicalPoint?.durationMs ?? 0,
       kind: offset < 0 ? 'history' : offset === 0 ? 'today' : 'forecast',
     };
   });
+
+  const studiedDays = history.filter((point) => point.durationMs > 0);
+  const totalStudyDurationMs = sumStudyDuration(durationByDate.values());
 
   return {
     history,
@@ -458,6 +485,12 @@ export function buildLearningStatistics({
     accuracy: totalAnswers > 0 ? (totalCorrect / totalAnswers) * 100 : 0,
     streak,
     forecastTotal: forecast.reduce((sum, point) => sum + point.totalCount, 0),
+    totalStudyDurationMs,
+    todayStudyDurationMs: durationByDate.get(todayKey)?.durationMs ?? 0,
+    averageDailyStudyDurationMs: studiedDays.length > 0
+      ? Math.round(studiedDays.reduce((sum, point) => sum + point.durationMs, 0) / studiedDays.length)
+      : 0,
+    averageQuestionDurationMs,
     forecastModel: {
       dailyNewTarget: setting.dailyNewWordCount,
       dailyReviewBaseline: setting.dailyReviewLimit,

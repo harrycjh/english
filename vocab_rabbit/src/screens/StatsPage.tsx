@@ -25,6 +25,7 @@ import {
   getStatisticsBucketKey,
   type StatisticsTimeScale,
 } from '../services/statistics-time-buckets';
+import { formatStudyDuration } from '../services/study-duration';
 
 interface StatsPageProps {
   payload: WordPayload;
@@ -384,7 +385,7 @@ function LearningLoadChart({ points, todayKey, scale }: {
                   data-today={point.kind === 'today' ? 'true' : undefined}
                   data-kind={point.kind}
                   key={point.dateKey}
-                  title={`${formatDate(point.dateKey)}：复习 ${point.reviewCount}，新认识 ${point.newCount}${point.deferredReviewCount > 0 ? `，顺延复习 ${point.deferredReviewCount}` : ''}${point.kind === 'forecast' ? '（预测）' : '（实际）'}`}
+                  title={`${formatDate(point.dateKey)}：复习 ${point.reviewCount}，新认识 ${point.newCount}${point.deferredReviewCount > 0 ? `，顺延复习 ${point.deferredReviewCount}` : ''}${point.durationMs > 0 ? `，用时 ${formatStudyDuration(point.durationMs)}` : ''}${point.kind === 'forecast' ? '（预测）' : '（实际）'}`}
                 >
                   <div className="learning-load-day__plot">
                     {point.totalCount > 0 && (
@@ -642,6 +643,23 @@ export function StatsPage({
     () => aggregateMasteryLevelTimeline(memory.masteryLevelTimeline, durabilityTimeScale),
     [durabilityTimeScale, memory.masteryLevelTimeline],
   );
+  const studyTime = useMemo(() => {
+    const recent = learning.history.slice(-7);
+    return {
+      today: learning.todayStudyDurationMs,
+      recentTotal: recent.reduce((sum, point) => sum + point.durationMs, 0),
+      recentDays: recent.filter((point) => point.durationMs > 0).length,
+      dailyAverage: learning.averageDailyStudyDurationMs,
+      total: learning.totalStudyDurationMs,
+      perQuestion: learning.averageQuestionDurationMs,
+    };
+  }, [
+    learning.averageDailyStudyDurationMs,
+    learning.averageQuestionDurationMs,
+    learning.history,
+    learning.todayStudyDurationMs,
+    learning.totalStudyDurationMs,
+  ]);
   const tabs: Array<{ id: StatsTab; label: string; icon: typeof Activity }> = [
     { id: 'forgetting', label: '遗忘曲线', icon: Activity },
     { id: 'learning', label: '学习情况', icon: CalendarRange },
@@ -724,6 +742,42 @@ export function StatsPage({
 
           {activeTab === 'learning' && (
             <div className="stats-tab-panel stats-tab-panel--learning" role="tabpanel">
+              <section className="memory-panel memory-panel--study-time">
+                <div className="memory-panel__header">
+                  <div>
+                    <h2>学习时长</h2>
+                    <p>按每题从出现到答完的真实间隔累计，中途离开超过 2 分钟的空档不计入</p>
+                  </div>
+                </div>
+                <dl className="study-time-summary">
+                  <div className="study-time-summary__item is-today">
+                    <dt>今天</dt>
+                    <dd>{formatStudyDuration(studyTime.today)}</dd>
+                    <small>{studyTime.today > 0 ? '今天已经学了这么久' : '今天还没开始'}</small>
+                  </div>
+                  <div className="study-time-summary__item">
+                    <dt>近 7 天合计</dt>
+                    <dd>{formatStudyDuration(studyTime.recentTotal)}</dd>
+                    <small>其中 {studyTime.recentDays} 天有学习</small>
+                  </div>
+                  <div className="study-time-summary__item">
+                    <dt>学习日均</dt>
+                    <dd>{formatStudyDuration(studyTime.dailyAverage)}</dd>
+                    <small>只统计真正学习过的日子</small>
+                  </div>
+                  <div className="study-time-summary__item">
+                    <dt>累计</dt>
+                    <dd>{formatStudyDuration(studyTime.total)}</dd>
+                    <small>从第一次答题算起</small>
+                  </div>
+                  <div className="study-time-summary__item">
+                    <dt>平均每题</dt>
+                    <dd>{formatStudyDuration(studyTime.perQuestion)}</dd>
+                    <small>含反馈动画与朗读</small>
+                  </div>
+                </dl>
+              </section>
+
               <section className="memory-panel memory-panel--learning-load">
                 <div className="memory-panel__header">
                   <div>

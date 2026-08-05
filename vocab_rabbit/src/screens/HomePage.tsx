@@ -33,6 +33,7 @@ import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
 import { addDaysToDateKey, isTaskFullyAnswered } from '../services/task-service';
+import { estimateQuestionDurationMs } from '../services/study-duration';
 import {
   getPrimaryOxfordRefLabel,
   getStudyChinese,
@@ -476,7 +477,11 @@ export function ReviewPage({
   const heatmapDays = buildHeatmapDays(heatmapTasks, task.dateKey);
   const completedDays = heatmapDays.filter((day) => day.task?.completedAt).length;
   const completionRate = Math.round((completedDays / 14) * 100);
-  const estimatedMinutes = plannedCount === 0 ? 0 : Math.max(1, Math.round(plannedCount * 0.25));
+  // Estimate from the child's own measured pace rather than a fixed guess.
+  const questionDurationMs = estimateQuestionDurationMs(answerEvents);
+  const estimatedMinutes = plannedCount === 0
+    ? 0
+    : Math.max(1, Math.round((plannedCount * questionDurationMs) / 60_000));
   const isTaskComplete = Boolean(task.completedAt) && isTaskFullyAnswered(task);
   const hasStarted = task.totalAnswered > 0 && !isTaskComplete;
   const reviewLoad = task.reviewWordIds.length;
