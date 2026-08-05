@@ -53,7 +53,6 @@ describe('ReviewPage', () => {
         onSelectProfile={async () => undefined}
         onSaveSelectionStates={async () => undefined}
         onOpenStats={() => undefined}
-        onOpenSettings={() => undefined}
       />,
     );
 
@@ -64,9 +63,8 @@ describe('ReviewPage', () => {
     expect(markup).toContain('review-metric-card review-metric-card--task is-actionable');
     expect(markup).toContain('review-advice-card review-advice-card--bars is-actionable');
     expect(markup).toContain('review-advice-card review-advice-card--bag is-actionable');
-    // 今日建议 navigates nowhere, so it must not be dressed with the chevron
-    // that `.is-actionable` draws.
-    expect(markup).not.toContain('review-advice-card--tea is-actionable');
+    // Every advice card now opens something, so all three carry the chevron.
+    expect(markup).toContain('review-advice-card review-advice-card--tea is-actionable');
     expect(markup).toContain('今日复习');
     expect(markup).toContain('计划 0 · 已完成 0');
     expect(markup).not.toContain('预览主题');
@@ -514,8 +512,10 @@ describe('ReviewPage', () => {
       expect(style).not.toContain('left:54px');
     }
 
-    // Only the two cards that navigate somewhere may show the chevron. None of
-    // the advice cards is given a handler here, so all three stay plain.
-    expect(markup).not.toMatch(/review-advice-card--\w+ is-actionable/);
+    // 今日签到 and 背包 both open a drawer, so they earn the chevron; 未来压力
+    // is only given a handler by the real app, so here it stays plain.
+    expect(markup).toMatch(/review-advice-card--tea is-actionable/);
+    expect(markup).toMatch(/review-advice-card--bag is-actionable/);
+    expect(markup).not.toMatch(/review-advice-card--bars is-actionable/);
   });
 });

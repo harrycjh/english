@@ -4,6 +4,7 @@ import type { DailyTaskSummary, SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { LocalLifePhotoView } from '../models/local-media';
 import type { ParentSetting, ProfileId } from '../models/parent-setting';
+import type { BackpackSlot } from '../services/backpack';
 import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordPayload } from '../models/word';
 import {
@@ -773,6 +774,15 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     setParentSetting(nextSetting);
   }
 
+  async function handleEquipBackpackItem(slot: BackpackSlot, itemId: string) {
+    if (!parentSetting) return;
+    const field = slot === 'mascot' ? 'mascotSceneId' : 'focusSceneId';
+    if (parentSetting[field] === itemId) return;
+    const nextSetting = { ...parentSetting, [field]: itemId };
+    await saveParentSetting(nextSetting);
+    setParentSetting(nextSetting);
+  }
+
   async function handleSaveSelectionStates(states: WordSelectionState[]) {
     await saveWordSelectionStates(states);
     setSelectionById((previous) => {
@@ -1031,7 +1041,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
         onChangeNewWordQueue={persistNewWordQueue}
         onRemoveTodayNewWord={handleRemoveTodayNewWord}
         onOpenStats={handleOpenStats}
-        onOpenSettings={handleOpenSettings}
+        onEquipBackpackItem={handleEquipBackpackItem}
       />
     );
   }

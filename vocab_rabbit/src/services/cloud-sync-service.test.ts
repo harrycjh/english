@@ -41,6 +41,8 @@ function makeRequest(): SyncRequest {
           showExamples: true,
           showHints: true,
           preferLandscape: true,
+          mascotSceneId: 'default',
+          focusSceneId: 'default',
         },
         fieldRevisions: {},
       },

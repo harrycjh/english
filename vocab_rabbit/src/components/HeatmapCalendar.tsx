@@ -58,7 +58,7 @@ export function HeatmapCalendar({ tasks, endDateKey = createStudyDateKey() }: He
   const days = buildHeatmapDays(tasks, endDateKey);
 
   return (
-    <div className="heatmap" aria-label="最近 14 天学习热力图">
+    <div className="heatmap" aria-label="学习热力图">
       {days.map((day) => {
         return (
           <span

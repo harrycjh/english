@@ -151,6 +151,8 @@ describe('mergeParentSetting', () => {
       showExamples: true,
       showHints: true,
       preferLandscape: true,
+      mascotSceneId: 'default',
+      focusSceneId: 'default',
     };
     const local: VersionedParentSetting = {
       value: { ...base, dailyNewWordCount: 10, englishVoiceURI: 'voice-en-local' },

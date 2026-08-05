@@ -30,6 +30,15 @@ import { MasteryLevelIcon } from '../components/MasteryLevelIcon';
 import { NewWordQueueDrawer } from '../components/NewWordQueueDrawer';
 import { ReviewQueueDrawer } from '../components/ReviewQueueDrawer';
 import { EstimateBreakdownDrawer } from '../components/EstimateBreakdownDrawer';
+import { CheckInCalendarDrawer } from '../components/CheckInCalendarDrawer';
+import { BackpackDrawer } from '../components/BackpackDrawer';
+import { summarizeCheckIns } from '../services/check-in';
+import {
+  BACKPACK_ITEMS,
+  type BackpackSlot,
+  countOwnedItems,
+  resolveEquippedItem,
+} from '../services/backpack';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { buildHeatmapDays, type HeatmapDay } from '../components/HeatmapCalendar';
@@ -273,7 +282,7 @@ function getReviewHeatmapLevel(day: HeatmapDay): ReviewHeatmapLevel {
 
 function ReviewTaskHeatmap({ days, currentDateKey }: { days: HeatmapDay[]; currentDateKey: string }) {
   return (
-    <div className="review-reference-heatmap" aria-label="最近 14 天学习热力图">
+    <div className="review-reference-heatmap" aria-label="学习热力图">
       <div className="review-reference-heatmap__grid">
         {days.map((day) => (
           <span
@@ -504,7 +513,7 @@ interface ReviewPageProps {
   onChangeNewWordQueue?: (wordIds: string[]) => Promise<void>;
   onRemoveTodayNewWord?: (wordId: string) => Promise<void>;
   onOpenStats?: () => void;
-  onOpenSettings?: () => void;
+  onEquipBackpackItem?: (slot: BackpackSlot, itemId: string) => Promise<void>;
 }
 
 export function ReviewPage({
@@ -529,7 +538,7 @@ export function ReviewPage({
   onChangeNewWordQueue,
   onRemoveTodayNewWord,
   onOpenStats,
-  onOpenSettings,
+  onEquipBackpackItem,
 }: ReviewPageProps) {
   const plannedCount = task.newWordIds.length + task.reviewWordIds.length;
   const answeredWordIdSet = new Set(task.answeredWordIds);
@@ -542,6 +551,15 @@ export function ReviewPage({
   const heatmapDays = buildHeatmapDays(heatmapTasks, task.dateKey);
   const completedDays = heatmapDays.filter((day) => day.task?.completedAt).length;
   const completionRate = Math.round((completedDays / 14) * 100);
+  // Check-ins read from the same merged list as the heatmap, so today's stamp
+  // appears the moment the task is finished rather than after the next reload.
+  const checkInSummary = summarizeCheckIns(heatmapTasks, task.dateKey);
+  const checkInValue = checkInSummary.isTodayCheckedIn
+    ? `已连续 ${checkInSummary.streakDays} 天`
+    : '今天还没签到';
+  const ownedItemCount = countOwnedItems(checkInSummary.totalDays);
+  const mascotItem = resolveEquippedItem('mascot', setting.mascotSceneId, checkInSummary.totalDays);
+  const focusItem = resolveEquippedItem('focus', setting.focusSceneId, checkInSummary.totalDays);
   // Estimate the work that is actually left, at the child's own measured pace
   // for each mastery level, so the card counts down as the session progresses
   // and a day of easy reviews is not priced like a day of new words.
@@ -561,6 +579,8 @@ export function ReviewPage({
   const [isNewWordQueueOpen, setIsNewWordQueueOpen] = useState(false);
   const [isReviewQueueOpen, setIsReviewQueueOpen] = useState(false);
   const [isEstimateOpen, setIsEstimateOpen] = useState(false);
+  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
+  const [isBackpackOpen, setIsBackpackOpen] = useState(false);
   const [layoutPreview, setLayoutPreview] = useState<LayoutPreview>(() => readLayoutPreview());
   const isDebugPickerOpen = debugPickerOpen ?? localDebugPickerOpen;
   const nextDateKey = addDaysToDateKey(task.dateKey, 1);
@@ -580,8 +600,22 @@ export function ReviewPage({
     onRequestLocalLifePhoto?.(wordId);
   }
 
+  /**
+   * The side drawers are modal, so only one can be reached at a time. Closing
+   * every other one from a single place means a new drawer cannot be added and
+   * quietly left out of some other drawer's close list.
+   */
+  function openSideDrawer(drawer: 'newWord' | 'review' | 'estimate' | 'checkIn' | 'backpack') {
+    setSelectedWordId(null);
+    setIsNewWordQueueOpen(drawer === 'newWord');
+    setIsReviewQueueOpen(drawer === 'review');
+    setIsEstimateOpen(drawer === 'estimate');
+    setIsCheckInOpen(drawer === 'checkIn');
+    setIsBackpackOpen(drawer === 'backpack');
+  }
+
   const heroBadge = isTaskComplete ? '今日完成 · 复习页' : hasStarted ? '进行中 · 复习页' : '今日任务 · 复习页';
-  const primaryActionLabel = isTaskComplete ? '再复习一轮' : hasStarted ? '继续学习' : '开始学习';
+  const primaryActionLabel = isTaskComplete ? '今日任务已完成' : hasStarted ? '继续学习' : '开始学习';
   const heroDescription = isTaskComplete
     ? '今天的新词和复习词都已经完成，可以回看代表词，或者再练一轮薄弱词。'
     : hasStarted
@@ -593,12 +627,6 @@ export function ReviewPage({
     : isReviewHeavy
       ? '复习词比新词多，建议先完成复习部分。'
       : '今天节奏正常，适合直接开始。';
-  const suggestionTitle = isTaskComplete ? '今天可以轻松回看' : isReviewHeavy ? '今天建议先做复习' : '今天可以正常加入新词';
-  const suggestionText = isTaskComplete
-    ? '已经完成的任务不用再压速度，优先回看刚答错或还不稳的词。'
-    : isReviewHeavy
-      ? '复习量已经接近今天的主任务，先把旧词做完会更稳。'
-      : '今天新词和复习词比较平衡，适合一口气完成。';
   const pressureLevel = reviewLoad > setting.dailyReviewLimit
     ? '偏高'
     : reviewLoad >= Math.ceil(setting.dailyReviewLimit * 0.7)
@@ -676,7 +704,12 @@ export function ReviewPage({
   }
 
   return (
-    <main className="page page--review" data-profile={setting.profileId}>
+    <main
+      className="page page--review"
+      data-profile={setting.profileId}
+      data-mascot-scene={mascotItem.id}
+      data-focus-scene={focusItem.id}
+    >
       <div
         className="review-mockup-frame"
         style={{
@@ -790,6 +823,7 @@ export function ReviewPage({
                   className="primary-button review-focus-card__button"
                   type="button"
                   onClick={onStart}
+                  disabled={isTaskComplete}
                   style={getRelativeBoundsStyle(reviewLayout.modules.focusCard.children.ctaButton, reviewLayout.modules.focusCard)}
                 >
                   {primaryActionLabel}
@@ -904,12 +938,7 @@ export function ReviewPage({
               value={`${plannedCount} 个`}
               note={`新词 ${task.newWordIds.length} · 复习 ${task.reviewWordIds.length}`}
               layout={reviewLayout.cards.metrics[0]}
-              onClick={() => {
-                setIsReviewQueueOpen(false);
-                setIsEstimateOpen(false);
-                setSelectedWordId(null);
-                setIsNewWordQueueOpen(true);
-              }}
+              onClick={() => openSideDrawer('newWord')}
             />
             <ReviewMetricCard
               tone="time"
@@ -917,12 +946,7 @@ export function ReviewPage({
               value={getEstimateValue(remainingCount, estimatedMinutes)}
               note={getEstimateNote(remainingCount, hasStarted, todayDurationMs)}
               layout={reviewLayout.cards.metrics[1]}
-              onClick={() => {
-                setIsNewWordQueueOpen(false);
-                setIsReviewQueueOpen(false);
-                setSelectedWordId(null);
-                setIsEstimateOpen(true);
-              }}
+              onClick={() => openSideDrawer('estimate')}
             />
             <ReviewMetricCard
               tone="theme"
@@ -930,16 +954,11 @@ export function ReviewPage({
               value={`${pendingReviewCount} 个`}
               note={`计划 ${task.reviewWordIds.length} · 已完成 ${completedReviewCount}`}
               layout={reviewLayout.cards.metrics[2]}
-              onClick={() => {
-                setIsNewWordQueueOpen(false);
-                setIsEstimateOpen(false);
-                setSelectedWordId(null);
-                setIsReviewQueueOpen(true);
-              }}
+              onClick={() => openSideDrawer('review')}
             />
             <ReviewMetricCard
               tone="heatmap"
-              label="14 天学习热力图"
+              label="学习热力图"
               note=""
               layout={reviewLayout.cards.metrics[3]}
             >
@@ -984,15 +1003,22 @@ export function ReviewPage({
               </h2>
             </div>
             <div className="review-advice-grid" style={{ position: 'absolute', left: '0', top: '0', width: '100%', height: `${guidanceGridHeight}px` }}>
-              <ReviewAdviceCard accent="tea" label="今日建议" value={suggestionTitle} description="" layout={reviewGuidanceLayouts.tea} />
+              <ReviewAdviceCard
+                accent="tea"
+                label="今日签到"
+                value={checkInValue}
+                description=""
+                layout={reviewGuidanceLayouts.tea}
+                onClick={() => openSideDrawer('checkIn')}
+              />
               <ReviewAdviceCard accent="bars" label="未来压力" value={pressureLevel} description="" layout={reviewGuidanceLayouts.bars} onClick={onOpenStats} />
               <ReviewAdviceCard
                 accent="bag"
-                label="当前学习设置"
-                value={`${setting.dailyNewWordCount} 新词 · ${setting.dailyReviewLimit} 复习`}
+                label="背包"
+                value={`${ownedItemCount} / ${BACKPACK_ITEMS.length} 件道具`}
                 description=""
                 layout={reviewGuidanceLayouts.bag}
-                onClick={onOpenSettings}
+                onClick={() => openSideDrawer('backpack')}
               />
             </div>
           </section>
@@ -1034,7 +1060,7 @@ export function ReviewPage({
                 ])
             : undefined
         }
-        queueCompanion={isNewWordQueueOpen || isReviewQueueOpen || isEstimateOpen}
+        queueCompanion={isNewWordQueueOpen || isReviewQueueOpen || isEstimateOpen || isCheckInOpen || isBackpackOpen}
       />
       <NewWordQueueDrawer
         isOpen={isNewWordQueueOpen}
@@ -1068,6 +1094,21 @@ export function ReviewPage({
         answerEvents={answerEvents}
         todayDurationMs={todayDurationMs}
         onClose={() => setIsEstimateOpen(false)}
+      />
+      <CheckInCalendarDrawer
+        isOpen={isCheckInOpen}
+        tasks={heatmapTasks}
+        todayKey={task.dateKey}
+        onClose={() => setIsCheckInOpen(false)}
+      />
+      <BackpackDrawer
+        isOpen={isBackpackOpen}
+        profileId={setting.profileId}
+        totalCheckInDays={checkInSummary.totalDays}
+        mascotSceneId={mascotItem.id}
+        focusSceneId={focusItem.id}
+        onEquip={(slot, itemId) => void onEquipBackpackItem?.(slot, itemId)}
+        onClose={() => setIsBackpackOpen(false)}
       />
     </main>
   );

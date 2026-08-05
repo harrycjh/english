@@ -45,4 +45,25 @@ describe('parent setting normalization', () => {
       newWordQueue: ['word-b', '', 'word-a', 'word-b'],
     }).newWordQueue).toEqual(['word-b', 'word-a']);
   });
+
+  it('remembers which backpack items are being worn', () => {
+    expect(normalizeParentSetting({
+      ...defaultParentSetting,
+      mascotSceneId: 'cyber',
+      focusSceneId: 'kennel',
+    })).toMatchObject({
+      mascotSceneId: 'cyber',
+      focusSceneId: 'kennel',
+    });
+  });
+
+  it('dresses settings saved before the backpack existed in the free items', () => {
+    expect(normalizeParentSetting({
+      enableAudio: true,
+      mascotSceneId: '  ',
+    })).toMatchObject({
+      mascotSceneId: 'default',
+      focusSceneId: 'default',
+    });
+  });
 });

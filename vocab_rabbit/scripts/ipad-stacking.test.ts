@@ -348,7 +348,7 @@ describe('paired queue and word detail drawers', () => {
   });
 
   it('opens the new-word queue on the review sheet and stacks level above stars in review rows', () => {
-    expect(reviewSource).toContain('setIsNewWordQueueOpen(true)');
+    expect(reviewSource).toContain("openSideDrawer('newWord')");
     expect(reviewSource).toContain('<NewWordQueueDrawer');
     expect(appSource).not.toContain('function handleOpenNewWordQueue()');
     expect(reviewQueueSource).toMatch(
