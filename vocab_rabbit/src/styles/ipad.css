@@ -6039,7 +6039,10 @@ button {
   box-shadow: inset 0 0 0 1px rgba(241, 214, 171, 0.72), 0 10px 24px rgba(155, 104, 24, 0.08);
 }
 
-.page--review .review-metric-card::after {
+/* One chevron for every tappable card on the review page. Authoring it twice
+   is how the advice card's copy drifted 19px off centre. */
+.page--review .review-metric-card::after,
+.page--review .review-advice-card.is-actionable::after {
   content: '';
   position: absolute;
   right: 18px;
@@ -6445,16 +6448,9 @@ button {
   position: absolute;
 }
 
+/* The advice card is narrower and has less right padding than a metric card. */
 .page--review .review-advice-card.is-actionable::after {
-  content: '';
-  position: absolute;
   right: 16px;
-  top: 18px;
-  width: 9px;
-  height: 9px;
-  border-top: 2px solid #b88335;
-  border-right: 2px solid #b88335;
-  transform: rotate(45deg);
 }
 
 .page--review .review-advice-card__body {
