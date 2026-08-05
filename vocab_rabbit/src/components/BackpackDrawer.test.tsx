@@ -39,7 +39,7 @@ describe('BackpackDrawer', () => {
     // Matched against the heading itself: `toContain('伙伴')` would also pass
     // on 小屋伙伴 or 每日伙伴, which is the string this test exists to pin.
     expect(markup).toMatch(/<h3[^>]*>伙伴<\/h3>/);
-    expect(markup).toMatch(/<h3[^>]*>小屋背景<\/h3>/);
+    expect(markup).toMatch(/<h3[^>]*>主题背景<\/h3>/);
     expect(markup).toContain('data-slot="mascot"');
     expect(markup).toContain('data-slot="focus"');
   });
