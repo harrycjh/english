@@ -225,6 +225,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-dunhuang.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'phuket',
+    slot: 'focus',
+    name: '普吉岛',
+    hint: '长尾船停在海湾里',
+    requiredDays: 72,
+    artFile: 'scene-phuket.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
