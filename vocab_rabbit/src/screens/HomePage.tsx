@@ -37,6 +37,7 @@ import {
   BACKPACK_ITEMS,
   type BackpackSlot,
   countOwnedItems,
+  getFocusSceneBackground,
   resolveEquippedItem,
 } from '../services/backpack';
 import { APP_VERSION } from '../config/app-meta';
@@ -723,6 +724,9 @@ export function ReviewPage({
       data-profile={setting.profileId}
       data-mascot-scene={mascotItem.id}
       data-focus-scene={focusItem.id}
+      style={{
+        '--focus-scene-background': getFocusSceneBackground(focusItem, setting.profileId) ?? undefined,
+      } as CSSProperties}
     >
       <div
         className="review-mockup-frame"

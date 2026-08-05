@@ -5897,9 +5897,10 @@ button {
   padding: 0;
   border-radius: 34px;
   overflow: hidden;
-  background:
+  --focus-scene-default:
     linear-gradient(180deg, rgba(255, 249, 228, 0.28), rgba(255, 238, 191, 0.18)),
     url('/design-reference/slices/review-focus-art.png?v=5') center center/cover no-repeat;
+  background: var(--focus-scene-default);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.82), 0 20px 42px rgba(193, 145, 68, 0.12);
 }
 
@@ -12003,26 +12004,13 @@ html[data-shell-mode='ipad-fixed'] .page--review .review-plan-shell__chrome .app
 }
 
 /*
- * The focus card carries text across its left half, and the default art is
- * painted pale there to make room. Borrowed scenes are not, so each one gets a
- * scrim that fades out before it reaches the picture.
+ * One rule for every focus scene. The picture, its framing and whether it needs
+ * a scrim all come from the catalogue via --focus-scene-background, so adding a
+ * scene is a one-line change instead of a stylesheet rule somebody has to
+ * remember to write.
  */
-.page--review[data-focus-scene='meadow'] .review-focus-card {
-  background:
-    linear-gradient(96deg, rgba(255, 251, 238, 0.95) 0 30%, rgba(255, 249, 228, 0.66) 54%, rgba(255, 247, 222, 0.14) 80%, rgba(255, 246, 220, 0.04) 100%),
-    url('/design-reference/slices/stats-rhythm-house-v1.webp?v=1') center 64% / cover no-repeat;
-}
-
-.page--review[data-focus-scene='kennel'] .review-focus-card {
-  background:
-    linear-gradient(96deg, rgba(255, 251, 238, 0.95) 0 30%, rgba(255, 249, 228, 0.66) 54%, rgba(255, 247, 222, 0.14) 80%, rgba(255, 246, 220, 0.04) 100%),
-    url('/design-reference/slices/settings-task-impact-doghouse-v1.webp?v=1') center 56% / cover no-repeat;
-}
-
-.page--review[data-focus-scene='cottage'] .review-focus-card {
-  background:
-    linear-gradient(96deg, rgba(255, 251, 238, 0.95) 0 30%, rgba(255, 249, 228, 0.66) 54%, rgba(255, 247, 222, 0.14) 80%, rgba(255, 246, 220, 0.04) 100%),
-    url('/design-reference/slices/selection-plan-house-background.webp?v=1') center 58% / cover no-repeat;
+.page--review .review-focus-card {
+  background: var(--focus-scene-background, var(--focus-scene-default));
 }
 
 .page--review .review-day-forward-button {

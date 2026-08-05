@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import type { BackpackItem } from './backpack';
 import {
   BACKPACK_ITEMS,
   DEFAULT_ITEM_ID,
   countOwnedItems,
+  getFocusSceneBackground,
   getItemArtUrl,
   getNextUnlock,
   isItemOwned,
@@ -79,5 +81,49 @@ describe('backpack', () => {
     expect(getItemArtUrl(item, 'stinky-dog')).toContain('review-dog-scene-v1.webp');
     expect(getItemArtUrl(item, 'cute-junjun')).toContain('review-junjun-cutout-v1.webp');
     expect(getItemArtUrl(item, 'fragrant-rabbit')).toContain('review-bunny-scene.png');
+  });
+});
+
+describe('getFocusSceneBackground', () => {
+  function focusItem(overrides: Partial<BackpackItem> = {}): BackpackItem {
+    return {
+      id: 'landmark',
+      slot: 'focus',
+      name: '地标',
+      hint: '',
+      requiredDays: 20,
+      artFile: 'landmark.webp',
+      ...overrides,
+    };
+  }
+
+  it('scrims art that was never asked to leave room for the text', () => {
+    const background = getFocusSceneBackground(focusItem(), 'cute-junjun')!;
+
+    expect(background.startsWith('linear-gradient(96deg')).toBe(true);
+    expect(background).toContain("url('/design-reference/slices/landmark.webp')");
+    expect(background).toContain('center 58% / cover no-repeat');
+  });
+
+  it('leaves art drawn to the slot spec unscrimmed', () => {
+    // The whole point of drawing the margin in is that the picture keeps its
+    // colour on the left instead of being washed out by a scrim it does not
+    // need — so a scrim here would undo the work.
+    const background = getFocusSceneBackground(focusItem({ hasBuiltInMargin: true }), 'cute-junjun')!;
+
+    expect(background).not.toContain('96deg');
+    expect(background).toContain('landmark.webp');
+  });
+
+  it('honours a per-item framing', () => {
+    const background = getFocusSceneBackground(focusItem({ focusArtPosition: 'center 30%' }), 'cute-junjun')!;
+
+    expect(background).toContain('center 30% / cover');
+  });
+
+  it('paints nothing for the built-in scene or for mascot items', () => {
+    // The card already carries its own art, and mascot art is framed by CSS.
+    expect(getFocusSceneBackground(focusItem({ id: DEFAULT_ITEM_ID }), 'cute-junjun')).toBeNull();
+    expect(getFocusSceneBackground(focusItem({ slot: 'mascot' }), 'cute-junjun')).toBeNull();
   });
 });

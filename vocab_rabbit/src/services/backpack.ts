@@ -15,11 +15,21 @@ export interface BackpackItem {
   requiredDays: number;
   /**
    * Art file under `/design-reference/slices/`, or null for the item that
-   * follows the current profile. The same file is what `ipad.css` paints when
-   * the item is equipped; `backpack.test.ts` reads the stylesheet to prove the
-   * two never drift apart.
+   * follows the current profile. `scripts/backpack-art.test.ts` proves the file
+   * ships and that the stylesheet can reach it.
    */
   artFile: string | null;
+  /**
+   * `background-position` for focus scenes. Landscape art is usually framed a
+   * little below centre, so the horizon lands under the text rather than
+   * through it. Ignored by mascot items, which are framed in CSS.
+   */
+  focusArtPosition?: string;
+  /**
+   * True when the art was drawn to this slot's spec, with its left 62% already
+   * left quiet for the text. Those skip the scrim; borrowed art needs it.
+   */
+  hasBuiltInMargin?: boolean;
 }
 
 export const DEFAULT_ITEM_ID = 'default';
@@ -70,6 +80,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     hint: '雨后的草坡和白栅栏',
     requiredDays: 5,
     artFile: 'stats-rhythm-house-v1.webp',
+    focusArtPosition: 'center 64%',
   },
   {
     id: 'cottage',
@@ -86,6 +97,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     hint: '木头狗屋和一丛野花',
     requiredDays: 12,
     artFile: 'settings-task-impact-doghouse-v1.webp',
+    focusArtPosition: 'center 56%',
   },
 ];
 
@@ -138,4 +150,29 @@ export function getNextUnlock(totalCheckInDays: number): BackpackItem | null {
 
 export function getItemArtUrl(item: BackpackItem, profileId: ProfileId): string {
   return `/design-reference/slices/${item.artFile ?? PROFILE_MASCOT_ART[profileId]}`;
+}
+
+/**
+ * The scrim that keeps the focus card's text legible over borrowed art.
+ *
+ * Art drawn to this slot's spec already leaves its left 62% quiet, and laying a
+ * scrim over that only washes out a picture that did not need the help.
+ */
+const FOCUS_SCRIM = 'linear-gradient(96deg, rgba(255, 251, 238, 0.95) 0 30%, rgba(255, 249, 228, 0.66) 54%, rgba(255, 247, 222, 0.14) 80%, rgba(255, 246, 220, 0.04) 100%)';
+
+/**
+ * The whole background shorthand for an equipped focus scene, or null for the
+ * built-in art that the stylesheet already paints.
+ *
+ * Driving this from the catalogue rather than a rule per item is what makes
+ * adding a scene a one-line change: a hand-written stylesheet rule that nobody
+ * remembers to add is a scene that silently keeps the old picture.
+ */
+export function getFocusSceneBackground(item: BackpackItem, profileId: ProfileId): string | null {
+  if (item.slot !== 'focus' || item.id === DEFAULT_ITEM_ID) return null;
+  const layers = [
+    ...(item.hasBuiltInMargin ? [] : [FOCUS_SCRIM]),
+    `url('${getItemArtUrl(item, profileId)}') ${item.focusArtPosition ?? 'center 58%'} / cover no-repeat`,
+  ];
+  return layers.join(', ');
 }
