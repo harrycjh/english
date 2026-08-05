@@ -168,7 +168,7 @@ describe('memory statistics', () => {
     expect(statistics.masteryLevels.map((point) => point.count)).toEqual([1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
   });
 
-  it('rebuilds daily mastery-level counts from saved answer snapshots', () => {
+  it('counts every word that has reached a level, not just the ones sitting there', () => {
     const shortMemory = createRecord({
       wordId: 'word-short',
       masteryLevel: 2,
@@ -194,11 +194,50 @@ describe('memory statistics', () => {
     }, events, now);
 
     expect(statistics.masteryLevelTimeline.find((point) => point.dateKey === '2026-07-12')?.counts)
-      .toMatchObject({ 2: 0, 6: 0 });
+      .toMatchObject({ 0: 0, 2: 0, 6: 0 });
     expect(statistics.masteryLevelTimeline.find((point) => point.dateKey === '2026-07-13')?.counts)
-      .toMatchObject({ 2: 1, 6: 0 });
+      .toMatchObject({ 0: 1, 2: 1, 3: 0, 6: 0 });
+    // The Lv6 word passed through Lv2 to get there, so it is counted at both.
     expect(statistics.masteryLevelTimeline.find((point) => point.dateKey === '2026-07-14')?.counts)
-      .toMatchObject({ 2: 1, 6: 1 });
+      .toMatchObject({ 0: 2, 2: 2, 3: 1, 6: 1, 7: 0 });
+  });
+
+  it('keeps a word at its best level after it slips back down', () => {    const peak = createRecord({
+      wordId: 'word-peaked',
+      masteryLevel: 6,
+      reviewStage: 6,
+      lastStudiedAt: '2026-07-13T08:00:00.000Z',
+    });
+    const slipped = { ...peak, masteryLevel: 3, reviewStage: 3, lastStudiedAt: '2026-07-14T08:00:00.000Z' };
+    const events = [
+      { ...createEvent('peak', '2026-07-13T08:00:00.000Z', true), wordId: peak.wordId, learningStateAfter: peak },
+      { ...createEvent('slip', '2026-07-14T08:00:00.000Z', false), wordId: peak.wordId, learningStateAfter: slipped },
+    ];
+
+    const statistics = buildMemoryStatistics({ [peak.wordId]: slipped }, events, now);
+
+    expect(statistics.masteryLevelTimeline.at(-1)?.counts).toMatchObject({ 3: 1, 6: 1, 7: 0 });
+  });
+
+  it('counts progress that predates the answer log, and skips words never studied', () => {
+    const studied = Object.fromEntries([0, 1, 1, 10].map((masteryLevel, index) => {
+      const wordId = `word-${index}`;
+      return [wordId, createRecord({ wordId, masteryLevel, reviewStage: masteryLevel })];
+    }));
+    const untouched = createRecord({
+      wordId: 'word-untouched',
+      masteryLevel: 5,
+      reviewStage: 5,
+      lastStudiedAt: null,
+      nextDueAt: null,
+    });
+
+    const statistics = buildMemoryStatistics({ ...studied, [untouched.wordId]: untouched }, [], now);
+
+    // No answer events at all — an imported or synced history still has to show
+    // up, and Lv5 holds only the Lv10 word because the Lv5 one was never studied.
+    expect(statistics.masteryLevelTimeline.at(-1)?.counts)
+      .toMatchObject({ 0: 4, 1: 3, 2: 1, 5: 1, 10: 1 });
   });
 
   it('calculates formal answer accuracy from the level before each answer', () => {
@@ -234,5 +273,49 @@ describe('memory statistics', () => {
       answerCount: 0,
       accuracy: null,
     });
+  });
+
+  it('reads accuracy from the last seven study days only', () => {
+    const levelRecord = (masteryLevel: number): LearningRecord => createRecord({
+      masteryLevel,
+      reviewStage: masteryLevel,
+    });
+    const events = ['07', '08', '09', '10', '11', '12', '13', '14'].map((day, index) => ({
+      ...createEvent(`day-${day}`, `2026-07-${day}T08:00:00.000Z`, index > 0),
+      learningStateBefore: levelRecord(0),
+    }));
+
+    const accuracy = buildMasteryLevelAccuracy(events);
+
+    // Eight days of answers, one of them wrong — and the wrong one is the oldest.
+    expect(accuracy[0]).toMatchObject({ correctCount: 7, answerCount: 7, accuracy: 100 });
+  });
+
+  it('counts the last seven days she studied, not the last seven on the calendar', () => {
+    const levelRecord = (masteryLevel: number): LearningRecord => createRecord({
+      masteryLevel,
+      reviewStage: masteryLevel,
+    });
+    const events = [
+      { ...createEvent('old-correct', '2026-05-02T08:00:00.000Z', true), learningStateBefore: levelRecord(5) },
+      { ...createEvent('old-wrong', '2026-05-03T08:00:00.000Z', false), learningStateBefore: levelRecord(5) },
+    ];
+
+    // Ten weeks stale, but it is still the most recent thing she did.
+    expect(buildMasteryLevelAccuracy(events)[5]).toMatchObject({ answerCount: 2, accuracy: 50 });
+  });
+
+  it('chooses the recent days by date, not by the order the log arrives in', () => {
+    const levelRecord = (masteryLevel: number): LearningRecord => createRecord({
+      masteryLevel,
+      reviewStage: masteryLevel,
+    });
+    // Dexie hands events back in key order, which is not date order.
+    const events = ['07', '08', '09', '10', '11', '12', '13', '14'].map((day, index) => ({
+      ...createEvent(`day-${day}`, `2026-07-${day}T08:00:00.000Z`, index > 0),
+      learningStateBefore: levelRecord(0),
+    })).reverse();
+
+    expect(buildMasteryLevelAccuracy(events)[0]).toMatchObject({ answerCount: 7, accuracy: 100 });
   });
 });

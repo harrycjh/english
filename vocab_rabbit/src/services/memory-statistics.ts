@@ -58,6 +58,7 @@ export interface MasteryLevelPoint {
 
 export interface MasteryLevelTimelinePoint {
   dateKey: string;
+  /** Words that had reached each level by this day — cumulative, not a split. */
   counts: Record<number, number>;
 }
 
@@ -262,12 +263,38 @@ function createMasteryLevels(estimates: WordMemoryEstimate[]): MasteryLevelPoint
   }));
 }
 
+/**
+ * Keeps only the most recent days that actually have answers in them.
+ *
+ * Counting studied days rather than calendar days means a week away from the
+ * app does not empty the chart — the question is "how is she answering lately",
+ * and the answer to that is the last seven times she sat down, whenever they
+ * were. Same approach as `collectStudiedWords` in `study-duration`.
+ */
+function takeRecentStudiedDays(events: AnswerEvent[], recentDays: number): AnswerEvent[] {
+  const recentDateKeys = new Set(
+    [...new Set(events.map((event) => event.dateKey))].sort().slice(-recentDays),
+  );
+  return events.filter((event) => recentDateKeys.has(event.dateKey));
+}
+
+/**
+ * Per-level accuracy over the last few study days.
+ *
+ * Deliberately short: a level is a moving target. The words sitting at Lv2 this
+ * week are not the ones that were there a month ago, and a chart that averaged
+ * over all history would keep reporting a long-fixed weak spot forever. Seven
+ * days is short enough to move when she improves and long enough that one bad
+ * morning does not swing the whole line.
+ */
+export const LEVEL_ACCURACY_RECENT_DAYS = 7;
+
 export function buildMasteryLevelAccuracy(
   answerEvents: AnswerEvent[],
 ): MasteryLevelAccuracyPoint[] {
   const totals = MASTERY_LEVEL_COLORS.map(() => ({ correctCount: 0, answerCount: 0 }));
 
-  for (const event of answerEvents) {
+  for (const event of takeRecentStudiedDays(answerEvents, LEVEL_ACCURACY_RECENT_DAYS)) {
     const masteryLevel = event.learningStateBefore?.masteryLevel;
     if (!Number.isFinite(masteryLevel)) continue;
     const level = clamp(Math.floor(masteryLevel!), 0, MASTERY_LEVEL_COLORS.length - 1);
@@ -299,12 +326,24 @@ function addDays(dateKey: string, days: number): string {
   return createDateKey(date);
 }
 
-function createTimelineCounts(records: Iterable<LearningRecord>): Record<number, number> {
+/**
+ * How many words have *reached* each level, not how many sit there now.
+ *
+ * A word that climbs from Lv3 to Lv4 has not stopped being a word that got to
+ * Lv3, so the Lv3 line must not fall when it moves on — under the old reading
+ * every promotion showed up as a loss, and the only line that could grow
+ * without another shrinking was Lv10. Levels move one step at a time
+ * (`applyAnswer`), so "reached Lv3" is exactly "peaked at Lv3 or above"; the
+ * peak also keeps the credit for a word that later slipped back down, which is
+ * the point of calling the chart 持久度 rather than 分布.
+ *
+ * The lines nest by construction (Lv0 ≥ Lv1 ≥ … ≥ Lv10), so the chart reads as
+ * a funnel: how far the vocabulary has got, level by level.
+ */
+function createReachedCounts(peakLevels: Iterable<number>): Record<number, number> {
   const counts = Object.fromEntries(MASTERY_LEVEL_COLORS.map((_, level) => [level, 0]));
-  for (const record of records) {
-    if (!record.lastStudiedAt) continue;
-    const level = clamp(Math.round(record.masteryLevel), 0, MASTERY_LEVEL_COLORS.length - 1);
-    counts[level] += 1;
+  for (const peak of peakLevels) {
+    for (let level = 0; level <= peak; level += 1) counts[level] += 1;
   }
   return counts;
 }
@@ -320,24 +359,31 @@ export function buildMasteryLevelTimeline(
   const snapshots = answerEvents
     .filter((event): event is AnswerEvent & { learningStateAfter: LearningRecord } => Boolean(event.learningStateAfter))
     .sort((left, right) => left.answeredAt.localeCompare(right.answeredAt));
-  const stateByWord = new Map<string, LearningRecord>();
+  const peakByWord = new Map<string, number>();
   const timeline: MasteryLevelTimelinePoint[] = [];
   let snapshotIndex = 0;
 
+  const recordReached = (record: LearningRecord) => {
+    if (!record.lastStudiedAt) return;
+    const level = clamp(Math.round(record.masteryLevel), 0, MASTERY_LEVEL_COLORS.length - 1);
+    peakByWord.set(record.wordId, Math.max(peakByWord.get(record.wordId) ?? 0, level));
+  };
+
   for (let dateKey = startKey; dateKey <= todayKey; dateKey = addDays(dateKey, 1)) {
     while (snapshotIndex < snapshots.length && snapshots[snapshotIndex].dateKey <= dateKey) {
-      const snapshot = snapshots[snapshotIndex].learningStateAfter;
-      stateByWord.set(snapshot.wordId, snapshot);
+      recordReached(snapshots[snapshotIndex].learningStateAfter);
       snapshotIndex += 1;
     }
 
     if (dateKey === todayKey) {
+      // Today's row trusts the live records, but only upwards: a word sitting at
+      // Lv3 today may have been to Lv7 and back, and the log is what remembers.
       for (const record of Object.values(recordsById)) {
-        stateByWord.set(record.wordId, record);
+        recordReached(record);
       }
     }
 
-    timeline.push({ dateKey, counts: createTimelineCounts(stateByWord.values()) });
+    timeline.push({ dateKey, counts: createReachedCounts(peakByWord.values()) });
   }
 
   return timeline;

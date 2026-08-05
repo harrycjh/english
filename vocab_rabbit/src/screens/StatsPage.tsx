@@ -445,7 +445,7 @@ function MasteryLevelLineChart({ timeline, levels, todayKey, scale }: {
   }, [scrollRef, timeline.length, todayKey]);
 
   return (
-    <div className="durability-timeline-chart" role="group" aria-label="每日各学习等级单词数量曲线图">
+    <div className="durability-timeline-chart" role="group" aria-label="每日到过各学习等级的单词数量曲线图">
       <div className="durability-timeline-chart__axis" aria-hidden="true">
         <div className="durability-timeline-chart__scale">
           {ticks.map((tick) => <span key={tick}>{tick}</span>)}
@@ -550,7 +550,7 @@ function MasteryLevelAccuracyChart({ points }: {
       <svg
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label="Lv0到Lv10平均回答正确率折线图"
+        aria-label="Lv0到Lv10最近7个学习日的平均回答正确率折线图"
       >
         {yTicks.map((tick) => (
           <g key={tick}>
@@ -605,7 +605,7 @@ function MasteryLevelAccuracyChart({ points }: {
         ))}
       </svg>
       {availablePoints.length === 0 ? (
-        <p className="mastery-accuracy-chart__empty">完成正式答题后，这里会显示各等级的平均正确率。</p>
+        <p className="mastery-accuracy-chart__empty">完成正式答题后，这里会显示最近 7 个学习日各等级的平均正确率。</p>
       ) : null}
     </div>
   );
@@ -821,8 +821,8 @@ export function StatsPage({
                     </h2>
                     <p>
                       {durabilityView === 'level'
-                        ? '横轴为答题前等级，纵轴为该等级全部正式答题的平均正确率'
-                        : '横轴为时间，纵轴为周期末各学习等级的单词数量；左右拖动可查看历史'}
+                        ? '横轴为答题前等级，纵轴为最近 7 个学习日该等级正式答题的平均正确率'
+                        : '横轴为时间，纵轴为到当期为止到过各学习等级的单词数量；到过更高等级的词同时计入较低等级，左右拖动可查看历史'}
                     </p>
                   </div>
                   <div className="memory-panel__chart-tools">
@@ -845,10 +845,14 @@ export function StatsPage({
                 <div className={`memory-chart-legend memory-chart-legend--durability${durabilityView === 'level' ? ' is-accuracy' : ''}`}>
                   {memory.masteryLevels.map((point) => {
                     const accuracy = memory.masteryLevelAccuracy[point.level];
+                    // In timeline view the legend has to agree with the line's
+                    // right-hand end, which counts words that have reached the
+                    // level rather than words sitting on it.
+                    const reachedCount = masteryLevelTimeline.at(-1)?.counts[point.level] ?? 0;
                     return (
                       <span key={point.level}>
                         <i style={{ background: point.color }} />
-                        Lv.{point.level} · {point.count}
+                        Lv.{point.level} · {durabilityView === 'level' ? point.count : reachedCount}
                         {durabilityView === 'level'
                           ? ` · ${accuracy.answerCount > 0 ? `${Math.round(accuracy.accuracy!)}% / ${accuracy.answerCount}题` : '暂无答题'}`
                           : ''}
