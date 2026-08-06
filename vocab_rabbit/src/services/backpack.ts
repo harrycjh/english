@@ -279,6 +279,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-hokkaido.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'cambodia',
+    slot: 'focus',
+    name: '柬埔寨',
+    hint: '水边的吴哥窟',
+    requiredDays: 96,
+    artFile: 'scene-cambodia.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
