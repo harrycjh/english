@@ -50,10 +50,10 @@ describe('parent setting normalization', () => {
     expect(normalizeParentSetting({
       ...defaultParentSetting,
       mascotSceneId: 'cyber',
-      focusSceneId: 'kennel',
+      focusSceneId: 'beijing',
     })).toMatchObject({
       mascotSceneId: 'cyber',
-      focusSceneId: 'kennel',
+      focusSceneId: 'beijing',
     });
   });
 

@@ -27,18 +27,23 @@ describe('backpack art', () => {
   });
 
   it('builds every focus scene from the catalogue, with no rule to forget', () => {
+    // Including the free one. It used to be the single exception, painted by a
+    // stylesheet rule of its own, and swapping it then meant editing two files
+    // that nothing checks against each other.
     for (const item of BACKPACK_ITEMS) {
       if (item.slot !== 'focus') continue;
       const background = getFocusSceneBackground(item, 'cute-junjun');
-      if (item.id === DEFAULT_ITEM_ID) {
-        // The free scene is the card's own art; overriding it would only
-        // repaint what is already there.
-        expect(background).toBeNull();
-        continue;
-      }
       expect(background, `${item.id} paints nothing`).toContain(item.artFile!);
       expect(background).toContain('cover');
     }
+  });
+
+  it('leaves the stylesheet backstop without a picture of its own', () => {
+    // A picture here would be a second free scene that the catalogue does not
+    // know about, and it would show through wherever the catalogue is silent.
+    const rule = /--focus-scene-default:[^;]*;/.exec(css)?.[0] ?? '';
+
+    expect(rule).not.toContain('url(');
   });
 
   it('hands that background to the card through the variable the rule reads', () => {
@@ -53,7 +58,7 @@ describe('backpack art', () => {
     // asked to leave room. Art that was asked does not need it, and laying one
     // over it only washes the picture out.
     for (const item of BACKPACK_ITEMS) {
-      if (item.slot !== 'focus' || item.id === DEFAULT_ITEM_ID) continue;
+      if (item.slot !== 'focus') continue;
       const background = getFocusSceneBackground(item, 'cute-junjun')!;
       const scrimmed = background.includes('96deg');
       expect(`${item.id}: ${scrimmed}`).toBe(`${item.id}: ${!item.hasBuiltInMargin}`);

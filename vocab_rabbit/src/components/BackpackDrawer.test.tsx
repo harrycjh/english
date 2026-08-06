@@ -71,13 +71,13 @@ describe('BackpackDrawer', () => {
   });
 
   it('marks the item each slot is wearing', () => {
-    const markup = render(99, 'cyber', 'kennel');
+    const markup = render(99, 'cyber', 'beijing');
     const cyber = /<button[^>]*data-item-id="cyber"[\s\S]*?<\/button>/.exec(markup)?.[0] ?? '';
-    const kennel = /<button[^>]*data-item-id="kennel"[\s\S]*?<\/button>/.exec(markup)?.[0] ?? '';
+    const beijing = /<button[^>]*data-item-id="beijing"[\s\S]*?<\/button>/.exec(markup)?.[0] ?? '';
     const meadow = /<button[^>]*data-item-id="meadow"[\s\S]*?<\/button>/.exec(markup)?.[0] ?? '';
 
     expect(cyber).toContain('aria-pressed="true"');
-    expect(kennel).toContain('aria-pressed="true"');
+    expect(beijing).toContain('aria-pressed="true"');
     expect(meadow).toContain('aria-pressed="false"');
   });
 

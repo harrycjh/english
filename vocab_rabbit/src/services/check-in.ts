@@ -35,8 +35,18 @@ export interface CheckInMonth {
   checkedInCount: number;
 }
 
+/**
+ * How much check-in history the app loads, and therefore the most days it can
+ * ever count. Nothing in the backpack may cost more than this or it can never
+ * be unlocked -- `backpack.test.ts` holds the catalogue to it.
+ */
+export const CHECK_IN_HISTORY_DAYS = 90;
+
 export interface CheckInSummary {
-  /** Every day ever signed in, all history. Prices the backpack. */
+  /**
+   * Days signed in within the loaded history. Prices the backpack. Capped by
+   * CHECK_IN_HISTORY_DAYS, not unbounded.
+   */
   totalDays: number;
   /** Days in a row ending today (or yesterday, if today is still open). */
   streakDays: number;

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BackpackItem } from './backpack';
+import { CHECK_IN_HISTORY_DAYS } from './check-in';
 import {
   BACKPACK_ITEMS,
   DEFAULT_ITEM_ID,
@@ -57,10 +58,20 @@ describe('backpack', () => {
     }
   });
 
-  it('files the 山谷小屋 art as a background rather than a companion', () => {
+  it('keeps every price inside the history the app can actually count', () => {
+    // totalDays comes from the loaded check-in history, so a price above that
+    // window is an item nobody can ever buy -- and nothing else would say so.
+    const dearest = Math.max(...BACKPACK_ITEMS.map((item) => item.requiredDays));
+
+    expect(dearest).toBeLessThanOrEqual(CHECK_IN_HISTORY_DAYS);
+  });
+
+  it('files Mia的家 as a background rather than a companion', () => {
     // It is a house, and the mascot slot is where the rabbit lives.
-    expect(listSlotItems('focus').map((item) => item.id)).toContain('cottage');
-    expect(listSlotItems('mascot').map((item) => item.id)).not.toContain('cottage');
+    const free = listSlotItems('focus').find((item) => item.requiredDays === 0)!;
+
+    expect(free.name).toBe('Mia的家');
+    expect(listSlotItems('mascot').map((item) => item.name)).not.toContain('Mia的家');
   });
 
   it('wears the requested item once it is owned', () => {
@@ -122,10 +133,18 @@ describe('getFocusSceneBackground', () => {
     expect(background).toContain('center 30% / cover');
   });
 
-  it('paints nothing for the built-in scene or for mascot items', () => {
-    // The card already carries its own art, and mascot art is framed by CSS.
-    expect(getFocusSceneBackground(focusItem({ id: DEFAULT_ITEM_ID }), 'cute-junjun')).toBeNull();
+  it('paints the free scene like any other', () => {
+    // It stopped being a special case when 晨光小路 was swapped for Mia的家:
+    // the stylesheet rule that used to carry it was a second place to remember.
+    const background = getFocusSceneBackground(focusItem({ id: DEFAULT_ITEM_ID }), 'cute-junjun');
+
+    expect(background).toContain('landmark.webp');
+  });
+
+  it('paints nothing for mascot items or for art it has not got', () => {
+    // Mascot art is framed by CSS, and there is nothing to paint without a file.
     expect(getFocusSceneBackground(focusItem({ slot: 'mascot' }), 'cute-junjun')).toBeNull();
+    expect(getFocusSceneBackground(focusItem({ artFile: null }), 'cute-junjun')).toBeNull();
   });
 });
 

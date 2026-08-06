@@ -51,6 +51,7 @@ import {
   saveParentSetting,
   saveWordSelectionStates,
 } from '../services/storage-service';
+import { CHECK_IN_HISTORY_DAYS } from '../services/check-in';
 import { verifyFamilyCode } from '../services/cloud-sync-service';
 import type { StartupSyncResult } from '../services/startup-sync-service';
 import { buildStudyDataExport, downloadJsonFile } from '../services/study-data-export';
@@ -260,7 +261,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           ...todayTask.newWordIds,
         ])].filter((wordId) => !localLifePhotoViewsRef.current[wordId]);
         const [history, savedLocalLifePhotos, savedLocalLifePhotoCount] = await Promise.all([
-          listRecentTasks(90),
+          listRecentTasks(CHECK_IN_HISTORY_DAYS),
           loadLocalLifePhotoViews(activePhotoWordIds),
           countLocalLifePhotos(),
         ]);
@@ -494,7 +495,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
   }, [answerEvents, task]);
 
   async function refreshRecentTasks() {
-    setRecentTasks(await listRecentTasks(90));
+    setRecentTasks(await listRecentTasks(CHECK_IN_HISTORY_DAYS));
   }
 
   async function rebuildTodayTask(
@@ -946,7 +947,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     setSelectionById(nextSelectionById);
     setParentSetting(backup.tables.parentSetting);
     setTask(restoredTask);
-    setRecentTasks(await listRecentTasks(90));
+    setRecentTasks(await listRecentTasks(CHECK_IN_HISTORY_DAYS));
     setSessionResult(null);
     setPracticeWordIds(null);
 

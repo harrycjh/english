@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { WordRecord } from '../models/word';
 import { CONTENT_VERSION } from '../config/app-meta';
+import { BACKPACK_ITEMS } from './backpack';
 import {
   collectOfflineImageUrls,
   downloadOfflineImages,
@@ -104,6 +105,16 @@ describe('collectOfflineImageUrls', () => {
     );
     expect(urls).toContain('/content/images/ui/mastery-levels/level-9.webp?v=2');
     expect(new Set(urls).size).toBe(urls.length);
+  });
+
+  it('collects every 主题 scene, so an offline backpack is not full of blanks', () => {
+    const urls = new Set(collectOfflineImageUrls([]));
+
+    for (const item of BACKPACK_ITEMS) {
+      if (!item.artFile) continue;
+      const matching = [...urls].filter((url) => url.includes(item.artFile!));
+      expect(matching, `${item.id} art is not downloaded`).toHaveLength(1);
+    }
   });
 });
 

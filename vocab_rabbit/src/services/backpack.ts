@@ -38,7 +38,9 @@ export const DEFAULT_ITEM_ID = 'default';
  * Everything the backpack can hold.
  *
  * Prices climb slowly and alternate between the two slots, so there is always
- * something close enough to be worth another day: 3, 5, 7, 12, 15.
+ * something close enough to be worth another day: 3, 5, 8, 11, 14. The focus
+ * ladder steps by three all the way up rather than by four, so the last scene
+ * lands inside CHECK_IN_HISTORY_DAYS -- a price above that can never be paid.
  */
 export const BACKPACK_ITEMS: BackpackItem[] = [
   {
@@ -68,10 +70,11 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
   {
     id: DEFAULT_ITEM_ID,
     slot: 'focus',
-    name: '晨光小路',
-    hint: '清晨的坡道和小屋',
+    name: 'Mia的家',
+    hint: '湖边的粉色小屋',
     requiredDays: 0,
-    artFile: 'review-focus-art.png',
+    artFile: 'scene-mia.webp',
+    hasBuiltInMargin: true,
   },
   {
     id: 'meadow',
@@ -83,28 +86,11 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     focusArtPosition: 'center 64%',
   },
   {
-    id: 'cottage',
-    slot: 'focus',
-    name: '山谷小屋',
-    hint: '花园尽头的小房子',
-    requiredDays: 7,
-    artFile: 'selection-plan-house-background.webp',
-  },
-  {
-    id: 'kennel',
-    slot: 'focus',
-    name: '小狗的家',
-    hint: '木头狗屋和一丛野花',
-    requiredDays: 12,
-    artFile: 'settings-task-impact-doghouse-v1.webp',
-    focusArtPosition: 'center 56%',
-  },
-  {
     id: 'beijing',
     slot: 'focus',
     name: '北京',
     hint: '晨光里的祈年殿',
-    requiredDays: 16,
+    requiredDays: 8,
     artFile: 'scene-beijing.webp',
     hasBuiltInMargin: true,
   },
@@ -113,7 +99,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '哈尔滨',
     hint: '雪后的索菲亚教堂',
-    requiredDays: 20,
+    requiredDays: 11,
     artFile: 'scene-harbin.webp',
     hasBuiltInMargin: true,
   },
@@ -122,7 +108,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '上海',
     hint: '春天的外滩和东方明珠',
-    requiredDays: 24,
+    requiredDays: 14,
     artFile: 'scene-shanghai.webp',
     hasBuiltInMargin: true,
   },
@@ -131,7 +117,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '西安',
     hint: '城墙上的钟鼓楼',
-    requiredDays: 28,
+    requiredDays: 17,
     artFile: 'scene-xian.webp',
     hasBuiltInMargin: true,
   },
@@ -140,7 +126,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '长白山',
     hint: '雪线之上的天池',
-    requiredDays: 32,
+    requiredDays: 20,
     artFile: 'scene-changbaishan.webp',
     hasBuiltInMargin: true,
   },
@@ -149,7 +135,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '马尔代夫',
     hint: '海面上的水屋',
-    requiredDays: 36,
+    requiredDays: 23,
     artFile: 'scene-maldives.webp',
     hasBuiltInMargin: true,
   },
@@ -158,7 +144,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '迪拜',
     hint: '海边的帆船塔',
-    requiredDays: 40,
+    requiredDays: 26,
     artFile: 'scene-dubai.webp',
     hasBuiltInMargin: true,
   },
@@ -167,7 +153,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '墨尔本',
     hint: '河边的城市天际线',
-    requiredDays: 44,
+    requiredDays: 29,
     artFile: 'scene-melbourne.webp',
     hasBuiltInMargin: true,
   },
@@ -176,7 +162,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '凯恩斯',
     hint: '珊瑚礁边的海湾小城',
-    requiredDays: 48,
+    requiredDays: 32,
     artFile: 'scene-cairns.webp',
     hasBuiltInMargin: true,
   },
@@ -185,7 +171,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '悉尼',
     hint: '黄昏港湾的歌剧院',
-    requiredDays: 52,
+    requiredDays: 35,
     artFile: 'scene-sydney.webp',
     hasBuiltInMargin: true,
   },
@@ -194,7 +180,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '阿布扎比',
     hint: '海边的白色清真寺',
-    requiredDays: 56,
+    requiredDays: 38,
     artFile: 'scene-abudhabi.webp',
     hasBuiltInMargin: true,
   },
@@ -203,7 +189,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '威海',
     hint: '海湾边的灯塔与栈道',
-    requiredDays: 60,
+    requiredDays: 41,
     artFile: 'scene-weihai.webp',
     hasBuiltInMargin: true,
   },
@@ -212,7 +198,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '曼谷',
     hint: '金顶大皇宫',
-    requiredDays: 64,
+    requiredDays: 44,
     artFile: 'scene-bangkok.webp',
     hasBuiltInMargin: true,
   },
@@ -221,7 +207,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '敦煌',
     hint: '沙丘旁的莫高窟',
-    requiredDays: 68,
+    requiredDays: 47,
     artFile: 'scene-dunhuang.webp',
     hasBuiltInMargin: true,
   },
@@ -230,7 +216,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '普吉岛',
     hint: '长尾船停在海湾里',
-    requiredDays: 72,
+    requiredDays: 50,
     artFile: 'scene-phuket.webp',
     hasBuiltInMargin: true,
   },
@@ -239,7 +225,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '巴厘岛',
     hint: '海崖上的塔庙',
-    requiredDays: 76,
+    requiredDays: 53,
     artFile: 'scene-bali.webp',
     hasBuiltInMargin: true,
   },
@@ -248,7 +234,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '澳门',
     hint: '大三巴牌坊前的石阶',
-    requiredDays: 80,
+    requiredDays: 56,
     artFile: 'scene-macau.webp',
     hasBuiltInMargin: true,
   },
@@ -257,7 +243,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '珠海',
     hint: '海边的日月贝',
-    requiredDays: 84,
+    requiredDays: 59,
     artFile: 'scene-zhuhai.webp',
     hasBuiltInMargin: true,
   },
@@ -266,7 +252,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '三亚',
     hint: '海上的观音像',
-    requiredDays: 88,
+    requiredDays: 62,
     artFile: 'scene-sanya.webp',
     hasBuiltInMargin: true,
   },
@@ -275,7 +261,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '北海道',
     hint: '花田尽头的风车',
-    requiredDays: 92,
+    requiredDays: 65,
     artFile: 'scene-hokkaido.webp',
     hasBuiltInMargin: true,
   },
@@ -284,7 +270,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '柬埔寨',
     hint: '水边的吴哥窟',
-    requiredDays: 96,
+    requiredDays: 68,
     artFile: 'scene-cambodia.webp',
     hasBuiltInMargin: true,
   },
@@ -293,7 +279,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '扬州',
     hint: '烟花三月的五亭桥',
-    requiredDays: 100,
+    requiredDays: 71,
     artFile: 'scene-yangzhou.webp',
     hasBuiltInMargin: true,
   },
@@ -302,7 +288,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '西双版纳',
     hint: '江边的金顶佛寺',
-    requiredDays: 104,
+    requiredDays: 74,
     artFile: 'scene-xishuangbanna.webp',
     hasBuiltInMargin: true,
   },
@@ -384,15 +370,19 @@ export function getItemArtUrl(item: BackpackItem, profileId: ProfileId): string 
 const FOCUS_SCRIM = 'linear-gradient(96deg, rgba(255, 251, 238, 0.95) 0 30%, rgba(255, 249, 228, 0.66) 54%, rgba(255, 247, 222, 0.14) 80%, rgba(255, 246, 220, 0.04) 100%)';
 
 /**
- * The whole background shorthand for an equipped focus scene, or null for the
- * built-in art that the stylesheet already paints.
+ * The whole background shorthand for an equipped focus scene, or null when
+ * there is no picture to paint.
+ *
+ * The free scene used to be excluded here and painted by a stylesheet rule of
+ * its own, which meant swapping it took an edit in two places -- so it is
+ * driven from the catalogue like every other scene now.
  *
  * Driving this from the catalogue rather than a rule per item is what makes
  * adding a scene a one-line change: a hand-written stylesheet rule that nobody
  * remembers to add is a scene that silently keeps the old picture.
  */
 export function getFocusSceneBackground(item: BackpackItem, profileId: ProfileId): string | null {
-  if (item.slot !== 'focus' || item.id === DEFAULT_ITEM_ID) return null;
+  if (item.slot !== 'focus' || !item.artFile) return null;
   const layers = [
     ...(item.hasBuiltInMargin ? [] : [FOCUS_SCRIM]),
     `url('${getItemArtUrl(item, profileId)}') ${item.focusArtPosition ?? 'center 58%'} / cover no-repeat`,

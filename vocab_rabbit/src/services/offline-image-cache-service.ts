@@ -1,4 +1,5 @@
 import type { WordRecord } from '../models/word';
+import { BACKPACK_ITEMS } from './backpack';
 import { getAssetUrl, getWordImageUrl } from './word-service';
 
 export const OFFLINE_IMAGE_CACHE_NAME = 'vocab-rabbit-images-v2';
@@ -10,7 +11,6 @@ const YIELD_INTERVAL = 6;
 
 const STATIC_IMAGE_URLS = [
   '/design-reference/slices/review-bunny-scene.png?v=4',
-  '/design-reference/slices/review-focus-art.png?v=5',
   '/design-reference/slices/review-oxford-tree-icon.png?v=1',
   '/design-reference/slices/review-book-art.png?v=4',
   '/design-reference/slices/review-bars-art.png?v=4',
@@ -61,8 +61,19 @@ function uniqueUrls(urls: string[]): string[] {
   return [...new Set(urls)];
 }
 
+/**
+ * Backpack art, straight from the catalogue. Listing these by hand is how the
+ * 主题 scenes came to be missing from an offline download that calls itself
+ * 全部 -- and the free scene is the one every child sees on the review page.
+ */
+function backpackArtUrls(): string[] {
+  return BACKPACK_ITEMS
+    .filter((item) => item.artFile)
+    .map((item) => getAssetUrl(`/design-reference/slices/${item.artFile}?v=1`));
+}
+
 export function collectOfflineImageUrls(words: WordRecord[]): string[] {
-  const urls = STATIC_IMAGE_URLS.map(getAssetUrl);
+  const urls = [...STATIC_IMAGE_URLS.map(getAssetUrl), ...backpackArtUrls()];
 
   for (let level = 1; level <= 9; level += 1) {
     urls.push(getAssetUrl(`/content/images/ui/mastery-levels/level-${level}.webp?v=2`));
