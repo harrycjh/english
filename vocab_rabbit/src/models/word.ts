@@ -146,13 +146,23 @@ export interface ExamChunk {
   sources: string[];
 }
 
-export interface TeachingChunk extends ExamChunk {
+/**
+ * A teaching chunk as it reaches the browser.
+ *
+ * The authored list carries much more per chunk -- `sense`, `type`, `cefr`,
+ * `sources`, and the provenance inside `usageFrequency` -- for the
+ * chunk-selection scripts to read. `scripts/shrink-word-payload.mjs` strips all
+ * of it, because 1302 words' worth of it was 140KB gzipped that every child
+ * downloaded on open and nothing ever rendered. Declaring only what ships is
+ * what stops someone reading a field that is present in dev (which serves the
+ * authored file) and undefined in production.
+ */
+export interface TeachingChunk {
+  phrase: string;
+  chinese: string;
   usageFrequency: {
     zipf: number;
     selectionScore: number;
-    source: 'wordfreq-estimate';
-    phraseListPer100Million?: number;
-    phaveRank?: number;
   };
 }
 

@@ -7,6 +7,32 @@ import { fileURLToPath } from 'node:url';
 // phone download and parse them on every visit for nothing.
 export const BUILD_ONLY_WORD_FIELDS = ['examChunks'];
 
+// Same story one level down: every teaching chunk carries the reasoning behind
+// its selection, and the drawer that shows them renders the phrase and its
+// translation and nothing else. Across 1302 words that was 140KB gzipped --
+// a quarter of the whole payload -- downloaded on every open for nothing.
+export const SHIPPED_TEACHING_CHUNK_FIELDS = ['phrase', 'chinese'];
+export const SHIPPED_USAGE_FREQUENCY_FIELDS = ['zipf', 'selectionScore'];
+
+function pick(source, fields) {
+  const kept = {};
+  for (const field of fields) {
+    if (source[field] !== undefined) kept[field] = source[field];
+  }
+  return kept;
+}
+
+function shrinkTeachingChunk(chunk) {
+  return {
+    ...pick(chunk, SHIPPED_TEACHING_CHUNK_FIELDS),
+    // Kept because the drawer sorts on them at render time. The authored file
+    // is only mostly in that order (63 words differ), so pre-sorting here and
+    // dropping these would quietly reorder those words in production but not
+    // in dev, where the authored file is served untouched.
+    usageFrequency: pick(chunk.usageFrequency ?? {}, SHIPPED_USAGE_FREQUENCY_FIELDS),
+  };
+}
+
 const PAYLOAD_RELATIVE_PATH = 'content/words/ket_vocabulary.json';
 
 export function shrinkWordPayload(payload) {
@@ -20,6 +46,9 @@ export function shrinkWordPayload(payload) {
       const shipped = { ...word };
       for (const field of BUILD_ONLY_WORD_FIELDS) {
         delete shipped[field];
+      }
+      if (Array.isArray(shipped.teachingChunks)) {
+        shipped.teachingChunks = shipped.teachingChunks.map(shrinkTeachingChunk);
       }
       return shipped;
     }),

@@ -17,32 +17,19 @@ const word: WordRecord = {
   imageApproved: true,
   oxfordRefs: [],
   examples: ['This is my hand.'],
+  // The shipped shape, not the authored one: the build strips everything the
+  // drawer does not render, so a fixture carrying sense/type/cefr/sources would
+  // be testing against data the component never actually sees.
   teachingChunks: [
     {
       phrase: 'give someone a hand',
       chinese: '帮助某人;搭把手',
-      sense: 'help someone',
-      type: 'fixed_expression',
-      cefr: 'A2',
-      sources: ['phrase-list'],
-      usageFrequency: {
-        zipf: 4.8,
-        selectionScore: 6.1,
-        source: 'wordfreq-estimate',
-      },
+      usageFrequency: { zipf: 4.8, selectionScore: 6.1 },
     },
     {
       phrase: 'by hand',
       chinese: '用手;手工',
-      sense: 'made or done manually',
-      type: 'fixed_expression',
-      cefr: 'A2',
-      sources: ['oewn-2025'],
-      usageFrequency: {
-        zipf: 4.5,
-        selectionScore: 4.5,
-        source: 'wordfreq-estimate',
-      },
+      usageFrequency: { zipf: 4.5, selectionScore: 4.5 },
     },
   ],
   relatedMedia: {
