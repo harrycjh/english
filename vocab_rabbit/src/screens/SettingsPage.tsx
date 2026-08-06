@@ -17,10 +17,15 @@ import type { StudyDataImportResult } from '../services/study-data-import';
 import type { WordRecord } from '../models/word';
 import {
   collectOfflineImageUrls,
-  downloadOfflineImages,
   getOfflineImageCacheStatus,
   requestPersistentImageStorage,
 } from '../services/offline-image-cache-service';
+import {
+  resumeOfflineImageJob,
+  startOfflineImageJob,
+  stopOfflineImageJob,
+  subscribeOfflineImageJob,
+} from '../services/offline-image-job';
 import {
   getAvailableSpeechVoices,
   speakSequence,
@@ -254,7 +259,6 @@ export function SettingsPage({
     message: null,
   });
   const studyDataInputRef = useRef<HTMLInputElement>(null);
-  const imageDownloadAbortRef = useRef<AbortController | null>(null);
   const privatePhotoAbortRef = useRef<AbortController | null>(null);
   const offlineImageUrls = useMemo(() => collectOfflineImageUrls(words), [words]);
 
@@ -290,12 +294,19 @@ export function SettingsPage({
     setOfflineImageState((current) => ({ ...current, phase: 'checking', total: offlineImageUrls.length }));
     void getOfflineImageCacheStatus(offlineImageUrls).then(({ cached, total }) => {
       if (cancelled) return;
-      setOfflineImageState({
-        phase: cached === total && total > 0 ? 'complete' : 'idle',
-        completed: cached,
-        total,
-        failed: 0,
-      });
+      setOfflineImageState((current) => (
+        // A running download owns these numbers. Overwriting them with a cache
+        // count taken before the page mounted is how re-entering Settings used
+        // to make an in-flight download look like it had stopped.
+        current.phase === 'downloading'
+          ? current
+          : {
+            phase: cached === total && total > 0 ? 'complete' : 'idle',
+            completed: cached,
+            total,
+            failed: 0,
+          }
+      ));
     }).catch(() => {
       if (!cancelled) {
         setOfflineImageState({ phase: 'error', completed: 0, total: offlineImageUrls.length, failed: 0 });
@@ -306,6 +317,42 @@ export function SettingsPage({
       cancelled = true;
     };
   }, [offlineImageUrls]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeOfflineImageJob((job) => {
+      if (job.running) {
+        setOfflineImageState({
+          phase: 'downloading',
+          completed: job.completed,
+          total: job.total,
+          failed: job.failed,
+        });
+        return;
+      }
+      setOfflineImageState((current) => {
+        if (current.phase !== 'downloading') return current;
+        return {
+          phase: job.failed > 0 ? 'error' : job.total > 0 && job.completed >= job.total ? 'complete' : 'idle',
+          completed: job.completed,
+          total: job.total,
+          failed: job.failed,
+        };
+      });
+    });
+
+    // The worker gets killed between slices by design, and a page that has been
+    // in the background for a while may have missed the end of the job -- so ask
+    // on mount and every time we come back to the foreground.
+    resumeOfflineImageJob();
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') resumeOfflineImageJob();
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => {
+      unsubscribe();
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, []);
 
   useEffect(() => {
     setPrivatePhotoState((current) => ({
@@ -377,9 +424,9 @@ export function SettingsPage({
     setLastSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
   }
 
-  async function handleOfflineImageDownload() {
+  function handleOfflineImageDownload() {
     if (offlineImageState.phase === 'downloading') {
-      imageDownloadAbortRef.current?.abort();
+      stopOfflineImageJob();
       return;
     }
     if (typeof caches === 'undefined') {
@@ -387,40 +434,9 @@ export function SettingsPage({
       return;
     }
 
-    const abortController = new AbortController();
-    imageDownloadAbortRef.current = abortController;
     setOfflineImageState((current) => ({ ...current, phase: 'downloading', failed: 0 }));
     void requestPersistentImageStorage();
-
-    try {
-      const result = await downloadOfflineImages(offlineImageUrls, {
-        signal: abortController.signal,
-        onProgress: ({ completed, total, failed }) => {
-          setOfflineImageState({ phase: 'downloading', completed, total, failed });
-        },
-      });
-      setOfflineImageState({
-        phase: result.failed > 0 ? 'error' : 'complete',
-        completed: result.cached + result.downloaded,
-        total: result.total,
-        failed: result.failed,
-      });
-    } catch (caughtError) {
-      const status = await getOfflineImageCacheStatus(offlineImageUrls).catch(() => ({
-        cached: offlineImageState.completed,
-        total: offlineImageUrls.length,
-      }));
-      setOfflineImageState({
-        phase: abortController.signal.aborted ? 'idle' : 'error',
-        completed: status.cached,
-        total: status.total,
-        failed: abortController.signal.aborted ? 0 : 1,
-      });
-    } finally {
-      if (imageDownloadAbortRef.current === abortController) {
-        imageDownloadAbortRef.current = null;
-      }
-    }
+    startOfflineImageJob(offlineImageUrls);
   }
 
   async function handlePrivatePhotoDownload() {
@@ -525,7 +541,7 @@ export function SettingsPage({
     : offlineImageState.phase === 'unsupported'
       ? '当前浏览器不支持离线图片缓存。'
       : offlineImageState.phase === 'downloading'
-        ? `正在下载 ${offlineImageState.completed}/${offlineImageState.total}（${offlineImagePercent}%）`
+        ? `正在下载 ${offlineImageState.completed}/${offlineImageState.total}（${offlineImagePercent}%），可以先去别的页面，下载会在后台继续。`
         : offlineImageState.phase === 'complete'
           ? `已下载全部 ${offlineImageState.total} 个图片资源，可离线快速显示。`
           : offlineImageState.phase === 'error'
@@ -785,7 +801,7 @@ export function SettingsPage({
                   className="secondary-button"
                   type="button"
                   disabled={offlineImageState.phase === 'checking' || offlineImageState.phase === 'unsupported'}
-                  onClick={() => void handleOfflineImageDownload()}
+                  onClick={handleOfflineImageDownload}
                 >
                   {offlineImageButtonText}
                 </button>

@@ -5,7 +5,10 @@ import { getAssetUrl, getWordImageUrl } from './word-service';
 export const OFFLINE_IMAGE_CACHE_NAME = 'vocab-rabbit-images-v2';
 
 const OFFLINE_DOWNLOAD_HEADER = 'X-VocaRabbit-Offline-Download';
-const DOWNLOAD_CONCURRENCY = 4;
+// 8, not 4. The list is ~1500 images over HTTP/2, where the cost is round
+// trips rather than bandwidth per connection, and this only ever runs on the
+// fallback path -- the worker does its own.
+const DOWNLOAD_CONCURRENCY = 8;
 const PROGRESS_UPDATE_INTERVAL = 8;
 const YIELD_INTERVAL = 6;
 
@@ -187,15 +190,19 @@ export async function downloadOfflineImages(
       const url = missing[nextIndex];
       nextIndex += 1;
       try {
+        // Without `cache: 'no-store'`: the point is to have the image
+        // available offline, and an image the browser already holds is one we
+        // should not make a child's phone download a second time.
         const response = await fetcher(url, {
-          cache: 'no-store',
           headers: { [OFFLINE_DOWNLOAD_HEADER]: '1' },
           signal: options.signal,
         });
         if (!response.ok) {
           throw new Error(`图片下载失败（${response.status}）`);
         }
-        await cache.put(url, response.clone());
+        // No clone: nothing else reads this body, and cloning one buffers the
+        // whole image twice.
+        await cache.put(url, response);
         downloaded += 1;
       } catch (caughtError) {
         if (options.signal?.aborted) {

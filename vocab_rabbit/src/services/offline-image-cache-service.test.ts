@@ -145,7 +145,13 @@ describe('downloadOfflineImages', () => {
 
     expect(cacheStorage.open).toHaveBeenCalledWith(OFFLINE_IMAGE_CACHE_NAME);
     expect(fetcher).toHaveBeenCalledTimes(1);
-    expect(fetcher).toHaveBeenCalledWith('/missing.webp', expect.objectContaining({ cache: 'no-store' }));
+    // Not `cache: 'no-store'`: an image the browser already holds should not be
+    // downloaded a second time onto a child's phone.
+    expect(fetcher).toHaveBeenCalledWith('/missing.webp', expect.not.objectContaining({ cache: 'no-store' }));
+    expect(fetcher).toHaveBeenCalledWith(
+      '/missing.webp',
+      expect.objectContaining({ headers: { 'X-VocaRabbit-Offline-Download': '1' } }),
+    );
     expect(cache.put).toHaveBeenCalledWith('/missing.webp', expect.any(Response));
     expect(result).toEqual({ cached: 1, downloaded: 1, failed: 0, total: 2 });
     expect(progress.at(-1)).toEqual({ completed: 2, total: 2, failed: 0 });
