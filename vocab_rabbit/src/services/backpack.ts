@@ -243,6 +243,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-bali.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'macau',
+    slot: 'focus',
+    name: '澳门',
+    hint: '大三巴牌坊前的石阶',
+    requiredDays: 80,
+    artFile: 'scene-macau.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
