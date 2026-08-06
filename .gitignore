@@ -5,6 +5,7 @@ __pycache__/
 
 # Large local source/extracted datasets
 RAZ/
+raz/
 red-rocket/
 red-rocket-extracted/
 red-rocket-processed/
