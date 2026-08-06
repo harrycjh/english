@@ -226,6 +226,58 @@ describe('estimateQuestionDurationMs', () => {
     expect(estimateQuestionDurationMs(steady)).toBe(11_875);
     expect(estimateQuestionDurationMs(withOutlier)).toBe(11_818);
   });
+
+  /**
+   * `LearningPage.handleAllCorrect` stamps its answers one second apart and
+   * writes `responseTimeMs: 0` for every one after the first.
+   */
+  function allCorrectShortcut(dateKey: string, count: number, startSeconds: number) {
+    return Array.from({ length: count }, (_, index) => ({
+      ...event(`shortcut-${index}`, dateKey, clockAt(startSeconds + index), index === 0 ? 9_000 : 0),
+      wordId: `shortcut-word-${index}`,
+    }));
+  }
+
+  it('ignores the answers the 全部答对 shortcut wrote for itself', () => {
+    const steady = Array.from({ length: 20 }, (_, index) => event(
+      `e-${index}`, '2026-08-01', clockAt(index * 10), 10_000,
+    ));
+    const cheated = [...steady, ...allCorrectShortcut('2026-08-01', 51, 600)];
+
+    // 50 one-second answers outnumber the 20 real ones, so without the guard
+    // the median collapses onto the shortcut instead of the child. The only
+    // difference from the steady run is the shortcut's own first answer, which
+    // is a real one and does count. Without the guard this reads 3.0s.
+    expect(estimateQuestionDurationMs(cheated)).toBe(11_818);
+    expect(estimateQuestionDurationMs(cheated)).toBeGreaterThan(10_000);
+  });
+
+  it('keeps the one answer the child really gave before the shortcut', () => {
+    const shortcut = allCorrectShortcut('2026-08-01', 30, 0);
+
+    // The first answer of the run is a real one: it was on screen while the
+    // child decided to give up, and its think time was really measured.
+    expect(estimateQuestionDurationMs(shortcut)).toBe(
+      estimateQuestionDurationMs([event('only', '2026-08-01', clockAt(0), 9_000)]),
+    );
+  });
+
+  it('measures a surviving question against the answer really before it', () => {
+    // A shortcut ending at 0:29, then a genuine answer at 1:30. The real answer
+    // is charged the 61s it actually waited, not the 90s it would be charged if
+    // the shortcut were spliced out of the log and the gap measured to the last
+    // answer that survived the filter.
+    const afterShortcut = [
+      ...allCorrectShortcut('2026-08-01', 30, 0),
+      event('real', '2026-08-01', clockAt(90), 12_000),
+    ];
+
+    // Two surviving samples, 9s and 61s: median 35s, held 2/14 of the way
+    // toward it from the 15s prior. Splicing would make it 49.5s and 19_929.
+    expect(estimateQuestionDurationMs(afterShortcut)).toBe(
+      Math.round((35_000 * (2 / 14)) + (15_000 * (12 / 14))),
+    );
+  });
 });
 
 /** One study day of `count` words answered `gapSeconds` apart, some repeated. */

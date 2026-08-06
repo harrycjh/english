@@ -144,6 +144,19 @@ export function sumStudyDuration(durations: Iterable<DailyStudyDuration>): numbe
   return total;
 }
 
+/**
+ * Whether a person was actually sitting there for this answer.
+ *
+ * A real answer always carries the time the child spent thinking about it. The
+ * debug 「全部答对」 shortcut (`LearningPage.handleAllCorrect`) writes
+ * `responseTimeMs: 0` for every answer after the first, which is also how a
+ * record with no think time at all -- an import from somewhere else, say --
+ * gets caught.
+ */
+function wasAnsweredByHand(event: AnswerEvent): boolean {
+  return event.responseTimeMs > 0;
+}
+
 function median(values: number[]): number {
   if (values.length === 0) return 0;
   const sorted = [...values].sort((left, right) => left - right);
@@ -156,13 +169,26 @@ function median(values: number[]): number {
 /**
  * Typical cost of one question, blended with the default prior so a handful of
  * unusually fast or slow answers cannot swing the estimate.
+ *
+ * Answers nobody sat through are dropped, on the same `wasAnsweredByHand` test
+ * `collectStudiedWords` uses. Left in, a 51-word 「全部答对」 shortcut
+ * contributes 50 one-second samples -- more than the child usually answers in a
+ * day -- and takes the median with it: 11.8s becomes 3.0s.
+ *
+ * The sample is dropped rather than the event, so the questions that survive
+ * still measure their gap against whatever really came before them. Removing
+ * the events first would splice the whole shortcut into one huge gap and hand
+ * the next real question the bill for it.
  */
 export function estimateQuestionDurationMs(events: AnswerEvent[]): number {
   const samples: number[] = [];
   for (const bucket of groupOrderedByDate(events).values()) {
     for (const [index, event] of bucket.entries()) {
       const duration = calculateQuestionDurationMs(event, bucket[index - 1]);
-      if (duration > 0) samples.push(duration);
+      // A hand-answered question always has a think time, so its duration is
+      // always positive -- there is nothing left for a `duration > 0` check.
+      if (!wasAnsweredByHand(event)) continue;
+      samples.push(duration);
     }
   }
 
@@ -206,7 +232,7 @@ interface StudiedWord {
  * what the log says happened, while this reports how long a person takes.
  */
 function collectStudiedWords(events: AnswerEvent[], recentDays: number): StudiedWord[] {
-  const byDate = groupOrderedByDate(events.filter((event) => event.responseTimeMs > 0));
+  const byDate = groupOrderedByDate(events.filter(wasAnsweredByHand));
   const recentDateKeys = [...byDate.keys()].sort().slice(-recentDays);
 
   const studied: StudiedWord[] = [];
