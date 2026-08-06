@@ -234,6 +234,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-phuket.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'bali',
+    slot: 'focus',
+    name: '巴厘岛',
+    hint: '海崖上的塔庙',
+    requiredDays: 76,
+    artFile: 'scene-bali.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
