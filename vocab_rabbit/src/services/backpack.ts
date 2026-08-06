@@ -270,6 +270,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-sanya.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'hokkaido',
+    slot: 'focus',
+    name: '北海道',
+    hint: '花田尽头的风车',
+    requiredDays: 92,
+    artFile: 'scene-hokkaido.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
