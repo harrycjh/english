@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vocab-rabbit-shell-v12';
+const CACHE_NAME = 'vocab-rabbit-shell-v13';
 const OFFLINE_IMAGE_CACHE_PREFIX = 'vocab-rabbit-images-';
 const OFFLINE_IMAGE_CACHE_NAME = 'vocab-rabbit-images-v2';
 const OFFLINE_DOWNLOAD_HEADER = 'X-VocaRabbit-Offline-Download';
@@ -6,8 +6,14 @@ const SCOPE_URL = new URL(self.registration.scope);
 const APP_ROOT_URL = new URL('./', SCOPE_URL).toString();
 const INDEX_URL = new URL('index.html', SCOPE_URL).toString();
 const MANIFEST_URL = new URL('manifest.webmanifest', SCOPE_URL).toString();
-const WORD_PAYLOAD_URL = new URL('content/words/ket_vocabulary.json', SCOPE_URL).toString();
-const PRECACHE = [APP_ROOT_URL, INDEX_URL, MANIFEST_URL, WORD_PAYLOAD_URL];
+// Deliberately without the word list. Precaching it made install download
+// 2.7MB that the app could not even use -- it lands under the bare URL, while
+// the app asks for a ?v=-suffixed one -- so the first visit paid for the list
+// twice. Warming it from the activate handler is no better: that download runs
+// alongside the page's own, and on a phone the two just halve each other's
+// bandwidth (measured: first open 2.0s -> 8.3s). So the list is fetched once,
+// by the app, and cached on the way past.
+const PRECACHE = [APP_ROOT_URL, INDEX_URL, MANIFEST_URL];
 
 async function putInCache(request, response) {
   if (!response || response.status !== 200) {
@@ -52,7 +58,10 @@ async function handleStaticAsset(request) {
 // most one session ever sees week-old words.
 async function handleWordPayload(event) {
   const { request } = event;
-  const cached = await caches.match(request);
+  // ignoreSearch so a cached copy still counts after CONTENT_VERSION moves on.
+  // It may be one version old, which is exactly what the background refresh
+  // below is for -- and it beats another 600KB before the first paint.
+  const cached = await caches.match(request, { ignoreSearch: true });
 
   // 'no-cache' rather than 'no-store': this still always reaches the server,
   // but it sends the ETag, so an unchanged word list costs a 304 instead of
@@ -70,7 +79,7 @@ async function handleWordPayload(event) {
   }
 
   const response = await fromNetwork;
-  return response || (await caches.match(WORD_PAYLOAD_URL)) || Response.error();
+  return response || Response.error();
 }
 
 self.addEventListener('install', (event) => {

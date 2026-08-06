@@ -38,8 +38,16 @@ async function loadServiceWorker(options: {
         cacheEntries.set(typeof request === 'string' ? request : request.url, response);
       },
     }),
-    match: async (request: Request | string) =>
-      cacheEntries.get(typeof request === 'string' ? request : request.url),
+    match: async (request: Request | string, options?: { ignoreSearch?: boolean }) => {
+      const url = typeof request === 'string' ? request : request.url;
+      const exact = cacheEntries.get(url);
+      if (exact || !options?.ignoreSearch) return exact;
+      const withoutQuery = url.split('?')[0];
+      for (const [key, value] of cacheEntries) {
+        if (key.split('?')[0] === withoutQuery) return value;
+      }
+      return undefined;
+    },
     keys: async () => [],
     delete: async () => true,
   };
@@ -137,14 +145,40 @@ describe('service worker word payload strategy', () => {
     expect(await response.text()).toBe('from-network');
   });
 
-  it('serves the precached copy when the network is gone and the version moved on', async () => {
+  // CONTENT_VERSION is baked into the query string, so a release changes the
+  // request URL. An exact-match lookup would miss and put the child back on the
+  // network for the whole 600KB on the first open after every deploy.
+  it('reuses the copy cached under a previous content version', async () => {
     const sw = await loadServiceWorker({
-      cached: { [`https://example.test${WORD_PAYLOAD}`]: 'precached' },
+      cached: { [`https://example.test${WORD_PAYLOAD}?v=v0.1.5`]: 'previous-version' },
+      networkBody: 'from-network',
+    });
+
+    const { response, pending } = await sw.dispatchFetch(versionedUrl);
+    expect(await response.text()).toBe('previous-version');
+
+    // ...and the background refresh stores the new version under the new key,
+    // so the staleness lasts exactly one open.
+    await Promise.all(pending);
+    expect(await sw.cacheEntries.get(versionedUrl)?.text()).toBe('from-network');
+  });
+
+  it('serves the cached copy when the network is gone', async () => {
+    const sw = await loadServiceWorker({
+      cached: { [`https://example.test${WORD_PAYLOAD}?v=v0.1.5`]: 'cached' },
       networkBody: null,
     });
 
     const { response } = await sw.dispatchFetch(versionedUrl);
 
-    expect(await response.text()).toBe('precached');
+    expect(await response.text()).toBe('cached');
+  });
+
+  it('does not precache the word list, which would download it twice', async () => {
+    const source = await readFile(path.resolve('public/sw.js'), 'utf8');
+    const precache = /const PRECACHE = \[([^\]]*)\]/.exec(source)?.[1] ?? '';
+
+    expect(precache).not.toMatch(/WORD_PAYLOAD|ket_vocabulary/);
+    expect(precache).toMatch(/INDEX_URL/);
   });
 });
