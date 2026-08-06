@@ -492,9 +492,10 @@ describe('estimateWordDurationByLevel', () => {
     expect(byLevel.get(9)).toEqual({
       level: 9, words: 10, durationMs: 13_750, isMeasured: true,
     });
-    // A level nobody visited has nothing of its own to say.
+    // A level nobody visited sits on the line between the two that were:
+    // five ninths of the way from Lv0's 31.75s down to Lv9's 13.75s.
     expect(byLevel.get(5)).toEqual({
-      level: 5, words: 0, durationMs: 21_650, isMeasured: false,
+      level: 5, words: 0, durationMs: 21_750, isMeasured: false,
     });
   });
 
@@ -516,6 +517,95 @@ describe('estimateWordDurationByLevel', () => {
     expect(byLevel.get(6)).toEqual({
       level: 6, words: 1, durationMs: 22_890, isMeasured: true,
     });
+  });
+
+  it('prices the levels above the child at the highest one she reached', () => {
+    // A child working through Lv0-Lv5: new words are slow, reviews get quicker.
+    const ladder = Array.from({ length: 6 }, (_, level) => levelDay(
+      '2026-08-01',
+      level,
+      Array.from({ length: 10 }, (_, i) => `w-${level}-${i}`),
+      30 - (level * 3),
+      level * 600,
+    )).flat();
+    const byLevel = estimateWordDurationByLevel(ladder);
+
+    // Lv5 is the top of what has actually been timed, and it is well below the
+    // overall pace, which is dragged up by the new words at the bottom.
+    const levelFive = byLevel.get(5)!;
+    expect(levelFive.isMeasured).toBe(true);
+    expect(levelFive.durationMs).toBeLessThan(estimateWordDurationMs(ladder));
+
+    for (let level = 6; level <= 10; level += 1) {
+      expect(byLevel.get(level)).toEqual({
+        level, words: 0, durationMs: levelFive.durationMs, isMeasured: false,
+      });
+    }
+  });
+
+  it('prices the levels below the child at the lowest one she reached', () => {
+    // Only Lv7 was studied, so Lv0-Lv6 have nothing below them to read.
+    const highOnly = levelDay(
+      '2026-08-01', 7, Array.from({ length: 10 }, (_, i) => `w-${i}`), 12,
+    );
+    const byLevel = estimateWordDurationByLevel(highOnly);
+    const levelSeven = byLevel.get(7)!;
+
+    expect(levelSeven.isMeasured).toBe(true);
+    for (let level = 0; level <= 6; level += 1) {
+      expect(byLevel.get(level)?.durationMs).toBe(levelSeven.durationMs);
+    }
+  });
+
+  it('reads a gap between two studied levels off the line joining them', () => {
+    const gapped = [
+      ...levelDay('2026-08-01', 2, Array.from({ length: 20 }, (_, i) => `low-${i}`), 40),
+      ...levelDay('2026-08-01', 6, Array.from({ length: 20 }, (_, i) => `high-${i}`), 10, 3_600),
+    ];
+    const byLevel = estimateWordDurationByLevel(gapped);
+    const low = byLevel.get(2)!.durationMs;
+    const high = byLevel.get(6)!.durationMs;
+
+    // Lv3, Lv4, Lv5 step evenly from Lv2 down to Lv6 rather than all quoting
+    // one average, and Lv4 lands exactly halfway.
+    expect(byLevel.get(4)?.durationMs).toBe(Math.round((low + high) / 2));
+    expect(byLevel.get(3)!.durationMs).toBeGreaterThan(byLevel.get(4)!.durationMs);
+    expect(byLevel.get(4)!.durationMs).toBeGreaterThan(byLevel.get(5)!.durationMs);
+    // Everything below Lv2 and above Lv6 repeats the nearest measured end.
+    expect(byLevel.get(0)?.durationMs).toBe(low);
+    expect(byLevel.get(10)?.durationMs).toBe(high);
+  });
+
+  it('reads a gap off the levels either side of it, not the far end of the ladder', () => {
+    const threeRungs = [
+      ...levelDay('2026-08-01', 0, Array.from({ length: 20 }, (_, i) => `a-${i}`), 40),
+      // Deliberately off the straight line from Lv0 to Lv8: if a gap were read
+      // from the far end of the ladder instead of its neighbours, these numbers
+      // would be the ones to give it away.
+      ...levelDay('2026-08-01', 4, Array.from({ length: 20 }, (_, i) => `b-${i}`), 34, 3_600),
+      ...levelDay('2026-08-01', 8, Array.from({ length: 20 }, (_, i) => `c-${i}`), 10, 7_200),
+    ];
+    const byLevel = estimateWordDurationByLevel(threeRungs);
+
+    // Lv6 sits halfway between Lv4 and Lv8, the rungs either side of it --
+    // reaching past Lv4 to Lv0 would price a review like a first meeting.
+    expect(byLevel.get(6)?.durationMs).toBe(
+      Math.round((byLevel.get(4)!.durationMs + byLevel.get(8)!.durationMs) / 2),
+    );
+    expect(byLevel.get(2)?.durationMs).toBe(
+      Math.round((byLevel.get(0)!.durationMs + byLevel.get(4)!.durationMs) / 2),
+    );
+  });
+
+  it('leaves a guessed level marked as a guess', () => {
+    const onlyLevelOne = levelDay(
+      '2026-08-01', 1, Array.from({ length: 10 }, (_, i) => `w-${i}`), 25,
+    );
+    const byLevel = estimateWordDurationByLevel(onlyLevelOne);
+
+    // Borrowing a neighbour's number is still not a measurement of this level.
+    expect(byLevel.get(8)?.isMeasured).toBe(false);
+    expect(byLevel.get(8)?.words).toBe(0);
   });
 
   it('only looks back a week, so a level follows the child', () => {
@@ -608,8 +698,10 @@ describe('estimateSessionDuration', () => {
   it('marks the levels it had to guess at', () => {
     const estimate = estimateSessionDuration([4, 4], history);
 
+    // Lv4 was never studied, so it is read off the line between Lv0 and Lv9
+    // rather than quoting the overall pace.
     expect(estimate.rows).toEqual([
-      { level: 4, words: 2, wordDurationMs: 21_650, durationMs: 43_300, isMeasured: false },
+      { level: 4, words: 2, wordDurationMs: 23_750, durationMs: 47_500, isMeasured: false },
     ]);
   });
 

@@ -276,8 +276,9 @@ export interface LevelWordDuration {
  * level today's plan can also be read at — after a correct answer the word moves
  * up, but by then it has left the queue.
  *
- * Levels the child has not touched lately, and levels with only a word or two,
- * lean on the overall pace rather than inventing a number from one sample.
+ * A level with only a word or two leans on the overall pace rather than
+ * inventing a number from one sample. A level with nothing at all takes the
+ * shape of the levels around it instead -- see `fillUnmeasuredLevels`.
  */
 export function estimateWordDurationByLevel(
   events: AnswerEvent[],
@@ -297,6 +298,7 @@ export function estimateWordDurationByLevel(
   }
 
   const byLevel = new Map<number, LevelWordDuration>();
+  const measuredLevels: number[] = [];
   for (let level = 0; level <= MAX_MASTERY_LEVEL; level += 1) {
     const bucket = totals.get(level);
     const words = bucket?.words ?? 0;
@@ -308,8 +310,62 @@ export function estimateWordDurationByLevel(
       durationMs: Math.round((observed * weight) + (overallDurationMs * (1 - weight))),
       isMeasured: words > 0,
     });
+    if (words > 0) measuredLevels.push(level);
   }
+
+  fillUnmeasuredLevels(byLevel, measuredLevels);
   return byLevel;
+}
+
+/**
+ * Prices the levels nobody reached from the levels next to them.
+ *
+ * The overall pace is the average of whatever the child studied lately, which
+ * is mostly new words at the bottom of the ladder. Quoting it for Lv6-Lv10
+ * charged a review the price of a first meeting: with a child working through
+ * Lv0-Lv5, every level above Lv5 was billed the blended average of the lot
+ * rather than anything resembling a review.
+ *
+ * So an untouched level is read off its neighbours instead: between two
+ * measured levels it sits on the line joining them, and above or below the ones
+ * the child has actually reached it simply repeats the nearest. With Lv0-Lv5
+ * measured that makes Lv6-Lv10 all cost what Lv5 costs, which is the closest
+ * thing to a review that has actually been timed.
+ *
+ * With nothing measured at all, every level keeps the overall pace it already
+ * has -- there are no neighbours to read.
+ */
+function fillUnmeasuredLevels(
+  byLevel: Map<number, LevelWordDuration>,
+  measuredLevels: number[],
+): void {
+  if (measuredLevels.length === 0) return;
+
+  const durationAt = (level: number) => byLevel.get(level)!.durationMs;
+  const lowest = measuredLevels[0];
+  const highest = measuredLevels[measuredLevels.length - 1];
+
+  for (const entry of byLevel.values()) {
+    if (entry.isMeasured) continue;
+
+    // Measured levels are already out, so `lowest` and `highest` themselves
+    // never reach these two branches -- the boundaries cannot be off by one.
+    if (entry.level < lowest) {
+      entry.durationMs = durationAt(lowest);
+      continue;
+    }
+    if (entry.level > highest) {
+      entry.durationMs = durationAt(highest);
+      continue;
+    }
+
+    const below = measuredLevels.filter((level) => level < entry.level).pop()!;
+    const above = measuredLevels.find((level) => level > entry.level)!;
+    const progress = (entry.level - below) / (above - below);
+    entry.durationMs = Math.round(
+      durationAt(below) + ((durationAt(above) - durationAt(below)) * progress),
+    );
+  }
 }
 
 /** One row of the estimate: every word of a level, and what they add up to. */
@@ -325,7 +381,7 @@ export interface SessionEstimate {
   totalDurationMs: number;
   /** One row per level present in the session, lowest level first. */
   rows: SessionEstimateRow[];
-  /** The single-figure pace the sparse levels fall back to. */
+  /** The single-figure pace a thinly measured level is held back towards. */
   overallWordDurationMs: number;
   /** The full Lv0–Lv10 pace table the rows were priced from. */
   byLevel: Map<number, LevelWordDuration>;

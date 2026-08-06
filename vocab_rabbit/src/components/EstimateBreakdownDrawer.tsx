@@ -125,7 +125,8 @@ export function EstimateBreakdownDrawer({
                 {measuredWords > 0
                   ? `最近 ${LEVEL_DURATION_RECENT_DAYS} 天一共有 ${measuredWords} 个词可以计时；`
                   : '最近还没有可以计时的记录；'}
-                练得少的等级会往整体速度上靠，避免一两个词就定了一个等级的价。
+                练得少的等级会往整体速度上靠，避免一两个词就定了一个等级的价；
+                最近完全没练到的等级，则按练过的相邻等级来算 —— 还没爬到的高等级，就按爬到过的最高等级算。
               </p>
             </div>
           </div>
