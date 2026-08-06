@@ -95,7 +95,8 @@ describe('BackpackDrawer', () => {
     expect(free).toBeGreaterThan(0);
     expect(total).toBeGreaterThan(free);
     expect(render(0)).toContain(`已收集 ${free} / ${total} 件`);
-    expect(render(99)).toContain(`已收集 ${total} / ${total} 件`);
+    const everything = Math.max(...BACKPACK_ITEMS.map((item) => item.requiredDays));
+    expect(render(everything)).toContain(`已收集 ${total} / ${total} 件`);
   });
 
   it('previews the free companion with the art the current profile wears', () => {

@@ -288,6 +288,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-cambodia.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'yangzhou',
+    slot: 'focus',
+    name: '扬州',
+    hint: '烟花三月的五亭桥',
+    requiredDays: 100,
+    artFile: 'scene-yangzhou.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
