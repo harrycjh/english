@@ -174,6 +174,12 @@ export interface WordRecord {
   example?: string;
   examples?: string[];
   exampleCollocations?: string[];
+  /**
+   * Build-time only: present in the authored word list so the chunk-selection
+   * scripts can read it, and stripped from the shipped payload by
+   * `scripts/shrink-word-payload.mjs`. Never read it at runtime -- it is
+   * undefined in the browser. See `scripts/shrink-word-payload.test.ts`.
+   */
   examChunks?: ExamChunk[];
   teachingChunks?: TeachingChunk[];
   exampleTranslations?: string[];

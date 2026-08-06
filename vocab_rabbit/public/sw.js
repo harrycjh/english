@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vocab-rabbit-shell-v11';
+const CACHE_NAME = 'vocab-rabbit-shell-v12';
 const OFFLINE_IMAGE_CACHE_PREFIX = 'vocab-rabbit-images-';
 const OFFLINE_IMAGE_CACHE_NAME = 'vocab-rabbit-images-v2';
 const OFFLINE_DOWNLOAD_HEADER = 'X-VocaRabbit-Offline-Download';
@@ -46,13 +46,31 @@ async function handleStaticAsset(request) {
   }
 }
 
-async function handleWordPayload(request) {
-  try {
-    const response = await fetch(request, { cache: 'no-store' });
-    return putInCache(request, response);
-  } catch {
-    return (await caches.match(request)) || (await caches.match(WORD_PAYLOAD_URL)) || Response.error();
+// The word list is ~900KB over the wire. Fetching it before every first paint
+// made "正在准备今天的词汇篮子" sit on screen for the whole download on phones.
+// Serve the cached copy straight away and refresh it in the background, so at
+// most one session ever sees week-old words.
+async function handleWordPayload(event) {
+  const { request } = event;
+  const cached = await caches.match(request);
+
+  // 'no-cache' rather than 'no-store': this still always reaches the server,
+  // but it sends the ETag, so an unchanged word list costs a 304 instead of
+  // another 900KB of the child's mobile data.
+  const fromNetwork = fetch(request, { cache: 'no-cache' })
+    .then((response) => putInCache(request, response))
+    .catch(() => null);
+
+  // Keep the worker alive long enough to store the refreshed copy even though
+  // the page has already been handed the cached one.
+  event.waitUntil(fromNetwork);
+
+  if (cached) {
+    return cached;
   }
+
+  const response = await fromNetwork;
+  return response || (await caches.match(WORD_PAYLOAD_URL)) || Response.error();
 }
 
 self.addEventListener('install', (event) => {
@@ -91,7 +109,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   if (new URL(event.request.url).pathname.endsWith('/content/words/ket_vocabulary.json')) {
-    event.respondWith(handleWordPayload(event.request));
+    event.respondWith(handleWordPayload(event));
     return;
   }
 
