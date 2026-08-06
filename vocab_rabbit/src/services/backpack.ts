@@ -261,6 +261,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-zhuhai.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'sanya',
+    slot: 'focus',
+    name: '三亚',
+    hint: '海上的观音像',
+    requiredDays: 88,
+    artFile: 'scene-sanya.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
