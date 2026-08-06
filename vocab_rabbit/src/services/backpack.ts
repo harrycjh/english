@@ -297,6 +297,15 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     artFile: 'scene-yangzhou.webp',
     hasBuiltInMargin: true,
   },
+  {
+    id: 'xishuangbanna',
+    slot: 'focus',
+    name: '西双版纳',
+    hint: '江边的金顶佛寺',
+    requiredDays: 104,
+    artFile: 'scene-xishuangbanna.webp',
+    hasBuiltInMargin: true,
+  },
 ];
 
 /** Art the 每日伙伴 item shows, which is whatever the current profile wears. */
