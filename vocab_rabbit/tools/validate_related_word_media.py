@@ -32,13 +32,18 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
     with_oxford = 0
     with_life_photo = 0
     with_red_rocket = 0
+    with_raz = 0
     with_oxford_sentence_translation = 0
     with_red_rocket_sentence_translation = 0
+    with_raz_sentence = 0
+    with_raz_sentence_translation = 0
     red_rocket_atlases: set[str] = set()
     red_rocket_images: set[tuple[str, str | int, int | None]] = set()
+    raz_atlases: set[str] = set()
+    raz_images: set[tuple[str, int | None, int | None]] = set()
 
-    if manifest.get("schemaVersion") not in (1, 2):
-        errors.append("public manifest schemaVersion must be 1 or 2")
+    if manifest.get("schemaVersion") not in (1, 2, 3):
+        errors.append("public manifest schemaVersion must be 1, 2, or 3")
 
     for entry in entries:
         word_id = entry.get("wordId")
@@ -50,6 +55,7 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
         oxford = related_media.get("oxford")
         life_photo = related_media.get("lifePhoto")
         red_rocket = related_media.get("redRocket")
+        raz = related_media.get("raz")
 
         if oxford:
             with_oxford += 1
@@ -98,6 +104,26 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
                 else:
                     errors.append(f"{word_id} Red Rocket sentence is missing sentenceTranslation")
 
+        if raz:
+            with_raz += 1
+            atlas_path = raz.get("atlasPath", "")
+            row = raz.get("row")
+            column = raz.get("column")
+            raz_atlases.add(atlas_path)
+            raz_images.add((atlas_path, row, column))
+            if not atlas_path.startswith("/content/images/raz-atlases/"):
+                errors.append(f"{word_id} RAZ atlasPath must stay under /content/images/raz-atlases/")
+            if not public_path_exists(atlas_path):
+                errors.append(f"{word_id} RAZ atlas is missing: {atlas_path}")
+            if row not in (0, 1, 2) or column not in (0, 1, 2):
+                errors.append(f"{word_id} RAZ atlas cell is invalid")
+            if not raz.get("bookId") or not raz.get("page"):
+                errors.append(f"{word_id} RAZ reference is missing bookId or page")
+            if raz.get("sentence"):
+                with_raz_sentence += 1
+                if raz.get("sentenceTranslation"):
+                    with_raz_sentence_translation += 1
+
     stats = manifest.get("stats", {})
     if stats.get("entries") != len(entries):
         errors.append("public stats.entries does not match entry count")
@@ -111,10 +137,20 @@ def validate_public_manifest(word_ids: set[str]) -> list[str]:
         errors.append("public stats.uniqueRedRocketImages does not match displayed page images")
     if stats.get("redRocketAtlases", 0) != len(red_rocket_atlases):
         errors.append("public stats.redRocketAtlases does not match unique atlas paths")
+    if stats.get("withRaz", 0) != with_raz:
+        errors.append("public stats.withRaz does not match entry count")
+    if stats.get("uniqueRazImages", 0) != len(raz_images):
+        errors.append("public stats.uniqueRazImages does not match displayed page images")
+    if stats.get("razAtlases", 0) != len(raz_atlases):
+        errors.append("public stats.razAtlases does not match unique atlas paths")
     if stats.get("withOxfordSentenceTranslation", 0) != with_oxford_sentence_translation:
         errors.append("public stats.withOxfordSentenceTranslation does not match translated sentence count")
     if stats.get("withRedRocketSentenceTranslation", 0) != with_red_rocket_sentence_translation:
         errors.append("public stats.withRedRocketSentenceTranslation does not match translated sentence count")
+    if stats.get("withRazSentence", 0) != with_raz_sentence:
+        errors.append("public stats.withRazSentence does not match sentence count")
+    if stats.get("withRazSentenceTranslation", 0) != with_raz_sentence_translation:
+        errors.append("public stats.withRazSentenceTranslation does not match translated sentence count")
     if (PUBLIC_ROOT / "content/images/life-photos").exists():
         errors.append("public/content/images/life-photos must not exist")
 

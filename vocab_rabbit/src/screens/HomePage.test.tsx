@@ -20,6 +20,30 @@ const previewWord: WordRecord = {
 
 describe('ReviewPage', () => {
   it('uses the approved word image in the today preview card', () => {
+    const previewWordWithMedia: WordRecord = {
+      ...previewWord,
+      relatedMedia: {
+        redRocket: {
+          atlasPath: '/content/images/red-rocket-atlases/atlas-001.webp',
+          row: 0,
+          column: 0,
+          label: 'Early Level 1, Dad, Page 3',
+          level: 'Early Level 1',
+          title: 'Dad',
+          page: 3,
+          matchKind: 'exact',
+          matchedTerm: 'dad',
+          confidence: 1,
+        },
+        oxford: {
+          imagePath: '/content/images/oxford-tree/level-1/book-1/page-1.webp',
+          label: 'Level 1, Book 1, Page 1',
+          level: 1,
+          book: 1,
+          page: 1,
+        },
+      },
+    };
     const markup = renderToStaticMarkup(
       <ReviewPage
         payload={{
@@ -46,8 +70,18 @@ describe('ReviewPage', () => {
         answerEvents={[]}
         masteredCount={0}
         recentTasks={[]}
-        previewWords={[previewWord]}
-        localLifePhotosById={{}}
+        previewWords={[previewWordWithMedia]}
+        localLifePhotosById={{
+          [previewWord.id]: {
+            wordId: previewWord.id,
+            objectUrl: 'blob:dad-life-photo',
+            caption: 'Dad',
+            photoId: 'dad-photo',
+            match: 'primary',
+            confidence: 1,
+            importedAt: '2026-08-07T00:00:00.000Z',
+          },
+        }}
         onStart={() => undefined}
         onStartDebug={() => undefined}
         onAdvanceDay={async () => undefined}
@@ -60,12 +94,23 @@ describe('ReviewPage', () => {
     expect(markup).toContain(
       `src="/content/images/words/ket_dad_n.webp?v=${CONTENT_VERSION}"`,
     );
+    expect(markup).toContain('class="review-preview-card__headline" data-auto-fit="true"');
+    expect(markup).toContain('aria-label="红火箭：有例图"');
+    expect(markup).toContain('aria-label="牛津树：有例图"');
+    expect(markup).toContain('aria-label="生活照片：有例图"');
+    expect(markup).not.toContain('aria-label="RAZ：');
+    expect(markup).toContain('review-preview-card__source-tag--green');
+    expect(markup).toContain('review-preview-card__source-tag--red');
+    expect(markup).toContain('review-preview-card__source-tag--blue');
+    expect(markup).toMatch(/>OXF<\/span>.*>RED<\/span>.*>LIF<\/span>/);
     expect(markup).not.toContain('review-day-forward-button');
     expect(markup).toContain('review-metric-card review-metric-card--task is-actionable');
     expect(markup).toContain('review-advice-card review-advice-card--bars is-actionable');
     expect(markup).toContain('review-advice-card review-advice-card--bag is-actionable');
     // Every advice card now opens something, so all three carry the chevron.
     expect(markup).toContain('review-advice-card review-advice-card--tea is-actionable');
+    expect(markup).toContain('lucide-calendar-days');
+    expect(markup).not.toContain('review-advice-card__art');
     // The heatmap opens nothing, so it must not advertise a tap — and without
     // the chevron its picture gets the whole card to sit in.
     expect(markup).toMatch(/class="review-metric-card review-metric-card--heatmap"/);

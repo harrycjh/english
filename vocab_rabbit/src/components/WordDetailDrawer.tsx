@@ -9,9 +9,11 @@ import type { WordRecord } from '../models/word';
 import { speakWord } from '../services/audio-service';
 import { AudioIconButton } from './AudioIconButton';
 import { DifficultyStars } from './DifficultyStars';
+import { MasteryLevelIcon } from './MasteryLevelIcon';
 import { WordImage } from './WordImage';
 import { getExampleSentences } from '../services/example-service';
 import { getWordAnswerStats } from '../services/answer-event-service';
+import { getTokenForms } from '../services/english-inflection-service';
 import { getWordAtlasStyle } from '../services/word-atlas-service';
 import {
   getAssetUrl,
@@ -64,30 +66,6 @@ function formatReviewDate(dateText: string | null): string {
   });
 }
 
-function getSelectionLabel(selectionState: WordSelectionState | undefined): string {
-  if (!selectionState || (selectionState.isEnabled && !selectionState.isPaused)) {
-    return '当前已启用';
-  }
-
-  if (selectionState.isPaused) {
-    return '当前已暂停';
-  }
-
-  return '当前未启用';
-}
-
-function getLearningLabel(record: LearningRecord | undefined): string {
-  if (!record) {
-    return '尚未开始';
-  }
-
-  if (record.masteryLevel >= MAX_MASTERY_LEVEL) {
-    return '已掌握';
-  }
-
-  return '学习中';
-}
-
 function getQuestionKindLabel(questionKind: AnswerEvent['questionKind']): string {
   if (questionKind === 'recognition') return '认识判断';
   if (questionKind === 'image-choice') return '图片选择';
@@ -108,6 +86,103 @@ function formatChunkTranslation(value: string): string {
   return value
     .replace(/\s*;\s*/g, '；')
     .replace(/\s*\/\s*/g, '、');
+}
+
+function escapeRegularExpression(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function getAuthoredHighlightTerms(english: string): string[] {
+  const trailingParenthesisRemoved = english.replace(/\s+\([^)]*\)\s*$/, '').trim();
+  const inlineOptional = trailingParenthesisRemoved.match(
+    /^(.*?)([A-Za-z]+)\(([^()\s]+)\)([A-Za-z]*)(.*)$/,
+  );
+  const variants = inlineOptional
+    ? [
+        `${inlineOptional[1]}${inlineOptional[2]}${inlineOptional[4]}${inlineOptional[5]}`,
+        `${inlineOptional[1]}${inlineOptional[2]}${inlineOptional[3]}${inlineOptional[4]}${inlineOptional[5]}`,
+      ]
+    : [trailingParenthesisRemoved];
+  return variants.flatMap((variant) => {
+    const normalized = variant.trim();
+    if (!/^[A-Za-z]+$/u.test(normalized)) return [normalized];
+    return getTokenForms(normalized);
+  });
+}
+
+function HighlightedRelatedSentence({
+  sentence,
+  word,
+  matchedTerms = [],
+}: {
+  sentence: string;
+  word: WordRecord;
+  matchedTerms?: Array<string | undefined>;
+}) {
+  const terms = [
+    ...matchedTerms,
+    ...getAuthoredHighlightTerms(word.english),
+  ].filter((term): term is string => Boolean(term?.trim()));
+  if (word.english.trim().toLowerCase() === 'not') {
+    terms.push(sentence.match(/\b[A-Za-z]+n['’]t\b/i)?.[0] ?? '');
+  }
+  const uniqueTerms = [...new Set(terms)]
+    .filter(Boolean)
+    .sort((left, right) => right.length - left.length);
+  if (uniqueTerms.length === 0) return <>{sentence}</>;
+
+  const pattern = new RegExp(
+    `(?<![A-Za-z])(?:${uniqueTerms.map(escapeRegularExpression).join('|')})(?![A-Za-z])`,
+    'gi',
+  );
+  const parts = [];
+  let cursor = 0;
+  for (const match of sentence.matchAll(pattern)) {
+    const index = match.index;
+    if (index > cursor) parts.push(sentence.slice(cursor, index));
+    parts.push(
+      <mark className="word-detail-drawer__related-word" key={`${index}-${match[0]}`}>
+        {match[0]}
+      </mark>,
+    );
+    cursor = index + match[0].length;
+  }
+  if (cursor === 0) return <>{sentence}</>;
+  if (cursor < sentence.length) parts.push(sentence.slice(cursor));
+  return <>{parts}</>;
+}
+
+function HighlightedRelatedTranslation({
+  translation,
+  word,
+}: {
+  translation: string;
+  word: WordRecord;
+}) {
+  const terms = [...new Set(
+    [getStudyChinese(word), word.chinese]
+      .flatMap((value) => value.split(/[；;,，、/]/))
+      .map((value) => value.replace(/[（）()]/g, '').trim())
+      .filter(Boolean),
+  )].sort((left, right) => right.length - left.length);
+  if (terms.length === 0) return <>{translation}</>;
+
+  const pattern = new RegExp(`(?:${terms.map(escapeRegularExpression).join('|')})`, 'g');
+  const parts = [];
+  let cursor = 0;
+  for (const match of translation.matchAll(pattern)) {
+    const index = match.index;
+    if (index > cursor) parts.push(translation.slice(cursor, index));
+    parts.push(
+      <mark className="word-detail-drawer__related-word" key={`${index}-${match[0]}`}>
+        {match[0]}
+      </mark>,
+    );
+    cursor = index + match[0].length;
+  }
+  if (cursor === 0) return <>{translation}</>;
+  if (cursor < translation.length) parts.push(translation.slice(cursor));
+  return <>{parts}</>;
 }
 
 interface LevelHistoryPoint {
@@ -272,19 +347,19 @@ export function WordDetailDrawer({
   const lifePhoto = localLifePhoto
     ? {
         src: localLifePhoto.objectUrl,
-        caption: localLifePhoto.caption,
         match: localLifePhoto.match,
         confidence: localLifePhoto.confidence,
       }
     : relatedMedia?.lifePhoto
       ? {
           src: getAssetUrl(relatedMedia.lifePhoto.imagePath),
-          caption: relatedMedia.lifePhoto.caption,
           match: relatedMedia.lifePhoto.match,
           confidence: relatedMedia.lifePhoto.confidence,
         }
       : null;
-  const hasRelatedMedia = Boolean(relatedMedia?.oxford || relatedMedia?.redRocket || lifePhoto);
+  const hasRelatedMedia = Boolean(
+    relatedMedia?.oxford || relatedMedia?.redRocket || relatedMedia?.raz || lifePhoto,
+  );
   const primaryMedia = (
     <div className="word-detail-drawer__primary-media">
       {word.imageApproved ? (
@@ -303,10 +378,11 @@ export function WordDetailDrawer({
       <p className="word-detail-drawer__meaning">{getStudyChinese(word)}</p>
       <p className="word-detail-drawer__part-of-speech">{getStudyPartOfSpeech(word)}</p>
       <div className="word-detail-drawer__meta-strip">
-        <span className="word-detail-chip">{word.category}</span>
         <DifficultyStars difficulty={word.difficulty} className="word-detail-chip word-detail-chip--stars" />
-        <span className="word-detail-chip">{getLearningLabel(record)}</span>
-        <span className="word-detail-chip">{getSelectionLabel(selectionState)}</span>
+        <MasteryLevelIcon
+          level={record?.masteryLevel ?? 0}
+          className="word-detail-drawer__mastery-level"
+        />
       </div>
     </div>
   );
@@ -374,8 +450,23 @@ export function WordDetailDrawer({
                     alt={`${getStudyText(word)} 的牛津树关联页`}
                   />
                   <div>
-                    <strong>牛津树图</strong>
-                    <span>{relatedMedia.oxford.label}</span>
+                    <div className="word-detail-drawer__related-heading">
+                      <strong>牛津树</strong>
+                      <span>Level {relatedMedia.oxford.level}</span>
+                    </div>
+                    {relatedMedia.oxford.sentence ? (
+                      <p className="word-detail-drawer__related-sentence">
+                        <HighlightedRelatedSentence sentence={relatedMedia.oxford.sentence} word={word} />
+                      </p>
+                    ) : null}
+                    {relatedMedia.oxford.sentenceTranslation ? (
+                      <p className="word-detail-drawer__related-translation">
+                        <HighlightedRelatedTranslation
+                          translation={relatedMedia.oxford.sentenceTranslation}
+                          word={word}
+                        />
+                      </p>
+                    ) : null}
                   </div>
                 </article>
               ) : null}
@@ -399,8 +490,64 @@ export function WordDetailDrawer({
                     />
                   )}
                   <div>
-                    <strong>红火箭图</strong>
-                    <span>{relatedMedia.redRocket.label}</span>
+                    <div className="word-detail-drawer__related-heading">
+                      <strong>红火箭</strong>
+                      <span>{relatedMedia.redRocket.level}</span>
+                    </div>
+                    {relatedMedia.redRocket.sentence ? (
+                      <p className="word-detail-drawer__related-sentence">
+                        <HighlightedRelatedSentence
+                          sentence={relatedMedia.redRocket.sentence}
+                          word={word}
+                          matchedTerms={[relatedMedia.redRocket.matchedTerm]}
+                        />
+                      </p>
+                    ) : null}
+                    {relatedMedia.redRocket.sentenceTranslation ? (
+                      <p className="word-detail-drawer__related-translation">
+                        <HighlightedRelatedTranslation
+                          translation={relatedMedia.redRocket.sentenceTranslation}
+                          word={word}
+                        />
+                      </p>
+                    ) : null}
+                  </div>
+                </article>
+              ) : null}
+
+              {relatedMedia?.raz ? (
+                <article className="word-detail-drawer__related-card">
+                  <span
+                    className="word-detail-drawer__raz-image word-image--atlas"
+                    role="img"
+                    aria-label={`${getStudyText(word)} 的 RAZ 首次出现页`}
+                    style={{
+                      ...getWordAtlasStyle(relatedMedia.raz, { columns: 3, rows: 3, cellSize: 512 }),
+                      backgroundImage: `url(${getWordImageUrl(relatedMedia.raz.atlasPath)})`,
+                    }}
+                  />
+                  <div>
+                    <div className="word-detail-drawer__related-heading">
+                      <strong>RAZ</strong>
+                      <span>Level {relatedMedia.raz.level}</span>
+                    </div>
+                    {relatedMedia.raz.sentence ? (
+                      <p className="word-detail-drawer__related-sentence">
+                        <HighlightedRelatedSentence
+                          sentence={relatedMedia.raz.sentence}
+                          word={word}
+                          matchedTerms={[relatedMedia.raz.matchedForm, relatedMedia.raz.matchedTerm]}
+                        />
+                      </p>
+                    ) : null}
+                    {relatedMedia.raz.sentenceTranslation ? (
+                      <p className="word-detail-drawer__related-translation">
+                        <HighlightedRelatedTranslation
+                          translation={relatedMedia.raz.sentenceTranslation}
+                          word={word}
+                        />
+                      </p>
+                    ) : null}
                   </div>
                 </article>
               ) : null}
@@ -417,7 +564,6 @@ export function WordDetailDrawer({
                       {getLifePhotoMatchLabel(lifePhoto.match)} · 置信度{' '}
                       {Math.round(lifePhoto.confidence * 100)}%
                     </span>
-                    <p>{lifePhoto.caption}</p>
                   </div>
                 </article>
               ) : null}

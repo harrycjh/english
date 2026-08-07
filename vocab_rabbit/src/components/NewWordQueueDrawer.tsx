@@ -1,11 +1,12 @@
 import { createPortal } from 'react-dom';
-import { ChevronDown, ChevronUp, ListOrdered, Plus, Search, Trash2, X } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, ListOrdered, Plus, Search, Trash2, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { WordSelectionState } from '../models/word-selection-state';
 import type { WordRecord } from '../models/word';
 import { isWordEnabledForStudy } from '../services/selection-service';
+import { groupTaskWordIdsByCompletion } from '../services/task-service';
 import { getStudyChinese, getStudyText } from '../services/word-service';
 import { DifficultyStars } from './DifficultyStars';
 import { WordImage } from './WordImage';
@@ -70,7 +71,10 @@ export function NewWordQueueDrawer({
     && !recordsById[wordId]
     && isWordEnabledForStudy(wordId, selectionById)
   )), [queue, recordsById, selectionById, wordsById]);
-  const todayWordIds = task.newWordIds.filter((wordId) => !task.answeredWordIds.includes(wordId));
+  const {
+    pendingWordIds: todayWordIds,
+    completedWordIds: completedTodayWordIds,
+  } = groupTaskWordIdsByCompletion(task.newWordIds, task.answeredWordIds);
   const todayWordIdSet = new Set(todayWordIds);
   const queueWordIdSet = new Set(activeQueue);
   const taskStarted = task.totalAnswered > 0;
@@ -146,6 +150,32 @@ export function NewWordQueueDrawer({
               })}
             </ol>
           ) : <p className="new-word-queue__empty">今日没有尚未学习的新词。</p>}
+        </section>
+
+        <section className="new-word-queue__section">
+          <div className="new-word-queue__section-heading">
+            <div>
+              <h3>今日新学习</h3>
+              <p>今天已经完成学习的新词。</p>
+            </div>
+            <strong>{completedTodayWordIds.length} 个</strong>
+          </div>
+          {completedTodayWordIds.length > 0 ? (
+            <ol className="new-word-queue__list new-word-queue__list--completed">
+              {completedTodayWordIds.map((wordId) => {
+                const word = wordsById.get(wordId);
+                if (!word) return null;
+                return (
+                  <li key={wordId}>
+                    <span className="new-word-queue__index is-complete">
+                      <Check size={14} aria-hidden="true" />
+                    </span>
+                    <QueueWord word={word} onOpen={() => onOpenWord?.(wordId)} />
+                  </li>
+                );
+              })}
+            </ol>
+          ) : <p className="new-word-queue__empty">今天还没有完成新词学习。</p>}
         </section>
 
         <section className="new-word-queue__section new-word-queue__section--manual">

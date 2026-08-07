@@ -1,16 +1,9 @@
 import type { DailyTaskSummary } from '../models/daily-task';
 import { addDaysToStudyDateKey } from './study-day';
 
-/**
- * A day counts as 签到 when that day's plan was finished, not merely opened.
- *
- * Anything looser turns the calendar into a second heatmap: the heatmap already
- * shows effort, and a stamp that a half-finished day can earn is worth nothing
- * to a child. Finishing is the thing the app asks for, so finishing is the thing
- * the stamp records — and it is the same bar the backpack unlocks are priced at.
- */
+/** A day counts as 签到 only after the child presses the page's stamp button. */
 export function isCheckedIn(task: DailyTaskSummary | undefined): boolean {
-  return Boolean(task?.completedAt);
+  return Boolean(task?.checkedInAt);
 }
 
 export interface CheckInDay {
@@ -40,7 +33,7 @@ export interface CheckInMonth {
  * ever count. Nothing in the backpack may cost more than this or it can never
  * be unlocked -- `backpack.test.ts` holds the catalogue to it.
  */
-export const CHECK_IN_HISTORY_DAYS = 90;
+export const CHECK_IN_HISTORY_DAYS = 210;
 
 export interface CheckInSummary {
   /**

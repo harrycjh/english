@@ -33,14 +33,13 @@ export interface BackpackItem {
 }
 
 export const DEFAULT_ITEM_ID = 'default';
+export const REWARD_INTERVAL_DAYS = 7;
 
 /**
  * Everything the backpack can hold.
  *
- * Prices climb slowly and alternate between the two slots, so there is always
- * something close enough to be worth another day: 3, 5, 8, 11, 14. The focus
- * ladder steps by three all the way up rather than by four, so the last scene
- * lands inside CHECK_IN_HISTORY_DAYS -- a price above that can never be paid.
+ * Starter companions and scenes are direct gifts. The earned ladder begins
+ * with Beijing and places one new travel scene on every seventh day.
  */
 export const BACKPACK_ITEMS: BackpackItem[] = [
   {
@@ -56,7 +55,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'mascot',
     name: '读书时光',
     hint: '在窗边把绘本读完',
-    requiredDays: 3,
+    requiredDays: 0,
     artFile: 'stats-rabbit-reading-v1.webp',
   },
   {
@@ -64,7 +63,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'mascot',
     name: '星夜特工',
     hint: '霓虹城里的夜间任务',
-    requiredDays: 8,
+    requiredDays: 0,
     artFile: 'settings-cyber-rabbit-hero.webp',
   },
   {
@@ -81,7 +80,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '青草坡屋',
     hint: '雨后的草坡和白栅栏',
-    requiredDays: 5,
+    requiredDays: 0,
     artFile: 'stats-rhythm-house-v1.webp',
     focusArtPosition: 'center 64%',
   },
@@ -90,7 +89,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '北京',
     hint: '晨光里的祈年殿',
-    requiredDays: 8,
+    requiredDays: 7,
     artFile: 'scene-beijing.webp',
     hasBuiltInMargin: true,
   },
@@ -99,7 +98,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '哈尔滨',
     hint: '雪后的索菲亚教堂',
-    requiredDays: 11,
+    requiredDays: 14,
     artFile: 'scene-harbin.webp',
     hasBuiltInMargin: true,
   },
@@ -108,7 +107,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '上海',
     hint: '春天的外滩和东方明珠',
-    requiredDays: 14,
+    requiredDays: 21,
     artFile: 'scene-shanghai.webp',
     hasBuiltInMargin: true,
   },
@@ -117,7 +116,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '西安',
     hint: '城墙上的钟鼓楼',
-    requiredDays: 17,
+    requiredDays: 28,
     artFile: 'scene-xian.webp',
     hasBuiltInMargin: true,
   },
@@ -126,7 +125,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '长白山',
     hint: '雪线之上的天池',
-    requiredDays: 20,
+    requiredDays: 35,
     artFile: 'scene-changbaishan.webp',
     hasBuiltInMargin: true,
   },
@@ -135,7 +134,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '马尔代夫',
     hint: '海面上的水屋',
-    requiredDays: 23,
+    requiredDays: 42,
     artFile: 'scene-maldives.webp',
     hasBuiltInMargin: true,
   },
@@ -144,7 +143,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '迪拜',
     hint: '海边的帆船塔',
-    requiredDays: 26,
+    requiredDays: 49,
     artFile: 'scene-dubai.webp',
     hasBuiltInMargin: true,
   },
@@ -153,7 +152,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '墨尔本',
     hint: '河边的城市天际线',
-    requiredDays: 29,
+    requiredDays: 56,
     artFile: 'scene-melbourne.webp',
     hasBuiltInMargin: true,
   },
@@ -162,7 +161,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '凯恩斯',
     hint: '珊瑚礁边的海湾小城',
-    requiredDays: 32,
+    requiredDays: 63,
     artFile: 'scene-cairns.webp',
     hasBuiltInMargin: true,
   },
@@ -171,7 +170,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '悉尼',
     hint: '黄昏港湾的歌剧院',
-    requiredDays: 35,
+    requiredDays: 70,
     artFile: 'scene-sydney.webp',
     hasBuiltInMargin: true,
   },
@@ -180,7 +179,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '阿布扎比',
     hint: '海边的白色清真寺',
-    requiredDays: 38,
+    requiredDays: 77,
     artFile: 'scene-abudhabi.webp',
     hasBuiltInMargin: true,
   },
@@ -189,7 +188,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '威海',
     hint: '海湾边的灯塔与栈道',
-    requiredDays: 41,
+    requiredDays: 84,
     artFile: 'scene-weihai.webp',
     hasBuiltInMargin: true,
   },
@@ -198,7 +197,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '曼谷',
     hint: '金顶大皇宫',
-    requiredDays: 44,
+    requiredDays: 91,
     artFile: 'scene-bangkok.webp',
     hasBuiltInMargin: true,
   },
@@ -207,7 +206,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '敦煌',
     hint: '沙丘旁的莫高窟',
-    requiredDays: 47,
+    requiredDays: 98,
     artFile: 'scene-dunhuang.webp',
     hasBuiltInMargin: true,
   },
@@ -216,7 +215,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '普吉岛',
     hint: '长尾船停在海湾里',
-    requiredDays: 50,
+    requiredDays: 105,
     artFile: 'scene-phuket.webp',
     hasBuiltInMargin: true,
   },
@@ -225,7 +224,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '巴厘岛',
     hint: '海崖上的塔庙',
-    requiredDays: 53,
+    requiredDays: 112,
     artFile: 'scene-bali.webp',
     hasBuiltInMargin: true,
   },
@@ -234,7 +233,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '澳门',
     hint: '大三巴牌坊前的石阶',
-    requiredDays: 56,
+    requiredDays: 119,
     artFile: 'scene-macau.webp',
     hasBuiltInMargin: true,
   },
@@ -243,7 +242,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '珠海',
     hint: '海边的日月贝',
-    requiredDays: 59,
+    requiredDays: 126,
     artFile: 'scene-zhuhai.webp',
     hasBuiltInMargin: true,
   },
@@ -252,7 +251,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '三亚',
     hint: '海上的观音像',
-    requiredDays: 62,
+    requiredDays: 133,
     artFile: 'scene-sanya.webp',
     hasBuiltInMargin: true,
   },
@@ -261,7 +260,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '北海道',
     hint: '花田尽头的风车',
-    requiredDays: 65,
+    requiredDays: 140,
     artFile: 'scene-hokkaido.webp',
     hasBuiltInMargin: true,
   },
@@ -270,7 +269,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '柬埔寨',
     hint: '水边的吴哥窟',
-    requiredDays: 68,
+    requiredDays: 147,
     artFile: 'scene-cambodia.webp',
     hasBuiltInMargin: true,
   },
@@ -279,7 +278,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '扬州',
     hint: '烟花三月的五亭桥',
-    requiredDays: 71,
+    requiredDays: 154,
     artFile: 'scene-yangzhou.webp',
     hasBuiltInMargin: true,
   },
@@ -288,7 +287,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     slot: 'focus',
     name: '西双版纳',
     hint: '江边的金顶佛寺',
-    requiredDays: 74,
+    requiredDays: 161,
     artFile: 'scene-xishuangbanna.webp',
     hasBuiltInMargin: true,
   },
@@ -321,6 +320,18 @@ export function listSlotItems(slot: BackpackSlot): BackpackItem[] {
   return BACKPACK_ITEMS.filter((item) => item.slot === slot);
 }
 
+export function listRewardItems(): BackpackItem[] {
+  return BACKPACK_ITEMS
+    .filter((item) => item.requiredDays > 0)
+    .sort((left, right) => left.requiredDays - right.requiredDays);
+}
+
+export function getUpcomingRewards(totalCheckInDays: number, limit?: number): BackpackItem[] {
+  const upcoming = listRewardItems()
+    .filter((item) => item.requiredDays > totalCheckInDays);
+  return limit === undefined ? upcoming : upcoming.slice(0, Math.max(0, limit));
+}
+
 export function isItemOwned(item: BackpackItem, totalCheckInDays: number): boolean {
   return totalCheckInDays >= item.requiredDays;
 }
@@ -351,9 +362,7 @@ export function resolveEquippedItem(
 
 /** The cheapest item not owned yet, so the calendar can name a reason to return. */
 export function getNextUnlock(totalCheckInDays: number): BackpackItem | null {
-  const locked = BACKPACK_ITEMS
-    .filter((item) => !isItemOwned(item, totalCheckInDays))
-    .sort((left, right) => left.requiredDays - right.requiredDays);
+  const locked = listRewardItems().filter((item) => !isItemOwned(item, totalCheckInDays));
   return locked[0] ?? null;
 }
 

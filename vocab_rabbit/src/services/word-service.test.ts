@@ -107,9 +107,10 @@ describe('mergeRelatedMedia', () => {
     };
 
     const merged = mergeRelatedMedia(payload, {
-      schemaVersion: 2,
+      schemaVersion: 3,
       generatedAt: '2026-07-08T00:00:00.000Z',
       redRocketAtlasGrid: { columns: 3, rows: 3, cellSize: 512 },
+      razAtlasGrid: { columns: 3, rows: 3, cellSize: 512 },
       stats: {
         totalWords: 2,
         entries: 1,
@@ -120,6 +121,9 @@ describe('mergeRelatedMedia', () => {
         withRedRocket: 1,
         uniqueRedRocketImages: 1,
         redRocketAtlases: 1,
+        withRaz: 1,
+        uniqueRazImages: 1,
+        razAtlases: 1,
       },
       entries: [
         {
@@ -144,6 +148,20 @@ describe('mergeRelatedMedia', () => {
               matchedTerm: 'dad',
               confidence: 0.94,
             },
+            raz: {
+              atlasPath: '/content/images/raz-atlases/atlas-000.webp',
+              row: 0,
+              column: 1,
+              label: 'Level E, E01 Hugs, Page 4',
+              bookId: 'E01',
+              level: 'E',
+              sequence: 1,
+              title: 'Hugs',
+              page: 4,
+              matchKind: 'exact',
+              matchedTerm: 'dad',
+              matchedForm: 'dad',
+            },
           },
         },
       ],
@@ -151,6 +169,7 @@ describe('mergeRelatedMedia', () => {
 
     expect(merged.words[0].relatedMedia?.oxford?.label).toBe('Level 1, Book 1, Page 3');
     expect(merged.words[0].relatedMedia?.redRocket?.title).toBe('My Hands');
+    expect(merged.words[0].relatedMedia?.raz?.bookId).toBe('E01');
     expect(merged.words[1].relatedMedia).toBeUndefined();
   });
 });

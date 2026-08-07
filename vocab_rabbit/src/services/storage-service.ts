@@ -309,6 +309,8 @@ export async function buildLocalSyncRequest(options: { forceFull?: boolean } = {
 function normalizeDailyTask(task: DailyTaskSummary): DailyTaskSummary {
   return {
     ...task,
+    // Completed days from older versions were check-ins; retain those stamps.
+    checkedInAt: task.checkedInAt === undefined ? task.completedAt ?? null : task.checkedInAt,
     wrongCount: task.wrongCount ?? Math.max(task.totalAnswered - task.correctCount, 0),
     answeredWordIds: task.answeredWordIds ?? [],
   };
@@ -333,8 +335,9 @@ export async function getDailyTask(dateKey: string): Promise<DailyTaskSummary | 
 
 export async function saveDailyTask(task: DailyTaskSummary): Promise<void> {
   await database.transaction('rw', database.dailyTasks, database.syncMetadata, async () => {
-    await database.dailyTasks.put(task);
-    await markPending(undefined, { taskDateKeys: [task.dateKey] });
+    const normalizedTask = normalizeDailyTask(task);
+    await database.dailyTasks.put(normalizedTask);
+    await markPending(undefined, { taskDateKeys: [normalizedTask.dateKey] });
   });
 }
 

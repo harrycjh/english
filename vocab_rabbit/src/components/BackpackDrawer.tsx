@@ -71,9 +71,7 @@ export function BackpackDrawer({
           </span>
           <span className="backpack-item__text">
             <strong>{item.name}</strong>
-            <small>
-              {isOwned ? item.hint : `还需 ${item.requiredDays - totalCheckInDays} 天签到`}
-            </small>
+            <small>{item.hint}</small>
           </span>
         </button>
       </li>

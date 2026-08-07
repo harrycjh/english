@@ -28,7 +28,8 @@ import { ProfileSelector } from '../components/ProfileSelector';
 import { NewWordQueueDrawer } from '../components/NewWordQueueDrawer';
 
 type StatusFilter = 'all' | 'new' | 'learning' | 'mastered' | 'paused' | 'disabled';
-type WordSourceFilter = 'all' | 'oxford' | 'redRocket' | 'lifePhoto';
+type WordSourceFilter = 'all' | 'oxford' | 'redRocket' | 'raz' | 'lifePhoto';
+type LeveledWordSourceFilter = Extract<WordSourceFilter, 'oxford' | 'redRocket' | 'raz'>;
 type SortMode = 'level' | 'difficulty' | 'recent' | 'alphabetical';
 type ViewMode = 'grid' | 'list';
 type PaginationToken = number | 'ellipsis';
@@ -103,6 +104,21 @@ const REFERENCE_SELECTION_CARD_ORDER = [
 const REFERENCE_SELECTION_CARD_INDEX = new Map<string, number>(
   REFERENCE_SELECTION_CARD_ORDER.map((wordId, index) => [wordId, index])
 );
+
+const RED_ROCKET_LEVEL_ORDER = [
+  'Pre-Reading Level',
+  'Emergent Level',
+  'Early Level 1',
+  'Early Level 2',
+  'Early Level 3',
+  'Early Level 4',
+] as const;
+
+const SOURCE_FILTER_LABELS: Record<LeveledWordSourceFilter, string> = {
+  oxford: 'Oxford',
+  redRocket: 'Red Rocket',
+  raz: 'RAZ',
+};
 
 const REFERENCE_SELECTION_CARD_OVERRIDES: Record<string, SelectionCardVisualOverride> = {
   ket_family_n: {
@@ -264,13 +280,65 @@ function getPrimaryLevel(word: WordRecord): number | null {
   return word.oxfordRefs[0]?.level ?? null;
 }
 
+function isLeveledWordSourceFilter(
+  filter: WordSourceFilter,
+): filter is LeveledWordSourceFilter {
+  return filter === 'oxford' || filter === 'redRocket' || filter === 'raz';
+}
+
+function getWordSourceLevel(
+  word: WordRecord,
+  source: LeveledWordSourceFilter,
+): string | null {
+  const level = word.relatedMedia?.[source]?.level;
+  return level === undefined ? null : String(level);
+}
+
+function compareWordSourceLevels(
+  source: LeveledWordSourceFilter,
+  left: string,
+  right: string,
+): number {
+  if (source === 'oxford') return Number(left) - Number(right);
+  if (source === 'redRocket') {
+    return RED_ROCKET_LEVEL_ORDER.indexOf(left as typeof RED_ROCKET_LEVEL_ORDER[number])
+      - RED_ROCKET_LEVEL_ORDER.indexOf(right as typeof RED_ROCKET_LEVEL_ORDER[number]);
+  }
+  return left.localeCompare(right);
+}
+
+export function getAvailableWordSourceLevels(
+  words: WordRecord[],
+  source: LeveledWordSourceFilter,
+): string[] {
+  const levels = new Set<string>();
+  for (const word of words) {
+    const level = getWordSourceLevel(word, source);
+    if (level) levels.add(level);
+  }
+  return [...levels].sort((left, right) => compareWordSourceLevels(source, left, right));
+}
+
+function formatWordSourceLevel(
+  source: LeveledWordSourceFilter,
+  level: string,
+): string {
+  if (source === 'oxford' || source === 'raz') return `Lv.${level}`;
+  if (level === 'Pre-Reading Level') return 'Pre';
+  if (level === 'Emergent Level') return 'Emergent';
+  return level.replace('Early Level ', 'Early ');
+}
+
 export function matchesWordSourceFilter(
   word: WordRecord,
   filter: WordSourceFilter,
+  selectedLevels: readonly string[] = [],
 ): boolean {
   if (filter === 'all') return true;
-  if (filter === 'oxford') return Boolean(word.relatedMedia?.oxford);
-  if (filter === 'redRocket') return Boolean(word.relatedMedia?.redRocket);
+  if (isLeveledWordSourceFilter(filter)) {
+    const level = getWordSourceLevel(word, filter);
+    return level !== null && (selectedLevels.length === 0 || selectedLevels.includes(level));
+  }
   return Boolean(word.hasLifePhoto);
 }
 
@@ -350,6 +418,7 @@ export function SelectionPage({
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState<StatusFilter>('all');
   const [wordSourceFilter, setWordSourceFilter] = useState<WordSourceFilter>('all');
+  const [selectedSourceLevels, setSelectedSourceLevels] = useState<string[]>([]);
   const [imageOnly, setImageOnly] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>('alphabetical');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -389,6 +458,15 @@ export function SelectionPage({
     () => Object.values(selectionById).filter((s) => s.isPaused).length,
     [selectionById]
   );
+  const leveledSourceFilter = isLeveledWordSourceFilter(wordSourceFilter)
+    ? wordSourceFilter
+    : null;
+  const availableSourceLevels = useMemo(
+    () => leveledSourceFilter
+      ? getAvailableWordSourceLevels(payload.words, leveledSourceFilter)
+      : [],
+    [leveledSourceFilter, payload.words],
+  );
 
   const filteredWords = useMemo(() => {
     const normalizedSearch = searchText.trim().toLowerCase();
@@ -414,6 +492,7 @@ export function SelectionPage({
       const matchesSource = matchesWordSourceFilter(
         word,
         wordSourceFilter,
+        selectedSourceLevels,
       );
       const matchesImage = !imageOnly || word.imageApproved;
 
@@ -444,7 +523,7 @@ export function SelectionPage({
         left.difficulty - right.difficulty ||
         left.english.localeCompare(right.english);
     });
-  }, [imageOnly, payload.words, recordsById, searchText, selectedCategory, selectedDifficulty, selectedStatus, selectionById, sortMode, wordSourceFilter]);
+  }, [imageOnly, payload.words, recordsById, searchText, selectedCategory, selectedDifficulty, selectedSourceLevels, selectedStatus, selectionById, sortMode, wordSourceFilter]);
 
   const stageSize = useStageSize();
   const pageSize = calculateSelectionPageSize(stageSize.height);
@@ -507,8 +586,22 @@ export function SelectionPage({
     setSelectedDifficulty('all');
     setSelectedStatus('all');
     setWordSourceFilter('all');
+    setSelectedSourceLevels([]);
     setImageOnly(false);
     setSortMode('alphabetical');
+    setCurrentPage(1);
+  }
+
+  function changeWordSourceFilter(nextFilter: WordSourceFilter) {
+    setWordSourceFilter(nextFilter);
+    setSelectedSourceLevels([]);
+    setCurrentPage(1);
+  }
+
+  function toggleSourceLevel(level: string) {
+    setSelectedSourceLevels((current) => current.includes(level)
+      ? current.filter((candidate) => candidate !== level)
+      : [...current, level]);
     setCurrentPage(1);
   }
 
@@ -534,7 +627,7 @@ export function SelectionPage({
         <section className="selection-layout">
 
           {/* Left sidebar: filters */}
-          <aside className="section-block selection-sidebar">
+          <aside className={`section-block selection-sidebar${leveledSourceFilter ? ' has-source-levels' : ''}`}>
             <div className="section-block__header">
               <h2>筛选条件</h2>
             </div>
@@ -557,13 +650,56 @@ export function SelectionPage({
             </label>
             <label className="selection-field">
               <span>词语来源</span>
-              <select className="selection-select" value={wordSourceFilter} onChange={(e) => { setWordSourceFilter(e.target.value as WordSourceFilter); setCurrentPage(1); }}>
+              <select
+                className="selection-select"
+                value={wordSourceFilter}
+                onChange={(event) => changeWordSourceFilter(event.target.value as WordSourceFilter)}
+              >
                 <option value="all">全部来源</option>
                 <option value="oxford">Oxford</option>
                 <option value="redRocket">Red Rocket</option>
+                <option value="raz">RAZ</option>
                 <option value="lifePhoto">生活图片</option>
               </select>
             </label>
+            {leveledSourceFilter ? (
+              <div
+                className="selection-source-levels"
+                aria-label={`${SOURCE_FILTER_LABELS[leveledSourceFilter]} 等级`}
+              >
+                <div className="selection-source-levels__heading">
+                  <strong>选择等级</strong>
+                  <small>可多选</small>
+                </div>
+                <div className="selection-source-levels__chips" role="group">
+                  <button
+                    type="button"
+                    className={`selection-source-levels__chip${selectedSourceLevels.length === 0 ? ' is-active' : ''}`}
+                    aria-pressed={selectedSourceLevels.length === 0}
+                    onClick={() => {
+                      setSelectedSourceLevels([]);
+                      setCurrentPage(1);
+                    }}
+                  >
+                    全部
+                  </button>
+                  {availableSourceLevels.map((level) => {
+                    const isActive = selectedSourceLevels.includes(level);
+                    return (
+                      <button
+                        key={level}
+                        type="button"
+                        className={`selection-source-levels__chip${isActive ? ' is-active' : ''}`}
+                        aria-pressed={isActive}
+                        onClick={() => toggleSourceLevel(level)}
+                      >
+                        {formatWordSourceLevel(leveledSourceFilter, level)}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
             <label className="selection-field">
               <span>星级</span>
               <select className="selection-select" value={selectedDifficulty} onChange={(e) => { setSelectedDifficulty(e.target.value); setCurrentPage(1); }}>

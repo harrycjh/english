@@ -3,6 +3,8 @@ export interface DailyTaskSummary {
   newWordIds: string[];
   reviewWordIds: string[];
   completedAt: string | null;
+  /** Optional only for records written before manual check-in was introduced. */
+  checkedInAt?: string | null;
   correctCount: number;
   wrongCount: number;
   totalAnswered: number;

@@ -210,6 +210,29 @@ describe('mergeDailyTasks', () => {
     });
   });
 
+  it('keeps a manual check-in when another device has not stamped the day', () => {
+    const baseTask = {
+      dateKey: '2026-07-15',
+      newWordIds: ['word-a'],
+      reviewWordIds: [],
+      completedAt: null,
+      checkedInAt: null,
+      correctCount: 0,
+      wrongCount: 0,
+      totalAnswered: 0,
+      answeredWordIds: [],
+    };
+    const stampedTask = {
+      ...baseTask,
+      checkedInAt: '2026-07-15T08:30:00.000Z',
+    };
+
+    const [merged] = mergeDailyTasks([baseTask], [stampedTask], []);
+
+    expect(merged.checkedInAt).toBe('2026-07-15T08:30:00.000Z');
+    expect(merged.completedAt).toBeNull();
+  });
+
   it('reopens a completed review-only task when merged new words are still unanswered', () => {
     const completedReviewTask = {
       dateKey: '2026-07-16',

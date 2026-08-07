@@ -3,11 +3,20 @@ import { describe, expect, it } from 'vitest';
 import { defaultParentSetting } from '../models/parent-setting';
 import { APP_VERSION } from '../config/app-meta';
 import type { WordPayload, WordRecord } from '../models/word';
-import { matchesWordSourceFilter, SelectionPage } from './SelectionPage';
+import {
+  getAvailableWordSourceLevels,
+  matchesWordSourceFilter,
+  SelectionPage,
+} from './SelectionPage';
 
 function createWord(
   id: string,
-  sources: { oxford?: boolean; redRocket?: boolean; lifePhoto?: boolean } = {},
+  sources: {
+    oxford?: boolean | number;
+    redRocket?: boolean | string;
+    raz?: boolean | string;
+    lifePhoto?: boolean;
+  } = {},
 ): WordRecord {
   return {
     id,
@@ -20,13 +29,13 @@ function createWord(
     imageApproved: true,
     ...({ hasLifePhoto: sources.lifePhoto }),
     oxfordRefs: [],
-    relatedMedia: sources.oxford || sources.redRocket
+    relatedMedia: sources.oxford || sources.redRocket || sources.raz
       ? {
           ...(sources.oxford ? {
             oxford: {
               imagePath: '/content/images/oxford-tree/level-1/book-1/page-3.webp',
               label: 'Level 1, Book 1, Page 3',
-              level: 1,
+              level: typeof sources.oxford === 'number' ? sources.oxford : 1,
               book: 1,
               page: 3,
             },
@@ -36,12 +45,26 @@ function createWord(
             row: 0,
             column: 0,
             label: 'Early Level 1, Test Book, Page 1',
-            level: 'Early Level 1',
+            level: typeof sources.redRocket === 'string' ? sources.redRocket : 'Early Level 1',
             title: 'Test Book',
             page: 1,
             matchKind: 'exact',
             matchedTerm: id,
             confidence: 1,
+          } } : {}),
+          ...(sources.raz ? { raz: {
+            atlasPath: '/content/images/raz-atlases/atlas-000.webp',
+            row: 0,
+            column: 1,
+            label: 'Level E, E01 Test Book, Page 3',
+            bookId: 'E01',
+            level: typeof sources.raz === 'string' ? sources.raz : 'E',
+            sequence: 1,
+            title: 'Test Book',
+            page: 3,
+            matchKind: 'exact',
+            matchedTerm: id,
+            matchedForm: id,
           } } : {}),
         }
       : undefined,
@@ -51,6 +74,7 @@ function createWord(
 const words = [
   createWord('oxford', { oxford: true }),
   createWord('red-rocket', { redRocket: true }),
+  createWord('raz', { raz: true }),
   createWord('life-photo', { lifePhoto: true }),
   createWord('unlinked'),
 ];
@@ -94,15 +118,16 @@ function renderSelectionPage(nextPayload: WordPayload): string {
 }
 
 describe('SelectionPage', () => {
-  it('matches Oxford, Red Rocket, and life-photo coverage without imported browser photos', () => {
+  it('matches Oxford, Red Rocket, RAZ, and life-photo coverage without imported browser photos', () => {
     expect(matchesWordSourceFilter(words[0], 'oxford')).toBe(true);
     expect(matchesWordSourceFilter(words[1], 'redRocket')).toBe(true);
-    expect(matchesWordSourceFilter(words[2], 'lifePhoto')).toBe(true);
-    expect(matchesWordSourceFilter(words[3], 'lifePhoto')).toBe(false);
+    expect(matchesWordSourceFilter(words[2], 'raz')).toBe(true);
+    expect(matchesWordSourceFilter(words[3], 'lifePhoto')).toBe(true);
+    expect(matchesWordSourceFilter(words[4], 'lifePhoto')).toBe(false);
     expect(words.every((word) => matchesWordSourceFilter(word, 'all'))).toBe(true);
   });
 
-  it('offers the three related-media sources in one vocabulary-source filter', () => {
+  it('offers the four related-media sources in one vocabulary-source filter', () => {
     const markup = renderSelectionPage(payload);
 
     expect(markup).toContain('词语来源');
@@ -116,9 +141,43 @@ describe('SelectionPage', () => {
     expect(markup).toContain('全部来源');
     expect(markup).toContain('Oxford');
     expect(markup).toContain('Red Rocket');
+    expect(markup).toContain('RAZ');
     expect(markup).toContain('生活图片');
     expect(markup).toContain('新词队列');
     expect(markup).toContain('加入队列');
+    expect(markup).not.toContain('selection-source-levels');
+  });
+
+  it('filters each reading source by one or more selected levels', () => {
+    const oxfordTwo = createWord('oxford-two', { oxford: 2 });
+    const redEmergent = createWord('red-emergent', { redRocket: 'Emergent Level' });
+    const razH = createWord('raz-h', { raz: 'H' });
+
+    expect(matchesWordSourceFilter(oxfordTwo, 'oxford', [])).toBe(true);
+    expect(matchesWordSourceFilter(oxfordTwo, 'oxford', ['2', '4'])).toBe(true);
+    expect(matchesWordSourceFilter(oxfordTwo, 'oxford', ['1'])).toBe(false);
+    expect(matchesWordSourceFilter(redEmergent, 'redRocket', ['Emergent Level'])).toBe(true);
+    expect(matchesWordSourceFilter(redEmergent, 'redRocket', ['Early Level 1'])).toBe(false);
+    expect(matchesWordSourceFilter(razH, 'raz', ['E', 'H'])).toBe(true);
+    expect(matchesWordSourceFilter(razH, 'raz', ['G'])).toBe(false);
+  });
+
+  it('derives and sorts the real levels available in each source', () => {
+    const levelWords = [
+      createWord('oxford-sixteen', { oxford: 16 }),
+      createWord('oxford-two', { oxford: 2 }),
+      createWord('red-early-two', { redRocket: 'Early Level 2' }),
+      createWord('red-pre', { redRocket: 'Pre-Reading Level' }),
+      createWord('raz-l', { raz: 'L' }),
+      createWord('raz-e', { raz: 'E' }),
+    ];
+
+    expect(getAvailableWordSourceLevels(levelWords, 'oxford')).toEqual(['2', '16']);
+    expect(getAvailableWordSourceLevels(levelWords, 'redRocket')).toEqual([
+      'Pre-Reading Level',
+      'Early Level 2',
+    ]);
+    expect(getAvailableWordSourceLevels(levelWords, 'raz')).toEqual(['E', 'L']);
   });
 
   it('uses the generated word images for the six reference cards', () => {

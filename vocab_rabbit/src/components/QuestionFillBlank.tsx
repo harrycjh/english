@@ -12,7 +12,8 @@ import type { LocalLifePhotoView } from '../models/local-media';
 import type { FillBlankQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
 import { getExamplePairForLevel } from '../services/example-service';
-import { getStudyChinese } from '../services/word-service';
+import { getWordAtlasStyle } from '../services/word-atlas-service';
+import { getStudyChinese, getWordImageUrl } from '../services/word-service';
 import { AudioIconButton } from './AudioIconButton';
 import { LearningLevelControl } from './LearningLevelControl';
 import { QuestionMedia } from './QuestionMedia';
@@ -26,8 +27,10 @@ interface QuestionFillBlankProps {
   upgradeToLevel?: number | null;
   selectedAnswer: string | null;
   localLifePhoto?: LocalLifePhotoView;
+  relatedResultPhase?: 'idle' | 'fading-out' | 'revealed';
   showHints: boolean;
   showDifficultSpellingSkip?: boolean;
+  onContinue?: () => void;
   onSubmit: (answer: string) => void;
 }
 
@@ -79,8 +82,10 @@ export function QuestionFillBlank({
   upgradeToLevel,
   selectedAnswer,
   localLifePhoto,
+  relatedResultPhase = 'idle',
   showHints,
   showDifficultSpellingSkip = false,
+  onContinue,
   onSubmit,
 }: QuestionFillBlankProps) {
   const [guess, setGuess] = useState('');
@@ -127,6 +132,13 @@ export function QuestionFillBlank({
     : questionLevel === 8
       ? answeredCorrectly
       : false;
+  const raz = question.word.relatedMedia?.raz;
+  const showRazResult = (
+    questionLevel === 8
+    && answeredCorrectly
+    && relatedResultPhase === 'revealed'
+    && Boolean(raz?.sentence)
+  );
   const activeCharacterIndex = useMemo(() => {
     if (!useSpellingCardLayout || disabled) return -1;
     let missingIndex = 0;
@@ -213,6 +225,40 @@ export function QuestionFillBlank({
       ))}
     </div>
   );
+
+  if (showRazResult && raz) {
+    return (
+      <section className="question-panel question-panel--fill question-panel--full-spelling question-panel--full-spelling-final">
+        <figure className="question-related-page-result question-raz-result" aria-label="RAZ 对应页面">
+          <span
+            className="question-related-page-result__atlas word-image--atlas"
+            role="img"
+            aria-label={raz.label}
+            style={{
+              ...getWordAtlasStyle(raz, { columns: 3, rows: 3, cellSize: 512 }),
+              backgroundImage: `url(${getWordImageUrl(raz.atlasPath)})`,
+            }}
+          />
+          <figcaption>
+            <span>{raz.label}</span>
+            <p>{raz.sentence}</p>
+            {raz.sentenceTranslation ? (
+              <p className="question-related-page-result__translation">
+                {raz.sentenceTranslation}
+              </p>
+            ) : null}
+            <button
+              className="primary-button question-related-page-result__continue"
+              type="button"
+              onClick={onContinue}
+            >
+              继续
+            </button>
+          </figcaption>
+        </figure>
+      </section>
+    );
+  }
 
   const useFinalSpellingLayout = questionLevel >= 8 && questionLevel <= 9;
   const imageStrategy = questionLevel >= 9 ? 'life-photo' : 'comfy';

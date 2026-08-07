@@ -173,4 +173,30 @@ describe('Red Rocket atlas plan', () => {
       page: 5,
     });
   });
+
+  it('preserves RAZ media and schema version when rebuilding Red Rocket', () => {
+    const matches = matchWordsToRedRocket([{ id: 'hand', english: 'hand', partOfSpeech: 'n' }], books);
+    const plan = createRedRocketAtlasPlan(matches);
+    const merged = mergeRedRocketMediaManifest({
+      schemaVersion: 3,
+      generatedAt: '',
+      stats: { withRaz: 1, uniqueRazImages: 1, razAtlases: 1 },
+      razAtlasGrid: { columns: 3, rows: 3, cellSize: 512 },
+      entries: [{
+        wordId: 'hand',
+        relatedMedia: {
+          raz: {
+            atlasPath: '/content/images/raz-atlases/atlas-000.webp',
+            row: 0,
+            column: 0,
+          },
+        },
+      }],
+    }, [{ id: 'hand' }], matches, plan, '2026-08-07T00:00:00.000Z');
+
+    expect(merged.schemaVersion).toBe(3);
+    expect(merged.razAtlasGrid).toEqual({ columns: 3, rows: 3, cellSize: 512 });
+    expect(merged.entries[0].relatedMedia.raz).toBeDefined();
+    expect(merged.stats.withRaz).toBe(1);
+  });
 });

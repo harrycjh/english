@@ -45,7 +45,9 @@ export function splitRelatedResultAudio(
     ? question.word.relatedMedia?.oxford
     : level === 6
       ? question.word.relatedMedia?.redRocket
-      : undefined;
+      : level === 8
+        ? question.word.relatedMedia?.raz
+        : undefined;
   const relatedItemCount = (relatedMedia?.sentence ? 1 : 0)
     + (relatedMedia?.sentenceTranslation ? 1 : 0);
 
@@ -131,7 +133,15 @@ export function getStudyAudioPlan(
     pushExample();
   } else if (level === 8) {
     afterAnswer.push({ text: getStudyText(question.word), lang: 'en-GB' });
-    if (answerCorrect) pushExample();
+    if (answerCorrect) {
+      pushExample();
+      const razSentence = question.word.relatedMedia?.raz?.sentence;
+      if (razSentence) {
+        afterAnswer.push({ text: razSentence, lang: 'en-GB', rate: 0.86 });
+        const translation = question.word.relatedMedia?.raz?.sentenceTranslation;
+        if (translation) afterAnswer.push({ text: translation, lang: 'zh-CN' });
+      }
+    }
   } else if (level === 9) {
     afterAnswer.push({ text: getStudyText(question.word), lang: 'en-GB' });
     if (answerCorrect) {

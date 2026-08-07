@@ -21,6 +21,8 @@ import argparse
 import json
 import re
 import subprocess
+import inspect
+import statistics
 import sys
 import tempfile
 from pathlib import Path
@@ -33,6 +35,7 @@ except ImportError:  # pragma: no cover - 环境提示
 ROOT_DIR = Path(__file__).resolve().parents[1]
 RAZ_DIR = ROOT_DIR / "raz"
 OUTPUT_PATH = RAZ_DIR / "extracted" / "raz-books.json"
+SENTENCES_PATH = RAZ_DIR / "extracted" / "raz-sentences.json"
 
 LEVEL_DIR_RE = re.compile(r"^([A-Z])级别-pdf$")
 # 每级除了正式读物，还有两本「定级」测评本，编号写成 `H定级1-…`。
@@ -66,20 +69,90 @@ WORD_RE = re.compile(r"[A-Za-z][A-Za-z'’\-]*")
 SIZE_TOLERANCE = 0.75
 # 一个字号要占到这么多字符才可能是正文，挡掉装饰性大字。
 MIN_BODY_CHARS = 25
+# 整页只有图解标签或表格的页（金球场平面图、龙卷风剖面图、球员数据表）根本没有正文，
+# 而 body_size_of 是「从大到小取第一个够长的字号」，只能把 10pt 的标签当成正文交出去。
+# 所以再按整本书的正文字号设一条下限：低于它的一律算图注，这一页不产出正文。
+BODY_SIZE_FLOOR_RATIO = 0.8
 CONTROL_CHARS_RE = re.compile(r"[\x00-\x1f\x7f]+")
+PRODUCTION_NOTE_RE = re.compile(r"<\s*(?:PHOTO|IMAGE|ART|ILLO|TK)\b", re.IGNORECASE)
+URL_RE = re.compile(r"(?:https?://|www\.)\S+", re.IGNORECASE)
+# 句末标点后跟空白才算断句；缩写的句点会先由 split_sentences 临时保护。
+SENTENCE_SPLIT_RE = re.compile(
+    r"(?<=[.!?])[\"\u201d\u2019']?\s+(?=[\"\u201c(]?\s*[A-Z0-9])"
+)
+ABBREVIATION_RE = re.compile(
+    r"\b(?:Mr|Mrs|Ms|Dr|Prof|St|vs|No)\.|(?:\b[A-Z]\.){2,}|\b[A-Z]\."
+)
+ABBREVIATION_PERIOD_SENTINEL = "\ue000"
+BULLET_BREAK_SENTINEL = "\ue001"
+# RAZ 的开引号后面常带一个空格（`\u201c I see`），断句的前瞻和成品例句都不该带着它。
+# 只收弯引号：直单引号 `'` 在 `the birds' nests` 里是撇号，去掉后面的空格会粘住下一个词。
+OPEN_QUOTE_SPACE_RE = re.compile(r"([\u201c\u2018])\s+")
+SENTENCE_END_RE = re.compile(r"[.!?][\"\u201d\u2019']?$")
+SENTENCE_START_RE = re.compile(r"^[\"\u201c\u2018(]?[A-Z0-9]")
+MIN_SENTENCE_WORDS = 3
+# 项目符号清单（材料表、安全须知）整块没有句末标点，会被拼成一个几十词的"句子"。
+# 拆开之后，`Reptiles have dry, scaly skin.` 这种完整句留下，`two rubber bands` 这种碎片
+# 自然被"必须有句末标点"筛掉。
+BULLET_RE = re.compile(r"\s*[\u2022\u25aa\u25cf\u2023]\s*")
+BULLET_PREFIX_RE = re.compile(r"^[\u2022\u25aa\u25cf\u2023]\s*")
+LIST_BREAK_RE = re.compile(
+    rf"\s*(?:[\u2022\u25aa\u25cf\u2023]|{BULLET_BREAK_SENTINEL})\s*"
+)
+HEADING_LOWERCASE_WORDS = frozenset(
+    {"a", "an", "and", "as", "at", "by", "for", "from", "in", "of", "on", "or", "the", "to", "with"}
+)
+BARE_NUMBER_RE = re.compile(r"(?<![\w.])\d{1,2}(?![\w.])")
+EMPTY_QUOTE_RE = re.compile(r"[\u201c\u2018]\s*(?=[\u201d\u2019]|$)")
+# 目录标题有时被装饰性圆点包着：`\u2022\u2022\u2022 Table of Contents \u2022\u2022 \u2022`
+DECORATION_RE = re.compile(r"^[\s\u2022\u25aa\u25cf\u2023.\u2013\u2014-]+|[\s\u2022\u25aa\u25cf\u2023\u2013\u2014-]+$")
 OCR_DPI = 300
 OCR_BODY_HEIGHT_RATIO = 0.72
 OCR_TEXT_PAGE_RATIO = 0.3
 
+
+def split_sentences(text: str) -> list[str]:
+    protected = ABBREVIATION_RE.sub(
+        lambda match: match.group(0).replace(".", ABBREVIATION_PERIOD_SENTINEL),
+        text,
+    )
+    sentences = [
+        sentence.replace(ABBREVIATION_PERIOD_SENTINEL, ".")
+        for sentence in SENTENCE_SPLIT_RE.split(protected)
+    ]
+    merged: list[str] = []
+    for sentence in sentences:
+        if (
+            merged
+            and re.match(r"^[a-z]", sentence)
+        ):
+            merged[-1] = f"{merged[-1]} {sentence}"
+        else:
+            merged.append(sentence)
+    return merged
+
+
+def looks_like_heading_line(line: str) -> bool:
+    if SENTENCE_END_RE.search(line):
+        return False
+    words = WORD_RE.findall(line)
+    return (
+        2 <= len(words) <= 10
+        and all(word.lower() in HEADING_LOWERCASE_WORDS or word[0].isupper() for word in words)
+    )
+
 # 正文里夹带的功能页，单独打标签，不算故事正文词数。
 SECTION_MARKERS = {
-    "Table of Contents": "toc",
-    "Glossary": "glossary",
-    "Index": "index",
-    "Focus Question": "focus-question",
-    "Word Work": "word-work",
-    "Writing and Art": "activity",
-    "Explore More": "activity",
+    "table of contents": "toc",
+    "contents": "toc",
+    "glossary": "glossary",
+    "index": "index",
+    "focus question": "focus-question",
+    "word work": "word-work",
+    "writing and art": "activity",
+    "explore more": "activity",
+    "explore further": "activity",
+    "did you know?": "activity",
 }
 
 # freedom (n.)  the state of being free (p. 4)
@@ -137,6 +210,12 @@ def split_credit(value: str) -> str | None:
 def clean_text(text: str) -> str:
     """RAZ 用 \x07 当词条里的制表符，原样留着会污染下游。"""
     return CONTROL_CHARS_RE.sub(" ", text).strip()
+
+
+def is_production_note(text: str) -> bool:
+    """`<PHOTO: Aerial photo of soccer pitch…>` 是排版批注，成书时该被图片替掉却漏在了
+    文字层里（全库只有 H60 一处）。它读起来像正文，绝不能进例句。"""
+    return text.lstrip().startswith("<") or bool(PRODUCTION_NOTE_RE.search(text))
 
 
 def is_ocr_noise(text: str) -> bool:
@@ -233,13 +312,34 @@ def looks_like_boilerplate(text: str) -> bool:
     return any(marker in text for marker in BOILERPLATE_MARKERS)
 
 
-def classify_section(lines: list[dict]) -> str | None:
-    """页首若是功能页标题（词汇表/目录/索引…），返回标签。"""
-    for line in lines[:2]:
-        for marker, kind in SECTION_MARKERS.items():
-            if line["text"].rstrip(":") == marker:
-                return kind
-    return None
+def drop_production_notes(lines: list[dict]) -> list[dict]:
+    """批注会折成好几行，`<` 开头那行之后一直丢到出现 `>` 为止。"""
+    kept: list[dict] = []
+    inside = False
+    for line in lines:
+        if not inside and is_production_note(line["text"]):
+            inside = ">" not in line["text"]
+            continue
+        if inside:
+            inside = ">" not in line["text"]
+            continue
+        kept.append(line)
+    return kept
+
+
+def split_section(lines: list[dict]) -> tuple[str | None, list[dict], list[dict]]:
+    """按功能页标题（词汇表/目录/索引…）把一页切成两段，返回 (标签, 标题前, 标题后)。
+
+    不能只看头两行：跨页排版会把「故事最后一段 + 词汇表开头」拼进同一页，标题落在页尾
+    （K26、L23）；也有页首先排了一条图注、标题被挤到第三行的（L54 的目录）。
+    切开之后，标题之前算正文，标题之后归功能页——这样混排页的正文不丢，词汇表也不会
+    被当成正文喂进例句。
+    """
+    for index, line in enumerate(lines):
+        kind = SECTION_MARKERS.get(DECORATION_RE.sub("", line["text"]).rstrip(":").casefold())
+        if kind:
+            return kind, lines[:index], lines[index + 1 :]
+    return None, lines, []
 
 
 def parse_glossary(lines: list[dict]) -> list[dict]:
@@ -296,6 +396,13 @@ def parse_ocr_pages(pages: list[list[dict]]) -> list[dict]:
     return body
 
 
+def book_body_size(pages: list[list[dict]]) -> float:
+    """整本书的正文字号——取各页正文字号的中位数，少数图解页拉不动它。"""
+    sizes = [body_size_of(page) for page in pages if page]
+    sizes = [size for size in sizes if size]
+    return statistics.median(sizes) if sizes else 0.0
+
+
 def parse_book(pages: list[list[dict]], *, level: str, sequence: int, title: str, source: str) -> dict:
     """把整本书的原始页文字切成 front matter / 正文 / back matter。"""
     joined = "\n".join(line["text"] for page in pages for line in page)
@@ -316,6 +423,7 @@ def parse_book(pages: list[list[dict]], *, level: str, sequence: int, title: str
         body = parse_ocr_pages(pages)
     expected = 3
     pending_number: int | None = None
+    floor = book_body_size(pages) * BODY_SIZE_FLOOR_RATIO
     for index, raw in enumerate(pages if source != "ocr" else []):
         if not raw:
             continue
@@ -328,6 +436,7 @@ def parse_book(pages: list[list[dict]], *, level: str, sequence: int, title: str
             expected = number + 1
         if looks_like_boilerplate("\n".join(line["text"] for line in lines)):
             continue
+        lines = drop_production_notes(lines)
 
         # 通栏排版的书（正文横跨整个跨页）会把页码单独甩在对开的另一半上，于是
         # 「只有页码的空页」后面跟着「有正文却没页码的页」。把号码交接过去，否则
@@ -344,20 +453,29 @@ def parse_book(pages: list[list[dict]], *, level: str, sequence: int, title: str
         if not lines:
             continue
 
-        kind = classify_section(lines)
-        if kind:
-            lines = lines[1:]
-        if kind == "glossary":
-            glossary = parse_glossary(lines)
-
         body_size = body_size_of(lines)
-        prose = [line for line in lines if abs(line["size"] - body_size) <= SIZE_TOLERANCE]
-        labels = [line for line in lines if abs(line["size"] - body_size) > SIZE_TOLERANCE]
+        if body_size < floor:
+            body_size = None  # 整页都是图注/表格，没有正文
+        section, head, tail = split_section(lines)
+        if section == "glossary":
+            glossary = parse_glossary(tail)
+
+        # 标题前没有正文字号的内容，说明整页都是功能页；否则是混排页，按正文收。
+        def is_prose(line: dict) -> bool:
+            return body_size is not None and abs(line["size"] - body_size) <= SIZE_TOLERANCE
+
+        head_prose = [line for line in head if is_prose(line)]
+        kind = section if section and not head_prose else None
+        content = tail if kind else head
+
+        prose = [line for line in content if is_prose(line)]
+        labels = [line for line in content if not is_prose(line)]
         body.append(
             {
                 "page": number,
                 "pdfIndex": index,
                 "kind": kind or "story",
+                "bodySize": body_size,
                 "text": "\n".join(line["text"] for line in prose),
                 "labels": [line["text"] for line in labels],
             }
@@ -379,6 +497,7 @@ def parse_book(pages: list[list[dict]], *, level: str, sequence: int, title: str
         "grade": grade.group(1) if grade else None,
         "pdfPageCount": len(pages),
         "source": source,
+        "bodySize": book_body_size(pages),
         "storyWordCount": story_words,
         "pages": body,
         "glossary": glossary,
@@ -419,6 +538,7 @@ def main() -> int:
     parser.add_argument("--level", nargs="*", help="只处理这些级别，如 E F G")
     parser.add_argument("--limit", type=int, help="每级最多处理几本")
     parser.add_argument("--output", type=Path, default=OUTPUT_PATH)
+    parser.add_argument("--sentences", type=Path, default=SENTENCES_PATH)
     args = parser.parse_args()
 
     targets = discover(args.level, args.limit)
@@ -446,9 +566,205 @@ def main() -> int:
         encoding="utf-8",
     )
 
+    pool = write_sentences(books, args.sentences)
+
     report(books)
     print(f"\n已写入 {display_path(args.output)}")
+    print(
+        f"例句池 {display_path(args.sentences)}："
+        f"{pool['bookCount']} 本 / {pool['sentenceCount']} 句（只来自正文）"
+    )
+
+    wiring = audit_wiring() + audit_body_sizes(books)
+    for problem in wiring[:20]:
+        print(f"接线守卫：{problem}", file=sys.stderr)
+
+    leaks = audit_sentences(pool)
+    if wiring:
+        return 1
+    if leaks:
+        print(f"例句池混进了非正文内容 {len(leaks)} 处：", file=sys.stderr)
+        for name, book_id, page, text in leaks[:20]:
+            print(f"  [{name}] {book_id} p{page}  {text}", file=sys.stderr)
+        return 1
+    print("例句池守卫：未发现非正文内容 ✓")
     return 0
+
+
+def collect_sentences(book: dict) -> list[dict]:
+    """把一本书的正文切成句子——这是唯一允许拿去做例句的东西。
+
+    只读 `kind == "story"` 页的 `text`：图注（`labels`）、词汇表、目录、索引、以及
+    没有版面层级可言的扫描件（`kind == "ocr"`）都在这一步之前就被排除，不是靠调用方
+    自觉绕开。句子会跨页续写，所以先按页序拼成一整篇再断句，并记下每句**起始**的页码。
+    """
+    chunks: list[str] = []
+    starts: list[tuple[int, int]] = []  # (拼接后的字符下标, 页码)
+    cursor = 0
+    for page in book["pages"]:
+        if page["kind"] != "story" or not page["text"]:
+            continue
+        lines: list[str] = []
+        in_bullet = False
+        previous_line: str | None = None
+        for raw_line in page["text"].split("\n"):
+            line = raw_line.strip()
+            if not line:
+                continue
+            if BULLET_PREFIX_RE.match(line):
+                in_bullet = True
+            elif in_bullet and re.match(r"^[A-Z]", line):
+                lines.append(BULLET_BREAK_SENTINEL)
+                in_bullet = False
+            elif (
+                previous_line
+                and looks_like_heading_line(previous_line)
+                and re.match(r"^[A-Z]", line)
+            ):
+                lines.append(BULLET_BREAK_SENTINEL)
+            lines.append(line)
+            previous_line = line
+        text = " ".join(lines).replace(
+            f" {BULLET_BREAK_SENTINEL} ", BULLET_BREAK_SENTINEL
+        )
+        text = OPEN_QUOTE_SPACE_RE.sub(r"\1", text)
+        if not text:
+            continue
+        starts.append((cursor, page["page"]))
+        chunks.append(text)
+        cursor += len(text) + 1
+
+    joined = " ".join(chunks)
+    sentences: list[dict] = []
+    offset = 0
+    for raw in split_sentences(joined):
+        start = joined.find(raw, offset)
+        if start >= 0:
+            offset = start + len(raw)
+        page = next((num for pos, num in reversed(starts) if pos <= start), None)
+        for chunk in LIST_BREAK_RE.split(raw):
+            for piece in split_sentences(chunk):
+                text = accept_sentence(piece)
+                if text:
+                    sentences.append({"page": page, "text": text})
+    return sentences
+
+
+def accept_sentence(raw: str) -> str | None:
+    """够格当例句就返回清理后的句子，否则 None。"""
+    text = EMPTY_QUOTE_RE.sub("", raw).strip()
+    # 结尾没有句末标点 = 半句话（页面截断、清单碎片、图注短语），不是完整句子。
+    if not text or not SENTENCE_END_RE.search(text):
+        return None
+    if not SENTENCE_START_RE.search(text):
+        return None
+    if URL_RE.search(text):
+        return None
+    # 编号材料表（`1 Newspaper 2 Sponge 3 Wire hanger …`）读起来像句子，其实是插图清单。
+    words = [word for word in re.findall(r"[A-Za-z’\'\-]+", text) if len(word) > 1]
+    if len(words) < MIN_SENTENCE_WORDS:
+        return None
+    return text
+
+
+def write_sentences(books: list[dict], path: Path) -> dict:
+    pool = []
+    for book in books:
+        sentences = collect_sentences(book)
+        if not sentences:
+            continue
+        pool.append(
+            {
+                "id": book["id"],
+                "level": book["level"],
+                "title": book["title"],
+                "sentences": sentences,
+            }
+        )
+    payload = {
+        "bookCount": len(pool),
+        "sentenceCount": sum(len(b["sentences"]) for b in pool),
+        "books": pool,
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
+    return payload
+
+
+# 例句里绝不该出现的东西：网址、版权页、分级对照、署名、功能页标题、目录点线、
+# 词汇表词条、页码回指、控制字符、排版批注、项目符号清单。
+LEAK_PATTERNS = {
+    "网址": re.compile(r"https?://|www\."),
+    "版权": re.compile(r"©|copyright|all rights reserved", re.IGNORECASE),
+    "分级对照": re.compile(r"fountas|pinnell|reading recovery|lexile", re.IGNORECASE),
+    "署名": re.compile(r"^(written by|illustrated by|photo credits?)\b", re.IGNORECASE),
+    "功能页标题": re.compile(
+        r"^(glossary|index|table of contents|explore more|word work|focus question)\b",
+        re.IGNORECASE,
+    ),
+    "目录点线": re.compile(r"\.{4,}"),
+    "词汇表词条": re.compile(r"\((n|v|adj|adv|prep|pron|conj|pl|interj)\.\)"),
+    "页码回指": re.compile(r"\(pp?\.\s*\d"),
+    "控制字符": re.compile(r"[\x00-\x08\x0b-\x1f\x7f]"),
+    "排版批注": re.compile(r"<"),
+    "版权页样板": re.compile(r"readinga-?z|learninga-?z", re.IGNORECASE),
+    "项目符号": re.compile(r"[\u2022\u25aa\u25cf\u2023]"),
+    "小写清单碎片": re.compile(r"^[a-z]"),
+}
+
+
+def audit_body_sizes(books: list[dict]) -> list[str]:
+    """输出侧的不变量：正文页只要出了正文，字号就得落在整本书的正文区间里。
+
+    图解页、数据表页整页没有正文，`body_size_of`（从大到小取第一个够长的字号）只能把
+    10pt 的标签当正文交出来，而这些标签不含任何样板词，样板守卫是哑的。所以直接盯着
+    产物：字号明显小于全书正文的页，正文必须是空的。
+    """
+    problems = []
+    for book in books:
+        floor = (book.get("bodySize") or 0) * BODY_SIZE_FLOOR_RATIO
+        if not floor:
+            continue
+        for page in book["pages"]:
+            size = page.get("bodySize")
+            if page["kind"] == "story" and page["text"] and size and size < floor:
+                problems.append(
+                    f"{book['id']} p{page['page']} 正文字号 {size} 低于全书 "
+                    f"{book['bodySize']} 的下限 —— 这页多半只是图注或表格"
+                )
+    return problems
+
+
+def audit_wiring() -> list[str]:
+    """接线守卫：例句只准读正文页的 `text`。
+
+    图注本身就是通顺的完整句子（`A supercell thunderstorm moves across Nebraska in 2004.`），
+    任何样板正则都认不出它不是正文。所以这一类只能盯着代码本身：一旦有人把 `labels`
+    或别的 kind 接进例句，样板守卫是哑的，这里必须响。
+    """
+    # 只认真正的取值写法，别被文档字符串里提到的 labels 绊倒。
+    source = re.sub(r'"""[\s\S]*?"""', "", inspect.getsource(collect_sentences))
+    problems = []
+    if re.search(r"""\[\s*["']labels""", source):
+        problems.append("collect_sentences 读到了 labels —— 图注不是正文，不能进例句")
+    if 'page["kind"] != "story"' not in source:
+        problems.append("collect_sentences 没有把非正文页挡在外面")
+    return problems
+
+
+def audit_sentences(pool: dict) -> list[tuple[str, str, int | None, str]]:
+    """例句池的守卫：非正文的东西一旦漏进来，这里必须叫。
+
+    抽取规则是靠字号和版面猜出来的，换一批 PDF 就可能猜错。所以每次抽完都重跑一遍，
+    而不是把"当时查过了"当成保证。
+    """
+    leaks = []
+    for book in pool["books"]:
+        for sentence in book["sentences"]:
+            for name, pattern in LEAK_PATTERNS.items():
+                if pattern.search(sentence["text"]):
+                    leaks.append((name, book["id"], sentence["page"], sentence["text"][:90]))
+    return leaks
 
 
 def report(books: list[dict]) -> None:

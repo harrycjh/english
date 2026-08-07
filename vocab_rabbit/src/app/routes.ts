@@ -1,4 +1,4 @@
-export type AppRoute = 'home' | 'selection' | 'stats' | 'settings' | 'learning' | 'complete';
+export type AppRoute = 'home' | 'selection' | 'stats' | 'settings' | 'learning' | 'complete' | 'checkIn';
 
 export const MAIN_APP_ROUTES = ['home', 'selection', 'stats', 'settings'] as const;
 export type MainAppRoute = typeof MAIN_APP_ROUTES[number];

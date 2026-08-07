@@ -8,7 +8,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const manifestPath = path.join(root, 'public/content/words/word_related_media.json');
 const checkpointPath = path.join(root, 'tmp/related-media-translations/checkpoint.json');
 const endpoint = process.env.LM_STUDIO_URL ?? 'http://127.0.0.1:1234/v1/chat/completions';
-const model = process.env.LM_STUDIO_MODEL ?? 'qwen/qwen3-vl-30b';
+const model = process.env.LM_STUDIO_MODEL ?? 'qwen/qwen3.6-35b-a3b';
 const batchSize = Number(process.env.TRANSLATION_BATCH_SIZE ?? 32);
 const limitArgument = process.argv.find((argument) => argument.startsWith('--limit='));
 const limit = limitArgument ? Number(limitArgument.split('=')[1]) : null;
@@ -164,7 +164,7 @@ async function main() {
   const itemsById = new Map();
   const manifestTranslationsById = new Map();
   for (const entry of manifest.entries) {
-    for (const source of ['oxford', 'redRocket']) {
+    for (const source of ['oxford', 'redRocket', 'raz']) {
       const media = entry.relatedMedia?.[source];
       const sentence = normalizeSentence(media?.sentence);
       if (!sentence) continue;
@@ -210,8 +210,9 @@ async function main() {
   let applied = 0;
   let withOxfordSentenceTranslation = 0;
   let withRedRocketSentenceTranslation = 0;
+  let withRazSentenceTranslation = 0;
   for (const entry of manifest.entries) {
-    for (const source of ['oxford', 'redRocket']) {
+    for (const source of ['oxford', 'redRocket', 'raz']) {
       const media = entry.relatedMedia?.[source];
       const sentence = normalizeSentence(media?.sentence);
       if (!sentence) continue;
@@ -221,12 +222,14 @@ async function main() {
       applied += 1;
       if (source === 'oxford') withOxfordSentenceTranslation += 1;
       if (source === 'redRocket') withRedRocketSentenceTranslation += 1;
+      if (source === 'raz') withRazSentenceTranslation += 1;
     }
   }
   manifest.stats = {
     ...(manifest.stats ?? {}),
     withOxfordSentenceTranslation,
     withRedRocketSentenceTranslation,
+    withRazSentenceTranslation,
   };
   await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
   console.log(`Applied ${applied} related sentence translations to ${manifestPath}`);

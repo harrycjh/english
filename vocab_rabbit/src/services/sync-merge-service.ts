@@ -107,11 +107,16 @@ export function mergeParentSetting(
 
 function mergeTaskBase(left: DailyTaskSummary, right: DailyTaskSummary): DailyTaskSummary {
   const completedTimes = [left.completedAt, right.completedAt].filter((value): value is string => Boolean(value));
+  const checkedInTimes = [
+    left.checkedInAt === undefined ? left.completedAt : left.checkedInAt,
+    right.checkedInAt === undefined ? right.completedAt : right.checkedInAt,
+  ].filter((value): value is string => Boolean(value));
   return {
     ...left,
     newWordIds: [...new Set([...left.newWordIds, ...right.newWordIds])],
     reviewWordIds: [...new Set([...left.reviewWordIds, ...right.reviewWordIds])],
     completedAt: completedTimes.sort()[0] ?? null,
+    checkedInAt: checkedInTimes.sort()[0] ?? null,
     correctCount: 0,
     wrongCount: 0,
     totalAnswered: 0,

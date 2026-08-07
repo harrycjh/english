@@ -78,6 +78,14 @@ def load_words() -> list[dict[str, Any]]:
     return load_json(WORD_LIST_PATH)["words"]
 
 
+def preserved_media_by_word(manifest: dict[str, Any], source: str) -> dict[str, dict[str, Any]]:
+    return {
+        entry["wordId"]: (entry.get("relatedMedia") or {})[source]
+        for entry in manifest.get("entries", [])
+        if (entry.get("relatedMedia") or {}).get(source)
+    }
+
+
 def load_latest_photo_captions() -> dict[str, str]:
     latest: dict[str, dict[str, Any]] = {}
     if not CAPTIONS_PATH.exists():
@@ -403,11 +411,8 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
     oxford_root = resolve_oxford_root(args.oxford_root)
     photo_candidates = collect_photo_candidates({word["id"] for word in words})
     existing_manifest = load_json(MANIFEST_PATH) if MANIFEST_PATH.exists() else {"entries": []}
-    existing_red_rocket = {
-        entry["wordId"]: (entry.get("relatedMedia") or {}).get("redRocket")
-        for entry in existing_manifest.get("entries", [])
-        if (entry.get("relatedMedia") or {}).get("redRocket")
-    }
+    existing_red_rocket = preserved_media_by_word(existing_manifest, "redRocket")
+    existing_raz = preserved_media_by_word(existing_manifest, "raz")
     existing_oxford_sentences = {
         entry["wordId"]: {
             "sentence": ((entry.get("relatedMedia") or {}).get("oxford") or {}).get("sentence"),
@@ -446,6 +451,8 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
         related_media: dict[str, Any] = {}
         if word_id in existing_red_rocket:
             related_media["redRocket"] = existing_red_rocket[word_id]
+        if word_id in existing_raz:
+            related_media["raz"] = existing_raz[word_id]
 
         first_ref = (word.get("oxfordRefs") or [None])[0]
         if word_id in existing_oxford_page_overrides:
@@ -523,8 +530,9 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
             entries.append({"wordId": word_id, "relatedMedia": related_media})
 
     with_red_rocket = sum(1 for entry in entries if "redRocket" in entry["relatedMedia"])
+    with_raz = sum(1 for entry in entries if "raz" in entry["relatedMedia"])
     manifest = {
-        "schemaVersion": 2 if with_red_rocket else 1,
+        "schemaVersion": 3 if with_raz else 2 if with_red_rocket else 1,
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "stats": {
             "totalWords": len(words),
@@ -541,11 +549,20 @@ def export_related_media(args: argparse.Namespace) -> dict[str, Any]:
             "withRedRocket": with_red_rocket,
             "uniqueRedRocketImages": (existing_manifest.get("stats") or {}).get("uniqueRedRocketImages", 0),
             "redRocketAtlases": (existing_manifest.get("stats") or {}).get("redRocketAtlases", 0),
+            "withRaz": with_raz,
+            "uniqueRazImages": (existing_manifest.get("stats") or {}).get("uniqueRazImages", 0),
+            "razAtlases": (existing_manifest.get("stats") or {}).get("razAtlases", 0),
         },
         "entries": entries,
     }
     if with_red_rocket:
         manifest["redRocketAtlasGrid"] = existing_manifest.get("redRocketAtlasGrid") or {
+            "columns": 3,
+            "rows": 3,
+            "cellSize": 512,
+        }
+    if with_raz:
+        manifest["razAtlasGrid"] = existing_manifest.get("razAtlasGrid") or {
             "columns": 3,
             "rows": 3,
             "cellSize": 512,

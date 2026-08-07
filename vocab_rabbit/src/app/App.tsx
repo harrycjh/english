@@ -20,6 +20,7 @@ import { LearningPage } from '../screens/LearningPage';
 import { SelectionPage } from '../screens/SelectionPage';
 import { StatsPage } from '../screens/StatsPage';
 import { SettingsPage } from '../screens/SettingsPage';
+import { CheckInPage } from '../screens/CheckInPage';
 import {
   buildDailyTask,
   addDaysToDateKey,
@@ -191,6 +192,11 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const privatePhotoPrefetchKey = useRef<string | null>(null);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.appRoute = loading || error ? 'status' : route;
+  }, [error, loading, route]);
 
   useEffect(() => {
     configureSpeechVoices({
@@ -509,7 +515,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     }
 
     const studyDate = task ? createDateTimeForDateKey(task.dateKey) : new Date();
-    const nextTask = buildDailyTask(
+    const rebuiltTask = buildDailyTask(
       payload.words,
       nextRecords,
       nextSetting,
@@ -517,6 +523,9 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       nextSelection,
       excludedNewWordIds,
     );
+    const nextTask = task?.dateKey === rebuiltTask.dateKey
+      ? { ...rebuiltTask, checkedInAt: task.checkedInAt ?? null }
+      : rebuiltTask;
     await saveDailyTask(nextTask);
     setTask(nextTask);
     await refreshRecentTasks();
@@ -599,7 +608,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     }
     setSessionResult(result);
     await refreshRecentTasks();
-    startTransition(() => setRoute('complete'));
+    startTransition(() => setRoute('checkIn'));
   }
 
   function handleStart() {
@@ -729,10 +738,32 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     navigateToMainRoute('stats');
   }
 
+  function handleOpenCheckIn() {
+    setSessionResult(null);
+    startTransition(() => setRoute('checkIn'));
+  }
+
+  async function handleCheckIn() {
+    if (!task || task.checkedInAt) return;
+    const latestTask = await getDailyTask(task.dateKey) ?? task;
+    if (latestTask.checkedInAt) {
+      setTask(latestTask);
+      return;
+    }
+    const checkedInTask = {
+      ...latestTask,
+      checkedInAt: createDateTimeForDateKey(task.dateKey).toISOString(),
+    };
+    await saveDailyTask(checkedInTask);
+    setTask(checkedInTask);
+    await refreshRecentTasks();
+  }
+
   function handleBackHome() {
     setPracticeWordIds(null);
     setDebugSession(null);
     setIsDebugPickerOpen(false);
+    setSessionResult(null);
     navigateToMainRoute('home');
   }
 
@@ -1046,6 +1077,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
         onChangeNewWordQueue={persistNewWordQueue}
         onRemoveTodayNewWord={handleRemoveTodayNewWord}
         onOpenStats={handleOpenStats}
+        onOpenCheckIn={handleOpenCheckIn}
         onEquipBackpackItem={handleEquipBackpackItem}
       />
     );
@@ -1116,6 +1148,21 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
 
     if (route === 'complete' && sessionResult) {
       return <CompletionPage result={sessionResult} onBackHome={handleBackHome} />;
+    }
+
+    if (route === 'checkIn') {
+      const checkInTasks = [...recentTasks.filter((recentTask) => recentTask.dateKey !== task.dateKey), task];
+      return (
+        <CheckInPage
+          tasks={checkInTasks}
+          todayKey={task.dateKey}
+          sessionResult={sessionResult}
+          unlockAll={parentSetting.profileId === 'stinky-dog'}
+          profileId={parentSetting.profileId}
+          onCheckIn={handleCheckIn}
+          onBackHome={handleBackHome}
+        />
+      );
     }
 
     const currentMainRoute = isMainAppRoute(route) ? route : 'home';

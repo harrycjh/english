@@ -8,12 +8,13 @@ import {
   summarizeCheckIns,
 } from './check-in';
 
-function createTask(dateKey: string, completed: boolean): DailyTaskSummary {
+function createTask(dateKey: string, completed: boolean, checkedIn = completed): DailyTaskSummary {
   return {
     dateKey,
     newWordIds: ['word-a'],
     reviewWordIds: [],
     completedAt: completed ? `${dateKey}T09:00:00.000Z` : null,
+    checkedInAt: checkedIn ? `${dateKey}T10:00:00.000Z` : null,
     correctCount: completed ? 1 : 0,
     wrongCount: 0,
     totalAnswered: completed ? 1 : 0,
@@ -22,9 +23,9 @@ function createTask(dateKey: string, completed: boolean): DailyTaskSummary {
 }
 
 describe('check-in', () => {
-  it('signs a day in only once its plan is finished', () => {
-    expect(isCheckedIn(createTask('2026-08-05', true))).toBe(true);
-    expect(isCheckedIn(createTask('2026-08-05', false))).toBe(false);
+  it('uses the explicit manual stamp instead of task completion', () => {
+    expect(isCheckedIn(createTask('2026-08-05', true, false))).toBe(false);
+    expect(isCheckedIn(createTask('2026-08-05', false, true))).toBe(true);
     expect(isCheckedIn(undefined)).toBe(false);
   });
 

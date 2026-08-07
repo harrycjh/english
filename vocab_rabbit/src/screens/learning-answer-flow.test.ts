@@ -16,7 +16,7 @@ describe('getLearningAnswerFlow', () => {
     });
   });
 
-  it.each([4, 6])('requires a manual continue after a correct related-page reveal at level %i', (level) => {
+  it.each([4, 6, 8])('requires a manual continue after a correct related-page reveal at level %i', (level) => {
     expect(getLearningAnswerFlow(level, true, true)).toEqual({
       retrySameQuestion: false,
       requiresManualContinue: true,

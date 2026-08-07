@@ -55,7 +55,7 @@ export function getLearningAnswerFlow(
 ): LearningAnswerFlow {
   return {
     retrySameQuestion: false,
-    requiresManualContinue: (level === 4 || level === 6)
+    requiresManualContinue: (level === 4 || level === 6 || level === 8)
       && answerCorrect
       && hasRelatedResult,
     holdAfterFeedbackMs: 2_000,

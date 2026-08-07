@@ -499,10 +499,8 @@ describe('vocab sync Function Compute handler', () => {
   });
 
   it('carries a finished day from the device that finished it to the next one', async () => {
-    // 签到 is read off dailyTasks[].completedAt. The server rebuilds task
-    // counts from the event log on the way through, so a finished day has to
-    // survive that rebuild or the calendar loses its stamps on the second
-    // device and the backpack un-prices itself.
+    // The server rebuilds task counts from the event log on the way through,
+    // so a finished day has to survive that rebuild on the second device.
     const repository = createMemoryRepository();
     const handler = createHandler(repository, env);
     const connectA = parseResponse(await handler(event('/api/device/connect', {

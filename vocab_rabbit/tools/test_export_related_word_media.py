@@ -22,6 +22,29 @@ SPEC.loader.exec_module(MODULE)
 
 
 class ExportRelatedWordMediaTests(unittest.TestCase):
+    def test_preserves_generated_book_sources_when_oxford_is_rebuilt(self) -> None:
+        manifest = {
+            "entries": [
+                {
+                    "wordId": "word-1",
+                    "relatedMedia": {
+                        "redRocket": {"atlasPath": "/red-rocket.webp"},
+                        "raz": {"atlasPath": "/raz.webp", "bookId": "E01", "page": 4},
+                    },
+                },
+                {"wordId": "word-2", "relatedMedia": {"oxford": {"imagePath": "/oxford.webp"}}},
+            ]
+        }
+
+        self.assertEqual(
+            MODULE.preserved_media_by_word(manifest, "raz"),
+            {"word-1": {"atlasPath": "/raz.webp", "bookId": "E01", "page": 4}},
+        )
+        self.assertEqual(
+            MODULE.preserved_media_by_word(manifest, "redRocket"),
+            {"word-1": {"atlasPath": "/red-rocket.webp"}},
+        )
+
     def test_selected_photos_only_includes_confirmed_unique_results(self) -> None:
         selected = MODULE.selected_photos_from_review(
             {

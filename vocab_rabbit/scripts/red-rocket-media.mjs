@@ -381,10 +381,11 @@ export function mergeRedRocketMediaManifest(manifest, words, matches, atlasPlan,
     .sort((left, right) => (wordOrder.get(left.wordId) ?? Infinity) - (wordOrder.get(right.wordId) ?? Infinity));
   const withOxford = entries.filter((entry) => entry.relatedMedia.oxford).length;
   const withLifePhoto = entries.filter((entry) => entry.relatedMedia.lifePhoto).length;
+  const withRaz = entries.filter((entry) => entry.relatedMedia.raz).length;
 
   return {
     ...manifest,
-    schemaVersion: 2,
+    schemaVersion: withRaz > 0 ? 3 : 2,
     generatedAt,
     redRocketAtlasGrid: {
       columns: RED_ROCKET_ATLAS_COLUMNS,
@@ -398,6 +399,7 @@ export function mergeRedRocketMediaManifest(manifest, words, matches, atlasPlan,
       withOxford,
       withLifePhoto,
       withRedRocket: matches.length,
+      withRaz,
       uniqueRedRocketImages: atlasPlan.pages.length,
       redRocketAtlases: atlasPlan.atlases.length,
     },

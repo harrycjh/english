@@ -168,6 +168,7 @@ export function buildDailyTask(
     newWordIds,
     reviewWordIds: dueReviewWordIds,
     completedAt: null,
+    checkedInAt: null,
     correctCount: 0,
     wrongCount: 0,
     totalAnswered: 0,
@@ -333,6 +334,17 @@ export function getTaskStudyQueue(task: DailyTaskSummary): string[] {
   }
   const answeredWordIds = new Set(task.answeredWordIds);
   return plannedWordIds.filter((wordId) => !answeredWordIds.has(wordId));
+}
+
+export function groupTaskWordIdsByCompletion(
+  plannedWordIds: string[],
+  answeredWordIds: string[],
+): { pendingWordIds: string[]; completedWordIds: string[] } {
+  const answeredWordIdSet = new Set(answeredWordIds);
+  return {
+    pendingWordIds: plannedWordIds.filter((wordId) => !answeredWordIdSet.has(wordId)),
+    completedWordIds: plannedWordIds.filter((wordId) => answeredWordIdSet.has(wordId)),
+  };
 }
 
 export function recordTaskAnswer(task: DailyTaskSummary, isCorrect: boolean, wordId?: string): DailyTaskSummary {

@@ -62,6 +62,20 @@ describe('collectOfflineImageUrls', () => {
             matchedTerm: 'family',
             confidence: 1,
           },
+          raz: {
+            atlasPath: '/content/images/raz-atlases/atlas-000.webp',
+            row: 0,
+            column: 2,
+            label: 'Level E, E01 Family, Page 4',
+            bookId: 'E01',
+            level: 'E',
+            sequence: 1,
+            title: 'Family',
+            page: 4,
+            matchKind: 'exact',
+            matchedTerm: 'family',
+            matchedForm: 'family',
+          },
         },
       }),
       createWord({
@@ -100,6 +114,7 @@ describe('collectOfflineImageUrls', () => {
       `/content/images/oxford-tree/level-1/book-1/page-3.webp?v=${CONTENT_VERSION}`,
     );
     expect(urls.filter((url) => url.includes('red-rocket-atlases/atlas-000.webp'))).toHaveLength(1);
+    expect(urls.filter((url) => url.includes('raz-atlases/atlas-000.webp'))).toHaveLength(1);
     expect(urls).toContain(
       `/content/images/red-rocket-pages/corrected.webp?v=${CONTENT_VERSION}`,
     );

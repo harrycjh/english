@@ -8,6 +8,7 @@ import {
   buildDailyTask,
   createDateTimeForDateKey,
   expandDailyTaskPlan,
+  groupTaskWordIdsByCompletion,
   getTaskStudyQueue,
   normalizeDailyTaskPlan,
   reconcileTaskCompletion,
@@ -83,6 +84,16 @@ describe('recordTaskAnswer', () => {
 });
 
 describe('daily task queue', () => {
+  it('keeps planned order while separating completed words from pending words', () => {
+    expect(groupTaskWordIdsByCompletion(
+      ['word-a', 'word-b', 'word-c', 'word-d'],
+      ['word-c', 'unplanned-word', 'word-a'],
+    )).toEqual({
+      pendingWordIds: ['word-b', 'word-d'],
+      completedWordIds: ['word-a', 'word-c'],
+    });
+  });
+
   it('places due reviews before new words and skips words already answered today', () => {
     const task = {
       ...makeTask(),

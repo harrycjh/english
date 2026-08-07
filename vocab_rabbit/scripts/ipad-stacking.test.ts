@@ -4,10 +4,15 @@ import { describe, expect, it } from 'vitest';
 const css = readFileSync(new URL('../src/styles/ipad.css', import.meta.url), 'utf8');
 const appSource = readFileSync(new URL('../src/app/App.tsx', import.meta.url), 'utf8');
 const reviewSource = readFileSync(new URL('../src/screens/HomePage.tsx', import.meta.url), 'utf8');
+const checkInPageSource = readFileSync(new URL('../src/screens/CheckInPage.tsx', import.meta.url), 'utf8');
 const selectionSource = readFileSync(new URL('../src/screens/SelectionPage.tsx', import.meta.url), 'utf8');
 const wordDetailSource = readFileSync(new URL('../src/components/WordDetailDrawer.tsx', import.meta.url), 'utf8');
 const newWordQueueSource = readFileSync(new URL('../src/components/NewWordQueueDrawer.tsx', import.meta.url), 'utf8');
 const reviewQueueSource = readFileSync(new URL('../src/components/ReviewQueueDrawer.tsx', import.meta.url), 'utf8');
+const inertialScrollSource = readFileSync(
+  new URL('../src/hooks/useInertialHorizontalScroll.ts', import.meta.url),
+  'utf8',
+);
 
 function getZIndex(selector: string): number {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -27,6 +32,33 @@ describe('modal stacking', () => {
 });
 
 describe('fixed iPad shell', () => {
+  it('renders preview source tags as colored outlines without a fill', () => {
+    expect(css).toMatch(
+      /\.page--review \.review-preview-card__source-tag\s*\{[^}]*height:\s*18px;[^}]*border:\s*1\.5px solid currentColor;[^}]*background:\s*transparent;[^}]*text-shadow:\s*none;[^}]*box-shadow:\s*none;/s,
+    );
+    expect(css).toMatch(
+      /\.review-preview-card__source-tag--yellow\s*\{[^}]*color:\s*#[0-9a-f]{6};[^}]*\}/s,
+    );
+    expect(css).toMatch(
+      /\.review-preview-card__source-tag--green\s*\{[^}]*color:\s*#[0-9a-f]{6};[^}]*\}/s,
+    );
+    expect(css).toMatch(
+      /\.review-preview-card__source-tag--red\s*\{[^}]*color:\s*#[0-9a-f]{6};[^}]*\}/s,
+    );
+    expect(css).toMatch(
+      /\.review-preview-card__source-tag--blue\s*\{[^}]*color:\s*#[0-9a-f]{6};[^}]*\}/s,
+    );
+  });
+
+  it('leaves room for English descenders above the Chinese subtitle', () => {
+    expect(css).toMatch(
+      /\.page--review \.review-preview-card__body strong\s*\{[^}]*line-height:\s*1\.12;[^}]*\}/s,
+    );
+    expect(css).toMatch(
+      /\.page--review \.review-preview-card__body p\s*\{[^}]*margin:\s*7px 0 0;[^}]*\}/s,
+    );
+  });
+
   it('uses one 1194 by 834 iPad Pro canvas for every device', () => {
     expect(css).toMatch(
       /:root\s*\{[^}]*--ipad-pro-11-landscape-width:\s*1194px;[^}]*--ipad-pro-11-landscape-height:\s*834px;[^}]*--ipad-shell-padding:\s*0px;[^}]*--ipad-shell-stage-width:\s*var\(--ipad-pro-11-landscape-width\);[^}]*--ipad-shell-stage-height:\s*var\(--ipad-pro-11-landscape-height\);/s,
@@ -54,6 +86,106 @@ describe('fixed iPad shell', () => {
     expect(appSource).toContain("const activeDock = currentMainRoute === 'home' ? 'review' : currentMainRoute;");
     expect(appSource).toMatch(/<BottomDock\s+active=\{activeDock\}/s);
     expect(reviewSource).not.toContain('<nav className="home-dock review-dock"');
+  });
+
+  it('shows the external home button only on the review route', () => {
+    expect(appSource).toContain("root.dataset.appRoute = loading || error ? 'status' : route;");
+    expect(css).toMatch(
+      /html\[data-app-route='home'\] #homeBtn\s*\{[^}]*display:\s*flex;/s,
+    );
+  });
+
+  it('opens check-in as a full route instead of a side drawer', () => {
+    expect(reviewSource).not.toContain('<CheckInCalendarDrawer');
+    expect(reviewSource).toContain('onClick={onOpenCheckIn}');
+    expect(appSource).toMatch(
+      /async function handleComplete[\s\S]*?setSessionResult\(result\);[\s\S]*?setRoute\('checkIn'\)/,
+    );
+    expect(appSource).toMatch(
+      /async function handleCheckIn[\s\S]*?checkedInAt:[\s\S]*?saveDailyTask\(checkedInTask\)/,
+    );
+    expect(css).toMatch(
+      /\.page--check-in\s*\{[^}]*width:\s*100%;[^}]*min-height:\s*100%;[^}]*overflow-x:\s*hidden;[^}]*overflow-y:\s*auto;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__stamp-button\s*\{[^}]*border-radius:\s*50%;[^}]*cursor:\s*pointer;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__back\s*\{[^}]*transform:\s*translate\(20px, 20px\);/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__stamp-wrap\s*\{[^}]*transform:\s*translateY\(30px\);/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__totals\s*\{[^}]*transform:\s*translateY\(60px\);/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__action-stack\s*\{[^}]*transform:\s*translateY\(40px\);/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-timeline\s*\{[^}]*position:\s*relative;[^}]*display:\s*grid;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-timeline\s*\{[^}]*margin-top:\s*24px;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-track\s*\{[^}]*overflow-x:\s*auto;[^}]*touch-action:\s*pan-x;[^}]*cursor:\s*grab;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-track\s*\{[^}]*-webkit-overflow-scrolling:\s*touch;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-track\s*\{[^}]*scrollbar-width:\s*none;/s,
+    );
+    expect(checkInPageSource).not.toContain('ZoomIn');
+    expect(css).toMatch(
+      /\.check-in-page__reward-thumb\s*\{[^}]*width:\s*120px;[^}]*\}/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-thumb img\s*\{[^}]*display:\s*block;[^}]*width:\s*100%;[^}]*height:\s*auto;[^}]*object-fit:\s*contain;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-copy\s*\{[^}]*justify-items:\s*center;[^}]*text-align:\s*center;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-preview\s*\{[^}]*grid-template-rows:\s*auto auto;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-preview > img\s*\{[^}]*height:\s*auto;[^}]*object-fit:\s*contain;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-preview > div\s*\{[^}]*align-items:\s*center;[^}]*text-align:\s*center;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-strip\s*\{[^}]*display:\s*grid;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-stops\s*\{[^}]*display:\s*flex;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-progress\s*\{[^}]*width:\s*100%;[^}]*height:\s*22px;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-progress > strong\s*\{[^}]*top:\s*8px;[^}]*line-height:\s*1\.2;/s,
+    );
+    expect(checkInPageSource).toMatch(
+      /className="check-in-page__reward-strip"[\s\S]*className="check-in-page__reward-stops"[\s\S]*className="check-in-page__reward-progress"/s,
+    );
+    expect(inertialScrollSource).toContain('window.requestAnimationFrame(glide)');
+    expect(inertialScrollSource).toContain('velocity *= Math.pow(0.96');
+    expect(inertialScrollSource).toContain("window.matchMedia('(prefers-reduced-motion: reduce)')");
+    const pointerDownSource = /function handlePointerDown[\s\S]*?\n  \}/
+      .exec(inertialScrollSource)?.[0] ?? '';
+    expect(pointerDownSource).not.toContain('setPointerCapture');
+    expect(inertialScrollSource).toMatch(
+      /function handlePointerMove[\s\S]*?if \(!didMouseDragRef\.current && Math\.abs\(totalDistance\) > 4\) \{[\s\S]*?setPointerCapture\(event\.pointerId\)/,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__layout\s*\{[^}]*align-items:\s*start;[^}]*min-height:\s*526px;/s,
+    );
+    expect(css).toMatch(
+      /\.check-in-page__reward-lightbox\s*\{[^}]*position:\s*absolute;[^}]*inset:\s*0;/s,
+    );
   });
 
   it('keeps one shared top chrome outside the moving route layers', () => {
@@ -169,11 +301,15 @@ describe('shared word detail drawer', () => {
     expect(wordDetailSource).not.toContain('getOxfordRefLabels');
   });
 
-  it('renders Red Rocket pages from the compact related-media atlas', () => {
+  it('renders Red Rocket and RAZ pages from compact related-media atlases', () => {
     expect(wordDetailSource).toContain('word-detail-drawer__red-rocket-image');
-    expect(wordDetailSource).toContain('<strong>红火箭图</strong>');
+    expect(wordDetailSource).toContain('<strong>红火箭</strong>');
+    expect(wordDetailSource).toContain('word-detail-drawer__raz-image');
+    expect(wordDetailSource).toContain('<strong>RAZ</strong>');
+    expect(wordDetailSource).toContain('word-detail-drawer__related-heading');
+    expect(wordDetailSource).toContain('word-detail-drawer__related-translation');
     expect(css).toMatch(
-      /\.word-detail-drawer__red-rocket-image\s*\{[^}]*width:\s*100%;[^}]*aspect-ratio:\s*1;/s,
+      /\.word-detail-drawer__red-rocket-image,\s*\.word-detail-drawer__raz-image\s*\{[^}]*width:\s*100%;[^}]*aspect-ratio:\s*1;/s,
     );
   });
 
@@ -216,6 +352,19 @@ describe('selection one-screen layout', () => {
       /\.page--selection \.selection-word-row__main\s*\{[^}]*grid-template-columns:\s*144px 44px minmax\(0, 1fr\) 32px;/s,
     );
     expect(selectionSource).not.toContain('getPrimaryOxfordRefLabel');
+    expect(selectionSource).toContain('className="selection-source-levels"');
+    expect(css).toMatch(
+      /\.page--selection \.selection-source-levels\s*\{[^}]*display:\s*grid;[^}]*border-radius:\s*14px;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-source-levels__chip\.is-active\s*\{[^}]*background:/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-source-levels__chips\s*\{[^}]*flex-wrap:\s*wrap;[^}]*overflow:\s*visible;/s,
+    );
+    expect(css).toMatch(
+      /\.page--selection \.selection-source-levels__chip\.is-active\s*\{[^}]*background:\s*linear-gradient\(135deg, #ffbd57, #f28b1d\);/s,
+    );
   });
 });
 
@@ -357,6 +506,21 @@ describe('paired queue and word detail drawers', () => {
     expect(css).toMatch(
       /\.new-word-queue__progress\s*\{[^}]*display:\s*grid;[^}]*gap:\s*4px;[^}]*flex:\s*0 0 54px;/s,
     );
+  });
+
+  it('uses only left-side semantic artwork in the advice cards', () => {
+    expect(reviewSource).toContain('<CalendarDays');
+    expect(reviewSource).not.toContain('review-advice-card__art');
+    expect(css).toMatch(
+      /\.page--review \.review-advice-card--bag \.review-advice-card__icon\s*\{[^}]*background-image:\s*url\('\/design-reference\/slices\/review-bag-art\.png\?v=4'\);/s,
+    );
+  });
+
+  it('lists words completed today beneath both pending queues', () => {
+    expect(newWordQueueSource).toContain('<h3>今日新学习</h3>');
+    expect(newWordQueueSource).toContain('completedTodayWordIds.map');
+    expect(reviewQueueSource).toContain('<h3>今日已复习</h3>');
+    expect(reviewQueueSource).toContain('completedWordIds.map');
   });
 });
 

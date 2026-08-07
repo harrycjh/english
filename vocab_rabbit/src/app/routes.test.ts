@@ -16,5 +16,6 @@ describe('main route transitions', () => {
     expect(isMainAppRoute('home')).toBe(true);
     expect(isMainAppRoute('learning')).toBe(false);
     expect(isMainAppRoute('complete')).toBe(false);
+    expect(isMainAppRoute('checkIn')).toBe(false);
   });
 });

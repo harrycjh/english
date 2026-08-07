@@ -97,6 +97,11 @@ export function collectOfflineImageUrls(words: WordRecord[]): string[] {
     if (redRocketPath) {
       urls.push(getWordImageUrl(redRocketPath));
     }
+
+    const razPath = word.relatedMedia?.raz?.atlasPath;
+    if (razPath) {
+      urls.push(getWordImageUrl(razPath));
+    }
   }
 
   return uniqueUrls(urls);

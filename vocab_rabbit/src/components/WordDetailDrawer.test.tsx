@@ -39,6 +39,8 @@ const word: WordRecord = {
       level: 1,
       book: 1,
       page: 4,
+      sentence: 'She held both hands up.',
+      sentenceTranslation: '她举起了双手。',
     },
     redRocket: {
       atlasPath: '/content/images/red-rocket-atlases/atlas-001.webp',
@@ -51,6 +53,24 @@ const word: WordRecord = {
       matchKind: 'exact',
       matchedTerm: 'hand',
       confidence: 0.94,
+      sentence: 'It is as big as your hand.',
+      sentenceTranslation: '它和你的手一样大。',
+    },
+    raz: {
+      atlasPath: '/content/images/raz-atlases/atlas-000.webp',
+      row: 2,
+      column: 0,
+      label: 'Level E, E01 Hugs, Page 4',
+      bookId: 'E01',
+      level: 'E',
+      sequence: 1,
+      title: 'Hugs',
+      page: 4,
+      matchKind: 'exact',
+      matchedTerm: 'hand',
+      matchedForm: 'hand',
+      sentence: 'Hands help us pick things up.',
+      sentenceTranslation: '手帮助我们拿起东西。',
     },
   },
 };
@@ -128,6 +148,30 @@ describe('WordDetailDrawer', () => {
 
     expect(markup).not.toContain('word-detail-drawer--selection');
     expect(markup).not.toContain('word-detail-drawer__selection-overview');
+    expect(markup).not.toContain('身体部位');
+    expect(markup).not.toContain('尚未开始');
+    expect(markup).not.toContain('当前已启用');
+    expect(markup).toContain('word-detail-chip--stars');
+  });
+
+  it('shows the current mastery Level immediately after the difficulty stars', () => {
+    const markup = renderToStaticMarkup(
+      <WordDetailDrawer
+        isOpen
+        word={word}
+        record={levelFourRecord}
+        selectionState={undefined}
+        setting={{ ...defaultParentSetting, enableAudio: false }}
+        context="review"
+        onClose={() => undefined}
+      />,
+    );
+    const metaStrip = /<div class="word-detail-drawer__meta-strip">([\s\S]*?)<\/div>/.exec(markup)?.[1] ?? '';
+
+    expect(metaStrip).toContain('aria-label="词库难度 1 星"');
+    expect(metaStrip).toContain('aria-label="学习等级 4"');
+    expect(metaStrip).toContain('Lv.4');
+    expect(metaStrip.indexOf('词库难度 1 星')).toBeLessThan(metaStrip.indexOf('学习等级 4'));
   });
 
   it('uses the review layout in selection context', () => {
@@ -138,6 +182,15 @@ describe('WordDetailDrawer', () => {
         record={undefined}
         selectionState={undefined}
         setting={{ ...defaultParentSetting, enableAudio: false }}
+        localLifePhoto={{
+          wordId: word.id,
+          objectUrl: 'blob:hand-photo',
+          caption: '小朋友伸出一只手。',
+          photoId: 'hand-photo',
+          match: 'primary',
+          confidence: 0.96,
+          importedAt: '2026-08-07T00:00:00.000Z',
+        }}
         context="selection"
         onClose={() => undefined}
       />,
@@ -148,10 +201,37 @@ describe('WordDetailDrawer', () => {
     expect(markup).not.toContain('word-detail-drawer__inline-examples');
     expect(markup).toContain('word-detail-drawer__hero');
     expect(markup).toContain('关联图片');
-    expect(markup).toContain('牛津树图');
-    expect(markup).toContain('红火箭图');
+    expect(markup).toContain('<strong>牛津树</strong><span>Level 1</span>');
+    expect(markup).toContain('<strong>红火箭</strong><span>Early Level 1</span>');
+    expect(markup).toContain('<strong>RAZ</strong><span>Level E</span>');
+    expect(markup).not.toContain('牛津树图');
+    expect(markup).not.toContain('红火箭图');
+    expect(markup).not.toContain('RAZ 图');
+    expect(markup).not.toContain('Book 1, Page 4');
+    expect(markup).not.toContain('My Hands, Page 4');
+    expect(markup).not.toContain('E01 Hugs, Page 4');
+    expect(markup).toContain(
+      'She held both <mark class="word-detail-drawer__related-word">hands</mark> up.',
+    );
+    expect(markup).toContain(
+      'It is as big as your <mark class="word-detail-drawer__related-word">hand</mark>.',
+    );
+    expect(markup).toContain(
+      '<mark class="word-detail-drawer__related-word">Hands</mark> help us pick things up.',
+    );
+    expect(markup).toContain(
+      '她举起了双<mark class="word-detail-drawer__related-word">手</mark>。',
+    );
+    expect(markup).toContain(
+      '它和你的<mark class="word-detail-drawer__related-word">手</mark>一样大。',
+    );
+    expect(markup).toContain(
+      '<mark class="word-detail-drawer__related-word">手</mark>帮助我们拿起东西。',
+    );
+    expect(markup).toContain('生活照片');
+    expect(markup).not.toContain('小朋友伸出一只手。');
     expect(markup).toContain('This is my hand.');
-    expect(markup.indexOf('牛津树图')).toBeLessThan(markup.indexOf('例句'));
+    expect(markup.indexOf('<strong>牛津树</strong>')).toBeLessThan(markup.indexOf('例句'));
   });
 
   it('renders translated teaching chunks before related media', () => {
@@ -236,7 +316,7 @@ describe('WordDetailDrawer', () => {
     expect(markup).not.toContain('高频固定搭配');
   });
 
-  it('renders the Red Rocket atlas cell and source location', () => {
+  it('renders the Red Rocket atlas cell with level-only metadata', () => {
     const markup = renderToStaticMarkup(
       <WordDetailDrawer
         isOpen
@@ -249,8 +329,8 @@ describe('WordDetailDrawer', () => {
       />,
     );
 
-    expect(markup).toContain('红火箭图');
-    expect(markup).toContain('Early Level 1, My Hands, Page 4');
+    expect(markup).toContain('<strong>红火箭</strong><span>Early Level 1</span>');
+    expect(markup).not.toContain('Early Level 1, My Hands, Page 4');
     expect(markup).toContain('background-size:300% 300%');
     expect(markup).toContain('background-position:100% 50%');
     expect(markup).toContain('red-rocket-atlases/atlas-001.webp');

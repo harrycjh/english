@@ -268,7 +268,12 @@ export function LearningPage({
     const shouldRevealRedRocketResult = correct
       && questionLevel === 6
       && Boolean(currentQuestion.word.relatedMedia?.redRocket?.sentence);
-    const shouldRevealRelatedResult = shouldRevealOxfordResult || shouldRevealRedRocketResult;
+    const shouldRevealRazResult = correct
+      && questionLevel === 8
+      && Boolean(currentQuestion.word.relatedMedia?.raz?.sentence);
+    const shouldRevealRelatedResult = (
+      shouldRevealOxfordResult || shouldRevealRedRocketResult || shouldRevealRazResult
+    );
     const answerFlow = getLearningAnswerFlow(
       questionLevel,
       correct,
@@ -581,10 +586,12 @@ export function LearningPage({
             upgradeToLevel={upgradeToLevel}
             selectedAnswer={selectedAnswer}
             localLifePhoto={localLifePhotosById[currentWord.id]}
+            relatedResultPhase={relatedResultPhase}
             showHints={setting.showHints}
             showDifficultSpellingSkip={
               shouldShowDifficultSpellingSkip
             }
+            onContinue={() => void handleContinue()}
             onSubmit={handleAnswer}
           />
         ) : null}

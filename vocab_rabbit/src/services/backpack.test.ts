@@ -8,54 +8,59 @@ import {
   getFocusSceneBackground,
   getItemArtUrl,
   getNextUnlock,
+  getUpcomingRewards,
   isItemOwned,
+  listRewardItems,
   listSlotItems,
   resolveBackpackDays,
   resolveEquippedItem,
 } from './backpack';
 
 describe('backpack', () => {
-  it('gives every slot something to wear from day one', () => {
+  it('gives every slot its default item from day one', () => {
     for (const slot of ['mascot', 'focus'] as const) {
       const free = listSlotItems(slot).filter((item) => item.requiredDays === 0);
-      expect(free).toHaveLength(1);
-      expect(free[0].id).toBe(DEFAULT_ITEM_ID);
+      expect(free.some((item) => item.id === DEFAULT_ITEM_ID)).toBe(true);
     }
   });
 
-  it('unlocks an item the day the count reaches its price', () => {
+  it('gifts the starter art instead of putting it on the reward ladder', () => {
     const reading = listSlotItems('mascot').find((item) => item.id === 'reading')!;
+    const cyber = listSlotItems('mascot').find((item) => item.id === 'cyber')!;
+    const meadow = listSlotItems('focus').find((item) => item.id === 'meadow')!;
 
-    expect(reading.requiredDays).toBe(3);
-    expect(isItemOwned(reading, 2)).toBe(false);
-    expect(isItemOwned(reading, 3)).toBe(true);
+    expect([reading.requiredDays, cyber.requiredDays, meadow.requiredDays]).toEqual([0, 0, 0]);
+    expect([reading, cyber, meadow].every((item) => isItemOwned(item, 0))).toBe(true);
   });
 
   it('counts what is owned as the days add up', () => {
-    // Two free items to start with, and the first unlock is priced at 3 days.
-    expect(countOwnedItems(0)).toBe(2);
-    expect(countOwnedItems(2)).toBe(2);
-    expect(countOwnedItems(3)).toBe(3);
+    expect(countOwnedItems(0)).toBe(5);
+    expect(countOwnedItems(6)).toBe(5);
+    expect(countOwnedItems(7)).toBe(6);
     expect(countOwnedItems(999)).toBe(BACKPACK_ITEMS.length);
   });
 
-  it('names the cheapest item still locked', () => {
-    expect(getNextUnlock(0)?.requiredDays).toBe(3);
-    expect(getNextUnlock(3)?.requiredDays).toBe(5);
+  it('starts the reward ladder with Beijing on day seven', () => {
+    expect(getNextUnlock(0)?.id).toBe('beijing');
+    expect(getNextUnlock(0)?.requiredDays).toBe(7);
+    expect(getNextUnlock(7)?.id).toBe('harbin');
+    expect(getNextUnlock(7)?.requiredDays).toBe(14);
     expect(getNextUnlock(999)).toBeNull();
   });
 
-  it('keeps both slots earning as the days add up', () => {
-    // A slot that stops unlocking is a slot the child stops opening, so no
-    // slot may sit still for longer than the whole ladder took to get going.
-    for (const slot of ['mascot', 'focus'] as const) {
-      const prices = listSlotItems(slot).map((item) => item.requiredDays);
+  it('places exactly one reward on every seventh checked-in day', () => {
+    const rewards = listRewardItems();
+    expect(rewards.map((item) => item.requiredDays)).toEqual(
+      rewards.map((_, index) => (index + 1) * 7),
+    );
+  });
 
-      expect(prices).toEqual([...prices].sort((a, b) => a - b));
-      for (let index = 1; index < prices.length; index += 1) {
-        expect(prices[index] - prices[index - 1]).toBeLessThanOrEqual(5);
-      }
-    }
+  it('lists every remaining reward for the scrollable timeline', () => {
+    const upcoming = getUpcomingRewards(8);
+
+    expect(upcoming[0].requiredDays).toBe(14);
+    expect(upcoming.at(-1)?.requiredDays).toBe(161);
+    expect(upcoming).toHaveLength(listRewardItems().length - 1);
   });
 
   it('keeps every price inside the history the app can actually count', () => {
@@ -75,13 +80,13 @@ describe('backpack', () => {
   });
 
   it('wears the requested item once it is owned', () => {
-    expect(resolveEquippedItem('mascot', 'cyber', 8).id).toBe('cyber');
-    expect(resolveEquippedItem('focus', 'meadow', 5).id).toBe('meadow');
+    expect(resolveEquippedItem('mascot', 'cyber', 0).id).toBe('cyber');
+    expect(resolveEquippedItem('focus', 'meadow', 0).id).toBe('meadow');
   });
 
   it('falls back to the free item for anything it cannot honour', () => {
     // Not earned yet, from another slot, and outright unknown.
-    expect(resolveEquippedItem('mascot', 'cyber', 7).id).toBe(DEFAULT_ITEM_ID);
+    expect(resolveEquippedItem('focus', 'beijing', 6).id).toBe(DEFAULT_ITEM_ID);
     expect(resolveEquippedItem('mascot', 'meadow', 999).id).toBe(DEFAULT_ITEM_ID);
     expect(resolveEquippedItem('focus', 'from-a-later-version', 999).id).toBe(DEFAULT_ITEM_ID);
     expect(resolveEquippedItem('mascot', DEFAULT_ITEM_ID, 0).slot).toBe('mascot');

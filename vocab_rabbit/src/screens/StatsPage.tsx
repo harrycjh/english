@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Activity, BrainCircuit, CalendarRange, ShieldCheck } from 'lucide-react';
 import { ProfileSelector } from '../components/ProfileSelector';
 import { APP_VERSION } from '../config/app-meta';
+import { useInertialHorizontalScroll } from '../hooks/useInertialHorizontalScroll';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
@@ -231,116 +232,12 @@ function DurabilityViewSwitch({ value, onChange }: {
   );
 }
 
-function useInertialTimelineScroll() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const mouseDragRef = useRef<{
-    pointerId: number;
-    startX: number;
-    startScrollLeft: number;
-    lastX: number;
-    lastTime: number;
-    velocity: number;
-  } | null>(null);
-  const momentumFrameRef = useRef<number | null>(null);
-
-  useEffect(() => () => {
-    if (momentumFrameRef.current !== null) {
-      window.cancelAnimationFrame(momentumFrameRef.current);
-    }
-  }, []);
-
-  function stopMouseMomentum(scroller?: HTMLDivElement) {
-    if (momentumFrameRef.current !== null) {
-      window.cancelAnimationFrame(momentumFrameRef.current);
-      momentumFrameRef.current = null;
-    }
-    scroller?.classList.remove('is-gliding');
-  }
-
-  function startMouseMomentum(scroller: HTMLDivElement, initialVelocity: number) {
-    if (Math.abs(initialVelocity) < 0.06 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
-
-    let velocity = Math.max(-2.8, Math.min(2.8, initialVelocity));
-    let lastFrameTime = window.performance.now();
-    scroller.classList.add('is-gliding');
-
-    function glide(frameTime: number) {
-      const elapsed = Math.min(34, frameTime - lastFrameTime);
-      lastFrameTime = frameTime;
-      const previousScrollLeft = scroller.scrollLeft;
-      scroller.scrollLeft += velocity * elapsed;
-      const reachedEdge = Math.abs(scroller.scrollLeft - previousScrollLeft) < 0.5;
-      velocity *= Math.pow(0.96, elapsed / 16.67);
-
-      if (Math.abs(velocity) < 0.018 || reachedEdge) {
-        stopMouseMomentum(scroller);
-        return;
-      }
-      momentumFrameRef.current = window.requestAnimationFrame(glide);
-    }
-
-    momentumFrameRef.current = window.requestAnimationFrame(glide);
-  }
-
-  function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
-    if (event.pointerType !== 'mouse' || event.button !== 0) return;
-    stopMouseMomentum(event.currentTarget);
-    mouseDragRef.current = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      startScrollLeft: event.currentTarget.scrollLeft,
-      lastX: event.clientX,
-      lastTime: event.timeStamp,
-      velocity: 0,
-    };
-    event.currentTarget.setPointerCapture(event.pointerId);
-    event.currentTarget.classList.add('is-dragging');
-  }
-
-  function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
-    const drag = mouseDragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    event.preventDefault();
-    event.currentTarget.scrollLeft = drag.startScrollLeft - (event.clientX - drag.startX);
-    const elapsed = Math.max(1, event.timeStamp - drag.lastTime);
-    const instantaneousVelocity = -(event.clientX - drag.lastX) / elapsed;
-    drag.velocity = (drag.velocity * 0.35) + (instantaneousVelocity * 0.65);
-    drag.lastX = event.clientX;
-    drag.lastTime = event.timeStamp;
-  }
-
-  function finishPointerDrag(event: ReactPointerEvent<HTMLDivElement>, shouldGlide: boolean) {
-    const drag = mouseDragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    mouseDragRef.current = null;
-    event.currentTarget.classList.remove('is-dragging');
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-    if (shouldGlide) {
-      startMouseMomentum(event.currentTarget, drag.velocity);
-    }
-  }
-
-  return {
-    scrollRef,
-    pointerHandlers: {
-      onPointerDown: handlePointerDown,
-      onPointerMove: handlePointerMove,
-      onPointerUp: (event: ReactPointerEvent<HTMLDivElement>) => finishPointerDrag(event, true),
-      onPointerCancel: (event: ReactPointerEvent<HTMLDivElement>) => finishPointerDrag(event, false),
-    },
-  };
-}
-
 function LearningLoadChart({ points, todayKey, scale }: {
   points: LearningLoadPoint[];
   todayKey: string;
   scale: StatisticsTimeScale;
 }) {
-  const { scrollRef, pointerHandlers } = useInertialTimelineScroll();
+  const { scrollRef, pointerHandlers } = useInertialHorizontalScroll();
   const columnWidth = scale === 'day' ? 48 : scale === 'week' ? 72 : 96;
   const rawMaximum = Math.max(...points.map((point) => point.totalCount), 1);
   const tickStep = Math.max(1, Math.ceil(rawMaximum / 4));
@@ -413,7 +310,7 @@ function MasteryLevelLineChart({ timeline, levels, todayKey, scale }: {
   todayKey: string;
   scale: StatisticsTimeScale;
 }) {
-  const { scrollRef, pointerHandlers } = useInertialTimelineScroll();
+  const { scrollRef, pointerHandlers } = useInertialHorizontalScroll();
   const dayWidth = scale === 'day' ? 48 : scale === 'week' ? 72 : 96;
   const width = Math.max(dayWidth, timeline.length * dayWidth);
   const height = 430;

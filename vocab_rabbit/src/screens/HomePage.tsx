@@ -1,4 +1,11 @@
-import { type CSSProperties, type ReactNode, useState } from 'react';
+import {
+  type CSSProperties,
+  type ReactNode,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import { CalendarDays } from 'lucide-react';
 import { IPAD_STAGE_HEIGHT } from '../app/ipad-viewport';
 import {
   LAYOUT_PREVIEW_OPTIONS,
@@ -13,6 +20,7 @@ import {
   calculatePreviewRows,
   shiftLayoutY,
 } from './review-preview-density';
+import { calculateAutoFitFontSize } from './review-preview-text';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
@@ -30,7 +38,6 @@ import { MasteryLevelIcon } from '../components/MasteryLevelIcon';
 import { NewWordQueueDrawer } from '../components/NewWordQueueDrawer';
 import { ReviewQueueDrawer } from '../components/ReviewQueueDrawer';
 import { EstimateBreakdownDrawer } from '../components/EstimateBreakdownDrawer';
-import { CheckInCalendarDrawer } from '../components/CheckInCalendarDrawer';
 import { BackpackDrawer } from '../components/BackpackDrawer';
 import { summarizeCheckIns } from '../services/check-in';
 import {
@@ -52,7 +59,6 @@ import {
   formatStudyDuration,
 } from '../services/study-duration';
 import {
-  getPrimaryOxfordRefLabel,
   getStudyChinese,
   getStudyPartOfSpeech,
   getStudyText,
@@ -231,6 +237,7 @@ interface ReviewPreviewCardProps {
   masteryLevel: number;
   index: number;
   layout: ReviewPreviewLayout;
+  hasLocalLifePhoto: boolean;
   onOpenDetails: () => void;
 }
 
@@ -241,6 +248,51 @@ interface ReviewAdviceCardProps {
   description: string;
   layout: ReviewGuidanceLayout;
   onClick?: () => void;
+}
+
+function AutoFitPreviewHeadline({ text, style }: { text: string; style: CSSProperties }) {
+  const headlineRef = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    const headline = headlineRef.current;
+    if (!headline) return;
+
+    let active = true;
+    const fit = () => {
+      headline.style.removeProperty('font-size');
+      const baseFontSize = Number.parseFloat(window.getComputedStyle(headline).fontSize);
+      const fittedFontSize = calculateAutoFitFontSize(
+        headline.clientWidth,
+        headline.scrollWidth,
+        baseFontSize,
+      );
+      if (fittedFontSize < baseFontSize) {
+        headline.style.fontSize = `${fittedFontSize}px`;
+      }
+    };
+
+    fit();
+    window.addEventListener('resize', fit);
+    void document.fonts?.ready.then(() => {
+      if (active) fit();
+    });
+
+    return () => {
+      active = false;
+      window.removeEventListener('resize', fit);
+    };
+  }, [text]);
+
+  return (
+    <strong
+      ref={headlineRef}
+      className="review-preview-card__headline"
+      data-auto-fit="true"
+      style={style}
+    >
+      {text}
+    </strong>
+  );
 }
 
 function ReviewMetricCard({ tone, label, value, note, layout, children, onClick }: ReviewMetricCardProps) {
@@ -371,10 +423,49 @@ function ReviewSummaryPill({ tone, label, value, layout }: ReviewSummaryPillProp
   );
 }
 
-function ReviewPreviewCard({ word, masteryLevel, index, layout, onOpenDetails }: ReviewPreviewCardProps) {
-  const oxfordLabel = getPrimaryOxfordRefLabel(word);
+const reviewSourceTags = [
+  {
+    key: 'raz',
+    code: 'RAZ',
+    label: 'RAZ',
+    tone: 'yellow',
+  },
+  {
+    key: 'oxford',
+    code: 'OXF',
+    label: '牛津树',
+    tone: 'green',
+  },
+  {
+    key: 'redRocket',
+    code: 'RED',
+    label: '红火箭',
+    tone: 'red',
+  },
+  {
+    key: 'lifePhoto',
+    code: 'LIF',
+    label: '生活照片',
+    tone: 'blue',
+  },
+] as const;
+
+function ReviewPreviewCard({
+  word,
+  masteryLevel,
+  index,
+  layout,
+  hasLocalLifePhoto,
+  onOpenDetails,
+}: ReviewPreviewCardProps) {
   const artVariant = ['family', 'hello', 'body', 'spark'][index % 4];
   const imageScale = reviewPreviewImageScales[word.id as keyof typeof reviewPreviewImageScales] ?? 1;
+  const sourceAvailability = {
+    redRocket: Boolean(word.relatedMedia?.redRocket),
+    oxford: Boolean(word.relatedMedia?.oxford),
+    raz: Boolean(word.relatedMedia?.raz),
+    lifePhoto: Boolean(word.relatedMedia?.lifePhoto || word.hasLifePhoto || hasLocalLifePhoto),
+  };
 
   return (
     <button
@@ -418,9 +509,10 @@ function ReviewPreviewCard({ word, masteryLevel, index, layout, onOpenDetails }:
         }}
       />
       <div className="review-preview-card__body" style={getRelativeBoundsStyle(layout.textSafe, layout)}>
-        <strong className="review-preview-card__headline" style={getRelativeTextStyle(layout.textBlocks.headline, layout.textSafe)}>
-          {getStudyText(word)}
-        </strong>
+        <AutoFitPreviewHeadline
+          text={getStudyText(word)}
+          style={getRelativeTextStyle(layout.textBlocks.headline, layout.textSafe)}
+        />
         <p className="review-preview-card__subtitle" style={getRelativeTextStyle(layout.textBlocks.subtitle, layout.textSafe)}>
           {getStudyChinese(word)}
         </p>
@@ -437,23 +529,36 @@ function ReviewPreviewCard({ word, masteryLevel, index, layout, onOpenDetails }:
         {formatPreviewPartOfSpeech(getStudyPartOfSpeech(word))}
       </span>
       <span
-        className="review-preview-card__source"
+        className="review-preview-card__sources"
+        role="list"
+        aria-label="例图来源"
         style={{
           position: 'absolute',
           left: '14px',
-          bottom: '12px',
+          bottom: '7px',
           width: `${layout.width - 28}px`,
           zIndex: reviewLayerZIndex.textContent,
         }}
       >
-        {oxfordLabel ? `Oxford Tree · ${oxfordLabel}` : 'Oxford Tree · 暂未回填'}
+        {reviewSourceTags
+          .filter((source) => sourceAvailability[source.key])
+          .map((source) => (
+            <span
+              key={source.key}
+              className={`review-preview-card__source-tag review-preview-card__source-tag--${source.tone}`}
+              role="listitem"
+              aria-label={`${source.label}：有例图`}
+              title={`${source.label}：有例图`}
+            >
+              {source.code}
+            </span>
+          ))}
       </span>
     </button>
   );
 }
 
 function ReviewAdviceCard({ accent, label, value, description, layout, onClick }: ReviewAdviceCardProps) {
-  const artPlacement = reviewSlicePlacementsByFile[layout.artSlot.file];
   // The authored `textSafe` box is only the gap left of the art; the text itself
   // is authored in `textBlocks`, which starts further in and is much wider.
   const textBlock = layout.textBlocks.headline;
@@ -471,7 +576,9 @@ function ReviewAdviceCard({ accent, label, value, description, layout, onClick }
           transform: 'translateY(-50%)',
           zIndex: reviewLayerZIndex.decorativeIcons,
         }}
-      />
+      >
+        {accent === 'tea' ? <CalendarDays size={24} strokeWidth={2.4} /> : null}
+      </span>
       <div
         className="review-advice-card__body"
         style={{
@@ -484,18 +591,6 @@ function ReviewAdviceCard({ accent, label, value, description, layout, onClick }
         <strong>{value}</strong>
         {description ? <p>{description}</p> : null}
       </div>
-      <div
-        className="review-advice-card__art"
-        aria-hidden="true"
-        style={{
-          ...getRelativeBoundsStyle(layout.artSlot, layout),
-          zIndex: reviewLayerZIndex.slices,
-          backgroundImage: `url(${getReviewSliceUrl(layout.artSlot.file)})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center bottom',
-          backgroundSize: `${artPlacement?.assetDisplayWidth ?? layout.artSlot.width}px auto`,
-        }}
-      />
     </>
   );
 
@@ -530,6 +625,7 @@ interface ReviewPageProps {
   onChangeNewWordQueue?: (wordIds: string[]) => Promise<void>;
   onRemoveTodayNewWord?: (wordId: string) => Promise<void>;
   onOpenStats?: () => void;
+  onOpenCheckIn?: () => void;
   onEquipBackpackItem?: (slot: BackpackSlot, itemId: string) => Promise<void>;
 }
 
@@ -555,6 +651,7 @@ export function ReviewPage({
   onChangeNewWordQueue,
   onRemoveTodayNewWord,
   onOpenStats,
+  onOpenCheckIn = () => undefined,
   onEquipBackpackItem,
 }: ReviewPageProps) {
   const plannedCount = task.newWordIds.length + task.reviewWordIds.length;
@@ -568,8 +665,6 @@ export function ReviewPage({
   const heatmapDays = buildHeatmapDays(heatmapTasks, task.dateKey);
   const completedDays = heatmapDays.filter((day) => day.task?.completedAt).length;
   const completionRate = Math.round((completedDays / 14) * 100);
-  // Check-ins read from the same merged list as the heatmap, so today's stamp
-  // appears the moment the task is finished rather than after the next reload.
   const checkInSummary = summarizeCheckIns(heatmapTasks, task.dateKey);
   const checkInValue = checkInSummary.isTodayCheckedIn
     ? `已连续 ${checkInSummary.streakDays} 天`
@@ -600,7 +695,6 @@ export function ReviewPage({
   const [isNewWordQueueOpen, setIsNewWordQueueOpen] = useState(false);
   const [isReviewQueueOpen, setIsReviewQueueOpen] = useState(false);
   const [isEstimateOpen, setIsEstimateOpen] = useState(false);
-  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
   const [isBackpackOpen, setIsBackpackOpen] = useState(false);
   const [layoutPreview, setLayoutPreview] = useState<LayoutPreview>(() => readLayoutPreview());
   const isDebugPickerOpen = debugPickerOpen ?? localDebugPickerOpen;
@@ -626,12 +720,11 @@ export function ReviewPage({
    * every other one from a single place means a new drawer cannot be added and
    * quietly left out of some other drawer's close list.
    */
-  function openSideDrawer(drawer: 'newWord' | 'review' | 'estimate' | 'checkIn' | 'backpack') {
+  function openSideDrawer(drawer: 'newWord' | 'review' | 'estimate' | 'backpack') {
     setSelectedWordId(null);
     setIsNewWordQueueOpen(drawer === 'newWord');
     setIsReviewQueueOpen(drawer === 'review');
     setIsEstimateOpen(drawer === 'estimate');
-    setIsCheckInOpen(drawer === 'checkIn');
     setIsBackpackOpen(drawer === 'backpack');
   }
 
@@ -1008,6 +1101,7 @@ export function ReviewPage({
                       reviewPreviewLayouts[previewColumnIds[index % PREVIEW_COLUMNS]],
                       Math.floor(index / PREVIEW_COLUMNS) * previewRowPitch,
                     )}
+                    hasLocalLifePhoto={Boolean(localLifePhotosById[word.id])}
                     onOpenDetails={() => openWordDetails(word.id)}
                   />
                 ))}
@@ -1033,7 +1127,7 @@ export function ReviewPage({
                 value={checkInValue}
                 description=""
                 layout={reviewGuidanceLayouts.tea}
-                onClick={() => openSideDrawer('checkIn')}
+                onClick={onOpenCheckIn}
               />
               <ReviewAdviceCard accent="bars" label="未来压力" value={pressureLevel} description="" layout={reviewGuidanceLayouts.bars} onClick={onOpenStats} />
               <ReviewAdviceCard
@@ -1084,7 +1178,7 @@ export function ReviewPage({
                 ])
             : undefined
         }
-        queueCompanion={isNewWordQueueOpen || isReviewQueueOpen || isEstimateOpen || isCheckInOpen || isBackpackOpen}
+        queueCompanion={isNewWordQueueOpen || isReviewQueueOpen || isEstimateOpen || isBackpackOpen}
       />
       <NewWordQueueDrawer
         isOpen={isNewWordQueueOpen}
@@ -1118,13 +1212,6 @@ export function ReviewPage({
         answerEvents={answerEvents}
         todayDurationMs={todayDurationMs}
         onClose={() => setIsEstimateOpen(false)}
-      />
-      <CheckInCalendarDrawer
-        isOpen={isCheckInOpen}
-        tasks={heatmapTasks}
-        todayKey={task.dateKey}
-        unlockAll={canUnlockEverything}
-        onClose={() => setIsCheckInOpen(false)}
       />
       <BackpackDrawer
         isOpen={isBackpackOpen}

@@ -51,6 +51,22 @@ const word: WordRecord = {
       sentence: 'The rabbit hops across the grass.',
       sentenceTranslation: '兔子跳过草地。',
     },
+    raz: {
+      atlasPath: '/content/images/raz-atlases/atlas-001.webp',
+      row: 1,
+      column: 2,
+      label: 'Level E, E08 Rabbits, Page 6',
+      bookId: 'E08',
+      level: 'E',
+      sequence: 8,
+      title: 'Rabbits',
+      page: 6,
+      matchKind: 'exact',
+      matchedTerm: 'rabbit',
+      matchedForm: 'rabbit',
+      sentence: 'A rabbit can hear danger coming.',
+      sentenceTranslation: '兔子能听到危险正在靠近。',
+    },
   },
 };
 
@@ -187,6 +203,28 @@ describe('study audio plan', () => {
     });
   });
 
+  it('reads the normal example before the RAZ sentence after a correct level 8 answer', () => {
+    expect(getStudyAudioPlan(8, question(), true).afterAnswer).toEqual([
+      { text: 'rabbit', lang: 'en-GB', pauseAfterMs: WORD_TO_SENTENCE_PAUSE_MS },
+      { text: 'The rabbit sleeps under the table.', lang: 'en-GB', rate: 0.86 },
+      { text: '兔子睡在桌子下面。', lang: 'zh-CN' },
+      { text: 'A rabbit can hear danger coming.', lang: 'en-GB', rate: 0.86 },
+      { text: '兔子能听到危险正在靠近。', lang: 'zh-CN' },
+    ]);
+    expect(splitRelatedResultAudio(8, question(), getStudyAudioPlan(8, question(), true).afterAnswer))
+      .toEqual({
+        beforeReveal: [
+          { text: 'rabbit', lang: 'en-GB', pauseAfterMs: WORD_TO_SENTENCE_PAUSE_MS },
+          { text: 'The rabbit sleeps under the table.', lang: 'en-GB', rate: 0.86 },
+          { text: '兔子睡在桌子下面。', lang: 'zh-CN' },
+        ],
+        afterReveal: [
+          { text: 'A rabbit can hear danger coming.', lang: 'en-GB', rate: 0.86 },
+          { text: '兔子能听到危险正在靠近。', lang: 'zh-CN' },
+        ],
+      });
+  });
+
   it('reads the word and Chinese meaning after a wrong level 6 answer', () => {
     expect(getStudyAudioPlan(6, question(), false)).toEqual({
       beforeAnswer: [{ text: '兔子', lang: 'zh-CN' }],
@@ -223,6 +261,8 @@ describe('study audio plan', () => {
         { text: 'rabbit', lang: 'en-GB', pauseAfterMs: WORD_TO_SENTENCE_PAUSE_MS },
         { text: 'The rabbit sleeps under the table.', lang: 'en-GB', rate: 0.86 },
         { text: '兔子睡在桌子下面。', lang: 'zh-CN' },
+        { text: 'A rabbit can hear danger coming.', lang: 'en-GB', rate: 0.86 },
+        { text: '兔子能听到危险正在靠近。', lang: 'zh-CN' },
       ],
     });
   });

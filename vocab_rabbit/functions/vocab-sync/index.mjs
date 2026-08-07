@@ -116,6 +116,10 @@ function mergeTasks(local = [], remote = []) {
       newWordIds: [...new Set([...wordIds(current.newWordIds), ...wordIds(task.newWordIds)])],
       reviewWordIds: [...new Set([...wordIds(current.reviewWordIds), ...wordIds(task.reviewWordIds)])],
       completedAt: [current.completedAt, task.completedAt].filter(Boolean).sort()[0] ?? null,
+      checkedInAt: [
+        current.checkedInAt === undefined ? current.completedAt : current.checkedInAt,
+        task.checkedInAt === undefined ? task.completedAt : task.checkedInAt,
+      ].filter(Boolean).sort()[0] ?? null,
       correctCount: Math.max(current.correctCount ?? 0, task.correctCount ?? 0),
       wrongCount: Math.max(current.wrongCount ?? 0, task.wrongCount ?? 0),
       totalAnswered: Math.max(current.totalAnswered ?? 0, task.totalAnswered ?? 0),
@@ -139,8 +143,8 @@ function rebuildTaskCounts(tasks, events, generation) {
     const dateEvents = eventsByDate.get(task.dateKey) ?? [];
     // A day with nothing left in the log is a day whose answers have aged out,
     // not a day that was never answered. Rebuilding it down to zero empties
-    // answeredWordIds, which makes normalizeTaskPlans drop completedAt — and a
-    // day that loses its completedAt loses its 签到 stamp on every device.
+    // answeredWordIds, which makes normalizeTaskPlans drop completedAt and
+    // incorrectly reopens a finished plan on every device.
     if (dateEvents.length === 0) return task;
     return {
       ...task,

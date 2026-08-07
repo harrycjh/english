@@ -45,29 +45,31 @@ describe('BackpackDrawer', () => {
     expect(markup).toContain('data-slot="focus"');
   });
 
-  it('shows locked art with the days still to go, rather than hiding it', () => {
+  it('shows locked art with its picture description, rather than hiding it', () => {
     const markup = render(0);
-    const reading = /<button[^>]*data-item-id="reading"[\s\S]*?<\/button>/.exec(markup)?.[0] ?? '';
+    const beijing = /<button[^>]*data-item-id="beijing"[\s\S]*?<\/button>/.exec(markup)?.[0] ?? '';
 
-    expect(reading).toContain('is-locked');
-    expect(reading).toContain('disabled');
-    expect(reading).toContain('还需 3 天签到');
+    expect(beijing).toContain('is-locked');
+    expect(beijing).toContain('disabled');
+    expect(beijing).toContain('晨光里的祈年殿');
+    expect(beijing).not.toContain('还需');
     // The picture is the reason to come back, so it is still painted.
-    expect(reading).toContain('stats-rabbit-reading-v1.webp');
+    expect(beijing).toContain('scene-beijing.webp');
   });
 
-  it('counts down the days left, not the price', () => {
-    const reading = /<button[^>]*data-item-id="reading"[\s\S]*?<\/button>/.exec(render(1))?.[0] ?? '';
+  it('keeps the locked picture description stable as check-in days increase', () => {
+    const beijing = /<button[^>]*data-item-id="beijing"[\s\S]*?<\/button>/.exec(render(1))?.[0] ?? '';
 
-    expect(reading).toContain('还需 2 天签到');
+    expect(beijing).toContain('晨光里的祈年殿');
+    expect(beijing).not.toContain('还需');
   });
 
   it('opens a locked item up the day it is earned', () => {
-    const reading = /<button[^>]*data-item-id="reading"[\s\S]*?<\/button>/.exec(render(3))?.[0] ?? '';
+    const beijing = /<button[^>]*data-item-id="beijing"[\s\S]*?<\/button>/.exec(render(7))?.[0] ?? '';
 
-    expect(reading).not.toContain('is-locked');
-    expect(reading).not.toContain('disabled');
-    expect(reading).toContain('在窗边把绘本读完');
+    expect(beijing).not.toContain('is-locked');
+    expect(beijing).not.toContain('disabled');
+    expect(beijing).toContain('晨光里的祈年殿');
   });
 
   it('marks the item each slot is wearing', () => {
@@ -82,9 +84,11 @@ describe('BackpackDrawer', () => {
   });
 
   it('does not mark an unearned item as worn, whatever the settings say', () => {
-    const cyber = /<button[^>]*data-item-id="cyber"[\s\S]*?<\/button>/.exec(render(3, 'cyber'))?.[0] ?? '';
+    const beijing = /<button[^>]*data-item-id="beijing"[\s\S]*?<\/button>/.exec(
+      render(3, 'default', 'beijing'),
+    )?.[0] ?? '';
 
-    expect(cyber).toContain('aria-pressed="false"');
+    expect(beijing).toContain('aria-pressed="false"');
   });
 
   it('counts the collection against everything there is to collect', () => {

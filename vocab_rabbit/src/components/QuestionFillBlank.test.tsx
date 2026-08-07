@@ -152,6 +152,57 @@ describe('QuestionFillBlank', () => {
     expect(markup).not.toContain('is-full-spelling-life-photo');
   });
 
+  it('reveals the RAZ page and sentence after a correct level 8 spelling answer', () => {
+    const razWord = {
+      ...word,
+      relatedMedia: {
+        raz: {
+          atlasPath: '/content/images/raz-atlases/atlas-001.webp',
+          row: 1,
+          column: 2,
+          label: 'Level E, E08 Chemistry, Page 6',
+          bookId: 'E08',
+          level: 'E',
+          sequence: 8,
+          title: 'Chemistry',
+          page: 6,
+          matchKind: 'exact' as const,
+          matchedTerm: 'chemistry',
+          matchedForm: 'chemistry',
+          sentence: 'Chemistry helps us understand materials.',
+          sentenceTranslation: '化学帮助我们了解材料。',
+        },
+      },
+    };
+    const markup = renderToStaticMarkup(
+      <QuestionFillBlank
+        question={{
+          kind: 'fill-blank',
+          prompt: '',
+          studyText: 'chemistry',
+          word: razWord,
+          maskedCharacters: Array.from({ length: 9 }, () => '_'),
+          missingLetters: [...'chemistry'],
+          inputMode: 'full',
+        }}
+        disabled
+        enableAudio
+        questionLevel={8}
+        selectedAnswer="chemistry"
+        relatedResultPhase="revealed"
+        showHints={false}
+        onContinue={() => undefined}
+        onSubmit={() => undefined}
+      />,
+    );
+
+    expect(markup).toContain('aria-label="RAZ 对应页面"');
+    expect(markup).toContain('Chemistry helps us understand materials.');
+    expect(markup).toContain('化学帮助我们了解材料。');
+    expect(markup).toContain('atlas-001.webp');
+    expect(markup).toContain('>继续</button>');
+  });
+
   it('uses a life photo at level 9 and falls back to Comfy when none exists', () => {
     const question: FillBlankQuestion = {
       kind: 'fill-blank',
