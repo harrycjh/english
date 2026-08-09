@@ -3636,6 +3636,7 @@ button {
   background: #eef6ff;
 }
 
+.word-detail-drawer__oxford-image.word-image--atlas,
 .word-detail-drawer__red-rocket-image,
 .word-detail-drawer__raz-image {
   display: block;

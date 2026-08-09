@@ -1,9 +1,10 @@
 import type { ChoiceQuestion } from '../services/question-service';
 import { speakWord } from '../services/audio-service';
 import { getExamplePairForLevel, getExampleSentences } from '../services/example-service';
-import { getStudyChinese, getStudyPartOfSpeech, getWordImageUrl } from '../services/word-service';
+import { getStudyChinese, getStudyPartOfSpeech } from '../services/word-service';
 import { LearningLevelControl } from './LearningLevelControl';
 import { AudioIconButton } from './AudioIconButton';
+import { OxfordPageImage } from './OxfordPageImage';
 import { QuestionExampleResult } from './QuestionExampleResult';
 
 interface QuestionTextProps {
@@ -78,7 +79,11 @@ export function QuestionText({
 
       {showOxfordResult && oxford ? (
         <figure className="question-related-page-result question-oxford-result" aria-label="牛津树对应页面">
-          <img src={getWordImageUrl(oxford.imagePath)} alt={oxford.label} />
+          <OxfordPageImage
+            media={oxford}
+            alt={oxford.label}
+            className="question-related-page-result__atlas"
+          />
           <figcaption>
             <span>{oxford.label}</span>
             <p>{oxford.sentence}</p>

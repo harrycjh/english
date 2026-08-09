@@ -85,7 +85,10 @@ export function collectOfflineImageUrls(words: WordRecord[]): string[] {
   for (const word of words) {
     urls.push(getWordImageUrl(word.imageAtlas?.atlasPath ?? word.imagePath));
 
-    const oxfordPath = word.relatedMedia?.oxford?.imagePath;
+    const oxfordPath = (
+      word.relatedMedia?.oxford?.imagePath
+      ?? word.relatedMedia?.oxford?.atlasPath
+    );
     if (oxfordPath) {
       urls.push(getWordImageUrl(oxfordPath));
     }

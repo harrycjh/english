@@ -10,7 +10,7 @@
     "dev": "vite",
     "build": "npm run build:esa",
     "build:github": "tsc --noEmit && vite build --mode github-pages && node scripts/shrink-word-payload.mjs dist",
-    "build:esa": "tsc --noEmit && vite build --mode esa && node scripts/shrink-word-payload.mjs dist && node scripts/build-word-atlases.mjs dist",
+    "build:esa": "tsc --noEmit && vite build --mode esa && node scripts/shrink-word-payload.mjs dist && node scripts/build-word-atlases.mjs dist && node scripts/build-oxford-atlases.mjs dist",
     "generate:review-preview-scales": "node scripts/generate-review-preview-scales.mjs",
     "generate:raz-media": "node scripts/export-raz-media.mjs",
     "scene:prepare": "node scripts/prepare-scene-art.mjs",

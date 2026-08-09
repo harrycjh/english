@@ -131,6 +131,28 @@ describe('collectOfflineImageUrls', () => {
       expect(matching, `${item.id} art is not downloaded`).toHaveLength(1);
     }
   });
+
+  it('collects a bundled Oxford atlas instead of a removed source page', () => {
+    const urls = collectOfflineImageUrls([
+      createWord({
+        relatedMedia: {
+          oxford: {
+            atlasPath: '/content/images/oxford-atlases/atlas-004.webp',
+            row: 2,
+            column: 1,
+            label: 'Level 4, Book 2, Page 9',
+            level: 4,
+            book: 2,
+            page: 9,
+          },
+        },
+      }),
+    ]);
+
+    expect(urls).toContain(
+      `/content/images/oxford-atlases/atlas-004.webp?v=${CONTENT_VERSION}`,
+    );
+  });
 });
 
 describe('downloadOfflineImages', () => {

@@ -3,6 +3,7 @@ import type { WordRecord } from '../models/word';
 import type { QuestionImageStrategy } from '../services/question-service';
 import { getWordAtlasStyle } from '../services/word-atlas-service';
 import { getAssetUrl, getWordImageUrl } from '../services/word-service';
+import { OxfordPageImage } from './OxfordPageImage';
 import { WordImage } from './WordImage';
 
 interface QuestionMediaProps {
@@ -25,7 +26,13 @@ export function QuestionMedia({ word, strategy, localLifePhoto, className, alt }
       return <WordImage className={className} word={word} alt={alt} />;
     }
     if (word.relatedMedia?.oxford) {
-      return <img className={className} src={getAssetUrl(word.relatedMedia.oxford.imagePath)} alt={alt} />;
+      return (
+        <OxfordPageImage
+          className={className}
+          media={word.relatedMedia.oxford}
+          alt={alt}
+        />
+      );
     }
     if (word.relatedMedia?.redRocket) {
       if (word.relatedMedia.redRocket.imagePath) {

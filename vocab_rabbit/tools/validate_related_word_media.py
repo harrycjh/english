@@ -15,6 +15,7 @@ PUBLIC_MANIFEST_PATH = PROJECT_ROOT / "public/content/words/word_related_media.j
 LIFE_PHOTO_COVERAGE_PATH = PROJECT_ROOT / "public/content/words/life_photo_coverage.json"
 PUBLIC_ROOT = PROJECT_ROOT / "public"
 LOCAL_PACKAGE_PATH = PROJECT_ROOT / "design-output/local-life-photo-package/vocab-rabbit-life-photos.zip"
+SEMANTIC_EXCLUSIONS_PATH = PROJECT_ROOT / "scripts/related-media-semantic-exclusions.json"
 
 
 def load_json(path: Path) -> Any:
@@ -238,6 +239,35 @@ def validate_life_photo_coverage(word_ids: set[str]) -> list[str]:
     return errors
 
 
+def validate_semantic_exclusions(word_ids: set[str]) -> list[str]:
+    errors: list[str] = []
+    if not SEMANTIC_EXCLUSIONS_PATH.exists():
+        return [f"semantic exclusions are missing: {SEMANTIC_EXCLUSIONS_PATH}"]
+
+    payload = load_json(SEMANTIC_EXCLUSIONS_PATH)
+    manifest = load_json(PUBLIC_MANIFEST_PATH)
+    entries_by_word_id = {entry.get("wordId"): entry for entry in manifest.get("entries", [])}
+    seen_keys: set[str] = set()
+    for exclusion in payload.get("exclusions", []):
+        key = exclusion.get("key", "")
+        source = exclusion.get("source", "")
+        word_id = exclusion.get("wordId", "")
+        if key in seen_keys:
+            errors.append(f"semantic exclusions contain duplicate key: {key}")
+        seen_keys.add(key)
+        if word_id not in word_ids:
+            errors.append(f"semantic exclusion has unknown wordId: {word_id}")
+        if source not in ("oxford", "redRocket", "raz"):
+            errors.append(f"semantic exclusion has invalid source: {key}")
+            continue
+
+        media = ((entries_by_word_id.get(word_id) or {}).get("relatedMedia") or {}).get(source)
+        identity = exclusion.get("mediaIdentity") or {}
+        if media and media.get("label") == identity.get("label") and media.get("page") == identity.get("page"):
+            errors.append(f"excluded semantic mismatch was reintroduced: {key}")
+    return errors
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Validate VocaRabbit related media assets.")
     parser.add_argument("--public-only", action="store_true")
@@ -247,6 +277,7 @@ def main() -> None:
 
     errors = validate_public_manifest(word_ids)
     errors.extend(validate_life_photo_coverage(word_ids))
+    errors.extend(validate_semantic_exclusions(word_ids))
     if not args.public_only:
         errors.extend(validate_local_life_photo_package(word_ids))
     result = {

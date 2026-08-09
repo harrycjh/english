@@ -1,0 +1,2418 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-09T10:20:38.189Z",
+  "exclusions": [
+    {
+      "key": "oxford:ket_father_n",
+      "source": "oxford",
+      "wordId": "ket_father_n",
+      "sourceLabel": "Level 6, Book 10, Page 9",
+      "sentence": "\"We can tell Father Christmas what to bring us.\"",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 6, Book 10, Page 9",
+        "page": 9
+      }
+    },
+    {
+      "key": "oxford:ket_kid_s_n",
+      "source": "oxford",
+      "wordId": "ket_kid_s_n",
+      "sourceLabel": "Level 4, Book 1, Page 8",
+      "sentence": "Grandmother had a kid goat.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 4, Book 1, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "raz:ket_name_n",
+      "source": "raz",
+      "wordId": "ket_name_n",
+      "sourceLabel": "Level E, E19 Shapes in Tide Pools, Page 5",
+      "sentence": "Can you name this animal?",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E19 Shapes in Tide Pools, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "oxford:ket_dead_adj",
+      "source": "oxford",
+      "wordId": "ket_dead_adj",
+      "sourceLabel": "Level 9, Book 2, Page 26",
+      "sentence": "Soon they came to a dead end.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 9, Book 2, Page 26",
+        "page": 26
+      }
+    },
+    {
+      "key": "redRocket:ket_baby_n",
+      "source": "redRocket",
+      "wordId": "ket_baby_n",
+      "sourceLabel": "Emergent Level, Baby Animals, Page 4",
+      "sentence": "A baby hen is a chicken.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Emergent Level, Baby Animals, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "oxford:ket_back_n_adv_adj",
+      "source": "oxford",
+      "wordId": "ket_back_n_adv_adj",
+      "sourceLabel": "Level 1, Book 50, Page 6",
+      "sentence": "\"Come back!\"",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 1, Book 50, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "redRocket:ket_back_n_adv_adj",
+      "source": "redRocket",
+      "wordId": "ket_back_n_adv_adj",
+      "sourceLabel": "Early Level 4, Dinner With Fox, Page 15",
+      "sentence": "\"Please come back for dinner again,\" said Fox.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Dinner With Fox, Page 15",
+        "page": 15
+      }
+    },
+    {
+      "key": "raz:ket_back_n_adv_adj",
+      "source": "raz",
+      "wordId": "ket_back_n_adv_adj",
+      "sourceLabel": "Level E, E02 A Week with Grandpa, Page 10",
+      "sentence": "I went back home.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E02 A Week with Grandpa, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "oxford:ket_ear_n",
+      "source": "oxford",
+      "wordId": "ket_ear_n",
+      "sourceLabel": "Level 2, Book 26, Page 8",
+      "sentence": "She took Mum's ear-ring.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 2, Book 26, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "oxford:ket_break_n_v",
+      "source": "oxford",
+      "wordId": "ket_break_n_v",
+      "sourceLabel": "Level 7, Book 13, Page 6",
+      "sentence": "They stopped for a break.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 7, Book 13, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "oxford:ket_leg_n",
+      "source": "oxford",
+      "wordId": "ket_leg_n",
+      "sourceLabel": "Level 3, Book 13, Page 5",
+      "sentence": "Floppy pulled his leg.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 3, Book 13, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "oxford:ket_clean_adj_v",
+      "source": "oxford",
+      "wordId": "ket_clean_adj_v",
+      "sourceLabel": "Level 2, Book 7, Page 16",
+      "sentence": "Floppy looked clean.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 2, Book 7, Page 16",
+        "page": 16
+      }
+    },
+    {
+      "key": "oxford:ket_cold_adj_n",
+      "source": "oxford",
+      "wordId": "ket_cold_adj_n",
+      "sourceLabel": "Level 3, Book 4, Page 11",
+      "sentence": "\"This ice is cold,\" said Wilf.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 3, Book 4, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "redRocket:ket_cold_adj_n",
+      "source": "redRocket",
+      "wordId": "ket_cold_adj_n",
+      "sourceLabel": "Emergent Level, What Feels Cold, Page 6",
+      "sentence": "The wind feels cold.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Emergent Level, What Feels Cold, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "raz:ket_cold_adj_n",
+      "source": "raz",
+      "wordId": "ket_cold_adj_n",
+      "sourceLabel": "Level E, E20 Places Plants and Animals Live, Page 9",
+      "sentence": "The tundra is very cold.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E20 Places Plants and Animals Live, Page 9",
+        "page": 9
+      }
+    },
+    {
+      "key": "raz:ket_comb_n",
+      "source": "raz",
+      "wordId": "ket_comb_n",
+      "sourceLabel": "Level H, H21 Cool as a Cuke, Page 6",
+      "sentence": "They comb their fur like Cuke.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level H, H21 Cool as a Cuke, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "raz:ket_nurse_n",
+      "source": "raz",
+      "wordId": "ket_nurse_n",
+      "sourceLabel": "Level F, F36 Night Animals, Page 8",
+      "sentence": "This nurse shark is active at night.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F36 Night Animals, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "redRocket:ket_sweet_n_adj",
+      "source": "redRocket",
+      "wordId": "ket_sweet_n_adj",
+      "sourceLabel": "Early Level 4, Making Honey, Page 11",
+      "sentence": "Bees fly from flower to flower and suck out the sweet nectar from inside.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Making Honey, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "raz:ket_sweet_n_adj",
+      "source": "raz",
+      "wordId": "ket_sweet_n_adj",
+      "sourceLabel": "Level E, E12 All Kinds of Farms, Page 10",
+      "sentence": "Sugar makes foods sweet.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E12 All Kinds of Farms, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "oxford:ket_poor_adj",
+      "source": "oxford",
+      "wordId": "ket_poor_adj",
+      "sourceLabel": "Level 4, Book 15, Page 13",
+      "sentence": "\"Poor old Mum,\" said Wilf.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 4, Book 15, Page 13",
+        "page": 13
+      }
+    },
+    {
+      "key": "redRocket:ket_hard_adj_adv",
+      "source": "redRocket",
+      "wordId": "ket_hard_adj_adv",
+      "sourceLabel": "Early Level 1, As Fast As You Can, Page 16",
+      "sentence": "I can blow as hard as you can.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, As Fast As You Can, Page 16",
+        "page": 16
+      }
+    },
+    {
+      "key": "raz:ket_hard_adj_adv",
+      "source": "raz",
+      "wordId": "ket_hard_adj_adv",
+      "sourceLabel": "Level F, F11 Glassblowing, Page 6",
+      "sentence": "I try not to blow too hard.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F11 Glassblowing, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "raz:ket_rich_adj",
+      "source": "raz",
+      "wordId": "ket_rich_adj",
+      "sourceLabel": "Level H, H53 The Mighty Mississippi, Page 11",
+      "sentence": "The floods are messy, but they leave behind rich soil.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level H, H53 The Mighty Mississippi, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "redRocket:ket_right_n_adj_adv",
+      "source": "redRocket",
+      "wordId": "ket_right_n_adj_adv",
+      "sourceLabel": "Early Level 3, Go Left Or Right, Page 16",
+      "sentence": "Turn to the right.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 3, Go Left Or Right, Page 16",
+        "page": 16
+      }
+    },
+    {
+      "key": "redRocket:ket_cool_adj_exclam",
+      "source": "redRocket",
+      "wordId": "ket_cool_adj_exclam",
+      "sourceLabel": "Early Level 3, Time For A Swim, Page 18",
+      "sentence": "It was cool.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 3, Time For A Swim, Page 18",
+        "page": 18
+      }
+    },
+    {
+      "key": "raz:ket_cool_adj_exclam",
+      "source": "raz",
+      "wordId": "ket_cool_adj_exclam",
+      "sourceLabel": "Level E, E13 The Four Seasons, Page 7",
+      "sentence": "It starts to cool off.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E13 The Four Seasons, Page 7",
+        "page": 7
+      }
+    },
+    {
+      "key": "oxford:ket_kind_adj_n",
+      "source": "oxford",
+      "wordId": "ket_kind_adj_n",
+      "sourceLabel": "Level 7, Book 6, Page 5",
+      "sentence": "\"It's a kind of submarine,\" said Wilf.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 7, Book 6, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "redRocket:ket_kind_adj_n",
+      "source": "redRocket",
+      "wordId": "ket_kind_adj_n",
+      "sourceLabel": "Early Level 4, Odd One Out, Page 16",
+      "sentence": "Which one is a different kind of hat?",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Odd One Out, Page 16",
+        "page": 16
+      }
+    },
+    {
+      "key": "raz:ket_kind_adj_n",
+      "source": "raz",
+      "wordId": "ket_kind_adj_n",
+      "sourceLabel": "Level E, E46 Let’s Carve a Pumpkin, Page 6",
+      "sentence": "It’s kind of gross and fun at the same time!",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E46 Let’s Carve a Pumpkin, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "raz:ket_shower_n",
+      "source": "raz",
+      "wordId": "ket_shower_n",
+      "sourceLabel": "Level F, F05 How Is the Weather Today?, Page 5",
+      "sentence": "The weatherman says it will be warm with showers.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F05 How Is the Weather Today?, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "raz:ket_key_n",
+      "source": "raz",
+      "wordId": "ket_key_n",
+      "sourceLabel": "Level G, G46 Chess, Page 11",
+      "sentence": "The king is the key to the game, but he is weak.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G46 Chess, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "oxford:ket_sink_n",
+      "source": "oxford",
+      "wordId": "ket_sink_n",
+      "sourceLabel": "Level 7, Book 9, Page 4",
+      "sentence": "Wilma's mum was washing her hands at the sink.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 7, Book 9, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "redRocket:ket_bowl_n",
+      "source": "redRocket",
+      "wordId": "ket_bowl_n",
+      "sourceLabel": "Emergent Level, Lets Play Ball, Page 12",
+      "sentence": "We like to bowl balls.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Emergent Level, Lets Play Ball, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "oxford:ket_flat_n",
+      "source": "oxford",
+      "wordId": "ket_flat_n",
+      "sourceLabel": "Level 1, Book 60, Page 7",
+      "sentence": "Pat it flat.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 1, Book 60, Page 7",
+        "page": 7
+      }
+    },
+    {
+      "key": "redRocket:ket_flat_n",
+      "source": "redRocket",
+      "wordId": "ket_flat_n",
+      "sourceLabel": "Early Level 2, Sets In Nature, Page 14",
+      "sentence": "They got some flat stones and some black stones.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 2, Sets In Nature, Page 14",
+        "page": 14
+      }
+    },
+    {
+      "key": "redRocket:ket_light_n_adj",
+      "source": "redRocket",
+      "wordId": "ket_light_n_adj",
+      "sourceLabel": "Early Level 1, Heavy Or Light, Page 10",
+      "sentence": "A rocket is heavy, but a balloon is light.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, Heavy Or Light, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "oxford:ket_top_n",
+      "source": "oxford",
+      "wordId": "ket_top_n",
+      "sourceLabel": "Level 1, Book 45, Page 10",
+      "sentence": "This is the top dog.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 1, Book 45, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "oxford:ket_tie_n",
+      "source": "oxford",
+      "wordId": "ket_tie_n",
+      "sourceLabel": "Level 2, Book 13, Page 4",
+      "sentence": "He couldn't tie his laces.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 2, Book 13, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "redRocket:ket_tie_n",
+      "source": "redRocket",
+      "wordId": "ket_tie_n",
+      "sourceLabel": "Early Level 2, So Strong, Page 9",
+      "sentence": "It can tie up a big ship like this one.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 2, So Strong, Page 9",
+        "page": 9
+      }
+    },
+    {
+      "key": "redRocket:ket_ring_n_v",
+      "source": "redRocket",
+      "wordId": "ket_ring_n_v",
+      "sourceLabel": "Early Level 3, Ringing Bells, Page 14",
+      "sentence": "A bike has a bell for the rider to ring.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 3, Ringing Bells, Page 14",
+        "page": 14
+      }
+    },
+    {
+      "key": "raz:ket_ring_n_v",
+      "source": "raz",
+      "wordId": "ket_ring_n_v",
+      "sourceLabel": "Level G, G50 Wiggly Worms, Page 5",
+      "sentence": "Each part is shaped like a ring.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G50 Wiggly Worms, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "raz:ket_jumper_n",
+      "source": "raz",
+      "wordId": "ket_jumper_n",
+      "sourceLabel": "Level J, J定级1 Animal Olympics, Page 7",
+      "sentence": "He was a great jumper.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level J, J定级1 Animal Olympics, Page 7",
+        "page": 7
+      }
+    },
+    {
+      "key": "raz:ket_golden_adj",
+      "source": "raz",
+      "wordId": "ket_golden_adj",
+      "sourceLabel": "Level J, J58 Incredible Places to Stay, Page 5",
+      "sentence": "At the Golden Nugget, you can ride a waterslide.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level J, J58 Incredible Places to Stay, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "redRocket:ket_orange_adj_n",
+      "source": "redRocket",
+      "wordId": "ket_orange_adj_n",
+      "sourceLabel": "Early Level 1, Half Each, Page 12",
+      "sentence": "I have a big orange.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, Half Each, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "raz:ket_white_adj",
+      "source": "raz",
+      "wordId": "ket_white_adj",
+      "sourceLabel": "Level E, E30 Carlos’s First Halloween, Page 8",
+      "sentence": "Ms. White made a pirate!",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E30 Carlos’s First Halloween, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "oxford:ket_cook_n_v",
+      "source": "oxford",
+      "wordId": "ket_cook_n_v",
+      "sourceLabel": "Level 5, Book 20, Page 16",
+      "sentence": "There was a lot to cook.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 5, Book 20, Page 16",
+        "page": 16
+      }
+    },
+    {
+      "key": "redRocket:ket_drink_n_v",
+      "source": "redRocket",
+      "wordId": "ket_drink_n_v",
+      "sourceLabel": "Emergent Level, Stickybeak The Parrot, Page 10",
+      "sentence": "He likes to drink a lot.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Emergent Level, Stickybeak The Parrot, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "oxford:ket_glass_n_adj",
+      "source": "oxford",
+      "wordId": "ket_glass_n_adj",
+      "sourceLabel": "Level 6, Book 6, Page 4",
+      "sentence": "\"Don't tap the glass,\" said Dad.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 6, Book 6, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "redRocket:ket_glass_n_adj",
+      "source": "redRocket",
+      "wordId": "ket_glass_n_adj",
+      "sourceLabel": "Early Level 3, What Is It Made Of, Page 12",
+      "sentence": "Glass is made from sand.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 3, What Is It Made Of, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "oxford:ket_pepper_n",
+      "source": "oxford",
+      "wordId": "ket_pepper_n",
+      "sourceLabel": "Level 9, Book 3, Page 3",
+      "sentence": "They watched a dog called Pepper.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 9, Book 3, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_course_n",
+      "source": "oxford",
+      "wordId": "ket_course_n",
+      "sourceLabel": "Level 7, Book 6, Page 15",
+      "sentence": "\"Of course you can speak,\" said the Professor.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 7, Book 6, Page 15",
+        "page": 15
+      }
+    },
+    {
+      "key": "raz:ket_course_n",
+      "source": "raz",
+      "wordId": "ket_course_n",
+      "sourceLabel": "Level H, H05 I’d Like to Be, Page 7",
+      "sentence": "I’d like to be a cowboy and ride on a horse, sleep under the stars, and see the cows, of course.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level H, H05 I’d Like to Be, Page 7",
+        "page": 7
+      }
+    },
+    {
+      "key": "raz:ket_lesson_n",
+      "source": "raz",
+      "wordId": "ket_lesson_n",
+      "sourceLabel": "Level E, E48 The Boy Who Cried “Wolf!”, Page 12",
+      "sentence": "The boy learned a lesson.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E48 The Boy Who Cried “Wolf!”, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "raz:ket_ruler_n",
+      "source": "raz",
+      "wordId": "ket_ruler_n",
+      "sourceLabel": "Level H, H37 Grounded to Earth, Page 7",
+      "sentence": "“I am Zorb, the ruler of Earth!”",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level H, H37 Grounded to Earth, Page 7",
+        "page": 7
+      }
+    },
+    {
+      "key": "raz:ket_science_n",
+      "source": "raz",
+      "wordId": "ket_science_n",
+      "sourceLabel": "Level G, G65 Look At This Book!, Page 4",
+      "sentence": "When I read science fiction, I explore distant planets.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G65 Look At This Book!, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "oxford:ket_mark_n",
+      "source": "oxford",
+      "wordId": "ket_mark_n",
+      "sourceLabel": "Level 7, Book 11, Page 12",
+      "sentence": "She had a brother called Mark.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 7, Book 11, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "oxford:ket_board_n",
+      "source": "oxford",
+      "wordId": "ket_board_n",
+      "sourceLabel": "Level 7, Book 6, Page 12",
+      "sentence": "Get on board,\" went on the Professor.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 7, Book 6, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "raz:ket_pupil_n",
+      "source": "raz",
+      "wordId": "ket_pupil_n",
+      "sourceLabel": "Level I, I44 Owls Overhead, Page 7",
+      "sentence": "That’s because of their pupils—the black circles in the center of their eyes.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level I, I44 Owls Overhead, Page 7",
+        "page": 7
+      }
+    },
+    {
+      "key": "oxford:ket_rubber_n",
+      "source": "oxford",
+      "wordId": "ket_rubber_n",
+      "sourceLabel": "Level 9, Book 8, Page 28",
+      "sentence": "The four of them floated downstream on the rubber tubes.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 9, Book 8, Page 28",
+        "page": 28
+      }
+    },
+    {
+      "key": "oxford:ket_bill_n",
+      "source": "oxford",
+      "wordId": "ket_bill_n",
+      "sourceLabel": "Level 14, Book 5, Page 32",
+      "sentence": "'Welcome to dinner, Bill and Nan.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 14, Book 5, Page 32",
+        "page": 32
+      }
+    },
+    {
+      "key": "oxford:ket_form_n",
+      "source": "oxford",
+      "wordId": "ket_form_n",
+      "sourceLabel": "Level 9, Book 10, Page 4",
+      "sentence": "\"Let's form a band.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 9, Book 10, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "redRocket:ket_letter_n",
+      "source": "redRocket",
+      "wordId": "ket_letter_n",
+      "sourceLabel": "Early Level 4, Triky Tangrams, Page 11",
+      "sentence": "Can you make the first letter of your own name?",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Triky Tangrams, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "raz:ket_letter_n",
+      "source": "raz",
+      "wordId": "ket_letter_n",
+      "sourceLabel": "Level E, E76 The Sisters C, Page 3",
+      "sentence": "They both like the letter c.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E76 The Sisters C, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_film_n_v",
+      "source": "oxford",
+      "wordId": "ket_film_n_v",
+      "sourceLabel": "Level 6, Book 4, Page 26",
+      "sentence": "\"Well, I'm sorry, I didn't put a film in the camera.\"",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 6, Book 4, Page 26",
+        "page": 26
+      }
+    },
+    {
+      "key": "redRocket:ket_show_v_n",
+      "source": "redRocket",
+      "wordId": "ket_show_v_n",
+      "sourceLabel": "Early Level 1, Show Me A Shape, Page 12",
+      "sentence": "Show me the shape of a shadow.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, Show Me A Shape, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "raz:ket_show_v_n",
+      "source": "raz",
+      "wordId": "ket_show_v_n",
+      "sourceLabel": "Level E, E51 Wake Up, Bear!, Page 12",
+      "sentence": "“Time to show my cub the world,” Bear says.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E51 Wake Up, Bear!, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "redRocket:ket_play_v_n",
+      "source": "redRocket",
+      "wordId": "ket_play_v_n",
+      "sourceLabel": "Early Level 3, Our Tree House, Page 4",
+      "sentence": "We have made this play house up in a tree.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 3, Our Tree House, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "redRocket:ket_pop_n",
+      "source": "redRocket",
+      "wordId": "ket_pop_n",
+      "sourceLabel": "Early Level 1, As Fast As You Can, Page 18",
+      "sentence": "Pop!",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, As Fast As You Can, Page 18",
+        "page": 18
+      }
+    },
+    {
+      "key": "redRocket:ket_listen_to_v",
+      "source": "redRocket",
+      "wordId": "ket_listen_to_v",
+      "sourceLabel": "Early Level 2, Off To School, Page 8",
+      "sentence": "Some children have to ride on a train to get to school.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 2, Off To School, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "oxford:ket_performance_entertainment_n",
+      "source": "oxford",
+      "wordId": "ket_performance_entertainment_n",
+      "sourceLabel": "Level 15, Book 1, Page 5",
+      "sentence": "It can therefore help improve a person's performance when doing an extreme sport.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 15, Book 1, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "redRocket:ket_tune_music_n",
+      "source": "redRocket",
+      "wordId": "ket_tune_music_n",
+      "sourceLabel": "Early Level 3, Our Family Band, Page 12",
+      "sentence": "My grandfather plays the music he likes on his bagpipes.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 3, Our Family Band, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "redRocket:ket_mouse_n",
+      "source": "redRocket",
+      "wordId": "ket_mouse_n",
+      "sourceLabel": "Pre-Reading Level, A Brave Girl, Page 18",
+      "sentence": "M is for mouse.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Pre-Reading Level, A Brave Girl, Page 18",
+        "page": 18
+      }
+    },
+    {
+      "key": "raz:ket_tablet_n",
+      "source": "raz",
+      "wordId": "ket_tablet_n",
+      "sourceLabel": "Level J, J32 The Story of the Statue, Page 13",
+      "sentence": "The tablet in its left hand has July 4, 1776, written on it.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level J, J32 The Story of the Statue, Page 13",
+        "page": 13
+      }
+    },
+    {
+      "key": "raz:ket_web_n",
+      "source": "raz",
+      "wordId": "ket_web_n",
+      "sourceLabel": "Level G, G10 Whose Eggs Are These?, Page 8",
+      "sentence": "You can find them near spider webs.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G10 Whose Eggs Are These?, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "oxford:ket_click_n_v",
+      "source": "oxford",
+      "wordId": "ket_click_n_v",
+      "sourceLabel": "Level 6, Book 9, Page 6",
+      "sentence": "The teeth went click, click, click.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 6, Book 9, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "redRocket:ket_click_n_v",
+      "source": "redRocket",
+      "wordId": "ket_click_n_v",
+      "sourceLabel": "Early Level 4, Keeping Safe, Page 6",
+      "sentence": "Make it click.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Keeping Safe, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "oxford:ket_printer_n",
+      "source": "oxford",
+      "wordId": "ket_printer_n",
+      "sourceLabel": "Level 10, Book 9, Page 9",
+      "sentence": "Printer (looks after the printing machines)",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 10, Book 9, Page 9",
+        "page": 9
+      }
+    },
+    {
+      "key": "raz:ket_channel_n",
+      "source": "raz",
+      "wordId": "ket_channel_n",
+      "sourceLabel": "Level G, G72 A Trip to Petra, Page 6",
+      "sentence": "In the canyon, they saw water channels and clay pipes.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G72 A Trip to Petra, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "oxford:ket_it_n",
+      "source": "oxford",
+      "wordId": "ket_it_n",
+      "sourceLabel": "Level 1, Book 12, Page 3",
+      "sentence": "I can't reach it!",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 1, Book 12, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "redRocket:ket_it_n",
+      "source": "redRocket",
+      "wordId": "ket_it_n",
+      "sourceLabel": "Early Level 2, What Makes It Go, Page 8",
+      "sentence": "It needs batteries to make it go.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 2, What Makes It Go, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "redRocket:ket_riding_n",
+      "source": "redRocket",
+      "wordId": "ket_riding_n",
+      "sourceLabel": "Early Level 4, Once Upon A Time, Page 10",
+      "sentence": "We like the story about Little Red Riding Hood and the big bad wolf.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Once Upon A Time, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "raz:ket_riding_n",
+      "source": "raz",
+      "wordId": "ket_riding_n",
+      "sourceLabel": "Level I, I56 Little Red Riding Hood, Page 3",
+      "sentence": "There once lived a girl named Little Red Riding Hood.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level I, I56 Little Red Riding Hood, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_baseball_n",
+      "source": "oxford",
+      "wordId": "ket_baseball_n",
+      "sourceLabel": "Level 9, Book 9, Page 5",
+      "sentence": "\"Buy two cheeses and you get a free baseball cap,\" said the lady.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 9, Book 9, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "oxford:ket_goal_n",
+      "source": "oxford",
+      "wordId": "ket_goal_n",
+      "sourceLabel": "Level 1, Book 34, Page 10",
+      "sentence": "Dad got a goal.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 1, Book 34, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "raz:ket_skate_v",
+      "source": "raz",
+      "wordId": "ket_skate_v",
+      "sourceLabel": "Level E, E69 Skateboards, Page 9",
+      "sentence": "Some people ride skateboards in skate parks.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E69 Skateboards, Page 9",
+        "page": 9
+      }
+    },
+    {
+      "key": "oxford:ket_player_n",
+      "source": "oxford",
+      "wordId": "ket_player_n",
+      "sourceLabel": "Level 7, Book 13, Page 5",
+      "sentence": "\"And can we take the CD player?\"",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 7, Book 13, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "oxford:ket_cricket_n",
+      "source": "oxford",
+      "wordId": "ket_cricket_n",
+      "sourceLabel": "Level 9, Book 4, Page 12",
+      "sentence": "The children wanted to play cricket, so they had a game before they went home.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 9, Book 4, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "oxford:ket_racket_n",
+      "source": "oxford",
+      "wordId": "ket_racket_n",
+      "sourceLabel": "Level 11, Book 11, Page 9",
+      "sentence": "'Stop that racket and come inside.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 11, Book 11, Page 9",
+        "page": 9
+      }
+    },
+    {
+      "key": "oxford:ket_bank_n",
+      "source": "oxford",
+      "wordId": "ket_bank_n",
+      "sourceLabel": "Level 7, Book 2, Page 14",
+      "sentence": "There were alligators asleep on the bank.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 7, Book 2, Page 14",
+        "page": 14
+      }
+    },
+    {
+      "key": "oxford:ket_block_n",
+      "source": "oxford",
+      "wordId": "ket_block_n",
+      "sourceLabel": "Level 2, Book 13, Page 12",
+      "sentence": "Dad made a block.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 2, Book 13, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "oxford:ket_castle_n",
+      "source": "oxford",
+      "wordId": "ket_castle_n",
+      "sourceLabel": "Level 5, Book 4, Page 15",
+      "sentence": "The children went on the Jumping Castle.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 5, Book 4, Page 15",
+        "page": 15
+      }
+    },
+    {
+      "key": "oxford:ket_court_n",
+      "source": "oxford",
+      "wordId": "ket_court_n",
+      "sourceLabel": "Level 10, Book 11, Page 15",
+      "sentence": "The court is quite small so you have to be very accurate.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 10, Book 11, Page 15",
+        "page": 15
+      }
+    },
+    {
+      "key": "redRocket:ket_underground_n_adj",
+      "source": "redRocket",
+      "wordId": "ket_underground_n_adj",
+      "sourceLabel": "Early Level 4, Living Underground, Page 18",
+      "sentence": "Underground homes are not too hot or too cold.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Living Underground, Page 18",
+        "page": 18
+      }
+    },
+    {
+      "key": "raz:ket_underground_n_adj",
+      "source": "raz",
+      "wordId": "ket_underground_n_adj",
+      "sourceLabel": "Level F, F55 Tunnels, Page 4",
+      "sentence": "Some tunnels go underground.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F55 Tunnels, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "redRocket:ket_square_n_adj",
+      "source": "redRocket",
+      "wordId": "ket_square_n_adj",
+      "sourceLabel": "Emergent Level, What Shape Is This?, Page 12",
+      "sentence": "This cake is square.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Emergent Level, What Shape Is This?, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "raz:ket_square_n_adj",
+      "source": "raz",
+      "wordId": "ket_square_n_adj",
+      "sourceLabel": "Level G, G46 Chess, Page 3",
+      "sentence": "In the game of chess, pieces battle on a board of squares.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G46 Chess, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_capital_n",
+      "source": "oxford",
+      "wordId": "ket_capital_n",
+      "sourceLabel": "Level 15, Book 4, Page 42",
+      "sentence": "Each new character we meet is introduced in capital letters to make their entrance stand out, e.g.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 15, Book 4, Page 42",
+        "page": 42
+      }
+    },
+    {
+      "key": "raz:ket_wood_n",
+      "source": "raz",
+      "wordId": "ket_wood_n",
+      "sourceLabel": "Level E, E21 Shoes Men Wear, Page 6",
+      "sentence": "Men wear them in the woods.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E21 Shoes Men Wear, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "oxford:ket_change_v_n",
+      "source": "oxford",
+      "wordId": "ket_change_v_n",
+      "sourceLabel": "Level 6, Book 19, Page 14",
+      "sentence": "Kipper wanted to change seats, but",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 6, Book 19, Page 14",
+        "page": 14
+      }
+    },
+    {
+      "key": "redRocket:ket_change_v_n",
+      "source": "redRocket",
+      "wordId": "ket_change_v_n",
+      "sourceLabel": "Early Level 4, Book Art, Page 11",
+      "sentence": "Sometimes the author wants things changed.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Book Art, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "raz:ket_change_v_n",
+      "source": "raz",
+      "wordId": "ket_change_v_n",
+      "sourceLabel": "Level F, F04 Changing Seasons, Page 3",
+      "sentence": "I live where the weather changes during the year.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F04 Changing Seasons, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_euro_n",
+      "source": "oxford",
+      "wordId": "ket_euro_n",
+      "sourceLabel": "Level 12, Book 4, Page 34",
+      "sentence": "not crashing in the euro races!",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 12, Book 4, Page 34",
+        "page": 34
+      }
+    },
+    {
+      "key": "oxford:ket_eagle_n",
+      "source": "oxford",
+      "wordId": "ket_eagle_n",
+      "sourceLabel": "Level 11, Book 5, Page 3",
+      "sentence": "\"The Eagle has Landed\"",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 11, Book 5, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "redRocket:ket_country_n",
+      "source": "redRocket",
+      "wordId": "ket_country_n",
+      "sourceLabel": "Early Level 2, Big Machines, Page 8",
+      "sentence": "It is in the country.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 2, Big Machines, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "raz:ket_country_n",
+      "source": "raz",
+      "wordId": "ket_country_n",
+      "sourceLabel": "Level E, E23 Country Animals, Page 3",
+      "sentence": "Some people live in the country.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E23 Country Animals, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_spring_n",
+      "source": "oxford",
+      "wordId": "ket_spring_n",
+      "sourceLabel": "Level 3, Book 15, Page 3",
+      "sentence": "Mum and Dad were spring-cleaning.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 3, Book 15, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_cloudy_adj",
+      "source": "oxford",
+      "wordId": "ket_cloudy_adj",
+      "sourceLabel": "Level 13, Book 4, Page 32",
+      "sentence": "George stared out at the stream of cloudy water swirling past.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 13, Book 4, Page 32",
+        "page": 32
+      }
+    },
+    {
+      "key": "raz:ket_april_n",
+      "source": "raz",
+      "wordId": "ket_april_n",
+      "sourceLabel": "Level I, I40 A Pocket Park for Tiny, Page 3",
+      "sentence": "April and her brother, Jesse, lived in the city.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level I, I40 A Pocket Park for Tiny, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_may_n",
+      "source": "oxford",
+      "wordId": "ket_may_n",
+      "sourceLabel": "Level 2, Book 27, Page 8",
+      "sentence": "said Mrs May.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 2, Book 27, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "oxford:ket_quarter_n",
+      "source": "oxford",
+      "wordId": "ket_quarter_n",
+      "sourceLabel": "Level 15, Book 1, Page 27",
+      "sentence": "This is where you go up the quarter pipe [a curved, sloped ramp] and stall [balance] on one hand (see picture above).",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 15, Book 1, Page 27",
+        "page": 27
+      }
+    },
+    {
+      "key": "raz:ket_quarter_n",
+      "source": "raz",
+      "wordId": "ket_quarter_n",
+      "sourceLabel": "Level F, F52 Super Thrift, Page 5",
+      "sentence": "It was only a quarter.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F52 Super Thrift, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "raz:ket_second_adj_det_n",
+      "source": "raz",
+      "wordId": "ket_second_adj_det_n",
+      "sourceLabel": "Level E, E52 Five Seconds to Blastoff!, Page 3",
+      "sentence": "There are five seconds to blastoff.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E52 Five Seconds to Blastoff!, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_daily_adj_adv",
+      "source": "oxford",
+      "wordId": "ket_daily_adj_adv",
+      "sourceLabel": "Level 10, Book 12, Page 31",
+      "sentence": "'It's a reporter from The Daily Snoop,' said Harry.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 10, Book 12, Page 31",
+        "page": 31
+      }
+    },
+    {
+      "key": "redRocket:ket_date_n",
+      "source": "redRocket",
+      "wordId": "ket_date_n",
+      "sourceLabel": "Early Level 3, Good Things From Trees, Page 15",
+      "sentence": "They grow dates and nuts and coconuts and bananas.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 3, Good Things From Trees, Page 15",
+        "page": 15
+      }
+    },
+    {
+      "key": "redRocket:ket_gram_me_n",
+      "source": "redRocket",
+      "wordId": "ket_gram_me_n",
+      "sourceLabel": "Early Level 1, Help Me Please, Page 6",
+      "sentence": "Come and help me with my garden.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, Help Me Please, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "oxford:ket_birth_n",
+      "source": "oxford",
+      "wordId": "ket_birth_n",
+      "sourceLabel": "Level 10, Book 10, Page 26",
+      "sentence": "\"Blotch has a tiny, orange birth mark behind her fourth ear,\" said the monster mum lovingly.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 10, Book 10, Page 26",
+        "page": 26
+      }
+    },
+    {
+      "key": "oxford:ket_season_n",
+      "source": "oxford",
+      "wordId": "ket_season_n",
+      "sourceLabel": "Level 11, Book 13, Page 8",
+      "sentence": "This season, strange things were happening at Lowgate United.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 11, Book 13, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "raz:ket_flight_n",
+      "source": "raz",
+      "wordId": "ket_flight_n",
+      "sourceLabel": "Level F, F41 Flashlight Shadow Show, Page 11",
+      "sentence": "I make a bird in flight.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F41 Flashlight Shadow Show, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "redRocket:ket_leave_v",
+      "source": "redRocket",
+      "wordId": "ket_leave_v",
+      "sourceLabel": "Early Level 2, Sets In Nature, Page 6",
+      "sentence": "They got some oval leaves and some yellow leaves.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 2, Sets In Nature, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "raz:ket_leave_v",
+      "source": "raz",
+      "wordId": "ket_leave_v",
+      "sourceLabel": "Level E, E13 The Four Seasons, Page 8",
+      "sentence": "In fall, trees lose their leaves.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E13 The Four Seasons, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "redRocket:ket_trip_n",
+      "source": "redRocket",
+      "wordId": "ket_trip_n",
+      "sourceLabel": "Early Level 4, Once Upon A Time, Page 15",
+      "sentence": "Who's that going trip-trap over my bridge?",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Once Upon A Time, Page 15",
+        "page": 15
+      }
+    },
+    {
+      "key": "redRocket:ket_way_n",
+      "source": "redRocket",
+      "wordId": "ket_way_n",
+      "sourceLabel": "Early Level 3, Road Rules, Page 6",
+      "sentence": "We look one way and then we look the other way.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 3, Road Rules, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "raz:ket_scooter_n",
+      "source": "raz",
+      "wordId": "ket_scooter_n",
+      "sourceLabel": "Level G, G定级2 A Dog for Sally, Page 7",
+      "sentence": "Sally visits Mrs. Lee and her dog, Scooter.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G定级2 A Dog for Sally, Page 7",
+        "page": 7
+      }
+    },
+    {
+      "key": "oxford:ket_business_n",
+      "source": "oxford",
+      "wordId": "ket_business_n",
+      "sourceLabel": "Level 11, Book 2, Page 40",
+      "sentence": "\"And just so you don't try any monkey business, like escaping, we'll keep the two little monkeys in the van for ...\" he grinned, \"... safety.\"",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 11, Book 2, Page 40",
+        "page": 40
+      }
+    },
+    {
+      "key": "redRocket:ket_cleaner_n",
+      "source": "redRocket",
+      "wordId": "ket_cleaner_n",
+      "sourceLabel": "Early Level 4, Then And Now, Page 7",
+      "sentence": "There were no vacuum cleaners then.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Then And Now, Page 7",
+        "page": 7
+      }
+    },
+    {
+      "key": "raz:ket_cleaner_n",
+      "source": "raz",
+      "wordId": "ket_cleaner_n",
+      "sourceLabel": "Level L, L08 Colonial Life, Page 14",
+      "sentence": "The air and water were much cleaner.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level L, L08 Colonial Life, Page 14",
+        "page": 14
+      }
+    },
+    {
+      "key": "raz:ket_company_n",
+      "source": "raz",
+      "wordId": "ket_company_n",
+      "sourceLabel": "Level E, E47 I Am Your New Plant, Page 8",
+      "sentence": "Please give me company.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E47 I Am Your New Plant, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "oxford:ket_worker_n",
+      "source": "oxford",
+      "wordId": "ket_worker_n",
+      "sourceLabel": "Level 10, Book 10, Page 48",
+      "sentence": "said Paul, \"You're a miracle-worker, you're a marvel, you're an angel.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 10, Book 10, Page 48",
+        "page": 48
+      }
+    },
+    {
+      "key": "redRocket:ket_worker_n",
+      "source": "redRocket",
+      "wordId": "ket_worker_n",
+      "sourceLabel": "Early Level 4, Making Honey, Page 7",
+      "sentence": "There are thousands of worker bees, too.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Making Honey, Page 7",
+        "page": 7
+      }
+    },
+    {
+      "key": "raz:ket_guide_n",
+      "source": "raz",
+      "wordId": "ket_guide_n",
+      "sourceLabel": "Level K, K51 Model Rockets, Page 10",
+      "sentence": "Place the rocket over the guide wire on the pad.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level K, K51 Model Rockets, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "raz:ket_queen_n",
+      "source": "raz",
+      "wordId": "ket_queen_n",
+      "sourceLabel": "Level E, E39 Dolly’s Drama Queen Day, Page 3",
+      "sentence": "“You had a drama queen day today,” Dad said.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E39 Dolly’s Drama Queen Day, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_may_mv",
+      "source": "oxford",
+      "wordId": "ket_may_mv",
+      "sourceLabel": "Level 2, Book 27, Page 8",
+      "sentence": "said Mrs May.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 2, Book 27, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "raz:ket_experience_n",
+      "source": "raz",
+      "wordId": "ket_experience_n",
+      "sourceLabel": "Level G, G65 Look At This Book!, Page 12",
+      "sentence": "Books let me experience new things without ever leaving my room!",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G65 Look At This Book!, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "oxford:ket_life_n",
+      "source": "oxford",
+      "wordId": "ket_life_n",
+      "sourceLabel": "Level 5, Book 15, Page 12",
+      "sentence": "The scarecrow came to life.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 5, Book 15, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "redRocket:ket_life_n",
+      "source": "redRocket",
+      "wordId": "ket_life_n",
+      "sourceLabel": "Early Level 4, Help Our Oceans, Page 16",
+      "sentence": "We must all help to save the sea life and the oceans.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Help Our Oceans, Page 16",
+        "page": 16
+      }
+    },
+    {
+      "key": "raz:ket_sort_n",
+      "source": "raz",
+      "wordId": "ket_sort_n",
+      "sourceLabel": "Level F, F45 Cleaning My Room, Page 3",
+      "sentence": "Can you help me sort my clothes?",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F45 Cleaning My Room, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_view_n",
+      "source": "oxford",
+      "wordId": "ket_view_n",
+      "sourceLabel": "Level 11, Book 2, Page 32",
+      "sentence": "As we were crossing the road, a dirty white van shot into view.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 11, Book 2, Page 32",
+        "page": 32
+      }
+    },
+    {
+      "key": "redRocket:ket_as_conj_adv_prep",
+      "source": "redRocket",
+      "wordId": "ket_as_conj_adv_prep",
+      "sourceLabel": "Early Level 1, As Fast As You Can, Page 10",
+      "sentence": "I can hit as far as you can.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, As Fast As You Can, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "raz:ket_as_conj_adv_prep",
+      "source": "raz",
+      "wordId": "ket_as_conj_adv_prep",
+      "sourceLabel": "Level E, E33 A Sweet Tale, Page 11",
+      "sentence": "“The bread is as flat as my tail!”",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E33 A Sweet Tale, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "redRocket:ket_as_well_as_prep",
+      "source": "redRocket",
+      "wordId": "ket_as_well_as_prep",
+      "sourceLabel": "Early Level 1, As Fast As You Can, Page 8",
+      "sentence": "I can yell as loud as you can.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, As Fast As You Can, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "oxford:ket_at_all_prep_phr",
+      "source": "oxford",
+      "wordId": "ket_at_all_prep_phr",
+      "sourceLabel": "Level 1, Book 45, Page 4",
+      "sentence": "Look at all the dogs.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 1, Book 45, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "redRocket:ket_at_all_prep_phr",
+      "source": "redRocket",
+      "wordId": "ket_at_all_prep_phr",
+      "sourceLabel": "Early Level 1, What Goes Up High, Page 8",
+      "sentence": "Look at all the flags.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, What Goes Up High, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "raz:ket_till_prep",
+      "source": "raz",
+      "wordId": "ket_till_prep",
+      "sourceLabel": "Level L, L08 Colonial Life, Page 8",
+      "sentence": "You plant seeds and till soil with a plow pulled by oxen.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level L, L08 Colonial Life, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "redRocket:ket_up_prep_adv",
+      "source": "redRocket",
+      "wordId": "ket_up_prep_adv",
+      "sourceLabel": "Early Level 1, Clean Up Time, Page 6",
+      "sentence": "We clean up the paints and the brushes.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, Clean Up Time, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "raz:ket_so_conj_adv",
+      "source": "raz",
+      "wordId": "ket_so_conj_adv",
+      "sourceLabel": "Level E, E31 Let’s Make Lemonade, Page 3",
+      "sentence": "It’s so hot today.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E31 Let’s Make Lemonade, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_good_night_exclam",
+      "source": "oxford",
+      "wordId": "ket_good_night_exclam",
+      "sourceLabel": "Level 11, Book 12, Page 20",
+      "sentence": "Zé walked in, put down his things and stretched out in the hay for a good night's sleep.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 11, Book 12, Page 20",
+        "page": 20
+      }
+    },
+    {
+      "key": "raz:ket_good_night_exclam",
+      "source": "raz",
+      "wordId": "ket_good_night_exclam",
+      "sourceLabel": "Level J, J44 The Creature Constitution, Page 15",
+      "sentence": "The night they signed their constitution, the creatures in the building all had a good night’s sleep.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level J, J44 The Creature Constitution, Page 15",
+        "page": 15
+      }
+    },
+    {
+      "key": "redRocket:ket_of_course_not_adv",
+      "source": "redRocket",
+      "wordId": "ket_of_course_not_adv",
+      "sourceLabel": "Early Level 4, Bear Gets Stuck, Page 10",
+      "sentence": "The other bears could not help him.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Bear Gets Stuck, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "raz:ket_yet_adv",
+      "source": "raz",
+      "wordId": "ket_yet_adv",
+      "sourceLabel": "Level F, F73 Lou’s Flu, Page 5",
+      "sentence": "Yet he did, that silly kid.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F73 Lou’s Flu, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "raz:ket_bit_n_adv",
+      "source": "raz",
+      "wordId": "ket_bit_n_adv",
+      "sourceLabel": "Level E, E15 What’s For Dinner?, Page 6",
+      "sentence": "But ants bit his tongue.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E15 What’s For Dinner?, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "oxford:ket_get_on_phr_v",
+      "source": "oxford",
+      "wordId": "ket_get_on_phr_v",
+      "sourceLabel": "Level 1, Book 20, Page 3",
+      "sentence": "Get on, Biff.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 1, Book 20, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "redRocket:ket_get_on_phr_v",
+      "source": "redRocket",
+      "wordId": "ket_get_on_phr_v",
+      "sourceLabel": "Early Level 4, Hide From Max Monkey, Page 12",
+      "sentence": "\"I will get on this log to look for Giraffe,\" said Max Monkey.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Hide From Max Monkey, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "raz:ket_look_out_phr_v",
+      "source": "raz",
+      "wordId": "ket_look_out_phr_v",
+      "sourceLabel": "Level F, F27 Monster Reading Buddies, Page 8",
+      "sentence": "Jupe looks out the library window.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F27 Monster Reading Buddies, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "oxford:ket_put_on_phr_v",
+      "source": "oxford",
+      "wordId": "ket_put_on_phr_v",
+      "sourceLabel": "Level 1, Book 29, Page 3",
+      "sentence": "Mum put on a big pillow.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 1, Book 29, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "raz:ket_take_off_phr_v",
+      "source": "raz",
+      "wordId": "ket_take_off_phr_v",
+      "sourceLabel": "Level E, E04 Time for Bed, Page 5",
+      "sentence": "He takes off his clothes.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E04 Time for Bed, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "oxford:ket_work_out_phr_v",
+      "source": "oxford",
+      "wordId": "ket_work_out_phr_v",
+      "sourceLabel": "Level 11, Book 1, Page 50",
+      "sentence": "It didn't take him very long to work out what had happened.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 11, Book 1, Page 50",
+        "page": 50
+      }
+    },
+    {
+      "key": "raz:ket_work_out_phr_v",
+      "source": "raz",
+      "wordId": "ket_work_out_phr_v",
+      "sourceLabel": "Level J, J42 Guess That President, Page 10",
+      "sentence": "He started a group that helped countries work out their problems instead of going to war.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level J, J42 Guess That President, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "redRocket:ket_brush_n_v",
+      "source": "redRocket",
+      "wordId": "ket_brush_n_v",
+      "sourceLabel": "Early Level 4, Simple Technology, Page 16",
+      "sentence": "We use brushes every day.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Simple Technology, Page 16",
+        "page": 16
+      }
+    },
+    {
+      "key": "raz:ket_build_v",
+      "source": "raz",
+      "wordId": "ket_build_v",
+      "sourceLabel": "Level E, E30 Carlos’s First Halloween, Page 4",
+      "sentence": "They visit friends in their building.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E30 Carlos’s First Halloween, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "oxford:ket_contact_n_v",
+      "source": "oxford",
+      "wordId": "ket_contact_n_v",
+      "sourceLabel": "Level 10, Book 11, Page 25",
+      "sentence": "Basketball, Volleyball and Handball are three of the World's main non-contact, ball-handling games.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 10, Book 11, Page 25",
+        "page": 25
+      }
+    },
+    {
+      "key": "oxford:ket_copy_v",
+      "source": "oxford",
+      "wordId": "ket_copy_v",
+      "sourceLabel": "Level 10, Book 4, Page 11",
+      "sentence": "This coin looks real, but it's a copy.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 10, Book 4, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "oxford:ket_cross_n_v",
+      "source": "oxford",
+      "wordId": "ket_cross_n_v",
+      "sourceLabel": "Level 1, Book 33, Page 6",
+      "sentence": "\"I'm cross,\" said Dad.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 1, Book 33, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "oxford:ket_cycle_v",
+      "source": "oxford",
+      "wordId": "ket_cycle_v",
+      "sourceLabel": "Level 11, Book 17, Page 16",
+      "sentence": "He came in wearing his anorak and cycle clips.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 11, Book 17, Page 16",
+        "page": 16
+      }
+    },
+    {
+      "key": "redRocket:ket_cycle_v",
+      "source": "redRocket",
+      "wordId": "ket_cycle_v",
+      "sourceLabel": "Early Level 4, Help Our Oceans, Page 6",
+      "sentence": "Oceans feed the water cycle.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Help Our Oceans, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "raz:ket_cycle_v",
+      "source": "raz",
+      "wordId": "ket_cycle_v",
+      "sourceLabel": "Level F, F04 Changing Seasons, Page 10",
+      "sentence": "The cycle will start all over.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F04 Changing Seasons, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "oxford:ket_follow_social_media_v",
+      "source": "oxford",
+      "wordId": "ket_follow_social_media_v",
+      "sourceLabel": "Level 6, Book 18, Page 6",
+      "sentence": "\"Follow me to the games,\" he said.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 6, Book 18, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "redRocket:ket_follow_social_media_v",
+      "source": "redRocket",
+      "wordId": "ket_follow_social_media_v",
+      "sourceLabel": "Early Level 2, Playground Games, Page 11",
+      "sentence": "follow the leader",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 2, Playground Games, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "oxford:ket_get_v",
+      "source": "oxford",
+      "wordId": "ket_get_v",
+      "sourceLabel": "Level 1, Book 20, Page 3",
+      "sentence": "Get on, Biff.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 1, Book 20, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "oxford:ket_get_back_v",
+      "source": "oxford",
+      "wordId": "ket_get_back_v",
+      "sourceLabel": "Level 2, Book 17, Page 6",
+      "sentence": "\"Get back,\" said a fireman.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 2, Book 17, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "redRocket:ket_give_somebody_a_call_ring_v",
+      "source": "redRocket",
+      "wordId": "ket_give_somebody_a_call_ring_v",
+      "sourceLabel": "Early Level 3, Ringing Bells, Page 14",
+      "sentence": "A bike has a bell for the rider to ring.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 3, Ringing Bells, Page 14",
+        "page": 14
+      }
+    },
+    {
+      "key": "redRocket:ket_make_sure_that_v",
+      "source": "redRocket",
+      "wordId": "ket_make_sure_that_v",
+      "sourceLabel": "Early Level 2, Missing Heads, Page 12",
+      "sentence": "That lamb looks funny.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 2, Missing Heads, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "oxford:ket_need_v",
+      "source": "oxford",
+      "wordId": "ket_need_v",
+      "sourceLabel": "Level 4, Book 25, Page 4",
+      "sentence": "They wanted to help Children in Need.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 4, Book 25, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "oxford:ket_order_n_v",
+      "source": "oxford",
+      "wordId": "ket_order_n_v",
+      "sourceLabel": "Level 8, Book 4, Page 21",
+      "sentence": "She will not give the order to attack because she is afraid my uncle will harm me.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 8, Book 4, Page 21",
+        "page": 21
+      }
+    },
+    {
+      "key": "oxford:ket_point_v",
+      "source": "oxford",
+      "wordId": "ket_point_v",
+      "sourceLabel": "Level 8, Book 7, Page 17",
+      "sentence": "\"That's not the point,\" said Dad.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 8, Book 7, Page 17",
+        "page": 17
+      }
+    },
+    {
+      "key": "oxford:ket_post_v_n",
+      "source": "oxford",
+      "wordId": "ket_post_v_n",
+      "sourceLabel": "Level 4, Book 5, Page 9",
+      "sentence": "He climbed on the lamp post.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 4, Book 5, Page 9",
+        "page": 9
+      }
+    },
+    {
+      "key": "raz:ket_post_v_n",
+      "source": "raz",
+      "wordId": "ket_post_v_n",
+      "sourceLabel": "Level G, G01 Signs Are Everywhere, Page 3",
+      "sentence": "Signs are on posts.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G01 Signs Are Everywhere, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "raz:ket_print_v",
+      "source": "raz",
+      "wordId": "ket_print_v",
+      "sourceLabel": "Level I, I19 The Magic Bike, Page 12",
+      "sentence": "“There were tire prints everywhere.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level I, I19 The Magic Bike, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "oxford:ket_record_v",
+      "source": "oxford",
+      "wordId": "ket_record_v",
+      "sourceLabel": "Level 10, Book 8, Page 28",
+      "sentence": "It must be a record!",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 10, Book 8, Page 28",
+        "page": 28
+      }
+    },
+    {
+      "key": "oxford:ket_sail_v",
+      "source": "oxford",
+      "wordId": "ket_sail_v",
+      "sourceLabel": "Level 7, Book 17, Page 25",
+      "sentence": "\"The crash must have been the sail,\" said Biff.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 7, Book 17, Page 25",
+        "page": 25
+      }
+    },
+    {
+      "key": "oxford:ket_save_v",
+      "source": "oxford",
+      "wordId": "ket_save_v",
+      "sourceLabel": "Level 5, Book 16, Page 13",
+      "sentence": "\"Noah will save all the animals.\"",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 5, Book 16, Page 13",
+        "page": 13
+      }
+    },
+    {
+      "key": "oxford:ket_smoke_v",
+      "source": "oxford",
+      "wordId": "ket_smoke_v",
+      "sourceLabel": "Level 8, Book 2, Page 24",
+      "sentence": "There was smoke everywhere.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 8, Book 2, Page 24",
+        "page": 24
+      }
+    },
+    {
+      "key": "redRocket:ket_smoke_v",
+      "source": "redRocket",
+      "wordId": "ket_smoke_v",
+      "sourceLabel": "Early Level 2, Volcanoes, Page 11",
+      "sentence": "It has red fire and black smoke.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 2, Volcanoes, Page 11",
+        "page": 11
+      }
+    },
+    {
+      "key": "raz:ket_smoke_v",
+      "source": "raz",
+      "wordId": "ket_smoke_v",
+      "sourceLabel": "Level G, G45 Fire Safety, Page 5",
+      "sentence": "Your house should have smoke alarms.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G45 Fire Safety, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "oxford:ket_spell_v",
+      "source": "oxford",
+      "wordId": "ket_spell_v",
+      "sourceLabel": "Level 5, Book 9, Page 6",
+      "sentence": "The spell went wrong.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 5, Book 9, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "oxford:ket_train_transitive_and_intransitive_v",
+      "source": "oxford",
+      "wordId": "ket_train_transitive_and_intransitive_v",
+      "sourceLabel": "Level 8, Book 5, Page 13",
+      "sentence": "When the train came in everyone rushed to get on.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 8, Book 5, Page 13",
+        "page": 13
+      }
+    },
+    {
+      "key": "redRocket:ket_train_transitive_and_intransitive_v",
+      "source": "redRocket",
+      "wordId": "ket_train_transitive_and_intransitive_v",
+      "sourceLabel": "Emergent Level, Go Go Go, Page 4",
+      "sentence": "A train is going past.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Emergent Level, Go Go Go, Page 4",
+        "page": 4
+      }
+    },
+    {
+      "key": "oxford:ket_dear_adj",
+      "source": "oxford",
+      "wordId": "ket_dear_adj",
+      "sourceLabel": "Level 2, Book 27, Page 8",
+      "sentence": "\"Oh dear!\"",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 2, Book 27, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "raz:ket_easy_adj",
+      "source": "raz",
+      "wordId": "ket_easy_adj",
+      "sourceLabel": "Level E, E09 Nothing for Father’s Day, Page 8",
+      "sentence": "He wants to take it easy and play.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E09 Nothing for Father’s Day, Page 8",
+        "page": 8
+      }
+    },
+    {
+      "key": "oxford:ket_fair_adj",
+      "source": "oxford",
+      "wordId": "ket_fair_adj",
+      "sourceLabel": "Level 3, Book 22, Page 3",
+      "sentence": "Everyone went to the school fair.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 3, Book 22, Page 3",
+        "page": 3
+      }
+    },
+    {
+      "key": "redRocket:ket_poor_thing_you_adj",
+      "source": "redRocket",
+      "wordId": "ket_poor_thing_you_adj",
+      "sourceLabel": "Emergent Level, What Can You See, Page 10",
+      "sentence": "Can you see 4 monkeys?",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Emergent Level, What Can You See, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "oxford:ket_round_adj",
+      "source": "oxford",
+      "wordId": "ket_round_adj",
+      "sourceLabel": "Level 3, Book 4, Page 13",
+      "sentence": "He went round the rink.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 3, Book 4, Page 13",
+        "page": 13
+      }
+    },
+    {
+      "key": "redRocket:ket_round_adj",
+      "source": "redRocket",
+      "wordId": "ket_round_adj",
+      "sourceLabel": "Emergent Level, Round And Round, Page 18",
+      "sentence": "A merry-go-round goes round and round, too.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Emergent Level, Round And Round, Page 18",
+        "page": 18
+      }
+    },
+    {
+      "key": "raz:ket_wide_adj",
+      "source": "raz",
+      "wordId": "ket_wide_adj",
+      "sourceLabel": "Level E, E51 Wake Up, Bear!, Page 12",
+      "sentence": "She is wide awake!",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level E, E51 Wake Up, Bear!, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "redRocket:ket_design_drawing_n",
+      "source": "redRocket",
+      "wordId": "ket_design_drawing_n",
+      "sourceLabel": "Early Level 1, My Hands, Page 12",
+      "sentence": "My hands are good for drawing.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 1, My Hands, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "redRocket:ket_match_n",
+      "source": "redRocket",
+      "wordId": "ket_match_n",
+      "sourceLabel": "Emergent Level, Hot Stuff, Page 12",
+      "sentence": "The match is hot.",
+      "reason": "The page teaches a hot matchstick, not a sports match.",
+      "mediaIdentity": {
+        "label": "Emergent Level, Hot Stuff, Page 12",
+        "page": 12
+      }
+    },
+    {
+      "key": "oxford:ket_set_n",
+      "source": "oxford",
+      "wordId": "ket_set_n",
+      "sourceLabel": "Level 4, Book 28, Page 24",
+      "sentence": "They set off for the party.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 4, Book 28, Page 24",
+        "page": 24
+      }
+    },
+    {
+      "key": "redRocket:ket_set_n",
+      "source": "redRocket",
+      "wordId": "ket_set_n",
+      "sourceLabel": "Early Level 4, Hare And Tortoise, Page 10",
+      "sentence": "\"Get ready, set, go!\"",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Early Level 4, Hare And Tortoise, Page 10",
+        "page": 10
+      }
+    },
+    {
+      "key": "raz:ket_set_n",
+      "source": "raz",
+      "wordId": "ket_set_n",
+      "sourceLabel": "Level F, F12 Our Camping Trip, Page 5",
+      "sentence": "We drive to the lake, and we set up camp.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level F, F12 Our Camping Trip, Page 5",
+        "page": 5
+      }
+    },
+    {
+      "key": "oxford:ket_smoking_n",
+      "source": "oxford",
+      "wordId": "ket_smoking_n",
+      "sourceLabel": "Level 12, Book 6, Page 7",
+      "sentence": "At first, the rock was smoking hot.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level 12, Book 6, Page 7",
+        "page": 7
+      }
+    },
+    {
+      "key": "raz:ket_smoking_n",
+      "source": "raz",
+      "wordId": "ket_smoking_n",
+      "sourceLabel": "Level L, L09 Sending Messages, Page 6",
+      "sentence": "A blanket was placed over a smoking fire.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level L, L09 Sending Messages, Page 6",
+        "page": 6
+      }
+    },
+    {
+      "key": "raz:ket_wish_n",
+      "source": "raz",
+      "wordId": "ket_wish_n",
+      "sourceLabel": "Level G, G46 Chess, Page 9",
+      "sentence": "She can move as far as she wishes, in any direction.",
+      "reason": "Two-model semantic review confirmed a different study sense.",
+      "mediaIdentity": {
+        "label": "Level G, G46 Chess, Page 9",
+        "page": 9
+      }
+    }
+  ]
+}

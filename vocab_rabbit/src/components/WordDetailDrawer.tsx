@@ -10,6 +10,7 @@ import { speakWord } from '../services/audio-service';
 import { AudioIconButton } from './AudioIconButton';
 import { DifficultyStars } from './DifficultyStars';
 import { MasteryLevelIcon } from './MasteryLevelIcon';
+import { OxfordPageImage } from './OxfordPageImage';
 import { WordImage } from './WordImage';
 import { getExampleSentences } from '../services/example-service';
 import { getWordAnswerStats } from '../services/answer-event-service';
@@ -445,8 +446,9 @@ export function WordDetailDrawer({
             <div className="word-detail-drawer__related-grid">
               {relatedMedia?.oxford ? (
                 <article className="word-detail-drawer__related-card">
-                  <img
-                    src={getAssetUrl(relatedMedia.oxford.imagePath)}
+                  <OxfordPageImage
+                    className="word-detail-drawer__oxford-image"
+                    media={relatedMedia.oxford}
                     alt={`${getStudyText(word)} 的牛津树关联页`}
                   />
                   <div>

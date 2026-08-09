@@ -5,7 +5,10 @@ export interface OxfordRef {
 }
 
 export interface RelatedOxfordImage {
-  imagePath: string;
+  imagePath?: string;
+  atlasPath?: string;
+  row?: number;
+  column?: number;
   label: string;
   level: number;
   book: number;
@@ -62,6 +65,7 @@ export interface WordRelatedMediaManifestStats {
   withOxford: number;
   withLifePhoto: number;
   uniqueOxfordImages: number;
+  oxfordAtlases?: number;
   withOxfordSentence?: number;
   withOxfordSentenceTranslation?: number;
   lifePhotoPackageImages: number;
@@ -85,6 +89,11 @@ export interface WordRelatedMediaManifestEntry {
 export interface WordRelatedMediaManifest {
   schemaVersion: 1 | 2 | 3;
   generatedAt: string;
+  oxfordAtlasGrid?: {
+    columns: number;
+    rows: number;
+    cellSize: number;
+  };
   redRocketAtlasGrid?: {
     columns: number;
     rows: number;

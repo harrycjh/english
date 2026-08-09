@@ -3,23 +3,23 @@
   "generatedAt": "2026-08-09T07:46:45.640Z",
   "stats": {
     "totalWords": 1693,
-    "entries": 1574,
-    "withOxford": 1473,
+    "entries": 1548,
+    "withOxford": 1392,
     "withLifePhoto": 0,
-    "uniqueOxfordImages": 1178,
+    "uniqueOxfordImages": 1127,
     "lifePhotoPackageImages": 714,
-    "withRedRocket": 784,
-    "uniqueRedRocketImages": 657,
+    "withRedRocket": 728,
+    "uniqueRedRocketImages": 621,
     "redRocketAtlases": 73,
-    "withOxfordSentence": 1256,
-    "withRedRocketSentence": 775,
-    "withOxfordSentenceTranslation": 1256,
-    "withRedRocketSentenceTranslation": 775,
-    "withRaz": 1397,
-    "uniqueRazImages": 1005,
+    "withOxfordSentence": 1175,
+    "withRedRocketSentence": 719,
+    "withOxfordSentenceTranslation": 1175,
+    "withRedRocketSentenceTranslation": 719,
+    "withRaz": 1333,
+    "uniqueRazImages": 967,
     "razAtlases": 112,
-    "withRazSentence": 1368,
-    "withRazSentenceTranslation": 1365
+    "withRazSentence": 1304,
+    "withRazSentenceTranslation": 1302
   },
   "entries": [
     {
@@ -1048,15 +1048,6 @@
           "sentence": "I showed the tooth to my mother and father.",
           "sentenceTranslation": "我把牙齿展示给爸爸妈妈看。"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-6/book-10/page-9.webp",
-          "label": "Level 6, Book 10, Page 9",
-          "level": 6,
-          "book": 10,
-          "page": 9,
-          "sentence": "\"We can tell Father Christmas what to bring us.\"",
-          "sentenceTranslation": "“我们可以告诉圣诞老人我们要什么礼物。”"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-002.webp",
           "row": 0,
@@ -1363,15 +1354,6 @@
     {
       "wordId": "ket_kid_s_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-4/book-1/page-8.webp",
-          "label": "Level 4, Book 1, Page 8",
-          "level": 4,
-          "book": 1,
-          "page": 8,
-          "sentence": "Grandmother had a kid goat.",
-          "sentenceTranslation": "祖母有一只小山羊。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-037.webp",
           "row": 1,
@@ -1531,22 +1513,6 @@
           "page": 4,
           "sentence": "\"My name is Stan,\" said a man.",
           "sentenceTranslation": "“我叫斯坦，”一个男人说。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-016.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level E, E19 Shapes in Tide Pools, Page 5",
-          "bookId": "E19",
-          "level": "E",
-          "sequence": 19,
-          "title": "Shapes in Tide Pools",
-          "page": 5,
-          "matchKind": "exact",
-          "matchedTerm": "name",
-          "matchedForm": "name",
-          "sentence": "Can you name this animal?",
-          "sentenceTranslation": "你能说出这是什么动物吗？"
         }
       }
     },
@@ -1905,15 +1871,6 @@
           "sentence": "Some volcanoes are dead.",
           "sentenceTranslation": "有些火山是死的。"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-9/book-2/page-26.webp",
-          "label": "Level 9, Book 2, Page 26",
-          "level": 9,
-          "book": 2,
-          "page": 26,
-          "sentence": "Soon they came to a dead end.",
-          "sentenceTranslation": "很快，他们来到了一个死胡同。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
           "row": 2,
@@ -2183,20 +2140,6 @@
     {
       "wordId": "ket_baby_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-003.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Emergent Level, Baby Animals, Page 4",
-          "level": "Emergent Level",
-          "title": "Baby Animals",
-          "page": 4,
-          "matchKind": "exact",
-          "matchedTerm": "baby",
-          "confidence": 0.86,
-          "sentence": "A baby hen is a chicken.",
-          "sentenceTranslation": "小鸡是小母鸡。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-2/book-8/page-4.webp",
           "label": "Level 2, Book 8, Page 4",
@@ -2335,50 +2278,6 @@
           "matchedForm": "soap",
           "sentence": "The big soap bubbles go up and up.",
           "sentenceTranslation": "巨大的肥皂泡越升越高。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_back_n_adv_adj",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-056.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Early Level 4, Dinner With Fox, Page 15",
-          "level": "Early Level 4",
-          "title": "Dinner With Fox",
-          "page": 15,
-          "matchKind": "exact",
-          "matchedTerm": "back",
-          "confidence": 0.86,
-          "sentence": "\"Please come back for dinner again,\" said Fox.",
-          "sentenceTranslation": "\"请再回来吃晚饭，\"狐狸说。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-1/book-50/page-6.webp",
-          "label": "Level 1, Book 50, Page 6",
-          "level": 1,
-          "book": 50,
-          "page": 6,
-          "sentence": "\"Come back!\"",
-          "sentenceTranslation": "“回来！”"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-001.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Level E, E02 A Week with Grandpa, Page 10",
-          "bookId": "E02",
-          "level": "E",
-          "sequence": 2,
-          "title": "A Week with Grandpa",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "back",
-          "matchedForm": "back",
-          "sentence": "I went back home.",
-          "sentenceTranslation": "我回到了家。"
         }
       }
     },
@@ -2635,15 +2534,6 @@
     {
       "wordId": "ket_ear_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-2/book-26/page-8.webp",
-          "label": "Level 2, Book 26, Page 8",
-          "level": 2,
-          "book": 26,
-          "page": 8,
-          "sentence": "She took Mum's ear-ring.",
-          "sentenceTranslation": "她拿了妈妈的耳环。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-041.webp",
           "row": 1,
@@ -2887,15 +2777,6 @@
     {
       "wordId": "ket_break_n_v",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-7/book-13/page-6.webp",
-          "label": "Level 7, Book 13, Page 6",
-          "level": 7,
-          "book": 13,
-          "page": 6,
-          "sentence": "They stopped for a break.",
-          "sentenceTranslation": "他们停下来休息了一下。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-014.webp",
           "row": 1,
@@ -2945,15 +2826,6 @@
     {
       "wordId": "ket_leg_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-3/book-13/page-5.webp",
-          "label": "Level 3, Book 13, Page 5",
-          "level": 3,
-          "book": 13,
-          "page": 5,
-          "sentence": "Floppy pulled his leg.",
-          "sentenceTranslation": "弗洛皮拉了他的腿。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-016.webp",
           "row": 1,
@@ -3285,15 +3157,6 @@
           "sentence": "We clean up the paints and the brushes.",
           "sentenceTranslation": "我们收拾颜料和画笔。"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-2/book-7/page-16.webp",
-          "label": "Level 2, Book 7, Page 16",
-          "level": 2,
-          "book": 7,
-          "page": 16,
-          "sentence": "Floppy looked clean.",
-          "sentenceTranslation": "floppy 看起来很干净。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-034.webp",
           "row": 2,
@@ -3423,50 +3286,6 @@
           "page": 4,
           "sentence": "Mrs May found a toothbrush.",
           "sentenceTranslation": "梅太太发现了一把牙刷。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_cold_adj_n",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-010.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Emergent Level, What Feels Cold, Page 6",
-          "level": "Emergent Level",
-          "title": "What Feels Cold",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "cold",
-          "confidence": 0.86,
-          "sentence": "The wind feels cold.",
-          "sentenceTranslation": "风感觉很冷。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-3/book-4/page-11.webp",
-          "label": "Level 3, Book 4, Page 11",
-          "level": 3,
-          "book": 4,
-          "page": 11,
-          "sentence": "\"This ice is cold,\" said Wilf.",
-          "sentenceTranslation": "“这个冰很冷，”威尔夫说。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-017.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Level E, E20 Places Plants and Animals Live, Page 9",
-          "bookId": "E20",
-          "level": "E",
-          "sequence": 20,
-          "title": "Places Plants and Animals Live",
-          "page": 9,
-          "matchKind": "exact",
-          "matchedTerm": "cold",
-          "matchedForm": "cold",
-          "sentence": "The tundra is very cold.",
-          "sentenceTranslation": "苔原非常寒冷。"
         }
       }
     },
@@ -3613,22 +3432,6 @@
           "page": 24,
           "sentence": "YOUR COMB.\"",
           "sentenceTranslation": "你的梳子。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-080.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Level H, H21 Cool as a Cuke, Page 6",
-          "bookId": "H21",
-          "level": "H",
-          "sequence": 21,
-          "title": "Cool as a Cuke",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "comb",
-          "matchedForm": "comb",
-          "sentence": "They comb their fur like Cuke.",
-          "sentenceTranslation": "他们像库克一样梳理毛发。"
         }
       }
     },
@@ -3685,22 +3488,6 @@
           "page": 13,
           "sentence": "We narrowly missed two cleaning ladies, a nurse and an angry queue,",
           "sentenceTranslation": "我们险些撞上两位清洁女工、一位护士和一个愤怒的队伍。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
-          "row": 0,
-          "column": 1,
-          "label": "Level F, F36 Night Animals, Page 8",
-          "bookId": "F36",
-          "level": "F",
-          "sequence": 36,
-          "title": "Night Animals",
-          "page": 8,
-          "matchKind": "exact",
-          "matchedTerm": "nurse",
-          "matchedForm": "nurse",
-          "sentence": "This nurse shark is active at night.",
-          "sentenceTranslation": "这种护士鲨在夜间很活跃。"
         }
       }
     },
@@ -4541,20 +4328,6 @@
     {
       "wordId": "ket_sweet_n_adj",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-063.webp",
-          "row": 0,
-          "column": 1,
-          "label": "Early Level 4, Making Honey, Page 11",
-          "level": "Early Level 4",
-          "title": "Making Honey",
-          "page": 11,
-          "matchKind": "exact",
-          "matchedTerm": "sweet",
-          "confidence": 0.94,
-          "sentence": "Bees fly from flower to flower and suck out the sweet nectar from inside.",
-          "sentenceTranslation": "蜜蜂从一朵花飞到另一朵花，吸出里面的甜花蜜。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-3/book-25/page-8.webp",
           "label": "Level 3, Book 25, Page 8",
@@ -4563,22 +4336,6 @@
           "page": 8,
           "sentence": "A doctor gave Midge a sweet.",
           "sentenceTranslation": "一位医生给了米奇一颗糖果。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-010.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Level E, E12 All Kinds of Farms, Page 10",
-          "bookId": "E12",
-          "level": "E",
-          "sequence": 12,
-          "title": "All Kinds of Farms",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "sweet",
-          "matchedForm": "sweet",
-          "sentence": "Sugar makes foods sweet.",
-          "sentenceTranslation": "糖让食物变甜。"
         }
       }
     },
@@ -5011,15 +4768,6 @@
     {
       "wordId": "ket_poor_adj",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-4/book-15/page-13.webp",
-          "label": "Level 4, Book 15, Page 13",
-          "level": 4,
-          "book": 15,
-          "page": 13,
-          "sentence": "\"Poor old Mum,\" said Wilf.",
-          "sentenceTranslation": "\"可怜的老妈，\"威尔夫说。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-092.webp",
           "row": 1,
@@ -5479,20 +5227,6 @@
     {
       "wordId": "ket_hard_adj_adv",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-013.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Early Level 1, As Fast As You Can, Page 16",
-          "level": "Early Level 1",
-          "title": "As Fast As You Can",
-          "page": 16,
-          "matchKind": "exact",
-          "matchedTerm": "hard",
-          "confidence": 0.86,
-          "sentence": "I can blow as hard as you can.",
-          "sentenceTranslation": "我可以像你一样用力地吹气。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-6/book-10/page-3.webp",
           "label": "Level 6, Book 10, Page 3",
@@ -5501,22 +5235,6 @@
           "page": 3,
           "sentence": "\"Christmas is hard work,\" said Dad.",
           "sentenceTranslation": "“圣诞节是辛苦的工作，”爸爸说。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-047.webp",
-          "row": 2,
-          "column": 1,
-          "label": "Level F, F11 Glassblowing, Page 6",
-          "bookId": "F11",
-          "level": "F",
-          "sequence": 11,
-          "title": "Glassblowing",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "hard",
-          "matchedForm": "hard",
-          "sentence": "I try not to blow too hard.",
-          "sentenceTranslation": "我尽量不吹得太用力。"
         }
       }
     },
@@ -5853,22 +5571,6 @@
           "page": 22,
           "sentence": "\"I'm rich!\"",
           "sentenceTranslation": "“我有钱了！”"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-084.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Level H, H53 The Mighty Mississippi, Page 11",
-          "bookId": "H53",
-          "level": "H",
-          "sequence": 53,
-          "title": "The Mighty Mississippi",
-          "page": 11,
-          "matchKind": "exact",
-          "matchedTerm": "rich",
-          "matchedForm": "rich",
-          "sentence": "The floods are messy, but they leave behind rich soil.",
-          "sentenceTranslation": "洪水很混乱，但它们留下了肥沃的土壤。"
         }
       }
     },
@@ -5949,20 +5651,6 @@
     {
       "wordId": "ket_right_n_adj_adv",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-038.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Early Level 3, Go Left Or Right, Page 16",
-          "level": "Early Level 3",
-          "title": "Go Left Or Right",
-          "page": 16,
-          "matchKind": "exact",
-          "matchedTerm": "right",
-          "confidence": 0.94,
-          "sentence": "Turn to the right.",
-          "sentenceTranslation": "向右转。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-5/book-17/page-24.webp",
           "label": "Level 5, Book 17, Page 24",
@@ -6097,42 +5785,12 @@
     {
       "wordId": "ket_cool_adj_exclam",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-049.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Early Level 3, Time For A Swim, Page 18",
-          "level": "Early Level 3",
-          "title": "Time For A Swim",
-          "page": 18,
-          "matchKind": "exact",
-          "matchedTerm": "cool",
-          "confidence": 0.94,
-          "sentence": "It was cool.",
-          "sentenceTranslation": "天气很凉爽。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-1/book-21/page-18.webp",
           "label": "Level 1, Book 21, Page 18",
           "level": 1,
           "book": 21,
           "page": 18
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-011.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level E, E13 The Four Seasons, Page 7",
-          "bookId": "E13",
-          "level": "E",
-          "sequence": 13,
-          "title": "The Four Seasons",
-          "page": 7,
-          "matchKind": "exact",
-          "matchedTerm": "cool",
-          "matchedForm": "cool",
-          "sentence": "It starts to cool off.",
-          "sentenceTranslation": "天气开始变凉。"
         }
       }
     },
@@ -6339,49 +5997,6 @@
           "matchedForm": "difficult",
           "sentence": "A president’s day is very difficult.",
           "sentenceTranslation": "总统的一天非常艰难。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_kind_adj_n",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-064.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Early Level 4, Odd One Out, Page 16",
-          "level": "Early Level 4",
-          "title": "Odd One Out",
-          "page": 16,
-          "matchKind": "exact",
-          "matchedTerm": "kind",
-          "confidence": 0.94,
-          "sentence": "Which one is a different kind of hat?",
-          "sentenceTranslation": "哪一顶帽子是不同种类的？"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-7/book-6/page-5.webp",
-          "label": "Level 7, Book 6, Page 5",
-          "level": 7,
-          "book": 6,
-          "page": 5,
-          "sentence": "\"It's a kind of submarine,\" said Wilf.",
-          "sentenceTranslation": "“那是一种潜水艇，”威尔夫说。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-031.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Level E, E46 Let’s Carve a Pumpkin, Page 6",
-          "bookId": "E46",
-          "level": "E",
-          "sequence": 46,
-          "title": "Let’s Carve a Pumpkin",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "kind",
-          "matchedForm": "kind",
-          "sentence": "It’s kind of gross and fun at the same time!"
         }
       }
     },
@@ -7523,22 +7138,6 @@
           "page": 5,
           "sentence": "Then Ray noticed one player after another taking their cups of tea into the shower room.",
           "sentenceTranslation": "然后雷注意到一个接一个的队员把他们的茶杯带进了淋浴间。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-046.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Level F, F05 How Is the Weather Today?, Page 5",
-          "bookId": "F05",
-          "level": "F",
-          "sequence": 5,
-          "title": "How Is the Weather Today?",
-          "page": 5,
-          "matchKind": "inflection",
-          "matchedTerm": "shower",
-          "matchedForm": "showers",
-          "sentence": "The weatherman says it will be warm with showers.",
-          "sentenceTranslation": "天气预报员说天气会变暖，并有阵雨。"
         }
       }
     },
@@ -7605,37 +7204,12 @@
           "level": 4,
           "book": 12,
           "page": 26
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-070.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Level G, G46 Chess, Page 11",
-          "bookId": "G46",
-          "level": "G",
-          "sequence": 46,
-          "title": "Chess",
-          "page": 11,
-          "matchKind": "exact",
-          "matchedTerm": "key",
-          "matchedForm": "key",
-          "sentence": "The king is the key to the game, but he is weak.",
-          "sentenceTranslation": "国王是游戏的关键，但他很弱。"
         }
       }
     },
     {
       "wordId": "ket_sink_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-7/book-9/page-4.webp",
-          "label": "Level 7, Book 9, Page 4",
-          "level": 7,
-          "book": 9,
-          "page": 4,
-          "sentence": "Wilma's mum was washing her hands at the sink.",
-          "sentenceTranslation": "威尔玛的妈妈正在水槽边洗手。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
           "row": 0,
@@ -7736,20 +7310,6 @@
     {
       "wordId": "ket_bowl_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-006.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Emergent Level, Lets Play Ball, Page 12",
-          "level": "Emergent Level",
-          "title": "Lets Play Ball",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "bowl",
-          "confidence": 0.86,
-          "sentence": "We like to bowl balls.",
-          "sentenceTranslation": "我们喜欢打保龄球。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-7/book-9/page-6.webp",
           "label": "Level 7, Book 9, Page 6",
@@ -7938,50 +7498,8 @@
       }
     },
     {
-      "wordId": "ket_flat_n",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-029.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Early Level 2, Sets In Nature, Page 14",
-          "level": "Early Level 2",
-          "title": "Sets In Nature",
-          "page": 14,
-          "matchKind": "exact",
-          "matchedTerm": "flat",
-          "confidence": 0.94,
-          "sentence": "They got some flat stones and some black stones.",
-          "sentenceTranslation": "他们拿了一些扁平的石头和一些黑色的石头。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-1/book-60/page-7.webp",
-          "label": "Level 1, Book 60, Page 7",
-          "level": 1,
-          "book": 60,
-          "page": 7,
-          "sentence": "Pat it flat.",
-          "sentenceTranslation": "把它拍平。"
-        }
-      }
-    },
-    {
       "wordId": "ket_light_n_adj",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-016.webp",
-          "row": 0,
-          "column": 1,
-          "label": "Early Level 1, Heavy Or Light, Page 10",
-          "level": "Early Level 1",
-          "title": "Heavy Or Light",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "light",
-          "confidence": 0.86,
-          "sentence": "A rocket is heavy, but a balloon is light.",
-          "sentenceTranslation": "火箭很重，但气球很轻。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-2/book-15/page-16.webp",
           "label": "Level 2, Book 15, Page 16",
@@ -8704,15 +8222,6 @@
           "confidence": 0.86,
           "sentence": "It has hot, melted rock coming out of the top.",
           "sentenceTranslation": "它顶部会喷出炽热的熔岩。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-1/book-45/page-10.webp",
-          "label": "Level 1, Book 45, Page 10",
-          "level": 1,
-          "book": 45,
-          "page": 10,
-          "sentence": "This is the top dog.",
-          "sentenceTranslation": "这是最棒的狗。"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-015.webp",
@@ -9548,29 +9057,6 @@
     {
       "wordId": "ket_tie_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-030.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Early Level 2, So Strong, Page 9",
-          "level": "Early Level 2",
-          "title": "So Strong",
-          "page": 9,
-          "matchKind": "exact",
-          "matchedTerm": "tie",
-          "confidence": 0.86,
-          "sentence": "It can tie up a big ship like this one.",
-          "sentenceTranslation": "它能绑住像这样的大船。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-2/book-13/page-4.webp",
-          "label": "Level 2, Book 13, Page 4",
-          "level": 2,
-          "book": 13,
-          "page": 4,
-          "sentence": "He couldn't tie his laces.",
-          "sentenceTranslation": "他系不好鞋带。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-007.webp",
           "row": 0,
@@ -9643,20 +9129,6 @@
     {
       "wordId": "ket_ring_n_v",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-045.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Early Level 3, Ringing Bells, Page 14",
-          "level": "Early Level 3",
-          "title": "Ringing Bells",
-          "page": 14,
-          "matchKind": "exact",
-          "matchedTerm": "ring",
-          "confidence": 0.86,
-          "sentence": "A bike has a bell for the rider to ring.",
-          "sentenceTranslation": "自行车有一个铃铛，骑车人可以按响它。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-2/book-26/page-8.webp",
           "label": "Level 2, Book 26, Page 8",
@@ -9665,22 +9137,6 @@
           "page": 8,
           "sentence": "She took Mum's ear-ring.",
           "sentenceTranslation": "她拿了妈妈的耳环。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-071.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level G, G50 Wiggly Worms, Page 5",
-          "bookId": "G50",
-          "level": "G",
-          "sequence": 50,
-          "title": "Wiggly Worms",
-          "page": 5,
-          "matchKind": "exact",
-          "matchedTerm": "ring",
-          "matchedForm": "ring",
-          "sentence": "Each part is shaped like a ring.",
-          "sentenceTranslation": "每一部分都呈环形。"
         }
       }
     },
@@ -10360,22 +9816,6 @@
           "page": 43,
           "sentence": "Josh grabbed Harry's jumper.",
           "sentenceTranslation": "乔希抓住了哈利的毛衣。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Level J, J定级1 Animal Olympics, Page 7",
-          "bookId": "J定级1",
-          "level": "J",
-          "sequence": 1,
-          "title": "Animal Olympics",
-          "page": 7,
-          "matchKind": "exact",
-          "matchedTerm": "jumper",
-          "matchedForm": "jumper",
-          "sentence": "He was a great jumper.",
-          "sentenceTranslation": "他是个出色的跳跃者。"
         }
       }
     },
@@ -10794,42 +10234,12 @@
           "page": 29,
           "sentence": "There was a golden sunset that evening.",
           "sentenceTranslation": "那天晚上有一轮金色的夕阳。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level J, J58 Incredible Places to Stay, Page 5",
-          "bookId": "J58",
-          "level": "J",
-          "sequence": 58,
-          "title": "Incredible Places to Stay",
-          "page": 5,
-          "matchKind": "exact",
-          "matchedTerm": "golden",
-          "matchedForm": "golden",
-          "sentence": "At the Golden Nugget, you can ride a waterslide.",
-          "sentenceTranslation": "在Golden Nugget，你可以玩水上滑梯。"
         }
       }
     },
     {
       "wordId": "ket_orange_adj_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-016.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Early Level 1, Half Each, Page 12",
-          "level": "Early Level 1",
-          "title": "Half Each",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "orange",
-          "confidence": 0.94,
-          "sentence": "I have a big orange.",
-          "sentenceTranslation": "我有一个大橙子。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-10/book-10/page-26.webp",
           "label": "Level 10, Book 10, Page 26",
@@ -11160,22 +10570,6 @@
           "page": 4,
           "sentence": "It was a blue and white plate.",
           "sentenceTranslation": "那是一个蓝白相间的盘子。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-023.webp",
-          "row": 0,
-          "column": 1,
-          "label": "Level E, E30 Carlos’s First Halloween, Page 8",
-          "bookId": "E30",
-          "level": "E",
-          "sequence": 30,
-          "title": "Carlos’s First Halloween",
-          "page": 8,
-          "matchKind": "exact",
-          "matchedTerm": "white",
-          "matchedForm": "white",
-          "sentence": "Ms. White made a pirate!",
-          "sentenceTranslation": "怀特女士做了一个海盗！"
         }
       }
     },
@@ -11777,15 +11171,6 @@
           "confidence": 0.86,
           "sentence": "We can cook in the microwave.",
           "sentenceTranslation": "我们可以在微波炉里做饭。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-5/book-20/page-16.webp",
-          "label": "Level 5, Book 20, Page 16",
-          "level": 5,
-          "book": 20,
-          "page": 16,
-          "sentence": "There was a lot to cook.",
-          "sentenceTranslation": "要做的菜很多。"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-015.webp",
@@ -12926,20 +12311,6 @@
     {
       "wordId": "ket_drink_n_v",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-008.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Emergent Level, Stickybeak The Parrot, Page 10",
-          "level": "Emergent Level",
-          "title": "Stickybeak The Parrot",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "drink",
-          "confidence": 0.86,
-          "sentence": "He likes to drink a lot.",
-          "sentenceTranslation": "他喜欢喝很多。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-3/book-13/page-10.webp",
           "label": "Level 3, Book 13, Page 10",
@@ -14093,29 +13464,6 @@
     {
       "wordId": "ket_glass_n_adj",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-050.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Early Level 3, What Is It Made Of, Page 12",
-          "level": "Early Level 3",
-          "title": "What Is It Made Of",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "glass",
-          "confidence": 0.94,
-          "sentence": "Glass is made from sand.",
-          "sentenceTranslation": "玻璃是由沙子制成的。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-6/book-6/page-4.webp",
-          "label": "Level 6, Book 6, Page 4",
-          "level": 6,
-          "book": 6,
-          "page": 4,
-          "sentence": "\"Don't tap the glass,\" said Dad.",
-          "sentenceTranslation": "“不要敲玻璃。”爸爸说。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-003.webp",
           "row": 0,
@@ -14240,15 +13588,6 @@
     {
       "wordId": "ket_pepper_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-9/book-3/page-3.webp",
-          "label": "Level 9, Book 3, Page 3",
-          "level": 9,
-          "book": 3,
-          "page": 3,
-          "sentence": "They watched a dog called Pepper.",
-          "sentenceTranslation": "他们观看了一只名叫Pepper的狗。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-099.webp",
           "row": 1,
@@ -14605,36 +13944,6 @@
       }
     },
     {
-      "wordId": "ket_course_n",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-7/book-6/page-15.webp",
-          "label": "Level 7, Book 6, Page 15",
-          "level": 7,
-          "book": 6,
-          "page": 15,
-          "sentence": "\"Of course you can speak,\" said the Professor.",
-          "sentenceTranslation": "“当然你可以说话，”教授说。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-077.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Level H, H05 I’d Like to Be, Page 7",
-          "bookId": "H05",
-          "level": "H",
-          "sequence": 5,
-          "title": "I’d Like to Be",
-          "page": 7,
-          "matchKind": "exact",
-          "matchedTerm": "course",
-          "matchedForm": "course",
-          "sentence": "I’d like to be a cowboy and ride on a horse, sleep under the stars, and see the cows, of course.",
-          "sentenceTranslation": "我想成为一名牛仔，骑马，在星空下睡觉，当然还要看牛。"
-        }
-      }
-    },
-    {
       "wordId": "ket_lesson_n",
       "relatedMedia": {
         "oxford": {
@@ -14645,43 +13954,6 @@
           "page": 5,
           "sentence": "She hurried to a table at the front and sat there eagerly waiting for the first lesson to begin.",
           "sentenceTranslation": "她急忙跑到前面的桌子旁，急切地坐在那里等待第一节课开始。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-032.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Level E, E48 The Boy Who Cried “Wolf!”, Page 12",
-          "bookId": "E48",
-          "level": "E",
-          "sequence": 48,
-          "title": "The Boy Who Cried “Wolf!”",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "lesson",
-          "matchedForm": "lesson",
-          "sentence": "The boy learned a lesson.",
-          "sentenceTranslation": "男孩学到了一个教训。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_ruler_n",
-      "relatedMedia": {
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-082.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Level H, H37 Grounded to Earth, Page 7",
-          "bookId": "H37",
-          "level": "H",
-          "sequence": 37,
-          "title": "Grounded to Earth",
-          "page": 7,
-          "matchKind": "exact",
-          "matchedTerm": "ruler",
-          "matchedForm": "ruler",
-          "sentence": "“I am Zorb, the ruler of Earth!”",
-          "sentenceTranslation": "“我是佐布，地球的主宰！”"
         }
       }
     },
@@ -14838,37 +14110,12 @@
           "level": 10,
           "book": 9,
           "page": 6
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-073.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Level G, G65 Look At This Book!, Page 4",
-          "bookId": "G65",
-          "level": "G",
-          "sequence": 65,
-          "title": "Look At This Book!",
-          "page": 4,
-          "matchKind": "exact",
-          "matchedTerm": "science",
-          "matchedForm": "science",
-          "sentence": "When I read science fiction, I explore distant planets.",
-          "sentenceTranslation": "当我读科幻小说时，我探索遥远的星球。"
         }
       }
     },
     {
       "wordId": "ket_mark_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-7/book-11/page-12.webp",
-          "label": "Level 7, Book 11, Page 12",
-          "level": 7,
-          "book": 11,
-          "page": 12,
-          "sentence": "She had a brother called Mark.",
-          "sentenceTranslation": "她有一个叫马克的哥哥。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-024.webp",
           "row": 1,
@@ -14933,15 +14180,6 @@
           "confidence": 0.94,
           "sentence": "You will have a board to help you.",
           "sentenceTranslation": "你会有一块板子来帮助你。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-7/book-6/page-12.webp",
-          "label": "Level 7, Book 6, Page 12",
-          "level": 7,
-          "book": 6,
-          "page": 12,
-          "sentence": "Get on board,\" went on the Professor.",
-          "sentenceTranslation": "上船吧，”教授继续说道。"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-040.webp",
@@ -15535,22 +14773,6 @@
           "page": 11,
           "sentence": "The teacher, Miss Mdingane, gave each pupil an English name.",
           "sentenceTranslation": "老师，丁丹娜小姐，给每个学生起了一个英文名字。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-092.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Level I, I44 Owls Overhead, Page 7",
-          "bookId": "I44",
-          "level": "I",
-          "sequence": 44,
-          "title": "Owls Overhead",
-          "page": 7,
-          "matchKind": "inflection",
-          "matchedTerm": "pupil",
-          "matchedForm": "pupils",
-          "sentence": "That’s because of their pupils—the black circles in the center of their eyes.",
-          "sentenceTranslation": "这是因为它们的瞳孔——眼睛中心的黑色圆圈。"
         }
       }
     },
@@ -15860,15 +15082,6 @@
           "confidence": 0.94,
           "sentence": "Tyres are made from rubber.",
           "sentenceTranslation": "轮胎是用橡胶做的。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-9/book-8/page-28.webp",
-          "label": "Level 9, Book 8, Page 28",
-          "level": 9,
-          "book": 8,
-          "page": 28,
-          "sentence": "The four of them floated downstream on the rubber tubes.",
-          "sentenceTranslation": "他们四个人乘着橡皮艇顺流而下。"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-044.webp",
@@ -16411,20 +15624,6 @@
       }
     },
     {
-      "wordId": "ket_bill_n",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-14/book-5/page-32.webp",
-          "label": "Level 14, Book 5, Page 32",
-          "level": 14,
-          "book": 5,
-          "page": 32,
-          "sentence": "'Welcome to dinner, Bill and Nan.",
-          "sentenceTranslation": "‘欢迎来吃晚餐，比尔和南。’"
-        }
-      }
-    },
-    {
       "wordId": "ket_email_n_v",
       "relatedMedia": {
         "oxford": {
@@ -16499,15 +15698,6 @@
     {
       "wordId": "ket_form_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-9/book-10/page-4.webp",
-          "label": "Level 9, Book 10, Page 4",
-          "level": 9,
-          "book": 10,
-          "page": 4,
-          "sentence": "\"Let's form a band.",
-          "sentenceTranslation": "“让我们组一支乐队吧。”"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-078.webp",
           "row": 2,
@@ -16611,20 +15801,6 @@
     {
       "wordId": "ket_letter_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-070.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Early Level 4, Triky Tangrams, Page 11",
-          "level": "Early Level 4",
-          "title": "Triky Tangrams",
-          "page": 11,
-          "matchKind": "exact",
-          "matchedTerm": "letter",
-          "confidence": 0.94,
-          "sentence": "Can you make the first letter of your own name?",
-          "sentenceTranslation": "你能写出自己名字的第一个字母吗？"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-4/book-18/page-12.webp",
           "label": "Level 4, Book 18, Page 12",
@@ -16633,22 +15809,6 @@
           "page": 12,
           "sentence": "They had a letter.",
           "sentenceTranslation": "他们有一封信。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-042.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Level E, E76 The Sisters C, Page 3",
-          "bookId": "E76",
-          "level": "E",
-          "sequence": 76,
-          "title": "The Sisters C",
-          "page": 3,
-          "matchKind": "exact",
-          "matchedTerm": "letter",
-          "matchedForm": "letter",
-          "sentence": "They both like the letter c.",
-          "sentenceTranslation": "他们都喜欢字母c。"
         }
       }
     },
@@ -17732,15 +16892,6 @@
     {
       "wordId": "ket_film_n_v",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-6/book-4/page-26.webp",
-          "label": "Level 6, Book 4, Page 26",
-          "level": 6,
-          "book": 4,
-          "page": 26,
-          "sentence": "\"Well, I'm sorry, I didn't put a film in the camera.\"",
-          "sentenceTranslation": "“嗯，很抱歉，我没往相机里装胶卷。”"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-094.webp",
           "row": 1,
@@ -17806,20 +16957,6 @@
     {
       "wordId": "ket_show_v_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-019.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Early Level 1, Show Me A Shape, Page 12",
-          "level": "Early Level 1",
-          "title": "Show Me A Shape",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "show",
-          "confidence": 0.86,
-          "sentence": "Show me the shape of a shadow.",
-          "sentenceTranslation": "给我看看影子的形状。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-2/book-26/page-3.webp",
           "label": "Level 2, Book 26, Page 3",
@@ -17828,22 +16965,6 @@
           "page": 3,
           "sentence": "The children went to a show.",
           "sentenceTranslation": "孩子们去看了一场表演。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-033.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Level E, E51 Wake Up, Bear!, Page 12",
-          "bookId": "E51",
-          "level": "E",
-          "sequence": 51,
-          "title": "Wake Up, Bear!",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "show",
-          "matchedForm": "show",
-          "sentence": "“Time to show my cub the world,” Bear says.",
-          "sentenceTranslation": "熊说：“是时候带我的小熊宝宝看看这个世界了。”"
         }
       }
     },
@@ -18387,20 +17508,6 @@
     {
       "wordId": "ket_play_v_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-044.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Early Level 3, Our Tree House, Page 4",
-          "level": "Early Level 3",
-          "title": "Our Tree House",
-          "page": 4,
-          "matchKind": "exact",
-          "matchedTerm": "play",
-          "confidence": 0.86,
-          "sentence": "We have made this play house up in a tree.",
-          "sentenceTranslation": "我们把这座游戏屋建在了树上。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-1/book-43/page-3.webp",
           "label": "Level 1, Book 43, Page 3",
@@ -18526,20 +17633,6 @@
     {
       "wordId": "ket_pop_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-013.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Early Level 1, As Fast As You Can, Page 18",
-          "level": "Early Level 1",
-          "title": "As Fast As You Can",
-          "page": 18,
-          "matchKind": "exact",
-          "matchedTerm": "pop",
-          "confidence": 0.94,
-          "sentence": "Pop!",
-          "sentenceTranslation": "砰！"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-7/book-1/page-30.webp",
           "label": "Level 7, Book 1, Page 30",
@@ -18596,20 +17689,6 @@
     {
       "wordId": "ket_listen_to_v",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-028.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Early Level 2, Off To School, Page 8",
-          "level": "Early Level 2",
-          "title": "Off To School",
-          "page": 8,
-          "matchKind": "exact",
-          "matchedTerm": "to",
-          "confidence": 0.7,
-          "sentence": "Some children have to ride on a train to get to school.",
-          "sentenceTranslation": "有些孩子必须坐火车去上学。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-5/book-17/page-23.webp",
           "label": "Level 5, Book 17, Page 23",
@@ -18949,20 +18028,6 @@
       }
     },
     {
-      "wordId": "ket_performance_entertainment_n",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-15/book-1/page-5.webp",
-          "label": "Level 15, Book 1, Page 5",
-          "level": 15,
-          "book": 1,
-          "page": 5,
-          "sentence": "It can therefore help improve a person's performance when doing an extreme sport.",
-          "sentenceTranslation": "因此，它可以帮助提高一个人在进行极限运动时的表现。"
-        }
-      }
-    },
-    {
       "wordId": "ket_rap_n",
       "relatedMedia": {
         "oxford": {
@@ -19021,20 +18086,6 @@
     {
       "wordId": "ket_tune_music_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-043.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Early Level 3, Our Family Band, Page 12",
-          "level": "Early Level 3",
-          "title": "Our Family Band",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "music",
-          "confidence": 0.86,
-          "sentence": "My grandfather plays the music he likes on his bagpipes.",
-          "sentenceTranslation": "我爷爷用他的风笛演奏他喜欢的音乐。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-9/book-10/page-11.webp",
           "label": "Level 9, Book 10, Page 11",
@@ -20071,20 +19122,6 @@
     {
       "wordId": "ket_mouse_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-000.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Pre-Reading Level, A Brave Girl, Page 18",
-          "level": "Pre-Reading Level",
-          "title": "A Brave Girl",
-          "page": 18,
-          "matchKind": "exact",
-          "matchedTerm": "mouse",
-          "confidence": 0.86,
-          "sentence": "M is for mouse.",
-          "sentenceTranslation": "M代表老鼠。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-5/book-1/page-23.webp",
           "label": "Level 5, Book 1, Page 23",
@@ -20107,27 +19144,6 @@
           "matchedForm": "mice",
           "sentence": "Mice live in cities.",
           "sentenceTranslation": "老鼠住在城市里。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_tablet_n",
-      "relatedMedia": {
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-097.webp",
-          "row": 2,
-          "column": 1,
-          "label": "Level J, J32 The Story of the Statue, Page 13",
-          "bookId": "J32",
-          "level": "J",
-          "sequence": 32,
-          "title": "The Story of the Statue",
-          "page": 13,
-          "matchKind": "exact",
-          "matchedTerm": "tablet",
-          "matchedForm": "tablet",
-          "sentence": "The tablet in its left hand has July 4, 1776, written on it.",
-          "sentenceTranslation": "它左手中的平板上写着1776年7月4日。"
         }
       }
     },
@@ -20377,51 +19393,12 @@
           "level": 14,
           "book": 5,
           "page": 59
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Level G, G10 Whose Eggs Are These?, Page 8",
-          "bookId": "G10",
-          "level": "G",
-          "sequence": 10,
-          "title": "Whose Eggs Are These?",
-          "page": 8,
-          "matchKind": "inflection",
-          "matchedTerm": "web",
-          "matchedForm": "webs",
-          "sentence": "You can find them near spider webs.",
-          "sentenceTranslation": "你可以在蜘蛛网附近找到它们。"
         }
       }
     },
     {
       "wordId": "ket_click_n_v",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-061.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Early Level 4, Keeping Safe, Page 6",
-          "level": "Early Level 4",
-          "title": "Keeping Safe",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "click",
-          "confidence": 0.94,
-          "sentence": "Make it click.",
-          "sentenceTranslation": "让它发出咔哒声。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-6/book-9/page-6.webp",
-          "label": "Level 6, Book 9, Page 6",
-          "level": 6,
-          "book": 9,
-          "page": 6,
-          "sentence": "The teeth went click, click, click.",
-          "sentenceTranslation": "牙齿发出咔哒、咔哒、咔哒的声音。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-048.webp",
           "row": 0,
@@ -20512,15 +19489,6 @@
           "confidence": 0.94,
           "sentence": "The person who makes the book is called the printer.",
           "sentenceTranslation": "制作这本书的人叫印刷工。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-10/book-9/page-9.webp",
-          "label": "Level 10, Book 9, Page 9",
-          "level": 10,
-          "book": 9,
-          "page": 9,
-          "sentence": "Printer (looks after the printing machines)",
-          "sentenceTranslation": "打印机（负责照看印刷机）"
         }
       }
     },
@@ -20546,27 +19514,6 @@
       }
     },
     {
-      "wordId": "ket_channel_n",
-      "relatedMedia": {
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-075.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Level G, G72 A Trip to Petra, Page 6",
-          "bookId": "G72",
-          "level": "G",
-          "sequence": 72,
-          "title": "A Trip to Petra",
-          "page": 6,
-          "matchKind": "inflection",
-          "matchedTerm": "channel",
-          "matchedForm": "channels",
-          "sentence": "In the canyon, they saw water channels and clay pipes.",
-          "sentenceTranslation": "在峡谷中，他们看到了水渠和黏土管道。"
-        }
-      }
-    },
-    {
       "wordId": "ket_headphones_n",
       "relatedMedia": {
         "oxford": {
@@ -20577,34 +19524,6 @@
           "page": 21,
           "sentence": "A lady with headphones counted up to five on her fingers.",
           "sentenceTranslation": "一位戴着耳机的女士用手指数到五。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_it_n",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-034.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Early Level 2, What Makes It Go, Page 8",
-          "level": "Early Level 2",
-          "title": "What Makes It Go",
-          "page": 8,
-          "matchKind": "exact",
-          "matchedTerm": "it",
-          "confidence": 0.7,
-          "sentence": "It needs batteries to make it go.",
-          "sentenceTranslation": "它需要电池才能运转。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-1/book-12/page-3.webp",
-          "label": "Level 1, Book 12, Page 3",
-          "level": 1,
-          "book": 12,
-          "page": 3,
-          "sentence": "I can't reach it!",
-          "sentenceTranslation": "我够不着！"
         }
       }
     },
@@ -20771,20 +19690,6 @@
     {
       "wordId": "ket_riding_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-064.webp",
-          "row": 2,
-          "column": 1,
-          "label": "Early Level 4, Once Upon A Time, Page 10",
-          "level": "Early Level 4",
-          "title": "Once Upon A Time",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "riding",
-          "confidence": 0.94,
-          "sentence": "We like the story about Little Red Riding Hood and the big bad wolf.",
-          "sentenceTranslation": "我们喜欢小红帽和大灰狼的故事。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-10/book-11/page-10.webp",
           "label": "Level 10, Book 11, Page 10",
@@ -20793,22 +19698,6 @@
           "page": 10,
           "sentence": "People have been riding horses for thousands of years to fight, hunt and carry messages.",
           "sentenceTranslation": "人们几千年来一直骑马作战、打猎和传递信息。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-093.webp",
-          "row": 2,
-          "column": 1,
-          "label": "Level I, I56 Little Red Riding Hood, Page 3",
-          "bookId": "I56",
-          "level": "I",
-          "sequence": 56,
-          "title": "Little Red Riding Hood",
-          "page": 3,
-          "matchKind": "exact",
-          "matchedTerm": "riding",
-          "matchedForm": "riding",
-          "sentence": "There once lived a girl named Little Red Riding Hood.",
-          "sentenceTranslation": "从前住着一个名叫小红帽的女孩。"
         }
       }
     },
@@ -20900,15 +19789,6 @@
           "confidence": 0.94,
           "sentence": "Grandad can't play baseball.",
           "sentenceTranslation": "爷爷不会打棒球。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-9/book-9/page-5.webp",
-          "label": "Level 9, Book 9, Page 5",
-          "level": 9,
-          "book": 9,
-          "page": 5,
-          "sentence": "\"Buy two cheeses and you get a free baseball cap,\" said the lady.",
-          "sentenceTranslation": "“买两块奶酪，就送一顶免费的棒球帽，”女士说。"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-066.webp",
@@ -21050,15 +19930,6 @@
     {
       "wordId": "ket_goal_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-1/book-34/page-10.webp",
-          "label": "Level 1, Book 34, Page 10",
-          "level": 1,
-          "book": 34,
-          "page": 10,
-          "sentence": "Dad got a goal.",
-          "sentenceTranslation": "爸爸进了一个球。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-083.webp",
           "row": 2,
@@ -21292,22 +20163,6 @@
           "level": 3,
           "book": 4,
           "page": 10
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-040.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Level E, E69 Skateboards, Page 9",
-          "bookId": "E69",
-          "level": "E",
-          "sequence": 69,
-          "title": "Skateboards",
-          "page": 9,
-          "matchKind": "exact",
-          "matchedTerm": "skate",
-          "matchedForm": "skate",
-          "sentence": "Some people ride skateboards in skate parks.",
-          "sentenceTranslation": "有些人在滑板公园里玩滑板。"
         }
       }
     },
@@ -21669,15 +20524,6 @@
           "sentence": "\"I whistle to the players.\"",
           "sentenceTranslation": "“我向球员们吹口哨。”"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-7/book-13/page-5.webp",
-          "label": "Level 7, Book 13, Page 5",
-          "level": 7,
-          "book": 13,
-          "page": 5,
-          "sentence": "\"And can we take the CD player?\"",
-          "sentenceTranslation": "\"我们能带上CD播放机吗？\""
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-005.webp",
           "row": 2,
@@ -21994,15 +20840,6 @@
     {
       "wordId": "ket_cricket_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-9/book-4/page-12.webp",
-          "label": "Level 9, Book 4, Page 12",
-          "level": 9,
-          "book": 4,
-          "page": 12,
-          "sentence": "The children wanted to play cricket, so they had a game before they went home.",
-          "sentenceTranslation": "孩子们想打板球，所以他们在回家前玩了一局。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-079.webp",
           "row": 0,
@@ -22081,20 +20918,6 @@
           "confidence": 0.94,
           "sentence": "He likes to surf at the beach, too!",
           "sentenceTranslation": "他也喜欢在海滩上冲浪！"
-        }
-      }
-    },
-    {
-      "wordId": "ket_racket_n",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-11/book-11/page-9.webp",
-          "label": "Level 11, Book 11, Page 9",
-          "level": 11,
-          "book": 11,
-          "page": 9,
-          "sentence": "'Stop that racket and come inside.",
-          "sentenceTranslation": "“别吵了，快进来。”"
         }
       }
     },
@@ -22430,15 +21253,6 @@
           "matchKind": "exact",
           "matchedTerm": "bank",
           "confidence": 0.94
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-7/book-2/page-14.webp",
-          "label": "Level 7, Book 2, Page 14",
-          "level": 7,
-          "book": 2,
-          "page": 14,
-          "sentence": "There were alligators asleep on the bank.",
-          "sentenceTranslation": "河岸上有些鳄鱼正在睡觉。"
         }
       }
     },
@@ -22458,15 +21272,6 @@
           "confidence": 0.82,
           "sentence": "Some icebergs look like very big blocks.",
           "sentenceTranslation": "有些冰山看起来像巨大的块状物。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-2/book-13/page-12.webp",
-          "label": "Level 2, Book 13, Page 12",
-          "level": 2,
-          "book": 13,
-          "page": 12,
-          "sentence": "Dad made a block.",
-          "sentenceTranslation": "爸爸做了一个积木。"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
@@ -22737,15 +21542,6 @@
           "sentence": "Sometimes it's a castle.",
           "sentenceTranslation": "有时它是一座城堡。"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-5/book-4/page-15.webp",
-          "label": "Level 5, Book 4, Page 15",
-          "level": 5,
-          "book": 4,
-          "page": 15,
-          "sentence": "The children went on the Jumping Castle.",
-          "sentenceTranslation": "孩子们去了蹦床城堡。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
           "row": 1,
@@ -22809,15 +21605,6 @@
     {
       "wordId": "ket_court_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-10/book-11/page-15.webp",
-          "label": "Level 10, Book 11, Page 15",
-          "level": 10,
-          "book": 11,
-          "page": 15,
-          "sentence": "The court is quite small so you have to be very accurate.",
-          "sentenceTranslation": "球场很小，所以你必须非常准确。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-085.webp",
           "row": 2,
@@ -23284,62 +22071,18 @@
     {
       "wordId": "ket_underground_n_adj",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-062.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Early Level 4, Living Underground, Page 18",
-          "level": "Early Level 4",
-          "title": "Living Underground",
-          "page": 18,
-          "matchKind": "exact",
-          "matchedTerm": "underground",
-          "confidence": 0.94,
-          "sentence": "Underground homes are not too hot or too cold.",
-          "sentenceTranslation": "地下的房子不会太热也不会太冷。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-5/book-8/page-9.webp",
           "label": "Level 5, Book 8, Page 9",
           "level": 5,
           "book": 8,
           "page": 9
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level F, F55 Tunnels, Page 4",
-          "bookId": "F55",
-          "level": "F",
-          "sequence": 55,
-          "title": "Tunnels",
-          "page": 4,
-          "matchKind": "exact",
-          "matchedTerm": "underground",
-          "matchedForm": "underground",
-          "sentence": "Some tunnels go underground.",
-          "sentenceTranslation": "有些隧道在地下。"
         }
       }
     },
     {
       "wordId": "ket_square_n_adj",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-011.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Emergent Level, What Shape Is This?, Page 12",
-          "level": "Emergent Level",
-          "title": "What Shape Is This?",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "square",
-          "confidence": 0.94,
-          "sentence": "This cake is square.",
-          "sentenceTranslation": "这个蛋糕是方形的。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-8/book-5/page-14.webp",
           "label": "Level 8, Book 5, Page 14",
@@ -23348,22 +22091,6 @@
           "page": 14,
           "sentence": "They went to Trafalgar Square.",
           "sentenceTranslation": "他们去了特拉法加广场。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-070.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Level G, G46 Chess, Page 3",
-          "bookId": "G46",
-          "level": "G",
-          "sequence": 46,
-          "title": "Chess",
-          "page": 3,
-          "matchKind": "inflection",
-          "matchedTerm": "square",
-          "matchedForm": "squares",
-          "sentence": "In the game of chess, pieces battle on a board of squares.",
-          "sentenceTranslation": "在国际象棋游戏中，棋子在方格棋盘上对弈。"
         }
       }
     },
@@ -23414,15 +22141,6 @@
     {
       "wordId": "ket_capital_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-15/book-4/page-42.webp",
-          "label": "Level 15, Book 4, Page 42",
-          "level": 15,
-          "book": 4,
-          "page": 42,
-          "sentence": "Each new character we meet is introduced in capital letters to make their entrance stand out, e.g.",
-          "sentenceTranslation": "我们遇到的每个新角色都用大写字母介绍，以突出他们的出场，例如："
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-099.webp",
           "row": 0,
@@ -24031,22 +22749,6 @@
           "page": 11,
           "sentence": "She had a bit of wood.",
           "sentenceTranslation": "她有一小块木头。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-017.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Level E, E21 Shoes Men Wear, Page 6",
-          "bookId": "E21",
-          "level": "E",
-          "sequence": 21,
-          "title": "Shoes Men Wear",
-          "page": 6,
-          "matchKind": "inflection",
-          "matchedTerm": "wood",
-          "matchedForm": "woods",
-          "sentence": "Men wear them in the woods.",
-          "sentenceTranslation": "男人们在树林里戴它们。"
         }
       }
     },
@@ -24764,50 +23466,6 @@
       }
     },
     {
-      "wordId": "ket_change_v_n",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-054.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Early Level 4, Book Art, Page 11",
-          "level": "Early Level 4",
-          "title": "Book Art",
-          "page": 11,
-          "matchKind": "inflection",
-          "matchedTerm": "change",
-          "confidence": 0.82,
-          "sentence": "Sometimes the author wants things changed.",
-          "sentenceTranslation": "有时作者想做一些改变。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-6/book-19/page-14.webp",
-          "label": "Level 6, Book 19, Page 14",
-          "level": 6,
-          "book": 19,
-          "page": 14,
-          "sentence": "Kipper wanted to change seats, but",
-          "sentenceTranslation": "基普想换座位，但是"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-045.webp",
-          "row": 2,
-          "column": 1,
-          "label": "Level F, F04 Changing Seasons, Page 3",
-          "bookId": "F04",
-          "level": "F",
-          "sequence": 4,
-          "title": "Changing Seasons",
-          "page": 3,
-          "matchKind": "inflection",
-          "matchedTerm": "change",
-          "matchedForm": "changes",
-          "sentence": "I live where the weather changes during the year.",
-          "sentenceTranslation": "我住的地方，天气在一年中会变化。"
-        }
-      }
-    },
-    {
       "wordId": "ket_dollar_n",
       "relatedMedia": {
         "raz": {
@@ -24873,15 +23531,6 @@
     {
       "wordId": "ket_euro_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-12/book-4/page-34.webp",
-          "label": "Level 12, Book 4, Page 34",
-          "level": 12,
-          "book": 4,
-          "page": 34,
-          "sentence": "not crashing in the euro races!",
-          "sentenceTranslation": "在欧洲比赛中不撞车！"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
           "row": 2,
@@ -25704,15 +24353,6 @@
           "sentence": "An eagle goes fast.",
           "imagePath": "/content/images/red-rocket-pages/c55766b10c7c4e94a86237bb5a5e667964bd15e0.webp",
           "sentenceTranslation": "老鹰飞得很快。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-11/book-5/page-3.webp",
-          "label": "Level 11, Book 5, Page 3",
-          "level": 11,
-          "book": 5,
-          "page": 3,
-          "sentence": "\"The Eagle has Landed\"",
-          "sentenceTranslation": "“鹰已经着陆了”"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-018.webp",
@@ -27715,20 +26355,6 @@
     {
       "wordId": "ket_country_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-023.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Early Level 2, Big Machines, Page 8",
-          "level": "Early Level 2",
-          "title": "Big Machines",
-          "page": 8,
-          "matchKind": "exact",
-          "matchedTerm": "country",
-          "confidence": 0.94,
-          "sentence": "It is in the country.",
-          "sentenceTranslation": "它在乡下。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-8/book-4/page-18.webp",
           "label": "Level 8, Book 4, Page 18",
@@ -27737,22 +26363,6 @@
           "page": 18,
           "sentence": "I promised to rule the country wisely and well.",
           "sentenceTranslation": "我答应会明智而妥善地治理这个国家。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-018.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level E, E23 Country Animals, Page 3",
-          "bookId": "E23",
-          "level": "E",
-          "sequence": 23,
-          "title": "Country Animals",
-          "page": 3,
-          "matchKind": "exact",
-          "matchedTerm": "country",
-          "matchedForm": "country",
-          "sentence": "Some people live in the country.",
-          "sentenceTranslation": "有些人住在乡下。"
         }
       }
     },
@@ -28240,15 +26850,6 @@
           "sentence": "The days get warmer when spring comes.",
           "sentenceTranslation": "春天来了，天气就变暖了。"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-3/book-15/page-3.webp",
-          "label": "Level 3, Book 15, Page 3",
-          "level": 3,
-          "book": 15,
-          "page": 3,
-          "sentence": "Mum and Dad were spring-cleaning.",
-          "sentenceTranslation": "爸爸妈妈正在做春季大扫除。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-010.webp",
           "row": 2,
@@ -28445,15 +27046,6 @@
           "confidence": 0.94,
           "sentence": "Wednesday was a cloudy day, so we played outside.",
           "sentenceTranslation": "星期三是多云的天气，所以我们到外面玩了。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-13/book-4/page-32.webp",
-          "label": "Level 13, Book 4, Page 32",
-          "level": 13,
-          "book": 4,
-          "page": 32,
-          "sentence": "George stared out at the stream of cloudy water swirling past.",
-          "sentenceTranslation": "George凝视着那条浑浊的水流，它正从身边湍急地流过。"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
@@ -28907,22 +27499,6 @@
           "page": 6,
           "sentence": "In April I started a new job – on the Titanic.",
           "sentenceTranslation": "四月，我开始了一份新工作——在泰坦尼克号上。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-091.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Level I, I40 A Pocket Park for Tiny, Page 3",
-          "bookId": "I40",
-          "level": "I",
-          "sequence": 40,
-          "title": "A Pocket Park for Tiny",
-          "page": 3,
-          "matchKind": "exact",
-          "matchedTerm": "april",
-          "matchedForm": "april",
-          "sentence": "April and her brother, Jesse, lived in the city.",
-          "sentenceTranslation": "艾普尔和她的哥哥杰西住在城里。"
         }
       }
     },
@@ -29168,15 +27744,6 @@
     {
       "wordId": "ket_may_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-2/book-27/page-8.webp",
-          "label": "Level 2, Book 27, Page 8",
-          "level": 2,
-          "book": 27,
-          "page": 8,
-          "sentence": "said Mrs May.",
-          "sentenceTranslation": "梅太太说。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-081.webp",
           "row": 1,
@@ -30149,31 +28716,6 @@
           "confidence": 0.94,
           "sentence": "It only lights up half of the moon or a quarter of the moon.",
           "sentenceTranslation": "它只照亮了月亮的一半或四分之一。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-15/book-1/page-27.webp",
-          "label": "Level 15, Book 1, Page 27",
-          "level": 15,
-          "book": 1,
-          "page": 27,
-          "sentence": "This is where you go up the quarter pipe [a curved, sloped ramp] and stall [balance] on one hand (see picture above).",
-          "sentenceTranslation": "这就是你上半管坡道[一种弯曲的斜坡]并单手停住[保持平衡]的地方（见上图）。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Level F, F52 Super Thrift, Page 5",
-          "bookId": "F52",
-          "level": "F",
-          "sequence": 52,
-          "title": "Super Thrift",
-          "page": 5,
-          "matchKind": "exact",
-          "matchedTerm": "quarter",
-          "matchedForm": "quarter",
-          "sentence": "It was only a quarter.",
-          "sentenceTranslation": "那只是一角钱。"
         }
       }
     },
@@ -30232,22 +28774,6 @@
           "page": 6,
           "sentence": "They came second.",
           "sentenceTranslation": "他们获得了第二名。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-034.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Level E, E52 Five Seconds to Blastoff!, Page 3",
-          "bookId": "E52",
-          "level": "E",
-          "sequence": 52,
-          "title": "Five Seconds to Blastoff!",
-          "page": 3,
-          "matchKind": "inflection",
-          "matchedTerm": "second",
-          "matchedForm": "seconds",
-          "sentence": "There are five seconds to blastoff.",
-          "sentenceTranslation": "还有五秒就要发射了。"
         }
       }
     },
@@ -30340,20 +28866,6 @@
       }
     },
     {
-      "wordId": "ket_daily_adj_adv",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-10/book-12/page-31.webp",
-          "label": "Level 10, Book 12, Page 31",
-          "level": 10,
-          "book": 12,
-          "page": 31,
-          "sentence": "'It's a reporter from The Daily Snoop,' said Harry.",
-          "sentenceTranslation": "“他是《每日偷窥报》的记者，”哈利说。"
-        }
-      }
-    },
-    {
       "wordId": "ket_moment_n",
       "relatedMedia": {
         "oxford": {
@@ -30416,20 +28928,6 @@
     {
       "wordId": "ket_date_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-038.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Early Level 3, Good Things From Trees, Page 15",
-          "level": "Early Level 3",
-          "title": "Good Things From Trees",
-          "page": 15,
-          "matchKind": "inflection",
-          "matchedTerm": "date",
-          "confidence": 0.82,
-          "sentence": "They grow dates and nuts and coconuts and bananas.",
-          "sentenceTranslation": "他们种枣子、坚果、椰子和香蕉。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-6/book-10/page-16.webp",
           "label": "Level 6, Book 10, Page 16",
@@ -30692,20 +29190,6 @@
     {
       "wordId": "ket_gram_me_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-016.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Early Level 1, Help Me Please, Page 6",
-          "level": "Early Level 1",
-          "title": "Help Me Please",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "me",
-          "confidence": 0.7,
-          "sentence": "Come and help me with my garden.",
-          "sentenceTranslation": "来帮我打理花园吧。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-12/book-1/page-30.webp",
           "label": "Level 12, Book 1, Page 30",
@@ -30808,15 +29292,6 @@
     {
       "wordId": "ket_birth_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-10/book-10/page-26.webp",
-          "label": "Level 10, Book 10, Page 26",
-          "level": 10,
-          "book": 10,
-          "page": 26,
-          "sentence": "\"Blotch has a tiny, orange birth mark behind her fourth ear,\" said the monster mum lovingly.",
-          "sentenceTranslation": "“布洛奇在她第四只耳朵后面有一个小小的橙色胎记，”怪物妈妈温柔地说。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-093.webp",
           "row": 0,
@@ -30942,15 +29417,6 @@
     {
       "wordId": "ket_season_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-11/book-13/page-8.webp",
-          "label": "Level 11, Book 13, Page 8",
-          "level": 11,
-          "book": 13,
-          "page": 8,
-          "sentence": "This season, strange things were happening at Lowgate United.",
-          "sentenceTranslation": "这个赛季，洛盖特联队发生了一些奇怪的事情。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-010.webp",
           "row": 2,
@@ -31126,22 +29592,6 @@
           "page": 4,
           "sentence": "On the flight there was a surprise for Nadim.",
           "sentenceTranslation": "在飞行途中，纳迪姆收到了一个惊喜。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level F, F41 Flashlight Shadow Show, Page 11",
-          "bookId": "F41",
-          "level": "F",
-          "sequence": 41,
-          "title": "Flashlight Shadow Show",
-          "page": 11,
-          "matchKind": "exact",
-          "matchedTerm": "flight",
-          "matchedForm": "flight",
-          "sentence": "I make a bird in flight.",
-          "sentenceTranslation": "我制作了一只飞翔的鸟。"
         }
       }
     },
@@ -31447,20 +29897,6 @@
     {
       "wordId": "ket_leave_v",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-029.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Early Level 2, Sets In Nature, Page 6",
-          "level": "Early Level 2",
-          "title": "Sets In Nature",
-          "page": 6,
-          "matchKind": "inflection",
-          "matchedTerm": "leave",
-          "confidence": 0.82,
-          "sentence": "They got some oval leaves and some yellow leaves.",
-          "sentenceTranslation": "他们摘了一些椭圆形的叶子和一些黄色的叶子。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-6/book-20/page-25.webp",
           "label": "Level 6, Book 20, Page 25",
@@ -31469,22 +29905,6 @@
           "page": 25,
           "sentence": "\"Now I can leave the island!\"",
           "sentenceTranslation": "\"现在我可以离开这个岛了！\""
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-011.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Level E, E13 The Four Seasons, Page 8",
-          "bookId": "E13",
-          "level": "E",
-          "sequence": 13,
-          "title": "The Four Seasons",
-          "page": 8,
-          "matchKind": "inflection",
-          "matchedTerm": "leave",
-          "matchedForm": "leaves",
-          "sentence": "In fall, trees lose their leaves.",
-          "sentenceTranslation": "秋天，树木失去了叶子。"
         }
       }
     },
@@ -31913,20 +30333,6 @@
     {
       "wordId": "ket_trip_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-064.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Early Level 4, Once Upon A Time, Page 15",
-          "level": "Early Level 4",
-          "title": "Once Upon A Time",
-          "page": 15,
-          "matchKind": "exact",
-          "matchedTerm": "trip",
-          "confidence": 0.94,
-          "sentence": "Who's that going trip-trap over my bridge?",
-          "sentenceTranslation": "谁在过我的桥时发出哒哒的声音？"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-9/book-1/page-32.webp",
           "label": "Level 9, Book 1, Page 32",
@@ -32435,20 +30841,6 @@
     {
       "wordId": "ket_way_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-045.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Early Level 3, Road Rules, Page 6",
-          "level": "Early Level 3",
-          "title": "Road Rules",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "way",
-          "confidence": 0.86,
-          "sentence": "We look one way and then we look the other way.",
-          "sentenceTranslation": "我们先往一个方向看，然后又往另一个方向看。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-1/book-59/page-4.webp",
           "label": "Level 1, Book 59, Page 4",
@@ -32694,22 +31086,6 @@
           "confidence": 0.94,
           "sentence": "It's not Grandad's scooter.",
           "sentenceTranslation": "这不是爷爷的滑板车。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-076.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Level G, G定级2 A Dog for Sally, Page 7",
-          "bookId": "G定级2",
-          "level": "G",
-          "sequence": 2,
-          "title": "A Dog for Sally",
-          "page": 7,
-          "matchKind": "exact",
-          "matchedTerm": "scooter",
-          "matchedForm": "scooter",
-          "sentence": "Sally visits Mrs. Lee and her dog, Scooter.",
-          "sentenceTranslation": "莎莉拜访了李太太和她的狗斯库特。"
         }
       }
     },
@@ -32890,15 +31266,6 @@
     {
       "wordId": "ket_business_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-11/book-2/page-40.webp",
-          "label": "Level 11, Book 2, Page 40",
-          "level": 11,
-          "book": 2,
-          "page": 40,
-          "sentence": "\"And just so you don't try any monkey business, like escaping, we'll keep the two little monkeys in the van for ...\" he grinned, \"... safety.\"",
-          "sentenceTranslation": "‘为了防止你耍什么把戏，比如逃跑，我们会把两只小猴子留在车里……’他笑了，‘……为了安全。’"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-096.webp",
           "row": 2,
@@ -32964,20 +31331,6 @@
     {
       "wordId": "ket_cleaner_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-070.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Early Level 4, Then And Now, Page 7",
-          "level": "Early Level 4",
-          "title": "Then And Now",
-          "page": 7,
-          "matchKind": "inflection",
-          "matchedTerm": "cleaner",
-          "confidence": 0.82,
-          "sentence": "There were no vacuum cleaners then.",
-          "sentenceTranslation": "那时候还没有吸尘器。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-10/book-13/page-5.webp",
           "label": "Level 10, Book 13, Page 5",
@@ -32986,22 +31339,6 @@
           "page": 5,
           "sentence": "'I give up,' said Mrs Binns, the royal cleaner.",
           "sentenceTranslation": "“我放弃了，”宾斯太太，皇家清洁工说。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Level L, L08 Colonial Life, Page 14",
-          "bookId": "L08",
-          "level": "L",
-          "sequence": 8,
-          "title": "Colonial Life",
-          "page": 14,
-          "matchKind": "exact",
-          "matchedTerm": "cleaner",
-          "matchedForm": "cleaner",
-          "sentence": "The air and water were much cleaner.",
-          "sentenceTranslation": "空气和水都干净多了。"
         }
       }
     },
@@ -33016,22 +31353,6 @@
           "page": 31,
           "sentence": "Neil is now Chairman of an electronics company.",
           "sentenceTranslation": "尼尔现在是一家电子公司的主席。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-032.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Level E, E47 I Am Your New Plant, Page 8",
-          "bookId": "E47",
-          "level": "E",
-          "sequence": 47,
-          "title": "I Am Your New Plant",
-          "page": 8,
-          "matchKind": "exact",
-          "matchedTerm": "company",
-          "matchedForm": "company",
-          "sentence": "Please give me company.",
-          "sentenceTranslation": "请陪陪我。"
         }
       }
     },
@@ -33138,29 +31459,6 @@
     {
       "wordId": "ket_worker_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-063.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Early Level 4, Making Honey, Page 7",
-          "level": "Early Level 4",
-          "title": "Making Honey",
-          "page": 7,
-          "matchKind": "exact",
-          "matchedTerm": "worker",
-          "confidence": 0.94,
-          "sentence": "There are thousands of worker bees, too.",
-          "sentenceTranslation": "还有成千上万的工蜂。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-10/book-10/page-48.webp",
-          "label": "Level 10, Book 10, Page 48",
-          "level": 10,
-          "book": 10,
-          "page": 48,
-          "sentence": "said Paul, \"You're a miracle-worker, you're a marvel, you're an angel.",
-          "sentenceTranslation": "保罗说：“你是个奇迹创造者，你是个奇迹，你是个天使。”"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-005.webp",
           "row": 2,
@@ -33204,27 +31502,6 @@
           "matchedForm": "writers",
           "sentence": "Conclusion Today, William Shakespeare is thought to be one of the greatest writers of all time.",
           "sentenceTranslation": "结论 如今，威廉·莎士比亚被认为是有史以来最伟大的作家之一。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_guide_n",
-      "relatedMedia": {
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level K, K51 Model Rockets, Page 10",
-          "bookId": "K51",
-          "level": "K",
-          "sequence": 51,
-          "title": "Model Rockets",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "guide",
-          "matchedForm": "guide",
-          "sentence": "Place the rocket over the guide wire on the pad.",
-          "sentenceTranslation": "将火箭放在发射台导轨上。"
         }
       }
     },
@@ -33283,22 +31560,6 @@
           "page": 16,
           "sentence": "\"This is where the Queen lives,\" said Gran.",
           "sentenceTranslation": "“这就是女王住的地方，”奶奶说。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-027.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level E, E39 Dolly’s Drama Queen Day, Page 3",
-          "bookId": "E39",
-          "level": "E",
-          "sequence": 39,
-          "title": "Dolly’s Drama Queen Day",
-          "page": 3,
-          "matchKind": "exact",
-          "matchedTerm": "queen",
-          "matchedForm": "queen",
-          "sentence": "“You had a drama queen day today,” Dad said.",
-          "sentenceTranslation": "“你今天真是个戏剧女王。”爸爸说。"
         }
       }
     },
@@ -33586,15 +31847,6 @@
     {
       "wordId": "ket_may_mv",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-2/book-27/page-8.webp",
-          "label": "Level 2, Book 27, Page 8",
-          "level": 2,
-          "book": 27,
-          "page": 8,
-          "sentence": "said Mrs May.",
-          "sentenceTranslation": "梅太太说。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-020.webp",
           "row": 1,
@@ -33988,22 +32240,6 @@
           "page": 15,
           "sentence": "No experience necessary.",
           "sentenceTranslation": "无需经验。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-073.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Level G, G65 Look At This Book!, Page 12",
-          "bookId": "G65",
-          "level": "G",
-          "sequence": 65,
-          "title": "Look At This Book!",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "experience",
-          "matchedForm": "experience",
-          "sentence": "Books let me experience new things without ever leaving my room!",
-          "sentenceTranslation": "书籍让我足不出户就能体验新事物！"
         }
       }
     },
@@ -34112,29 +32348,6 @@
     {
       "wordId": "ket_life_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-059.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Early Level 4, Help Our Oceans, Page 16",
-          "level": "Early Level 4",
-          "title": "Help Our Oceans",
-          "page": 16,
-          "matchKind": "exact",
-          "matchedTerm": "life",
-          "confidence": 0.94,
-          "sentence": "We must all help to save the sea life and the oceans.",
-          "sentenceTranslation": "我们必须一起努力拯救海洋生物和海洋。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-5/book-15/page-12.webp",
-          "label": "Level 5, Book 15, Page 12",
-          "level": 5,
-          "book": 15,
-          "page": 12,
-          "sentence": "The scarecrow came to life.",
-          "sentenceTranslation": "稻草人活过来了。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-071.webp",
           "row": 0,
@@ -34345,22 +32558,6 @@
           "page": 5,
           "sentence": "This time it was a different sort of adventure.",
           "sentenceTranslation": "这次是一次不同类型的冒险。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
-          "row": 2,
-          "column": 1,
-          "label": "Level F, F45 Cleaning My Room, Page 3",
-          "bookId": "F45",
-          "level": "F",
-          "sequence": 45,
-          "title": "Cleaning My Room",
-          "page": 3,
-          "matchKind": "exact",
-          "matchedTerm": "sort",
-          "matchedForm": "sort",
-          "sentence": "Can you help me sort my clothes?",
-          "sentenceTranslation": "你能帮我整理衣服吗？"
         }
       }
     },
@@ -34569,15 +32766,6 @@
     {
       "wordId": "ket_view_n",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-11/book-2/page-32.webp",
-          "label": "Level 11, Book 2, Page 32",
-          "level": 11,
-          "book": 2,
-          "page": 32,
-          "sentence": "As we were crossing the road, a dirty white van shot into view.",
-          "sentenceTranslation": "当我们正在过马路时，一辆脏兮兮的白色货车突然出现在视野中。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-075.webp",
           "row": 0,
@@ -38383,63 +36571,18 @@
     {
       "wordId": "ket_as_conj_adv_prep",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-012.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Early Level 1, As Fast As You Can, Page 10",
-          "level": "Early Level 1",
-          "title": "As Fast As You Can",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "as",
-          "confidence": 0.7,
-          "sentence": "I can hit as far as you can.",
-          "sentenceTranslation": "我能打到你所能打到的地方。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-1/book-12/page-4.webp",
           "label": "Level 1, Book 12, Page 4",
           "level": 1,
           "book": 12,
           "page": 4
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-025.webp",
-          "row": 0,
-          "column": 1,
-          "label": "Level E, E33 A Sweet Tale, Page 11",
-          "bookId": "E33",
-          "level": "E",
-          "sequence": 33,
-          "title": "A Sweet Tale",
-          "page": 11,
-          "matchKind": "exact",
-          "matchedTerm": "as",
-          "matchedForm": "as",
-          "sentence": "“The bread is as flat as my tail!”",
-          "sentenceTranslation": "这面包跟我尾巴一样平！"
         }
       }
     },
     {
       "wordId": "ket_as_well_as_prep",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-012.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Early Level 1, As Fast As You Can, Page 8",
-          "level": "Early Level 1",
-          "title": "As Fast As You Can",
-          "page": 8,
-          "matchKind": "exact",
-          "matchedTerm": "as",
-          "confidence": 0.7,
-          "sentence": "I can yell as loud as you can.",
-          "imagePath": "/content/images/red-rocket-pages/3837484a746ea66771d090ba10343a3ad941bf59.webp",
-          "sentenceTranslation": "我可以像你一样大声喊叫。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-7/book-2/page-7.webp",
           "label": "Level 7, Book 2, Page 7",
@@ -38512,29 +36655,6 @@
     {
       "wordId": "ket_at_all_prep_phr",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-021.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Early Level 1, What Goes Up High, Page 8",
-          "level": "Early Level 1",
-          "title": "What Goes Up High",
-          "page": 8,
-          "matchKind": "exact",
-          "matchedTerm": "at all",
-          "confidence": 0.96,
-          "sentence": "Look at all the flags.",
-          "sentenceTranslation": "看看所有的旗帜。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-1/book-45/page-4.webp",
-          "label": "Level 1, Book 45, Page 4",
-          "level": 1,
-          "book": 45,
-          "page": 4,
-          "sentence": "Look at all the dogs.",
-          "sentenceTranslation": "看看所有的狗。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-007.webp",
           "row": 0,
@@ -39816,22 +37936,6 @@
           "level": 9,
           "book": 5,
           "page": 34
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Level L, L08 Colonial Life, Page 8",
-          "bookId": "L08",
-          "level": "L",
-          "sequence": 8,
-          "title": "Colonial Life",
-          "page": 8,
-          "matchKind": "exact",
-          "matchedTerm": "till",
-          "matchedForm": "till",
-          "sentence": "You plant seeds and till soil with a plow pulled by oxen.",
-          "sentenceTranslation": "你播种并用牛拉的犁翻土。"
         }
       }
     },
@@ -39956,20 +38060,6 @@
     {
       "wordId": "ket_up_prep_adv",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-013.webp",
-          "row": 2,
-          "column": 1,
-          "label": "Early Level 1, Clean Up Time, Page 6",
-          "level": "Early Level 1",
-          "title": "Clean Up Time",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "up",
-          "confidence": 0.7,
-          "sentence": "We clean up the paints and the brushes.",
-          "sentenceTranslation": "我们收拾颜料和画笔。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-1/book-18/page-5.webp",
           "label": "Level 1, Book 18, Page 5",
@@ -40287,22 +38377,6 @@
           "level": 3,
           "book": 20,
           "page": 18
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-023.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Level E, E31 Let’s Make Lemonade, Page 3",
-          "bookId": "E31",
-          "level": "E",
-          "sequence": 31,
-          "title": "Let’s Make Lemonade",
-          "page": 3,
-          "matchKind": "exact",
-          "matchedTerm": "so",
-          "matchedForm": "so",
-          "sentence": "It’s so hot today.",
-          "sentenceTranslation": "今天太热了。"
         }
       }
     },
@@ -40497,36 +38571,6 @@
       }
     },
     {
-      "wordId": "ket_good_night_exclam",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-11/book-12/page-20.webp",
-          "label": "Level 11, Book 12, Page 20",
-          "level": 11,
-          "book": 12,
-          "page": 20,
-          "sentence": "Zé walked in, put down his things and stretched out in the hay for a good night's sleep.",
-          "sentenceTranslation": "Zé走了进来，放下东西，躺在干草上好好睡了一觉。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-098.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Level J, J44 The Creature Constitution, Page 15",
-          "bookId": "J44",
-          "level": "J",
-          "sequence": 44,
-          "title": "The Creature Constitution",
-          "page": 15,
-          "matchKind": "exact",
-          "matchedTerm": "good night",
-          "matchedForm": "good night",
-          "sentence": "The night they signed their constitution, the creatures in the building all had a good night’s sleep.",
-          "sentenceTranslation": "在他们签署宪法的那个晚上，楼里的生物们都睡了一个好觉。"
-        }
-      }
-    },
-    {
       "wordId": "ket_hello_exclam",
       "relatedMedia": {
         "redRocket": {
@@ -40653,20 +38697,6 @@
     {
       "wordId": "ket_of_course_not_adv",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-053.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Early Level 4, Bear Gets Stuck, Page 10",
-          "level": "Early Level 4",
-          "title": "Bear Gets Stuck",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "not",
-          "confidence": 0.86,
-          "sentence": "The other bears could not help him.",
-          "sentenceTranslation": "其他熊无法帮助他。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-7/book-6/page-15.webp",
           "label": "Level 7, Book 6, Page 15",
@@ -41761,22 +39791,6 @@
           "page": 9,
           "sentence": "\"Can you see it, yet?\"",
           "sentenceTranslation": "“你看到了吗，现在？”"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Level F, F73 Lou’s Flu, Page 5",
-          "bookId": "F73",
-          "level": "F",
-          "sequence": 73,
-          "title": "Lou’s Flu",
-          "page": 5,
-          "matchKind": "exact",
-          "matchedTerm": "yet",
-          "matchedForm": "yet",
-          "sentence": "Yet he did, that silly kid.",
-          "sentenceTranslation": "然而他确实做了，那个傻孩子。"
         }
       }
     },
@@ -42149,22 +40163,6 @@
           "page": 11,
           "sentence": "She had a bit of wood.",
           "sentenceTranslation": "她有一小块木头。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-013.webp",
-          "row": 0,
-          "column": 1,
-          "label": "Level E, E15 What’s For Dinner?, Page 6",
-          "bookId": "E15",
-          "level": "E",
-          "sequence": 15,
-          "title": "What’s For Dinner?",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "bit",
-          "matchedForm": "bit",
-          "sentence": "But ants bit his tongue.",
-          "sentenceTranslation": "但是蚂蚁咬了他的舌头。"
         }
       }
     },
@@ -43814,29 +41812,6 @@
     {
       "wordId": "ket_get_on_phr_v",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-059.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Early Level 4, Hide From Max Monkey, Page 12",
-          "level": "Early Level 4",
-          "title": "Hide From Max Monkey",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "get on",
-          "confidence": 0.96,
-          "sentence": "\"I will get on this log to look for Giraffe,\" said Max Monkey.",
-          "sentenceTranslation": "“我要爬上这根原木去找长颈鹿，”猴子麦克斯说。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-1/book-20/page-3.webp",
-          "label": "Level 1, Book 20, Page 3",
-          "level": 1,
-          "book": 20,
-          "page": 3,
-          "sentence": "Get on, Biff.",
-          "sentenceTranslation": "上车吧，比夫。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
           "row": 2,
@@ -44036,22 +42011,6 @@
           "level": 1,
           "book": 3,
           "page": 3
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Level F, F27 Monster Reading Buddies, Page 8",
-          "bookId": "F27",
-          "level": "F",
-          "sequence": 27,
-          "title": "Monster Reading Buddies",
-          "page": 8,
-          "matchKind": "inflection",
-          "matchedTerm": "look out",
-          "matchedForm": "looks out",
-          "sentence": "Jupe looks out the library window.",
-          "sentenceTranslation": "朱普望着图书馆的窗户。"
         }
       }
     },
@@ -44101,15 +42060,6 @@
           "confidence": 0.96,
           "sentence": "We put on our helmets.",
           "sentenceTranslation": "我们戴上了头盔。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-1/book-29/page-3.webp",
-          "label": "Level 1, Book 29, Page 3",
-          "level": 1,
-          "book": 29,
-          "page": 3,
-          "sentence": "Mum put on a big pillow.",
-          "sentenceTranslation": "妈妈放了一个大枕头。"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-003.webp",
@@ -44182,22 +42132,6 @@
           "level": 7,
           "book": 1,
           "page": 4
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-002.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Level E, E04 Time for Bed, Page 5",
-          "bookId": "E04",
-          "level": "E",
-          "sequence": 4,
-          "title": "Time for Bed",
-          "page": 5,
-          "matchKind": "inflection",
-          "matchedTerm": "take off",
-          "matchedForm": "takes off",
-          "sentence": "He takes off his clothes.",
-          "sentenceTranslation": "他脱下衣服。"
         }
       }
     },
@@ -44296,36 +42230,6 @@
           "matchedForm": "wakes up",
           "sentence": "Grandpa wakes up.",
           "sentenceTranslation": "爷爷醒了。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_work_out_phr_v",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-11/book-1/page-50.webp",
-          "label": "Level 11, Book 1, Page 50",
-          "level": 11,
-          "book": 1,
-          "page": 50,
-          "sentence": "It didn't take him very long to work out what had happened.",
-          "sentenceTranslation": "他没花太长时间就弄清楚了发生了什么。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-098.webp",
-          "row": 2,
-          "column": 1,
-          "label": "Level J, J42 Guess That President, Page 10",
-          "bookId": "J42",
-          "level": "J",
-          "sequence": 42,
-          "title": "Guess That President",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "work out",
-          "matchedForm": "work out",
-          "sentence": "He started a group that helped countries work out their problems instead of going to war.",
-          "sentenceTranslation": "他成立了一个组织，帮助各国解决问题，而不是发动战争。"
         }
       }
     },
@@ -45200,20 +43104,6 @@
     {
       "wordId": "ket_brush_n_v",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-068.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Early Level 4, Simple Technology, Page 16",
-          "level": "Early Level 4",
-          "title": "Simple Technology",
-          "page": 16,
-          "matchKind": "inflection",
-          "matchedTerm": "brush",
-          "confidence": 0.82,
-          "sentence": "We use brushes every day.",
-          "sentenceTranslation": "我们每天都用刷子。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-8/book-5/page-25.webp",
           "label": "Level 8, Book 5, Page 25",
@@ -45262,22 +43152,6 @@
           "level": 6,
           "book": 13,
           "page": 4
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-022.webp",
-          "row": 2,
-          "column": 1,
-          "label": "Level E, E30 Carlos’s First Halloween, Page 4",
-          "bookId": "E30",
-          "level": "E",
-          "sequence": 30,
-          "title": "Carlos’s First Halloween",
-          "page": 4,
-          "matchKind": "inflection",
-          "matchedTerm": "build",
-          "matchedForm": "building",
-          "sentence": "They visit friends in their building.",
-          "sentenceTranslation": "他们去拜访住在同一栋楼里的朋友。"
         }
       }
     },
@@ -45516,20 +43390,6 @@
       }
     },
     {
-      "wordId": "ket_contact_n_v",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-10/book-11/page-25.webp",
-          "label": "Level 10, Book 11, Page 25",
-          "level": 10,
-          "book": 11,
-          "page": 25,
-          "sentence": "Basketball, Volleyball and Handball are three of the World's main non-contact, ball-handling games.",
-          "sentenceTranslation": "篮球、排球和手球是世界上三种主要的非接触性球类运动。"
-        }
-      }
-    },
-    {
       "wordId": "ket_continue_v",
       "relatedMedia": {
         "oxford": {
@@ -45575,15 +43435,6 @@
           "confidence": 0.94,
           "sentence": "The printer makes a copy for the publisher to check.",
           "sentenceTranslation": "打印机为出版商制作了一份副本以便检查。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-10/book-4/page-11.webp",
-          "label": "Level 10, Book 4, Page 11",
-          "level": 10,
-          "book": 4,
-          "page": 11,
-          "sentence": "This coin looks real, but it's a copy.",
-          "sentenceTranslation": "这枚硬币看起来是真的，但它是仿制品。"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-110.webp",
@@ -45650,15 +43501,6 @@
           "sentence": "\"No, Tiger, you can't cross over,\" said the crocodile.",
           "sentenceTranslation": "“不，老虎，你不能过去，”鳄鱼说。"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-1/book-33/page-6.webp",
-          "label": "Level 1, Book 33, Page 6",
-          "level": 1,
-          "book": 33,
-          "page": 6,
-          "sentence": "\"I'm cross,\" said Dad.",
-          "sentenceTranslation": "“我生气了，”爸爸说。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-036.webp",
           "row": 2,
@@ -45704,50 +43546,6 @@
           "matchedForm": "cried",
           "sentence": "“Oh, no!” cried Mrs. Beaver.",
           "sentenceTranslation": "“哦，不！”海狸太太喊道。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_cycle_v",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-058.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Early Level 4, Help Our Oceans, Page 6",
-          "level": "Early Level 4",
-          "title": "Help Our Oceans",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "cycle",
-          "confidence": 0.94,
-          "sentence": "Oceans feed the water cycle.",
-          "sentenceTranslation": "海洋参与水循环。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-11/book-17/page-16.webp",
-          "label": "Level 11, Book 17, Page 16",
-          "level": 11,
-          "book": 17,
-          "page": 16,
-          "sentence": "He came in wearing his anorak and cycle clips.",
-          "sentenceTranslation": "他进来时穿着他的防风外套，还戴着自行车护腿。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-046.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level F, F04 Changing Seasons, Page 10",
-          "bookId": "F04",
-          "level": "F",
-          "sequence": 4,
-          "title": "Changing Seasons",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "cycle",
-          "matchedForm": "cycle",
-          "sentence": "The cycle will start all over.",
-          "sentenceTranslation": "循环将重新开始。"
         }
       }
     },
@@ -46455,35 +44253,6 @@
       }
     },
     {
-      "wordId": "ket_follow_social_media_v",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-029.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Early Level 2, Playground Games, Page 11",
-          "level": "Early Level 2",
-          "title": "Playground Games",
-          "page": 11,
-          "matchKind": "exact",
-          "matchedTerm": "follow",
-          "confidence": 0.94,
-          "sentence": "follow the leader",
-          "imagePath": "/content/images/red-rocket-pages/1055dd7ef73dc33ae31ebb04dac2b78a8c8ab978.webp",
-          "sentenceTranslation": "跟着领袖走"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-6/book-18/page-6.webp",
-          "label": "Level 6, Book 18, Page 6",
-          "level": 6,
-          "book": 18,
-          "page": 6,
-          "sentence": "\"Follow me to the games,\" he said.",
-          "sentenceTranslation": "“跟我去游戏区吧，”他说。"
-        }
-      }
-    },
-    {
       "wordId": "ket_forget_v",
       "relatedMedia": {
         "redRocket": {
@@ -46544,15 +44313,6 @@
           "sentence": "But my father is scared of rats, so I won't get one after all.",
           "sentenceTranslation": "但我爸爸害怕老鼠，所以我最终不会养一只。"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-1/book-20/page-3.webp",
-          "label": "Level 1, Book 20, Page 3",
-          "level": 1,
-          "book": 20,
-          "page": 3,
-          "sentence": "Get on, Biff.",
-          "sentenceTranslation": "上车吧，比夫。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-001.webp",
           "row": 2,
@@ -46574,15 +44334,6 @@
     {
       "wordId": "ket_get_back_v",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-2/book-17/page-6.webp",
-          "label": "Level 2, Book 17, Page 6",
-          "level": 2,
-          "book": 17,
-          "page": 6,
-          "sentence": "\"Get back,\" said a fireman.",
-          "sentenceTranslation": "“退后，”一名消防员说。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-084.webp",
           "row": 2,
@@ -46684,25 +44435,6 @@
           "matchedForm": "gave",
           "sentence": "Everybody gave Billy a birthday hug.",
           "sentenceTranslation": "大家都给了比利一个生日拥抱。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_give_somebody_a_call_ring_v",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-045.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Early Level 3, Ringing Bells, Page 14",
-          "level": "Early Level 3",
-          "title": "Ringing Bells",
-          "page": 14,
-          "matchKind": "exact",
-          "matchedTerm": "ring",
-          "confidence": 0.86,
-          "sentence": "A bike has a bell for the rider to ring.",
-          "sentenceTranslation": "自行车有一个铃铛，骑车人可以按响它。"
         }
       }
     },
@@ -47574,20 +45306,6 @@
     {
       "wordId": "ket_make_sure_that_v",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-027.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Early Level 2, Missing Heads, Page 12",
-          "level": "Early Level 2",
-          "title": "Missing Heads",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "that",
-          "confidence": 0.7,
-          "sentence": "That lamb looks funny.",
-          "sentenceTranslation": "那只小羊看起来很滑稽。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-6/book-16/page-5.webp",
           "label": "Level 6, Book 16, Page 5",
@@ -47764,15 +45482,6 @@
           "sentence": "Oceans give us what we need.",
           "sentenceTranslation": "海洋给了我们所需要的一切。"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-4/book-25/page-4.webp",
-          "label": "Level 4, Book 25, Page 4",
-          "level": 4,
-          "book": 25,
-          "page": 4,
-          "sentence": "They wanted to help Children in Need.",
-          "sentenceTranslation": "他们想帮助有需要的儿童。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-000.webp",
           "row": 0,
@@ -47824,15 +45533,6 @@
     {
       "wordId": "ket_order_n_v",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-8/book-4/page-21.webp",
-          "label": "Level 8, Book 4, Page 21",
-          "level": 8,
-          "book": 4,
-          "page": 21,
-          "sentence": "She will not give the order to attack because she is afraid my uncle will harm me.",
-          "sentenceTranslation": "她不会下令进攻，因为她害怕我叔叔会伤害我。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
           "row": 1,
@@ -47986,15 +45686,6 @@
           "sentence": "My hands are good for pointing.",
           "sentenceTranslation": "我的手很适合指路。"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-8/book-7/page-17.webp",
-          "label": "Level 8, Book 7, Page 17",
-          "level": 8,
-          "book": 7,
-          "page": 17,
-          "sentence": "\"That's not the point,\" said Dad.",
-          "sentenceTranslation": "“那不是重点，”爸爸说。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-066.webp",
           "row": 1,
@@ -48010,36 +45701,6 @@
           "matchedForm": "points",
           "sentence": "Clare points at Dad’s chair.",
           "sentenceTranslation": "克莱尔指着爸爸的椅子。"
-        }
-      }
-    },
-    {
-      "wordId": "ket_post_v_n",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-4/book-5/page-9.webp",
-          "label": "Level 4, Book 5, Page 9",
-          "level": 4,
-          "book": 5,
-          "page": 9,
-          "sentence": "He climbed on the lamp post.",
-          "sentenceTranslation": "他爬上了灯柱。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Level G, G01 Signs Are Everywhere, Page 3",
-          "bookId": "G01",
-          "level": "G",
-          "sequence": 1,
-          "title": "Signs Are Everywhere",
-          "page": 3,
-          "matchKind": "inflection",
-          "matchedTerm": "post",
-          "matchedForm": "posts",
-          "sentence": "Signs are on posts.",
-          "sentenceTranslation": "标志牌立在柱子上。"
         }
       }
     },
@@ -48096,22 +45757,6 @@
           "page": 23,
           "sentence": "We have put the jokes on the computer, now we can print them off,",
           "sentenceTranslation": "我们已经把笑话输入电脑了，现在可以打印出来了。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-089.webp",
-          "row": 0,
-          "column": 1,
-          "label": "Level I, I19 The Magic Bike, Page 12",
-          "bookId": "I19",
-          "level": "I",
-          "sequence": 19,
-          "title": "The Magic Bike",
-          "page": 12,
-          "matchKind": "inflection",
-          "matchedTerm": "print",
-          "matchedForm": "prints",
-          "sentence": "“There were tire prints everywhere.",
-          "sentenceTranslation": "“到处都是轮胎印。"
         }
       }
     },
@@ -48278,20 +45923,6 @@
       }
     },
     {
-      "wordId": "ket_record_v",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-10/book-8/page-28.webp",
-          "label": "Level 10, Book 8, Page 28",
-          "level": 10,
-          "book": 8,
-          "page": 28,
-          "sentence": "It must be a record!",
-          "sentenceTranslation": "这一定是纪录！"
-        }
-      }
-    },
-    {
       "wordId": "ket_relax_become_happy_v",
       "relatedMedia": {
         "oxford": {
@@ -48359,15 +45990,6 @@
           "sentence": "Some days a big wind can make our boats sail.",
           "sentenceTranslation": "有时大风能让我们的小船航行。"
         },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-7/book-17/page-25.webp",
-          "label": "Level 7, Book 17, Page 25",
-          "level": 7,
-          "book": 17,
-          "page": 25,
-          "sentence": "\"The crash must have been the sail,\" said Biff.",
-          "sentenceTranslation": "“撞击声一定是帆发出的，”比夫说。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-077.webp",
           "row": 0,
@@ -48402,15 +46024,6 @@
           "confidence": 0.94,
           "sentence": "We must all help to save the sea life and the oceans.",
           "sentenceTranslation": "我们必须一起努力拯救海洋生物和海洋。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-5/book-16/page-13.webp",
-          "label": "Level 5, Book 16, Page 13",
-          "level": 5,
-          "book": 16,
-          "page": 13,
-          "sentence": "\"Noah will save all the animals.\"",
-          "sentenceTranslation": "“诺亚会拯救所有的动物。”"
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-038.webp",
@@ -48885,50 +46498,6 @@
       }
     },
     {
-      "wordId": "ket_smoke_v",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-032.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Early Level 2, Volcanoes, Page 11",
-          "level": "Early Level 2",
-          "title": "Volcanoes",
-          "page": 11,
-          "matchKind": "exact",
-          "matchedTerm": "smoke",
-          "confidence": 0.94,
-          "sentence": "It has red fire and black smoke.",
-          "sentenceTranslation": "它有红色的火焰和黑色的烟。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-8/book-2/page-24.webp",
-          "label": "Level 8, Book 2, Page 24",
-          "level": 8,
-          "book": 2,
-          "page": 24,
-          "sentence": "There was smoke everywhere.",
-          "sentenceTranslation": "到处都是烟。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-070.webp",
-          "row": 0,
-          "column": 1,
-          "label": "Level G, G45 Fire Safety, Page 5",
-          "bookId": "G45",
-          "level": "G",
-          "sequence": 45,
-          "title": "Fire Safety",
-          "page": 5,
-          "matchKind": "exact",
-          "matchedTerm": "smoke",
-          "matchedForm": "smoke",
-          "sentence": "Your house should have smoke alarms.",
-          "sentenceTranslation": "你的家里应该有烟雾报警器。"
-        }
-      }
-    },
-    {
       "wordId": "ket_sound_v",
       "relatedMedia": {
         "redRocket": {
@@ -48974,15 +46543,6 @@
     {
       "wordId": "ket_spell_v",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-5/book-9/page-6.webp",
-          "label": "Level 5, Book 9, Page 6",
-          "level": 5,
-          "book": 9,
-          "page": 6,
-          "sentence": "The spell went wrong.",
-          "sentenceTranslation": "咒语出错了。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-068.webp",
           "row": 1,
@@ -49252,29 +46812,6 @@
     {
       "wordId": "ket_train_transitive_and_intransitive_v",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-004.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Emergent Level, Go Go Go, Page 4",
-          "level": "Emergent Level",
-          "title": "Go Go Go",
-          "page": 4,
-          "matchKind": "exact",
-          "matchedTerm": "train",
-          "confidence": 0.86,
-          "sentence": "A train is going past.",
-          "sentenceTranslation": "一列火车正在经过。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-8/book-5/page-13.webp",
-          "label": "Level 8, Book 5, Page 13",
-          "level": 8,
-          "book": 5,
-          "page": 13,
-          "sentence": "When the train came in everyone rushed to get on.",
-          "sentenceTranslation": "火车进站时，大家都冲上去上车。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
           "row": 2,
@@ -49881,15 +47418,6 @@
     {
       "wordId": "ket_dear_adj",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-2/book-27/page-8.webp",
-          "label": "Level 2, Book 27, Page 8",
-          "level": 2,
-          "book": 27,
-          "page": 8,
-          "sentence": "\"Oh dear!\"",
-          "sentenceTranslation": "“哎呀！”"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
           "row": 0,
@@ -50109,22 +47637,6 @@
           "page": 11,
           "sentence": "\"It's easy,\" he said.",
           "sentenceTranslation": "“这很简单，”他说。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-007.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Level E, E09 Nothing for Father’s Day, Page 8",
-          "bookId": "E09",
-          "level": "E",
-          "sequence": 9,
-          "title": "Nothing for Father’s Day",
-          "page": 8,
-          "matchKind": "exact",
-          "matchedTerm": "easy",
-          "matchedForm": "easy",
-          "sentence": "He wants to take it easy and play.",
-          "sentenceTranslation": "他想放松一下，玩一玩。"
         }
       }
     },
@@ -50250,15 +47762,6 @@
     {
       "wordId": "ket_fair_adj",
       "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-3/book-22/page-3.webp",
-          "label": "Level 3, Book 22, Page 3",
-          "level": 3,
-          "book": 22,
-          "page": 3,
-          "sentence": "Everyone went to the school fair.",
-          "sentenceTranslation": "每个人都去了学校集市。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
           "row": 2,
@@ -51684,21 +49187,6 @@
     {
       "wordId": "ket_poor_thing_you_adj",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-009.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Emergent Level, What Can You See, Page 10",
-          "level": "Emergent Level",
-          "title": "What Can You See",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "you",
-          "confidence": 0.7,
-          "sentence": "Can you see 4 monkeys?",
-          "imagePath": "/content/images/red-rocket-pages/a836cbc45ef11532c20e7b34ff71da2ad6304c50.webp",
-          "sentenceTranslation": "你能看到4只猴子吗？"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-11/book-15/page-11.webp",
           "label": "Level 11, Book 15, Page 11",
@@ -51803,29 +49291,6 @@
     {
       "wordId": "ket_round_adj",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-008.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Emergent Level, Round And Round, Page 18",
-          "level": "Emergent Level",
-          "title": "Round And Round",
-          "page": 18,
-          "matchKind": "exact",
-          "matchedTerm": "round",
-          "confidence": 0.86,
-          "sentence": "A merry-go-round goes round and round, too.",
-          "sentenceTranslation": "旋转木马也一圈圈地转着。"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-3/book-4/page-13.webp",
-          "label": "Level 3, Book 4, Page 13",
-          "level": 3,
-          "book": 4,
-          "page": 13,
-          "sentence": "He went round the rink.",
-          "sentenceTranslation": "他绕着冰场跑了一圈。"
-        },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-014.webp",
           "row": 1,
@@ -52689,22 +50154,6 @@
           "page": 14,
           "sentence": "they came to a wide river.",
           "sentenceTranslation": "他们来到一条宽阔的河边。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-033.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Level E, E51 Wake Up, Bear!, Page 12",
-          "bookId": "E51",
-          "level": "E",
-          "sequence": 51,
-          "title": "Wake Up, Bear!",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "wide",
-          "matchedForm": "wide",
-          "sentence": "She is wide awake!",
-          "sentenceTranslation": "她完全清醒了！"
         }
       }
     },
@@ -52991,20 +50440,6 @@
     {
       "wordId": "ket_design_drawing_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-018.webp",
-          "row": 1,
-          "column": 0,
-          "label": "Early Level 1, My Hands, Page 12",
-          "level": "Early Level 1",
-          "title": "My Hands",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "drawing",
-          "confidence": 0.94,
-          "sentence": "My hands are good for drawing.",
-          "sentenceTranslation": "我的手很适合画画。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-9/book-2/page-35.webp",
           "label": "Level 9, Book 2, Page 35",
@@ -53138,20 +50573,6 @@
     {
       "wordId": "ket_match_n",
       "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-005.webp",
-          "row": 1,
-          "column": 1,
-          "label": "Emergent Level, Hot Stuff, Page 12",
-          "level": "Emergent Level",
-          "title": "Hot Stuff",
-          "page": 12,
-          "matchKind": "exact",
-          "matchedTerm": "match",
-          "confidence": 0.94,
-          "sentence": "The match is hot.",
-          "sentenceTranslation": "比赛很激烈。"
-        },
         "oxford": {
           "imagePath": "/content/images/oxford-tree/level-10/book-16/page-45.webp",
           "label": "Level 10, Book 16, Page 45",
@@ -53604,50 +51025,6 @@
       }
     },
     {
-      "wordId": "ket_set_n",
-      "relatedMedia": {
-        "redRocket": {
-          "atlasPath": "/content/images/red-rocket-atlases/atlas-058.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Early Level 4, Hare And Tortoise, Page 10",
-          "level": "Early Level 4",
-          "title": "Hare And Tortoise",
-          "page": 10,
-          "matchKind": "exact",
-          "matchedTerm": "set",
-          "confidence": 0.86,
-          "sentence": "\"Get ready, set, go!\"",
-          "sentenceTranslation": "“准备好了，开始！”"
-        },
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-4/book-28/page-24.webp",
-          "label": "Level 4, Book 28, Page 24",
-          "level": 4,
-          "book": 28,
-          "page": 24,
-          "sentence": "They set off for the party.",
-          "sentenceTranslation": "他们出发去参加聚会。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-048.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Level F, F12 Our Camping Trip, Page 5",
-          "bookId": "F12",
-          "level": "F",
-          "sequence": 12,
-          "title": "Our Camping Trip",
-          "page": 5,
-          "matchKind": "exact",
-          "matchedTerm": "set",
-          "matchedForm": "set",
-          "sentence": "We drive to the lake, and we set up camp.",
-          "sentenceTranslation": "我们开车去湖边，然后扎营。"
-        }
-      }
-    },
-    {
       "wordId": "ket_shoe_n",
       "relatedMedia": {
         "redRocket": {
@@ -53746,36 +51123,6 @@
           "matchedForm": "side",
           "sentence": "Mia found a box with Double It! written on the side.",
           "sentenceTranslation": "米娅发现一个盒子，侧面写着“加倍！”"
-        }
-      }
-    },
-    {
-      "wordId": "ket_smoking_n",
-      "relatedMedia": {
-        "oxford": {
-          "imagePath": "/content/images/oxford-tree/level-12/book-6/page-7.webp",
-          "label": "Level 12, Book 6, Page 7",
-          "level": 12,
-          "book": 6,
-          "page": 7,
-          "sentence": "At first, the rock was smoking hot.",
-          "sentenceTranslation": "起初，石头热得冒烟。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
-          "row": 2,
-          "column": 0,
-          "label": "Level L, L09 Sending Messages, Page 6",
-          "bookId": "L09",
-          "level": "L",
-          "sequence": 9,
-          "title": "Sending Messages",
-          "page": 6,
-          "matchKind": "exact",
-          "matchedTerm": "smoking",
-          "matchedForm": "smoking",
-          "sentence": "A blanket was placed over a smoking fire.",
-          "sentenceTranslation": "一条毯子盖在冒烟的火堆上。"
         }
       }
     },
@@ -53908,22 +51255,6 @@
           "page": 13,
           "sentence": "\"I wish Dad was here,\" he said.",
           "sentenceTranslation": "“我希望爸爸在这里，”他说。"
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-070.webp",
-          "row": 1,
-          "column": 2,
-          "label": "Level G, G46 Chess, Page 9",
-          "bookId": "G46",
-          "level": "G",
-          "sequence": 46,
-          "title": "Chess",
-          "page": 9,
-          "matchKind": "inflection",
-          "matchedTerm": "wish",
-          "matchedForm": "wishes",
-          "sentence": "She can move as far as she wishes, in any direction.",
-          "sentenceTranslation": "她可以朝任何方向移动，想走多远就走多远。"
         }
       }
     },

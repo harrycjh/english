@@ -92,4 +92,25 @@ describe('QuestionMedia related image priority', () => {
 
     expect(render(baseWord)).toContain('ket_house_n.webp');
   });
+
+  it('renders a production Oxford atlas cell when the source page was bundled', () => {
+    const markup = render({
+      ...baseWord,
+      relatedMedia: {
+        oxford: {
+          atlasPath: '/content/images/oxford-atlases/atlas-001.webp',
+          row: 1,
+          column: 2,
+          label: 'Level 3, Book 2, Page 8',
+          level: 3,
+          book: 2,
+          page: 8,
+        },
+      },
+    });
+
+    expect(markup).toContain('word-image--atlas');
+    expect(markup).toContain('oxford-atlases/atlas-001.webp');
+    expect(markup).toContain('background-position:100% 50%');
+  });
 });
