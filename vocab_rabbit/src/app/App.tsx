@@ -757,6 +757,9 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     await saveDailyTask(checkedInTask);
     setTask(checkedInTask);
     await refreshRecentTasks();
+    if (onRequestSync) {
+      void onRequestSync().catch(() => undefined);
+    }
   }
 
   function handleBackHome() {

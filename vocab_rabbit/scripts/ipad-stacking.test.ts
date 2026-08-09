@@ -96,14 +96,17 @@ describe('fixed iPad shell', () => {
   });
 
   it('opens check-in as a full route instead of a side drawer', () => {
+    const checkInHandler = appSource.match(
+      /async function handleCheckIn\(\) \{([\s\S]*?)\n  \}\n\n  function handleBackHome/,
+    )?.[1] ?? '';
     expect(reviewSource).not.toContain('<CheckInCalendarDrawer');
     expect(reviewSource).toContain('onClick={onOpenCheckIn}');
     expect(appSource).toMatch(
       /async function handleComplete[\s\S]*?setSessionResult\(result\);[\s\S]*?setRoute\('checkIn'\)/,
     );
-    expect(appSource).toMatch(
-      /async function handleCheckIn[\s\S]*?checkedInAt:[\s\S]*?saveDailyTask\(checkedInTask\)/,
-    );
+    expect(checkInHandler).toContain('checkedInAt:');
+    expect(checkInHandler).toContain('await saveDailyTask(checkedInTask);');
+    expect(checkInHandler).toContain('void onRequestSync().catch(() => undefined);');
     expect(css).toMatch(
       /\.page--check-in\s*\{[^}]*width:\s*100%;[^}]*min-height:\s*100%;[^}]*overflow-x:\s*hidden;[^}]*overflow-y:\s*auto;/s,
     );

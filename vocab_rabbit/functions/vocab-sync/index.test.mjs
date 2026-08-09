@@ -726,6 +726,31 @@ describe('vocab sync Function Compute handler', () => {
     });
   });
 
+  it('keeps a manual check-in when the other device has not stamped the day', () => {
+    const local = emptySnapshot();
+    const remote = emptySnapshot();
+    const baseTask = {
+      dateKey: '2026-07-15',
+      newWordIds: ['word-a'],
+      reviewWordIds: [],
+      completedAt: '2026-07-15T08:00:00.000Z',
+      checkedInAt: null,
+      correctCount: 1,
+      wrongCount: 0,
+      totalAnswered: 1,
+      answeredWordIds: ['word-a'],
+    };
+    local.dailyTasks = [baseTask];
+    remote.dailyTasks = [{
+      ...baseTask,
+      checkedInAt: '2026-07-15T08:30:00.000Z',
+    }];
+
+    const merged = mergeSnapshots(local, remote);
+
+    expect(merged.dailyTasks[0].checkedInAt).toBe('2026-07-15T08:30:00.000Z');
+  });
+
   it('caps divergent device plans while retaining every answered new word', () => {
     const local = emptySnapshot();
     const remote = emptySnapshot();

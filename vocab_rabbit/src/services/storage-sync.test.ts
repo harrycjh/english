@@ -184,6 +184,7 @@ describe('cloud merge persistence', () => {
       newWordIds: ['word-a'],
       reviewWordIds: [],
       completedAt: null,
+      checkedInAt: '2026-07-14T10:01:30.000Z',
       correctCount: 1,
       wrongCount: 0,
       totalAnswered: 1,
@@ -206,6 +207,7 @@ describe('cloud merge persistence', () => {
     });
     expect(request.delta?.events.map((event) => event.id)).toEqual(['event-a']);
     expect(request.delta?.dailyTasks.map((task) => task.dateKey)).toEqual(['2026-07-14']);
+    expect(request.delta?.dailyTasks[0].checkedInAt).toBe('2026-07-14T10:01:30.000Z');
     expect(request.delta?.wordSelectionStates.map((state) => state.wordId)).toEqual(['word-a']);
     expect(request.delta?.parentSetting?.value.dailyNewWordCount).toBe(25);
 
