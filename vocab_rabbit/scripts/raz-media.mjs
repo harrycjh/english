@@ -126,10 +126,16 @@ const WORD_CONTEXT = new Map([
   ['ket_flat_n', /\b(?:live|lives|lived|living|stay|stays|stayed|staying)\s+(?:together\s+)?(?:in|at)\s+(?:a|an|my|your|his|her|our|their)\s+flat\b|\b(?:rent|rents|rented|renting|buy|buys|bought|own|owns|owned|owning)\s+(?:a|an|the|my|your|his|her|our|their)\s+flat\b|\bflat\s+(?:is|means)\s+(?:a|an)\s+apartment\b|\bapartment\s+(?:called|known as)\s+(?:a|an)\s+flat\b/i],
   ['ket_form_n', /\b(?:a|an|the|this|that|my|your|his|her|our|their)\s+form\b|\bforms?\s+of\b|\b(?:fill(?:ed|ing)?|complete[sd]?|sign(?:ed|ing)?|submit(?:ted|ting)?|application|registration)\b.{0,30}\bform\b/i],
   ['ket_hard_adj_adv', /^(?![\s\S]*\bhard [cg]\b)[\s\S]*\bhard\b/i],
+  ['ket_look_v', /\blook(?:s|ed|ing)?\s+(?:at|around|back|down|inside|outside|up)\b|\b(?:have|had|take|took)\s+(?:a|another)\s+look\b/i],
+  ['ket_match_n', /\b(?:a|an|the|our|their|football|soccer|tennis|cricket|baseball|basketball)\s+match(?:es)?\b|\bmatch(?:es)?\s+(?:began|ended|starts?|was|is)\b|\blight(?:ed|ing)?\s+(?:a|the)\s+match\b/i],
   ['ket_mean_v', /\b(?:what|which|this|that|it|word|words|sign|name)\b.{0,60}\bmean(?:s|t|ing)?\b|\bmean(?:s|t|ing)?\s+(?:that|to)\b/i],
+  ['ket_miss_v', /\bmiss(?:es|ed)?\s+(?:a|an|the|my|your|his|her|our|their)\s+(?:appointment|bus|chance|class|deadline|event|flight|game|match|meeting|opportunity|party|plane|school|show|stop|train|turn)\b|\bmiss(?:es|ed)?\s+(?:out|the\s+(?:mark|point))\b/i],
   ['ket_notice_n', /\b(?:a|an|the|this|that|my|your|his|her|our|their)\s+notice\b|\bnotice\s+(?:board|says|reads)\b|\b(?:read|reads|saw|see|posted|put up)\b.{0,24}\bnotice\b/i],
+  ['ket_order_n_v', /\border(?:ed|ing|s)?\s+(?:(?:a|an|the|some)\s+)?(?:breakfast|dinner|drink|drinks|food|lunch|meal|pizza|things)\b|\b(?:make|place|take)\s+(?:a|an|the|my|your|his|her|our|their)\s+order\b|\b(?:a|an|the|my|your|his|her|our|their)\s+order\s+(?:arrived|came|is|was)\b/i],
+  ['ket_point_v', /\bpoint(?:s|ed|ing)?\s+(?:at|down|out|to|toward|towards|up)\b/i],
   ['ket_pop_n', /\b(?:pop music|pop song|pop singer|pop band|pop concert|pop album|pop chart|listen to pop)\b/i],
   ['ket_record_v', /\b(?:to|can|could|will|would|should|must|we|you|they|scientists|researchers)\s+record\b|\brecord(?:ed|ing)\b/i],
+  ['ket_right_n_adj_adv', /\b(?:answer|choice|direction|place|thing|way)\s+(?:is|was|seems?|looks?)\s+right\b|\bright\s+(?:answer|choice|direction|place|thing|way)\b/i],
   ['ket_snowboard_n', /\b(?:a|an|the|this|that|my|your|his|her|our|their)\s+snowboard\b|\b(?:get|got|ride|rode|riding|use|used|using)\b.{0,24}\bsnowboard\b/i],
   ['ket_sound_v', /\bsound(?:s|ed|ing)?\s+(?:like|good|bad|loud|quiet|strange|different)\b|\b(?:alarm|bell|horn)\s+sound(?:s|ed)?\b/i],
   ['ket_visit_n', /\b(?:a|the|this|that|my|your|our|their|his|her|first|last|next) visit\b|\bvisit (?:to|from)\b/i],
@@ -223,7 +229,7 @@ function countMonth(text, month) {
 
 function countPageOccurrences(page, word, term, form) {
   const context = WORD_CONTEXT.get(word.id) ?? SEMANTIC_CONTEXT.get(word.english.toLowerCase());
-  if (context && !context.test(page.caseText)) return 0;
+  if (context && !context.test(page.text)) return 0;
   const protectedForm = caseSensitiveForm(word, term, form);
   if (!protectedForm) return countPhrase(page.normalizedText, form);
   if (protectedForm === 'March' || protectedForm === 'May') {
@@ -404,7 +410,8 @@ export function matchWordToRaz(word, books) {
       if (page.kind !== 'story' || !page.normalizedText) continue;
       const pageMatches = [];
       for (const term of terms) {
-        for (const [formIndex, form] of buildRazWordForms(term, word.partOfSpeech).entries()) {
+        const taughtPartOfSpeech = word.studySense?.partOfSpeech ?? word.partOfSpeech;
+        for (const [formIndex, form] of buildRazWordForms(term, taughtPartOfSpeech).entries()) {
           if (formIndex > 0 && caseSensitiveForm(word, term, term)) continue;
           if (
             word.english.toLowerCase() === 'train (transitive and intransitive)'

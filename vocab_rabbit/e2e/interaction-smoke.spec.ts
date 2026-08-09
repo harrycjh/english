@@ -1,7 +1,4 @@
 import { expect, test, type Page } from '@playwright/test';
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
-import { zipSync, strToU8 } from 'fflate';
 
 const dbName = 'vocab-rabbit';
 
@@ -25,37 +22,6 @@ async function resetApp(page: Page) {
 async function gotoHome(page: Page) {
   await page.getByRole('button', { name: '复习' }).last().click();
   await expect(page.getByRole('heading', { name: '今日学习计划' })).toBeVisible();
-}
-
-async function createTinyLifePhotoPackage() {
-  const sampleImage = await readFile(path.join(process.cwd(), 'public/content/images/words/ket_girl_n.webp'));
-  const manifest = {
-    schemaVersion: 1,
-    generatedAt: '2026-07-08T00:00:00.000Z',
-    stats: {
-      totalWords: 1693,
-      withLifePhoto: 1,
-    },
-    entries: [
-      {
-        wordId: 'ket_girl_n',
-        relatedMedia: {
-          lifePhoto: {
-            imagePath: '/life-photos/ket_girl_n.webp',
-            caption: 'interaction smoke test life photo',
-            photoId: 'test-photo-1',
-            match: 'primary',
-            confidence: 0.99,
-          },
-        },
-      },
-    ],
-  };
-
-  return Buffer.from(zipSync({
-    'word_related_media.json': strToU8(JSON.stringify(manifest)),
-    'life-photos/ket_girl_n.webp': new Uint8Array(sampleImage),
-  }));
 }
 
 function createStudyDataBackup() {
@@ -103,8 +69,8 @@ test.describe('main app interactions', () => {
     await expect(page.getByRole('button', { name: '返回首页' })).toBeVisible();
     await page.getByRole('button', { name: '全部答对' }).click();
 
-    await expect(page.locator('.celebration-card')).toBeVisible();
-    await page.getByRole('button', { name: '回到首页' }).click();
+    await expect(page.getByRole('heading', { name: '今天还没签到' })).toBeVisible();
+    await page.getByRole('button', { name: '返回首页' }).click();
     await expect(page.getByRole('heading', { name: '今日学习计划' })).toBeVisible();
 
     await page.getByRole('button', { name: '统计' }).last().click();
@@ -254,9 +220,10 @@ test.describe('main app interactions', () => {
       await returnToPicker();
     }
 
-    await openLevel(10);
-    await expect(page.getByLabel('直接拼写单词')).toBeVisible();
-    await expect(page.locator('.learning-level-control')).toHaveAttribute('data-level', '10');
+    await openLevel(9);
+    await expect(page.getByLabel('待拼写单词')).toBeVisible();
+    await expect(page.getByRole('textbox', { name: '使用实体键盘输入字母' })).toBeVisible();
+    await expect(page.locator('.learning-level-control')).toHaveAttribute('data-level', '9');
   });
 
   test('selection page filters, bulk buttons, detail drawer, and dock navigation work', async ({ page }) => {
@@ -288,7 +255,7 @@ test.describe('main app interactions', () => {
     await expect(page.getByRole('heading', { name: '今日学习计划' })).toBeVisible();
   });
 
-  test('settings controls, export, and local photo import work', async ({ page }) => {
+  test('settings controls, export, and restore work', async ({ page }) => {
     await page.getByRole('button', { name: '设置' }).last().click();
     await expect(page.getByRole('heading', { name: /把学习节奏/ })).toBeVisible();
     await expect(page.getByRole('heading', { name: /音色选择/ })).toBeVisible();
@@ -305,7 +272,7 @@ test.describe('main app interactions', () => {
     await expect(page.getByRole('button', { name: '试听' }).first()).toBeEnabled();
     await page.getByRole('button', { name: '试听' }).first().click();
 
-    await page.getByLabel('每日新词调节').getByRole('button', { name: '+' }).click();
+    await page.getByRole('button', { name: '每日新词增加 1' }).click();
     const imageToggle = page.locator('.settings-toggle-row').filter({ hasText: '图片题' }).getByRole('button');
     await imageToggle.click();
     await expect(imageToggle).toHaveAttribute('aria-pressed', 'false');
@@ -339,21 +306,13 @@ test.describe('main app interactions', () => {
         };
       });
     }, dbName);
-    expect(settingsAfterConfirm.dailyNewWordCount).toBe(7);
+    expect(settingsAfterConfirm.dailyNewWordCount).toBe(9);
     expect(settingsAfterConfirm.showImages).toBe(false);
 
     const downloadPromise = page.waitForEvent('download');
     await page.getByRole('button', { name: '导出数据' }).click();
     const download = await downloadPromise;
     expect(download.suggestedFilename()).toContain('vocab-rabbit-study-data');
-
-    const packageBuffer = await createTinyLifePhotoPackage();
-    await page.locator('input[accept*="application/zip"]').setInputFiles({
-      name: 'tiny-life-photos.zip',
-      mimeType: 'application/zip',
-      buffer: packageBuffer,
-    });
-    await expect(page.getByText(/已导入 1 张.*导入时间/)).toBeVisible();
 
     const backupBuffer = createStudyDataBackup();
     page.once('dialog', async (dialog) => {
@@ -367,13 +326,6 @@ test.describe('main app interactions', () => {
     });
     await expect(page.getByText('已恢复 1 条学习记录、0 条答题记录')).toBeVisible();
     await expect(page.getByLabel('每日新词调节')).toContainText('13');
-
-    await page.getByRole('button', { name: '选词' }).last().click();
-    await page.getByPlaceholder('搜索单词或中文意思').fill('girl');
-    await page.locator('.selection-word-card__body').first().click();
-    await expect(page.getByText('生活照片')).toBeVisible();
-    await expect(page.getByText('interaction smoke test life photo')).toBeVisible();
-    await page.getByRole('button', { name: '关闭' }).click();
 
     await gotoHome(page);
   });

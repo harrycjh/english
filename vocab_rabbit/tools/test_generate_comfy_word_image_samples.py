@@ -371,7 +371,7 @@ class FamilyPromptTests(unittest.TestCase):
             and "ket_spare_adj" <= word["id"] <= "ket_worst_adj"
         ]
 
-        self.assertEqual(len(final_batch), 22)
+        self.assertEqual(len(final_batch), 23)
         for word in final_batch:
             with self.subTest(word_id=word["id"]):
                 self.assertNotIn(
@@ -596,7 +596,7 @@ class FamilyPromptTests(unittest.TestCase):
             word for word in words if word.get("category") == "方式和程度副词"
         ]
 
-        self.assertEqual(len(adverb_words), 58)
+        self.assertEqual(len(adverb_words), 57)
         for word in adverb_words:
             with self.subTest(word_id=word["id"]):
                 self.assertNotIn(
@@ -636,7 +636,7 @@ class FamilyPromptTests(unittest.TestCase):
         words = MODULE.load_words(include_approved=True)
         time_words = [word for word in words if word.get("category") == "时间和日期"]
 
-        self.assertEqual(len(time_words), 47)
+        self.assertEqual(len(time_words), 45)
         for word in time_words:
             with self.subTest(word_id=word["id"]):
                 self.assertNotIn(
@@ -737,7 +737,7 @@ class FamilyPromptTests(unittest.TestCase):
             word for word in words if word.get("category") == "数量和多少"
         ]
 
-        self.assertEqual(len(quantity_words), 19)
+        self.assertEqual(len(quantity_words), 20)
         for word in quantity_words:
             with self.subTest(word_id=word["id"]):
                 self.assertNotIn(
@@ -779,7 +779,7 @@ class FamilyPromptTests(unittest.TestCase):
             word for word in words if word.get("category") == "情态动词和语气"
         ]
 
-        self.assertEqual(len(modal_words), 11)
+        self.assertEqual(len(modal_words), 12)
         for word in modal_words:
             with self.subTest(word_id=word["id"]):
                 self.assertNotIn(

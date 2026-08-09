@@ -393,6 +393,77 @@ describe('RAZ first-occurrence matching', () => {
     });
   });
 
+  it('skips common surface-form matches that teach a different sense', () => {
+    const senseBooks = [
+      normalizeRazBook({
+        id: 'E01',
+        level: 'E',
+        sequence: 1,
+        title: 'Ambiguous Everyday Words',
+        file: 'ambiguous-everyday-words.pdf',
+        pages: [
+          {
+            page: 3,
+            pdfIndex: 2,
+            kind: 'story',
+            text: [
+              'Right now, the children are ready.',
+              'Use your right hand to hold the lace.',
+              'Plants need water in order to live.',
+              'Students earn belts in a certain order. The class begins.',
+              'The captain ordered the sailors to drop the anchor.',
+              'The costume makes him look like a rabbit.',
+              'Her cub is missing.',
+              'Use materials that match the shapes.',
+            ].join(' '),
+          },
+          {
+            page: 4,
+            pdfIndex: 3,
+            kind: 'story',
+            text: [
+              'Your answer is right.',
+              'I want to order a pizza.',
+              'Look at the bright red kite.',
+              'Do not miss the bus.',
+              'We watched a football match.',
+            ].join(' '),
+          },
+        ],
+      }, 0),
+    ];
+    const matches = matchWordsToRaz([
+      {
+        id: 'ket_right_n_adj_adv',
+        english: 'right',
+        partOfSpeech: 'n, adj & adv',
+        studySense: { partOfSpeech: 'adj', chinese: '正确的' },
+      },
+      {
+        id: 'ket_order_n_v',
+        english: 'order',
+        partOfSpeech: 'n & v',
+        studySense: { partOfSpeech: 'v', chinese: '点餐；订购' },
+      },
+      { id: 'ket_look_v', english: 'look', partOfSpeech: 'v' },
+      { id: 'ket_miss_v', english: 'miss', partOfSpeech: 'v' },
+      {
+        id: 'ket_match_n',
+        english: 'match',
+        partOfSpeech: 'n',
+        studySense: { partOfSpeech: 'n', chinese: '比赛' },
+      },
+    ], senseBooks);
+
+    expect(Object.fromEntries(matches.map((match) => [match.wordId, match.page.page]))).toEqual({
+      ket_right_n_adj_adv: 4,
+      ket_order_n_v: 4,
+      ket_look_v: 4,
+      ket_miss_v: 4,
+      ket_match_n: 4,
+    });
+  });
+
   it('removes list markers from complete bullet sentences', () => {
     const bulletBooks = [
       normalizeRazBook({

@@ -167,6 +167,7 @@ CALENDAR_SCENES = {
 NUMBER_SCENES = {
     "ket_first_adv_adj": "one runner crossing the finish line clearly ahead of two runners behind, no written numbers",
     "ket_one_det_pron": "one single red apple alone in the center of a plain table, no written numbers",
+    "ket_second_adj_det_n": "three runners crossing a finish line, with the highlighted runner clearly just behind the winner and ahead of the last runner, no written numbers",
     "ket_zero_n": "an open empty basket with nothing inside, clearly showing none remaining, no written numbers",
 }
 
@@ -1601,6 +1602,7 @@ ARTICLE_DETERMINER_SCENES = {
 }
 
 MODAL_SCENES = {
+    "ket_can_n_mv": "a child confidently swimming across a pool while an encouraging adult watches from the poolside, clearly showing the child's ability",
     "ket_cannot_mv": "a child trying but unable to lift an enormous heavy rock from the ground",
     "ket_could_mv": "a child considering two possible safe paths they could take across a park",
     "ket_have_got_to_mv": "a child urgently putting on a backpack because it is time to leave for school",

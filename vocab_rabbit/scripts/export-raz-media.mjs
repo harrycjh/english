@@ -1,6 +1,5 @@
 import { execFile } from 'node:child_process';
-import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
-import os from 'node:os';
+import { mkdtemp, mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
@@ -20,13 +19,37 @@ const mediaManifestPath = path.join(projectRoot, 'public/content/words/word_rela
 const razBooksPath = path.join(repositoryRoot, 'raz/extracted/raz-books.json');
 const rendererPath = path.join(projectRoot, 'tools/render_raz_atlases.py');
 const reportPath = path.join(projectRoot, 'design-output/raz-media/export-report.json');
+const HELP_TEXT = `Usage: node scripts/export-raz-media.mjs [options]
 
-function parseArgs(argv) {
-  const args = new Map(argv.map((arg) => {
-    const [key, value = 'true'] = arg.split('=', 2);
-    return [key, value];
-  }));
+Options:
+  --dry-run           Build and print the report without changing files
+  --skip-render       Reuse existing atlases only when page locations are unchanged
+  --quality=<1-100>   WebP quality (default: 82)
+  --books=<path>      Extracted RAZ books JSON
+  --help              Show this help without running the export`;
+
+export function parseRazExportArgs(argv) {
+  const args = new Map();
+  const valueOptions = new Set(['--quality', '--books']);
+  const flagOptions = new Set(['--dry-run', '--skip-render', '--help']);
+  for (const argument of argv) {
+    const separator = argument.indexOf('=');
+    const key = separator === -1 ? argument : argument.slice(0, separator);
+    const value = separator === -1 ? 'true' : argument.slice(separator + 1);
+    if (!flagOptions.has(key) && !valueOptions.has(key)) {
+      throw new Error(`Unknown argument: ${argument}`);
+    }
+    if (flagOptions.has(key) && separator !== -1) {
+      throw new Error(`${key} does not accept a value`);
+    }
+    if (valueOptions.has(key) && separator === -1) {
+      throw new Error(`${key} requires =<value>`);
+    }
+    if (args.has(key)) throw new Error(`Duplicate argument: ${key}`);
+    args.set(key, value);
+  }
   return {
+    help: args.has('--help'),
     dryRun: args.has('--dry-run'),
     skipRender: args.has('--skip-render'),
     quality: Number(args.get('--quality') ?? 82),
@@ -34,10 +57,34 @@ function parseArgs(argv) {
   };
 }
 
+export async function replaceDirectoryAtomically(stagedPath, targetPath) {
+  const backupPath = `${targetPath}.backup-${process.pid}-${Date.now()}`;
+  let hasBackup = false;
+  try {
+    try {
+      await rename(targetPath, backupPath);
+      hasBackup = true;
+    } catch (error) {
+      if (error?.code !== 'ENOENT') throw error;
+    }
+    await rename(stagedPath, targetPath);
+    if (hasBackup) await rm(backupPath, { recursive: true, force: true });
+  } catch (error) {
+    if (hasBackup) {
+      await rm(targetPath, { recursive: true, force: true });
+      await rename(backupPath, targetPath);
+    }
+    throw error;
+  }
+}
+
 async function renderAtlases(atlasPlan, quality) {
-  const tempRoot = await mkdtemp(path.join(os.tmpdir(), 'vocab-rabbit-raz-'));
+  // Stage beside public/ so the final rename stays on one filesystem. The
+  // checked-in atlas directory is untouched until every page has rendered.
+  const tempRoot = await mkdtemp(path.join(projectRoot, 'public', '.raz-render-'));
   const planPath = path.join(tempRoot, 'atlas-plan.json');
   const atlasOutputRoot = path.join(projectRoot, 'public/content/images/raz-atlases');
+  const stagedAtlasRoot = path.join(tempRoot, 'content/images/raz-atlases');
   try {
     const renderPlan = {
       atlases: atlasPlan.atlases.map((atlas) => ({
@@ -51,22 +98,25 @@ async function renderAtlases(atlasPlan, quality) {
       })),
     };
     await writeFile(planPath, JSON.stringify(renderPlan));
-    await rm(atlasOutputRoot, { recursive: true, force: true });
-    await mkdir(atlasOutputRoot, { recursive: true });
     const { stdout } = await run('python3', [
       rendererPath,
       '--plan', planPath,
-      '--public-root', path.join(projectRoot, 'public'),
+      '--public-root', tempRoot,
       '--quality', String(quality),
     ], { maxBuffer: 4 * 1024 * 1024 });
     process.stdout.write(stdout);
+    await replaceDirectoryAtomically(stagedAtlasRoot, atlasOutputRoot);
   } finally {
     await rm(tempRoot, { recursive: true, force: true });
   }
 }
 
-async function main() {
-  const args = parseArgs(process.argv.slice(2));
+async function main(argv = process.argv.slice(2)) {
+  const args = parseRazExportArgs(argv);
+  if (args.help) {
+    console.log(HELP_TEXT);
+    return;
+  }
   if (!Number.isInteger(args.quality) || args.quality < 1 || args.quality > 100) {
     throw new Error(`--quality must be an integer from 1 to 100, got ${args.quality}`);
   }
@@ -142,7 +192,9 @@ async function main() {
   console.log(JSON.stringify(report.stats, null, 2));
 }
 
-main().catch((error) => {
-  console.error(error.stack || error.message);
-  process.exitCode = 1;
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    console.error(error.stack || error.message);
+    process.exitCode = 1;
+  });
+}

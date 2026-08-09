@@ -254653,6 +254653,16 @@
       "english": "point",
       "partOfSpeech": "v",
       "chinese": "观点",
+      "studySense": {
+        "partOfSpeech": "v",
+        "chinese": "指；指向",
+        "examples": [
+          "He pointed at the map."
+        ],
+        "exampleIndexes": [
+          0
+        ]
+      },
       "category": "常用动作动词",
       "difficulty": 3,
       "imagePath": "/content/images/words/ket_point_v.webp",
@@ -281698,6 +281708,16 @@
       "english": "match",
       "partOfSpeech": "n",
       "chinese": "匹配",
+      "studySense": {
+        "partOfSpeech": "n",
+        "chinese": "比赛",
+        "examples": [
+          "We are going to watch a football match."
+        ],
+        "exampleIndexes": [
+          0
+        ]
+      },
       "category": "其他常用词",
       "difficulty": 4,
       "imagePath": "/content/images/words/ket_match_n.webp",

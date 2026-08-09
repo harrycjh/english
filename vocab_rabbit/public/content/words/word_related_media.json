@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-07T08:15:45.414Z",
+  "generatedAt": "2026-08-09T07:46:45.640Z",
   "stats": {
     "totalWords": 1693,
     "entries": 1574,
@@ -15,11 +15,11 @@
     "withRedRocketSentence": 775,
     "withOxfordSentenceTranslation": 1256,
     "withRedRocketSentenceTranslation": 775,
-    "withRaz": 1398,
+    "withRaz": 1397,
     "uniqueRazImages": 1005,
     "razAtlases": 112,
-    "withRazSentence": 1367,
-    "withRazSentenceTranslation": 1367
+    "withRazSentence": 1368,
+    "withRazSentenceTranslation": 1365
   },
   "entries": [
     {
@@ -347,8 +347,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
-          "row": 0,
-          "column": 2,
+          "row": 1,
+          "column": 0,
           "label": "Level K, K52 Different, Page 3",
           "bookId": "K52",
           "level": "K",
@@ -435,8 +435,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F62 The Giant Turnip, Page 7",
           "bookId": "F62",
           "level": "F",
@@ -891,20 +891,20 @@
           "page": 10
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-044.webp",
-          "row": 2,
-          "column": 1,
-          "label": "Level F, F01 Where Is Cub?, Page 3",
-          "bookId": "F01",
-          "level": "F",
-          "sequence": 1,
-          "title": "Where Is Cub?",
-          "page": 3,
-          "matchKind": "inflection",
+          "atlasPath": "/content/images/raz-atlases/atlas-066.webp",
+          "row": 1,
+          "column": 0,
+          "label": "Level G, G14 Maria Joins the Team, Page 9",
+          "bookId": "G14",
+          "level": "G",
+          "sequence": 14,
+          "title": "Maria Joins the Team",
+          "page": 9,
+          "matchKind": "exact",
           "matchedTerm": "miss",
-          "matchedForm": "missing",
-          "sentence": "Her cub is missing.",
-          "sentenceTranslation": "她的幼崽不见了。"
+          "matchedForm": "miss",
+          "sentence": "“You can miss the game,” he says.",
+          "sentenceTranslation": "他说：“你可以缺席这场比赛。”"
         }
       }
     },
@@ -1317,7 +1317,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F72 Sir Suffix, Page 9",
           "bookId": "F72",
           "level": "F",
@@ -1395,8 +1395,8 @@
       "relatedMedia": {
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
-          "row": 0,
-          "column": 2,
+          "row": 1,
+          "column": 0,
           "label": "Level K, K05 Extreme Animals, Page 15",
           "bookId": "K05",
           "level": "K",
@@ -1447,7 +1447,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
           "row": 2,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K48 New Planet, New School, Page 8",
           "bookId": "K48",
           "level": "K",
@@ -1917,7 +1917,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F33 Smart Crows, Page 11",
           "bookId": "F33",
           "level": "F",
@@ -2440,8 +2440,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F28 Hibernation, Page 6",
           "bookId": "F28",
           "level": "F",
@@ -2869,7 +2869,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
           "row": 0,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K04 Migrating Geese, Page 3",
           "bookId": "K04",
           "level": "K",
@@ -3031,7 +3031,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F42 Following the Map, Page 4",
           "bookId": "F42",
           "level": "F",
@@ -3222,8 +3222,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
-          "row": 1,
-          "column": 2,
+          "row": 2,
+          "column": 0,
           "label": "Level J, J定级2 What Comes From Plants, Page 7",
           "bookId": "J定级2",
           "level": "J",
@@ -3689,7 +3689,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F36 Night Animals, Page 8",
           "bookId": "F36",
           "level": "F",
@@ -4009,7 +4009,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-103.webp",
           "row": 1,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K23 Animals, Animals, Page 3",
           "bookId": "K23",
           "level": "K",
@@ -4111,9 +4111,9 @@
           "sentenceTranslation": "但金熙很害怕。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F31 The Three Little Pigs, Page 6",
           "bookId": "F31",
           "level": "F",
@@ -4199,9 +4199,9 @@
           "sentenceTranslation": "“多么奇怪的树啊！”"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level G, G02 Places People Live, Page 12",
           "bookId": "G02",
           "level": "G",
@@ -4261,7 +4261,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F37 Are You From India?, Page 10",
           "bookId": "F37",
           "level": "F",
@@ -4333,7 +4333,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F63 Motorcycles, Page 6",
           "bookId": "F63",
           "level": "F",
@@ -4435,7 +4435,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F27 Monster Reading Buddies, Page 10",
           "bookId": "F27",
           "level": "F",
@@ -4523,7 +4523,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F47 Eat Like a Pig, Page 3",
           "bookId": "F47",
           "level": "F",
@@ -5053,7 +5053,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F77 Princess Prefix, Page 10",
           "bookId": "F77",
           "level": "F",
@@ -5198,8 +5198,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F72 Sir Suffix, Page 6",
           "bookId": "F72",
           "level": "F",
@@ -5229,7 +5229,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F61 Fishtank Fun, Page 3",
           "bookId": "F61",
           "level": "F",
@@ -5301,7 +5301,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F32 Using Less Energy, Page 9",
           "bookId": "F32",
           "level": "F",
@@ -5973,20 +5973,20 @@
           "sentenceTranslation": "起重机把教室放正了。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-006.webp",
-          "row": 2,
-          "column": 2,
-          "label": "Level E, E08 When I Grow Up, Page 10",
-          "bookId": "E08",
+          "atlasPath": "/content/images/raz-atlases/atlas-038.webp",
+          "row": 0,
+          "column": 0,
+          "label": "Level E, E63 Lost and Found, Page 12",
+          "bookId": "E63",
           "level": "E",
-          "sequence": 8,
-          "title": "When I Grow Up",
-          "page": 10,
+          "sequence": 63,
+          "title": "Lost and Found",
+          "page": 12,
           "matchKind": "exact",
           "matchedTerm": "right",
           "matchedForm": "right",
-          "sentence": "“Right now,” said Mom.",
-          "sentenceTranslation": "“现在，”妈妈说。"
+          "sentence": "Mom says I did the right thing.",
+          "sentenceTranslation": "妈妈说我做对了。"
         }
       }
     },
@@ -6005,7 +6005,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
           "row": 1,
-          "column": 1,
+          "column": 2,
           "label": "Level L, L01 Smelly Clyde, Page 3",
           "bookId": "L01",
           "level": "L",
@@ -6079,7 +6079,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F43 The Tortoise and the Hare, Page 12",
           "bookId": "F43",
           "level": "F",
@@ -6369,20 +6369,19 @@
           "sentenceTranslation": "“那是一种潜水艇，”威尔夫说。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-007.webp",
-          "row": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-031.webp",
+          "row": 1,
           "column": 2,
-          "label": "Level E, E10 City Animals, Page 3",
-          "bookId": "E10",
+          "label": "Level E, E46 Let’s Carve a Pumpkin, Page 6",
+          "bookId": "E46",
           "level": "E",
-          "sequence": 10,
-          "title": "City Animals",
-          "page": 3,
-          "matchKind": "inflection",
+          "sequence": 46,
+          "title": "Let’s Carve a Pumpkin",
+          "page": 6,
+          "matchKind": "exact",
           "matchedTerm": "kind",
-          "matchedForm": "kinds",
-          "sentence": "Many kinds of animals live in cities, too.",
-          "sentenceTranslation": "许多种类的动物也生活在城市里。"
+          "matchedForm": "kind",
+          "sentence": "It’s kind of gross and fun at the same time!"
         }
       }
     },
@@ -6517,7 +6516,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
           "row": 2,
-          "column": 1,
+          "column": 2,
           "label": "Level J, J定级2 What Comes From Plants, Page 11",
           "bookId": "J定级2",
           "level": "J",
@@ -6777,7 +6776,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
           "row": 0,
-          "column": 1,
+          "column": 2,
           "label": "Level L, L08 Colonial Life, Page 6",
           "bookId": "L08",
           "level": "L",
@@ -6872,7 +6871,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F74 The Sunflower Hut, Page 11",
           "bookId": "F74",
           "level": "F",
@@ -6972,7 +6971,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-049.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F20 In a Chinese Garden, Page 3",
           "bookId": "F20",
           "level": "F",
@@ -7640,7 +7639,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F21 Does It Sink or Float?, Page 3",
           "bookId": "F21",
           "level": "F",
@@ -7705,7 +7704,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F49 Stella Storyteller, Page 3",
           "bookId": "F49",
           "level": "F",
@@ -7793,7 +7792,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
           "row": 1,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K53 What Built This?, Page 5",
           "bookId": "K53",
           "level": "K",
@@ -7837,7 +7836,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
           "row": 1,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K34 Chickens in My Backyard, Page 5",
           "bookId": "K34",
           "level": "K",
@@ -7880,8 +7879,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F25 Hide and Seek with Zog, Page 7",
           "bookId": "F25",
           "level": "F",
@@ -8331,9 +8330,9 @@
           "sentenceTranslation": "她帮我把闹钟定在五点半，还让我特别早睡觉。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
-          "row": 2,
-          "column": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-103.webp",
+          "row": 0,
+          "column": 0,
           "label": "Level K, K18 It’s About Time, Page 10",
           "bookId": "K18",
           "level": "K",
@@ -8455,8 +8454,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F32 Using Less Energy, Page 5",
           "bookId": "F32",
           "level": "F",
@@ -8500,7 +8499,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F42 Following the Map, Page 11",
           "bookId": "F42",
           "level": "F",
@@ -8908,8 +8907,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level G, G04 Long Ago and Today, Page 5",
           "bookId": "G04",
           "level": "G",
@@ -9013,7 +9012,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
           "row": 2,
-          "column": 1,
+          "column": 2,
           "label": "Level L, L09 Sending Messages, Page 11",
           "bookId": "L09",
           "level": "L",
@@ -9032,9 +9031,9 @@
       "wordId": "ket_cell_phone_n",
       "relatedMedia": {
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
-          "row": 2,
-          "column": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-108.webp",
+          "row": 0,
+          "column": 0,
           "label": "Level L, L09 Sending Messages, Page 12",
           "bookId": "L09",
           "level": "L",
@@ -9164,7 +9163,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G04 Long Ago and Today, Page 8",
           "bookId": "G04",
           "level": "G",
@@ -9282,8 +9281,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F60 Battery Power!, Page 3",
           "bookId": "F60",
           "level": "F",
@@ -9341,7 +9340,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
           "row": 0,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K42 Soccer Is a Kick!, Page 12",
           "bookId": "K42",
           "level": "K",
@@ -9414,8 +9413,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
-          "row": 0,
-          "column": 2,
+          "row": 1,
+          "column": 0,
           "label": "Level K, K33 I’m Allergic to Peanuts, Page 9",
           "bookId": "K33",
           "level": "K",
@@ -9807,7 +9806,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-049.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F19 How to Make a Snow Person, Page 11",
           "bookId": "F19",
           "level": "F",
@@ -10189,7 +10188,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-103.webp",
           "row": 1,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K22 I’d Like to Be, Page 8",
           "bookId": "K22",
           "level": "K",
@@ -10365,7 +10364,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
           "row": 1,
-          "column": 1,
+          "column": 2,
           "label": "Level J, J定级1 Animal Olympics, Page 7",
           "bookId": "J定级1",
           "level": "J",
@@ -10409,7 +10408,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F57 On the Moon, Page 11",
           "bookId": "F57",
           "level": "F",
@@ -10531,8 +10530,8 @@
       "relatedMedia": {
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F52 Super Thrift, Page 6",
           "bookId": "F52",
           "level": "F",
@@ -10648,7 +10647,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
           "row": 0,
-          "column": 1,
+          "column": 2,
           "label": "Level J, J69 Picture Day, Page 9",
           "bookId": "J69",
           "level": "J",
@@ -10799,7 +10798,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
           "row": 0,
-          "column": 1,
+          "column": 2,
           "label": "Level J, J58 Incredible Places to Stay, Page 5",
           "bookId": "J58",
           "level": "J",
@@ -11250,8 +11249,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F64 Color Wheel Colors, Page 5",
           "bookId": "F64",
           "level": "F",
@@ -11291,9 +11290,9 @@
           "sentenceTranslation": "奇普指着一艘黄色的潜水艇。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F45 Cleaning My Room, Page 10",
           "bookId": "F45",
           "level": "F",
@@ -11571,7 +11570,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F25 Hide and Seek with Zog, Page 12",
           "bookId": "F25",
           "level": "F",
@@ -11703,7 +11702,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G03 The Food We Eat, Page 8",
           "bookId": "G03",
           "level": "G",
@@ -11746,8 +11745,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
-          "row": 1,
-          "column": 2,
+          "row": 2,
+          "column": 0,
           "label": "Level K, K35 Sam’s Fourth of July, Page 8",
           "bookId": "K35",
           "level": "K",
@@ -12056,7 +12055,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
           "row": 0,
-          "column": 0,
+          "column": 1,
           "label": "Level L, L08 Colonial Life, Page 4",
           "bookId": "L08",
           "level": "L",
@@ -12218,7 +12217,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
           "row": 1,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K06 Simple Machines, Page 4",
           "bookId": "K06",
           "level": "K",
@@ -12551,8 +12550,8 @@
       "relatedMedia": {
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F47 Eat Like a Pig, Page 8",
           "bookId": "F47",
           "level": "F",
@@ -12573,7 +12572,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
           "row": 1,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K43 France, Page 13",
           "bookId": "K43",
           "level": "K",
@@ -12668,7 +12667,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F71 At the Watering Hole, Page 12",
           "bookId": "F71",
           "level": "F",
@@ -12800,7 +12799,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F32 Using Less Energy, Page 7",
           "bookId": "F32",
           "level": "F",
@@ -13085,7 +13084,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-099.webp",
           "row": 2,
-          "column": 1,
+          "column": 2,
           "label": "Level J, J53 Ostriches: Giant Birds, Page 9",
           "bookId": "J53",
           "level": "J",
@@ -13493,7 +13492,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F25 Hide and Seek with Zog, Page 12",
           "bookId": "F25",
           "level": "F",
@@ -13567,7 +13566,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F47 Eat Like a Pig, Page 5",
           "bookId": "F47",
           "level": "F",
@@ -13682,8 +13681,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F44 Double It!, Page 10",
           "bookId": "F44",
           "level": "F",
@@ -13846,7 +13845,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G03 The Food We Eat, Page 12",
           "bookId": "G03",
           "level": "G",
@@ -14283,7 +14282,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
           "row": 0,
-          "column": 0,
+          "column": 1,
           "label": "Level L, L08 Colonial Life, Page 4",
           "bookId": "L08",
           "level": "L",
@@ -14458,7 +14457,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
           "row": 1,
-          "column": 1,
+          "column": 2,
           "label": "Level J, J63 Sugar, Sugar, Everywhere, Page 14",
           "bookId": "J63",
           "level": "J",
@@ -14488,7 +14487,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
           "row": 0,
-          "column": 0,
+          "column": 1,
           "label": "Level J, J68 A Trip to Rio, Page 9",
           "bookId": "J68",
           "level": "J",
@@ -14813,9 +14812,9 @@
           "sentenceTranslation": "他们经过了图书馆。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F27 Monster Reading Buddies, Page 3",
           "bookId": "F27",
           "level": "F",
@@ -15075,7 +15074,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F40 Our Class Flag, Page 9",
           "bookId": "F40",
           "level": "F",
@@ -15208,8 +15207,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F29 Firefighters, Page 4",
           "bookId": "F29",
           "level": "F",
@@ -15283,7 +15282,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F39 SuperZero, Page 10",
           "bookId": "F39",
           "level": "F",
@@ -15362,7 +15361,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
           "row": 1,
-          "column": 0,
+          "column": 1,
           "label": "Level J, J69 Picture Day, Page 14",
           "bookId": "J69",
           "level": "J",
@@ -15478,9 +15477,9 @@
           "sentenceTranslation": "他们想了解新教室的情况。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F40 Our Class Flag, Page 5",
           "bookId": "F40",
           "level": "F",
@@ -15570,7 +15569,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F29 Firefighters, Page 11",
           "bookId": "F29",
           "level": "F",
@@ -15705,7 +15704,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-066.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G14 Maria Joins the Team, Page 4",
           "bookId": "G14",
           "level": "G",
@@ -15969,7 +15968,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
           "row": 2,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K37 Día de los Muertos, Page 15",
           "bookId": "K37",
           "level": "K",
@@ -16217,7 +16216,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
           "row": 2,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K48 New Planet, New School, Page 5",
           "bookId": "K48",
           "level": "K",
@@ -16366,7 +16365,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F53 At the Airport, Page 10",
           "bookId": "F53",
           "level": "F",
@@ -16440,7 +16439,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
           "row": 1,
-          "column": 1,
+          "column": 2,
           "label": "Level L, L09 Sending Messages, Page 4",
           "bookId": "L09",
           "level": "L",
@@ -16576,22 +16575,6 @@
           "level": 1,
           "book": 14,
           "page": 5
-        },
-        "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-108.webp",
-          "row": 0,
-          "column": 0,
-          "label": "Level L, L09 Sending Messages, Page 13",
-          "bookId": "L09",
-          "level": "L",
-          "sequence": 9,
-          "title": "Sending Messages",
-          "page": 13,
-          "matchKind": "inflection",
-          "matchedTerm": "text",
-          "matchedForm": "texting",
-          "sentence": "Cell phones are also used for texting— sending short, typed messages.",
-          "sentenceTranslation": "手机也用于发短信——发送简短的打字消息。"
         }
       }
     },
@@ -16748,8 +16731,8 @@
       "relatedMedia": {
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F70 At the Movies, Page 3",
           "bookId": "F70",
           "level": "F",
@@ -17051,7 +17034,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G01 Signs Are Everywhere, Page 3",
           "bookId": "G01",
           "level": "G",
@@ -17659,7 +17642,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G04 Long Ago and Today, Page 9",
           "bookId": "G04",
           "level": "G",
@@ -17956,9 +17939,9 @@
       "wordId": "ket_cartoon_n",
       "relatedMedia": {
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
-          "row": 2,
-          "column": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
+          "row": 0,
+          "column": 0,
           "label": "Level K, K40 Blackbeard the Pirate, Page 4",
           "bookId": "K40",
           "level": "K",
@@ -18089,8 +18072,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
-          "row": 0,
-          "column": 2,
+          "row": 1,
+          "column": 0,
           "label": "Level J, J69 Picture Day, Page 13",
           "bookId": "J69",
           "level": "J",
@@ -18355,8 +18338,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-103.webp",
-          "row": 1,
-          "column": 2,
+          "row": 2,
+          "column": 0,
           "label": "Level K, K24 Summer Olympics Events, Page 9",
           "bookId": "K24",
           "level": "K",
@@ -18451,7 +18434,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G04 Long Ago and Today, Page 8",
           "bookId": "G04",
           "level": "G",
@@ -18638,8 +18621,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F24 A Pet for Jupe, Page 10",
           "bookId": "F24",
           "level": "F",
@@ -19280,9 +19263,9 @@
       "wordId": "ket_hobby_n",
       "relatedMedia": {
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
-          "row": 2,
-          "column": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
+          "row": 0,
+          "column": 0,
           "label": "Level J, J定级2 What Comes From Plants, Page 13",
           "bookId": "J定级2",
           "level": "J",
@@ -19503,8 +19486,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F33 Smart Crows, Page 8",
           "bookId": "F33",
           "level": "F",
@@ -19998,7 +19981,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-103.webp",
           "row": 0,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K18 It’s About Time, Page 12",
           "bookId": "K18",
           "level": "K",
@@ -20070,7 +20053,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G12 Animal Eyes, Page 6",
           "bookId": "G12",
           "level": "G",
@@ -20397,8 +20380,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level G, G10 Whose Eggs Are These?, Page 8",
           "bookId": "G10",
           "level": "G",
@@ -20547,7 +20530,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
           "row": 0,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K41 What Lives in This Hole?, Page 5",
           "bookId": "K41",
           "level": "K",
@@ -20930,7 +20913,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-066.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G14 Maria Joins the Team, Page 3",
           "bookId": "G14",
           "level": "G",
@@ -21197,7 +21180,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F21 Does It Sink or Float?, Page 7",
           "bookId": "F21",
           "level": "F",
@@ -21962,8 +21945,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F50 Piñatas Are Fun!, Page 12",
           "bookId": "F50",
           "level": "F",
@@ -22193,7 +22176,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-049.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F20 In a Chinese Garden, Page 3",
           "bookId": "F20",
           "level": "F",
@@ -22374,7 +22357,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
           "row": 0,
-          "column": 0,
+          "column": 1,
           "label": "Level J, J58 Incredible Places to Stay, Page 4",
           "bookId": "J58",
           "level": "J",
@@ -22487,8 +22470,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F38 Two for Me, One for You, Page 7",
           "bookId": "F38",
           "level": "F",
@@ -22766,7 +22749,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F61 Fishtank Fun, Page 7",
           "bookId": "F61",
           "level": "F",
@@ -22808,7 +22791,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
           "row": 1,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K33 I’m Allergic to Peanuts, Page 13",
           "bookId": "K33",
           "level": "K",
@@ -22910,7 +22893,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F53 At the Airport, Page 3",
           "bookId": "F53",
           "level": "F",
@@ -23005,7 +22988,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F定级1 Many Roads, Page 9",
           "bookId": "F定级1",
           "level": "F",
@@ -23324,8 +23307,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F55 Tunnels, Page 4",
           "bookId": "F55",
           "level": "F",
@@ -23772,7 +23755,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F42 Following the Map, Page 3",
           "bookId": "F42",
           "level": "F",
@@ -24396,7 +24379,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F35 Jobs for James, Page 5",
           "bookId": "F35",
           "level": "F",
@@ -24540,7 +24523,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F35 Jobs for James, Page 7",
           "bookId": "F35",
           "level": "F",
@@ -24830,7 +24813,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F35 Jobs for James, Page 5",
           "bookId": "F35",
           "level": "F",
@@ -24901,8 +24884,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
-          "row": 1,
-          "column": 2,
+          "row": 2,
+          "column": 0,
           "label": "Level K, K43 France, Page 15",
           "bookId": "K43",
           "level": "K",
@@ -24944,7 +24927,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F35 Jobs for James, Page 5",
           "bookId": "F35",
           "level": "F",
@@ -25029,8 +25012,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level G, G01 Signs Are Everywhere, Page 9",
           "bookId": "G01",
           "level": "G",
@@ -25072,7 +25055,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F50 Piñatas Are Fun!, Page 3",
           "bookId": "F50",
           "level": "F",
@@ -25269,7 +25252,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G10 Whose Eggs Are These?, Page 6",
           "bookId": "G10",
           "level": "G",
@@ -25647,7 +25630,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F58 Four Friends, Page 4",
           "bookId": "F58",
           "level": "F",
@@ -26040,7 +26023,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F46 Some Birds Go, Page 5",
           "bookId": "F46",
           "level": "F",
@@ -26156,7 +26139,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F24 A Pet for Jupe, Page 12",
           "bookId": "F24",
           "level": "F",
@@ -26490,7 +26473,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G10 Whose Eggs Are These?, Page 10",
           "bookId": "G10",
           "level": "G",
@@ -26613,7 +26596,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F23 Friends in the Stars, Page 4",
           "bookId": "F23",
           "level": "F",
@@ -26876,8 +26859,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level G, G10 Whose Eggs Are These?, Page 8",
           "bookId": "G10",
           "level": "G",
@@ -26921,7 +26904,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F23 Friends in the Stars, Page 9",
           "bookId": "F23",
           "level": "F",
@@ -27053,7 +27036,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F43 The Tortoise and the Hare, Page 3",
           "bookId": "F43",
           "level": "F",
@@ -27337,8 +27320,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F57 On the Moon, Page 3",
           "bookId": "F57",
           "level": "F",
@@ -27512,7 +27495,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F42 Following the Map, Page 4",
           "bookId": "F42",
           "level": "F",
@@ -27828,9 +27811,9 @@
           "page": 5
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F42 Following the Map, Page 10",
           "bookId": "F42",
           "level": "F",
@@ -27860,7 +27843,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
           "row": 1,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K43 France, Page 7",
           "bookId": "K43",
           "level": "K",
@@ -28019,8 +28002,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F42 Following the Map, Page 6",
           "bookId": "F42",
           "level": "F",
@@ -28050,7 +28033,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F42 Following the Map, Page 8",
           "bookId": "F42",
           "level": "F",
@@ -28475,7 +28458,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
           "row": 2,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K18 It’s About Time, Page 7",
           "bookId": "K18",
           "level": "K",
@@ -28635,7 +28618,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
           "row": 2,
-          "column": 1,
+          "column": 2,
           "label": "Level J, J67 Tornadoes, Page 5",
           "bookId": "J67",
           "level": "J",
@@ -29570,7 +29553,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G07 My Day, Page 6",
           "bookId": "G07",
           "level": "G",
@@ -29598,9 +29581,9 @@
           "sentenceTranslation": "“今晚，我们要表演一个皮影戏！”"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level G, G07 My Day, Page 7",
           "bookId": "G07",
           "level": "G",
@@ -29880,7 +29863,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G07 My Day, Page 5",
           "bookId": "G07",
           "level": "G",
@@ -29910,7 +29893,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F35 Jobs for James, Page 7",
           "bookId": "F35",
           "level": "F",
@@ -29954,7 +29937,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-066.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G14 Maria Joins the Team, Page 4",
           "bookId": "G14",
           "level": "G",
@@ -30179,7 +30162,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F52 Super Thrift, Page 5",
           "bookId": "F52",
           "level": "F",
@@ -30927,7 +30910,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G07 My Day, Page 5",
           "bookId": "G07",
           "level": "G",
@@ -31087,7 +31070,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
           "row": 2,
-          "column": 1,
+          "column": 2,
           "label": "Level L, L05 Big Machines, Page 15",
           "bookId": "L05",
           "level": "L",
@@ -31146,8 +31129,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F41 Flashlight Shadow Show, Page 11",
           "bookId": "F41",
           "level": "F",
@@ -31425,7 +31408,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
           "row": 0,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K32 I Love City Parks, Page 15",
           "bookId": "K32",
           "level": "K",
@@ -31445,8 +31428,8 @@
       "relatedMedia": {
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
-          "row": 0,
-          "column": 2,
+          "row": 1,
+          "column": 0,
           "label": "Level K, K43 France, Page 5",
           "bookId": "K43",
           "level": "K",
@@ -31680,7 +31663,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F46 Some Birds Go, Page 5",
           "bookId": "F46",
           "level": "F",
@@ -31710,7 +31693,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G10 Whose Eggs Are These?, Page 7",
           "bookId": "G10",
           "level": "G",
@@ -31870,7 +31853,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F42 Following the Map, Page 3",
           "bookId": "F42",
           "level": "F",
@@ -32010,9 +31993,9 @@
           "sentenceTranslation": "图案上用镜像文字写着“奇普”。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-049.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F20 In a Chinese Garden, Page 4",
           "bookId": "F20",
           "level": "F",
@@ -32084,7 +32067,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F70 At the Movies, Page 5",
           "bookId": "F70",
           "level": "F",
@@ -32745,7 +32728,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
           "row": 2,
-          "column": 0,
+          "column": 1,
           "label": "Level L, L05 Big Machines, Page 8",
           "bookId": "L05",
           "level": "L",
@@ -32847,7 +32830,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F23 Friends in the Stars, Page 7",
           "bookId": "F23",
           "level": "F",
@@ -32947,9 +32930,9 @@
           "sentenceTranslation": "“我想赚取所有的额外零花钱，”她说。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F35 Jobs for James, Page 6",
           "bookId": "F35",
           "level": "F",
@@ -33007,7 +32990,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
           "row": 1,
-          "column": 0,
+          "column": 1,
           "label": "Level L, L08 Colonial Life, Page 14",
           "bookId": "L08",
           "level": "L",
@@ -33230,7 +33213,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
           "row": 0,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K51 Model Rockets, Page 10",
           "bookId": "K51",
           "level": "K",
@@ -33644,8 +33627,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F21 Does It Sink or Float?, Page 11",
           "bookId": "F21",
           "level": "F",
@@ -33689,7 +33672,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F29 Firefighters, Page 11",
           "bookId": "F29",
           "level": "F",
@@ -33977,9 +33960,9 @@
           "page": 35
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
-          "row": 2,
-          "column": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
+          "row": 0,
+          "column": 0,
           "label": "Level J, J67 Tornadoes, Page 15",
           "bookId": "J67",
           "level": "J",
@@ -34111,7 +34094,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
           "row": 2,
-          "column": 0,
+          "column": 1,
           "label": "Level L, L09 Sending Messages, Page 10",
           "bookId": "L09",
           "level": "L",
@@ -34197,9 +34180,9 @@
           "sentenceTranslation": "比夫和奇普听到一个声音。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F58 Four Friends, Page 10",
           "bookId": "F58",
           "level": "F",
@@ -34366,7 +34349,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F45 Cleaning My Room, Page 3",
           "bookId": "F45",
           "level": "F",
@@ -34438,7 +34421,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F42 Following the Map, Page 3",
           "bookId": "F42",
           "level": "F",
@@ -34524,7 +34507,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F44 Double It!, Page 12",
           "bookId": "F44",
           "level": "F",
@@ -34554,7 +34537,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F63 Motorcycles, Page 5",
           "bookId": "F63",
           "level": "F",
@@ -34702,7 +34685,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
           "row": 2,
-          "column": 0,
+          "column": 1,
           "label": "Level J, J定级2 What Comes From Plants, Page 10",
           "bookId": "J定级2",
           "level": "J",
@@ -34996,7 +34979,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G02 Places People Live, Page 5",
           "bookId": "G02",
           "level": "G",
@@ -35304,7 +35287,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G02 Places People Live, Page 5",
           "bookId": "G02",
           "level": "G",
@@ -35334,7 +35317,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F32 Using Less Energy, Page 3",
           "bookId": "F32",
           "level": "F",
@@ -35830,7 +35813,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F25 Hide and Seek with Zog, Page 3",
           "bookId": "F25",
           "level": "F",
@@ -36178,7 +36161,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F42 Following the Map, Page 7",
           "bookId": "F42",
           "level": "F",
@@ -36252,7 +36235,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F38 Two for Me, One for You, Page 3",
           "bookId": "F38",
           "level": "F",
@@ -36410,7 +36393,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F49 Stella Storyteller, Page 12",
           "bookId": "F49",
           "level": "F",
@@ -36553,8 +36536,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F43 The Tortoise and the Hare, Page 4",
           "bookId": "F43",
           "level": "F",
@@ -36716,7 +36699,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F40 Our Class Flag, Page 12",
           "bookId": "F40",
           "level": "F",
@@ -37493,8 +37476,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level G, G10 Whose Eggs Are These?, Page 3",
           "bookId": "G10",
           "level": "G",
@@ -38146,7 +38129,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G01 Signs Are Everywhere, Page 4",
           "bookId": "G01",
           "level": "G",
@@ -38308,7 +38291,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F63 Motorcycles, Page 10",
           "bookId": "F63",
           "level": "F",
@@ -38615,7 +38598,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F28 Hibernation, Page 7",
           "bookId": "F28",
           "level": "F",
@@ -38689,7 +38672,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G02 Places People Live, Page 6",
           "bookId": "G02",
           "level": "G",
@@ -38809,7 +38792,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
           "row": 0,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K33 I’m Allergic to Peanuts, Page 7",
           "bookId": "K33",
           "level": "K",
@@ -39139,7 +39122,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F70 At the Movies, Page 6",
           "bookId": "F70",
           "level": "F",
@@ -39663,9 +39646,9 @@
           "page": 18
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-099.webp",
-          "row": 2,
-          "column": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
+          "row": 0,
+          "column": 0,
           "label": "Level J, J53 Ostriches: Giant Birds, Page 14",
           "bookId": "J53",
           "level": "J",
@@ -39836,8 +39819,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
-          "row": 0,
-          "column": 2,
+          "row": 1,
+          "column": 0,
           "label": "Level L, L08 Colonial Life, Page 8",
           "bookId": "L08",
           "level": "L",
@@ -40173,7 +40156,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F38 Two for Me, One for You, Page 12",
           "bookId": "F38",
           "level": "F",
@@ -40338,7 +40321,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F28 Hibernation, Page 8",
           "bookId": "F28",
           "level": "F",
@@ -40368,7 +40351,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
           "row": 2,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K15 To the Pumpkin Patch, Page 10",
           "bookId": "K15",
           "level": "K",
@@ -40498,7 +40481,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-103.webp",
           "row": 2,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K30 Hugs for Daddy, Page 7",
           "bookId": "K30",
           "level": "K",
@@ -40572,7 +40555,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F26 Farm Friends, Page 8",
           "bookId": "F26",
           "level": "F",
@@ -40951,8 +40934,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F定级1 Many Roads, Page 10",
           "bookId": "F定级1",
           "level": "F",
@@ -41474,7 +41457,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F46 Some Birds Go, Page 9",
           "bookId": "F46",
           "level": "F",
@@ -41606,7 +41589,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F24 A Pet for Jupe, Page 6",
           "bookId": "F24",
           "level": "F",
@@ -41782,7 +41765,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F73 Lou’s Flu, Page 5",
           "bookId": "F73",
           "level": "F",
@@ -41812,7 +41795,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
           "row": 2,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K48 New Planet, New School, Page 5",
           "bookId": "K48",
           "level": "K",
@@ -41842,7 +41825,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F75 A Look at Fossils, Page 3",
           "bookId": "F75",
           "level": "F",
@@ -42095,8 +42078,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
-          "row": 0,
-          "column": 2,
+          "row": 1,
+          "column": 0,
           "label": "Level J, J59 The Princess and the Pea, Page 12",
           "bookId": "J59",
           "level": "J",
@@ -42643,8 +42626,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
-          "row": 1,
-          "column": 2,
+          "row": 2,
+          "column": 0,
           "label": "Level J, J65 Lacrosse, Page 8",
           "bookId": "J65",
           "level": "J",
@@ -42673,8 +42656,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-066.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level G, G14 Maria Joins the Team, Page 8",
           "bookId": "G14",
           "level": "G",
@@ -42746,9 +42729,9 @@
           "sentenceTranslation": "“也许他在里面，”基普说。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F49 Stella Storyteller, Page 10",
           "bookId": "F49",
           "level": "F",
@@ -43130,8 +43113,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F23 Friends in the Stars, Page 5",
           "bookId": "F23",
           "level": "F",
@@ -43305,7 +43288,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G09 The Chase, Page 12",
           "bookId": "G09",
           "level": "G",
@@ -43690,7 +43673,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F29 Firefighters, Page 8",
           "bookId": "F29",
           "level": "F",
@@ -43737,9 +43720,9 @@
       "wordId": "ket_fill_in_phr_v",
       "relatedMedia": {
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-103.webp",
-          "row": 2,
-          "column": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
+          "row": 0,
+          "column": 0,
           "label": "Level K, K30 Hugs for Daddy, Page 14",
           "bookId": "K30",
           "level": "K",
@@ -43855,9 +43838,9 @@
           "sentenceTranslation": "上车吧，比夫。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F53 At the Airport, Page 11",
           "bookId": "F53",
           "level": "F",
@@ -44057,7 +44040,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F27 Monster Reading Buddies, Page 8",
           "bookId": "F27",
           "level": "F",
@@ -44175,7 +44158,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F69 Are You Okay?, Page 7",
           "bookId": "F69",
           "level": "F",
@@ -44443,7 +44426,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F64 Color Wheel Colors, Page 3",
           "bookId": "F64",
           "level": "F",
@@ -44483,9 +44466,9 @@
           "page": 35
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F49 Stella Storyteller, Page 10",
           "bookId": "F49",
           "level": "F",
@@ -45049,7 +45032,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F54 Terrific Tree Houses, Page 9",
           "bookId": "F54",
           "level": "F",
@@ -45079,7 +45062,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-058.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F51 Animal Dads, Page 7",
           "bookId": "F51",
           "level": "F",
@@ -45139,7 +45122,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
           "row": 0,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K01 How Zebras Got Their Stripes, Page 14",
           "bookId": "K01",
           "level": "K",
@@ -45561,7 +45544,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
           "row": 1,
-          "column": 0,
+          "column": 1,
           "label": "Level J, J60 Día for María, Page 14",
           "bookId": "J60",
           "level": "J",
@@ -45892,7 +45875,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
           "row": 2,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K36 Grounded to Earth, Page 5",
           "bookId": "K36",
           "level": "K",
@@ -45934,9 +45917,9 @@
           "sentenceTranslation": "“是时候下潜了，”他说。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F71 At the Watering Hole, Page 6",
           "bookId": "F71",
           "level": "F",
@@ -46010,7 +45993,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F24 A Pet for Jupe, Page 6",
           "bookId": "F24",
           "level": "F",
@@ -46198,7 +46181,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F70 At the Movies, Page 6",
           "bookId": "F70",
           "level": "F",
@@ -46456,7 +46439,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-055.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F42 Following the Map, Page 3",
           "bookId": "F42",
           "level": "F",
@@ -46782,7 +46765,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F21 Does It Sink or Float?, Page 12",
           "bookId": "F21",
           "level": "F",
@@ -46803,7 +46786,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F24 A Pet for Jupe, Page 8",
           "bookId": "F24",
           "level": "F",
@@ -47083,7 +47066,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G09 The Chase, Page 11",
           "bookId": "G09",
           "level": "G",
@@ -47111,9 +47094,9 @@
           "sentenceTranslation": "“快点，”比夫说。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-066.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-065.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level G, G13 Gordon Finds His Way, Page 6",
           "bookId": "G13",
           "level": "G",
@@ -47201,7 +47184,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
           "row": 0,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K51 Model Rockets, Page 5",
           "bookId": "K51",
           "level": "K",
@@ -47487,20 +47470,20 @@
           "page": 3
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-007.webp",
-          "row": 0,
-          "column": 2,
-          "label": "Level E, E09 Nothing for Father’s Day, Page 5",
-          "bookId": "E09",
+          "atlasPath": "/content/images/raz-atlases/atlas-039.webp",
+          "row": 1,
+          "column": 0,
+          "label": "Level E, E66 Where Are My Things?, Page 7",
+          "bookId": "E66",
           "level": "E",
-          "sequence": 9,
-          "title": "Nothing for Father’s Day",
-          "page": 5,
-          "matchKind": "exact",
+          "sequence": 66,
+          "title": "Where Are My Things?",
+          "page": 7,
+          "matchKind": "inflection",
           "matchedTerm": "look",
-          "matchedForm": "look",
-          "sentence": "It made him look like a big rabbit.",
-          "sentenceTranslation": "这让他看起来像一只大兔子。"
+          "matchedForm": "looked",
+          "sentence": "He looked around his roots.",
+          "sentenceTranslation": "他环顾了一下自己的树根。"
         }
       }
     },
@@ -47614,8 +47597,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F74 The Sunflower Hut, Page 8",
           "bookId": "F74",
           "level": "F",
@@ -47643,9 +47626,9 @@
           "sentenceTranslation": "“没关系，”张说。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level G, G02 Places People Live, Page 12",
           "bookId": "G02",
           "level": "G",
@@ -47851,20 +47834,20 @@
           "sentenceTranslation": "她不会下令进攻，因为她害怕我叔叔会伤害我。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-046.webp",
-          "row": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-104.webp",
+          "row": 1,
           "column": 1,
-          "label": "Level F, F06 The Food Chain, Page 3",
-          "bookId": "F06",
-          "level": "F",
-          "sequence": 6,
-          "title": "The Food Chain",
-          "page": 3,
+          "label": "Level K, K33 I’m Allergic to Peanuts, Page 13",
+          "bookId": "K33",
+          "level": "K",
+          "sequence": 33,
+          "title": "I’m Allergic to Peanuts",
+          "page": 13,
           "matchKind": "exact",
           "matchedTerm": "order",
           "matchedForm": "order",
-          "sentence": "All plants need food in order to live.",
-          "sentenceTranslation": "所有植物都需要食物才能生存。"
+          "sentence": "At restaurants, I order things that don’t have peanuts.",
+          "sentenceTranslation": "在餐馆里，我会点不含花生的食物。"
         }
       }
     },
@@ -48026,7 +48009,7 @@
           "matchedTerm": "point",
           "matchedForm": "points",
           "sentence": "Clare points at Dad’s chair.",
-          "sentenceTranslation": "Clare指着爸爸的椅子。"
+          "sentenceTranslation": "克莱尔指着爸爸的椅子。"
         }
       }
     },
@@ -48045,7 +48028,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level G, G01 Signs Are Everywhere, Page 3",
           "bookId": "G01",
           "level": "G",
@@ -48279,7 +48262,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-103.webp",
           "row": 2,
-          "column": 0,
+          "column": 1,
           "label": "Level K, K28 Barack Obama, Page 15",
           "bookId": "K28",
           "level": "K",
@@ -48531,8 +48514,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F57 On the Moon, Page 3",
           "bookId": "F57",
           "level": "F",
@@ -48636,7 +48619,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F56 We Do Yoga, Page 11",
           "bookId": "F56",
           "level": "F",
@@ -48666,7 +48649,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
           "row": 2,
-          "column": 0,
+          "column": 1,
           "label": "Level J, J定级2 What Comes From Plants, Page 10",
           "bookId": "J定级2",
           "level": "J",
@@ -48768,7 +48751,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-053.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F31 The Three Little Pigs, Page 10",
           "bookId": "F31",
           "level": "F",
@@ -48798,7 +48781,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F59 I Need a Snow Day!, Page 7",
           "bookId": "F59",
           "level": "F",
@@ -48983,7 +48966,8 @@
           "page": 5,
           "matchKind": "exact",
           "matchedTerm": "sound",
-          "matchedForm": "sound"
+          "matchedForm": "sound",
+          "sentence": "They make a really loud sound when there’s smoke."
         }
       }
     },
@@ -49293,8 +49277,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
-          "row": 1,
-          "column": 2,
+          "row": 2,
+          "column": 0,
           "label": "Level K, K10 All About Kites, Page 9",
           "bookId": "K10",
           "level": "K",
@@ -49717,7 +49701,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
           "row": 0,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F72 Sir Suffix, Page 5",
           "bookId": "F72",
           "level": "F",
@@ -49774,8 +49758,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
-          "row": 1,
-          "column": 2,
+          "row": 2,
+          "column": 0,
           "label": "Level L, L01 Smelly Clyde, Page 17",
           "bookId": "L01",
           "level": "L",
@@ -49833,9 +49817,9 @@
           "sentenceTranslation": "还有一个舒适的家。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F63 Motorcycles, Page 7",
           "bookId": "F63",
           "level": "F",
@@ -49908,8 +49892,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level G, G04 Long Ago and Today, Page 5",
           "bookId": "G04",
           "level": "G",
@@ -50055,7 +50039,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F44 Double It!, Page 3",
           "bookId": "F44",
           "level": "F",
@@ -50220,7 +50204,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
           "row": 1,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K07 Slithery and Slimy, Page 15",
           "bookId": "K07",
           "level": "K",
@@ -50278,7 +50262,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F23 Friends in the Stars, Page 7",
           "bookId": "F23",
           "level": "F",
@@ -50352,7 +50336,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-052.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F28 Hibernation, Page 7",
           "bookId": "F28",
           "level": "F",
@@ -50526,7 +50510,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-061.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F65 Who Needs Rain?, Page 7",
           "bookId": "F65",
           "level": "F",
@@ -50568,9 +50552,9 @@
           "sentenceTranslation": "他很高兴自己不是侍童。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-049.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F20 In a Chinese Garden, Page 4",
           "bookId": "F20",
           "level": "F",
@@ -50679,7 +50663,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F58 Four Friends, Page 4",
           "bookId": "F58",
           "level": "F",
@@ -50781,9 +50765,9 @@
           "sentenceTranslation": "“那不可能。”"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F77 Princess Prefix, Page 7",
           "bookId": "F77",
           "level": "F",
@@ -50811,9 +50795,9 @@
           "sentenceTranslation": "后来，体操大多变成了室内运动。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-101.webp",
-          "row": 2,
-          "column": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-102.webp",
+          "row": 0,
+          "column": 0,
           "label": "Level J, J定级2 What Comes From Plants, Page 13",
           "bookId": "J定级2",
           "level": "J",
@@ -50972,8 +50956,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
-          "row": 0,
-          "column": 2,
+          "row": 1,
+          "column": 0,
           "label": "Level L, L08 Colonial Life, Page 8",
           "bookId": "L08",
           "level": "L",
@@ -51131,7 +51115,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
           "row": 2,
-          "column": 2,
+          "column": 1,
           "label": "Level G, G02 Places People Live, Page 6",
           "bookId": "G02",
           "level": "G",
@@ -51159,7 +51143,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F38 Two for Me, One for You, Page 12",
           "bookId": "F38",
           "level": "F",
@@ -51203,7 +51187,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
           "row": 1,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F55 Tunnels, Page 8",
           "bookId": "F55",
           "level": "F",
@@ -51314,7 +51298,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-060.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F59 I Need a Snow Day!, Page 3",
           "bookId": "F59",
           "level": "F",
@@ -51416,7 +51400,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-100.webp",
           "row": 2,
-          "column": 0,
+          "column": 1,
           "label": "Level J, J66 Cricket, Page 13",
           "bookId": "J66",
           "level": "J",
@@ -51621,8 +51605,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-064.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level G, G04 Long Ago and Today, Page 10",
           "bookId": "G04",
           "level": "G",
@@ -51651,8 +51635,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-103.webp",
-          "row": 0,
-          "column": 2,
+          "row": 1,
+          "column": 0,
           "label": "Level K, K22 I’d Like to Be, Page 3",
           "bookId": "K22",
           "level": "K",
@@ -51680,9 +51664,9 @@
           "sentenceTranslation": "“谢谢你，亨利叔叔，”玛丽-安用小小而有礼貌的声音说。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-105.webp",
-          "row": 2,
-          "column": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
+          "row": 0,
+          "column": 0,
           "label": "Level K, K49 Mongo’s Migration, Page 12",
           "bookId": "K49",
           "level": "K",
@@ -51769,9 +51753,9 @@
           "sentenceTranslation": "“我尽快就回来，”内莉说。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-063.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-062.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F77 Princess Prefix, Page 7",
           "bookId": "F77",
           "level": "F",
@@ -51959,9 +51943,9 @@
           "sentenceTranslation": "灯光使她的脸看起来很吓人。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
-          "row": 0,
-          "column": 0,
+          "atlasPath": "/content/images/raz-atlases/atlas-050.webp",
+          "row": 2,
+          "column": 2,
           "label": "Level F, F24 A Pet for Jupe, Page 4",
           "bookId": "F24",
           "level": "F",
@@ -52047,7 +52031,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-051.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F25 Hide and Seek with Zog, Page 3",
           "bookId": "F25",
           "level": "F",
@@ -52075,9 +52059,9 @@
           "sentenceTranslation": "其他类似的游戏，如澳式足球、盖尔式足球和美式足球，也都发展出了自己的规则。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-106.webp",
-          "row": 2,
-          "column": 2,
+          "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
+          "row": 0,
+          "column": 0,
           "label": "Level L, L07 Crocs and Gators, Page 9",
           "bookId": "L07",
           "level": "L",
@@ -52107,7 +52091,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-059.webp",
           "row": 0,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F54 Terrific Tree Houses, Page 3",
           "bookId": "F54",
           "level": "F",
@@ -52435,8 +52419,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-054.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F37 Are You From India?, Page 9",
           "bookId": "F37",
           "level": "F",
@@ -52813,7 +52797,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
           "row": 2,
-          "column": 1,
+          "column": 0,
           "label": "Level F, F48 Sleds, Page 6",
           "bookId": "F48",
           "level": "F",
@@ -53042,7 +53026,8 @@
           "page": 10,
           "matchKind": "exact",
           "matchedTerm": "design",
-          "matchedForm": "design"
+          "matchedForm": "design",
+          "sentence": "The design on this egg will have parts that are white, yellow, green, and dark blue."
         }
       }
     },
@@ -53177,20 +53162,20 @@
           "sentenceTranslation": "然后是比赛的时间了。"
         },
         "raz": {
-          "atlasPath": "/content/images/raz-atlases/atlas-049.webp",
+          "atlasPath": "/content/images/raz-atlases/atlas-099.webp",
           "row": 2,
-          "column": 0,
-          "label": "Level F, F19 How to Make a Snow Person, Page 9",
-          "bookId": "F19",
-          "level": "F",
-          "sequence": 19,
-          "title": "How to Make a Snow Person",
-          "page": 9,
+          "column": 1,
+          "label": "Level J, J49 I Broke It, Page 13",
+          "bookId": "J49",
+          "level": "J",
+          "sequence": 49,
+          "title": "I Broke It",
+          "page": 13,
           "matchKind": "exact",
           "matchedTerm": "match",
           "matchedForm": "match",
-          "sentence": "Try to use materials that match the shapes you want.",
-          "sentenceTranslation": "尽量使用与你想要的形状相匹配的材料。"
+          "sentence": "“As a punishment, you can’t go to the soccer match on Saturday,” she says.",
+          "sentenceTranslation": "她说：“作为惩罚，你周六不能去参加足球赛。”"
         }
       }
     },
@@ -53252,8 +53237,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-057.webp",
-          "row": 1,
-          "column": 0,
+          "row": 0,
+          "column": 2,
           "label": "Level F, F46 Some Birds Go, Page 12",
           "bookId": "F46",
           "level": "F",
@@ -53514,8 +53499,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
-          "row": 2,
-          "column": 0,
+          "row": 1,
+          "column": 2,
           "label": "Level F, F44 Double It!, Page 10",
           "bookId": "F44",
           "level": "F",
@@ -53749,7 +53734,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-056.webp",
           "row": 1,
-          "column": 2,
+          "column": 1,
           "label": "Level F, F44 Double It!, Page 3",
           "bookId": "F44",
           "level": "F",
@@ -53778,8 +53763,8 @@
         },
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-107.webp",
-          "row": 1,
-          "column": 2,
+          "row": 2,
+          "column": 0,
           "label": "Level L, L09 Sending Messages, Page 6",
           "bookId": "L09",
           "level": "L",
@@ -53897,7 +53882,7 @@
         "raz": {
           "atlasPath": "/content/images/raz-atlases/atlas-103.webp",
           "row": 0,
-          "column": 1,
+          "column": 2,
           "label": "Level K, K21 Police Officers, Page 6",
           "bookId": "K21",
           "level": "K",
