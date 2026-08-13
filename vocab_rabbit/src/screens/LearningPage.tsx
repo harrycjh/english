@@ -13,7 +13,12 @@ import { QuestionLetterChoice } from '../components/QuestionLetterChoice';
 import { QuestionRecognition } from '../components/QuestionRecognition';
 import { QuestionSentenceChoice } from '../components/QuestionSentenceChoice';
 import { QuestionText } from '../components/QuestionText';
-import { playLevelUpSound, speakSequence, stopSpeaking } from '../services/audio-service';
+import {
+  playLevelUpSound,
+  primeLevelUpSound,
+  speakSequence,
+  stopSpeaking,
+} from '../services/audio-service';
 import { buildQuestion, getCorrectAnswer, isCorrectAnswer, type Question } from '../services/question-service';
 import { createAnswerEventId } from '../services/answer-event-service';
 import { createEmptyRecord } from '../services/spaced-repetition';
@@ -222,6 +227,7 @@ export function LearningPage({
     }
 
     const correct = isCorrectAnswer(currentQuestion, answer);
+    if (correct && questionLevel < 10 && setting.enableAudio) primeLevelUpSound();
     const correctAnswer = getCorrectAnswer(currentQuestion);
     const feedbackCorrectAnswer = currentQuestion.kind === 'fill-blank'
       ? currentQuestion.studyText

@@ -402,7 +402,7 @@
         "id": "task",
         "x": 29,
         "y": 304,
-        "width": 258,
+        "width": 265.25,
         "height": 105,
         "borderRadius": 22,
         "zIndex": 4,
@@ -430,28 +430,28 @@
       },
       {
         "id": "time",
-        "x": 301,
+        "x": 308.25,
         "y": 304,
-        "width": 258,
+        "width": 265.25,
         "height": 105,
         "borderRadius": 22,
         "zIndex": 4,
         "renderMode": "dom",
         "iconAnchor": {
-          "x": 315,
+          "x": 322.25,
           "y": 325,
           "width": 63,
           "height": 63,
           "renderMode": "dom"
         },
         "textSafe": {
-          "x": 390,
+          "x": 397.25,
           "y": 326,
           "width": 148,
           "height": 58
         },
         "chevron": {
-          "x": 529,
+          "x": 536.25,
           "y": 350,
           "width": 9,
           "height": 9,
@@ -460,28 +460,28 @@
       },
       {
         "id": "theme",
-        "x": 573,
+        "x": 587.5,
         "y": 304,
-        "width": 258,
+        "width": 265.25,
         "height": 105,
         "borderRadius": 22,
         "zIndex": 4,
         "renderMode": "dom",
         "iconAnchor": {
-          "x": 587,
+          "x": 601.5,
           "y": 325,
           "width": 63,
           "height": 63,
           "renderMode": "dom"
         },
         "textSafe": {
-          "x": 662,
+          "x": 676.5,
           "y": 326,
           "width": 148,
           "height": 58
         },
         "chevron": {
-          "x": 801,
+          "x": 815.5,
           "y": 350,
           "width": 9,
           "height": 9,
@@ -490,28 +490,28 @@
       },
       {
         "id": "heatmap",
-        "x": 845,
+        "x": 866.75,
         "y": 304,
-        "width": 289,
+        "width": 265.25,
         "height": 105,
         "borderRadius": 22,
         "zIndex": 4,
         "renderMode": "dom",
         "textSafe": {
-          "x": 859,
+          "x": 880.75,
           "y": 314,
           "width": 186,
           "height": 18
         },
         "heatmapBounds": {
-          "x": 859,
+          "x": 880.75,
           "y": 338,
           "width": 182,
           "height": 50,
           "renderMode": "dom"
         },
         "chevron": {
-          "x": 1105,
+          "x": 1126.75,
           "y": 323,
           "width": 9,
           "height": 9,
@@ -758,7 +758,7 @@
         "id": "tea",
         "x": 29,
         "y": 612,
-        "width": 361,
+        "width": 265.25,
         "height": 84,
         "borderRadius": 22,
         "zIndex": 4,
@@ -773,7 +773,7 @@
         "textSafe": {
           "x": 83,
           "y": 625,
-          "width": 195,
+          "width": 163.25,
           "height": 44
         },
         "textBlocks": {
@@ -786,18 +786,18 @@
           "headline": {
             "x": 101,
             "y": 643,
-            "width": 182,
+            "width": 163.25,
             "height": 20
           },
           "description": {
             "x": 101,
             "y": 667,
-            "width": 182,
+            "width": 163.25,
             "height": 16
           }
         },
         "artSlot": {
-          "x": 298,
+          "x": 206,
           "y": 622,
           "width": 74,
           "height": 63,
@@ -805,7 +805,65 @@
           "file": "review-book-art.png"
         },
         "chevron": {
-          "x": 356,
+          "x": 257.25,
+          "y": 631,
+          "width": 9,
+          "height": 9,
+          "renderMode": "dom"
+        }
+      },
+      {
+        "id": "accuracy",
+        "x": 308.25,
+        "y": 612,
+        "width": 265.25,
+        "height": 84,
+        "borderRadius": 22,
+        "zIndex": 4,
+        "renderMode": "dom",
+        "iconAnchor": {
+          "x": 322.25,
+          "y": 632,
+          "width": 44,
+          "height": 44,
+          "renderMode": "dom"
+        },
+        "textSafe": {
+          "x": 362.25,
+          "y": 625,
+          "width": 163.25,
+          "height": 44
+        },
+        "textBlocks": {
+          "eyebrow": {
+            "x": 380.25,
+            "y": 625,
+            "width": 90,
+            "height": 14
+          },
+          "headline": {
+            "x": 380.25,
+            "y": 643,
+            "width": 163.25,
+            "height": 20
+          },
+          "description": {
+            "x": 380.25,
+            "y": 667,
+            "width": 163.25,
+            "height": 16
+          }
+        },
+        "artSlot": {
+          "x": 485.25,
+          "y": 622,
+          "width": 74,
+          "height": 63,
+          "renderMode": "slice",
+          "file": "review-book-art.png"
+        },
+        "chevron": {
+          "x": 536.5,
           "y": 631,
           "width": 9,
           "height": 9,
@@ -814,48 +872,48 @@
       },
       {
         "id": "bars",
-        "x": 404,
+        "x": 587.5,
         "y": 612,
-        "width": 352,
+        "width": 265.25,
         "height": 84,
         "borderRadius": 22,
         "zIndex": 4,
         "renderMode": "dom",
         "iconAnchor": {
-          "x": 418,
+          "x": 601.5,
           "y": 632,
           "width": 44,
           "height": 44,
           "renderMode": "dom"
         },
         "textSafe": {
-          "x": 458,
+          "x": 641.5,
           "y": 625,
-          "width": 186,
+          "width": 163.25,
           "height": 44
         },
         "textBlocks": {
           "eyebrow": {
-            "x": 476,
+            "x": 659.5,
             "y": 625,
             "width": 90,
             "height": 14
           },
           "headline": {
-            "x": 476,
+            "x": 659.5,
             "y": 643,
-            "width": 168,
+            "width": 163.25,
             "height": 20
           },
           "description": {
-            "x": 476,
+            "x": 659.5,
             "y": 667,
-            "width": 168,
+            "width": 163.25,
             "height": 16
           }
         },
         "artSlot": {
-          "x": 664,
+          "x": 764.5,
           "y": 622,
           "width": 74,
           "height": 63,
@@ -863,7 +921,7 @@
           "file": "review-bars-art.png"
         },
         "chevron": {
-          "x": 722,
+          "x": 815.75,
           "y": 631,
           "width": 9,
           "height": 9,
@@ -872,48 +930,48 @@
       },
       {
         "id": "bag",
-        "x": 770,
+        "x": 866.75,
         "y": 612,
-        "width": 363,
+        "width": 265.25,
         "height": 84,
         "borderRadius": 22,
         "zIndex": 4,
         "renderMode": "dom",
         "iconAnchor": {
-          "x": 784,
+          "x": 880.75,
           "y": 632,
           "width": 44,
           "height": 44,
           "renderMode": "dom"
         },
         "textSafe": {
-          "x": 824,
+          "x": 920.75,
           "y": 625,
-          "width": 195,
+          "width": 163.25,
           "height": 44
         },
         "textBlocks": {
           "eyebrow": {
-            "x": 842,
+            "x": 938.75,
             "y": 625,
             "width": 104,
             "height": 14
           },
           "headline": {
-            "x": 842,
+            "x": 938.75,
             "y": 643,
-            "width": 177,
+            "width": 163.25,
             "height": 20
           },
           "description": {
-            "x": 842,
+            "x": 938.75,
             "y": 667,
-            "width": 177,
+            "width": 163.25,
             "height": 16
           }
         },
         "artSlot": {
-          "x": 1041,
+          "x": 1043.75,
           "y": 622,
           "width": 74,
           "height": 63,
@@ -921,7 +979,7 @@
           "file": "review-bag-art.png"
         },
         "chevron": {
-          "x": 1099,
+          "x": 1095,
           "y": 631,
           "width": 9,
           "height": 9,

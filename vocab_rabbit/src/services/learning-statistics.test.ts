@@ -96,6 +96,37 @@ describe('learning statistics', () => {
     expect(statistics.totalAnswers).toBe(2);
   });
 
+  it('carries each study day answer accuracy into the load timeline', () => {
+    const statistics = buildLearningStatistics({
+      currentTask: task({
+        dateKey: '2026-07-15',
+        totalAnswered: 3,
+        correctCount: 2,
+        answeredWordIds: ['word-a', 'word-b'],
+      }),
+      tasks: [],
+      answerEvents: [
+        event('correct-1', 'word-a', '2026-07-15', true),
+        event('wrong-1', 'word-a', '2026-07-15', false),
+        event('correct-2', 'word-b', '2026-07-15', true),
+      ],
+      words: [{ id: 'word-a' }, { id: 'word-b' }],
+      recordsById: {},
+      selectionById: {},
+      setting: defaultParentSetting,
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    });
+
+    expect(statistics.timeline[90]).toMatchObject({
+      dateKey: '2026-07-15',
+      answerCount: 3,
+      correctCount: 2,
+      accuracy: (2 / 3) * 100,
+    });
+    expect(statistics.timeline[89]).toMatchObject({ answerCount: 0, correctCount: 0, accuracy: null });
+    expect(statistics.timeline[91]).toMatchObject({ answerCount: 0, correctCount: 0, accuracy: null });
+  });
+
   it('projects reviews created by future daily new words', () => {
     const statistics = buildLearningStatistics({
       currentTask: task({ dateKey: '2026-07-15' }),

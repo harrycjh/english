@@ -243,6 +243,20 @@ function LearningLoadChart({ points, todayKey, scale }: {
   const tickStep = Math.max(1, Math.ceil(rawMaximum / 4));
   const maximum = tickStep * 4;
   const ticks = [maximum, maximum - tickStep, maximum - (tickStep * 2), tickStep, 0];
+  const accuracyTicks = [100, 75, 50, 25, 0];
+  const accuracyPoints = points.flatMap((point, index) => (
+    point.accuracy === null
+      ? []
+      : [{
+        index,
+        accuracy: point.accuracy,
+        x: ((index + 0.5) / points.length) * 100,
+        y: 100 - point.accuracy,
+      }]
+  ));
+  const accuracyPath = accuracyPoints.map((point, index) => (
+    `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(3)} ${point.y.toFixed(3)}`
+  )).join(' ');
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -255,7 +269,7 @@ function LearningLoadChart({ points, todayKey, scale }: {
   }, [points.length, scrollRef, todayKey]);
 
   return (
-      <div className="learning-load-chart" role="group" aria-label="每日实际与预测学习负荷堆叠柱状图">
+    <div className="learning-load-chart" role="group" aria-label="实际与预测学习负荷柱状图及答题准确率折线图">
       <div className="learning-load-chart__axis" aria-hidden="true">
         <div className="learning-load-chart__scale">
           {ticks.map((tick) => <span key={tick}>{tick}</span>)}
@@ -282,7 +296,7 @@ function LearningLoadChart({ points, todayKey, scale }: {
                   data-today={point.kind === 'today' ? 'true' : undefined}
                   data-kind={point.kind}
                   key={point.dateKey}
-                  title={`${formatDate(point.dateKey)}：复习 ${point.reviewCount}，新认识 ${point.newCount}${point.deferredReviewCount > 0 ? `，顺延复习 ${point.deferredReviewCount}` : ''}${point.durationMs > 0 ? `，用时 ${formatStudyDuration(point.durationMs)}` : ''}${point.kind === 'forecast' ? '（预测）' : '（实际）'}`}
+                  title={`${formatDate(point.dateKey)}：复习 ${point.reviewCount}，新认识 ${point.newCount}${point.accuracy === null ? '' : `，答题准确率 ${Math.round(point.accuracy)}%（${point.correctCount}/${point.answerCount}）`}${point.deferredReviewCount > 0 ? `，顺延复习 ${point.deferredReviewCount}` : ''}${point.durationMs > 0 ? `，用时 ${formatStudyDuration(point.durationMs)}` : ''}${point.kind === 'forecast' ? '（预测）' : '（实际）'}`}
                 >
                   <div className="learning-load-day__plot">
                     {point.totalCount > 0 && (
@@ -298,7 +312,27 @@ function LearningLoadChart({ points, todayKey, scale }: {
               );
             })}
           </div>
+          {accuracyPath ? (
+            <div className="learning-load-chart__accuracy-layer" aria-hidden="true">
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d={accuracyPath} className="learning-load-chart__accuracy-line" vectorEffect="non-scaling-stroke" />
+              </svg>
+              {accuracyPoints.map((point) => (
+                <span
+                  className="learning-load-chart__accuracy-node"
+                  key={point.index}
+                  style={{ left: `${point.x}%`, top: `${point.y}%` }}
+                />
+              ))}
+            </div>
+          ) : null}
         </div>
+      </div>
+      <div className="learning-load-chart__accuracy-axis" aria-hidden="true">
+        <div className="learning-load-chart__accuracy-scale">
+          {accuracyTicks.map((tick) => <span key={tick}>{tick}%</span>)}
+        </div>
+        <small>准确率</small>
       </div>
     </div>
   );
@@ -678,7 +712,7 @@ export function StatsPage({
               <section className="memory-panel memory-panel--learning-load">
                 <div className="memory-panel__header">
                   <div>
-                    <h2>{learningTimeScale === 'day' ? '每日' : learningTimeScale === 'week' ? '每周' : '每月'}学习负荷</h2>
+                    <h2>{learningTimeScale === 'day' ? '每日' : learningTimeScale === 'week' ? '每周' : '每月'}学习负荷与答题准确率</h2>
                     <p>
                       历史显示真实完成量；未来按每日新词 {learning.forecastModel.dailyNewTarget}、
                       完成率 {Math.round(learning.forecastModel.completionRate * 100)}%、分阶段题型正确率与当前记忆等级预测，新增词会滚入后续复习
@@ -693,6 +727,7 @@ export function StatsPage({
                     <div className="memory-chart-legend">
                       <span><i className="is-review" />复习词</span>
                       <span><i className="is-new" />新认识词</span>
+                      <span><i className="is-accuracy" />答题准确率</span>
                       <span><i className="is-forecast" />未来预测</span>
                     </div>
                   </div>

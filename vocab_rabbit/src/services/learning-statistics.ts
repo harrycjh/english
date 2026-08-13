@@ -62,6 +62,9 @@ export interface LearningLoadPoint {
   totalCount: number;
   deferredReviewCount: number;
   durationMs: number;
+  answerCount: number;
+  correctCount: number;
+  accuracy: number | null;
   kind: 'history' | 'today' | 'forecast';
 }
 
@@ -460,6 +463,8 @@ export function buildLearningStatistics({
     const newCount = futurePoint?.newCount ?? historicalPoint?.newCount ?? 0;
     const reviewCount = futurePoint?.reviewCount ?? historicalPoint?.reviewCount ?? 0;
     const retryCount = futurePoint?.retryCount ?? historicalPoint?.retryCount ?? 0;
+    const answerCount = historicalPoint?.answerCount ?? 0;
+    const correctCount = historicalPoint?.correctCount ?? 0;
     return {
       dateKey: timelineDateKey,
       newCount,
@@ -468,6 +473,9 @@ export function buildLearningStatistics({
       totalCount: newCount + reviewCount,
       deferredReviewCount: futurePoint?.deferredReviewCount ?? 0,
       durationMs: futurePoint?.durationMs ?? historicalPoint?.durationMs ?? 0,
+      answerCount,
+      correctCount,
+      accuracy: answerCount > 0 ? (correctCount / answerCount) * 100 : null,
       kind: offset < 0 ? 'history' : offset === 0 ? 'today' : 'forecast',
     };
   });

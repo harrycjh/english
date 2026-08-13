@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays, Dog, Rabbit } from 'lucide-react';
 import { IPAD_STAGE_HEIGHT } from '../app/ipad-viewport';
 import {
   LAYOUT_PREVIEW_OPTIONS,
@@ -37,6 +37,7 @@ import { WordImage } from '../components/WordImage';
 import { MasteryLevelIcon } from '../components/MasteryLevelIcon';
 import { NewWordQueueDrawer } from '../components/NewWordQueueDrawer';
 import { ReviewQueueDrawer } from '../components/ReviewQueueDrawer';
+import { WrongWordQueueDrawer } from '../components/WrongWordQueueDrawer';
 import { EstimateBreakdownDrawer } from '../components/EstimateBreakdownDrawer';
 import { BackpackDrawer } from '../components/BackpackDrawer';
 import { summarizeCheckIns } from '../services/check-in';
@@ -69,7 +70,7 @@ import reviewPreviewImageScales from '../data/review-preview-image-scales.json';
 
 type ReviewPreviewWord = WordPayload['words'][number];
 type ReviewSummaryTone = 'library' | 'mastered' | 'completion';
-type ReviewAdviceAccent = 'tea' | 'bars' | 'bag';
+type ReviewAdviceAccent = 'tea' | 'accuracy' | 'bars' | 'bag';
 type ReviewHeatmapLevel = 'empty' | 'soft' | 'warm' | 'strong';
 
 type ReviewLayout = typeof reviewLayoutData;
@@ -247,6 +248,7 @@ interface ReviewAdviceCardProps {
   value: string;
   description: string;
   layout: ReviewGuidanceLayout;
+  icon?: ReactNode;
   onClick?: () => void;
 }
 
@@ -558,7 +560,7 @@ function ReviewPreviewCard({
   );
 }
 
-function ReviewAdviceCard({ accent, label, value, description, layout, onClick }: ReviewAdviceCardProps) {
+function ReviewAdviceCard({ accent, label, value, description, layout, icon, onClick }: ReviewAdviceCardProps) {
   // The authored `textSafe` box is only the gap left of the art; the text itself
   // is authored in `textBlocks`, which starts further in and is much wider.
   const textBlock = layout.textBlocks.headline;
@@ -577,7 +579,7 @@ function ReviewAdviceCard({ accent, label, value, description, layout, onClick }
           zIndex: reviewLayerZIndex.decorativeIcons,
         }}
       >
-        {accent === 'tea' ? <CalendarDays size={24} strokeWidth={2.4} /> : null}
+        {icon ?? (accent === 'tea' ? <CalendarDays size={24} strokeWidth={2.4} /> : null)}
       </span>
       <div
         className="review-advice-card__body"
@@ -669,6 +671,11 @@ export function ReviewPage({
   const checkInValue = checkInSummary.isTodayCheckedIn
     ? `已连续 ${checkInSummary.streakDays} 天`
     : '今天还没签到';
+  const todayAccuracy = task.totalAnswered > 0
+    ? (task.correctCount / task.totalAnswered) * 100
+    : null;
+  const todayAccuracyValue = todayAccuracy === null ? '--' : `${Math.round(todayAccuracy)}%`;
+  const TodayAccuracyIcon = todayAccuracy !== null && todayAccuracy > 85 ? Rabbit : Dog;
   // The debug profile owns the whole catalogue, so new art can be equipped and
   // looked at the day it lands instead of after the check-ins that price it.
   const canUnlockEverything = isDebugProfile(setting.profileId);
@@ -694,6 +701,7 @@ export function ReviewPage({
   const [localDebugPickerOpen, setLocalDebugPickerOpen] = useState(false);
   const [isNewWordQueueOpen, setIsNewWordQueueOpen] = useState(false);
   const [isReviewQueueOpen, setIsReviewQueueOpen] = useState(false);
+  const [isWrongWordQueueOpen, setIsWrongWordQueueOpen] = useState(false);
   const [isEstimateOpen, setIsEstimateOpen] = useState(false);
   const [isBackpackOpen, setIsBackpackOpen] = useState(false);
   const [layoutPreview, setLayoutPreview] = useState<LayoutPreview>(() => readLayoutPreview());
@@ -720,10 +728,11 @@ export function ReviewPage({
    * every other one from a single place means a new drawer cannot be added and
    * quietly left out of some other drawer's close list.
    */
-  function openSideDrawer(drawer: 'newWord' | 'review' | 'estimate' | 'backpack') {
+  function openSideDrawer(drawer: 'newWord' | 'review' | 'wrong' | 'estimate' | 'backpack') {
     setSelectedWordId(null);
     setIsNewWordQueueOpen(drawer === 'newWord');
     setIsReviewQueueOpen(drawer === 'review');
+    setIsWrongWordQueueOpen(drawer === 'wrong');
     setIsEstimateOpen(drawer === 'estimate');
     setIsBackpackOpen(drawer === 'backpack');
   }
@@ -1129,6 +1138,15 @@ export function ReviewPage({
                 layout={reviewGuidanceLayouts.tea}
                 onClick={onOpenCheckIn}
               />
+              <ReviewAdviceCard
+                accent="accuracy"
+                label="今日胜率"
+                value={todayAccuracyValue}
+                description=""
+                layout={reviewGuidanceLayouts.accuracy}
+                icon={<TodayAccuracyIcon size={25} strokeWidth={2.2} />}
+                onClick={() => openSideDrawer('wrong')}
+              />
               <ReviewAdviceCard accent="bars" label="未来压力" value={pressureLevel} description="" layout={reviewGuidanceLayouts.bars} onClick={onOpenStats} />
               <ReviewAdviceCard
                 accent="bag"
@@ -1178,7 +1196,7 @@ export function ReviewPage({
                 ])
             : undefined
         }
-        queueCompanion={isNewWordQueueOpen || isReviewQueueOpen || isEstimateOpen || isBackpackOpen}
+        queueCompanion={isNewWordQueueOpen || isReviewQueueOpen || isWrongWordQueueOpen || isEstimateOpen || isBackpackOpen}
       />
       <NewWordQueueDrawer
         isOpen={isNewWordQueueOpen}
@@ -1202,6 +1220,18 @@ export function ReviewPage({
         task={task}
         onClose={() => {
           setIsReviewQueueOpen(false);
+          setSelectedWordId(null);
+        }}
+        onOpenWord={openWordDetails}
+      />
+      <WrongWordQueueDrawer
+        isOpen={isWrongWordQueueOpen}
+        words={payload.words}
+        recordsById={recordsById}
+        answerEvents={answerEvents}
+        dateKey={task.dateKey}
+        onClose={() => {
+          setIsWrongWordQueueOpen(false);
           setSelectedWordId(null);
         }}
         onOpenWord={openWordDetails}

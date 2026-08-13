@@ -106,7 +106,7 @@ describe('fixed iPad shell', () => {
     );
     expect(checkInHandler).toContain('checkedInAt:');
     expect(checkInHandler).toContain('await saveDailyTask(checkedInTask);');
-    expect(checkInHandler).toContain('void onRequestSync().catch(() => undefined);');
+    expect(checkInHandler).toContain('await onRequestSync();');
     expect(css).toMatch(
       /\.page--check-in\s*\{[^}]*width:\s*100%;[^}]*min-height:\s*100%;[^}]*overflow-x:\s*hidden;[^}]*overflow-y:\s*auto;/s,
     );

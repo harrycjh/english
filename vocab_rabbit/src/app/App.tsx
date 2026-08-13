@@ -758,7 +758,10 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     setTask(checkedInTask);
     await refreshRecentTasks();
     if (onRequestSync) {
-      void onRequestSync().catch(() => undefined);
+      // Keep the PWA awake until the sync service has finished its retry cycle.
+      // The local stamp is already durable, so a later resume can retry if the
+      // network is still unavailable.
+      await onRequestSync();
     }
   }
 

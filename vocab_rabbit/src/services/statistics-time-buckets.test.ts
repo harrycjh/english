@@ -16,8 +16,8 @@ describe('statistics time buckets', () => {
 
   it('sums learning load inside a week', () => {
     const points: LearningLoadPoint[] = [
-      { dateKey: '2026-07-20', newCount: 3, reviewCount: 2, retryCount: 1, totalCount: 6, deferredReviewCount: 0, durationMs: 90_000, kind: 'history' },
-      { dateKey: '2026-07-21', newCount: 4, reviewCount: 5, retryCount: 2, totalCount: 11, deferredReviewCount: 1, durationMs: 150_000, kind: 'today' },
+      { dateKey: '2026-07-20', newCount: 3, reviewCount: 2, retryCount: 1, totalCount: 6, deferredReviewCount: 0, durationMs: 90_000, answerCount: 4, correctCount: 3, accuracy: 75, kind: 'history' },
+      { dateKey: '2026-07-21', newCount: 4, reviewCount: 5, retryCount: 2, totalCount: 11, deferredReviewCount: 1, durationMs: 150_000, answerCount: 6, correctCount: 3, accuracy: 50, kind: 'today' },
     ];
     expect(aggregateLearningLoadTimeline(points, 'week')).toEqual([{
       dateKey: '2026-07-20',
@@ -27,8 +27,33 @@ describe('statistics time buckets', () => {
       totalCount: 14,
       deferredReviewCount: 1,
       durationMs: 240_000,
+      answerCount: 10,
+      correctCount: 6,
+      accuracy: 60,
       kind: 'today',
     }]);
+  });
+
+  it('does not invent an accuracy for a bucket without actual answers', () => {
+    const points: LearningLoadPoint[] = [{
+      dateKey: '2026-07-20',
+      newCount: 3,
+      reviewCount: 2,
+      retryCount: 1,
+      totalCount: 5,
+      deferredReviewCount: 0,
+      durationMs: 90_000,
+      answerCount: 0,
+      correctCount: 0,
+      accuracy: null,
+      kind: 'forecast',
+    }];
+
+    expect(aggregateLearningLoadTimeline(points, 'week')[0]).toMatchObject({
+      answerCount: 0,
+      correctCount: 0,
+      accuracy: null,
+    });
   });
 
   it('uses the final mastery-level state in a month instead of adding states', () => {

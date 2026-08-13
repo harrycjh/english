@@ -27,6 +27,8 @@ let voicePreferences: SpeechVoicePreferences = {
   chineseVoiceURI: '',
 };
 
+let levelUpAudioContext: AudioContext | null = null;
+
 function canSpeak(): boolean {
   return typeof window !== 'undefined'
     && 'speechSynthesis' in window
@@ -126,14 +128,35 @@ export async function speakSequence(items: SpeechItem[]): Promise<void> {
   }
 }
 
-export function playLevelUpSound(): void {
-  if (typeof window === 'undefined') return;
+function getLevelUpAudioContext(): AudioContext | null {
+  if (typeof window === 'undefined') return null;
   const AudioContextConstructor = window.AudioContext
     ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-  if (!AudioContextConstructor) return;
+  if (!AudioContextConstructor) return null;
+
+  if (!levelUpAudioContext || levelUpAudioContext.state === 'closed') {
+    levelUpAudioContext = new AudioContextConstructor();
+  }
+  return levelUpAudioContext;
+}
+
+export function primeLevelUpSound(): void {
+  try {
+    const context = getLevelUpAudioContext();
+    if (context && context.state !== 'running') {
+      void context.resume().catch(() => undefined);
+    }
+  } catch {
+    // WebAudio is optional; speech and the rest of the answer flow must continue.
+  }
+}
+
+export function playLevelUpSound(): void {
+  if (typeof window === 'undefined') return;
 
   try {
-    const context = new AudioContextConstructor();
+    const context = getLevelUpAudioContext();
+    if (!context) return;
     const startedAt = context.currentTime;
     const gain = context.createGain();
     gain.gain.setValueAtTime(0.0001, startedAt);
@@ -150,12 +173,8 @@ export function playLevelUpSound(): void {
       oscillator.start(noteStartedAt);
       oscillator.stop(noteStartedAt + 0.32);
     });
-
-    window.setTimeout(() => {
-      void context.close().catch(() => undefined);
-    }, 900);
   } catch {
-    // Browsers may block AudioContext creation until they see enough user intent.
+    // Browsers without usable WebAudio should still keep the learning flow moving.
   }
 }
 

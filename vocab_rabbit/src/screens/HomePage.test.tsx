@@ -59,10 +59,10 @@ describe('ReviewPage', () => {
           newWordIds: [previewWord.id],
           reviewWordIds: [],
           completedAt: null,
-          correctCount: 0,
-          wrongCount: 0,
-          totalAnswered: 0,
-          answeredWordIds: [],
+          correctCount: 6,
+          wrongCount: 1,
+          totalAnswered: 7,
+          answeredWordIds: [previewWord.id],
         }}
         setting={defaultParentSetting}
         recordsById={{}}
@@ -107,7 +107,11 @@ describe('ReviewPage', () => {
     expect(markup).toContain('review-metric-card review-metric-card--task is-actionable');
     expect(markup).toContain('review-advice-card review-advice-card--bars is-actionable');
     expect(markup).toContain('review-advice-card review-advice-card--bag is-actionable');
-    // Every advice card now opens something, so all three carry the chevron.
+    expect(markup).toContain('review-advice-card review-advice-card--accuracy is-actionable');
+    expect(markup).toContain('今日胜率');
+    expect(markup).toContain('86%');
+    expect(markup).toContain('lucide-rabbit');
+    // Every advice card now opens something, so all four carry the chevron.
     expect(markup).toContain('review-advice-card review-advice-card--tea is-actionable');
     expect(markup).toContain('lucide-calendar-days');
     expect(markup).not.toContain('review-advice-card__art');
@@ -584,8 +588,8 @@ describe('ReviewPage', () => {
     const bodies = [...markup.matchAll(/<div class="review-advice-card__body" style="([^"]*)"/g)]
       .map((match) => match[1]);
 
-    expect(icons).toHaveLength(3);
-    expect(bodies).toHaveLength(3);
+    expect(icons).toHaveLength(4);
+    expect(bodies).toHaveLength(4);
 
     for (const style of icons) {
       // All three icons are authored at the same 14px card inset.
@@ -598,8 +602,8 @@ describe('ReviewPage', () => {
 
     // The text starts clear of the icon and keeps the authored right edge, so
     // the longest headline stays on one line instead of overflowing the card.
-    expect(bodies.map((style) => /left:(\d+)px/.exec(style)?.[1])).toEqual(['72', '72', '72']);
-    expect(bodies.map((style) => /width:(\d+)px/.exec(style)?.[1])).toEqual(['182', '168', '177']);
+    expect(bodies.map((style) => /left:([\d.]+)px/.exec(style)?.[1])).toEqual(['72', '72', '72', '72']);
+    expect(bodies.map((style) => /width:([\d.]+)px/.exec(style)?.[1])).toEqual(['163.25', '163.25', '163.25', '163.25']);
     for (const style of bodies) {
       expect(style).toContain('top:50%');
       expect(style).toContain('translateY(-50%)');
@@ -612,5 +616,7 @@ describe('ReviewPage', () => {
     expect(markup).toMatch(/review-advice-card--tea is-actionable/);
     expect(markup).toMatch(/review-advice-card--bag is-actionable/);
     expect(markup).not.toMatch(/review-advice-card--bars is-actionable/);
+    expect(markup).toContain('lucide-dog');
+    expect(markup).toContain('>--</strong>');
   });
 });

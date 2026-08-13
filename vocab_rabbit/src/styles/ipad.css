@@ -6095,7 +6095,7 @@ button {
   left: 29px;
   top: 304px;
   width: 1103px;
-  grid-template-columns: 258px 258px 258px 289px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin: 0;
 }
@@ -6275,6 +6275,10 @@ button {
 
 .page--review #review-guidance-section {
   top: 583px;
+}
+
+.page--review #review-guidance-section .review-panel__header h2 {
+  transform: translateY(5px);
 }
 
 .page--review .review-panel__header {
@@ -6535,9 +6539,10 @@ button {
 
 .page--review .review-advice-grid {
   position: relative;
-  grid-template-columns: 361px 352px 363px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin-top: 0;
+  transform: translateY(10px);
 }
 
 .page--review .review-advice-card {
@@ -6614,6 +6619,19 @@ button {
 .page--review .review-advice-card--tea .review-advice-card__icon svg {
   width: 24px;
   height: 24px;
+  stroke: currentColor;
+}
+
+.page--review .review-advice-card--accuracy .review-advice-card__icon {
+  display: grid;
+  place-items: center;
+  color: #d07b28;
+  background: radial-gradient(circle at 35% 35%, #fff9e9 0, #f8e5bd 64%, #efd29a 100%);
+}
+
+.page--review .review-advice-card--accuracy .review-advice-card__icon svg {
+  width: 25px;
+  height: 25px;
   stroke: currentColor;
 }
 
@@ -8628,6 +8646,20 @@ button {
 .new-word-queue__index.is-complete {
   background: #e8f5df;
   color: #57943d;
+}
+
+.new-word-queue__wrong-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  min-height: 27px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: #fff0ec;
+  color: #c65b49;
+  font-size: 11px;
+  white-space: nowrap;
 }
 
 .new-word-queue__word {
@@ -13508,7 +13540,7 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
 
 .page--stats .learning-load-chart {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr);
+  grid-template-columns: 48px minmax(0, 1fr) 46px;
   width: 100%;
   height: 100%;
   min-height: 0;
@@ -13571,6 +13603,64 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   position: relative;
   height: 100%;
   min-height: 0;
+}
+
+.page--stats .learning-load-chart__accuracy-layer {
+  position: absolute;
+  z-index: 3;
+  inset: 50px 0 45px;
+  pointer-events: none;
+}
+
+.page--stats .learning-load-chart__accuracy-layer svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.page--stats .learning-load-chart__accuracy-line {
+  fill: none;
+  stroke: #e5674f;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 2px 2px rgba(153, 66, 48, 0.12));
+}
+
+.page--stats .learning-load-chart__accuracy-node {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border: 2px solid #fffdf8;
+  border-radius: 50%;
+  background: #e5674f;
+  box-shadow: 0 1px 4px rgba(126, 53, 39, 0.22);
+  transform: translate(-50%, -50%);
+}
+
+.page--stats .learning-load-chart__accuracy-axis {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 45px;
+  min-height: 0;
+  color: #b36a5d;
+  font-size: 10px;
+  text-align: left;
+}
+
+.page--stats .learning-load-chart__accuracy-scale {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
+  padding: 50px 0 0 8px;
+}
+
+.page--stats .learning-load-chart__accuracy-axis small {
+  align-self: center;
+  padding-left: 8px;
+  color: #b78378;
+  font-size: 9px;
 }
 
 .page--stats .learning-load-chart__grid {
@@ -13769,6 +13859,13 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
 
 .page--stats .memory-chart-legend i.is-review {
   background: #f8d77d;
+}
+
+.page--stats .memory-chart-legend i.is-accuracy {
+  height: 0;
+  border-top: 2px solid #e5674f;
+  border-radius: 0;
+  background: transparent;
 }
 
 .page--stats .memory-chart-legend i.is-forecast {
