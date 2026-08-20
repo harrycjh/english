@@ -201,4 +201,24 @@ describe('SelectionPage', () => {
     }
     expect(markup).not.toContain('/design-reference/slices/selection-card-');
   });
+
+  it('renders vocabulary pages on a horizontally draggable card track', () => {
+    const carouselWords = Array.from({ length: 31 }, (_, index) => createWord(`word-${index + 1}`));
+    const markup = renderSelectionPage({
+      ...payload,
+      wordCount: carouselWords.length,
+      words: carouselWords,
+    });
+
+    expect(markup).toContain('class="selection-results-viewport selection-card-carousel"');
+    expect(markup).toContain('aria-label="卡片视图，可左右拖动，共 6 页"');
+    expect(markup).toContain('data-selection-page="1"');
+    expect(markup).toContain('data-selection-page="2"');
+    expect(markup).toContain('class="selection-pagination__indicator"');
+    expect(markup).toContain('class="selection-pagination__window"');
+    expect(markup).toContain('class="selection-pagination__track"');
+    expect(markup).toContain('class="selection-pagination__tail"');
+    expect(markup).toContain('data-page-number="1"');
+    expect(markup).toContain('draggable="false"');
+  });
 });

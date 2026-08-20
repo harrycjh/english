@@ -74,6 +74,7 @@ import { APP_VERSION } from '../config/app-meta';
 import { getMillisecondsUntilNextStudyDay } from '../services/study-day';
 import { configureSpeechVoices } from '../services/audio-service';
 import { buildQuestion } from '../services/question-service';
+import { buildReviewPreviewWords } from '../services/review-preview-service';
 import { BottomDock } from '../components/BottomDock';
 import { ProfileSelector } from '../components/ProfileSelector';
 import {
@@ -128,18 +129,6 @@ function MainShellChrome({ profileId, onSelectProfile }: MainShellChromeProps) {
       />
     </header>
   );
-}
-
-function getPreviewWords(payload: WordPayload | null, task: DailyTaskSummary | null) {
-  if (!payload || !task) {
-    return [];
-  }
-
-  // The home comp shows one row of four on the authored stage; a taller stage
-  // (foldable) fills up to three rows, so hand the page enough words for that.
-  const wordIds = [...task.newWordIds, ...task.reviewWordIds].slice(0, 12);
-  const wordsById = new Map(payload.words.map((word) => [word.id, word]));
-  return wordIds.map((wordId) => wordsById.get(wordId)).filter(Boolean) as WordPayload['words'];
 }
 
 function getAuthoritativeTaskAnswerIds(task: DailyTaskSummary, events: AnswerEvent[]): string[] {
@@ -484,7 +473,11 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     };
   }, []);
 
-  const previewWords = useMemo(() => getPreviewWords(payload, task), [payload, task]);
+  const previewWords = useMemo(() => buildReviewPreviewWords(
+    payload,
+    task,
+    new Set(Object.keys(localLifePhotosById)),
+  ), [localLifePhotosById, payload, task]);
   const masteredCount = useMemo(
     () => Object.values(recordsById).filter((record) => isMastered(record)).length,
     [recordsById]

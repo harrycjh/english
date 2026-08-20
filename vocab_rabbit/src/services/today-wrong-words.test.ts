@@ -25,6 +25,22 @@ describe('today wrong words', () => {
       event('c-1', 'word-c', '2026-08-12T11:00:00.000Z'),
       event('a-correct', 'word-a', '2026-08-12T12:00:00.000Z', true),
       event('other-day', 'word-d', '2026-08-11T12:00:00.000Z'),
+      {
+        ...event('lv0-wrong', 'word-lv0', '2026-08-12T13:00:00.000Z'),
+        learningStateBefore: {
+          wordId: 'word-lv0',
+          masteryLevel: 0,
+          reviewStage: 0,
+          correctStreak: 0,
+          wrongCount: 0,
+          lastStudiedAt: null,
+          nextDueAt: null,
+        },
+      },
+      {
+        ...event('legacy-recognition', 'word-legacy-lv0', '2026-08-12T14:00:00.000Z'),
+        questionKind: 'recognition' as const,
+      },
     ];
 
     expect(buildTodayWrongWords(events, '2026-08-12')).toEqual([

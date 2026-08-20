@@ -1,4 +1,5 @@
 import type { AnswerEvent } from '../models/answer-event';
+import { countsTowardTodayAccuracy } from './today-answer-statistics';
 
 export interface TodayWrongWord {
   wordId: string;
@@ -10,7 +11,7 @@ export function buildTodayWrongWords(events: AnswerEvent[], dateKey: string): To
   const byWordId = new Map<string, TodayWrongWord>();
 
   for (const event of events) {
-    if (event.dateKey !== dateKey || event.isCorrect) continue;
+    if (event.dateKey !== dateKey || event.isCorrect || !countsTowardTodayAccuracy(event)) continue;
     const current = byWordId.get(event.wordId);
     byWordId.set(event.wordId, {
       wordId: event.wordId,

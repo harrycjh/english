@@ -64,7 +64,7 @@ export const BACKPACK_ITEMS: BackpackItem[] = [
     name: '星夜特工',
     hint: '霓虹城里的夜间任务',
     requiredDays: 0,
-    artFile: 'settings-cyber-rabbit-hero.webp',
+    artFile: 'settings-starlight-rabbit-explorer-v1.webp',
   },
   {
     id: DEFAULT_ITEM_ID,

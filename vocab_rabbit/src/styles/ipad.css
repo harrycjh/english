@@ -6309,6 +6309,42 @@ button {
   margin-top: 0;
 }
 
+.page--review .review-preview-carousel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  touch-action: pan-x pinch-zoom;
+  cursor: grab;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page--review .review-preview-carousel.is-dragging,
+.page--review .review-preview-carousel.is-gliding {
+  cursor: grabbing;
+}
+
+.page--review .review-preview-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.page--review .review-preview-carousel.has-overflow::after {
+  content: '';
+  flex: 0 0 calc(100% - 265px);
+}
+
+.page--review .review-preview-carousel__page {
+  min-width: 1102px;
+  flex: 0 0 1102px;
+}
+
 .page--review .review-preview-card {
   display: grid;
   grid-template-columns: 110px minmax(0, 1fr);
@@ -8648,7 +8684,8 @@ button {
   color: #57943d;
 }
 
-.new-word-queue__wrong-count {
+.new-word-queue__wrong-count,
+.new-word-queue__unfamiliar-count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -8660,6 +8697,11 @@ button {
   color: #c65b49;
   font-size: 11px;
   white-space: nowrap;
+}
+
+.new-word-queue__unfamiliar-count {
+  background: #fff6d9;
+  color: #a96a00;
 }
 
 .new-word-queue__word {
@@ -9073,8 +9115,56 @@ button {
   box-shadow: inset 0 0 0 1px rgba(234, 210, 171, 0.92);
 }
 
+.page--selection .selection-pagination__window {
+  position: relative;
+  flex: 0 0 auto;
+  height: 32px;
+  overflow: hidden;
+}
+
+.page--selection .selection-pagination__track,
+.page--selection .selection-pagination__tail {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page--selection .selection-pagination__track {
+  position: relative;
+  z-index: 1;
+  width: max-content;
+  transition: transform 130ms cubic-bezier(0.2, 0.72, 0.25, 1);
+  will-change: transform;
+}
+
+.page--selection .selection-pagination__tail {
+  flex: 0 0 auto;
+  transition: opacity 130ms ease;
+}
+
+.page--selection .selection-pagination__indicator {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, #ffb23e, #ff9300);
+  box-shadow: 0 5px 12px rgba(231, 133, 8, 0.2);
+  transition:
+    transform 130ms cubic-bezier(0.2, 0.72, 0.25, 1),
+    width 130ms cubic-bezier(0.2, 0.72, 0.25, 1),
+    opacity 120ms ease;
+  will-change: transform, width;
+}
+
 .page--selection .selection-pagination__button,
 .page--selection .selection-pagination__ellipsis {
+  position: relative;
+  z-index: 1;
   min-width: 32px;
   height: 32px;
   border-radius: 10px;
@@ -9088,11 +9178,21 @@ button {
   background: transparent;
   color: #52331a;
   cursor: pointer;
+  transition: color 130ms ease;
 }
 
 .page--selection .selection-pagination__button.is-active {
   color: #ffffff;
-  background: linear-gradient(135deg, #ffb23e, #ff9300);
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page--selection .selection-pagination__indicator,
+  .page--selection .selection-pagination__track,
+  .page--selection .selection-pagination__tail,
+  .page--selection .selection-pagination__button {
+    transition: none;
+  }
 }
 
 .page--selection .selection-dock.home-dock {
@@ -9425,6 +9525,55 @@ html[data-stage-grown='true'] .page--selection .selection-layout > .section-bloc
 
 .page--selection .selection-pagination {
   margin-top: 10px;
+}
+
+.page--selection .selection-results-viewport {
+  margin-top: 10px;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page--selection .selection-results-viewport.is-dragging,
+.page--selection .selection-results-viewport.is-gliding {
+  cursor: grabbing;
+}
+
+.page--selection .selection-results-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.page--selection .selection-card-carousel {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  touch-action: pan-x pinch-zoom;
+}
+
+.page--selection .selection-card-grid--page {
+  flex: 0 0 100%;
+  min-width: 100%;
+  margin-top: 0;
+  align-content: start;
+}
+
+.page--selection .selection-list-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y pinch-zoom;
+}
+
+.page--selection .selection-list--page {
+  flex: 0 0 auto;
+  min-height: 100%;
+  margin-top: 0;
+  align-content: start;
 }
 
 .page--selection .selection-summary__hero,
@@ -12905,7 +13054,7 @@ html[data-shell-mode='ipad-fixed'] .page--review .review-plan-shell__chrome .app
 }
 
 .page--review[data-mascot-scene='cyber'] .review-dom-surface::before {
-  background-image: url('/design-reference/slices/settings-cyber-rabbit-hero.webp?v=1');
+  background-image: url('/design-reference/slices/settings-starlight-rabbit-explorer-v1.webp?v=1');
   background-position: center 46%;
   background-size: 138% auto;
   opacity: 1;

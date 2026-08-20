@@ -14,6 +14,7 @@ import {
   type LayoutPreview,
 } from '../app/layout-preview';
 import { useStageSize } from '../app/use-stage-size';
+import { useInertialHorizontalScroll } from '../hooks/useInertialHorizontalScroll';
 import {
   PREVIEW_COLUMNS,
   PREVIEW_ROW_GAP,
@@ -59,6 +60,7 @@ import {
   estimateSessionDuration,
   formatStudyDuration,
 } from '../services/study-duration';
+import { buildTodayAnswerStatistics } from '../services/today-answer-statistics';
 import {
   getStudyChinese,
   getStudyPartOfSpeech,
@@ -491,6 +493,7 @@ function ReviewPreviewCard({
           word={word}
           className="review-preview-card__word-image"
           alt=""
+          draggable={false}
         />
         <span
           className="review-preview-card__index"
@@ -671,9 +674,14 @@ export function ReviewPage({
   const checkInValue = checkInSummary.isTodayCheckedIn
     ? `已连续 ${checkInSummary.streakDays} 天`
     : '今天还没签到';
-  const todayAccuracy = task.totalAnswered > 0
-    ? (task.correctCount / task.totalAnswered) * 100
-    : null;
+  const todayAnswerStatistics = buildTodayAnswerStatistics(answerEvents, task.dateKey);
+  // Legacy task rows may not have answer events. Once events exist, they are
+  // authoritative so a day containing only Lv0 self-assessments shows `--`.
+  const todayAccuracy = todayAnswerStatistics.eventCount > 0
+    ? todayAnswerStatistics.accuracy
+    : task.totalAnswered > 0
+      ? (task.correctCount / task.totalAnswered) * 100
+      : null;
   const todayAccuracyValue = todayAccuracy === null ? '--' : `${Math.round(todayAccuracy)}%`;
   const TodayAccuracyIcon = todayAccuracy !== null && todayAccuracy > 85 ? Rabbit : Dog;
   // The debug profile owns the whole catalogue, so new art can be equipped and
@@ -696,6 +704,11 @@ export function ReviewPage({
   const reviewLoad = task.reviewWordIds.length;
   const isReviewHeavy = reviewLoad >= task.newWordIds.length;
   const stageSize = useStageSize();
+  const {
+    scrollRef: previewCarouselRef,
+    pointerHandlers: previewCarouselPointerHandlers,
+    consumeMouseDrag: consumePreviewMouseDrag,
+  } = useInertialHorizontalScroll();
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
   const [isAdvancingDay, setIsAdvancingDay] = useState(false);
   const [localDebugPickerOpen, setLocalDebugPickerOpen] = useState(false);
@@ -721,6 +734,11 @@ export function ReviewPage({
   function openWordDetails(wordId: string) {
     setSelectedWordId(wordId);
     onRequestLocalLifePhoto?.(wordId);
+  }
+
+  function openPreviewWordDetails(wordId: string) {
+    if (consumePreviewMouseDrag()) return;
+    openWordDetails(wordId);
   }
 
   /**
@@ -796,7 +814,14 @@ export function ReviewPage({
     rowHeight: previewCardHeight,
   });
   const previewOverflowHeight = (previewRows - 1) * previewRowPitch;
-  const visiblePreviewWords = previewWords.slice(0, previewRows * PREVIEW_COLUMNS);
+  const previewPageSize = previewRows * PREVIEW_COLUMNS;
+  const previewPages = Array.from(
+    { length: Math.ceil(previewWords.length / previewPageSize) },
+    (_, pageIndex) => previewWords.slice(
+      pageIndex * previewPageSize,
+      (pageIndex + 1) * previewPageSize,
+    ),
+  );
   const previewSectionBounds = {
     ...reviewLayout.modules.previewSection,
     height: reviewLayout.modules.previewSection.height + previewOverflowHeight,
@@ -1099,20 +1124,38 @@ export function ReviewPage({
               </h2>
             </div>
             {previewWords.length > 0 ? (
-              <div className="review-preview-grid" style={{ position: 'absolute', left: '0', top: '0', width: '100%', height: `${previewGridHeight + previewOverflowHeight}px` }}>
-                {visiblePreviewWords.map((word, index) => (
-                  <ReviewPreviewCard
-                    key={word.id}
-                    word={word}
-                    masteryLevel={recordsById[word.id]?.masteryLevel ?? 0}
-                    index={index}
-                    layout={shiftLayoutY(
-                      reviewPreviewLayouts[previewColumnIds[index % PREVIEW_COLUMNS]],
-                      Math.floor(index / PREVIEW_COLUMNS) * previewRowPitch,
-                    )}
-                    hasLocalLifePhoto={Boolean(localLifePhotosById[word.id])}
-                    onOpenDetails={() => openWordDetails(word.id)}
-                  />
+              <div
+                className={`review-preview-carousel${previewPages.length > 1 ? ' has-overflow' : ''}`}
+                aria-label={`今日预览，可左右滑动，共 ${previewWords.length} 个词`}
+                ref={previewCarouselRef}
+                {...previewCarouselPointerHandlers}
+                style={{ height: `${previewGridHeight + previewOverflowHeight}px` }}
+              >
+                {previewPages.map((pageWords, pageIndex) => (
+                  <div
+                    className="review-preview-grid review-preview-carousel__page"
+                    data-preview-page={pageIndex + 1}
+                    key={`preview-page-${pageIndex + 1}`}
+                    style={{ height: `${previewGridHeight + previewOverflowHeight}px` }}
+                  >
+                    {pageWords.map((word, pageWordIndex) => {
+                      const globalIndex = (pageIndex * previewPageSize) + pageWordIndex;
+                      return (
+                        <ReviewPreviewCard
+                          key={word.id}
+                          word={word}
+                          masteryLevel={recordsById[word.id]?.masteryLevel ?? 0}
+                          index={globalIndex}
+                          layout={shiftLayoutY(
+                            reviewPreviewLayouts[previewColumnIds[pageWordIndex % PREVIEW_COLUMNS]],
+                            Math.floor(pageWordIndex / PREVIEW_COLUMNS) * previewRowPitch,
+                          )}
+                          hasLocalLifePhoto={Boolean(localLifePhotosById[word.id])}
+                          onOpenDetails={() => openPreviewWordDetails(word.id)}
+                        />
+                      );
+                    })}
+                  </div>
                 ))}
               </div>
             ) : (

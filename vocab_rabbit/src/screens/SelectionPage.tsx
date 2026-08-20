@@ -1,6 +1,21 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  type MouseEvent as ReactMouseEvent,
+  type UIEvent as ReactUIEvent,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useStageSize } from '../app/use-stage-size';
-import { calculateBreakdownRows, calculateSelectionPageSize } from './selection-density';
+import {
+  calculateBreakdownRows,
+  calculateSelectionPageSize,
+  SELECTION_COLUMNS,
+  SELECTION_ROW_GAP,
+  SELECTION_ROW_HEIGHT,
+} from './selection-density';
+import { useInertialHorizontalScroll } from '../hooks/useInertialHorizontalScroll';
 import type { AnswerEvent } from '../models/answer-event';
 import type { DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
@@ -32,7 +47,6 @@ type WordSourceFilter = 'all' | 'oxford' | 'redRocket' | 'raz' | 'lifePhoto';
 type LeveledWordSourceFilter = Extract<WordSourceFilter, 'oxford' | 'redRocket' | 'raz'>;
 type SortMode = 'level' | 'difficulty' | 'recent' | 'alphabetical';
 type ViewMode = 'grid' | 'list';
-type PaginationToken = number | 'ellipsis';
 
 interface SelectionPageProps {
   payload: WordPayload;
@@ -205,6 +219,7 @@ function SelectionWordCard({
               <WordImage
                 word={word}
                 alt={chineseLabel}
+                draggable={false}
                 onError={() => setHasArt(false)}
               />
             ) : (
@@ -369,31 +384,6 @@ function getCategoryColorSlot(category: string): number {
   return Math.abs(h) % 8;
 }
 
-function buildPagination(totalPages: number, currentPage: number): PaginationToken[] {
-  if (totalPages <= 7) {
-    return Array.from({ length: totalPages }, (_, index) => index + 1);
-  }
-
-  const items: PaginationToken[] = [1];
-  const windowStart = Math.max(2, currentPage - 1);
-  const windowEnd = Math.min(totalPages - 1, currentPage + 1);
-
-  if (windowStart > 2) {
-    items.push('ellipsis');
-  }
-
-  for (let page = windowStart; page <= windowEnd; page += 1) {
-    items.push(page);
-  }
-
-  if (windowEnd < totalPages - 1) {
-    items.push('ellipsis');
-  }
-
-  items.push(totalPages);
-  return items;
-}
-
 export function SelectionPage({
   payload,
   recordsById,
@@ -425,6 +415,20 @@ export function SelectionPage({
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedWordId, setSelectedWordId] = useState<string | null>(null);
   const [isQueueOpen, setIsQueueOpen] = useState(false);
+  const {
+    scrollRef: gridScrollRef,
+    pointerHandlers: gridPointerHandlers,
+    consumeMouseDrag: consumeGridMouseDrag,
+  } = useInertialHorizontalScroll();
+  const {
+    scrollRef: listScrollRef,
+    pointerHandlers: listPointerHandlers,
+    consumeMouseDrag: consumeListMouseDrag,
+  } = useInertialHorizontalScroll('vertical');
+  const latestPageRef = useRef(1);
+  const paginationIndicatorRef = useRef<HTMLSpanElement>(null);
+  const paginationTrackRef = useRef<HTMLDivElement>(null);
+  const paginationTailRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!openNewWordQueue) return;
@@ -530,10 +534,15 @@ export function SelectionPage({
   const breakdownRows = calculateBreakdownRows(stageSize.height);
   const totalPages = Math.max(1, Math.ceil(filteredWords.length / pageSize));
   const activePage = Math.min(currentPage, totalPages);
-  const visibleWords = useMemo(() => {
-    const start = (activePage - 1) * pageSize;
-    return filteredWords.slice(start, start + pageSize);
-  }, [activePage, filteredWords, pageSize]);
+  const selectionRows = pageSize / SELECTION_COLUMNS;
+  const gridViewportHeight = (selectionRows * SELECTION_ROW_HEIGHT)
+    + ((selectionRows - 1) * SELECTION_ROW_GAP);
+  const listViewportHeight = (pageSize * 56) + ((pageSize - 1) * 6);
+  const pageNumbers = useMemo(
+    () => Array.from({ length: totalPages }, (_, index) => index + 1),
+    [totalPages],
+  );
+  latestPageRef.current = activePage;
 
   const reviewLoad = useMemo(() => estimateReviewLoad(recordsById, selectionById, setting), [recordsById, selectionById, setting]);
 
@@ -559,8 +568,131 @@ export function SelectionPage({
     wordSourceFilter === 'all' &&
     !imageOnly &&
     sortMode === 'alphabetical';
-  const pagination = useMemo(() => buildPagination(totalPages, activePage), [activePage, totalPages]);
+  const paginationWindowSize = Math.min(5, totalPages);
+  const paginationWindowWidth = (paginationWindowSize * 32)
+    + (Math.max(0, paginationWindowSize - 1) * 4);
   const breakdownMax = categoryBreakdown[0]?.[1] ?? 1;
+
+  const viewportResetKey = [
+    searchText,
+    selectedCategory,
+    selectedDifficulty,
+    selectedStatus,
+    wordSourceFilter,
+    selectedSourceLevels.join(','),
+    imageOnly ? 'images' : 'all-images',
+    sortMode,
+    pageSize,
+    viewMode,
+  ].join('|');
+
+  useEffect(() => {
+    gridScrollRef.current?.scrollTo({ left: 0 });
+    listScrollRef.current?.scrollTo({ top: 0 });
+    latestPageRef.current = 1;
+    setCurrentPage(1);
+  }, [gridScrollRef, listScrollRef, viewportResetKey]);
+
+  function getPageWords(pageNumber: number) {
+    const start = (pageNumber - 1) * pageSize;
+    return filteredWords.slice(start, start + pageSize);
+  }
+
+  function getViewportPageExtent(
+    scroller: HTMLDivElement,
+    axis: 'horizontal' | 'vertical',
+  ) {
+    const page = scroller.querySelector<HTMLElement>('[data-selection-page]');
+    if (!page) return axis === 'horizontal' ? scroller.clientWidth : scroller.clientHeight;
+    const styles = window.getComputedStyle(scroller);
+    const gap = Number.parseFloat(axis === 'horizontal' ? styles.columnGap : styles.rowGap) || 0;
+    return (axis === 'horizontal' ? page.offsetWidth : page.offsetHeight) + gap;
+  }
+
+  function updatePaginationIndicator(pagePosition: number) {
+    const indicator = paginationIndicatorRef.current;
+    const track = paginationTrackRef.current;
+    if (!indicator || !track) return;
+
+    const buttons = track.querySelectorAll<HTMLElement>('.selection-pagination__button');
+    const firstButton = buttons[0];
+    if (!firstButton) return;
+    const buttonPitch = buttons[1]
+      ? buttons[1].offsetLeft - firstButton.offsetLeft
+      : firstButton.offsetWidth + 4;
+    const clampedPosition = Math.max(1, Math.min(totalPages, pagePosition));
+    const indicatorSlot = Math.min(2, clampedPosition - 1);
+    const trackOffset = Math.max(0, clampedPosition - 3) * buttonPitch;
+
+    indicator.style.width = `${firstButton.offsetWidth}px`;
+    indicator.style.transform = `translate3d(${indicatorSlot * buttonPitch}px, 0, 0)`;
+    indicator.style.opacity = '1';
+    track.style.transform = `translate3d(${-trackOffset}px, 0, 0)`;
+
+    const tail = paginationTailRef.current;
+    if (tail) {
+      const showTail = clampedPosition < totalPages - 2;
+      tail.style.opacity = showTail ? '1' : '0';
+      tail.style.pointerEvents = showTail ? 'auto' : 'none';
+    }
+  }
+
+  function syncPageFromScroll(
+    event: ReactUIEvent<HTMLDivElement>,
+    axis: 'horizontal' | 'vertical',
+  ) {
+    const scroller = event.currentTarget;
+    const pageExtent = getViewportPageExtent(scroller, axis);
+    if (pageExtent <= 0) return;
+    const scrollOffset = axis === 'horizontal' ? scroller.scrollLeft : scroller.scrollTop;
+    const viewportExtent = axis === 'horizontal' ? scroller.clientWidth : scroller.clientHeight;
+    updatePaginationIndicator((scrollOffset / pageExtent) + 1);
+    const nextPage = Math.max(1, Math.min(totalPages, Math.floor((scrollOffset + (viewportExtent / 2)) / pageExtent) + 1));
+    if (nextPage === latestPageRef.current) return;
+    latestPageRef.current = nextPage;
+    setCurrentPage(nextPage);
+  }
+
+  function jumpToPage(pageNumber: number) {
+    const nextPage = Math.max(1, Math.min(totalPages, pageNumber));
+    latestPageRef.current = nextPage;
+    setCurrentPage(nextPage);
+    const scroller = viewMode === 'grid' ? gridScrollRef.current : listScrollRef.current;
+    if (!scroller) return;
+    const pageExtent = getViewportPageExtent(
+      scroller,
+      viewMode === 'grid' ? 'horizontal' : 'vertical',
+    );
+    scroller.scrollTo({
+      left: viewMode === 'grid' ? (nextPage - 1) * pageExtent : 0,
+      top: viewMode === 'list' ? (nextPage - 1) * pageExtent : 0,
+      behavior: 'smooth',
+    });
+  }
+
+  function consumeGridDragClick(event: ReactMouseEvent<HTMLDivElement>) {
+    if (!consumeGridMouseDrag()) return;
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  function consumeListDragClick(event: ReactMouseEvent<HTMLDivElement>) {
+    if (!consumeListMouseDrag()) return;
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  useLayoutEffect(() => {
+    const scroller = viewMode === 'grid' ? gridScrollRef.current : listScrollRef.current;
+    if (!scroller) {
+      updatePaginationIndicator(activePage);
+      return;
+    }
+    const axis = viewMode === 'grid' ? 'horizontal' : 'vertical';
+    const pageExtent = getViewportPageExtent(scroller, axis);
+    const scrollOffset = axis === 'horizontal' ? scroller.scrollLeft : scroller.scrollTop;
+    updatePaginationIndicator(pageExtent > 0 ? (scrollOffset / pageExtent) + 1 : activePage);
+  }, [activePage, totalPages, viewMode]);
 
   async function savePatchedSelectionStates(states: Array<Partial<WordSelectionState> & Pick<WordSelectionState, 'wordId'>>) {
     const nextStates = states.map((state) => {
@@ -776,48 +908,88 @@ export function SelectionPage({
                 <p>可以清空筛选，或者放宽分类、状态与图片条件。</p>
               </article>
             ) : viewMode === 'grid' ? (
-              <div className="selection-card-grid">
-                {visibleWords.map((word) => {
-                  const ss = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
-                  const vo = isReferenceGridState ? REFERENCE_SELECTION_CARD_OVERRIDES[word.id] : undefined;
-                  const canQueue = !recordsById[word.id] && ss.isEnabled && !ss.isPaused;
+              <div
+                className="selection-results-viewport selection-card-carousel"
+                aria-label={`卡片视图，可左右拖动，共 ${totalPages} 页`}
+                ref={gridScrollRef}
+                {...gridPointerHandlers}
+                onClickCapture={consumeGridDragClick}
+                onScroll={(event) => syncPageFromScroll(event, 'horizontal')}
+                style={{ height: `${gridViewportHeight}px` }}
+              >
+                {pageNumbers.map((pageNumber) => {
+                  const shouldRenderPage = Math.abs(pageNumber - activePage) <= 2;
                   return (
-                    <SelectionWordCard
-                      key={word.id}
-                      word={word}
-                      masteryLevel={recordsById[word.id]?.masteryLevel ?? 0}
-                      visualOverride={vo}
-                      onOpenDetails={() => openWordDetails(word.id)}
-                      isEnabled={ss.isEnabled}
-                      isPaused={ss.isPaused}
-                      isQueued={queuedWordIds.has(word.id)}
-                      canQueue={canQueue}
-                      onAddToQueue={() => void onChangeNewWordQueue([...setting.newWordQueue, word.id])}
-                      onToggleEnabled={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: !ss.isEnabled, isPaused: false }])}
-                      onTogglePaused={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: true, isPaused: !ss.isPaused }])}
-                    />
+                    <div
+                      className="selection-card-grid selection-card-grid--page"
+                      data-selection-page={pageNumber}
+                      key={`grid-page-${pageNumber}`}
+                      style={{ height: `${gridViewportHeight}px` }}
+                    >
+                      {shouldRenderPage ? getPageWords(pageNumber).map((word) => {
+                        const ss = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
+                        const vo = isReferenceGridState ? REFERENCE_SELECTION_CARD_OVERRIDES[word.id] : undefined;
+                        const canQueue = !recordsById[word.id] && ss.isEnabled && !ss.isPaused;
+                        return (
+                          <SelectionWordCard
+                            key={word.id}
+                            word={word}
+                            masteryLevel={recordsById[word.id]?.masteryLevel ?? 0}
+                            visualOverride={vo}
+                            onOpenDetails={() => openWordDetails(word.id)}
+                            isEnabled={ss.isEnabled}
+                            isPaused={ss.isPaused}
+                            isQueued={queuedWordIds.has(word.id)}
+                            canQueue={canQueue}
+                            onAddToQueue={() => void onChangeNewWordQueue([...setting.newWordQueue, word.id])}
+                            onToggleEnabled={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: !ss.isEnabled, isPaused: false }])}
+                            onTogglePaused={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: true, isPaused: !ss.isPaused }])}
+                          />
+                        );
+                      }) : null}
+                    </div>
                   );
                 })}
               </div>
             ) : (
-              <div className="selection-list">
-                {visibleWords.map((word) => {
-                  const ss = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
-                  const bucket = getWordLearningBucket(word.id, recordsById[word.id], ss);
-                  const sl = bucket === 'paused' ? '已暂停' : bucket === 'disabled' ? '未启用' : bucket === 'mastered' ? '已掌握' : bucket === 'learning' ? '学习中' : '未学';
-                  const st = bucket === 'paused' ? 'paused' : bucket === 'disabled' ? 'disabled' : 'active';
-                  const canQueue = !recordsById[word.id] && ss.isEnabled && !ss.isPaused;
+              <div
+                className="selection-results-viewport selection-list-scroll"
+                aria-label={`列表视图，可上下拖动，共 ${totalPages} 页`}
+                ref={listScrollRef}
+                {...listPointerHandlers}
+                onClickCapture={consumeListDragClick}
+                onScroll={(event) => syncPageFromScroll(event, 'vertical')}
+                style={{ height: `${listViewportHeight}px` }}
+              >
+                {pageNumbers.map((pageNumber) => {
+                  const shouldRenderPage = Math.abs(pageNumber - activePage) <= 2;
                   return (
-                    <SelectionWordRow
-                      key={word.id} word={word} statusLabel={sl} statusTone={st}
-                      updatedAtLabel={formatUpdatedAt(ss.updatedAt)}
-                      isEnabled={ss.isEnabled} isPaused={ss.isPaused}
-                      isQueued={queuedWordIds.has(word.id)} canQueue={canQueue}
-                      onAddToQueue={() => void onChangeNewWordQueue([...setting.newWordQueue, word.id])}
-                      onOpenDetails={() => openWordDetails(word.id)}
-                      onToggleEnabled={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: !ss.isEnabled, isPaused: false }])}
-                      onTogglePaused={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: true, isPaused: !ss.isPaused }])}
-                    />
+                    <div
+                      className="selection-list selection-list--page"
+                      data-selection-page={pageNumber}
+                      key={`list-page-${pageNumber}`}
+                      style={{ height: `${listViewportHeight}px` }}
+                    >
+                      {shouldRenderPage ? getPageWords(pageNumber).map((word) => {
+                        const ss = selectionById[word.id] ?? createDefaultWordSelectionState(word.id);
+                        const bucket = getWordLearningBucket(word.id, recordsById[word.id], ss);
+                        const sl = bucket === 'paused' ? '已暂停' : bucket === 'disabled' ? '未启用' : bucket === 'mastered' ? '已掌握' : bucket === 'learning' ? '学习中' : '未学';
+                        const st = bucket === 'paused' ? 'paused' : bucket === 'disabled' ? 'disabled' : 'active';
+                        const canQueue = !recordsById[word.id] && ss.isEnabled && !ss.isPaused;
+                        return (
+                          <SelectionWordRow
+                            key={word.id} word={word} statusLabel={sl} statusTone={st}
+                            updatedAtLabel={formatUpdatedAt(ss.updatedAt)}
+                            isEnabled={ss.isEnabled} isPaused={ss.isPaused}
+                            isQueued={queuedWordIds.has(word.id)} canQueue={canQueue}
+                            onAddToQueue={() => void onChangeNewWordQueue([...setting.newWordQueue, word.id])}
+                            onOpenDetails={() => openWordDetails(word.id)}
+                            onToggleEnabled={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: !ss.isEnabled, isPaused: false }])}
+                            onTogglePaused={() => void savePatchedSelectionStates([{ wordId: word.id, isEnabled: true, isPaused: !ss.isPaused }])}
+                          />
+                        );
+                      }) : null}
+                    </div>
                   );
                 })}
               </div>
@@ -826,14 +998,41 @@ export function SelectionPage({
             <div className="selection-pagination">
               <span>共 {filteredWords.length} 个单词</span>
               <div className="selection-pagination__rail">
-                {pagination.map((item, idx) =>
-                  item === 'ellipsis' ? (
-                    <span key={`e-${idx}`} className="selection-pagination__ellipsis">…</span>
-                  ) : (
-                    <button key={item} className={`selection-pagination__button${item === activePage ? ' is-active' : ''}`}
-                      type="button" onClick={() => setCurrentPage(item)}>{item}</button>
-                  )
-                )}
+                <div
+                  className="selection-pagination__window"
+                  style={{ width: `${paginationWindowWidth}px` }}
+                >
+                  <span
+                    className="selection-pagination__indicator"
+                    ref={paginationIndicatorRef}
+                    aria-hidden="true"
+                  />
+                  <div className="selection-pagination__track" ref={paginationTrackRef}>
+                    {pageNumbers.map((pageNumber) => (
+                      <button
+                        key={pageNumber}
+                        className={`selection-pagination__button${pageNumber === activePage ? ' is-active' : ''}`}
+                        data-page-number={pageNumber}
+                        type="button"
+                        onClick={() => jumpToPage(pageNumber)}
+                      >
+                        {pageNumber}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {totalPages > 5 ? (
+                  <div className="selection-pagination__tail" ref={paginationTailRef}>
+                    <span className="selection-pagination__ellipsis">…</span>
+                    <button
+                      className="selection-pagination__button"
+                      type="button"
+                      onClick={() => jumpToPage(totalPages)}
+                    >
+                      {totalPages}
+                    </button>
+                  </div>
+                ) : null}
               </div>
             </div>
           </section>

@@ -94,6 +94,7 @@ describe('ReviewPage', () => {
     expect(markup).toContain(
       `src="/content/images/words/ket_dad_n.webp?v=${CONTENT_VERSION}"`,
     );
+    expect(markup).toContain('draggable="false"');
     expect(markup).toContain('class="review-preview-card__headline" data-auto-fit="true"');
     expect(markup).toContain('aria-label="红火箭：有例图"');
     expect(markup).toContain('aria-label="牛津树：有例图"');
@@ -122,6 +123,56 @@ describe('ReviewPage', () => {
     expect(markup).toContain('今日复习');
     expect(markup).toContain('计划 0 · 已完成 0');
     expect(markup).not.toContain('预览主题');
+  });
+
+  it('renders additional preview words on horizontally swipeable pages', () => {
+    const previewWords = Array.from({ length: 5 }, (_, index) => ({
+      ...previewWord,
+      id: `preview-${index + 1}`,
+      english: `word-${index + 1}`,
+    }));
+    const markup = renderToStaticMarkup(
+      <ReviewPage
+        payload={{
+          generatedAt: '',
+          sourceFile: '',
+          categoryCount: 1,
+          wordCount: previewWords.length,
+          categories: [previewWord.category],
+          words: previewWords,
+        }}
+        task={{
+          dateKey: '2026-08-17',
+          newWordIds: previewWords.map((word) => word.id),
+          reviewWordIds: [],
+          completedAt: null,
+          checkedInAt: null,
+          correctCount: 0,
+          wrongCount: 0,
+          totalAnswered: 0,
+          answeredWordIds: [],
+        }}
+        setting={defaultParentSetting}
+        recordsById={{}}
+        selectionById={{}}
+        answerEvents={[]}
+        masteredCount={0}
+        recentTasks={[]}
+        previewWords={previewWords}
+        localLifePhotosById={{}}
+        onStart={() => undefined}
+        onStartDebug={() => undefined}
+        onAdvanceDay={async () => undefined}
+        onSelectProfile={async () => undefined}
+        onSaveSelectionStates={async () => undefined}
+      />,
+    );
+
+    expect(markup).toContain('class="review-preview-carousel has-overflow"');
+    expect(markup).toContain('aria-label="今日预览，可左右滑动，共 5 个词"');
+    expect(markup).toContain('data-preview-page="1"');
+    expect(markup).toContain('data-preview-page="2"');
+    expect(markup.match(/class="review-preview-card /g)).toHaveLength(5);
   });
 
   it('shows the dog-only next-day control, real heatmap data, and rounded-minute estimate', () => {

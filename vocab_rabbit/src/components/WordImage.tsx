@@ -6,6 +6,7 @@ interface WordImageProps {
   word: WordRecord;
   alt: string;
   className?: string;
+  draggable?: boolean;
   onError?: () => void;
 }
 
@@ -15,13 +16,14 @@ const WORD_ATLAS_GRID = {
   cellSize: 512,
 };
 
-export function WordImage({ word, alt, className, onError }: WordImageProps) {
+export function WordImage({ word, alt, className, draggable, onError }: WordImageProps) {
   if (!word.imageAtlas) {
     return (
       <img
         className={className}
         src={getWordImageUrl(word.imagePath)}
         alt={alt}
+        draggable={draggable}
         onError={onError}
       />
     );

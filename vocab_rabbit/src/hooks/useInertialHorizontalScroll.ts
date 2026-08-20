@@ -6,14 +6,16 @@ import {
 
 interface MouseDragState {
   pointerId: number;
-  startX: number;
-  startScrollLeft: number;
-  lastX: number;
+  startPosition: number;
+  startScrollOffset: number;
+  lastPosition: number;
   lastTime: number;
   velocity: number;
 }
 
-export function useInertialHorizontalScroll() {
+type InertialScrollAxis = 'horizontal' | 'vertical';
+
+export function useInertialHorizontalScroll(axis: InertialScrollAxis = 'horizontal') {
   const scrollRef = useRef<HTMLDivElement>(null);
   const mouseDragRef = useRef<MouseDragState | null>(null);
   const didMouseDragRef = useRef(false);
@@ -45,9 +47,14 @@ export function useInertialHorizontalScroll() {
     function glide(frameTime: number) {
       const elapsed = Math.min(34, frameTime - lastFrameTime);
       lastFrameTime = frameTime;
-      const previousScrollLeft = scroller.scrollLeft;
-      scroller.scrollLeft += velocity * elapsed;
-      const reachedEdge = Math.abs(scroller.scrollLeft - previousScrollLeft) < 0.5;
+      const previousScrollOffset = axis === 'horizontal' ? scroller.scrollLeft : scroller.scrollTop;
+      if (axis === 'horizontal') {
+        scroller.scrollLeft += velocity * elapsed;
+      } else {
+        scroller.scrollTop += velocity * elapsed;
+      }
+      const nextScrollOffset = axis === 'horizontal' ? scroller.scrollLeft : scroller.scrollTop;
+      const reachedEdge = Math.abs(nextScrollOffset - previousScrollOffset) < 0.5;
       velocity *= Math.pow(0.96, elapsed / 16.67);
 
       if (Math.abs(velocity) < 0.018 || reachedEdge) {
@@ -64,11 +71,14 @@ export function useInertialHorizontalScroll() {
     if (event.pointerType !== 'mouse' || event.button !== 0) return;
     stopMouseMomentum(event.currentTarget);
     didMouseDragRef.current = false;
+    const position = axis === 'horizontal' ? event.clientX : event.clientY;
     mouseDragRef.current = {
       pointerId: event.pointerId,
-      startX: event.clientX,
-      startScrollLeft: event.currentTarget.scrollLeft,
-      lastX: event.clientX,
+      startPosition: position,
+      startScrollOffset: axis === 'horizontal'
+        ? event.currentTarget.scrollLeft
+        : event.currentTarget.scrollTop,
+      lastPosition: position,
       lastTime: event.timeStamp,
       velocity: 0,
     };
@@ -77,7 +87,8 @@ export function useInertialHorizontalScroll() {
   function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
     const drag = mouseDragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
-    const totalDistance = event.clientX - drag.startX;
+    const position = axis === 'horizontal' ? event.clientX : event.clientY;
+    const totalDistance = position - drag.startPosition;
     if (!didMouseDragRef.current && Math.abs(totalDistance) > 4) {
       didMouseDragRef.current = true;
       event.currentTarget.setPointerCapture(event.pointerId);
@@ -86,11 +97,15 @@ export function useInertialHorizontalScroll() {
     if (!didMouseDragRef.current) return;
 
     event.preventDefault();
-    event.currentTarget.scrollLeft = drag.startScrollLeft - totalDistance;
+    if (axis === 'horizontal') {
+      event.currentTarget.scrollLeft = drag.startScrollOffset - totalDistance;
+    } else {
+      event.currentTarget.scrollTop = drag.startScrollOffset - totalDistance;
+    }
     const elapsed = Math.max(1, event.timeStamp - drag.lastTime);
-    const instantaneousVelocity = -(event.clientX - drag.lastX) / elapsed;
+    const instantaneousVelocity = -(position - drag.lastPosition) / elapsed;
     drag.velocity = (drag.velocity * 0.35) + (instantaneousVelocity * 0.65);
-    drag.lastX = event.clientX;
+    drag.lastPosition = position;
     drag.lastTime = event.timeStamp;
   }
 
