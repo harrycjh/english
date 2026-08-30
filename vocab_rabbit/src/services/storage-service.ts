@@ -1,6 +1,6 @@
 import Dexie, { type Table } from 'dexie';
-import type { AnswerEvent } from '../models/answer-event';
-import type { DailyTaskSummary } from '../models/daily-task';
+import type { AnswerEvent, PronunciationResult } from '../models/answer-event';
+import { normalizeDailyTaskSummary, type DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { LocalLifePhotoRecord } from '../models/local-media';
 import {
@@ -193,20 +193,33 @@ export async function savePhotoDeviceToken(photoDeviceToken: string | null): Pro
   return next;
 }
 
-export async function buildLocalSyncRequest(options: { forceFull?: boolean } = {}): Promise<SyncRequest> {
+export async function hasLocalLearningData(): Promise<boolean> {
+  const [answerCount, recordCount] = await Promise.all([
+    database.answerEvents.count(),
+    database.learningRecords.count(),
+  ]);
+  return answerCount > 0 || recordCount > 0;
+}
+
+export async function buildLocalSyncRequest(
+  options: { forceFull?: boolean; forceCloudPull?: boolean } = {},
+): Promise<SyncRequest> {
   const metadata = await ensureSyncMetadata();
-  if (metadata.serverCursor && !metadata.pendingSince) {
+  const serverCursor = metadata.serverCursor && options.forceCloudPull
+    ? `${metadata.serverCursor}:force-cloud-pull`
+    : metadata.serverCursor;
+  if (serverCursor && !metadata.pendingSince) {
     return {
       schemaVersion: SYNC_SCHEMA_VERSION,
       deviceId: metadata.deviceId,
-      cursor: metadata.serverCursor,
+      cursor: serverCursor,
       hasLocalChanges: false,
       snapshot: null,
       delta: null,
     };
   }
 
-  if (metadata.serverCursor && !metadata.forceFullSync && !options.forceFull) {
+  if (serverCursor && !metadata.forceFullSync && !options.forceFull) {
     const [events, dailyTasks, selectionStates, storedSetting, storedVersionedSetting] = await Promise.all([
       database.answerEvents.bulkGet(metadata.pendingEventIds),
       database.dailyTasks.bulkGet(metadata.pendingTaskDateKeys),
@@ -225,7 +238,7 @@ export async function buildLocalSyncRequest(options: { forceFull?: boolean } = {
       schemaVersion: SYNC_SCHEMA_VERSION,
       generation: metadata.generation,
       events: events.filter((event): event is AnswerEvent => Boolean(event)),
-      dailyTasks: dailyTasks.filter((task): task is DailyTaskSummary => Boolean(task)).map(normalizeDailyTask),
+      dailyTasks: dailyTasks.filter((task): task is DailyTaskSummary => Boolean(task)).map(normalizeDailyTaskSummary),
       wordSelectionStates: selectionStates.filter(
         (state): state is VersionedWordSelectionState => Boolean(state),
       ),
@@ -234,7 +247,7 @@ export async function buildLocalSyncRequest(options: { forceFull?: boolean } = {
     return {
       schemaVersion: SYNC_SCHEMA_VERSION,
       deviceId: metadata.deviceId,
-      cursor: metadata.serverCursor,
+      cursor: serverCursor,
       hasLocalChanges: true,
       snapshot: null,
       delta,
@@ -306,16 +319,6 @@ export async function buildLocalSyncRequest(options: { forceFull?: boolean } = {
   };
 }
 
-function normalizeDailyTask(task: DailyTaskSummary): DailyTaskSummary {
-  return {
-    ...task,
-    // Completed days from older versions were check-ins; retain those stamps.
-    checkedInAt: task.checkedInAt === undefined ? task.completedAt ?? null : task.checkedInAt,
-    wrongCount: task.wrongCount ?? Math.max(task.totalAnswered - task.correctCount, 0),
-    answeredWordIds: task.answeredWordIds ?? [],
-  };
-}
-
 export async function listLearningRecords(): Promise<Record<string, LearningRecord>> {
   const records = await database.learningRecords.toArray();
   return Object.fromEntries(records.map((record) => [record.wordId, record]));
@@ -330,12 +333,12 @@ export async function saveLearningRecord(record: LearningRecord): Promise<void> 
 
 export async function getDailyTask(dateKey: string): Promise<DailyTaskSummary | undefined> {
   const task = await database.dailyTasks.get(dateKey);
-  return task ? normalizeDailyTask(task) : undefined;
+  return task ? normalizeDailyTaskSummary(task) : undefined;
 }
 
 export async function saveDailyTask(task: DailyTaskSummary): Promise<void> {
   await database.transaction('rw', database.dailyTasks, database.syncMetadata, async () => {
-    const normalizedTask = normalizeDailyTask(task);
+    const normalizedTask = normalizeDailyTaskSummary(task);
     await database.dailyTasks.put(normalizedTask);
     await markPending(undefined, { taskDateKeys: [normalizedTask.dateKey] });
   });
@@ -343,12 +346,12 @@ export async function saveDailyTask(task: DailyTaskSummary): Promise<void> {
 
 export async function listRecentTasks(limit: number): Promise<DailyTaskSummary[]> {
   const tasks = await database.dailyTasks.orderBy('dateKey').reverse().limit(limit).toArray();
-  return tasks.reverse().map(normalizeDailyTask);
+  return tasks.reverse().map(normalizeDailyTaskSummary);
 }
 
 export async function listDailyTasks(): Promise<DailyTaskSummary[]> {
   const tasks = await database.dailyTasks.orderBy('dateKey').toArray();
-  return tasks.map(normalizeDailyTask);
+  return tasks.map(normalizeDailyTaskSummary);
 }
 
 export async function getParentSetting(): Promise<ParentSetting> {
@@ -420,6 +423,19 @@ export async function saveAnswerEvent(event: AnswerEvent): Promise<void> {
       generation: event.generation ?? metadata.generation,
     });
     await markPending(metadata, { eventIds: [event.id] });
+  });
+}
+
+export async function savePronunciationResult(
+  eventId: string,
+  pronunciation: PronunciationResult,
+): Promise<void> {
+  await database.transaction('rw', database.answerEvents, database.syncMetadata, async () => {
+    const event = await database.answerEvents.get(eventId);
+    if (!event) throw new Error('找不到需要补充跟读结果的答题记录。');
+    const metadata = await ensureSyncMetadata();
+    await database.answerEvents.put({ ...event, pronunciation });
+    await markPending(metadata, { eventIds: [eventId] });
   });
 }
 

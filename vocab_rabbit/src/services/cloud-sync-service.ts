@@ -13,6 +13,11 @@ export class CloudSyncError extends Error {
   }
 }
 
+export interface DownloadProgress {
+  loadedBytes: number;
+  totalBytes: number | null;
+}
+
 interface ConnectResponse {
   deviceToken: string;
 }
@@ -20,6 +25,13 @@ interface ConnectResponse {
 interface VerifyResponse {
   valid: boolean;
   deviceToken?: string;
+}
+
+export interface SpeechEvaluationWarrant {
+  applicationId: string;
+  userId: string;
+  warrantId: string;
+  expiresAt: number;
 }
 
 interface PhotoConnectResponse {
@@ -61,6 +73,7 @@ async function postJson<T>(
   body: unknown,
   token: string | null,
   fetchImpl: typeof fetch,
+  onDownloadProgress?: (progress: DownloadProgress) => void,
 ): Promise<T> {
   const requestInit: RequestInit = {
     method: 'POST',
@@ -141,7 +154,32 @@ async function postJson<T>(
   }
 
   try {
-    return await response.json() as T;
+    if (!onDownloadProgress || !response.body) {
+      return await response.json() as T;
+    }
+
+    const contentLength = Number.parseInt(response.headers.get('Content-Length') ?? '', 10);
+    const totalBytes = Number.isFinite(contentLength) && contentLength >= 0 ? contentLength : null;
+    const reader = response.body.getReader();
+    const chunks: Uint8Array[] = [];
+    let loadedBytes = 0;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+      chunks.push(value);
+      loadedBytes += value.byteLength;
+      onDownloadProgress({ loadedBytes, totalBytes });
+    }
+
+    const payload = new Uint8Array(loadedBytes);
+    let offset = 0;
+    for (const chunk of chunks) {
+      payload.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+    return JSON.parse(new TextDecoder().decode(payload)) as T;
   } catch {
     throw new CloudSyncError('invalid-response', '同步服务器返回了无法识别的数据。', response.status);
   }
@@ -172,12 +210,35 @@ export function verifyFamilyCode(
   return postJson('/api/device/verify', { familyCode }, deviceToken, fetchImpl);
 }
 
+export async function requestSpeechEvaluationWarrant(
+  deviceToken: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<SpeechEvaluationWarrant> {
+  const result = await postJson<SpeechEvaluationWarrant>(
+    '/api/speech/warrant',
+    {},
+    deviceToken,
+    fetchImpl,
+  );
+  if (!result.applicationId || !result.userId || !result.warrantId || !result.expiresAt) {
+    throw new CloudSyncError('invalid-response', '语音服务器没有返回完整的评测凭证。');
+  }
+  return result;
+}
+
 export async function synchronizeDevice(
   deviceToken: string,
   request: SyncRequest,
   fetchImpl: typeof fetch = fetch,
+  onDownloadProgress?: (progress: DownloadProgress) => void,
 ): Promise<SyncResponse> {
-  const result = await postJson<SyncResponse>('/api/sync', request, deviceToken, fetchImpl);
+  const result = await postJson<SyncResponse>(
+    '/api/sync',
+    request,
+    deviceToken,
+    fetchImpl,
+    onDownloadProgress,
+  );
   if (!result.cursor || !result.serverTime || (!result.snapshot && result.upToDate !== true)) {
     throw new CloudSyncError('invalid-response', '同步服务器返回的数据不完整。');
   }

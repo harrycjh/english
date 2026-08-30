@@ -62,9 +62,22 @@ function mergeEvents(local = [], remote = []) {
   const byId = new Map();
   for (const event of [...local, ...remote]) {
     const current = byId.get(event.id);
-    if (!current || JSON.stringify(event).localeCompare(JSON.stringify(current)) > 0) {
+    const eventHasPronunciation = Boolean(event.pronunciation);
+    const currentHasPronunciation = Boolean(current?.pronunciation);
+    if (!current || (eventHasPronunciation && !currentHasPronunciation)) {
       byId.set(event.id, event);
+      continue;
     }
+    if (!eventHasPronunciation && currentHasPronunciation) continue;
+    if (eventHasPronunciation && currentHasPronunciation) {
+      const resultOrder = event.pronunciation.attemptedAt
+        .localeCompare(current.pronunciation.attemptedAt);
+      if (resultOrder !== 0) {
+        if (resultOrder > 0) byId.set(event.id, event);
+        continue;
+    }
+    }
+    if (JSON.stringify(event).localeCompare(JSON.stringify(current)) > 0) byId.set(event.id, event);
   }
   return [...byId.values()].sort(
     (left, right) => left.answeredAt.localeCompare(right.answeredAt) || left.id.localeCompare(right.id),
@@ -346,6 +359,10 @@ function parseInvocation(event) {
     headers: Object.fromEntries(
       Object.entries(value.headers ?? {}).map(([key, headerValue]) => [key.toLowerCase(), headerValue]),
     ),
+    sourceIp: value.requestContext?.http?.sourceIp
+      ?? value.headers?.['x-forwarded-for']?.split(',')[0]?.trim()
+      ?? value.headers?.['x-real-ip']
+      ?? '127.0.0.1',
     body: typeof bodyText === 'string' ? JSON.parse(bodyText || '{}') : bodyText,
   };
 }
@@ -374,6 +391,50 @@ function requestedPhotoWordIds(body) {
   }
   const wordIds = body.wordIds.map((wordId) => String(wordId));
   return wordIds.every((wordId) => /^ket_[a-z0-9_]+$/.test(wordId)) ? wordIds : null;
+}
+
+export function createSpeechWarrantService(fetchImpl = fetch) {
+  return {
+    async authorize({ applicationId, applicationSecret, userId, userClientIp }) {
+      const timestamp = String(Math.floor(Date.now() / 1000));
+      const signatureFields = {
+        app_secret: applicationSecret,
+        appid: applicationId,
+        timestamp,
+        user_client_ip: userClientIp,
+        user_id: userId,
+      };
+      const signText = Object.entries(signatureFields)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
+      const requestSign = crypto.createHash('md5').update(signText).digest('hex');
+      const body = new FormData();
+      Object.entries({
+        appid: applicationId,
+        timestamp,
+        user_id: userId,
+        user_client_ip: userClientIp,
+        request_sign: requestSign,
+        warrant_available: '7200',
+      }).forEach(([key, value]) => body.append(key, value));
+      const warrantResponse = await fetchImpl('https://api.cloud.ssapi.cn/auth/authorize', {
+        method: 'POST',
+        body,
+      });
+      if (!warrantResponse.ok) {
+        throw new Error(`Speech warrant request failed (${warrantResponse.status}).`);
+      }
+      const payload = await warrantResponse.json();
+      if (payload?.code !== 0 || !payload?.data?.warrant_id || !payload?.data?.expire_at) {
+        throw new Error(`Speech warrant rejected (${payload?.code ?? 'invalid-response'}).`);
+      }
+      return {
+        warrantId: payload.data.warrant_id,
+        expiresAt: Number(payload.data.expire_at),
+      };
+    },
+  };
 }
 
 export function createHandler(repository, env, dependencies = {}) {
@@ -431,6 +492,29 @@ export function createHandler(repository, env, dependencies = {}) {
         isPhotoSigningRequest ? env.PHOTO_TOKEN_SIGNING_SECRET : env.TOKEN_SIGNING_SECRET,
         expectedScope,
       );
+
+      if (request.path === '/api/speech/warrant') {
+        if (!isNonEmptyString(env.SPEECH_APP_ID) || !isNonEmptyString(env.SPEECH_APP_SECRET)) {
+          return response(503, {
+            code: 'SPEECH_EVALUATION_NOT_CONFIGURED',
+            message: '语音评测尚未在服务器上启用。',
+          }, env.ALLOWED_ORIGIN);
+        }
+        const speechWarrantService = dependencies.speechWarrantService
+          ?? createSpeechWarrantService(dependencies.fetchImpl ?? fetch);
+        const warrant = await speechWarrantService.authorize({
+          applicationId: env.SPEECH_APP_ID,
+          applicationSecret: env.SPEECH_APP_SECRET,
+          userId: tokenPayload.deviceId,
+          userClientIp: request.sourceIp,
+        });
+        return response(200, {
+          applicationId: env.SPEECH_APP_ID,
+          userId: tokenPayload.deviceId,
+          warrantId: warrant.warrantId,
+          expiresAt: warrant.expiresAt,
+        }, env.ALLOWED_ORIGIN);
+      }
 
       if (request.path === '/api/media/connect') {
         const actualHash = hashFamilyCode(

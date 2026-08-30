@@ -146,9 +146,20 @@ interface RecallSample {
   recalled: boolean;
 }
 
+function isFormalRecallEvent(event: AnswerEvent): boolean {
+  if (event.sessionKind === 'practice' || event.isSessionRetry) return false;
+
+  const levelBeforeAnswer = event.learningStateBefore?.masteryLevel;
+  if (levelBeforeAnswer !== undefined) return levelBeforeAnswer > 0;
+
+  // Legacy events do not have a level snapshot. Recognition was only used by
+  // Lv0, while the remaining question types were formal review questions.
+  return event.questionKind !== 'recognition';
+}
+
 function buildRecallSamples(answerEvents: AnswerEvent[]): RecallSample[] {
   const eventsByWord = new Map<string, AnswerEvent[]>();
-  for (const event of answerEvents) {
+  for (const event of answerEvents.filter(isFormalRecallEvent)) {
     const events = eventsByWord.get(event.wordId) ?? [];
     events.push(event);
     eventsByWord.set(event.wordId, events);

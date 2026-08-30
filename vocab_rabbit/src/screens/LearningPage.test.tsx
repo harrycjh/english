@@ -8,6 +8,7 @@ import {
   hasTodayWrongDifficultSpellingAttempt,
   LearningPage,
 } from './LearningPage';
+import { shouldRequireWordPronunciation } from '../services/pronunciation-practice';
 
 const words: WordRecord[] = [
   ['dog', '狗'],
@@ -88,6 +89,13 @@ function makeAnswerEvent(overrides: Partial<AnswerEvent> = {}): AnswerEvent {
 }
 
 describe('LearningPage profile actions', () => {
+  it('does not insert pronunciation evaluation into the formal level flow', () => {
+    expect(shouldRequireWordPronunciation(2, true)).toBe(false);
+    expect(shouldRequireWordPronunciation(2, false)).toBe(false);
+    expect(shouldRequireWordPronunciation(1, true)).toBe(false);
+    expect(shouldRequireWordPronunciation(3, true)).toBe(false);
+  });
+
   it('shows the direct-correct action only for the dog profile', () => {
     const dogMarkup = renderLearningPage('stinky-dog');
     expect(dogMarkup).toContain('直接答对');

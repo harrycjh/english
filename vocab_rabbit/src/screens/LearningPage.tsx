@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
-import type { AnswerEvent } from '../models/answer-event';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { AnswerEvent, PronunciationResult } from '../models/answer-event';
 import type { SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { LocalLifePhotoView } from '../models/local-media';
 import type { ParentSetting } from '../models/parent-setting';
 import type { WordPayload } from '../models/word';
 import { ProgressRing } from '../components/ProgressRing';
+import { PronunciationPracticeCard } from '../components/PronunciationPracticeCard';
 import { QuestionFillBlank } from '../components/QuestionFillBlank';
 import { QuestionImage } from '../components/QuestionImage';
 import { QuestionImageAnswer } from '../components/QuestionImageAnswer';
@@ -24,6 +25,13 @@ import { createAnswerEventId } from '../services/answer-event-service';
 import { createEmptyRecord } from '../services/spaced-repetition';
 import { createDateTimeForDateKey } from '../services/task-service';
 import { getStudyAudioPlan, splitRelatedResultAudio } from '../services/study-audio-plan';
+import {
+  createScoredPronunciationResult,
+  createUnavailablePronunciationResult,
+  evaluateWordPronunciation,
+  shouldRequireWordPronunciation,
+  type PronunciationPracticeState,
+} from '../services/pronunciation-practice';
 import { indexWordsById } from '../services/word-service';
 import {
   AFTER_LEVEL_UP_ADVANCE_DELAY_MS,
@@ -42,6 +50,7 @@ interface LearningPageProps {
   studyDateKey: string;
   localLifePhotosById: Record<string, LocalLifePhotoView>;
   onAnswer: (event: AnswerEvent) => Promise<void>;
+  onPronunciationResult?: (eventId: string, result: PronunciationResult) => Promise<void>;
   onComplete: (result: SessionResult) => Promise<void>;
   onExit: () => void;
   debugLevel?: number | null;
@@ -89,6 +98,7 @@ export function LearningPage({
   studyDateKey,
   localLifePhotosById,
   onAnswer,
+  onPronunciationResult = async () => undefined,
   onComplete,
   onExit,
   debugLevel = null,
@@ -115,6 +125,13 @@ export function LearningPage({
     nextQueueLength: number;
     finalResult: SessionResult;
   } | null>(null);
+  const [pronunciationPrompt, setPronunciationPrompt] = useState<{
+    eventId: string;
+    word: string;
+    phonetic?: string;
+    state: PronunciationPracticeState;
+  } | null>(null);
+  const pronunciationResolver = useRef<(() => void) | null>(null);
 
   const currentWordId = queue[currentIndex];
   const currentWord = currentWordId ? wordsById.get(currentWordId) : undefined;
@@ -155,6 +172,7 @@ export function LearningPage({
     setUpgradeToLevel(null);
     setRelatedResultPhase('idle');
     setPendingAdvance(null);
+    setPronunciationPrompt(null);
     setQuestionStartedAt(Date.now());
   }, [currentIndex, currentWordId, currentWord, activeDebugLevel, payload.words]);
 
@@ -165,6 +183,64 @@ export function LearningPage({
     setUpgradeToLevel(null);
     setRelatedResultPhase('idle');
     setPendingAdvance(null);
+  }
+
+  function requestWordPronunciation(
+    eventId: string,
+    word: string,
+    phonetic?: string,
+  ): Promise<void> {
+    setPronunciationPrompt({ eventId, word, phonetic, state: { kind: 'ready' } });
+    return new Promise((resolve) => {
+      pronunciationResolver.current = resolve;
+    });
+  }
+
+  function finishPronunciationPractice() {
+    const resolve = pronunciationResolver.current;
+    pronunciationResolver.current = null;
+    setPronunciationPrompt(null);
+    resolve?.();
+  }
+
+  async function startPronunciationEvaluation() {
+    const prompt = pronunciationPrompt;
+    if (!prompt) return;
+    try {
+      const evaluation = await evaluateWordPronunciation(prompt.word, (state) => {
+        setPronunciationPrompt((current) => current?.eventId === prompt.eventId
+          ? { ...current, state }
+          : current);
+      });
+      const result = createScoredPronunciationResult(prompt.word, evaluation);
+      await onPronunciationResult(prompt.eventId, result);
+      setPronunciationPrompt((current) => current?.eventId === prompt.eventId
+        ? { ...current, state: { kind: 'complete', score: evaluation.score } }
+        : current);
+    } catch (error) {
+      setPronunciationPrompt((current) => current?.eventId === prompt.eventId
+        ? {
+            ...current,
+            state: {
+              kind: 'unavailable',
+              message: error instanceof Error ? error.message : '语音评测暂时不可用。',
+            },
+          }
+        : current);
+    }
+  }
+
+  async function skipPronunciationPractice() {
+    const prompt = pronunciationPrompt;
+    if (!prompt) return;
+    try {
+      await onPronunciationResult(
+        prompt.eventId,
+        createUnavailablePronunciationResult(prompt.word),
+      );
+    } finally {
+      finishPronunciationPractice();
+    }
   }
 
   async function advanceQuestion(
@@ -263,6 +339,7 @@ export function LearningPage({
     const shouldRevealLifePhoto = correct
       && questionLevel === 2
       && Boolean(localLifePhotosById[currentWordId] || currentQuestion.word.relatedMedia?.lifePhoto);
+    const shouldPracticePronunciation = shouldRequireWordPronunciation(questionLevel, correct);
     const lifePhotoRevealFlow = getLifePhotoRevealFlow(
       questionLevel,
       correct,
@@ -324,6 +401,12 @@ export function LearningPage({
     const speechItems = setting.enableAudio
       ? getStudyAudioPlan(questionLevel, currentQuestion, correct).afterAnswer
       : [];
+    const speechBeforePronunciation = shouldPracticePronunciation
+      ? speechItems.slice(0, 1)
+      : speechItems;
+    const speechAfterPronunciation = shouldPracticePronunciation
+      ? speechItems.slice(1)
+      : [];
     if (shouldRevealRelatedResult) {
       const relatedAudio = splitRelatedResultAudio(
         questionLevel,
@@ -357,15 +440,39 @@ export function LearningPage({
         shouldAnimateUpgrade ? nextLevel : null,
       );
     } else if (lifePhotoRevealFlow) {
-      if (speechItems.length > 0) await speakSequence(speechItems);
+      if (speechBeforePronunciation.length > 0) {
+        await speakSequence(speechBeforePronunciation);
+      }
       await wait(lifePhotoRevealFlow.revealAfterAudioMs);
       setRevealLifePhoto(true);
+      if (shouldPracticePronunciation) {
+        await requestWordPronunciation(
+          answerEvent.id,
+          currentQuestion.word.english,
+          currentQuestion.word.phonetic,
+        );
+      }
+      if (speechAfterPronunciation.length > 0) {
+        await speakSequence(speechAfterPronunciation);
+      }
       await waitWithFinalUpgrade(
         lifePhotoRevealFlow.holdAfterRevealMs,
         shouldAnimateUpgrade ? nextLevel : null,
       );
     } else {
-      if (speechItems.length > 0) await speakSequence(speechItems);
+      if (speechBeforePronunciation.length > 0) {
+        await speakSequence(speechBeforePronunciation);
+      }
+      if (shouldPracticePronunciation) {
+        await requestWordPronunciation(
+          answerEvent.id,
+          currentQuestion.word.english,
+          currentQuestion.word.phonetic,
+        );
+      }
+      if (speechAfterPronunciation.length > 0) {
+        await speakSequence(speechAfterPronunciation);
+      }
       await waitWithFinalUpgrade(
         answerFlow.holdAfterFeedbackMs,
         shouldAnimateUpgrade ? nextLevel : null,
@@ -472,7 +579,7 @@ export function LearningPage({
     <main className="page page--learn">
       <section className="learning-shell">
         <header className="learning-header">
-          <button className="secondary-button" type="button" onClick={onExit}>
+          <button className="secondary-button" type="button" disabled={isLocked} onClick={onExit}>
             返回首页
           </button>
           <ProgressRing value={currentIndex + 1} total={queue.length} />
@@ -606,6 +713,18 @@ export function LearningPage({
           <footer className="feedback-strip is-visible">
             {feedbackStripText}
           </footer>
+        ) : null}
+
+        {pronunciationPrompt ? (
+          <PronunciationPracticeCard
+            word={pronunciationPrompt.word}
+            phonetic={pronunciationPrompt.phonetic}
+            state={pronunciationPrompt.state}
+            onStart={() => void startPronunciationEvaluation()}
+            onRetry={() => void startPronunciationEvaluation()}
+            onContinue={finishPronunciationPractice}
+            onSkip={() => void skipPronunciationPractice()}
+          />
         ) : null}
       </section>
     </main>

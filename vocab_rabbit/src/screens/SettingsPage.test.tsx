@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { defaultParentSetting } from '../models/parent-setting';
-import { SettingsPage } from './SettingsPage';
+import { pickRandomPronunciationWord, SettingsPage } from './SettingsPage';
 
 describe('SettingsPage local data controls', () => {
   it('keeps only the verified local clear action and exposes no progress reset', () => {
@@ -67,6 +67,8 @@ describe('SettingsPage local data controls', () => {
     expect(markup).toContain('学习设置');
     expect(markup).toContain('学习负荷');
     expect(markup).toContain('学习体验');
+    expect(markup).toContain('语音评测');
+    expect(markup).toContain('随机抽取一个单词');
     expect(markup).toContain('音色选择');
     expect(markup).toContain('aria-label="英文发音音色"');
     expect(markup).toContain('aria-label="中文发音音色"');
@@ -76,5 +78,17 @@ describe('SettingsPage local data controls', () => {
     expect(markup).not.toContain('设备与使用方式');
     expect(markup).not.toContain('重置进度');
     expect(markup).not.toContain('云端重置');
+  });
+
+  it('selects a single-word pronunciation target and avoids the previous word', () => {
+    const words = [
+      { id: 'one', english: 'rabbit' },
+      { id: 'two', english: 'look after' },
+      { id: 'three', english: 'mother-in-law' },
+      { id: 'four', english: 'family' },
+    ] as Parameters<typeof pickRandomPronunciationWord>[0];
+
+    expect(pickRandomPronunciationWord(words, () => 0, 'one')?.id).toBe('three');
+    expect(pickRandomPronunciationWord(words, () => 0.99, 'one')?.id).toBe('four');
   });
 });

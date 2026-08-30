@@ -131,6 +131,47 @@ describe('memory statistics', () => {
     ]);
   });
 
+  it('excludes Lv0 self-assessments, same-day retries, and practice sessions from recall samples', () => {
+    const formalEvents = createRepeatedAnswerSample('formal-word', 2, true, 0).map((event, index) => ({
+      ...event,
+      learningStateBefore: createRecord({
+        wordId: event.wordId,
+        masteryLevel: index + 1,
+        reviewStage: index + 1,
+      }),
+    }));
+    const lv0Events = createRepeatedAnswerSample('lv0-word', 1, false, 1).map((event) => ({
+      ...event,
+      questionKind: 'recognition' as const,
+      learningStateBefore: createRecord({ wordId: event.wordId, masteryLevel: 0, reviewStage: 0 }),
+    }));
+    const retryEvents = createRepeatedAnswerSample('retry-word', 3, false, 2).map((event, index) => ({
+      ...event,
+      isSessionRetry: index === 1,
+      learningStateBefore: createRecord({ wordId: event.wordId, masteryLevel: 2, reviewStage: 2 }),
+    }));
+    const practiceEvents = createRepeatedAnswerSample('practice-word', 7, true, 3).map((event) => ({
+      ...event,
+      sessionKind: 'practice',
+      learningStateBefore: createRecord({ wordId: event.wordId, masteryLevel: 3, reviewStage: 3 }),
+    })) as AnswerEvent[];
+
+    const statistics = buildMemoryStatistics(
+      {},
+      [...formalEvents, ...lv0Events, ...retryEvents, ...practiceEvents],
+      now,
+    );
+
+    expect(statistics.personalCurveModel).toMatchObject({
+      source: 'default',
+      sampleCount: 1,
+      intervalBucketCount: 1,
+    });
+    expect(statistics.observedRecallPoints).toEqual([
+      expect.objectContaining({ intervalDays: 2, retention: 100, sampleCount: 1 }),
+    ]);
+  });
+
   it('switches to a fitted MaiMemo-style curve when enough real-interval samples exist', () => {
     const outcomes = [
       ...[true, true, true, false].map((isCorrect, index) => ({ intervalDays: 1, isCorrect, index })),

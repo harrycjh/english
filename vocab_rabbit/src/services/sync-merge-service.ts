@@ -1,5 +1,5 @@
 import type { AnswerEvent } from '../models/answer-event';
-import type { DailyTaskSummary } from '../models/daily-task';
+import { normalizeDailyTaskSummary, type DailyTaskSummary } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { ParentSetting } from '../models/parent-setting';
 import type {
@@ -16,6 +16,13 @@ function compareEvents(left: AnswerEvent, right: AnswerEvent): number {
 }
 
 function chooseCanonicalEvent(left: AnswerEvent, right: AnswerEvent): AnswerEvent {
+  if (Boolean(left.pronunciation) !== Boolean(right.pronunciation)) {
+    return left.pronunciation ? left : right;
+  }
+  if (left.pronunciation && right.pronunciation) {
+    const resultOrder = left.pronunciation.attemptedAt.localeCompare(right.pronunciation.attemptedAt);
+    if (resultOrder !== 0) return resultOrder > 0 ? left : right;
+  }
   const leftKey = `${left.schemaVersion ?? 0}\u0000${left.deviceId ?? ''}\u0000${JSON.stringify(left)}`;
   const rightKey = `${right.schemaVersion ?? 0}\u0000${right.deviceId ?? ''}\u0000${JSON.stringify(right)}`;
   return leftKey.localeCompare(rightKey) >= 0 ? left : right;
@@ -71,12 +78,20 @@ function compareSelection(left: VersionedWordSelectionState, right: VersionedWor
     || left.updatedByDeviceId.localeCompare(right.updatedByDeviceId);
 }
 
+function normalizeSelectionRevision(state: VersionedWordSelectionState): VersionedWordSelectionState {
+  return {
+    ...state,
+    updatedByDeviceId: state.updatedByDeviceId || '!legacy',
+  };
+}
+
 export function mergeWordSelectionStates(
   local: VersionedWordSelectionState[],
   remote: VersionedWordSelectionState[],
 ): VersionedWordSelectionState[] {
   const byWordId = new Map<string, VersionedWordSelectionState>();
-  for (const state of [...local, ...remote]) {
+  for (const rawState of [...local, ...remote]) {
+    const state = normalizeSelectionRevision(rawState);
     const existing = byWordId.get(state.wordId);
     if (!existing || compareSelection(state, existing) > 0) {
       byWordId.set(state.wordId, state);
@@ -113,14 +128,14 @@ function mergeTaskBase(left: DailyTaskSummary, right: DailyTaskSummary): DailyTa
   ].filter((value): value is string => Boolean(value));
   return {
     ...left,
-    newWordIds: [...new Set([...left.newWordIds, ...right.newWordIds])],
-    reviewWordIds: [...new Set([...left.reviewWordIds, ...right.reviewWordIds])],
+    newWordIds: [...new Set([...(left.newWordIds ?? []), ...(right.newWordIds ?? [])])],
+    reviewWordIds: [...new Set([...(left.reviewWordIds ?? []), ...(right.reviewWordIds ?? [])])],
     completedAt: completedTimes.sort()[0] ?? null,
     checkedInAt: checkedInTimes.sort()[0] ?? null,
     correctCount: 0,
     wrongCount: 0,
     totalAnswered: 0,
-    answeredWordIds: [...new Set([...left.answeredWordIds, ...right.answeredWordIds])],
+    answeredWordIds: [...new Set([...(left.answeredWordIds ?? []), ...(right.answeredWordIds ?? [])])],
   };
 }
 
@@ -130,7 +145,8 @@ export function mergeDailyTasks(
   events: AnswerEvent[],
 ): DailyTaskSummary[] {
   const byDate = new Map<string, DailyTaskSummary>();
-  for (const task of [...local, ...remote]) {
+  for (const rawTask of [...local, ...remote]) {
+    const task = normalizeDailyTaskSummary(rawTask);
     const existing = byDate.get(task.dateKey);
     byDate.set(task.dateKey, existing ? mergeTaskBase(existing, task) : { ...task });
   }
@@ -146,7 +162,7 @@ export function mergeDailyTasks(
     const dateEvents = (eventsByDate.get(dateKey) ?? []).sort(compareEvents);
     const answeredWordIds = dateEvents.length > 0
       ? [...new Set(dateEvents.filter((event) => event.isCorrect).map((event) => event.wordId))]
-      : task.answeredWordIds;
+      : task.answeredWordIds ?? [];
     const answeredWordIdSet = new Set(answeredWordIds);
     const plannedWordIds = new Set([...task.reviewWordIds, ...task.newWordIds]);
     const isFullyAnswered = [...plannedWordIds].every((wordId) => answeredWordIdSet.has(wordId));

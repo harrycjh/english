@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   createHandler,
   createMemoryRepository,
+  createSpeechWarrantService,
   hashFamilyCode,
   mergeSnapshots,
 } from './index.mjs';
@@ -15,6 +16,8 @@ const env = {
   PHOTO_TOKEN_SIGNING_SECRET: 'test-photo-signing-secret-at-least-32-characters',
   FIXED_USER_ID: 'xiaojunjun',
   ALLOWED_ORIGIN: 'https://www.cw2017.com',
+  SPEECH_APP_ID: 'speech-app-id',
+  SPEECH_APP_SECRET: 'speech-app-secret',
 };
 
 function event(path, body, token) {
@@ -95,6 +98,43 @@ function answerEvent(id, wordId, deviceId, answeredAt) {
 }
 
 describe('vocab sync Function Compute handler', () => {
+  it('requests speech warrants from the current multipart authorization endpoint', async () => {
+    const calls = [];
+    const service = createSpeechWarrantService(async (url, options) => {
+      calls.push({ url, options });
+      return {
+        ok: true,
+        async json() {
+          return {
+            code: 0,
+            data: { warrant_id: 'warrant-a', expire_at: 1_784_800_000 },
+          };
+        },
+      };
+    });
+
+    const result = await service.authorize({
+      applicationId: 'speech-app-id',
+      applicationSecret: 'speech-app-secret',
+      userId: 'device-a',
+      userClientIp: '127.0.0.1',
+    });
+
+    expect(result).toEqual({ warrantId: 'warrant-a', expiresAt: 1_784_800_000 });
+    expect(calls).toHaveLength(1);
+    expect(calls[0].url).toBe('https://api.cloud.ssapi.cn/auth/authorize');
+    expect(calls[0].options.method).toBe('POST');
+    expect(calls[0].options.headers).toBeUndefined();
+    expect(calls[0].options.body).toBeInstanceOf(FormData);
+    expect(Object.fromEntries(calls[0].options.body.entries())).toEqual(expect.objectContaining({
+      appid: 'speech-app-id',
+      user_id: 'device-a',
+      user_client_ip: '127.0.0.1',
+      warrant_available: '7200',
+      request_sign: expect.stringMatching(/^[a-f0-9]{32}$/),
+    }));
+  });
+
   it('rejects an incorrect family code', async () => {
     const handler = createHandler(createMemoryRepository(), env);
 
@@ -119,6 +159,55 @@ describe('vocab sync Function Compute handler', () => {
     expect(connect.statusCode).toBe(200);
     expect(connect.json.deviceToken).toBeTruthy();
     expect(unauthorized.statusCode).toBe(401);
+  });
+
+  it('issues a short-lived speech warrant for an active study device without exposing the secret', async () => {
+    const calls = [];
+    const speechWarrantService = {
+      async authorize(input) {
+        calls.push(input);
+        return { warrantId: 'warrant-a', expiresAt: 1_784_800_000 };
+      },
+    };
+    const repository = createMemoryRepository();
+    const handler = createHandler(repository, env, { speechWarrantService });
+    const connect = parseResponse(await handler(event('/api/device/connect', {
+      familyCode: '2468',
+      deviceId: 'device-a',
+    })));
+
+    const result = parseResponse(await handler(event(
+      '/api/speech/warrant',
+      {},
+      connect.json.deviceToken,
+    )));
+
+    expect(result.statusCode).toBe(200);
+    expect(result.json).toEqual({
+      applicationId: 'speech-app-id',
+      userId: 'device-a',
+      warrantId: 'warrant-a',
+      expiresAt: 1_784_800_000,
+    });
+    expect(JSON.stringify(result.json)).not.toContain('speech-app-secret');
+    expect(calls).toEqual([
+      expect.objectContaining({
+        applicationId: 'speech-app-id',
+        applicationSecret: 'speech-app-secret',
+        userId: 'device-a',
+      }),
+    ]);
+  });
+
+  it('rejects speech warrant requests without a study device token', async () => {
+    const handler = createHandler(createMemoryRepository(), env, {
+      speechWarrantService: { authorize: async () => ({ warrantId: 'unused', expiresAt: 0 }) },
+    });
+
+    const result = parseResponse(await handler(event('/api/speech/warrant', {})));
+
+    expect(result.statusCode).toBe(401);
+    expect(result.json.code).toBe('DEVICE_TOKEN_INVALID');
   });
 
   it('signs only requested private life photos for an active device', async () => {

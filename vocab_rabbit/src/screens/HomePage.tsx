@@ -506,10 +506,11 @@ function ReviewPreviewCard({
         level={masteryLevel}
         className="review-preview-card__favorite"
         style={{
-          ...getRelativeBoundsStyle(layout.favoriteIcon, layout),
+          position: 'absolute',
+          right: '10px',
+          top: '8px',
           width: '54px',
           height: '22px',
-          transform: 'translateX(-32px)',
           zIndex: reviewLayerZIndex.interactiveBadges,
         }}
       />

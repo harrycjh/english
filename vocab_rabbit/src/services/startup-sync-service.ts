@@ -1,8 +1,14 @@
-import { CloudSyncError, connectDevice, synchronizeDevice } from './cloud-sync-service';
+import {
+  CloudSyncError,
+  connectDevice,
+  synchronizeDevice,
+  type DownloadProgress,
+} from './cloud-sync-service';
 import {
   applySyncResponse,
   buildLocalSyncRequest,
   getOrCreateSyncMetadata,
+  hasLocalLearningData,
   saveDeviceToken,
 } from './storage-service';
 
@@ -15,6 +21,11 @@ export type StartupSyncResult =
 export type DeviceConnectionResult =
   | { kind: 'connected'; deviceToken: string }
   | Exclude<StartupSyncResult, { kind: 'synced'; serverTime: string }>;
+
+export interface StartupSyncProgress extends DownloadProgress {
+  phase: 'requesting' | 'downloading' | 'applying';
+  attempt: number;
+}
 
 interface SyncEventTarget {
   addEventListener(type: string, listener: EventListenerOrEventListenerObject): void;
@@ -47,18 +58,44 @@ export function installResumeSyncListeners(
   };
 }
 
-async function syncWithToken(deviceToken: string, fetchImpl: typeof fetch): Promise<StartupSyncResult> {
+async function syncWithToken(
+  deviceToken: string,
+  fetchImpl: typeof fetch,
+  onProgress?: (progress: StartupSyncProgress) => void,
+  attempt = 1,
+): Promise<StartupSyncResult> {
   try {
-    let request = await buildLocalSyncRequest();
+    const forceCloudPull = !(await hasLocalLearningData());
+    let request = await buildLocalSyncRequest({ forceCloudPull });
     let response;
     try {
-      response = await synchronizeDevice(deviceToken, request, fetchImpl);
+      onProgress?.({ phase: 'requesting', attempt, loadedBytes: 0, totalBytes: null });
+      response = await synchronizeDevice(deviceToken, request, fetchImpl, (progress) => {
+        onProgress?.({ phase: 'downloading', attempt, ...progress });
+      });
     } catch (error) {
       if (!(error instanceof CloudSyncError) || error.kind !== 'full-snapshot-required') throw error;
       request = await buildLocalSyncRequest({ forceFull: true });
-      response = await synchronizeDevice(deviceToken, request, fetchImpl);
+      onProgress?.({ phase: 'requesting', attempt, loadedBytes: 0, totalBytes: null });
+      response = await synchronizeDevice(deviceToken, request, fetchImpl, (progress) => {
+        onProgress?.({ phase: 'downloading', attempt, ...progress });
+      });
     }
-    await applySyncResponse(response, request);
+    onProgress?.({
+      phase: 'applying',
+      attempt,
+      loadedBytes: 0,
+      totalBytes: null,
+    });
+    try {
+      await applySyncResponse(response, request);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : '未知的本地存储错误';
+      return {
+        kind: 'blocked',
+        message: `云端学习记录已下载，但写入本机失败：${detail}`,
+      };
+    }
     return { kind: 'synced', serverTime: response.serverTime };
   } catch (error) {
     if (error instanceof CloudSyncError) {
@@ -108,12 +145,16 @@ export async function connectDeviceForBackgroundSync(
   }
 }
 
-export async function performStartupSync(fetchImpl: typeof fetch = fetch): Promise<StartupSyncResult> {
+export async function performStartupSync(
+  fetchImpl: typeof fetch = fetch,
+  onProgress?: (progress: StartupSyncProgress) => void,
+  attempt = 1,
+): Promise<StartupSyncResult> {
   const metadata = await getOrCreateSyncMetadata();
   if (!metadata.deviceToken) {
     return { kind: 'needs-code' };
   }
-  return syncWithToken(metadata.deviceToken, fetchImpl);
+  return syncWithToken(metadata.deviceToken, fetchImpl, onProgress, attempt);
 }
 
 export async function performStartupSyncWithRetry(
@@ -124,9 +165,22 @@ export async function performStartupSyncWithRetry(
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     lastResult = await sync();
     if (lastResult.kind === 'synced') return lastResult;
+    if (lastResult.kind !== 'unavailable') return lastResult;
     if (attempt < 3) await wait(attempt * 1_000);
   }
   return lastResult;
+}
+
+export async function restoreEmptyDeviceFromCloud(
+  fetchImpl: typeof fetch = fetch,
+  onProgress?: (progress: StartupSyncProgress) => void,
+): Promise<StartupSyncResult | null> {
+  if (await hasLocalLearningData()) return null;
+  let attempt = 0;
+  return performStartupSyncWithRetry(() => {
+    attempt += 1;
+    return performStartupSync(fetchImpl, onProgress, attempt);
+  });
 }
 
 export async function connectAndSynchronize(

@@ -4,6 +4,8 @@ import {
   hasConnectedDevice,
   installResumeSyncListeners,
   performStartupSyncWithRetry,
+  restoreEmptyDeviceFromCloud,
+  type StartupSyncProgress,
   type StartupSyncResult,
 } from '../services/startup-sync-service';
 
@@ -16,6 +18,18 @@ interface StartupSyncPanelProps {
   onConnect: () => void;
   onRetry: () => void;
   onEnterOffline: () => void;
+  progress?: StartupSyncProgress | null;
+  elapsedSeconds?: number;
+}
+
+function formatMegabytes(bytes: number): string {
+  return `${(bytes / 1_048_576).toFixed(1)} MB`;
+}
+
+function getProgressCopy(progress: StartupSyncProgress): string {
+  if (progress.phase === 'downloading') return '正在下载云端学习记录';
+  if (progress.phase === 'applying') return '正在写入本地学习空间';
+  return '服务器正在整理学习记录';
 }
 
 export function StartupSyncPanel({
@@ -25,6 +39,8 @@ export function StartupSyncPanel({
   onConnect,
   onRetry,
   onEnterOffline,
+  progress = null,
+  elapsedSeconds = 0,
 }: StartupSyncPanelProps) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -32,13 +48,45 @@ export function StartupSyncPanel({
   }
 
   if (state.kind === 'checking' || state.kind === 'connecting') {
+    const percentage = progress?.phase === 'downloading' && progress.totalBytes
+      ? Math.min(100, Math.round((progress.loadedBytes / progress.totalBytes) * 100))
+      : null;
     return (
       <main className="page page--status sync-gate-page">
         <section className="status-card sync-gate-card" aria-live="polite">
           <span className="sync-gate-card__mark" aria-hidden="true">VR</span>
-          <h1>{state.kind === 'connecting' ? '正在验证设备' : '正在打开学习空间'}</h1>
-          <p>{state.kind === 'connecting' ? '验证成功后立即进入，同步会在后台继续。' : '正在读取这台设备的连接状态。'}</p>
-          <span className="sync-gate-spinner" aria-hidden="true" />
+          <h1>{progress ? '正在恢复云端学习进度' : state.kind === 'connecting' ? '正在验证设备' : '正在打开学习空间'}</h1>
+          {progress ? (
+            <div className="sync-gate-progress-wrap">
+              <p>{getProgressCopy(progress)}</p>
+              <div
+                className={`sync-gate-progress${percentage === null ? ' is-indeterminate' : ''}`}
+                role="progressbar"
+                aria-label={getProgressCopy(progress)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                {...(percentage === null ? {} : { 'aria-valuenow': percentage })}
+              >
+                <span style={percentage === null ? undefined : { width: `${percentage}%` }} />
+              </div>
+              <div className="sync-gate-progress__meta">
+                <span>{percentage === null ? `第 ${progress.attempt}/3 次尝试` : `${percentage}%`}</span>
+                <span>
+                  {progress.phase === 'downloading' && progress.totalBytes
+                    ? `${formatMegabytes(progress.loadedBytes)} / ${formatMegabytes(progress.totalBytes)}`
+                    : `已等待 ${elapsedSeconds} 秒`}
+                </span>
+              </div>
+              {progress.phase === 'downloading' && progress.totalBytes && (
+                <p className="sync-gate-progress__elapsed">已等待 {elapsedSeconds} 秒</p>
+              )}
+            </div>
+          ) : (
+            <>
+              <p>{state.kind === 'connecting' ? '验证成功后立即进入，同步会在后台继续。' : '正在读取这台设备的连接状态。'}</p>
+              <span className="sync-gate-spinner" aria-hidden="true" />
+            </>
+          )}
         </section>
       </main>
     );
@@ -144,6 +192,8 @@ export function StartupSyncGate({ children }: StartupSyncGateProps) {
   const [isReady, setIsReady] = useState(false);
   const [backgroundState, setBackgroundState] = useState<BackgroundSyncState | null>(null);
   const [syncRevision, setSyncRevision] = useState(0);
+  const [restoreProgress, setRestoreProgress] = useState<StartupSyncProgress | null>(null);
+  const [restoreElapsedSeconds, setRestoreElapsedSeconds] = useState(0);
   const activeSync = useRef<Promise<StartupSyncResult> | null>(null);
   const queuedSync = useRef<Promise<StartupSyncResult> | null>(null);
 
@@ -178,16 +228,42 @@ export function StartupSyncGate({ children }: StartupSyncGateProps) {
   async function checkConnection() {
     setState({ kind: 'checking' });
     if (await hasConnectedDevice()) {
-      setIsReady(true);
-      void runBackgroundSync();
+      await enterConnectedDevice();
       return;
     }
     setState({ kind: 'needs-code' });
   }
 
+  async function enterConnectedDevice() {
+    setRestoreElapsedSeconds(0);
+    setRestoreProgress({ phase: 'requesting', attempt: 1, loadedBytes: 0, totalBytes: null });
+    const restoreResult = await restoreEmptyDeviceFromCloud(fetch, setRestoreProgress);
+    setRestoreProgress(null);
+    if (restoreResult) {
+      if (restoreResult.kind === 'synced') {
+        setSyncRevision((revision) => revision + 1);
+        setIsReady(true);
+      } else {
+        setState(restoreResult);
+      }
+      return;
+    }
+
+    setIsReady(true);
+    void runBackgroundSync();
+  }
+
   useEffect(() => {
     void checkConnection();
   }, []);
+
+  useEffect(() => {
+    if (!restoreProgress) return undefined;
+    const timer = window.setInterval(() => {
+      setRestoreElapsedSeconds((seconds) => seconds + 1);
+    }, 1_000);
+    return () => window.clearInterval(timer);
+  }, [Boolean(restoreProgress)]);
 
   useEffect(() => {
     if (!isReady) return undefined;
@@ -206,9 +282,8 @@ export function StartupSyncGate({ children }: StartupSyncGateProps) {
     setState({ kind: 'connecting' });
     const result = await connectDeviceForBackgroundSync(code.trim());
     if (result.kind === 'connected') {
-      setIsReady(true);
       setCode('');
-      void runBackgroundSync();
+      await enterConnectedDevice();
       return;
     }
     setState(result);
@@ -241,6 +316,8 @@ export function StartupSyncGate({ children }: StartupSyncGateProps) {
       onConnect={() => void handleConnect()}
       onRetry={() => code.trim() ? void handleConnect() : void checkConnection()}
       onEnterOffline={() => setIsReady(true)}
+      progress={restoreProgress}
+      elapsedSeconds={restoreElapsedSeconds}
     />
   );
 }

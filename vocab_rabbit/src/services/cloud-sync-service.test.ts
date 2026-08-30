@@ -5,6 +5,7 @@ import {
   connectDevice,
   connectPrivateLifePhotos,
   resolveSyncApiUrl,
+  requestSpeechEvaluationWarrant,
   synchronizeDevice,
   verifyFamilyCode,
 } from './cloud-sync-service';
@@ -107,6 +108,29 @@ describe('verifyFamilyCode', () => {
   });
 });
 
+describe('requestSpeechEvaluationWarrant', () => {
+  it('uses the connected study token and validates the returned warrant', async () => {
+    let capturedUrl = '';
+    let capturedHeaders: HeadersInit | undefined;
+    const fetchImpl: typeof fetch = async (input, init) => {
+      capturedUrl = String(input);
+      capturedHeaders = init?.headers;
+      return jsonResponse({
+        applicationId: 'speech-app',
+        userId: 'device-a',
+        warrantId: 'warrant-a',
+        expiresAt: 1_784_800_000,
+      });
+    };
+
+    const result = await requestSpeechEvaluationWarrant('study-token-a', fetchImpl);
+
+    expect(capturedUrl).toBe('/api/speech/warrant');
+    expect(new Headers(capturedHeaders).get('Authorization')).toBe('Bearer study-token-a');
+    expect(result.warrantId).toBe('warrant-a');
+  });
+});
+
 describe('connectPrivateLifePhotos', () => {
   it('uses the study device token to exchange the separate photo password', async () => {
     let capturedUrl = '';
@@ -177,5 +201,27 @@ describe('synchronizeDevice', () => {
     await expect(synchronizeDevice('token-a', makeRequest(), revokedFetch)).rejects.toMatchObject({
       kind: 'unauthorized',
     } satisfies Partial<CloudSyncError>);
+  });
+
+  it('reports the downloaded response bytes and total size', async () => {
+    const body = JSON.stringify({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-1',
+      serverTime: '2026-07-14T10:00:00.000Z',
+      upToDate: true,
+      snapshot: null,
+    });
+    const totalBytes = new TextEncoder().encode(body).byteLength;
+    const updates: Array<{ loadedBytes: number; totalBytes: number | null }> = [];
+    const fetchImpl: typeof fetch = async () => new Response(body, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': String(totalBytes),
+      },
+    });
+
+    await synchronizeDevice('token-a', makeRequest(), fetchImpl, (progress) => updates.push(progress));
+
+    expect(updates.at(-1)).toEqual({ loadedBytes: totalBytes, totalBytes });
   });
 });

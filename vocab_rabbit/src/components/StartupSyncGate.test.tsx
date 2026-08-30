@@ -20,6 +20,32 @@ describe('StartupSyncPanel', () => {
     expect(markup).toContain('暂时离线进入');
   });
 
+  it('shows measurable cloud restore progress instead of an indefinite spinner', () => {
+    const markup = renderToStaticMarkup(
+      <StartupSyncPanel
+        state={{ kind: 'checking' }}
+        code=""
+        progress={{
+          phase: 'downloading',
+          attempt: 1,
+          loadedBytes: 524_288,
+          totalBytes: 1_048_576,
+        }}
+        elapsedSeconds={12}
+        onCodeChange={() => undefined}
+        onConnect={() => undefined}
+        onRetry={() => undefined}
+        onEnterOffline={() => undefined}
+      />,
+    );
+
+    expect(markup).toContain('正在恢复云端学习进度');
+    expect(markup).toContain('50%');
+    expect(markup).toContain('0.5 MB / 1.0 MB');
+    expect(markup).toContain('已等待 12 秒');
+    expect(markup).toContain('role="progressbar"');
+  });
+
   it('offers retry and offline entry when the server is unavailable', () => {
     const markup = renderToStaticMarkup(
       <StartupSyncPanel

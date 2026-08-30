@@ -125,8 +125,8 @@ describe('ReviewPage', () => {
     expect(markup).not.toContain('预览主题');
   });
 
-  it('renders additional preview words on horizontally swipeable pages', () => {
-    const previewWords = Array.from({ length: 5 }, (_, index) => ({
+  it('renders additional preview words with aligned level icons on horizontally swipeable pages', () => {
+    const previewWords = Array.from({ length: 12 }, (_, index) => ({
       ...previewWord,
       id: `preview-${index + 1}`,
       english: `word-${index + 1}`,
@@ -153,7 +153,15 @@ describe('ReviewPage', () => {
           answeredWordIds: [],
         }}
         setting={defaultParentSetting}
-        recordsById={{}}
+        recordsById={Object.fromEntries(previewWords.map((word, index) => [word.id, {
+          wordId: word.id,
+          masteryLevel: index >= 8 ? 3 : 1,
+          reviewStage: index >= 8 ? 3 : 1,
+          correctStreak: 1,
+          wrongCount: 0,
+          lastStudiedAt: '2026-08-16T04:00:00.000Z',
+          nextDueAt: '2026-08-17T04:00:00.000Z',
+        }]))}
         selectionById={{}}
         answerEvents={[]}
         masteredCount={0}
@@ -169,10 +177,13 @@ describe('ReviewPage', () => {
     );
 
     expect(markup).toContain('class="review-preview-carousel has-overflow"');
-    expect(markup).toContain('aria-label="今日预览，可左右滑动，共 5 个词"');
+    expect(markup).toContain('aria-label="今日预览，可左右滑动，共 12 个词"');
     expect(markup).toContain('data-preview-page="1"');
     expect(markup).toContain('data-preview-page="2"');
-    expect(markup.match(/class="review-preview-card /g)).toHaveLength(5);
+    expect(markup.match(/class="review-preview-card /g)).toHaveLength(12);
+    expect(markup.match(/class="mastery-level-icon mastery-level-icon--level-1 review-preview-card__favorite"/g)).toHaveLength(8);
+    expect(markup.match(/class="mastery-level-icon mastery-level-icon--level-3 review-preview-card__favorite"/g)).toHaveLength(4);
+    expect(markup).not.toContain('transform:translateX(-32px)');
   });
 
   it('shows the dog-only next-day control, real heatmap data, and rounded-minute estimate', () => {

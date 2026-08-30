@@ -10,8 +10,10 @@ import {
   getOrCreateSyncMetadata,
   buildLocalSyncRequest,
   listAnswerEvents,
+  listDailyTasks,
   listLearningRecords,
   saveAnswerAndLearningRecord,
+  savePronunciationResult,
   saveDailyTask,
   saveParentSetting,
   saveWordSelectionState,
@@ -107,9 +109,73 @@ describe('answer persistence', () => {
     expect(secondRequest.snapshot?.checkpoint?.capturedAt).toBe(request.snapshot?.checkpoint?.capturedAt);
     expect(request.snapshot?.events).toHaveLength(1);
   });
+
+  it('adds pronunciation results to the original answer without creating another answer', async () => {
+    await saveAnswerAndLearningRecord(makeEvent(), makeRecord());
+
+    await savePronunciationResult('event-a', {
+      targetType: 'word',
+      targetText: 'family',
+      provider: 'aliyun-ssecp',
+      status: 'scored',
+      overallScore: 82,
+      attemptedAt: '2026-07-14T09:00:04.000Z',
+      recordId: 'record-a',
+    });
+
+    const events = await listAnswerEvents();
+    expect(events).toHaveLength(1);
+    expect(events[0].pronunciation).toMatchObject({
+      targetText: 'family',
+      status: 'scored',
+      overallScore: 82,
+    });
+    expect((await listLearningRecords())['word-a']).toEqual(makeRecord());
+    expect((await getOrCreateSyncMetadata()).pendingEventIds).toContain('event-a');
+  });
 });
 
 describe('cloud merge persistence', () => {
+  it('normalizes nullable arrays from legacy cloud tasks on a new device', async () => {
+    const legacyTask = {
+      dateKey: '2026-07-13',
+      newWordIds: null,
+      reviewWordIds: null,
+      completedAt: null,
+      correctCount: 0,
+      wrongCount: null,
+      totalAnswered: 0,
+      answeredWordIds: null,
+    };
+
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-legacy-task',
+      serverTime: '2026-07-14T10:00:00.000Z',
+      snapshot: {
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        generation: 0,
+        events: [],
+        checkpoint: null,
+        dailyTasks: [legacyTask as never],
+        wordSelectionStates: [],
+        parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+      },
+    });
+
+    expect(await listDailyTasks()).toEqual([{
+      dateKey: '2026-07-13',
+      newWordIds: [],
+      reviewWordIds: [],
+      completedAt: null,
+      checkedInAt: null,
+      correctCount: 0,
+      wrongCount: 0,
+      totalAnswered: 0,
+      answeredWordIds: [],
+    }]);
+  });
+
   it('applies the merged snapshot and acknowledged cursor together', async () => {
     const metadata = await getOrCreateSyncMetadata();
     const response: SyncResponse = {

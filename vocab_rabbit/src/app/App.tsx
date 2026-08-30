@@ -1,5 +1,5 @@
 import { startTransition, useEffect, useMemo, useRef, useState } from 'react';
-import type { AnswerEvent } from '../models/answer-event';
+import type { AnswerEvent, PronunciationResult } from '../models/answer-event';
 import type { DailyTaskSummary, SessionResult } from '../models/daily-task';
 import type { LearningRecord } from '../models/learning-record';
 import type { LocalLifePhotoView } from '../models/local-media';
@@ -48,6 +48,7 @@ import {
   listWordSelectionStates,
   replaceStudyData,
   saveAnswerAndLearningRecord,
+  savePronunciationResult,
   saveDailyTask,
   saveParentSetting,
   saveWordSelectionStates,
@@ -554,11 +555,12 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     );
     const enrichedEvent = {
       ...policyEvent,
+      sessionKind: practiceWordIds ? 'practice' as const : 'task' as const,
       learningStateBefore: currentRecord,
       learningStateAfter: nextRecord,
     };
     await saveAnswerAndLearningRecord(enrichedEvent, nextRecord);
-    setAnswerEvents((previous) => [...previous.slice(-499), enrichedEvent]);
+    setAnswerEvents((previous) => [...previous, enrichedEvent]);
 
     if (!practiceWordIds && task && !task.completedAt) {
       const latestTask = await getDailyTask(task.dateKey) ?? task;
@@ -572,6 +574,13 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
       ...previous,
       [event.wordId]: nextRecord,
     }));
+  }
+
+  async function handlePronunciationResult(eventId: string, result: PronunciationResult) {
+    await savePronunciationResult(eventId, result);
+    setAnswerEvents((previous) => previous.map((event) => (
+      event.id === eventId ? { ...event, pronunciation: result } : event
+    )));
   }
 
   async function handleComplete(result: SessionResult) {
@@ -973,7 +982,7 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
     }
 
     setRecordsById(records);
-    setAnswerEvents(backup.tables.answerEvents.slice(-500));
+    setAnswerEvents(backup.tables.answerEvents);
     setSelectionById(nextSelectionById);
     setParentSetting(backup.tables.parentSetting);
     setTask(restoredTask);
@@ -1135,6 +1144,9 @@ export default function App({ syncRevision = 0, onRequestSync }: AppProps) {
           studyDateKey={task.dateKey}
           localLifePhotosById={localLifePhotosById}
           onAnswer={debugSession ? async () => undefined : handleAnswer}
+          onPronunciationResult={debugSession
+            ? async () => undefined
+            : handlePronunciationResult}
           onComplete={debugSession
             ? async () => handleBackToDebugPicker()
             : handleComplete}

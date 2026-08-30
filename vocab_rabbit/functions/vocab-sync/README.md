@@ -59,11 +59,19 @@ PHOTO_ACCESS_CODE_HASH
 PHOTO_TOKEN_SIGNING_SECRET
 FIXED_USER_ID
 ALLOWED_ORIGIN
+SPEECH_APP_ID
+SPEECH_APP_SECRET
 ```
 
 The three `PHOTO_*` variables are only needed for private life photos. When they are
 missing, `/api/media/connect` and `/api/media/sign` answer `503
 PHOTO_ACCESS_NOT_CONFIGURED`; study sync keeps working.
+
+`SPEECH_APP_ID` and `SPEECH_APP_SECRET` enable the authenticated
+`POST /api/speech/warrant` route used by the pronunciation evaluator in Settings. Keep the
+secret only in Function Compute environment variables. Download the JavaScript
+SDK `engine.js` from the Alibaba Cloud spoken-language-assessment project and
+place it at `public/sdk/engine.js` before building the frontend.
 
 Optional table overrides:
 
@@ -84,6 +92,7 @@ Proxy these same-origin paths to the Function Compute HTTP trigger without cachi
 /api/device/connect
 /api/device/verify
 /api/sync
+/api/speech/warrant
 /api/media/connect
 /api/media/sign
 ```

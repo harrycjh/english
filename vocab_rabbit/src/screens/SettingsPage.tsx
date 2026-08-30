@@ -1,4 +1,5 @@
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { DailyTaskSummary } from '../models/daily-task';
 import {
   MIN_NEW_WORD_COUNT,
@@ -8,6 +9,7 @@ import {
 } from '../models/parent-setting';
 import { APP_VERSION } from '../config/app-meta';
 import { ProfileSelector } from '../components/ProfileSelector';
+import { PronunciationPracticeCard } from '../components/PronunciationPracticeCard';
 import {
   isPrivateLifePhotoAccessRequiredError,
   type PrivateLifePhotoDownloadOptions,
@@ -33,6 +35,12 @@ import {
   type SpeechVoiceOption,
 } from '../services/audio-service';
 import { hasLifePhotoSource } from '../services/word-service';
+import {
+  describeWordPronunciationEvaluation,
+  evaluateWordPronunciation,
+  prepareWordPronunciation,
+  type PronunciationPracticeState,
+} from '../services/pronunciation-practice';
 
 interface SettingsPageProps {
   settings: ParentSetting;
@@ -109,6 +117,21 @@ function createSettingsDraft(settings: ParentSetting): EditableSettings {
     englishVoiceURI: settings.englishVoiceURI,
     chineseVoiceURI: settings.chineseVoiceURI,
   };
+}
+
+export function pickRandomPronunciationWord(
+  words: WordRecord[],
+  random: () => number = Math.random,
+  excludedWordId?: string,
+): WordRecord | null {
+  const candidates = words.filter((word) => /^[a-z]+(?:['-][a-z]+)*$/i.test(word.english.trim()));
+  if (candidates.length === 0) return null;
+  const freshCandidates = excludedWordId
+    ? candidates.filter((word) => word.id !== excludedWordId)
+    : candidates;
+  const pool = freshCandidates.length > 0 ? freshCandidates : candidates;
+  const index = Math.min(pool.length - 1, Math.max(0, Math.floor(random() * pool.length)));
+  return pool[index];
 }
 
 /* ─── Sub-components ─── */
@@ -239,6 +262,8 @@ export function SettingsPage({
   const [studyDataImportError, setStudyDataImportError] = useState<string | null>(null);
   const [englishVoices, setEnglishVoices] = useState<SpeechVoiceOption[]>([]);
   const [chineseVoices, setChineseVoices] = useState<SpeechVoiceOption[]>([]);
+  const [pronunciationWord, setPronunciationWord] = useState<WordRecord | null>(null);
+  const [pronunciationState, setPronunciationState] = useState<PronunciationPracticeState>({ kind: 'ready' });
   const [offlineImageState, setOfflineImageState] = useState<{
     phase: 'checking' | 'idle' | 'downloading' | 'complete' | 'error' | 'unsupported';
     completed: number;
@@ -260,6 +285,7 @@ export function SettingsPage({
   });
   const studyDataInputRef = useRef<HTMLInputElement>(null);
   const privatePhotoAbortRef = useRef<AbortController | null>(null);
+  const lastPronunciationWordIdRef = useRef<string | undefined>(undefined);
   const offlineImageUrls = useMemo(() => collectOfflineImageUrls(words), [words]);
 
   useEffect(() => {
@@ -407,6 +433,50 @@ export function SettingsPage({
       lang: language === 'en' ? 'en-GB' : 'zh-CN',
       voiceURI,
     }]);
+  }
+
+  function openPronunciationEvaluation() {
+    const word = pickRandomPronunciationWord(
+      words,
+      Math.random,
+      lastPronunciationWordIdRef.current,
+    );
+    if (!word) {
+      window.alert('当前词库里没有适合进行单词语音评测的内容。');
+      return;
+    }
+    lastPronunciationWordIdRef.current = word.id;
+    setPronunciationState({ kind: 'ready' });
+    setPronunciationWord(word);
+    void prepareWordPronunciation().catch(() => undefined);
+    void speakSequence([{
+      text: word.english,
+      lang: 'en-GB',
+      voiceURI: settingsDraft.englishVoiceURI,
+    }]);
+  }
+
+  function closePronunciationEvaluation() {
+    setPronunciationWord(null);
+    setPronunciationState({ kind: 'ready' });
+  }
+
+  async function startPronunciationEvaluation() {
+    const word = pronunciationWord;
+    if (!word) return;
+    try {
+      const evaluation = await evaluateWordPronunciation(word.english, setPronunciationState);
+      setPronunciationState({
+        kind: 'complete',
+        score: evaluation.score,
+        feedback: describeWordPronunciationEvaluation(evaluation),
+      });
+    } catch (error) {
+      setPronunciationState({
+        kind: 'unavailable',
+        message: error instanceof Error ? error.message : '语音评测暂时不可用。',
+      });
+    }
   }
 
   async function handleClearAllData() {
@@ -681,6 +751,20 @@ export function SettingsPage({
                     enabled={settingsDraft.showHints}
                     onToggle={() => setSettingsDraft((current) => ({ ...current, showHints: !current.showHints }))}
                   />
+                  <article className="settings-toggle-row settings-pronunciation-launcher">
+                    <span className="settings-toggle-row__icon" aria-hidden="true">🎙</span>
+                    <div className="settings-toggle-row__text">
+                      <strong>语音评测</strong>
+                      <p>随机抽取一个单词，单独测试跟读和评分。</p>
+                    </div>
+                    <button
+                      className="secondary-button settings-pronunciation-button"
+                      type="button"
+                      onClick={openPronunciationEvaluation}
+                    >
+                      语音评测
+                    </button>
+                  </article>
                 </div>
               </section>
 
@@ -820,6 +904,30 @@ export function SettingsPage({
           </section>
         </section>
       </div>
+      {pronunciationWord && typeof document !== 'undefined' ? createPortal(
+        <div className="settings-pronunciation-overlay">
+          <div className="settings-pronunciation-dialog">
+            <button
+              className="settings-pronunciation-close"
+              type="button"
+              aria-label="关闭语音评测"
+              onClick={closePronunciationEvaluation}
+            >
+              ×
+            </button>
+            <PronunciationPracticeCard
+              word={pronunciationWord.english}
+              phonetic={pronunciationWord.phonetic}
+              state={pronunciationState}
+              onStart={() => void startPronunciationEvaluation()}
+              onRetry={() => void startPronunciationEvaluation()}
+              onContinue={closePronunciationEvaluation}
+              onSkip={closePronunciationEvaluation}
+            />
+          </div>
+        </div>,
+        document.body,
+      ) : null}
     </main>
   );
 }

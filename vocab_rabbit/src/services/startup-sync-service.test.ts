@@ -17,6 +17,7 @@ import {
   installResumeSyncListeners,
   performStartupSync,
   performStartupSyncWithRetry,
+  restoreEmptyDeviceFromCloud,
 } from './startup-sync-service';
 
 function jsonResponse(body: unknown, status = 200): Response {
@@ -136,7 +137,7 @@ describe('performStartupSync', () => {
     const result = await performStartupSync(async (_input, init) => {
       const request = JSON.parse(String(init?.body)) as SyncRequest;
       expect(request).toMatchObject({
-        cursor: 'cursor-old',
+        cursor: 'cursor-old:force-cloud-pull',
         hasLocalChanges: false,
         snapshot: null,
       });
@@ -174,6 +175,65 @@ describe('performStartupSync', () => {
     expect((await getOrCreateSyncMetadata()).serverCursor).toBe('cursor-new');
     expect((await listAnswerEvents()).map((event) => event.id)).toContain('event-from-cloud');
   });
+
+  it('forces a cloud pull when the saved cursor exists but local learning data is empty', async () => {
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-claims-current',
+      serverTime: '2026-07-14T08:00:00.000Z',
+      upToDate: false,
+      snapshot: {
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        generation: 0,
+        events: [],
+        checkpoint: null,
+        dailyTasks: [],
+        wordSelectionStates: [],
+        parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+      },
+    });
+    await saveDeviceToken('token-a');
+
+    const result = await performStartupSync(async (_input, init) => {
+      const request = JSON.parse(String(init?.body)) as SyncRequest;
+      expect(request).toMatchObject({
+        hasLocalChanges: false,
+        snapshot: null,
+      });
+      expect(request.cursor).not.toBe('cursor-claims-current');
+      return jsonResponse({
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        cursor: 'cursor-cloud-current',
+        serverTime: '2026-07-15T10:00:00.000Z',
+        upToDate: false,
+        snapshot: {
+          schemaVersion: SYNC_SCHEMA_VERSION,
+          generation: 0,
+          events: [{
+            id: 'event-restored-from-cloud',
+            wordId: 'word-cloud',
+            dateKey: '2026-07-15',
+            answeredAt: '2026-07-15T09:00:00.000Z',
+            questionKind: 'recognition',
+            selectedAnswer: '认识',
+            correctAnswer: '认识',
+            isCorrect: true,
+            responseTimeMs: 400,
+            deviceId: 'ipad-cloud',
+            schemaVersion: 1,
+            generation: 0,
+          }],
+          checkpoint: null,
+          dailyTasks: [],
+          wordSelectionStates: [],
+          parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+        },
+      });
+    });
+
+    expect(result.kind).toBe('synced');
+    expect((await listAnswerEvents()).map((event) => event.id)).toContain('event-restored-from-cloud');
+  });
 });
 
 describe('performStartupSyncWithRetry', () => {
@@ -207,6 +267,60 @@ describe('performStartupSyncWithRetry', () => {
 
     expect(result).toEqual({ kind: 'unavailable', message: 'failure 3' });
     expect(attempts).toBe(3);
+  });
+
+  it('does not download the cloud snapshot again after a local apply failure', async () => {
+    let attempts = 0;
+    const result = await performStartupSyncWithRetry(
+      async () => {
+        attempts += 1;
+        return { kind: 'blocked', message: '本地写入失败' };
+      },
+      async () => undefined,
+    );
+
+    expect(result).toEqual({ kind: 'blocked', message: '本地写入失败' });
+    expect(attempts).toBe(1);
+  });
+});
+
+describe('restoreEmptyDeviceFromCloud', () => {
+  it('waits for a cloud snapshot before an empty connected device enters the app', async () => {
+    await saveDeviceToken('token-a');
+    const result = await restoreEmptyDeviceFromCloud(async (_input, init) => {
+      const request = JSON.parse(String(init?.body)) as SyncRequest;
+      return jsonResponse({
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        cursor: 'cursor-restored',
+        serverTime: '2026-07-15T10:00:00.000Z',
+        upToDate: false,
+        snapshot: {
+          schemaVersion: SYNC_SCHEMA_VERSION,
+          generation: 0,
+          events: [{
+            id: 'event-required-restore',
+            wordId: 'word-cloud',
+            dateKey: '2026-07-15',
+            answeredAt: '2026-07-15T09:00:00.000Z',
+            questionKind: 'recognition',
+            selectedAnswer: '认识',
+            correctAnswer: '认识',
+            isCorrect: true,
+            responseTimeMs: 400,
+            deviceId: 'ipad-cloud',
+            schemaVersion: 1,
+            generation: 0,
+          }],
+          checkpoint: null,
+          dailyTasks: [],
+          wordSelectionStates: [],
+          parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+        },
+      } satisfies ReturnType<typeof syncResponse> & { upToDate: boolean });
+    });
+
+    expect(result?.kind).toBe('synced');
+    expect((await listAnswerEvents()).map((event) => event.id)).toContain('event-required-restore');
   });
 });
 

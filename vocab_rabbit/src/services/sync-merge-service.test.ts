@@ -50,6 +50,26 @@ describe('mergeAnswerEvents', () => {
 
     expect(merged.map((event) => event.id)).toEqual(['event-a', 'event-c', 'event-b']);
   });
+
+  it('keeps the pronunciation-enriched copy of an existing answer event', () => {
+    const answer = makeEvent('event-a', 'word-a', '2026-07-14T08:00:00.000Z', true);
+    const enriched = {
+      ...answer,
+      pronunciation: {
+        targetType: 'word' as const,
+        targetText: 'family',
+        provider: 'aliyun-ssecp' as const,
+        status: 'scored' as const,
+        overallScore: 86,
+        attemptedAt: '2026-07-14T08:00:05.000Z',
+      },
+    };
+
+    expect(mergeAnswerEvents([enriched], [answer]))
+      .toEqual([enriched]);
+    expect(mergeAnswerEvents([answer], [enriched]))
+      .toEqual([enriched]);
+  });
 });
 
 describe('replayLearningRecords', () => {
@@ -134,6 +154,25 @@ describe('mergeWordSelectionStates', () => {
     };
 
     expect(mergeWordSelectionStates([local], [remote])).toEqual([remote]);
+  });
+
+  it('upgrades legacy states that predate the device revision field', () => {
+    const legacy = {
+      wordId: 'word-a',
+      isEnabled: true,
+      isPaused: false,
+      updatedAt: '2026-07-14T09:00:00.000Z',
+    } as VersionedWordSelectionState;
+    const remote = {
+      ...legacy,
+      isPaused: true,
+      updatedByDeviceId: 'device-cloud',
+    };
+
+    const [merged] = mergeWordSelectionStates([legacy], [remote]);
+
+    expect(merged.updatedByDeviceId).toBeTruthy();
+    expect(merged.isPaused).toBe(true);
   });
 });
 
@@ -231,6 +270,26 @@ describe('mergeDailyTasks', () => {
 
     expect(merged.checkedInAt).toBe('2026-07-15T08:30:00.000Z');
     expect(merged.completedAt).toBeNull();
+  });
+
+  it('merges legacy tasks that do not have answered word ids yet', () => {
+    const legacyTask = {
+      dateKey: '2026-07-15',
+      newWordIds: ['word-a'],
+      reviewWordIds: [],
+      completedAt: null,
+      correctCount: 0,
+      totalAnswered: 0,
+    };
+    const cloudTask = {
+      ...legacyTask,
+      answeredWordIds: [],
+      wrongCount: 0,
+    };
+
+    const [merged] = mergeDailyTasks([legacyTask as never], [cloudTask], []);
+
+    expect(merged.answeredWordIds).toEqual([]);
   });
 
   it('reopens a completed review-only task when merged new words are still unanswered', () => {
