@@ -31,6 +31,7 @@ describe('statistics time buckets', () => {
       correctCount: 6,
       accuracy: 60,
       kind: 'today',
+      isProjected: false,
     }]);
   });
 

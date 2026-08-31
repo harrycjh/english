@@ -24,6 +24,16 @@ function columnValue(row, name) {
   return undefined;
 }
 
+function primaryKeyValue(row, name) {
+  const primaryKey = row?.primaryKey ?? row?.primaryKeys ?? [];
+  for (const column of primaryKey) {
+    if (Array.isArray(column) && column[0] === name) return column[1];
+    if (column.name === name) return column.value;
+    if (Object.hasOwn(column, name)) return column[name];
+  }
+  return undefined;
+}
+
 function parseJsonColumn(row, name, fallback) {
   const value = columnValue(row, name);
   if (typeof value !== 'string') return fallback;
@@ -95,6 +105,90 @@ async function readAllEvents(client, tableName, userId) {
   return events;
 }
 
+async function readAllCheckIns(client, tableName, userId) {
+  const checkIns = new Map();
+  let start = [
+    { user_id: userId },
+    { state_type: 'check_in' },
+    { state_id: TableStore.INF_MIN },
+  ];
+  const end = [
+    { user_id: userId },
+    { state_type: 'check_in' },
+    { state_id: TableStore.INF_MAX },
+  ];
+
+  while (start) {
+    const result = await client.getRange({
+      tableName,
+      direction: TableStore.Direction.FORWARD,
+      inclusiveStartPrimaryKey: start,
+      exclusiveEndPrimaryKey: end,
+      columnsToGet: ['checked_in_at', 'source_device_id'],
+      maxVersions: 1,
+      limit: 5000,
+    });
+    for (const row of result.rows ?? []) {
+      const dateKey = primaryKeyValue(row, 'state_id');
+      const checkedInAt = columnValue(row, 'checked_in_at');
+      if (typeof dateKey === 'string' && typeof checkedInAt === 'string') {
+        checkIns.set(dateKey, {
+          dateKey,
+          checkedInAt,
+          sourceDeviceId: columnValue(row, 'source_device_id') ?? 'unknown',
+        });
+      }
+    }
+    start = toStartPrimaryKey(result.nextStartPrimaryKey);
+  }
+  return checkIns;
+}
+
+function taskCheckInAt(task) {
+  const value = task.checkedInAt === undefined ? task.completedAt : task.checkedInAt;
+  return typeof value === 'string' && value ? value : null;
+}
+
+function collectTaskCheckIns(tasks, sourceDeviceId = 'legacy') {
+  const checkIns = new Map();
+  for (const task of tasks ?? []) {
+    const checkedInAt = taskCheckInAt(task);
+    if (!checkedInAt || typeof task.dateKey !== 'string') continue;
+    checkIns.set(task.dateKey, { dateKey: task.dateKey, checkedInAt, sourceDeviceId });
+  }
+  return checkIns;
+}
+
+function overlayCheckIns(snapshotWithoutEvents, checkIns) {
+  const tasksByDate = new Map((snapshotWithoutEvents.dailyTasks ?? []).map((task) => [task.dateKey, task]));
+  for (const checkIn of checkIns.values()) {
+    const task = tasksByDate.get(checkIn.dateKey);
+    if (task) {
+      const currentCheckedInAt = taskCheckInAt(task);
+      tasksByDate.set(checkIn.dateKey, {
+        ...task,
+        checkedInAt: [currentCheckedInAt, checkIn.checkedInAt].filter(Boolean).sort()[0],
+      });
+      continue;
+    }
+    tasksByDate.set(checkIn.dateKey, {
+      dateKey: checkIn.dateKey,
+      newWordIds: [],
+      reviewWordIds: [],
+      completedAt: null,
+      checkedInAt: checkIn.checkedInAt,
+      correctCount: 0,
+      wrongCount: 0,
+      totalAnswered: 0,
+      answeredWordIds: [],
+    });
+  }
+  return {
+    ...snapshotWithoutEvents,
+    dailyTasks: [...tasksByDate.values()].sort((left, right) => left.dateKey.localeCompare(right.dateKey)),
+  };
+}
+
 function deriveWordStates(snapshot) {
   const records = new Map((snapshot.checkpoint?.records ?? []).map((record) => [record.wordId, record]));
   const checkpointAt = snapshot.checkpoint?.capturedAt ?? '';
@@ -131,6 +225,35 @@ function deriveChangedWordStates(events, generation) {
 }
 
 export function createTablestoreRepository(client, tables = DEFAULT_TABLES) {
+  async function writeCheckIns(userId, checkIns) {
+    const rows = [...checkIns.values()].map((checkIn) => ({
+      type: 'PUT',
+      condition: condition(),
+      primaryKey: [
+        { user_id: userId },
+        { state_type: 'check_in' },
+        { state_id: checkIn.dateKey },
+      ],
+      attributeColumns: [
+        { checked_in_at: checkIn.checkedInAt },
+        { source_device_id: checkIn.sourceDeviceId },
+        { schema_version: TableStore.Long.fromNumber(1) },
+        { updated_at: new Date().toISOString() },
+      ],
+    }));
+    await writeRows(client, tables.app, rows);
+  }
+
+  async function hydrateCheckIns(userId, snapshotWithoutEvents) {
+    const storedCheckIns = await readAllCheckIns(client, tables.app, userId);
+    const legacyCheckIns = collectTaskCheckIns(snapshotWithoutEvents.dailyTasks);
+    const missingLegacyCheckIns = new Map(
+      [...legacyCheckIns].filter(([dateKey]) => !storedCheckIns.has(dateKey)),
+    );
+    await writeCheckIns(userId, missingLegacyCheckIns);
+    return overlayCheckIns(snapshotWithoutEvents, new Map([...legacyCheckIns, ...storedCheckIns]));
+  }
+
   async function readAppState(userId) {
     const appResult = await client.getRow({
       tableName: tables.app,
@@ -156,11 +279,14 @@ export function createTablestoreRepository(client, tables = DEFAULT_TABLES) {
     if (clientCursor && clientCursor === appState.cursor) {
       return { cursor: appState.cursor, isCurrent: true, snapshot: null };
     }
-    const events = await readAllEvents(client, tables.events, userId);
+    const [events, snapshotWithoutEvents] = await Promise.all([
+      readAllEvents(client, tables.events, userId),
+      hydrateCheckIns(userId, appState.snapshotWithoutEvents),
+    ]);
     return {
       cursor: appState.cursor,
       isCurrent: false,
-      snapshot: { ...appState.snapshotWithoutEvents, events },
+      snapshot: { ...snapshotWithoutEvents, events },
     };
   }
 
@@ -247,23 +373,26 @@ export function createTablestoreRepository(client, tables = DEFAULT_TABLES) {
       return result.row ? columnValue(result.row, 'active') === true : false;
     },
     getSyncState,
-    async mergeSnapshot(userId, incoming) {
+    async mergeSnapshot(userId, incoming, sourceDeviceId = 'legacy') {
       const current = (await getSyncState(userId, null)).snapshot;
       const merged = mergeSnapshots(current, incoming);
       await writeEvents(userId, incoming.events, incoming.checkpoint?.deviceId);
+      await writeCheckIns(userId, collectTaskCheckIns(incoming.dailyTasks, sourceDeviceId));
       await writeWordStates(userId, deriveWordStates(merged), merged.generation);
       const cursor = await writeAppState(userId, merged);
       return { snapshot: merged, cursor };
     },
-    async mergeDelta(userId, incoming, clientCursor) {
+    async mergeDelta(userId, incoming, clientCursor, sourceDeviceId = 'legacy') {
       const appState = await readAppState(userId);
       if (!appState || !clientCursor) return { cursor: null, snapshot: null };
 
       if (clientCursor === appState.cursor) {
-        const current = { ...appState.snapshotWithoutEvents, events: [] };
+        const snapshotWithoutEvents = await hydrateCheckIns(userId, appState.snapshotWithoutEvents);
+        const current = { ...snapshotWithoutEvents, events: [] };
         const merged = applyDeltaToSnapshot(current, incoming, { rebuildCounts: false });
         if (!merged) return { cursor: null, snapshot: null };
         await writeEvents(userId, incoming.events);
+        await writeCheckIns(userId, collectTaskCheckIns(incoming.dailyTasks, sourceDeviceId));
         await writeWordStates(
           userId,
           deriveChangedWordStates(incoming.events, merged.generation),
@@ -277,6 +406,7 @@ export function createTablestoreRepository(client, tables = DEFAULT_TABLES) {
       const merged = applyDeltaToSnapshot(current, incoming);
       if (!merged) return { cursor: null, snapshot: null };
       await writeEvents(userId, incoming.events);
+      await writeCheckIns(userId, collectTaskCheckIns(incoming.dailyTasks, sourceDeviceId));
       await writeWordStates(userId, deriveWordStates(merged), merged.generation);
       const cursor = await writeAppState(userId, merged);
       return { cursor, snapshot: merged };

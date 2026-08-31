@@ -6,6 +6,7 @@ import {
   clearLocalDeviceData,
   getOrCreateSyncMetadata,
   listAnswerEvents,
+  saveDailyTask,
   saveAnswerAndLearningRecord,
   saveDeviceToken,
 } from './storage-service';
@@ -237,6 +238,77 @@ describe('performStartupSync', () => {
 });
 
 describe('performStartupSyncWithRetry', () => {
+  it('immediately uploads local data preserved from a stale cloud snapshot', async () => {
+    const baseTask = {
+      dateKey: '2026-07-14',
+      newWordIds: ['word-a'],
+      reviewWordIds: [],
+      completedAt: null,
+      checkedInAt: null,
+      correctCount: 0,
+      wrongCount: 0,
+      totalAnswered: 0,
+      answeredWordIds: [],
+    };
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-before-check-in',
+      serverTime: '2026-07-14T08:00:00.000Z',
+      snapshot: {
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        generation: 0,
+        events: [],
+        checkpoint: null,
+        dailyTasks: [baseTask],
+        wordSelectionStates: [],
+        parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+      },
+    });
+    await saveDeviceToken('token-a');
+    await saveDailyTask({ ...baseTask, checkedInAt: '2026-07-14T09:00:00.000Z' });
+
+    const requests: SyncRequest[] = [];
+    const result = await performStartupSyncWithRetry(
+      () => performStartupSync(async (_input, init) => {
+        const request = JSON.parse(String(init?.body)) as SyncRequest;
+        requests.push(request);
+        if (requests.length === 1) {
+          return jsonResponse({
+            schemaVersion: SYNC_SCHEMA_VERSION,
+            cursor: 'cursor-from-other-device',
+            serverTime: '2026-07-14T10:00:00.000Z',
+            snapshot: {
+              schemaVersion: SYNC_SCHEMA_VERSION,
+              generation: 0,
+              events: [],
+              checkpoint: null,
+              dailyTasks: [baseTask],
+              wordSelectionStates: [],
+              parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+            },
+          });
+        }
+        return jsonResponse({
+          schemaVersion: SYNC_SCHEMA_VERSION,
+          cursor: 'cursor-after-repair',
+          serverTime: '2026-07-14T10:00:01.000Z',
+          upToDate: true,
+          snapshot: null,
+        });
+      }),
+      async () => undefined,
+    );
+
+    expect(result.kind).toBe('synced');
+    expect(requests).toHaveLength(2);
+    expect(requests[1].delta?.dailyTasks).toEqual([
+      expect.objectContaining({
+        dateKey: '2026-07-14',
+        checkedInAt: '2026-07-14T09:00:00.000Z',
+      }),
+    ]);
+  });
+
   it('retries silently until the third attempt succeeds', async () => {
     let attempts = 0;
     const delays: number[] = [];

@@ -117,6 +117,8 @@ export function LearningPage({
   const [isLocked, setIsLocked] = useState(false);
   const [feedbackText, setFeedbackText] = useState<string | null>(null);
   const [questionStartedAt, setQuestionStartedAt] = useState(() => Date.now());
+  const sessionStartedAt = useRef(Date.now());
+  const [sessionElapsedSeconds, setSessionElapsedSeconds] = useState(0);
   const [revealLifePhoto, setRevealLifePhoto] = useState(false);
   const [upgradeToLevel, setUpgradeToLevel] = useState<number | null>(null);
   const [relatedResultPhase, setRelatedResultPhase] = useState<'idle' | 'fading-out' | 'revealed'>('idle');
@@ -132,6 +134,15 @@ export function LearningPage({
     state: PronunciationPracticeState;
   } | null>(null);
   const pronunciationResolver = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    const updateElapsedTime = () => {
+      setSessionElapsedSeconds(Math.floor((Date.now() - sessionStartedAt.current) / 1_000));
+    };
+    updateElapsedTime();
+    const timer = window.setInterval(updateElapsedTime, 1_000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   const currentWordId = queue[currentIndex];
   const currentWord = currentWordId ? wordsById.get(currentWordId) : undefined;
@@ -582,7 +593,11 @@ export function LearningPage({
           <button className="secondary-button" type="button" disabled={isLocked} onClick={onExit}>
             返回首页
           </button>
-          <ProgressRing value={currentIndex + 1} total={queue.length} />
+          <ProgressRing
+            value={currentIndex + 1}
+            total={queue.length}
+            elapsedSeconds={sessionElapsedSeconds}
+          />
           <div className="learning-header__meta">
             <span>{currentWord.category}</span>
             {setting.profileId === 'stinky-dog' ? (

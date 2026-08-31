@@ -603,6 +603,7 @@ export function createHandler(repository, env, dependencies = {}) {
             env.FIXED_USER_ID,
             request.body.delta,
             request.body.cursor,
+            tokenPayload.deviceId,
           );
           if (!merged.cursor) {
             return response(409, { code: 'FULL_SNAPSHOT_REQUIRED' }, env.ALLOWED_ORIGIN);
@@ -620,7 +621,11 @@ export function createHandler(repository, env, dependencies = {}) {
         if (!request.body.snapshot) {
           return response(400, { code: 'SNAPSHOT_REQUIRED' }, env.ALLOWED_ORIGIN);
         }
-        const merged = await repository.mergeSnapshot(env.FIXED_USER_ID, request.body.snapshot);
+        const merged = await repository.mergeSnapshot(
+          env.FIXED_USER_ID,
+          request.body.snapshot,
+          tokenPayload.deviceId,
+        );
         return response(200, {
           schemaVersion: SYNC_SCHEMA_VERSION,
           cursor: merged.cursor,

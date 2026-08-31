@@ -210,7 +210,7 @@ html[data-shell-mode='ipad-fixed'] .learning-header .secondary-button {
 }
 
 html[data-shell-mode='ipad-fixed'] .learning-header .progress-ring {
-  width: 260px;
+  width: 350px;
   height: 38px;
 }
 
@@ -4628,8 +4628,8 @@ button {
   grid-template-columns: minmax(120px, 1fr) auto;
   align-items: center;
   gap: 10px;
-  width: min(260px, 34vw);
-  min-width: 180px;
+  width: min(350px, 44vw);
+  min-width: 260px;
   height: 38px;
   padding: 6px 10px;
   border: 1px solid rgba(255, 157, 31, 0.26);
@@ -4659,9 +4659,15 @@ button {
   display: flex;
   align-items: baseline;
   justify-content: flex-end;
-  gap: 3px;
+  gap: 9px;
   color: #173553;
   white-space: nowrap;
+}
+
+.progress-ring__count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
 }
 
 .progress-ring__label strong {
@@ -4669,8 +4675,19 @@ button {
   line-height: 1;
 }
 
-.progress-ring__label span {
+.progress-ring__count > span {
   font-size: 12px;
+}
+
+.progress-ring__elapsed {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 9px;
+  border-left: 1px solid rgba(23, 53, 83, 0.16);
+  color: #6f7f91;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
 .question-panel {
@@ -14134,7 +14151,8 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   box-shadow: inset 0 0 0 1px rgba(255, 167, 35, 0.2);
 }
 
-.page--stats .learning-load-day--forecast .learning-load-day__plot {
+.page--stats .learning-load-day--forecast .learning-load-day__plot,
+.page--stats .learning-load-day--projected .learning-load-day__plot {
   border-top: 1px dashed rgba(191, 143, 69, 0.3);
 }
 
@@ -14163,12 +14181,14 @@ html[data-shell-mode='ipad-fixed'] .page--stats .stats-memory-frame {
   box-shadow: 0 5px 14px rgba(77, 119, 160, 0.12);
 }
 
-.page--stats .learning-load-day--forecast .learning-load-day__stack {
+.page--stats .learning-load-day--forecast .learning-load-day__stack,
+.page--stats .learning-load-day--projected .learning-load-day__stack {
   opacity: 0.72;
   box-shadow: 0 4px 10px rgba(77, 119, 160, 0.08);
 }
 
-.page--stats .learning-load-day--forecast .learning-load-day__stack::after {
+.page--stats .learning-load-day--forecast .learning-load-day__stack::after,
+.page--stats .learning-load-day--projected .learning-load-day__stack::after {
   content: '';
   position: absolute;
   inset: 0;

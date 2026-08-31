@@ -66,6 +66,8 @@ export interface LearningLoadPoint {
   correctCount: number;
   accuracy: number | null;
   kind: 'history' | 'today' | 'forecast';
+  /** Today has not started yet, so the bar shows the planned load instead of actual work. */
+  isProjected?: boolean;
 }
 
 export interface LearningForecastModel {
@@ -460,8 +462,20 @@ export function buildLearningStatistics({
     const timelineDateKey = dateKey(addDays(new Date(`${todayKey}T12:00:00.000Z`), offset));
     const historicalPoint = historyByDate.get(timelineDateKey);
     const futurePoint = forecastByDate.get(timelineDateKey);
-    const newCount = futurePoint?.newCount ?? historicalPoint?.newCount ?? 0;
-    const reviewCount = futurePoint?.reviewCount ?? historicalPoint?.reviewCount ?? 0;
+    const isToday = offset === 0;
+    const todayHasStarted = isToday && Boolean(
+      (historicalPoint?.answerCount ?? 0) > 0
+      || (historicalPoint?.newCount ?? 0) > 0
+      || (historicalPoint?.reviewCount ?? 0) > 0
+      || (historicalPoint?.durationMs ?? 0) > 0,
+    );
+    const isProjected = isToday && !todayHasStarted;
+    const newCount = isProjected
+      ? currentTask.newWordIds.length
+      : futurePoint?.newCount ?? historicalPoint?.newCount ?? 0;
+    const reviewCount = isProjected
+      ? currentTask.reviewWordIds.length
+      : futurePoint?.reviewCount ?? historicalPoint?.reviewCount ?? 0;
     const retryCount = futurePoint?.retryCount ?? historicalPoint?.retryCount ?? 0;
     const answerCount = historicalPoint?.answerCount ?? 0;
     const correctCount = historicalPoint?.correctCount ?? 0;
@@ -476,7 +490,8 @@ export function buildLearningStatistics({
       answerCount,
       correctCount,
       accuracy: answerCount > 0 ? (correctCount / answerCount) * 100 : null,
-      kind: offset < 0 ? 'history' : offset === 0 ? 'today' : 'forecast',
+      kind: offset < 0 ? 'history' : isToday ? 'today' : 'forecast',
+      isProjected,
     };
   });
 

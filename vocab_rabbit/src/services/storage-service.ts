@@ -567,6 +567,35 @@ function canonicalJson(value: unknown): string {
   return JSON.stringify(value);
 }
 
+function collectChangesMissingFromSnapshot(
+  snapshot: NonNullable<SyncResponse['snapshot']>,
+  events: AnswerEvent[],
+  dailyTasks: DailyTaskSummary[],
+  wordSelectionStates: VersionedWordSelectionState[],
+  parentSetting: VersionedParentSetting,
+): Required<PendingSyncChanges> {
+  const cloudEvents = new Map(snapshot.events.map((event) => [event.id, event]));
+  const cloudTasks = new Map(snapshot.dailyTasks.map((task) => {
+    const normalized = normalizeDailyTaskSummary(task);
+    return [normalized.dateKey, normalized];
+  }));
+  const cloudSelections = new Map(snapshot.wordSelectionStates.map((state) => [state.wordId, state]));
+
+  return {
+    eventIds: events
+      .filter((event) => canonicalJson(cloudEvents.get(event.id)) !== canonicalJson(event))
+      .map((event) => event.id),
+    taskDateKeys: dailyTasks
+      .filter((task) => canonicalJson(cloudTasks.get(task.dateKey)) !== canonicalJson(task))
+      .map((task) => task.dateKey),
+    selectionWordIds: wordSelectionStates
+      .filter((state) => canonicalJson(cloudSelections.get(state.wordId)) !== canonicalJson(state))
+      .map((state) => state.wordId),
+    parentSetting: canonicalJson(snapshot.parentSetting) !== canonicalJson(parentSetting),
+    forceFullSync: false,
+  };
+}
+
 function hasChangesAfterRequest(
   request: SyncRequest | undefined,
   metadata: SyncMetadata,
@@ -708,11 +737,27 @@ export async function applySyncResponse(response: SyncResponse, request?: SyncRe
       const parentSetting = storedParentSetting
         ? mergeParentSetting(snapshot.parentSetting, storedParentSetting)
         : snapshot.parentSetting;
+      const missingFromCloud = collectChangesMissingFromSnapshot(
+        snapshot,
+        events,
+        dailyTasks,
+        wordSelectionStates,
+        parentSetting,
+      );
+      const hasMissingCloudChanges = missingFromCloud.eventIds.length > 0
+        || missingFromCloud.taskDateKeys.length > 0
+        || missingFromCloud.selectionWordIds.length > 0
+        || missingFromCloud.parentSetting;
       const checkpoint = request?.snapshot
         && canonicalJson(metadata.checkpoint) !== canonicalJson(request.snapshot.checkpoint)
         ? metadata.checkpoint
         : snapshot.checkpoint;
       const records = Object.values(replayLearningRecords(events, checkpoint));
+      const nextMetadata = syncMetadataAfterResponse(
+        metadata,
+        response,
+        hasLateLocalChanges || hasMissingCloudChanges,
+      );
       await Promise.all([
         database.answerEvents.clear(),
         database.learningRecords.clear(),
@@ -732,9 +777,19 @@ export async function applySyncResponse(response: SyncResponse, request?: SyncRe
         database.parentSettingSync.put({ id: PARENT_SETTING_ID, ...parentSetting }),
         database.wordSelectionStates.bulkPut(wordSelectionStates),
         database.syncMetadata.put({
-          ...syncMetadataAfterResponse(metadata, response, hasLateLocalChanges),
+          ...nextMetadata,
           generation: snapshot.generation,
           checkpoint,
+          pendingEventIds: unionStrings(nextMetadata.pendingEventIds, missingFromCloud.eventIds),
+          pendingTaskDateKeys: unionStrings(
+            nextMetadata.pendingTaskDateKeys,
+            missingFromCloud.taskDateKeys,
+          ),
+          pendingSelectionWordIds: unionStrings(
+            nextMetadata.pendingSelectionWordIds,
+            missingFromCloud.selectionWordIds,
+          ),
+          pendingParentSetting: nextMetadata.pendingParentSetting || missingFromCloud.parentSetting,
         }),
       ]);
     },

@@ -89,7 +89,13 @@ describe('learning statistics', () => {
     expect(statistics.timeline).toHaveLength(181);
     expect(statistics.timeline[0]?.dateKey).toBe('2026-04-16');
     expect(statistics.timeline[86]?.dateKey).toBe('2026-07-11');
-    expect(statistics.timeline[90]).toMatchObject({ dateKey: '2026-07-15', newCount: 0, reviewCount: 0, kind: 'today' });
+    expect(statistics.timeline[90]).toMatchObject({
+      dateKey: '2026-07-15',
+      newCount: 1,
+      reviewCount: 0,
+      kind: 'today',
+      isProjected: true,
+    });
     expect(statistics.timeline[91]).toMatchObject({ dateKey: '2026-07-16', newCount: 1, reviewCount: 1, kind: 'forecast' });
     expect(statistics.timeline.at(-1)?.dateKey).toBe('2026-10-13');
     expect(statistics.totalLearnedWords).toBe(1);
@@ -125,6 +131,35 @@ describe('learning statistics', () => {
     });
     expect(statistics.timeline[89]).toMatchObject({ answerCount: 0, correctCount: 0, accuracy: null });
     expect(statistics.timeline[91]).toMatchObject({ answerCount: 0, correctCount: 0, accuracy: null });
+  });
+
+  it('switches todays bar from the translucent plan to actual completed words after study starts', () => {
+    const statistics = buildLearningStatistics({
+      currentTask: task({
+        dateKey: '2026-07-15',
+        newWordIds: ['word-a', 'word-b'],
+        reviewWordIds: ['word-c'],
+        totalAnswered: 1,
+        correctCount: 1,
+        answeredWordIds: ['word-b'],
+      }),
+      tasks: [],
+      answerEvents: [event('answer-1', 'word-b', '2026-07-15', true)],
+      words: [{ id: 'word-a' }, { id: 'word-b' }, { id: 'word-c' }],
+      recordsById: {},
+      selectionById: {},
+      setting: defaultParentSetting,
+      now: new Date('2026-07-15T12:00:00.000Z'),
+    });
+
+    expect(statistics.timeline[90]).toMatchObject({
+      dateKey: '2026-07-15',
+      newCount: 1,
+      reviewCount: 0,
+      totalCount: 1,
+      kind: 'today',
+      isProjected: false,
+    });
   });
 
   it('projects reviews created by future daily new words', () => {

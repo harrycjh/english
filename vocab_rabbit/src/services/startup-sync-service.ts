@@ -164,7 +164,11 @@ export async function performStartupSyncWithRetry(
   let lastResult: StartupSyncResult = { kind: 'unavailable', message: '同步服务器暂时不可用。' };
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     lastResult = await sync();
-    if (lastResult.kind === 'synced') return lastResult;
+    if (lastResult.kind === 'synced') {
+      const metadata = await getOrCreateSyncMetadata();
+      if (metadata.pendingSince && attempt < 3) continue;
+      return lastResult;
+    }
     if (lastResult.kind !== 'unavailable') return lastResult;
     if (attempt < 3) await wait(attempt * 1_000);
   }

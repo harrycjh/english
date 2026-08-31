@@ -13,6 +13,17 @@ This directory is deployed as an Alibaba Cloud Function Compute Node.js 20 funct
 - Life photos stay in a private OSS bucket. The function returns short-lived V4 GET URLs only to active devices.
 - The app has no cloud reset or cloud delete endpoint.
 
+## Dedicated Check-in Records
+
+Manual check-ins are stored independently from the mutable sync snapshot in
+`vocab_app_states`. Each day uses the primary key
+`[user_id, state_type = check_in, state_id = YYYY-MM-DD]` and keeps
+`checked_in_at`, `source_device_id`, `schema_version`, and `updated_at` columns.
+The function overlays these authoritative rows onto `dailyTasks` for backwards
+compatibility. On the first stale-cursor sync after an upgrade, legacy
+`dailyTasks.checkedInAt` values are automatically backfilled into dedicated
+rows.
+
 ## Prepare
 
 1. Copy `.env.example` values into Function Compute environment variables.

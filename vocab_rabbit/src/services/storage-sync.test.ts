@@ -331,6 +331,60 @@ describe('cloud merge persistence', () => {
     expect(nextRequest.delta?.events.map((event) => event.id)).toContain('event-late');
   });
 
+  it('re-uploads a local check-in when a stale cloud snapshot does not contain it', async () => {
+    const baseTask = {
+      dateKey: '2026-07-14',
+      newWordIds: ['word-a'],
+      reviewWordIds: [],
+      completedAt: null,
+      checkedInAt: null,
+      correctCount: 0,
+      wrongCount: 0,
+      totalAnswered: 0,
+      answeredWordIds: [],
+    };
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-before-check-in',
+      serverTime: '2026-07-14T10:00:00.000Z',
+      snapshot: {
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        generation: 0,
+        events: [],
+        checkpoint: null,
+        dailyTasks: [baseTask],
+        wordSelectionStates: [],
+        parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+      },
+    });
+
+    const checkedInAt = '2026-07-14T10:01:30.000Z';
+    await saveDailyTask({ ...baseTask, checkedInAt });
+    const request = await buildLocalSyncRequest();
+
+    await applySyncResponse({
+      schemaVersion: SYNC_SCHEMA_VERSION,
+      cursor: 'cursor-from-other-device',
+      serverTime: '2026-07-14T10:02:00.000Z',
+      snapshot: {
+        schemaVersion: SYNC_SCHEMA_VERSION,
+        generation: 0,
+        events: [],
+        checkpoint: null,
+        dailyTasks: [baseTask],
+        wordSelectionStates: [],
+        parentSetting: { value: defaultParentSetting, fieldRevisions: {} },
+      },
+    }, request);
+
+    expect((await listDailyTasks())[0].checkedInAt).toBe(checkedInAt);
+    const retryRequest = await buildLocalSyncRequest();
+    expect(retryRequest.hasLocalChanges).toBe(true);
+    expect(retryRequest.delta?.dailyTasks).toEqual([
+      expect.objectContaining({ dateKey: '2026-07-14', checkedInAt }),
+    ]);
+  });
+
   it('acknowledges an unchanged cursor without replacing local learning data', async () => {
     await saveAnswerAndLearningRecord(makeEvent(), makeRecord());
     const before = await listLearningRecords();

@@ -290,13 +290,14 @@ function LearningLoadChart({ points, todayKey, scale }: {
             {points.map((point) => {
               const height = (point.totalCount / maximum) * 100;
               const relativeLabel = formatTimelineLabel(point.dateKey, todayKey, scale);
+              const isProjected = point.kind === 'forecast' || point.isProjected === true;
               return (
                 <div
-                  className={`learning-load-day learning-load-day--${point.kind}`}
+                  className={`learning-load-day learning-load-day--${point.kind}${point.isProjected ? ' learning-load-day--projected' : ''}`}
                   data-today={point.kind === 'today' ? 'true' : undefined}
                   data-kind={point.kind}
                   key={point.dateKey}
-                  title={`${formatDate(point.dateKey)}：复习 ${point.reviewCount}，新认识 ${point.newCount}${point.accuracy === null ? '' : `，答题准确率 ${Math.round(point.accuracy)}%（${point.correctCount}/${point.answerCount}）`}${point.deferredReviewCount > 0 ? `，顺延复习 ${point.deferredReviewCount}` : ''}${point.durationMs > 0 ? `，用时 ${formatStudyDuration(point.durationMs)}` : ''}${point.kind === 'forecast' ? '（预测）' : '（实际）'}`}
+                  title={`${formatDate(point.dateKey)}：复习 ${point.reviewCount}，新认识 ${point.newCount}${point.accuracy === null ? '' : `，答题准确率 ${Math.round(point.accuracy)}%（${point.correctCount}/${point.answerCount}）`}${point.deferredReviewCount > 0 ? `，顺延复习 ${point.deferredReviewCount}` : ''}${point.durationMs > 0 ? `，用时 ${formatStudyDuration(point.durationMs)}` : ''}${isProjected ? '（计划）' : '（实际）'}`}
                 >
                   <div className="learning-load-day__plot">
                     {point.totalCount > 0 && (
